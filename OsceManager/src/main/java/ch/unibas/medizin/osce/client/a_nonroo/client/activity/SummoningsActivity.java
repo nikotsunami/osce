@@ -13,6 +13,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SummoningsPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SummoningsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SummoningsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
@@ -22,6 +23,7 @@ import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
+import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -673,7 +675,8 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			public void onSuccess(List<SemesterProxy> response) {
 				
 				for(SemesterProxy semesterProxy : response){
-					popupView.getSemesterList().addItem(semesterProxy.getSemester()+" "+semesterProxy.getCalYear(),semesterProxy.getId().toString());
+					popupView.getSemesterList().addItem(new EnumRenderer<Semesters>().render(semesterProxy.getSemester()) 
+							+ " " + semesterProxy.getCalYear(),semesterProxy.getId().toString());
 				}
 			}
 		});

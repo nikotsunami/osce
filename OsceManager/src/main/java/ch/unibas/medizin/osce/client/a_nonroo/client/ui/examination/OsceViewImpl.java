@@ -19,6 +19,7 @@ import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -161,9 +162,10 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 				if(object.getStudyYear()==null) {
 					return " ";
 				}
-				String s= " " + new EnumRenderer<StudyYears>().render(object.getStudyYear()) +"."+OsceEditActivity.semester.getSemester();
+				String s= " " + new EnumRenderer<StudyYears>().render(object.getStudyYear()) 
+						+ "." + new EnumRenderer<Semesters>().render(OsceEditActivity.semester.getSemester());
 				if(object.getIsRepeOsce()==true) {
-					s=s+" rape";
+					s += " " + constants.repe();
 				}
 				//String s=""+object.getStudyYear().ordinal();
 				return renderer.render(s);

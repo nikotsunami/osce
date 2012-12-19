@@ -17,6 +17,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -144,7 +145,8 @@ public class ExaminationScheduleActivity extends AbstractActivity implements Exa
 				
 				Log.info("OSce Proxy index : " + tabIndex);
 				OsceProxy osceProxy = osceList.next();
-				String osceLable = new EnumRenderer<StudyYears>().render(osceProxy.getStudyYear()) + "." + osceProxy.getSemester().getSemester().name();
+				String osceLable = new EnumRenderer<StudyYears>().render(osceProxy.getStudyYear()) + "." 
+						+ new EnumRenderer<Semesters>().render(osceProxy.getSemester().getSemester());
 				view.getOsceTabPanel().insert(new SimplePanel(), osceLable,tabIndex);
 				tabIndex++;
 				

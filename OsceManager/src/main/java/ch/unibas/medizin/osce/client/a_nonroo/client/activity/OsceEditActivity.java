@@ -446,7 +446,7 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 			{
 				if(osceProxy.getCopiedOsce()==null)
 				{
-					Window.alert("Please select OSCE for Rape");
+					Window.alert("Please select OSCE for Repe");
 					return;
 				}
 				else

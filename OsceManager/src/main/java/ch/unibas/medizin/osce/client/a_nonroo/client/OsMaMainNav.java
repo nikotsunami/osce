@@ -41,6 +41,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SemesterPopupView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.SemesterPopupViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
@@ -48,6 +49,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterRequest;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -645,11 +647,10 @@ public class OsMaMainNav extends Composite {
 	// G: SPEC START =
 	
 		@UiField(provided = true)
-	    public ValueListBox<SemesterProxy> lstSemester = new ValueListBox<SemesterProxy>(new AbstractRenderer<SemesterProxy>() 
-	    {
-	        public String render(SemesterProxy obj) 
-	        {	          
-	        	return obj == null ? "" :  String.valueOf(obj.getSemester())+" "+String.valueOf(obj.getCalYear());
+	    public ValueListBox<SemesterProxy> lstSemester = new ValueListBox<SemesterProxy>(new AbstractRenderer<SemesterProxy>() {
+	    	private EnumRenderer<Semesters> renderer = new EnumRenderer<Semesters>();
+	        public String render(SemesterProxy obj) {
+	        	return obj == null ? "" :  renderer.render(obj.getSemester()) + " " + String.valueOf(obj.getCalYear());
 	        }
 	    });
 		

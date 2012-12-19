@@ -109,7 +109,7 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 		try {
 			locale = "en";
     
-			returnJson = instance.sync(locale);
+			returnJson = instance.sendSync(locale);
 			
 			
 		} catch (Exception e) {
@@ -179,7 +179,7 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 			locale = "en";
 			returnData = "{\"message\" : [{\"key\":\"osce for date 2012-6-18 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"warning patient Daniel Kohler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Marianne Lamarie was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ferdinand Preussler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Karl Meyer was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Bettina Buser was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Carla Joanna Velazquez was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Max Peter was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ruth Musyl was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ljiljana Ivanovicwas not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Delphine Landwerlin was not found in the DMZ. Please manually push\"}],\"osceDay\" :[{\"osceDate\":\"2012-01-01T00:00:00Z\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"},{\"osceDate\":\"2012-06-18T00:00:00Z\"},{\"osceDate\":\"2012-06-21T00:00:00Z\"}],\"trainings\" : [{\"name\":\"testTraining\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:00:00Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-01T00:00:00Z\",\"timeStart\":\"2012-07-01T08:30:00Z\",\"timeEnd\":\"2012-07-01T15:30:00Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T10:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"tttttt\",\"trainingDate\":\"2012-07-17T00:00:59Z\",\"timeStart\":\"\",\"timeEnd\":\"\"}],\"patientInSemester\" : [{\"standarizedPatientId\":"+patient2.getId()+",\"acceptedTrainings\":[{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-21T00:00:00Z\"}],\"accepted\":false},{\"standarizedPatientId\":"+patient1.getId()+",\"acceptedTrainings\":[{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:15:55Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-10T00:00:00Z\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"}],\"accepted\":true}]}";	
 			//,\"timeStart\":\"2012-07-17T09:00:02Z\",\"timeEnd\":\"2012-07-17T19:00:00Z\"
-			returnJson = instance.sync(locale);	
+			returnJson = instance.sendSync(locale);	
 		} catch (Exception e) {
 			e.printStackTrace();
 			e.getCause().printStackTrace();
@@ -246,7 +246,7 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 		try {
 			locale = "en";
 			returnData = "{\"message\" : [{\"key\":\"osce for date 2012-6-18 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"osce for date 12-6-20 12:00 already in DMZ doing nothing\"},{\"key\":\"warning patient Daniel Kohler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Marianne Lamarie was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ferdinand Preussler was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Karl Meyer was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Bettina Buser was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Carla Joanna Velazquez was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Max Peter was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ruth Musyl was not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Ljiljana Ivanovicwas not found in the DMZ. Please manually push\"},{\"key\":\"warning patient Delphine Landwerlin was not found in the DMZ. Please manually push\"}],\"osceDay\" :[{\"osceDate\":\"2012-01-01T00:00:42Z\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"},{\"osceDate\":\"2012-06-18T00:00:59Z\"},{\"osceDate\":\"2012-06-21T00:00:30Z\"}],\"trainings\" : [{\"name\":\"testTraining\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:00:00Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-01T00:00:00Z\",\"timeStart\":\"2012-07-01T08:29:03Z\",\"timeEnd\":\"2012-07-01T15:29:01Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:01:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:59Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:43Z\",\"timeStart\":\"2012-07-17T10:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"tttttt\",\"trainingDate\":\"2012-07-17T00:00:59Z\",\"timeStart\":\"\",\"timeEnd\":\"\"}],\"patientInSemester\" : [{\"standarizedPatientId\":"+patient2.getId()+",\"acceptedTrainings\":[{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-21T00:00:00Z\"}],\"accepted\":false},{\"standarizedPatientId\":"+patient1.getId()+",\"acceptedTrainings\":[{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T07:00:02Z\",\"timeEnd\":\"2012-07-17T14:15:55Z\"},{\"name\":\"training2\",\"trainingDate\":\"2012-07-25T00:00:00Z\",\"timeStart\":\"2012-07-25T08:30:00Z\",\"timeEnd\":\"2012-07-25T15:30:00Z\"},{\"name\":\"training1\",\"trainingDate\":\"2012-07-17T00:00:00Z\",\"timeStart\":\"2012-07-17T11:00:02Z\",\"timeEnd\":\"2012-07-17T17:15:55Z\"}],\"acceptedOsce\":[{\"osceDate\":\"2012-06-10T00:00:00Z\"},{\"osceDate\":\"2012-06-20T00:00:00Z\"}],\"accepted\":true}]}";	
-			returnJson = instance.sync(locale);	
+			returnJson = instance.sendSync(locale);	
 		} catch (Exception e) {
 			e.printStackTrace();
 			e.getCause().printStackTrace();
@@ -284,7 +284,7 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 		try {
 			locale = "en";
     
-			instance.sync(locale);
+			instance.sendSync(locale);
 			
 			
 		} catch (Exception e) {
@@ -334,7 +334,7 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 		try {
 			locale = "en";
     
-			instance.sync(locale);
+			instance.sendSync(locale);
 			
 			
 		} catch (Exception e) {
@@ -393,7 +393,7 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 		try {
 			locale = "en";
     
-			instance.sync(locale);
+			instance.sendSync(locale);
 			Assert.fail("excepted error did not happen");
 			
 		} catch (Exception e) {
@@ -434,7 +434,7 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
 		try {
 			locale = "en";
     
-			instance.sync(locale);
+			instance.sendSync(locale);
 			
 			Assert.fail("Expected Error never occured " );
 		} catch (Exception e) {
@@ -651,7 +651,7 @@ public class DMZSyncServiceImplTest extends AbstractJUnit4SpringContextTests  {
         MyDMZSyncServiceImpl2 instance2 = new MyDMZSyncServiceImpl2();
         String ret;
 		try {
-			ret = instance2.getDMZDataForPatient(23L);
+			ret = instance2.getDMZData("");
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

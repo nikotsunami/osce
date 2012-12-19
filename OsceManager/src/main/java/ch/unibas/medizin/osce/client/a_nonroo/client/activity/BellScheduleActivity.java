@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.BellScheduleView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.BellScheduleViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
@@ -17,6 +18,7 @@ import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.shared.BellAssignmentType;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.Semesters;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -138,8 +140,9 @@ public class BellScheduleActivity extends AbstractActivity implements
 	}
 
 	private String getSemesterName() {
-		return this.semesterProxy.getSemester().name() + " "
-				+ this.semesterProxy.getCalYear();
+		String name = new EnumRenderer<Semesters>().render(semesterProxy.getSemester());
+		name += " " + this.semesterProxy.getCalYear();
+		return name;
 	}
 
 	private void init() {

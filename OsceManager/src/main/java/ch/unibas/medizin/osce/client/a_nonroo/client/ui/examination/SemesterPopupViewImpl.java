@@ -131,6 +131,4 @@ private static SemesterPopupViewImplUiBinder uiBinder = GWT.create(SemesterPopup
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;
 	}
-	
-		
 }

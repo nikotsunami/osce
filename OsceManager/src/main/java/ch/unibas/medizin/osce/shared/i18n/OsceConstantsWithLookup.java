@@ -78,6 +78,8 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 
 	public String exportSuccessful();
 
+	public String FED();
+
 	public String FEDERAL_EXAM();
 
 	public String FEMALE();
@@ -99,6 +101,8 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String httpClientException();
 
 	public String importSussessful();
+
+	public String item_analysis();
 
 	public String L();
 
@@ -188,6 +192,8 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 
 	public String PERPIECE();
 
+	public String post_analysys();
+
 	public String PREPARATION();
 
 	public String PROFESSION_EQUALS();
@@ -273,9 +279,6 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String WORKPERMISSION_EQUALS();
 
 	public String WORKPERMISSION_NOT_EQUALS();
-	
-	public String item_analysis();
-	
-	public String post_analysys();
+
 }
 

@@ -60,6 +60,7 @@ import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
 import ch.unibas.medizin.osce.shared.RoleTypes;
+import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -457,7 +458,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 					osceDaySubViewImpl.setDelegate(spRoleAssignmentActivity);
 					osceDaySubViewImpl.setOsceDayProxy(osceDayProxy);
 					StudyYears studyYear =osceProxy.getStudyYear();
-					String name =semesterProxy.getSemester().name();
+					String name = new EnumRenderer<Semesters>().render(semesterProxy.getSemester());
 
 					if(studyYear != null && name !=null){
 						String header = new EnumRenderer<StudyYears>().render(studyYear) +"." + name +" - " + DateTimeFormat.getShortDateFormat().format(osceDayProxy.getOsceDate());

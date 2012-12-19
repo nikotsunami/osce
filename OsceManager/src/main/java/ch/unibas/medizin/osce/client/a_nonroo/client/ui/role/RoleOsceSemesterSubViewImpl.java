@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
@@ -129,7 +130,7 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 				}
 				
 				if(object.getSemester()!=null) {
-					value=value+" "+object.getSemester().getSemester().name();
+					value = value + " " + new EnumRenderer<Semesters>().render(object.getSemester().getSemester());
 				}
 				return renderer.render(value);
 			}
@@ -138,27 +139,13 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 		osceSemesterTable.addColumn(new TextColumn<OsceProxy>() {
 			{ this.setSortable(true); }
 
-			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-
-				public String render(java.lang.String obj) {
-					return obj == null ? "" : String.valueOf(obj);
-				}
-			};
+			Renderer<Semesters> renderer = new EnumRenderer<Semesters>();
 
 			@Override
 			public String getValue(OsceProxy object) {
-				if(object.getSemester()==null)
-				{
-					return renderer.render(" ");
-				}
-				else
-				{
-				return renderer.render( object.getSemester().getSemester().toString());
-				}
+				return renderer.render( object.getSemester().getSemester());
 			}
-		}, constants.semester());
-		
-					
+		}, constants.semester());		
 	}
 	
 	public void setDelegate(Delegate delegate) 

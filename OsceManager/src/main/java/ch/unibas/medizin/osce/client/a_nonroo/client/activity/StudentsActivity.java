@@ -24,6 +24,7 @@ import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesRequest;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -227,7 +228,8 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 				while(osceList.hasNext()){
 					
 					final OsceProxy tempOsceProxy = osceList.next();
-					String osceLable = new EnumRenderer<StudyYears>().render(tempOsceProxy.getStudyYear()) + "." + tempOsceProxy.getSemester().getSemester().name();
+					String osceLable = new EnumRenderer<StudyYears>().render(tempOsceProxy.getStudyYear()) + "." 
+							+ new EnumRenderer<Semesters>().render(tempOsceProxy.getSemester().getSemester());
 				
 					final StudentSubDetailsViewImpl studentSubDetailsViewImpl = new StudentSubDetailsViewImpl(tempOsceProxy);
 					subDetailsView[tabIndex]=studentSubDetailsViewImpl;
