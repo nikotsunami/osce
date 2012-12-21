@@ -1,14 +1,18 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CriteriaPopupView.Delegate;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CriteriaPopupViewImpl.Binder;
+import java.util.ArrayList;
+
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -24,6 +28,18 @@ public class CheckListTopicPopupViewImpl extends PopupPanel implements CheckList
 	@UiField
 	Label topicLbl;
 	
+	
+	@UiField
+	Label isOverallQuestionLbl;
+	
+	@UiField
+	CheckBox isOverallQuestionChkBox;
+	
+
+	public CheckBox getIsOverallQuestionChkBox() {
+		return isOverallQuestionChkBox;
+	}
+
 	public Label getTopicLbl() {
 		return topicLbl;
 	}
@@ -92,8 +108,18 @@ public class CheckListTopicPopupViewImpl extends PopupPanel implements CheckList
 	@UiField
 	Button cancelBtn;
 	// E: Issue Role 
-			
 	
+	@UiField
+	HorizontalPanel thirtHP;
+	
+	private Label criteriaCountLbl;
+	
+	private ListBox criteriaCountLstBox=new ListBox();
+	
+	public ListBox getCriteriaCountLstBox() {
+		return criteriaCountLstBox;
+	}
+
 	public CheckListTopicPopupViewImpl() {
 		super(true);
 		add(BINDER.createAndBindUi(this));
@@ -101,6 +127,47 @@ public class CheckListTopicPopupViewImpl extends PopupPanel implements CheckList
 		// Issue Role 
 		cancelBtn.setText(constants.cancel());
 		// E: Issue Role 
+		isOverallQuestionLbl.removeFromParent();
+		isOverallQuestionChkBox.removeFromParent();
+		
+	}
+	
+	public CheckListTopicPopupViewImpl(boolean isQuestionView) {
+		
+		
+		super(true);
+		add(BINDER.createAndBindUi(this));
+		okBtn.setText(constants.okBtn());
+		// Issue Role 
+		cancelBtn.setText(constants.cancel());
+	
+		if(isQuestionView)
+		{
+			// E: Issue Role 
+			isOverallQuestionLbl.setText(constants.isOverallQuestion());
+			isOverallQuestionLbl.setVisible(true);
+			isOverallQuestionChkBox.setVisible(true);
+		}
+		else
+		{
+			isOverallQuestionLbl.removeFromParent();
+			isOverallQuestionChkBox.removeFromParent();
+			
+			criteriaCountLbl=new Label();
+			criteriaCountLbl.setText(constants.criteraCount());
+			
+			ArrayList<Integer> integers=new ArrayList<Integer>();
+			for(int i=0;i<11;i++)
+			{
+				criteriaCountLstBox.addItem(""+i);
+			}
+			criteriaCountLstBox.setSelectedIndex(0);
+			thirtHP.setWidth("100%");
+			thirtHP.add(criteriaCountLbl);
+			thirtHP.add(criteriaCountLstBox);
+		}
+		
+		
 	}
 	
 	public void setDelegate(Delegate delegate) {

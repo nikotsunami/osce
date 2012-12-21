@@ -351,6 +351,8 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	private SingleSelectionModel<AdvancedSearchCriteriaProxy> selectionAdvanceSearchModel;
 
 	RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl checklistQuestionItemViewImpl;
+	
+	private int questionCount=0;
 	// ]Assignment F
 	
 	//learning
@@ -1533,6 +1535,7 @@ final int index2 = index;
 //		RoleDetailsChecklistSubViewChecklistQuestionItemView queView[]=new RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl[proxy.getCheckList().getCheckListTopics().size()];
 		//create Topic View
 		standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getDragController().addDragHandler(roleDetailActivity);
+		roleDetailActivity.questionCount=0;
 		while(topicIterator.hasNext())
 		{
 			ChecklistTopicProxy topicProxy=topicIterator.next();
@@ -1544,8 +1547,9 @@ final int index2 = index;
 			
 			while(questionIterator.hasNext())
 			{
+				
 				ChecklistQuestionProxy questionProxy=questionIterator.next();
-				RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView=createQuestionView(index, questionProxy, topicView);
+				RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView=createQuestionView(index, questionProxy, topicView,++roleDetailActivity.questionCount);
 				
 				//create Criteria View
 				Iterator<ChecklistCriteriaProxy> criteriaIterator=questionProxy.getCheckListCriterias().iterator();
@@ -1953,7 +1957,7 @@ final int index2 = index;
 					//standardizedRoleDetailsView[selectedtab].checkListAP.clear();
 					
 					topicView.getDragController().makeDraggable(topicView.getqueVP());
-		
+					roleDetailActivity.questionCount=0;
 					while(topicIterator.hasNext())
 					{
 						ChecklistTopicProxy topicProxy=topicIterator.next();
@@ -1967,7 +1971,7 @@ final int index2 = index;
 						while(questionIterator.hasNext())
 						{
 							ChecklistQuestionProxy questionProxy=questionIterator.next();
-							RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView=createQuestionView(selectedtab, questionProxy, topicView);
+							RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView=createQuestionView(selectedtab, questionProxy, topicView,++roleDetailActivity.questionCount);
 							
 							//create Criteria View
 							Iterator<ChecklistCriteriaProxy> criteriaIterator=questionProxy.getCheckListCriterias().iterator();
@@ -1987,8 +1991,12 @@ final int index2 = index;
 							}
 							questionView.setChecklistTopicProxy(topicProxy);
 							questionView.setRoleDetailsChecklistSubViewChecklistTopicItemView(topicView);
+							
+							
 						}
 					}
+					
+					
 				}
 			});
 
@@ -2331,7 +2339,7 @@ final int index2 = index;
 			proxy.setInstruction(Instruction);
 			proxy.setCheckListTopic(topicView.getProxy());
 			proxy.setSequenceNumber(topicView.checkListQuestionVerticalPanel.getWidgetCount());
-			
+			proxy.setIsOveralQuestion(topicView.questionPopup.getIsOverallQuestionChkBox().getValue());
 			// Highlight onViolation
 			Log.info("Map ::"+topicView.getChecklistQuestionMap());
 			//Log.info("Map Size: "+ standardizedRoleDetailsView[selectedtab].checkListTopicView.get(selectedtab).getChecklistQuestionMap().size());
@@ -2342,18 +2350,19 @@ final int index2 = index;
 				{
 					Log.info("Call Success...");	
 					((CheckListTopicPopupViewImpl)(topicView.questionPopup)).hide();
-					createQuestionView(selectedtab,proxy,topicView);
+					createQuestionView(selectedtab,proxy,topicView,++roleDetailActivity.questionCount);
 			//	roleTopicInit(topicView.getProxy(), topicView);	
 				}
 			});
 		}
 		
-		public RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl createQuestionView(int selectedTab,ChecklistQuestionProxy proxy,RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView)
+		public RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl createQuestionView(int selectedTab,ChecklistQuestionProxy proxy,RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView,int questionCount)
 		{
 			RoleDetailsChecklistSubViewChecklistQuestionItemView questionView=new RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl();
 			//questionView.getQuestionItemLbl().setText(proxy.getQuestion());
 			questionView.getQuestionItemLbl().setTitle(proxy.getQuestion());
-			questionView.getQuestionItemLbl().setText(util.getFormatedString(proxy.getQuestion(),60));
+			questionView.getQuestionItemLbl().setText(questionCount +". "+util.getFormatedString(proxy.getQuestion(),60));
+			
 			
 			//view.getCriteriaLbl().setText(util.getFormatedString(proxy.getCriteria(),10));
 			//questionView.getQuestionInstruction().setText(proxy.getInstruction());
@@ -2433,6 +2442,7 @@ final int index2 = index;
 			proxy.setChecklistQuestion(questionView.getProxy());
 			proxy.setValue(value);
 			proxy.setSequenceNumber(questionView.optionVerticalPanel.getWidgetCount());
+			proxy.setCriteriaCount(new Integer(questionView.optionPopup.getCriteriaCountLstBox().getValue(questionView.optionPopup.getCriteriaCountLstBox().getSelectedIndex())));
 			// Highlight onViolation
 			Log.info("Map Size: " + questionView.getChecklistOptionMap().size());
 			request.persist().using(proxy).fire(new OSCEReceiver<Void>(questionView.getChecklistOptionMap()) 
@@ -2457,7 +2467,7 @@ final int index2 = index;
 			//change for design 
 			//util.getFormatedString(text, length);
 			view.getOptionLbl().setText(util.getFormatedString(optionProxy.getOptionName(), 10));
-			view.getOptionLbl().setTitle(optionProxy.getOptionName());
+			view.getOptionLbl().setTitle(optionProxy.getOptionName()+"["+optionProxy.getCriteriaCount()+"]");
 			if(optionProxy.getValue()!=null)
 			{
 				//view.getOptionLbl().setText(view.getOptionLbl().getText() +"("+ optionProxy.getValue() +")");
@@ -2510,6 +2520,7 @@ final int index2 = index;
 					
 					proxy.setTitle(topicname);
 					proxy.setDescription(description);
+					
 					final ChecklistTopicProxy finalProxy=proxy;
 					Log.info("Map Size: " + topicView.getChecklistTopicMap().size());
 					checklisttopicreq.persist().using(proxy).fire(new OSCEReceiver<Void>(topicView.getChecklistTopicMap()) 
@@ -2885,7 +2896,7 @@ final int index2 = index;
 								addQuestionProxy.setInstruction(questionProxy.getInstruction());
 								addQuestionProxy.setQuestion(questionProxy.getQuestion());
 								addQuestionProxy.setSequenceNumber(questionProxy.getSequenceNumber());
-								
+								addQuestionProxy.setIsOveralQuestion(questionProxy.getIsOveralQuestion());
 								questionRequest.persist().using(addQuestionProxy).fire(new Receiver<Void>() {
 
 									@Override
@@ -2896,7 +2907,7 @@ final int index2 = index;
 											public void onSuccess(Object response) {
 												ChecklistQuestionProxy queProxy=(ChecklistQuestionProxy)response;
 												//create question view
-												RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView=createQuestionView(selectedTab, queProxy, topicView);
+												RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView=createQuestionView(selectedTab, queProxy, topicView,++roleDetailActivity.questionCount);
 												if(questionProxy.getCheckListOptions()!=null)
 												{
 													Iterator<ChecklistOptionProxy> optionIterator=questionProxy.getCheckListOptions().iterator();
@@ -2911,6 +2922,7 @@ final int index2 = index;
 														addOptionProxy.setOptionName(optionProxy.getOptionName());
 														addOptionProxy.setValue(optionProxy.getValue());
 														addOptionProxy.setSequenceNumber(optionProxy.getSequenceNumber());
+														addOptionProxy.setCriteriaCount(optionProxy.getCriteriaCount());
 														
 														optionRequest.persist().using(addOptionProxy).fire();
 														
@@ -3015,7 +3027,7 @@ final int index2 = index;
 			addQuestionProxy.setInstruction(proxy.getInstruction());
 			addQuestionProxy.setQuestion(proxy.getQuestion());
 			addQuestionProxy.setSequenceNumber(proxy.getSequenceNumber());
-			
+			addQuestionProxy.setIsOveralQuestion(proxy.getIsOveralQuestion());
 //			questionRequest.persist().using(addQuestionProxy).with("checkListQuestions","checkListQuestions.checkListCriterias","checkListQuestions.checkListOptions").fire(new Receiver<void>() {
 	//
 //				@Override
@@ -3041,7 +3053,7 @@ final int index2 = index;
 							ChecklistQuestionProxy queProxy= (ChecklistQuestionProxy)response;
 							
 							//create question view
-							RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView=createQuestionView(selectedTab, queProxy, topicView);
+							RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView=createQuestionView(selectedTab, queProxy, topicView,++roleDetailActivity.questionCount);
 							
 							if(proxy.getCheckListOptions()!=null)
 							{
@@ -3055,7 +3067,7 @@ final int index2 = index;
 									addOptionProxy.setChecklistQuestion(queProxy);
 									addOptionProxy.setOptionName(optionProxy.getOptionName());
 									addOptionProxy.setValue(optionProxy.getValue());
-									
+									addOptionProxy.setCriteriaCount(optionProxy.getCriteriaCount());
 									
 									Log.info("Option Question ID is :"+addOptionProxy.getChecklistQuestion().getId());
 									optionRequest.persist().using(addOptionProxy).fire(new Receiver<Void>() {
@@ -3120,6 +3132,7 @@ final int index2 = index;
 			questionProxy=request.edit(questionProxy);
 			questionProxy.setQuestion(question);
 			questionProxy.setInstruction(instruction);
+			questionProxy.setIsOveralQuestion(questionView.editquestionpopup.getIsOverallQuestionChkBox().getValue());
 			// Highlight onViolation	
 			Log.info("Map Size: " + questionView.getChecklistQuestionMap().size());
 			 final ChecklistQuestionProxy finalquestionProxy=questionProxy;
@@ -5952,7 +5965,8 @@ final int index2 = index;
 		Iterator<ChecklistTopicProxy> topicIterator=proxy.getCheckList().getCheckListTopics().iterator();
 //		RoleDetailsChecklistSubViewChecklistQuestionItemView queView[]=new RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl[proxy.getCheckList().getCheckListTopics().size()];
 		//create Topic View
-		int i=0;
+		
+		roleDetailActivity.questionCount=0;
 		while(topicIterator.hasNext())
 		{
 			ChecklistTopicProxy topicProxy=topicIterator.next();
@@ -5981,7 +5995,7 @@ final int index2 = index;
 			while(questionIterator.hasNext())
 			{
 				ChecklistQuestionProxy questionProxy=questionIterator.next();
-				RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView=createQuestionView(index, questionProxy, topicView);
+				RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView=createQuestionView(index, questionProxy, topicView,++roleDetailActivity.questionCount);
 				
 				// SPEC Change
 				questionView.addCriteriaButton.setEnabled(false);
@@ -7253,7 +7267,7 @@ public void onDragStart(DragStartEvent event) {
 		proxy.setOptionName(topic);
 		proxy.setChecklistQuestion(optionView.getProxy().getChecklistQuestion());
 		proxy.setValue(description);
-		
+		proxy.setCriteriaCount(new Integer(optionView.optionPopup.getCriteriaCountLstBox().getValue(optionView.optionPopup.getCriteriaCountLstBox().getSelectedIndex())));
 		// Highlight onViolation
 		request.persist().using(proxy).fire(new OSCEReceiver<Void>(optionView.getChecklistOptionMap()) 
 		{

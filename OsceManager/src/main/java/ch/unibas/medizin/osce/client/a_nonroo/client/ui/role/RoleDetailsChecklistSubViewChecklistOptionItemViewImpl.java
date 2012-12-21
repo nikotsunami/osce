@@ -119,7 +119,7 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 	@UiHandler("editBtn")
 	public void editOption(ClickEvent event)
 	{
-		optionPopup=new CheckListTopicPopupViewImpl();			
+		optionPopup=new CheckListTopicPopupViewImpl(false);			
 			
 		((CheckListTopicPopupViewImpl)optionPopup).setAnimationEnabled(true);
 		
@@ -130,6 +130,8 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 		optionPopup.getTopicTxtBox().setValue(roleDetailsChecklistSubViewChecklistOptionItemViewImpl.getProxy().getOptionName());
 			
 		optionPopup.getDescriptionTxtBox().setValue(roleDetailsChecklistSubViewChecklistOptionItemViewImpl.getProxy().getValue());
+		if(roleDetailsChecklistSubViewChecklistOptionItemViewImpl.getProxy().getCriteriaCount() != null)
+		optionPopup.getCriteriaCountLstBox().setSelectedIndex(roleDetailsChecklistSubViewChecklistOptionItemViewImpl.getProxy().getCriteriaCount().intValue());
 			
 		((CheckListTopicPopupViewImpl)optionPopup).setWidth("160px");	
 			
@@ -179,7 +181,7 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 		});	
 		// E: Issue Role V1
 		
-		((CheckListTopicPopupViewImpl)optionPopup).setPopupPosition(editBtn.getAbsoluteLeft()-205, editBtn.getAbsoluteTop()-192); // SPEC Change+
+		((CheckListTopicPopupViewImpl)optionPopup).setPopupPosition(editBtn.getAbsoluteLeft()-205, editBtn.getAbsoluteTop()-245); // SPEC Change+
 		((CheckListTopicPopupViewImpl)optionPopup).show();
 	}
 	

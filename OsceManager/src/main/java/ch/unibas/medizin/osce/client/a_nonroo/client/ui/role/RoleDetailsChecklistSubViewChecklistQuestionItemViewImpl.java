@@ -381,7 +381,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 	{
 		if(optionPopup==null)
 		{
-			optionPopup=new CheckListTopicPopupViewImpl();
+			optionPopup=new CheckListTopicPopupViewImpl(false);
 			
 			//SPEC Change
 			((CheckListTopicPopupViewImpl)optionPopup).setAnimationEnabled(true);
@@ -437,7 +437,9 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		
 		
 		} //SPEC Change
-		((CheckListTopicPopupViewImpl)optionPopup).setPopupPosition(addOptionButton.getAbsoluteLeft()-205, addOptionButton.getAbsoluteTop()-195); //SPEC Change+
+		
+		((CheckListTopicPopupViewImpl)optionPopup).getCriteriaCountLstBox().setSelectedIndex(0);
+		((CheckListTopicPopupViewImpl)optionPopup).setPopupPosition(addOptionButton.getAbsoluteLeft()-205, addOptionButton.getAbsoluteTop()-240); //SPEC Change+
 		
 		
 		// Highlight onViolation
@@ -536,7 +538,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		//spec india
 		if(editquestionpopup==null)
 		{
-			editquestionpopup=new CheckListTopicPopupViewImpl();
+			editquestionpopup=new CheckListTopicPopupViewImpl(true);
 			//SPEC Change
 			
 			((CheckListTopicPopupViewImpl)editquestionpopup).setAnimationEnabled(true);
@@ -592,7 +594,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 			// E: Issue Role
 		
 		} // SPEC Change
-		((CheckListTopicPopupViewImpl)editquestionpopup).setPopupPosition(edit.getAbsoluteLeft()-450, edit.getAbsoluteTop()-195); // SPEC Change+
+		((CheckListTopicPopupViewImpl)editquestionpopup).setPopupPosition(edit.getAbsoluteLeft()-450, edit.getAbsoluteTop()-240); // SPEC Change+
 		
 		
 		
@@ -606,6 +608,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		
 		editquestionpopup.getTopicTxtBox().setText(proxy.getQuestion());	
 		editquestionpopup.getDescriptionTxtBox().setText(proxy.getInstruction());
+		editquestionpopup.getIsOverallQuestionChkBox().setChecked(proxy.getIsOveralQuestion());
 		((CheckListTopicPopupViewImpl)editquestionpopup).show();
 		
 	}

@@ -11,6 +11,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -58,14 +59,14 @@ public class XmlUtil {
 			checklistTitle.appendChild(doc.createTextNode("Title"));
 			rootElement.appendChild(checklistTitle);			
 			Element checklistTitleValue = doc.createElement("string");
-			checklistTitleValue.appendChild(doc.createTextNode(checkList.getTitle() == null ? "" : checkList.getTitle()));
+			checklistTitleValue.appendChild(doc.createCDATASection(checkList.getTitle() == null ? "" : checkList.getTitle()));
 			rootElement.appendChild(checklistTitleValue);
 						
 			Element checklistId = doc.createElement("key");
 			checklistId.appendChild(doc.createTextNode("FormId"));
 			rootElement.appendChild(checklistId);			
 			Element checklistIdVal = doc.createElement("string");
-			checklistIdVal.appendChild(doc.createTextNode(checkList.getId().toString()));
+			checklistIdVal.appendChild(doc.createCDATASection(checkList.getId().toString()));
 			rootElement.appendChild(checklistIdVal);
 			
 			Element topicKey = doc.createElement("key");
@@ -76,6 +77,8 @@ public class XmlUtil {
 			
 			Element topicArray = doc.createElement("array");
 			rootElement.appendChild(topicArray);
+			
+			int ctr = 1;
 			
 			while (checklistTopicItr.hasNext())
 			{
@@ -88,21 +91,21 @@ public class XmlUtil {
 				topicTitle.appendChild(doc.createTextNode("Title"));
 				topicDict.appendChild(topicTitle);
 				Element topicTitleVal = doc.createElement("string");
-				topicTitleVal.appendChild(doc.createTextNode(checklistTopic.getTitle()));
+				topicTitleVal.appendChild(doc.createCDATASection(checklistTopic.getTitle()));
 				topicDict.appendChild(topicTitleVal);
 				
 				Element topicDesc = doc.createElement("key");
 				topicDesc.appendChild(doc.createTextNode("Instruction"));
 				topicDict.appendChild(topicDesc);
 				Element topicDescVal = doc.createElement("string");
-				topicDescVal.appendChild(doc.createTextNode(checklistTopic.getDescription() == null ? "" : checklistTopic.getDescription()));
+				topicDescVal.appendChild(doc.createCDATASection(checklistTopic.getDescription() == null ? "" : checklistTopic.getDescription()));
 				topicDict.appendChild(topicDescVal);
 				
 				Element topicSeqNo = doc.createElement("key");
 				topicSeqNo.appendChild(doc.createTextNode("SequenceNumber"));
 				topicDict.appendChild(topicSeqNo);
 				Element topicSeqNoVal = doc.createElement("string");
-				topicSeqNoVal.appendChild(doc.createTextNode(checklistTopic.getSort_order().toString()));
+				topicSeqNoVal.appendChild(doc.createCDATASection(checklistTopic.getSort_order().toString()));
 				topicDict.appendChild(topicSeqNoVal);
 				
 				Element queKey = doc.createElement("key");
@@ -116,6 +119,7 @@ public class XmlUtil {
 				
 				while (queItr.hasNext())
 				{
+					
 					ChecklistQuestion checklistQuestion = queItr.next();
 					
 					Element queDict = doc.createElement("dict");
@@ -125,21 +129,29 @@ public class XmlUtil {
 					queProblem.appendChild(doc.createTextNode("Problem"));
 					queDict.appendChild(queProblem);
 					Element queProblemVal = doc.createElement("string");
-					queProblemVal.appendChild(doc.createTextNode(checklistQuestion.getQuestion()));
+					queProblemVal.appendChild(doc.createCDATASection(checklistQuestion.getQuestion()));
 					queDict.appendChild(queProblemVal);
 					
 					Element queInst = doc.createElement("key");
 					queInst.appendChild(doc.createTextNode("Instruction"));
 					queDict.appendChild(queInst);
 					Element queInstVal = doc.createElement("string");
-					queInstVal.appendChild(doc.createTextNode(checklistQuestion.getInstruction()));
+					queInstVal.appendChild(doc.createCDATASection(checklistQuestion.getInstruction()));
 					queDict.appendChild(queInstVal);
+					
+					Element queIsOverall = doc.createElement("key");
+					queIsOverall.appendChild(doc.createTextNode("isOverallQuestion"));
+					queDict.appendChild(queIsOverall);
+					Element queIsOverallVal = doc.createElement((checklistQuestion.getIsOveralQuestion() == null ? "false" : checklistQuestion.getIsOveralQuestion().toString()));					
+					queDict.appendChild(queIsOverallVal);
 					
 					Element queSeqNo = doc.createElement("key");
 					queSeqNo.appendChild(doc.createTextNode("SequenceNumber"));
 					queDict.appendChild(queSeqNo);
 					Element queSeqNoVal = doc.createElement("string");
-					queSeqNoVal.appendChild(doc.createTextNode(checklistQuestion.getSequenceNumber().toString()));
+					queSeqNoVal.appendChild(doc.createCDATASection(String.valueOf(ctr)));
+					ctr++;
+					//queSeqNoVal.appendChild(doc.createCDATASection(checklistQuestion.getSequenceNumber().toString()));
 					queDict.appendChild(queSeqNoVal);
 					
 					Element optionKey = doc.createElement("key");
@@ -162,14 +174,14 @@ public class XmlUtil {
 						optionTitle.appendChild(doc.createTextNode("Title"));
 						optionDict.appendChild(optionTitle);
 						Element optionTitleVal = doc.createElement("string");
-						optionTitleVal.appendChild(doc.createTextNode(checklistOption.getOptionName()));
+						optionTitleVal.appendChild(doc.createCDATASection(checklistOption.getOptionName()));
 						optionDict.appendChild(optionTitleVal);
 						
 						Element optionSubTitle = doc.createElement("key");
 						optionSubTitle.appendChild(doc.createTextNode("Subtitle"));
 						optionDict.appendChild(optionSubTitle);
 						Element optionSubTitleVal = doc.createElement("string");
-						optionSubTitleVal.appendChild(doc.createTextNode(checklistOption.getName() == null ? "" : checklistOption.getName()));
+						optionSubTitleVal.appendChild(doc.createCDATASection(checklistOption.getName() == null ? "" : checklistOption.getName()));
 						optionDict.appendChild(optionSubTitleVal);
 						
 						Element optionValue = doc.createElement("key");
@@ -179,11 +191,18 @@ public class XmlUtil {
 						optionValueVal.appendChild(doc.createTextNode(checklistOption.getValue()));
 						optionDict.appendChild(optionValueVal);
 						
+						Element criCountValue = doc.createElement("key");
+						criCountValue.appendChild(doc.createTextNode("criteriaCount"));
+						optionDict.appendChild(criCountValue);
+						Element criCountValueVal = doc.createElement("real");
+						criCountValueVal.appendChild(doc.createTextNode("[" + (checklistOption.getCriteriaCount() == null ? "" : checklistOption.getCriteriaCount().toString()) + "]"));
+						optionDict.appendChild(criCountValueVal);
+						
 						Element optionSeqNo = doc.createElement("key");
 						optionSeqNo.appendChild(doc.createTextNode("SequenceNumber"));
 						optionDict.appendChild(optionSeqNo);
 						Element optionSeqNoVal = doc.createElement("string");
-						optionSeqNoVal.appendChild(doc.createTextNode(checklistOption.getSequenceNumber().toString()));
+						optionSeqNoVal.appendChild(doc.createCDATASection(checklistOption.getSequenceNumber().toString()));
 						optionDict.appendChild(optionSeqNoVal);
 					}
 					
@@ -207,14 +226,14 @@ public class XmlUtil {
 						criteriaTitle.appendChild(doc.createTextNode("Title"));
 						criteriaDict.appendChild(criteriaTitle);
 						Element criteriaTitleVal = doc.createElement("string");
-						criteriaTitleVal.appendChild(doc.createTextNode(checklistCriteria.getCriteria()));
+						criteriaTitleVal.appendChild(doc.createCDATASection(checklistCriteria.getCriteria()));
 						criteriaDict.appendChild(criteriaTitleVal);
 						
 						Element criteriaSeqNo = doc.createElement("key");
 						criteriaSeqNo.appendChild(doc.createTextNode("SequenceNumber"));
 						criteriaDict.appendChild(criteriaSeqNo);
 						Element criteriaSeqNoVal = doc.createElement("string");
-						criteriaSeqNoVal.appendChild(doc.createTextNode(checklistCriteria.getSequenceNumber().toString()));
+						criteriaSeqNoVal.appendChild(doc.createCDATASection(checklistCriteria.getSequenceNumber().toString()));
 						criteriaDict.appendChild(criteriaSeqNoVal);
 					}
 					

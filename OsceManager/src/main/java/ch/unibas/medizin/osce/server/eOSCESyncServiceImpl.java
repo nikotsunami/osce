@@ -469,6 +469,9 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 								
 								xml = xml + "<checklisttopics>" + "\n";
 								List<ChecklistTopic> checklistTopic = checklist.getCheckListTopics();
+								
+								int ctr = 1;
+								
 								for (int ch=0; ch<checklistTopic.size(); ch++)
 								{
 									xml = xml + "<checklisttopic>" + "\n";
@@ -485,6 +488,10 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 										xml = xml + "<id>" + checklistQuestions.get(qu).getId() + "</id>" + "\n";
 										xml = xml + "<question>" + checklistQuestions.get(qu).getQuestion() + "</question>" + "\n";
 										xml = xml + "<instruction>" + checklistQuestions.get(qu).getInstruction() + "</instruction>" + "\n";
+										xml = xml + "<key>isOverallQuestion</key>" + "\n";
+										xml = xml + "<" + (checklistQuestions.get(qu).getIsOveralQuestion() == null ? "false" : checklistQuestions.get(qu).getIsOveralQuestion()) + " />" + "\n";
+										xml = xml + "<sequencenumber>" + ctr + "</sequencenumber>" + "\n";
+										ctr++;
 										
 										xml = xml + "<checklistcriterias>" + "\n";
 										//Set<ChecklistCriteria> criteria = new HashSet<ChecklistCriteria>();
@@ -510,6 +517,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 											xml = xml + "<id>" + op.getId() + "</id>" + "\n";
 											xml = xml + "<title>" + op.getOptionName() + "</title>" + "\n";
 											xml = xml + "<value>" + op.getValue() + "</value>" + "\n";
+											xml = xml + "<criteriacount>" + "[" + (op.getCriteriaCount() == null ? "" : op.getCriteriaCount()) + "]" + "</criteriacount>" + "\n";
 											xml = xml + "</checklistoption>" + "\n";
 										}
 										xml = xml + "</checklistoptions>" + "\n";

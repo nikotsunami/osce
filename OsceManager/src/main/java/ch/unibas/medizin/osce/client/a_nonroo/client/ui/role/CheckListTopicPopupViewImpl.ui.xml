@@ -68,8 +68,16 @@
 		
 	</g:HorizontalPanel>
 	
-	<g:HorizontalPanel  spacing="10" horizontalAlignment="center">
-		<my:IconButton icon="check" ui:field="okBtn"></my:IconButton>
+	<g:HorizontalPanel  spacing="10" ui:field="thirtHP">
+	
+		<g:Label ui:field="isOverallQuestionLbl" styleName="{style.right}" width="100px" visible="false"></g:Label>
+		
+		<g:CheckBox ui:field="isOverallQuestionChkBox" styleName="{style.left}" visible="false"></g:CheckBox>
+		
+	</g:HorizontalPanel>
+	
+	<g:HorizontalPanel  spacing="10" horizontalAlignment="center" >
+		<my:IconButton icon="check" ui:field="okBtn" ></my:IconButton>
 		<!-- Issue Role -->
 		<my:IconButton icon="closethick" ui:field="cancelBtn"></my:IconButton>
 		<!-- E: Issue Role -->

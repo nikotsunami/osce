@@ -1255,6 +1255,9 @@ public interface OsceConstants extends Constants {
 	public String year();
 
 	public String yes();
-
+	
+    public String isOverallQuestion();
+    
+    public String criteraCount();
 }
 

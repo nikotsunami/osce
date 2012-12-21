@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.TypedQuery;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.log4j.Logger;
@@ -48,7 +49,8 @@ public class ChecklistQuestion {
 	private String instruction;
 	
 	
-	
+	 @NotNull
+	 private Boolean isOveralQuestion;
 	
 	public void questionMoveUp(long checklisTopictID) {
 		if (this.entityManager == null) {

@@ -35,6 +35,8 @@ public class ChecklistOption implements Comparable<ChecklistOption> {
 	
 	private Integer sequenceNumber;
 	
+	private Integer criteriaCount;
+	
 	@Transactional
 	public ChecklistOption save()
 	{

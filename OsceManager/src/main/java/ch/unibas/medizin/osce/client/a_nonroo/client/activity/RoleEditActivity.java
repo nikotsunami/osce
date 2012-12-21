@@ -610,10 +610,17 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		else
 		{
 			 checkListProxy= standardizedRole.getCheckList();//spec
-
-			checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
+			 
+			/* if(((RoleEditCheckListSubViewImpl)checkListView).title.getValue() ==null || ((RoleEditCheckListSubViewImpl)checkListView).title.getValue().equals(""))
+			 {
+				 checkListProxy.setTitle(standardizedRole.getShortName());
+			 }
+			 else*/
+				 checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
+			
 			standardizedRole.setCheckList(checkListProxy);//spec
-			System.out.println("Checklist----2: "+checkListProxy.getTitle());
+			
+			//System.out.println("Checklist----2: "+checkListProxy.getTitle());
 			/*standardizedRole.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
 			standardizedRole.setSum((Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex()))));
 			*///Issue # 122 : Replace pull down with autocomplete.
@@ -656,7 +663,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		Log.info("Call Final Save()");
 		
 		// Highlight onViolation
-		
+		if(((RoleEditCheckListSubViewImpl)checkListView).title.getValue()==null || ((RoleEditCheckListSubViewImpl)checkListView).title.getValue().equals(""))
+			((RoleEditCheckListSubViewImpl)checkListView).title.setValue(((RoleEditViewImpl)view).shortName.getValue());
 		
 		Log.info("Map Size: " + view.getStandardizedRoleMap().size());
 		editorDriver.flush().fire(new OSCEReceiver<Void>(view.getStandardizedRoleMap()) {
@@ -765,6 +773,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		else
 		{
 			Log.info("Goto Else Part");
+			
 		finalSave();
 		
 		}
@@ -819,6 +828,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 							topic.setSort_order(oldTopc.getSort_order());
 							topic.setTitle(oldTopc.getTitle());
 							
+							
+							
 							topicRequest.persist().using(topic).fire(new OSCEReceiver<Void>() {
 
 								@SuppressWarnings("deprecation")
@@ -839,7 +850,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 										question.setInstruction(oldQuestion.getInstruction());
 										question.setQuestion(oldQuestion.getQuestion());
 										question.setSequenceNumber(oldQuestion.getSequenceNumber());
-										
+										question.setIsOveralQuestion(oldQuestion.getIsOveralQuestion());
 										questionRequest.persist().using(question).fire(new OSCEReceiver<Void>() {
 
 											@SuppressWarnings("deprecation")
@@ -862,7 +873,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 													option.setOptionName(oldOption.getOptionName());
 													option.setValue(oldOption.getValue());
 													option.setSequenceNumber(oldOption.getSequenceNumber());
-													
+													option.setCriteriaCount(oldOption.getCriteriaCount());
 													
 													optionRequest.persist().using(option).fire(new OSCEReceiver<Void>() {
 
