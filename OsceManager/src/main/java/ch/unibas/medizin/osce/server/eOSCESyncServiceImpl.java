@@ -690,6 +690,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 										file.delete();
 									}
 									
+									FileUtils.touch(file);
+									
 									TransformerFactory transformerFactory = TransformerFactory.newInstance();
 									Transformer transformer = transformerFactory.newTransformer();
 									DOMSource source = new DOMSource(doc);
