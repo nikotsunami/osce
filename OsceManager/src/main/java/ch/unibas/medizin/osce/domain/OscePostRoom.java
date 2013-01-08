@@ -102,7 +102,14 @@ public class OscePostRoom {
     	return q.getResultList();
     }
     
-    
+    public static List<OscePostRoom> findOscePostRoomByCourseID(long courseId)
+    {
+    	EntityManager em = entityManager();
+    	String query = "SELECT o FROM OscePostRoom o WHERE course.id = " + courseId;
+    	TypedQuery<OscePostRoom> q = em.createQuery(query, OscePostRoom.class);
+    	return q.getResultList();
+    }
+     
     public static OscePostRoom findOscePostRoomByOscePostAndCourse(Course course, OscePost oscePost)
     {
     		//Log.info("findOscePostRoomByOscePostAndCourse call");    		

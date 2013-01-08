@@ -353,8 +353,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 	//issue change
 	public void downloadFile(String filename, Boolean flag)
 	{
-		final String url="/downloadExportOsceFile?path="+filename+"&flag="+flag;
-		
+		final String url=GWT.getHostPageBaseURL() + "downloadExportOsceFile?path="+filename+"&flag="+flag;
 		Window.open(url, filename, "enabled");
 	}
 }

@@ -17,8 +17,18 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncException;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncService;
@@ -29,6 +39,7 @@ import ch.unibas.medizin.osce.domain.ChecklistCriteria;
 import ch.unibas.medizin.osce.domain.ChecklistOption;
 import ch.unibas.medizin.osce.domain.ChecklistQuestion;
 import ch.unibas.medizin.osce.domain.ChecklistTopic;
+import ch.unibas.medizin.osce.domain.Course;
 import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDay;
@@ -376,6 +387,340 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	//export
 	public void exportOsceFile(Long semesterID)
 	{
+		//System.out.println("~~SEMESTER ID : " + semesterID);
+		String fileName = "";
+		int timeslot = 0;
+		String xml;
+		
+		try
+		{
+			List<Osce> osceList = Osce.findAllOsceBySemster(semesterID);
+					
+			for (int i=0; i<osceList.size(); i++)
+			{
+				//System.out.println("OSCE : " + i);		
+				
+				timeslot = osceList.get(i).getOscePostBlueprints().size();
+				
+				List<OsceDay> osceDayList = OsceDay.findOsceDayByOsce(osceList.get(i).getId());
+				int startrotation = 0;
+				int totalrotation = 0;
+				
+				for (int j=0; j<osceDayList.size(); j++)
+				{
+					List<OsceSequence> sequenceList = OsceSequence.findOsceSequenceByOsceDay(osceDayList.get(j).getId());
+					System.out.println("SEQUENCE LIST : " + sequenceList.size());
+					
+					for (int k=0; k<sequenceList.size(); k++)
+					{
+						startrotation = totalrotation;
+						totalrotation = totalrotation + sequenceList.get(k).getNumberRotation();
+						
+						List<Course> courseList = sequenceList.get(k).getCourses();
+						
+						int rotationoffset = 0;
+						int rotationStart = startrotation;
+						for (int l=startrotation; l<totalrotation; l++)
+						{	
+							for (Course course : courseList)
+							{
+								DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+								DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+						
+								Document doc = docBuilder.newDocument();
+								
+								Element rotationElement = doc.createElement("rotation");
+								doc.appendChild(rotationElement);							
+								
+								rotationElement.setAttribute("version", "1.0");
+								
+								Element rootElement = doc.createElement("oscepostrooms");
+								rotationElement.appendChild(rootElement);
+								
+								List<OscePostRoom> oscePostRoomList = OscePostRoom.findOscePostRoomByCourseID(course.getId());
+								
+								for (OscePostRoom oscePostRoom : oscePostRoomList)
+								{
+									Element oscePostRoomElement = doc.createElement("oscepostroom");
+									rootElement.appendChild(oscePostRoomElement);
+									
+									Element roomElement = doc.createElement("room");
+									oscePostRoomElement.appendChild(roomElement);
+									
+									Element roomIdElement = doc.createElement("id");
+									roomIdElement.appendChild(doc.createTextNode(oscePostRoom.getRoom().getId().toString()));
+									roomElement.appendChild(roomIdElement);
+									
+									Element roomNumElement = doc.createElement("number");
+									roomNumElement.appendChild(doc.createCDATASection(oscePostRoom.getRoom().getRoomNumber() == null ? "" : oscePostRoom.getRoom().getRoomNumber()));
+									roomElement.appendChild(roomNumElement);
+									
+									List<Assignment> assignmentlist = Assignment.findAssignmentByOscePostRoom(oscePostRoom.getId(), osceList.get(i).getId(), l);
+									
+									List<Assignment> examinerAssList = new ArrayList<Assignment>();
+									
+									if (assignmentlist.size() > 0)
+									{
+										Date timestart = assignmentlist.get(0).getTimeStart();
+										Date timeend = assignmentlist.get(assignmentlist.size()-1).getTimeStart();
+										examinerAssList = Assignment.findAssignmentExamnierByOscePostRoom(oscePostRoom.getId(), osceList.get(i).getId());
+									}
+									
+									Element examinersElement = doc.createElement("examiners");
+									oscePostRoomElement.appendChild(examinersElement);
+									
+									for (Assignment examinerAss : examinerAssList)
+									{
+										//get examiner data
+										if (examinerAss.getExaminer() != null)
+										{
+											Element examinerEle = doc.createElement("examiner");
+											examinersElement.appendChild(examinerEle);
+											
+											Element examinerIdElement = doc.createElement("id");
+											examinerIdElement.appendChild(doc.createTextNode(examinerAss.getExaminer().getId().toString()));
+											examinerEle.appendChild(examinerIdElement);
+											
+											Element examinerFirstnameElement = doc.createElement("firstname");
+											examinerFirstnameElement.appendChild(doc.createCDATASection(examinerAss.getExaminer().getPreName() == null ? "" : examinerAss.getExaminer().getPreName()));
+											examinerEle.appendChild(examinerFirstnameElement);
+											
+											Element examinerlastnameElement = doc.createElement("lastname");
+											examinerlastnameElement.appendChild(doc.createCDATASection(examinerAss.getExaminer().getName() == null ? "" : examinerAss.getExaminer().getName()));
+											examinerEle.appendChild(examinerlastnameElement);
+											
+											Element examinerPhoneElement = doc.createElement("phone");
+											examinerPhoneElement.appendChild(doc.createCDATASection(examinerAss.getExaminer().getTelephone() == null ? "" : examinerAss.getExaminer().getTelephone()));
+											examinerEle.appendChild(examinerPhoneElement);
+											
+										}
+									}
+									
+									OscePost oscepost = OscePost.findOscePost(oscePostRoom.getOscePost().getId());
+									StandardizedRole standardizedRole = StandardizedRole.findStandardizedRole(oscepost.getStandardizedRole().getId());
+									CheckList checklist = CheckList.findCheckList(standardizedRole.getCheckList().getId());
+									
+									Element checkListEle = doc.createElement("checklist");
+									oscePostRoomElement.appendChild(checkListEle);
+									
+									Element checkListIdElement = doc.createElement("id");
+									checkListIdElement.appendChild(doc.createTextNode(checklist.getId().toString()));
+									checkListEle.appendChild(checkListIdElement);
+									
+									Element checkListTitleEle = doc.createElement("title");
+									checkListTitleEle.appendChild(doc.createCDATASection(checklist.getTitle() == null ? "" : checklist.getTitle()));
+									checkListEle.appendChild(checkListTitleEle);
+									
+									Element checkListTopicsEle = doc.createElement("checklisttopics");
+									checkListEle.appendChild(checkListTopicsEle);
+									
+									List<ChecklistTopic> checklistTopicList = checklist.getCheckListTopics();
+									
+									int ctr = 1;
+									
+									for (ChecklistTopic checklistTopic : checklistTopicList)
+									{
+										Element checkListTopicElement = doc.createElement("checklisttopic");
+										checkListTopicsEle.appendChild(checkListTopicElement);
+										
+										Element checkListTopicIdElement = doc.createElement("id");
+										checkListTopicIdElement.appendChild(doc.createTextNode(checklistTopic.getId().toString()));
+										checkListTopicElement.appendChild(checkListTopicIdElement);
+										
+										Element checkListTopicTitleEle = doc.createElement("title");
+										checkListTopicTitleEle.appendChild(doc.createCDATASection(checklistTopic.getTitle() == null ? "" : checklistTopic.getTitle()));
+										checkListTopicElement.appendChild(checkListTopicTitleEle);
+										
+										Element checkListTopicDescEle = doc.createElement("description");
+										checkListTopicDescEle.appendChild(doc.createCDATASection(checklistTopic.getDescription() == null ? "" : checklistTopic.getDescription()));
+										checkListTopicElement.appendChild(checkListTopicDescEle);
+										
+										Element checkListQuestionElement = doc.createElement("checklistquestions");
+										checkListTopicElement.appendChild(checkListQuestionElement);
+										
+										List<ChecklistQuestion> checklistQuestionsList = checklistTopic.getCheckListQuestions();
+										
+										for (ChecklistQuestion checklistQuestion : checklistQuestionsList)
+										{
+											Element checkListQueElement = doc.createElement("checklistquestion");
+											checkListQuestionElement.appendChild(checkListQueElement);
+											
+											Element checkListQueIdElement = doc.createElement("id");
+											checkListQueIdElement.appendChild(doc.createTextNode(checklistQuestion.getId().toString()));
+											checkListQueElement.appendChild(checkListQueIdElement);
+											
+											Element checkListQuestEle = doc.createElement("question");
+											checkListQuestEle.appendChild(doc.createCDATASection(checklistQuestion.getQuestion() == null ? "" : checklistQuestion.getQuestion()));
+											checkListQueElement.appendChild(checkListQuestEle);
+											
+											Element checkListQueInstEle = doc.createElement("instruction");
+											checkListQueInstEle.appendChild(doc.createCDATASection(checklistQuestion.getInstruction() == null ? "" : checklistQuestion.getInstruction()));
+											checkListQueElement.appendChild(checkListQueInstEle);
+											
+											Element checkListQueIsOverall = doc.createElement("key");
+											checkListQueIsOverall.appendChild(doc.createTextNode("isOverallQuestion"));
+											checkListQueElement.appendChild(checkListQueIsOverall);
+											Element checkListQueIsOverallVal = doc.createElement((checklistQuestion.getIsOveralQuestion() == null ? "false" : checklistQuestion.getIsOveralQuestion().toString()));					
+											checkListQueElement.appendChild(checkListQueIsOverallVal);
+											
+											Element checkListQueSeqNoElement = doc.createElement("sequencenumber");
+											checkListQueSeqNoElement.appendChild(doc.createTextNode(String.valueOf(ctr)));
+											checkListQueElement.appendChild(checkListQueSeqNoElement);
+											
+											ctr++;
+											
+											Element checkListCriteriaElement = doc.createElement("checklistcriterias");
+											checkListQueElement.appendChild(checkListCriteriaElement);
+											
+											Iterator<ChecklistCriteria> criiterator = checklistQuestion.getCheckListCriterias().iterator();
+											
+											while (criiterator.hasNext())
+											{
+												ChecklistCriteria criteria = criiterator.next();
+											
+												Element criteriaElement = doc.createElement("checklistcriteria");
+												checkListCriteriaElement.appendChild(criteriaElement);
+												
+												Element criteriaIdElement = doc.createElement("id");
+												criteriaIdElement.appendChild(doc.createTextNode(criteria.getId().toString()));
+												criteriaElement.appendChild(criteriaIdElement);
+												
+												Element criteriaTitleEle = doc.createElement("title");
+												criteriaTitleEle.appendChild(doc.createCDATASection(criteria.getCriteria() == null ? "" : criteria.getCriteria()));
+												criteriaElement.appendChild(criteriaTitleEle);
+												
+												Element criteriaSeqNoEle = doc.createElement("sequencenumber");
+												criteriaSeqNoEle.appendChild(doc.createTextNode(criteria.getSequenceNumber().toString()));
+												criteriaElement.appendChild(criteriaSeqNoEle);
+											}
+											
+											Element checkListOptionElement = doc.createElement("checklistoptions");
+											checkListQueElement.appendChild(checkListOptionElement);
+											
+											Iterator<ChecklistOption> opitr = checklistQuestion.getCheckListOptions().iterator();
+											
+											while (opitr.hasNext())
+											{
+												ChecklistOption option = opitr.next();
+												
+												Element optionElement = doc.createElement("checklistoption");
+												checkListOptionElement.appendChild(optionElement);
+												
+												Element optionIdElement = doc.createElement("id");
+												optionIdElement.appendChild(doc.createTextNode(option.getId().toString()));
+												optionElement.appendChild(optionIdElement);
+												
+												Element optionTitleEle = doc.createElement("title");
+												optionTitleEle.appendChild(doc.createCDATASection(option.getOptionName() == null ? "" : option.getOptionName()));
+												optionElement.appendChild(optionTitleEle);
+												
+												Element optionValElement = doc.createElement("value");
+												optionValElement.appendChild(doc.createTextNode(option.getValue().toString()));
+												optionElement.appendChild(optionValElement);
+												
+												Element optionSeqNoElement = doc.createElement("sequencenumber");
+												optionSeqNoElement.appendChild(doc.createTextNode(option.getSequenceNumber().toString()));
+												optionElement.appendChild(optionSeqNoElement);
+												
+												Element optionCriteriaCountElement = doc.createElement("criteriacount");
+												optionCriteriaCountElement.appendChild(doc.createTextNode("[" + (option.getCriteriaCount() == null ? "" : option.getCriteriaCount()) + "]"));
+												optionElement.appendChild(optionCriteriaCountElement);
+											}
+											
+										}
+										
+									}
+									
+									Element studentElement = doc.createElement("students");
+									oscePostRoomElement.appendChild(studentElement);
+									
+									for (Assignment studAss : assignmentlist)
+									{	
+										if (studAss.getStudent() != null)
+										{
+											Element studElement = doc.createElement("student");
+											studentElement.appendChild(studElement);
+											
+											Element studIdElement = doc.createElement("id");
+											studIdElement.appendChild(doc.createTextNode(studAss.getStudent().getId().toString()));
+											studElement.appendChild(studIdElement);
+											
+											Element studFirstNameEle = doc.createElement("firstname");
+											studFirstNameEle.appendChild(doc.createCDATASection(studAss.getStudent().getPreName() == null ? "" : studAss.getStudent().getPreName()));
+											studElement.appendChild(studFirstNameEle);
+											
+											Element studlastNameEle = doc.createElement("lastname");
+											studlastNameEle.appendChild(doc.createCDATASection(studAss.getStudent().getName() == null ? "" : studAss.getStudent().getName()));
+											studElement.appendChild(studlastNameEle);
+											
+											Element studEmailEle = doc.createElement("email");
+											studEmailEle.appendChild(doc.createCDATASection(studAss.getStudent().getEmail() == null ? "" : studAss.getStudent().getEmail()));
+											studElement.appendChild(studEmailEle);
+											
+											Element studStTimeElement = doc.createElement("starttime");
+											studStTimeElement.appendChild(doc.createTextNode(studAss.getTimeStart().toString()));
+											studElement.appendChild(studStTimeElement);
+											
+											Element studEndTimeElement = doc.createElement("id");
+											studEndTimeElement.appendChild(doc.createTextNode(studAss.getTimeEnd().toString()));
+											studElement.appendChild(studEndTimeElement);
+										}
+									}
+									
+								}
+								
+								String rotNum = String.format("%02d", (l+1));
+								fileName = String.valueOf(osceList.get(i).getSemester().getCalYear()) + osceList.get(i).getStudyYear() + osceList.get(i).getName() + rotNum + course.getColor() + ".xml";
+								
+								System.out.println("File Name : " + fileName);
+								
+								String processedFileName = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + fileName;
+								File processfile = new File(processedFileName);
+								Boolean processCheck = processfile.exists();	
+								
+								if (!processCheck)
+								{
+									fileName = fileName.replaceAll(" ", "_");
+									fileName = OsMaFilePathConstant.EXPORT_OSCE_UNPROCESSED_FILEPATH + fileName;
+									File file = new File(fileName);
+									Boolean check = file.exists();
+									
+									if (check)
+									{
+										file.delete();
+									}
+									
+									TransformerFactory transformerFactory = TransformerFactory.newInstance();
+									Transformer transformer = transformerFactory.newTransformer();
+									DOMSource source = new DOMSource(doc);
+									StreamResult result = new StreamResult(file);
+									transformer.transform(source, result);
+									
+									System.out.println("* * *" + file.getName() + " IS CREATED * * *");								
+								}
+								xml = "";
+								fileName = "";
+							}
+							
+							rotationoffset += timeslot;
+							
+							
+						}
+						
+						startrotation = totalrotation;
+					}
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			Log.info(e.getMessage());
+		}
+	
+	}
+	
+	/*public void exportOsceFile(Long semesterID)
+	{
 		System.out.println("~~SEMESTER ID : " + semesterID);
 		String fileName = "";
 		int timeslot = 0;
@@ -404,6 +749,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					{
 						startrotation = totalrotation;
 						totalrotation = totalrotation + sequenceList.get(k).getNumberRotation();
+						
 						int rotationoffset = 0;
 						int rotationStart = startrotation;
 						for (int l=startrotation; l<totalrotation; l++)
@@ -598,7 +944,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		{
 			Log.info(e.getMessage());
 		}
-	}
+	}*/
 	
 	public List<String> exportProcessedFileList()
 	{
