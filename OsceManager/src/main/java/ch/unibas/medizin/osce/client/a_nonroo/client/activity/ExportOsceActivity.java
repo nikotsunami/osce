@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -182,7 +183,9 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 						
 						anchor.addStyleName("exportAnchor");
 						
-						label.setText(result.get(i));
+						label.setText(util.getFormatedString(result.get(i), 20));
+						label.setTitle(result.get(i));
+						
 						checkBox.setFormValue(result.get(i));
 						
 						checkBoxList.add(checkBox);
@@ -251,7 +254,10 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 						anchor.addStyleName("exportAnchor");
 						
 						
-						label.setText(result.get(i));
+						//label.setText(result.get(i));
+						label.setText(util.getFormatedString(result.get(i), 20));
+						label.setTitle(result.get(i));
+						
 						checkBox.setFormValue(result.get(i));
 						
 						checkBoxList.add(checkBox);
