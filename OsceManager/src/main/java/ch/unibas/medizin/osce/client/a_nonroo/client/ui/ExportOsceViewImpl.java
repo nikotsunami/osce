@@ -51,7 +51,7 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	public ExportOsceViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		
-		disclouserPanelFlie.addStyleName("schedulePanelStyle");
+		disclouserPanelFlie.addStyleName("eOsceSchedulePanelStyle");
 		processed.setText(constants.exportProcessed());
 		unprocessed.setText(constants.exportUnprocessed());
 		exportButton.setText(constants.export());

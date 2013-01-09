@@ -812,6 +812,9 @@
                 </configuration>
                 <executions>
                     <execution>
+                    	<configuration>
+							<extraJvmArgs>-Xmx10G</extraJvmArgs>
+						</configuration>                    	
                         <id>gwtcompile</id>
                         <phase>prepare-package</phase>
                         <goals>

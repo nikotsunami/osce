@@ -3437,7 +3437,7 @@ color: #f1b532;
 .eOSCElable
 {
 	padding-top: 6px;
-	width: 200px;
+	width: 390px;
 }
 .eOSCEHorizontalPanel
 {
@@ -3447,6 +3447,13 @@ color: #f1b532;
 {	
 	background: url("images/SchedulePanelBackground.png") repeat-y;
 	width: 320px;
+	-moz-border-radius: 4px;
+}
+
+.eOsceSchedulePanelStyle
+{	
+	background: url("images/SchedulePanelBackground.png") repeat;
+	width: 500px;
 	-moz-border-radius: 4px;
 }
 

@@ -183,8 +183,9 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 						
 						anchor.addStyleName("exportAnchor");
 						
-						label.setText(util.getFormatedString(result.get(i), 20));
-						label.setTitle(result.get(i));
+						label.setText(result.get(i));
+						/*label.setText(util.getFormatedString(result.get(i), 20));
+						label.setTitle(result.get(i));*/
 						
 						checkBox.setFormValue(result.get(i));
 						
@@ -254,9 +255,9 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 						anchor.addStyleName("exportAnchor");
 						
 						
-						//label.setText(result.get(i));
-						label.setText(util.getFormatedString(result.get(i), 20));
-						label.setTitle(result.get(i));
+						label.setText(result.get(i));
+						/*label.setText(util.getFormatedString(result.get(i), 20));
+						label.setTitle(result.get(i));*/
 						
 						checkBox.setFormValue(result.get(i));
 						
@@ -313,8 +314,6 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 			}
 		}
 		
-		System.out.println("EXPORT FILELIST SIZE : " + fileList.size());
-		
 		eOsceServiceAsync.putAmazonS3Object(fileList, flag, new AsyncCallback<Void>() {
 			@Override
 			public void onFailure(Throwable caught) {
@@ -329,8 +328,6 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 				
 				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
 				messageConfirmationDialogBox.showConfirmationDialog(constants.exportSuccess());
-				
-				System.out.println("FLAG : " + flag);
 				
 				if (flag)
 					unprocessedClicked();					
