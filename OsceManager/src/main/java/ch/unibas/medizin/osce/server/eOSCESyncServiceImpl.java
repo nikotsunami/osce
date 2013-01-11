@@ -59,7 +59,9 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.PropertiesCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3Object;
@@ -82,8 +84,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		try
 		{
 			//write access and secret key
-			AWSCredentials credentials = new BasicAWSCredentials("", "");
-			AmazonS3Client client = new AmazonS3Client(credentials);
+			//AWSCredentials credentials = new BasicAWSCredentials("", "");
+			AmazonS3Client client = new AmazonS3Client(new PropertiesCredentials(eOSCESyncServiceImpl.class.getResourceAsStream("AwsCredentials.properties")));
 			//write bucket name in ""
 			ObjectListing objectListing = client.listObjects("");
 			
@@ -121,8 +123,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		try
 		{
 			//write access and secret key.
-			AWSCredentials credentials = new BasicAWSCredentials("", "");
-			AmazonS3Client client = new AmazonS3Client(credentials);
+			//AWSCredentials credentials = new BasicAWSCredentials("", "");
+			AmazonS3Client client = new AmazonS3Client(new PropertiesCredentials(eOSCESyncServiceImpl.class.getResourceAsStream("AwsCredentials.properties")));
 			S3Object object = null;
 			//write bucket name
 			ObjectListing objectListing = client.listObjects("");
@@ -161,8 +163,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		try
 		{
 			//write access and secret key
-			AWSCredentials credentials = new BasicAWSCredentials("", "");
-			AmazonS3Client client = new AmazonS3Client(credentials);
+			//AWSCredentials credentials = new BasicAWSCredentials("", "");
+			AmazonS3Client client = new AmazonS3Client(new PropertiesCredentials(eOSCESyncServiceImpl.class.getResourceAsStream("AwsCredentials.properties")));
 			
 			for (int i=0; i<fileList.size(); i++)
 			{
@@ -252,8 +254,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		try
 		{
 			//write access and secret key
-			AWSCredentials credentials = new BasicAWSCredentials("", "");
-			AmazonS3Client client = new AmazonS3Client(credentials);
+			//AWSCredentials credentials = new BasicAWSCredentials("", "");
+			AmazonS3Client client = new AmazonS3Client(new PropertiesCredentials(eOSCESyncServiceImpl.class.getResourceAsStream("AwsCredentials.properties")));
 			S3Object object = null;
 			
 			for (int i=0; i<fileList.size(); i++)
@@ -1020,15 +1022,36 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		return unprocessedList;
 	}
 	
-	public void putAmazonS3Object(List<String> fileList, Boolean flag) throws eOSCESyncException
-	{
-		//File name for Put is : RotationSequenceNumber.ExamName.Year.xml
+	public void putAmazonS3Object(String bucketName, List<String> fileList, Boolean flag) throws eOSCESyncException
+	{	
 		//file is put in bucketname as key.
 		
 		try
 		{
-			AWSCredentials credentials = new BasicAWSCredentials("", "");
-			AmazonS3Client client = new AmazonS3Client(credentials);
+			bucketName = bucketName.toLowerCase();
+			//AWSCredentials credentials = new BasicAWSCredentials("", "");
+			AmazonS3Client client = new AmazonS3Client(new PropertiesCredentials(eOSCESyncServiceImpl.class.getResourceAsStream("AwsCredentials.properties")));
+			
+			List<Bucket> bucketList = client.listBuckets();
+			Boolean bucketExist = false;
+			
+			for (Bucket bucket : bucketList)
+			{
+				if (bucketName.equals(bucket.getName()))
+				{
+					bucketExist = true;
+					break;
+				}
+				else
+				{
+					bucketExist = false;
+				}
+			}
+			
+			if (!bucketExist)
+			{
+				client.createBucket(bucketName);
+			}
 			
 			if (flag)
 			{
@@ -1038,7 +1061,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					
 					File file = new File(path);
 					
-					client.putObject("", fileList.get(i), file);
+					client.putObject(bucketName, fileList.get(i), file);
 				
 				//move file to processed				
 					File dir = new File(OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH);
@@ -1061,7 +1084,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					
 					File file = new File(path);
 					
-					client.putObject("oscetestspec", fileList.get(i), file);
+					client.putObject(bucketName, fileList.get(i), file);
 				}
 			}
 		}

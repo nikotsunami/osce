@@ -302,39 +302,44 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 	@Override
 	public void exportButtonClicked(final Boolean flag) {
 		
-		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-		
-		List<String> fileList = new ArrayList<String>();
-		
-		for (int i=0; i<checkBoxList.size(); i++)
+		if (semesterProxy != null)
 		{
-			if (checkBoxList.get(i).getValue() == true)
+			String bucketName = semesterProxy.getSemester().toString() + semesterProxy.getCalYear();
+			
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+			
+			List<String> fileList = new ArrayList<String>();
+			
+			for (int i=0; i<checkBoxList.size(); i++)
 			{
-				fileList.add(checkBoxList.get(i).getFormValue());
+				if (checkBoxList.get(i).getValue() == true)
+				{
+					fileList.add(checkBoxList.get(i).getFormValue());
+				}
 			}
-		}
-		
-		eOsceServiceAsync.putAmazonS3Object(fileList, flag, new AsyncCallback<Void>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-				messageConfirmationDialogBox.showConfirmationDialog(constants.exportFetchUnprocessedError());
-			}
+			
+			eOsceServiceAsync.putAmazonS3Object(bucketName, fileList, flag, new AsyncCallback<Void>() {
+				@Override
+				public void onFailure(Throwable caught) {
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.exportFetchUnprocessedError());
+				}
 
-			@Override
-			public void onSuccess(Void result) {
-				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-				
-				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-				messageConfirmationDialogBox.showConfirmationDialog(constants.exportSuccess());
-				
-				if (flag)
-					unprocessedClicked();					
-				else 
-					processedClicked();
-			}
-		});
+				@Override
+				public void onSuccess(Void result) {
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+					
+					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.exportSuccess());
+					
+					if (flag)
+						unprocessedClicked();					
+					else 
+						processedClicked();
+				}
+			});
+		}		
 	}
 	
 	@Override
