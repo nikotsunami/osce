@@ -26,12 +26,14 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncException;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncService;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.domain.Answer;
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.CheckList;
@@ -48,6 +50,10 @@ import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.domain.OsceSequence;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
+import ch.unibas.medizin.osce.server.i18n.GWTI18N;
+import ch.unibas.medizin.osce.shared.ColorPicker;
+import ch.unibas.medizin.osce.shared.StudyYears;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
@@ -105,7 +111,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			throw new eOSCESyncException("",e.getMessage());
 		}
 		
-		System.out.println("~~PROCESSED FILE SIZE : " + fileList.size());
+		//System.out.println("~~PROCESSED FILE SIZE : " + fileList.size());
 		return fileList;
 	}
 	
@@ -145,7 +151,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			throw new eOSCESyncException("",e.getMessage());
 		}
 		
-		System.out.println("~~UNPROCESSED FILE SIZE : " + fileList.size());
+		//System.out.println("~~UNPROCESSED FILE SIZE : " + fileList.size());
 		return fileList;
 	}
 
@@ -160,7 +166,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			
 			for (int i=0; i<fileList.size(); i++)
 			{
-				System.out.println("KEY NAME : " + fileList.get(i));
+				//System.out.println("KEY NAME : " + fileList.get(i));
 				//write bucket name
 				client.deleteObject("", fileList.get(i));
 			}
@@ -252,7 +258,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			
 			for (int i=0; i<fileList.size(); i++)
 			{
-				System.out.println("FILENAME : " + fileList.get(i));
+				//System.out.println("FILENAME : " + fileList.get(i));
 				//write bucket name
 				object = client.getObject(new GetObjectRequest("", fileList.get(i)));
 				addFile(object.getKey(), object.getObjectContent());	
@@ -374,7 +380,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				answerTable.setDoctor(doctor);
 				answerTable.persist();
 				
-				System.out.println("RECORD INSERTED SUCCESSFULLY");		
+				//System.out.println("RECORD INSERTED SUCCESSFULLY");		
 			}
 		}
 		catch(Exception e)
@@ -388,12 +394,17 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	public void exportOsceFile(Long semesterID)
 	{
 		//System.out.println("~~SEMESTER ID : " + semesterID);
+		
+		
+		
 		String fileName = "";
 		int timeslot = 0;
 		String xml;
 		
 		try
 		{
+			OsceConstantsWithLookup constants = GWTI18N.create(OsceConstantsWithLookup.class);
+			
 			List<Osce> osceList = Osce.findAllOsceBySemster(semesterID);
 					
 			for (int i=0; i<osceList.size(); i++)
@@ -409,7 +420,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				for (int j=0; j<osceDayList.size(); j++)
 				{
 					List<OsceSequence> sequenceList = OsceSequence.findOsceSequenceByOsceDay(osceDayList.get(j).getId());
-					System.out.println("SEQUENCE LIST : " + sequenceList.size());
+					//System.out.println("SEQUENCE LIST : " + sequenceList.size());
 					
 					for (int k=0; k<sequenceList.size(); k++)
 					{
@@ -462,8 +473,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 									if (assignmentlist.size() > 0)
 									{
 										Date timestart = assignmentlist.get(0).getTimeStart();
-										Date timeend = assignmentlist.get(assignmentlist.size()-1).getTimeStart();
-										examinerAssList = Assignment.findAssignmentExamnierByOscePostRoom(oscePostRoom.getId(), osceList.get(i).getId());
+										Date timeend = assignmentlist.get(assignmentlist.size()-1).getTimeEnd();
+										examinerAssList = Assignment.findAssignmentExamnierByOscePostRoom(oscePostRoom.getId(), osceList.get(i).getId(), timestart, timeend);
 									}
 									
 									Element examinersElement = doc.createElement("examiners");
@@ -471,7 +482,6 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 									
 									for (Assignment examinerAss : examinerAssList)
 									{
-										//get examiner data
 										if (examinerAss.getExaminer() != null)
 										{
 											Element examinerEle = doc.createElement("examiner");
@@ -669,10 +679,35 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 									
 								}
 								
-								String rotNum = String.format("%02d", (l+1));
-								fileName = String.valueOf(osceList.get(i).getSemester().getCalYear()) + osceList.get(i).getStudyYear() + osceList.get(i).getName() + rotNum + course.getColor() + ".xml";
+								/*String rotNum = String.format("%02d", (l+1));
 								
-								System.out.println("File Name : " + fileName);
+								String semesterValue = osceList.get(i).getSemester().getSemester().toString();
+								
+								String calyear = osceList.get(i).getSemester().getCalYear().toString();
+								calyear = calyear.substring(2, calyear.length());
+								
+								EnumRenderer<Enum<StudyYears>> enumStudyYear = new EnumRenderer<Enum<StudyYears>>();
+								
+								String studyYear = enumStudyYear.render(osceList.get(i).getStudyYear());
+								
+								studyYear.replace(".", "");
+								
+								EnumRenderer<Enum<ColorPicker>> enumColor = new EnumRenderer<Enum<ColorPicker>>();
+								String rotationString = enumColor.render(ColorPicker.valueOf(course.getColor()));*/
+								
+								
+								
+								fileName = osceList.get(i).getSemester().getSemester().toString() 
+										+ osceList.get(i).getSemester().getCalYear().toString().substring(2, osceList.get(i).getSemester().getCalYear().toString().length()) 
+										+ "-" + (constants.getString(osceList.get(i).getStudyYear().toString()).replace(".", "")) 
+										+ "-D" + (j + 1) + "-" + String.format("%02d", (l+1)) + "-" 
+										+ (constants.getString(course.getColor()));
+								
+								//fileName = String.valueOf(osceList.get(i).getSemester().getSemester()) +  + osceList.get(i).getName() + rotNum + course.getColor() + ".xml";
+								
+								fileName = fileName + ".osceexchange";
+								
+								//System.out.println("File Name : " + fileName);
 								
 								String processedFileName = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + fileName;
 								File processfile = new File(processedFileName);
@@ -698,7 +733,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 									StreamResult result = new StreamResult(file);
 									transformer.transform(source, result);
 									
-									System.out.println("* * *" + file.getName() + " IS CREATED * * *");								
+									//System.out.println("* * *" + file.getName() + " IS CREATED * * *");								
 								}
 								xml = "";
 								fileName = "";
@@ -1046,6 +1081,6 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			throw new eOSCESyncException("",e.getMessage());
 		}
 		
-		System.out.println("File is Put Successfully");
+		//System.out.println("File is Put Successfully");
 	}
 }

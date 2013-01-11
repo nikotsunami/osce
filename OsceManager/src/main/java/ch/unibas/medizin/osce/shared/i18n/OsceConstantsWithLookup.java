@@ -280,5 +280,37 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 
 	public String WORKPERMISSION_NOT_EQUALS();
 
+	//Color Names
+	public String color_1();
+	
+	public String color_2();
+	
+	public String color_3();
+	
+	public String color_4();
+	
+	public String color_5();
+	
+	public String color_6();
+	
+	public String color_7();
+	
+	public String color_8();
+	
+	public String color_9();
+	
+	public String color_10();
+	
+	public String color_11();
+	
+	public String color_12();
+	
+	public String color_13();
+	
+	public String color_14();
+	
+	public String color_15();
+	
+	public String color_16();
 }
 

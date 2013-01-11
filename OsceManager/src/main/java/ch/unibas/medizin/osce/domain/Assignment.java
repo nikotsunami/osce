@@ -839,15 +839,15 @@ public class Assignment {
     	return q.getResultList();
     }
     
-    public static List<Assignment> findAssignmentExamnierByOscePostRoom(Long id, Long osceId)
-    {
-    	EntityManager em = entityManager();
-    	//String query = "SELECT a FROM Assignment a WHERE a.oscePostRoom.id = " + id + " AND a.type = 2 AND a.timeStart > '" + time_start + "' AND timeStart < '" + time_end +"' ORDER BY timeStart";
-    	String query = "SELECT a FROM Assignment a WHERE a.oscePostRoom.id = " + id + " AND a.type = 2 AND a.osceDay.osce.id = " + osceId + " ORDER BY a.timeStart";
-    	//System.out.println("EXAMINER QUERY : " + query);
-    	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
-    	return q.getResultList();
-    }
+		public static List<Assignment> findAssignmentExamnierByOscePostRoom(Long id, Long osceId, Date startTime, Date endTime)
+	    {
+	    	EntityManager em = entityManager();
+	    	//String query = "SELECT a FROM Assignment a WHERE a.oscePostRoom.id = " + id + " AND a.type = 2 AND a.timeStart > '" + time_start + "' AND timeStart < '" + time_end +"' ORDER BY timeStart";
+	    	String query = "SELECT a FROM Assignment a WHERE a.oscePostRoom.id = " + id + " AND a.type = 2 AND a.osceDay.osce.id = " + osceId + " AND a.timeStart <= '" + startTime + "' AND a.timeEnd >= '" + endTime + "' ORDER BY a.timeStart";
+	    	//System.out.println("EXAMINER QUERY : " + query);
+	    	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
+	    	return q.getResultList();
+	    }
     
     public static List<Assignment> findAssignedDoctorBySpecialisation(Long specialisationId, Long clinicId)
     {
