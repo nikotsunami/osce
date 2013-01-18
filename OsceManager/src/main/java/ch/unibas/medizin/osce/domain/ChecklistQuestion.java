@@ -148,7 +148,7 @@ public class ChecklistQuestion {
 	public static List<ChecklistQuestion> findCheckListQuestionByTopic(Long topicId)
 	{
 		EntityManager em = entityManager();
-		String sql = "SELECT c FROM ChecklistQuestion c WHERE c.checkListTopic.id = " + topicId + " ORDER BY c.id";
+		String sql = "SELECT c FROM ChecklistQuestion c WHERE c.checkListTopic.id = " + topicId + " ORDER BY c.sequenceNumber,c.id";
 		TypedQuery<ChecklistQuestion> q = em.createQuery(sql, ChecklistQuestion.class);
 		return q.getResultList();
 	}

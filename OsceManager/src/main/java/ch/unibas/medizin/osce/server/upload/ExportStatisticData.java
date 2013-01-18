@@ -282,7 +282,13 @@ public class ExportStatisticData extends HttpServlet{
 							 
 							List<ChecklistTopic> checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
 							alphaSeq = 'A';
-							impressionQueId=null;
+							
+							impressionQueId = null;
+							
+							String impressionItemString=request.getParameter("p"+oscePost.getId().toString());							
+							if (impressionItemString != null)
+								impressionQueId=Long.parseLong(impressionItemString);
+							
 							for (ChecklistTopic checklistTopic : checklistTopicList)
 							{
 								List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
@@ -295,6 +301,7 @@ public class ExportStatisticData extends HttpServlet{
 										impressionQueId = question.getId();
 									}
 									writer.append(String.valueOf(alphaSeq) + count++);
+									//writer.append(question.getId().toString());
 									writer.append('|');
 								}
 								alphaSeq++;
@@ -312,12 +319,22 @@ public class ExportStatisticData extends HttpServlet{
 						    	{
 						    		if (lastCandidateId != null)
 						    		{
-						    			String impressionItemString=request.getParameter("p"+answer.getOscePostRoom().getOscePost().getId().toString());
+						    			if (impressionQueId != null)
+						    			{
+						    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, osceDay.getId());
+						    				writer.append(impressionItem1.getChecklistOption().getValue());
+						    			}
+							    		else
+							    		{
+							    			writer.append('0');//impression
+							    		}
+						    			
+						    			/*String impressionItemString=request.getParameter("p"+answer.getOscePostRoom().getOscePost().getId().toString());
 								    	if(impressionItemString==null)
 								    	{
 								    		if (impressionQueId != null)
 							    			{
-							    				Answer impressionItem1=Answer.findAnswer(answer.getStudent().getId(), impressionQueId, osceId);
+							    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, osceDay.getId());
 							    				writer.append(impressionItem1.getChecklistOption().getValue());
 							    			}
 								    		else
@@ -331,18 +348,18 @@ public class ExportStatisticData extends HttpServlet{
 								    			writer.append('0');
 								    		else
 								    		{
-								    			Answer impressionItem=Answer.findAnswer(answer.getStudent().getId(), new Long(impressionItemString), osceId);
+								    			Answer impressionItem=Answer.findAnswer(lastCandidateId, new Long(impressionItemString), osceDay.getId());
 								    			if(impressionItem !=null)
 								    				writer.append(impressionItem.getChecklistOption().getValue());
 								    			else if (impressionQueId != null)
 								    			{
-								    				Answer impressionItem1=Answer.findAnswer(answer.getStudent().getId(), impressionQueId, osceId);
+								    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, osceDay.getId());
 								    				writer.append(impressionItem1.getChecklistOption().getValue());
 								    			}
 								    			else
 								    				writer.append('0');
 								    		}
-								    	}
+								    	}*/
 						    		}
 						    		
 						    		writer.append('\n');
@@ -356,19 +373,29 @@ public class ExportStatisticData extends HttpServlet{
 						    	}
 						    	
 						    	writer.append(answer.getChecklistOption().getValue());
+						    	//writer.append(answer.getChecklistQuestion().getId().toString());
 					    		writer.append('|');
 						    }
 						    
 						    if (answerList.size() > 0)
 						    {
-						    	answer = answerList.get(answerList.size() - 1);
+						    	if (impressionQueId != null)
+				    			{
+				    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, osceDay.getId());
+				    				writer.append(impressionItem1.getChecklistOption().getValue());
+				    			}
+					    		else
+					    		{
+					    			writer.append('0');//impression
+					    		}
+						    	/*answer = answerList.get(answerList.size() - 1);
 							    
 							    String impressionItemString=request.getParameter("p"+answer.getOscePostRoom().getOscePost().getId().toString());
 						    	if(impressionItemString==null)
 						    	{	
 						    		if (impressionQueId != null)
 					    			{
-					    				Answer impressionItem1=Answer.findAnswer(answer.getStudent().getId(), impressionQueId, osceId);
+					    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, osceDay.getId());
 					    				writer.append(impressionItem1.getChecklistOption().getValue());
 					    			}
 						    		else
@@ -382,18 +409,18 @@ public class ExportStatisticData extends HttpServlet{
 						    			writer.append('0');
 						    		else
 						    		{
-						    			Answer impressionItem=Answer.findAnswer(answer.getStudent().getId(), new Long(impressionItemString), osceId);
+						    			Answer impressionItem=Answer.findAnswer(lastCandidateId, new Long(impressionItemString), osceDay.getId());
 						    			if(impressionItem !=null)
 						    				writer.append(impressionItem.getChecklistOption().getValue());
 						    			else if (impressionQueId != null)
 						    			{
-						    				Answer impressionItem1=Answer.findAnswer(answer.getStudent().getId(), impressionQueId, osceId);
+						    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, osceDay.getId());
 						    				writer.append(impressionItem1.getChecklistOption().getValue());
 						    			}
 						    			else
 						    				writer.append('0');
 						    		}
-						    	}
+						    	}*/
 						    }
 					    	
 						    writer.flush();
