@@ -1259,5 +1259,13 @@ public interface OsceConstants extends Constants {
     public String isOverallQuestion();
     
     public String criteraCount();
+    
+    public String bucketName();
+    
+    public String accessKey();
+    
+    public String secretKey();
+    
+    public String bucketInfoError();
 }
 

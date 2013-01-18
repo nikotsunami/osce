@@ -15,5 +15,5 @@ public interface eOSCESyncServiceAsync {
 	void exportOsceFile(Long semesterID, AsyncCallback<Void> cb);
 	void exportProcessedFileList(AsyncCallback<List<String>> cb);
 	void exportUnprocessedFileList(AsyncCallback<List<String>> cb);
-	void putAmazonS3Object(String bucketName, List<String> fileList, Boolean flag, AsyncCallback<Void> cb);
+	void putAmazonS3Object(String bucketName, String accessKey, String secretKey, List<String> fileList, Boolean flag, AsyncCallback<Void> cb);
 }

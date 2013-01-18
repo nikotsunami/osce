@@ -5,6 +5,7 @@ import java.util.List;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncService;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncServiceAsync;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExportOscePlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ExportOsceView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ExportOsceViewImpl;
@@ -13,6 +14,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScre
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
+import ch.unibas.medizin.osce.client.managed.request.BucketInformationProxy;
+import ch.unibas.medizin.osce.client.managed.request.BucketInformationRequest;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
@@ -92,6 +95,37 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 		});
 		
 		//requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		//System.out.println("SEMESTER ID : " + semesterProxy.getId());
+		
+		requests.bucketInformationRequestNonRoo().findBucketInformationBySemester(semesterProxy.getId()).fire(new OSCEReceiver<BucketInformationProxy>() {
+
+			@Override
+			public void onSuccess(BucketInformationProxy response) {
+				if (response != null)
+				{
+					//System.out.println("RESPONSE FOUND");
+					view.getBucketName().setText(response.getBucketName());
+					view.getAccessKey().setText(response.getAccessKey());
+					view.getSecretKey().setText(response.getSecretKey());
+					
+					view.getBucketName().setEnabled(false);
+					view.getAccessKey().setEnabled(false);
+					view.getSecretKey().setEnabled(false);
+					
+					view.getSaveEditButton().setText(constants.edit());
+					view.setBucketInformationProxy(response);
+					
+					view.getCancelButton().setVisible(false);
+				}
+				else
+				{
+					//System.out.println("RESPONSE NOT FOUND");
+					view.getSaveEditButton().setText(constants.save());
+					
+					view.getCancelButton().setVisible(true);
+				}
+			}
+		});
 		
 		generateXMLFile(semesterProxy.getId());
 		
@@ -304,8 +338,6 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 		
 		if (semesterProxy != null)
 		{
-			String bucketName = semesterProxy.getSemester().toString() + semesterProxy.getCalYear();
-			
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			
 			List<String> fileList = new ArrayList<String>();
@@ -318,12 +350,13 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 				}
 			}
 			
-			eOsceServiceAsync.putAmazonS3Object(bucketName, fileList, flag, new AsyncCallback<Void>() {
+			eOsceServiceAsync.putAmazonS3Object(view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(), fileList, flag, new AsyncCallback<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
+					
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-					messageConfirmationDialogBox.showConfirmationDialog(constants.exportFetchUnprocessedError());
+					messageConfirmationDialogBox.showConfirmationDialog(caught.getMessage());
 				}
 
 				@Override
@@ -363,5 +396,41 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 	{
 		final String url=GWT.getHostPageBaseURL() + "downloadExportOsceFile?path="+filename+"&flag="+flag;
 		Window.open(url, filename, "enabled");
+	}
+
+	@Override
+	public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey) {
+		BucketInformationRequest request = requests.bucketInformationRequest();
+		final BucketInformationProxy bucketInformationProxy;
+		
+		if (proxy == null)
+		{	
+			bucketInformationProxy = request.create(BucketInformationProxy.class);
+			bucketInformationProxy.setSemester(semesterProxy);
+		}
+		else
+		{
+			bucketInformationProxy = request.edit(proxy);
+			bucketInformationProxy.setSemester(proxy.getSemester());
+		}
+		
+			
+		bucketInformationProxy.setBucketName(bucketName);
+		bucketInformationProxy.setAccessKey(accessKey);
+		bucketInformationProxy.setSecretKey(secretKey);
+		
+		
+		request.persist().using(bucketInformationProxy).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				view.getBucketName().setEnabled(false);
+				view.getAccessKey().setEnabled(false);
+				view.getSecretKey().setEnabled(false);
+				
+				view.getSaveEditButton().setText(constants.edit());
+				view.setBucketInformationProxy(bucketInformationProxy);
+			}
+		});
 	}
 }

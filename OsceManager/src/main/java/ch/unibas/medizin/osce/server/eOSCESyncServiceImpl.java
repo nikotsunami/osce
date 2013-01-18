@@ -28,6 +28,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.log4j.spi.ErrorCode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -52,6 +53,7 @@ import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
 import ch.unibas.medizin.osce.shared.ColorPicker;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
@@ -64,6 +66,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.Region;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -99,17 +102,17 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		catch(AmazonServiceException ase)
 		{
-			Log.info(ase.getMessage());
+			Log.error(ase.getMessage());
 			throw new eOSCESyncException(ase.getErrorType().toString(),ase.getMessage());
 		}
 		catch(AmazonClientException ace)
 		{
-			Log.info(ace.getMessage());
+			Log.error(ace.getMessage());
 			throw new eOSCESyncException("",ace.getMessage());
 		}
 		catch(Exception e)
 		{
-			Log.info(e.getMessage());
+			Log.error(e.getMessage());
 			throw new eOSCESyncException("",e.getMessage());
 		}
 		
@@ -139,17 +142,17 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		catch(AmazonServiceException ase)
 		{
-			Log.info(ase.getMessage());
+			Log.error(ase.getMessage());
 			throw new eOSCESyncException(ase.getErrorType().toString(),ase.getMessage());
 		}
 		catch(AmazonClientException ace)
 		{
-			Log.info(ace.getMessage());
+			Log.error(ace.getMessage());
 			throw new eOSCESyncException("",ace.getMessage());
 		}
 		catch(Exception e)
 		{
-			Log.info(e.getMessage());
+			Log.error(e.getMessage());
 			throw new eOSCESyncException("",e.getMessage());
 		}
 		
@@ -175,17 +178,17 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		catch(AmazonServiceException ase)
 		{
-			Log.info(ase.getMessage());
+			Log.error(ase.getMessage());
 			throw new eOSCESyncException(ase.getErrorType().toString(),ase.getMessage());
 		}
 		catch(AmazonClientException ace)
 		{
-			Log.info(ace.getMessage());
+			Log.error(ace.getMessage());
 			throw new eOSCESyncException("",ace.getMessage());
 		}
 		catch(Exception e)
 		{
-			Log.info(e.getMessage());
+			Log.error(e.getMessage());
 			throw new eOSCESyncException("",e.getMessage());
 		}
 	}
@@ -227,11 +230,11 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			writer.close();
 			reader.close();
 			
-			importEOSCE(filename);
+			//importEOSCE(filename);
 		}
 		catch(Exception e)
 		{
-			Log.info(e.getMessage());
+			Log.error(e.getMessage());
 		} 
 		
 	}
@@ -253,6 +256,22 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	{
 		try
 		{
+			//System.out.println("in server side");
+			/*File folder = new File(OsMaConstant.IMPORT_EOSCE_FILEPATH);
+			File[] listOfFiles = folder.listFiles();
+			//System.out.println("Lenght : " + listOfFiles.length);
+			for (int i=0; i<listOfFiles.length; i++)
+			{
+				fileList.add(OsMaConstant.IMPORT_EOSCE_FILEPATH + listOfFiles[i].getName());
+			}
+			
+			//System.out.println("in server side1");
+			//System.out.println("FILE LIST SIZE : " + fileList.size());
+			for (int i=0; i<fileList.size(); i++)
+			{
+				System.out.println("FILE NAME : " + fileList.get(i));
+				//importEOSCE(fileList.get(i));
+			}*/
 			//write access and secret key
 			//AWSCredentials credentials = new BasicAWSCredentials("", "");
 			AmazonS3Client client = new AmazonS3Client(new PropertiesCredentials(eOSCESyncServiceImpl.class.getResourceAsStream("AwsCredentials.properties")));
@@ -274,22 +293,23 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		catch(AmazonServiceException ase)
 		{
-			Log.info(ase.getMessage());
+			Log.error(ase.getMessage(),ase);
 			throw new eOSCESyncException(ase.getErrorType().toString(),ase.getMessage());
 		}
 		catch(AmazonClientException ace)
 		{
-			Log.info(ace.getMessage());
+			Log.error(ace.getMessage(),ace);
 			throw new eOSCESyncException("",ace.getMessage());
 		}
 		catch(Exception e)
 		{
-			Log.info(e.getMessage());
+			
+			Log.error(e.getMessage(),e);
 			throw new eOSCESyncException("",e.getMessage());
 		}
 	}
 	
-	public void importEOSCE(String filename)
+	/*public void importEOSCE(String filename)
 	{
 		//System.out.println("~~~!!!Import EOSCE");
 		try
@@ -344,9 +364,9 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				rs = st.executeQuery("SELECT * FROM topic WHERE id = " + temptopicid);
 				long tempchecklistid = rs.getInt("checklistId");
 				
-				/*rs = st.executeQuery("SELECT * FROM examiner WHERE firstname = 'Rath'");
+				rs = st.executeQuery("SELECT * FROM examiner WHERE firstname = 'Rath'");
 				tempexaminerid = rs.getInt("id");
-				examinerid = rs.getInt("osmaId");*/
+				examinerid = rs.getInt("osmaId");
 				//System.out.println("EXAMINER ID : " + tempexaminerid);				
 				
 				rs = st.executeQuery("SELECT osmaId FROM station WHERE candidateId = " + tempcandidateid + " AND checklistId = " + tempchecklistid);
@@ -387,7 +407,77 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		catch(Exception e)
 		{
-			Log.info(e.getMessage());
+			Log.error(e.getMessage());
+		}
+		
+	}*/
+	
+	public void importEOSCE(String filename)
+	{
+		//System.out.println("~~~!!!Import EOSCE");
+		try
+		{
+			//"jdbc:sqlite:E:\\eosceTestData.oscexam"
+			filename = "jdbc:sqlite:" + filename;
+			Class.forName("org.sqlite.JDBC");
+			Connection connection = DriverManager.getConnection(filename);  
+			Statement statement = connection.createStatement();
+			
+			Statement st = connection.createStatement();
+			
+			String sql = "SELECT  cand.zcandidateid, ex.zexaminerid, que.zquestionid, opt.zvalue, st.zstationid, ans.zanswerquestion, ans.zanswerassessment FROM zanswer ans , zassessment ass, zschedule sch, z_1answeroptions ansopt, zoption opt, zcandidate cand, zquestion que, zstation st, zexaminer ex"
+					+ " WHERE ans.zanswerassessment = ass.z_pk"
+					+ " and  ass.zschedule = sch.z_pk"
+					+ " and ansopt.z_1optionanswers = ans.z_pk"
+					+ " and opt.z_pk = ansopt.z_8answeroptions"
+					+ " and sch.zcandidate = cand.z_pk"
+					+ " and sch.zstation = st.z_pk"
+					+ " and st.zexaminer = ex.z_pk"
+					+ " and ans.zanswerquestion = que.z_pk"
+					+ " order by sch.zcandidate asc";
+			
+			ResultSet resultset = statement.executeQuery(sql);
+			
+			ResultSet rs;
+			
+			long candidateId, criteriaId, optionId, questionId, osmaid, roomid = 0, examinerid = 0;
+			long tempcandidateid, tempquestionid, tempexaminerid = 0;
+			String optionvalue;
+			Answer answerTable;
+			
+			while (resultset.next())
+			{				
+				candidateId = Long.parseLong(resultset.getString(1));
+				examinerid = Long.parseLong(resultset.getString(2));
+				questionId = Long.parseLong(resultset.getString(3));
+				optionvalue = String.valueOf((int)resultset.getFloat(4));
+				roomid = Long.parseLong(resultset.getString(5));
+				
+				
+				
+				Student stud = Student.findStudent(candidateId);
+				ChecklistQuestion checklistQuestion = ChecklistQuestion.findChecklistQuestion(questionId);
+				
+				
+				OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoomByRoomAndStudent(candidateId, roomid);
+				Doctor doctor = Doctor.findDoctor(examinerid);
+				ChecklistOption checklistOption = ChecklistOption.findChecklistOptionByValueAndQuestion(questionId, String.valueOf(optionvalue));
+				
+				answerTable = new Answer();
+				answerTable.setAnswer(String.valueOf(optionvalue));
+				answerTable.setStudent(stud);
+				answerTable.setChecklistQuestion(checklistQuestion);
+				answerTable.setChecklistOption(checklistOption);							
+				answerTable.setOscePostRoom(oscePostRoom);
+				answerTable.setDoctor(doctor);
+				answerTable.persist();
+				
+				//System.out.println("RECORD INSERTED SUCCESSFULLY");		
+			}
+		}
+		catch(Exception e)
+		{
+			Log.error(e.getMessage());
 		}
 		
 	}
@@ -419,8 +509,11 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				int startrotation = 0;
 				int totalrotation = 0;
 				
+				//System.out.println("OSCEDAY LIST : " + osceDayList.size());
+				
 				for (int j=0; j<osceDayList.size(); j++)
 				{
+					//System.out.println("DAY ID : " + osceDayList.get(i));
 					List<OsceSequence> sequenceList = OsceSequence.findOsceSequenceByOsceDay(osceDayList.get(j).getId());
 					//System.out.println("SEQUENCE LIST : " + sequenceList.size());
 					
@@ -602,7 +695,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 												criteriaElement.appendChild(criteriaTitleEle);
 												
 												Element criteriaSeqNoEle = doc.createElement("sequencenumber");
-												criteriaSeqNoEle.appendChild(doc.createTextNode(criteria.getSequenceNumber().toString()));
+												criteriaSeqNoEle.appendChild(doc.createTextNode(criteria.getSequenceNumber() == null ? "" : criteria.getSequenceNumber().toString()));
 												criteriaElement.appendChild(criteriaSeqNoEle);
 											}
 											
@@ -627,11 +720,11 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 												optionElement.appendChild(optionTitleEle);
 												
 												Element optionValElement = doc.createElement("value");
-												optionValElement.appendChild(doc.createTextNode(option.getValue().toString()));
+												optionValElement.appendChild(doc.createTextNode(option.getValue() == null ? "" : option.getValue().toString()));
 												optionElement.appendChild(optionValElement);
 												
 												Element optionSeqNoElement = doc.createElement("sequencenumber");
-												optionSeqNoElement.appendChild(doc.createTextNode(option.getSequenceNumber().toString()));
+												optionSeqNoElement.appendChild(doc.createTextNode(option.getSequenceNumber() == null ? "" : option.getSequenceNumber().toString()));
 												optionElement.appendChild(optionSeqNoElement);
 												
 												Element optionCriteriaCountElement = doc.createElement("criteriacount");
@@ -670,11 +763,11 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 											studElement.appendChild(studEmailEle);
 											
 											Element studStTimeElement = doc.createElement("starttime");
-											studStTimeElement.appendChild(doc.createTextNode(studAss.getTimeStart().toString()));
+											studStTimeElement.appendChild(doc.createTextNode(studAss.getTimeStart() == null ? "" :studAss.getTimeStart().toString()));
 											studElement.appendChild(studStTimeElement);
 											
 											Element studEndTimeElement = doc.createElement("id");
-											studEndTimeElement.appendChild(doc.createTextNode(studAss.getTimeEnd().toString()));
+											studEndTimeElement.appendChild(doc.createTextNode(studAss.getTimeEnd() == null ? "" : studAss.getTimeEnd().toString()));
 											studElement.appendChild(studEndTimeElement);
 										}
 									}
@@ -707,7 +800,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 								
 								//fileName = String.valueOf(osceList.get(i).getSemester().getSemester()) +  + osceList.get(i).getName() + rotNum + course.getColor() + ".xml";
 								
-								fileName = fileName + ".osceexchange";
+								fileName = fileName + ".oscexchange";
 								
 								//System.out.println("File Name : " + fileName);
 								
@@ -753,7 +846,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		catch(Exception e)
 		{
-			Log.info(e.getMessage());
+			e.printStackTrace();
+			Log.error(e.getMessage());
 		}
 	
 	}
@@ -981,7 +1075,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		catch(Exception e)
 		{
-			Log.info(e.getMessage());
+			Log.error(e.getMessage());
 		}
 	}*/
 	
@@ -1022,21 +1116,24 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		return unprocessedList;
 	}
 	
-	public void putAmazonS3Object(String bucketName, List<String> fileList, Boolean flag) throws eOSCESyncException
+	public void putAmazonS3Object(String bucketName, String accessKey, String secretKey, List<String> fileList, Boolean flag) throws eOSCESyncException
 	{	
 		//file is put in bucketname as key.
 		
 		try
 		{
 			bucketName = bucketName.toLowerCase();
-			//AWSCredentials credentials = new BasicAWSCredentials("", "");
-			AmazonS3Client client = new AmazonS3Client(new PropertiesCredentials(eOSCESyncServiceImpl.class.getResourceAsStream("AwsCredentials.properties")));
 			
+			//System.out.println("BUCKET NAME : " + bucketName);
+			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+			//AmazonS3Client client = new AmazonS3Client(new PropertiesCredentials(eOSCESyncServiceImpl.class.getResourceAsStream("AwsCredentials.properties")));
+			AmazonS3Client client = new AmazonS3Client(credentials);
 			List<Bucket> bucketList = client.listBuckets();
 			Boolean bucketExist = false;
 			
 			for (Bucket bucket : bucketList)
 			{
+				//System.out.println("BUCKET ON S3 : " + bucket.getName());
 				if (bucketName.equals(bucket.getName()))
 				{
 					bucketExist = true;
@@ -1049,8 +1146,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			}
 			
 			if (!bucketExist)
-			{
-				client.createBucket(bucketName);
+			{	
+				client.createBucket(bucketName,Region.EU_Ireland);
 			}
 			
 			if (flag)
@@ -1063,7 +1160,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					
 					client.putObject(bucketName, fileList.get(i), file);
 				
-				//move file to processed				
+					//move file to processed				
 					File dir = new File(OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH);
 					if (dir.exists())
 					{
@@ -1090,17 +1187,27 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		catch(AmazonServiceException ase)
 		{
-			Log.info(ase.getMessage());
+			Log.error(ase.getMessage());
 			throw new eOSCESyncException(ase.getErrorType().toString(),ase.getMessage());
+			//check that bucketname is already exist or not
+			/*if (ase.getStatusCode() == 409)
+			{
+				bucketName = bucketName + "1";
+				putAmazonS3Object(bucketName, fileList, flag);
+			}
+			else
+			{
+				throw new eOSCESyncException(ase.getErrorType().toString(),ase.getMessage());
+			}*/
 		}
 		catch(AmazonClientException ace)
 		{
-			Log.info(ace.getMessage());
+			Log.error(ace.getMessage());
 			throw new eOSCESyncException("",ace.getMessage());
 		}
 		catch(Exception e)
 		{
-			Log.info(e.getMessage());
+			Log.error(e.getMessage());
 			throw new eOSCESyncException("",e.getMessage());
 		}
 		

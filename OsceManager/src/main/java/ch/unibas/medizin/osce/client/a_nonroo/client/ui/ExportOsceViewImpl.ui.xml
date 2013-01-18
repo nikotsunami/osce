@@ -26,6 +26,22 @@
 	<g:HTMLPanel addStyleNames="{style.dockhtml}">
 	
 		<g:HorizontalPanel>
+			<g:HTMLPanel>
+			<span class="{style.label}" ui:field="bucketNameLbl" />			
+			<g:TextBox ui:field="bucketName"></g:TextBox>
+			
+			<span class="{style.label}" ui:field="accessKeyLbl" />
+			<g:TextBox ui:field="accessKey"></g:TextBox>
+			
+			<span class="{style.label}" ui:field="secretKeyLbl" />
+			<g:TextBox ui:field="secretKey"></g:TextBox>
+			
+			<my:IconButton icon="pencil" ui:field="saveEditButton"></my:IconButton>
+			<my:IconButton icon="closethick" ui:field="cancelButton"></my:IconButton>
+			</g:HTMLPanel>
+		</g:HorizontalPanel>
+	
+		<g:HorizontalPanel>
 			<g:RadioButton ui:field="unprocessed" name="status" checked="true"></g:RadioButton>
 			<g:RadioButton ui:field="processed" name="status"></g:RadioButton>			
 		</g:HorizontalPanel>

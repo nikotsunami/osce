@@ -78,4 +78,15 @@ public class ChecklistOption implements Comparable<ChecklistOption> {
 			return 1;
 		}
 	}
+	
+	public static ChecklistOption findChecklistOptionByValueAndQuestion(Long questionId, String optionValue)
+	{
+		EntityManager em = entityManager();
+		String sql = "SELECT c FROM ChecklistOption c WHERE c.checklistQuestion.id = " + questionId + " AND c.value = " + optionValue;
+		TypedQuery<ChecklistOption> q = em.createQuery(sql, ChecklistOption.class);
+		if (q.getResultList().size() > 0)
+			return q.getSingleResult();
+		else
+			return null;
+	}
 }

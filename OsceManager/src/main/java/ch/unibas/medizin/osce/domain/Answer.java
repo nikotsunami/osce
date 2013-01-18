@@ -600,7 +600,7 @@ public class Answer {
 		{
 			EntityManager em = entityManager();
 			
-			String queryString="select distinct ans.checklistQuestion from Answer as ans where ans.oscePostRoom in (select distinct (oscePostRoom) from Assignment as ass where ass.osceDay in (select id from OsceDay where osce="+osceId+"))";
+			String queryString="select distinct ans.checklistQuestion from Answer as ans where ans.oscePostRoom in (select distinct (oscePostRoom) from Assignment as ass where ass.osceDay in (select id from OsceDay where osce="+osceId+")) order by ans.checklistQuestion.id";
 			TypedQuery<ChecklistQuestion> q = em.createQuery(queryString, ChecklistQuestion.class);	
 			 
 			return q.getResultList();
@@ -609,16 +609,26 @@ public class Answer {
 		public static List<Answer> retrieveExportCsvData(Long osceId)
 		{
 			EntityManager em = entityManager();
-			String queryString="SELECT a FROM Answer a where oscePostRoom in (select distinct (oscePostRoom) from Assignment where osceDay in (select id from OsceDay where osce=17)) order by doctor,student";
+			//String queryString="SELECT a FROM Answer a where oscePostRoom in (select distinct (oscePostRoom) from Assignment where osceDay in (select id from OsceDay where osce="+ osceId +")) group by doctor,student";
+			String queryString="SELECT a FROM Answer a where oscePostRoom in (select distinct (oscePostRoom) from Assignment where osceDay in (select id from OsceDay where osce="+ osceId +")) order by a.doctor, a.student";
 			TypedQuery<Answer> q = em.createQuery(queryString, Answer.class);	
 			 
 			return q.getResultList();
 		}
 		
-		public static Answer findAnswer(Long studentId,Long questionId)
+		public static List<Answer> retrieveExportCsvDataByOscePost(Long osceDayId, Long oscePostId)
 		{
 			EntityManager em = entityManager();
-			String queryString="SELECT a FROM Answer a where student="+studentId+" and checklistQuestion="+questionId+" and oscePostRoom in (select distinct (oscePostRoom) from Assignment where osceDay in (select id from OsceDay where osce=17)) order by doctor,student";
+			//String queryString="SELECT a FROM Answer a where oscePostRoom in (select distinct (oscePostRoom) from Assignment where osceDay in (select id from OsceDay where osce="+ osceId +")) group by doctor,student";
+			String queryString="SELECT a FROM Answer a WHERE a.oscePostRoom.oscePost.id = " + oscePostId + " ORDER BY a.doctor, a.student, a.checklistQuestion";
+			TypedQuery<Answer> q = em.createQuery(queryString, Answer.class);	
+			return q.getResultList();
+		}
+		
+		public static Answer findAnswer(Long studentId,Long questionId, Long osceId)
+		{
+			EntityManager em = entityManager();
+			String queryString="SELECT a FROM Answer a where student="+studentId+" and checklistQuestion="+questionId+" and oscePostRoom in (select distinct (oscePostRoom) from Assignment where osceDay in (select id from OsceDay where osce="+ osceId +")) order by doctor,student";
 			TypedQuery<Answer> q = em.createQuery(queryString, Answer.class);	
 			List<Answer> a=q.getResultList();
 			if(a.size() >0)
