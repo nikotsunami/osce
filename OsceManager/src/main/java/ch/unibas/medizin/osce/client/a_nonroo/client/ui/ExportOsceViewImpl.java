@@ -128,7 +128,7 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	@UiHandler("exportButton")
 	public void exportButtonClicked(ClickEvent event)
 	{
-		if (bucketName.getText() == "" || accessKey.getText() == "" || secretKey.getText() == "")
+		if (bucketName.getText().equals("") || accessKey.getText().equals("") || secretKey.getText().equals(""))
 		{
 			final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
 			messageConfirmationDialogBox.showConfirmationDialog(constants.bucketInfoError());
