@@ -291,12 +291,12 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			
 			if(analysisType.equals(AnalysisType.post_analysys)  && postAnalysisData != null)
 			{
-				String seqKey="s"+sequenceView.getOscePostProxy().getId();
+				String seqKey="s"+sequenceView.getOsceSequenceProxy().getId();
 				
 				Log.info("key :" +seqKey);
 				
 				List<String> seqValues=getValue(postAnalysisData, seqKey);
-				
+				if(seqValues != null)
 				((Label)sequenceView.getPostDataHP().getWidget(2)).setText(seqValues.get(0));
 			}
 			//For sum
