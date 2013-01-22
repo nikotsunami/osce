@@ -159,7 +159,7 @@ public class Answer {
 
 		TypedQuery<Answer> query = em.createQuery(queryString, Answer.class);
 
-		Log.info("numOfDistinctStudentExamined query String :" + queryString);
+		Log.info("retrieveDistinctStudentExamined query String :" + queryString);
 		// Log.info("Assignment List Size :" + assignmentList.size());
 
 		return query.getResultList();
@@ -233,7 +233,7 @@ public class Answer {
 
 						int missingAtPostLevel = 0;
 						Double average = new Double(0);
-
+						int pointsPerPostSize=0;
 						// loop through distinct item/question for particular
 						// post
 						for (int k = 0; k < items.size(); k++) {
@@ -333,16 +333,22 @@ public class Answer {
 							Log.info("Avg of point at item level :" + pointAvg);
 							// sumOfPoinstAtSeqLevel.add(pointAvg);
 							// totalPointsPerItem[k]=pointAvg;
-							pointAvg = pointAvg / points.length;
-							pointAvg = roundTwoDecimals(pointAvg);
+							
 							average = average + pointAvg;
+							pointsPerPostSize=pointsPerPostSize + points.length;
+							
+							pointAvg = pointAvg / points.length;
+							
+							pointAvg = roundTwoDecimals(pointAvg);
+							
 							questionList.add(pointAvg.toString());
 
 							// 3.calculate S.D at item level
 							Double pointSD = Math.sqrt(StatUtils
 									.variance(points));
-							pointSD = roundTwoDecimals(pointSD);
 							totalPointsPerItem[k] = pointSD;
+							pointSD = roundTwoDecimals(pointSD);
+							
 
 							questionList.add(pointSD.toString());
 
@@ -391,7 +397,7 @@ public class Answer {
 								+ missing);
 
 						// 2. Average at post level
-						average = average / items.size();
+						average = average / pointsPerPostSize;
 
 						if (average.isNaN())
 							postLevelList.add("0.0");
@@ -470,6 +476,7 @@ public class Answer {
 						Integer numOfStudentPerPost = 0;
 
 						Double averagePerPost = 0.0;
+						int pointsPerPostLength=0;
 						double sdPerDoctor[] = new double[doctors.size()];
 						double minPerDoctor[] = new double[doctors.size()];
 						double maxPerDoctor[] = new double[doctors.size()];
@@ -507,9 +514,13 @@ public class Answer {
 
 							}
 							Double average = StatUtils.mean(points);
+							
+							
+							averagePerPost = averagePerPost + StatUtils.sum(points);
+							pointsPerPostLength=pointsPerPostLength+points.length;
 							if (!average.isNaN())
 								average = roundTwoDecimals(average);
-							averagePerPost = averagePerPost + average;
+							
 							examinerLevelList.add(String.valueOf(average));
 
 							// sd
@@ -517,6 +528,7 @@ public class Answer {
 							sdPerDoctor[a] = sd;
 							if (!sd.isNaN())
 								sd = roundTwoDecimals(sd);
+							
 							examinerLevelList.add(String.valueOf(sd));
 
 							// minimum
@@ -551,7 +563,7 @@ public class Answer {
 						postLevelList.add("0");
 
 						// average
-						averagePerPost = averagePerPost / doctors.size();
+						averagePerPost = averagePerPost / pointsPerPostLength;
 
 						if (averagePerPost.isNaN()) {
 							postLevelList.add("0");
