@@ -239,7 +239,7 @@ public class ExcelFileImportServlet extends HttpServlet {
         				if (skillList.size() == 0)
         				{
         					skill = new Skill();        				
-            				skill.setShortcut(topicShortcut);
+            				skill.setShortcut(Integer.parseInt(topicShortcut));
             				skill.setDescription(col2);
             				skill.persist();
         				}

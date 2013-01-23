@@ -20,7 +20,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooEntity
 public class Skill {
 
-	private String shortcut;
+	private Integer shortcut;
 	
 	@Size(max = 1024)
 	private String description;
