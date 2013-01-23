@@ -48,6 +48,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -484,12 +486,19 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 
 					@Override
 					public void onSuccess(List<DoctorProxy> response) {
-						Log.info("create all item panel success :" +response.size());
 						statisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().clear();
 						for(DoctorProxy doctorProxy:response)
 						{
+							
 							createExaminerPanel(doctorProxy, statisticalEvaluationDetailSequenceViewImpl);
 						}
+					}
+					@Override
+					public void onFailure(ServerFailure error) {
+					}
+					@Override
+					public void onViolation(Set<Violation> errors) 
+					{
 					}
 				});
 			}
@@ -515,27 +524,26 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			Log.info("createExaminerPanel");
 			StatisticalEvaluationDetailsItemView examinerView=new StatisticalEvaluationDetailsItemViewImpl();
 			examinerView.setDelegate(this);
-			examinerView.getSequenceLbl().getElement().getParentElement().getStyle().setWidth(22, Unit.PCT);
+			//examinerView.getSequenceLbl().getElement().getParentElement().getStyle().setWidth(22, Unit.PCT);
+			examinerView.getSequenceLbl().getElement().getStyle().setWidth(22, Unit.PCT);
 			examinerView.getSequenceLbl().getElement().getStyle().setFontSize(12, Unit.PX);
 			examinerView.getSequenceLbl().setWidth("248px");
 			examinerView.getOnOffButton().setVisible(false);
 			examinerView.setDoctorProxy(doctorProxy);
 			examinerView.getSequenceLbl().setText(doctorProxy.getPreName() + " " + doctorProxy.getName());
 			examinerView.getSumPerSequenceLbl().setText("");
-			
 			examinerView.getFourthColumnHP().clear();
-			
 			examinerView.getFourthColumnHP().add(examinerView.createAddPointButton());
 			if(analysisType.equals(AnalysisType.post_analysys))
 			{
-				examinerView.getSumPerSequenceLbl().getElement().getParentElement().getStyle().setWidth(28, Unit.PCT);
-				examinerView.getFourthColumnHP().getElement().getParentElement().getStyle().setWidth(28, Unit.PCT);
+				//examinerView.getSumPerSequenceLbl().getElement().getParentElement().getStyle().setWidth(28, Unit.PCT);
+				//examinerView.getFourthColumnHP().getElement().getParentElement().getStyle().setWidth(28, Unit.PCT);
+				examinerView.getSumPerSequenceLbl().getElement().getStyle().setWidth(28, Unit.PCT);
+				examinerView.getFourthColumnHP().getElement().getStyle().setWidth(28, Unit.PCT);
 				//examinerView.getSequenceHeader().getTBodies().getItem(0).getElementsByTagName("td").getItem(3).setPropertyString("width", "28%");
 			}
-			
 			statisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().add(examinerView.asWidget());
 			examinerView.getPostDataHP().clear();
-			
 			for(int i=0;i<statisticalEvaluationDetailSequenceViewImpl.getPostDataHP().getWidgetCount();i++)
 			{
 				createPostDataLabel(examinerView, "-");
