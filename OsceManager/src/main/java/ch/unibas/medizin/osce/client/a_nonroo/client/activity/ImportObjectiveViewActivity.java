@@ -249,66 +249,68 @@ public class ImportObjectiveViewActivity extends AbstractActivity implements Imp
 	public void init()
 	{ 
 		Range range = view.getLearningObjectiveViewImpl().getTable().getVisibleRange();
-		int start = range.getStart();
-		int length = range.getLength();
+		final int start = range.getStart();
+		final int length = range.getLength();
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
 		requests.skillRequestNonRoo().countSkillBySearchCriteria(mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).fire(new OSCEReceiver<Integer>() {
 			@Override
 			public void onSuccess(Integer response) {
-				view.getLearningObjectiveViewImpl().getTable().setRowCount(response);
+				view.getLearningObjectiveViewImpl().getTable().setRowCount(response, true);
+				
+				requests.skillRequestNonRoo().findSkillBySearchCriteria(start, length, mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
+
+					@Override
+					public void onSuccess(List<SkillProxy> response) {
+						
+						for (int i=0; i<response.size(); i++)
+						{
+							learningObjective = new LearningObjectiveData();
+							SkillProxy skill = response.get(i);
+							
+							temp = skill.getTopic().getClassificationTopic().getMainClassification().getShortcut() + " " + skill.getTopic().getClassificationTopic().getShortcut() + " " + skill.getShortcut();
+							learningObjective.setCode(temp);
+							learningObjective.setSkill(skill);
+							learningObjective.setText(skill.getDescription());
+							learningObjective.setTopic(skill.getTopic().getTopicDesc());	
+							
+							if (skill.getSkillLevel() != null)
+								learningObjective.setSkillLevel(String.valueOf(skill.getSkillLevel().getLevelNumber()));
+							else
+								learningObjective.setSkillLevel("");
+							
+							Iterator<SkillHasApplianceProxy> iter = skill.getSkillHasAppliances().iterator();
+							
+							while (iter.hasNext())
+							{
+								SkillHasApplianceProxy skillHasApplianceProxy = iter.next();
+								
+								if (skillHasApplianceProxy.getAppliance().getShortcut().equals("D"))
+									learningObjective.setD("D");
+								else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("T"))
+									learningObjective.setT("T");
+								else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("E"))
+									learningObjective.setE("E");
+								else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("P"))
+									learningObjective.setP("P");
+								else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("G"))
+									learningObjective.setG("G");
+							}
+							
+							learningObjectiveData.add(learningObjective);
+							learningObjective = null;
+						}
+						
+						view.getLearningObjectiveViewImpl().getTable().setRowData(view.getLearningObjectiveViewImpl().getTable().getVisibleRange().getStart(), learningObjectiveData);
+						//view.getLearningObjectiveViewImpl().getTable().setVisibleRange(0, OsMaConstant.TABLE_PAGE_SIZE);
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+					}
+				});
 			}
 		});
 		
-		requests.skillRequestNonRoo().findSkillBySearchCriteria(start, length, mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
-
-			@Override
-			public void onSuccess(List<SkillProxy> response) {
-				
-				for (int i=0; i<response.size(); i++)
-				{
-					learningObjective = new LearningObjectiveData();
-					SkillProxy skill = response.get(i);
-					
-					temp = skill.getTopic().getClassificationTopic().getMainClassification().getShortcut() + " " + skill.getTopic().getClassificationTopic().getShortcut() + " " + skill.getShortcut();
-					learningObjective.setCode(temp);
-					learningObjective.setSkill(skill);
-					learningObjective.setText(skill.getDescription());
-					learningObjective.setTopic(skill.getTopic().getTopicDesc());	
-					
-					if (skill.getSkillLevel() != null)
-						learningObjective.setSkillLevel(String.valueOf(skill.getSkillLevel().getLevelNumber()));
-					else
-						learningObjective.setSkillLevel("");
-					
-					Iterator<SkillHasApplianceProxy> iter = skill.getSkillHasAppliances().iterator();
-					
-					while (iter.hasNext())
-					{
-						SkillHasApplianceProxy skillHasApplianceProxy = iter.next();
-						
-						if (skillHasApplianceProxy.getAppliance().getShortcut().equals("D"))
-							learningObjective.setD("D");
-						else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("T"))
-							learningObjective.setT("T");
-						else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("E"))
-							learningObjective.setE("E");
-						else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("P"))
-							learningObjective.setP("P");
-						else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("G"))
-							learningObjective.setG("G");
-					}
-					
-					learningObjectiveData.add(learningObjective);
-					learningObjective = null;
-				}
-				
-				view.getLearningObjectiveViewImpl().getTable().setRowData(learningObjectiveData);
-				view.getLearningObjectiveViewImpl().getTable().setVisibleRange(0, OsMaConstant.TABLE_PAGE_SIZE);
-				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-			}
-		});
+		
 		
 		
 	}
@@ -333,55 +335,57 @@ public class ImportObjectiveViewActivity extends AbstractActivity implements Imp
 		requests.skillRequestNonRoo().countSkillBySearchCriteria(mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).fire(new OSCEReceiver<Integer>() {
 			@Override
 			public void onSuccess(Integer response) {
-				view.getLearningObjectiveViewImpl().getTable().setRowCount(response);
+				view.getLearningObjectiveViewImpl().getTable().setRowCount(response, true);
+				
+				requests.skillRequestNonRoo().findSkillBySearchCriteria(range.getStart(), range.getLength(), mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
+
+					@Override
+					public void onSuccess(List<SkillProxy> response) {
+					
+						for (int i=0; i<response.size(); i++)
+						{
+							learningObjective = new LearningObjectiveData();
+							SkillProxy skill = response.get(i);
+							
+							temp = skill.getTopic().getClassificationTopic().getMainClassification().getShortcut() + " " + skill.getTopic().getClassificationTopic().getShortcut() + " " + skill.getShortcut();
+							learningObjective.setCode(temp);
+							learningObjective.setSkill(skill);
+							learningObjective.setText(skill.getDescription());
+							learningObjective.setTopic(skill.getTopic().getTopicDesc());	
+							
+							if (skill.getSkillLevel() != null)
+								learningObjective.setSkillLevel(String.valueOf(skill.getSkillLevel().getLevelNumber()));
+							else
+								learningObjective.setSkillLevel("");
+							
+							Iterator<SkillHasApplianceProxy> iter = skill.getSkillHasAppliances().iterator();
+							
+							while (iter.hasNext())
+							{
+								SkillHasApplianceProxy skillHasApplianceProxy = iter.next();
+								
+								if (skillHasApplianceProxy.getAppliance().getShortcut().equals("D"))
+									learningObjective.setD("D");
+								else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("T"))
+									learningObjective.setT("T");
+								else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("E"))
+									learningObjective.setE("E");
+								else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("P"))
+									learningObjective.setP("P");
+								else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("G"))
+									learningObjective.setG("G");
+							}
+							
+							learningObjectiveData.add(learningObjective);
+						}
+						
+						view.getLearningObjectiveViewImpl().getTable().setRowData(range.getStart(), learningObjectiveData);
+					}
+				});
 			}
 		});
 		
-		requests.skillRequestNonRoo().findSkillBySearchCriteria(range.getStart(), range.getLength(), mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
-
-			@Override
-			public void onSuccess(List<SkillProxy> response) {
-			
-				for (int i=0; i<response.size(); i++)
-				{
-					learningObjective = new LearningObjectiveData();
-					SkillProxy skill = response.get(i);
-					
-					temp = skill.getTopic().getClassificationTopic().getMainClassification().getShortcut() + " " + skill.getTopic().getClassificationTopic().getShortcut() + " " + skill.getShortcut();
-					learningObjective.setCode(temp);
-					learningObjective.setSkill(skill);
-					learningObjective.setText(skill.getDescription());
-					learningObjective.setTopic(skill.getTopic().getTopicDesc());	
-					
-					if (skill.getSkillLevel() != null)
-						learningObjective.setSkillLevel(String.valueOf(skill.getSkillLevel().getLevelNumber()));
-					else
-						learningObjective.setSkillLevel("");
-					
-					Iterator<SkillHasApplianceProxy> iter = skill.getSkillHasAppliances().iterator();
-					
-					while (iter.hasNext())
-					{
-						SkillHasApplianceProxy skillHasApplianceProxy = iter.next();
-						
-						if (skillHasApplianceProxy.getAppliance().getShortcut().equals("D"))
-							learningObjective.setD("D");
-						else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("T"))
-							learningObjective.setT("T");
-						else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("E"))
-							learningObjective.setE("E");
-						else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("P"))
-							learningObjective.setP("P");
-						else if (skillHasApplianceProxy.getAppliance().getShortcut().equals("G"))
-							learningObjective.setG("G");
-					}
-					
-					learningObjectiveData.add(learningObjective);
-				}
-				
-				view.getLearningObjectiveViewImpl().getTable().setRowData(range.getStart(), learningObjectiveData);
-			}
-		});
+		
 			
 	}
 
