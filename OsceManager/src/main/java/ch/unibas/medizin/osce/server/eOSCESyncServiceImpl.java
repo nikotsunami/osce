@@ -97,6 +97,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				if (fileExist(objectSummary.getKey()))
 				{
 					fileList.add(objectSummary.getKey());
+					
 				}
 			}
 		}
@@ -425,7 +426,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			
 			Statement st = connection.createStatement();
 			
-			String sql = "SELECT  cand.zcandidateid, ex.zexaminerid, que.zquestionid, opt.zvalue, st.zstationid, ans.zanswerquestion, ans.zanswerassessment FROM zanswer ans , zassessment ass, zschedule sch, z_1answeroptions ansopt, zoption opt, zcandidate cand, zquestion que, zstation st, zexaminer ex"
+			String sql = "SELECT  cand.zcandidateid, ex.zexaminerid, que.zquestionid, opt.zvalue, st.zstationid, ans.zanswerquestion, ans.ztimestamp, ans.zanswerassessment FROM zanswer ans , zassessment ass, zschedule sch, z_1answeroptions ansopt, zoption opt, zcandidate cand, zquestion que, zstation st, zexaminer ex"
 					+ " WHERE ans.zanswerassessment = ass.z_pk"
 					+ " and  ass.zschedule = sch.z_pk"
 					+ " and ansopt.z_1optionanswers = ans.z_pk"
@@ -470,6 +471,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				answerTable.setChecklistOption(checklistOption);							
 				answerTable.setOscePostRoom(oscePostRoom);
 				answerTable.setDoctor(doctor);
+				answerTable.setAnswerTimestamp(resultset.getTimestamp(6));
 				answerTable.persist();
 				
 				//System.out.println("RECORD INSERTED SUCCESSFULLY");		
@@ -823,7 +825,11 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 									FileUtils.touch(file);
 									
 									TransformerFactory transformerFactory = TransformerFactory.newInstance();
+									//transformerFactory.setAttribute("indent-number", new Integer(5));
 									Transformer transformer = transformerFactory.newTransformer();
+									transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+									transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "3");
+									//transformer.setOutputProperty("indent-amount", "3");
 									DOMSource source = new DOMSource(doc);
 									StreamResult result = new StreamResult(file);
 									transformer.transform(source, result);

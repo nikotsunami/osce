@@ -2,14 +2,18 @@ package ch.unibas.medizin.osce.domain;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.math.stat.StatUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -42,6 +46,10 @@ public class Answer {
 
 	@ManyToOne
 	OscePostRoom oscePostRoom;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date answerTimestamp;
 
 	public static List<Answer> retrieveStudent(Long osceDayId, Long courseId) {
 		Log.info("retrieveStudent :");
