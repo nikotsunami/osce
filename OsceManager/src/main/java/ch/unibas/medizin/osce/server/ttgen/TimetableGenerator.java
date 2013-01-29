@@ -368,6 +368,9 @@ public class TimetableGenerator {
 		estimatedTimeDay += (numberLongBreak * osce.getLongBreak());  
 		
 		boolean lunchBreakRequered = false;
+		
+		
+		
 		lunchBreakRequered = estimatedTimeDay > LUNCH_BREAK_MIDDLE_THRESHOLD;
 		
 		int lunchBreakRotation = 0;
@@ -1034,6 +1037,7 @@ public class TimetableGenerator {
 			}
 			
 			osceDay.setOsceSequences(osceSequences);
+			
 		} else { // multiple days --> one sequence for each day
 			Iterator<OsceDay> it = days.iterator();
 			int i = 0,j=0;
@@ -2002,9 +2006,17 @@ public class TimetableGenerator {
 						int breakValue = 0;
 						if (temp.length > 1)						
 							breakValue = Integer.parseInt(temp[1]);
-				
+						
 						int numberBreakPosts = rotations[parcourIndex].get(currRotationNumber);
 						int numberSlotsTotal = posts.size() + numberBreakPosts;
+						
+						//spec change
+						int preRotNoBreakPost = 0;
+						if (currRotationNumber == 0)
+							preRotNoBreakPost = 0;
+						else
+							preRotNoBreakPost = rotations[parcourIndex].get(currRotationNumber-1);
+						//spec change
 					
 						//by spec bug fix[
 						if (numberSlotsTotal > osce.getMaxNumberStudents())
@@ -2275,7 +2287,9 @@ public class TimetableGenerator {
 													(!earlyStartFirst && postBP.isFirstPart() || earlyStartFirst && !postBP.isFirstPart())) {
 												startTimeNew = dateAddMin(startTimeNew, osce.getShortBreakSimpatChange() - osce.getShortBreak());
 											}*/
-											if (numberBreakPosts == 0)
+											
+											//sepc change last
+											if (numberBreakPosts == 0 && preRotNoBreakPost > 0)
 											{
 												int postLength = osce.getPostLength() + osce.getShortBreak();
 												startTimeNew = dateAddMin(startTimeNew, postLength);
@@ -2324,8 +2338,8 @@ public class TimetableGenerator {
 							// lunch break or nothing is added)
 							
 							if(!lastRotation) {
-								
-								if (numberBreakPosts == 0)
+								//sepc change last
+								if (numberBreakPosts == 0 && preRotNoBreakPost > 0)
 								{
 									int postLength = osce.getPostLength() + osce.getShortBreak();
 									nextRotationStartTime = dateAddMin(nextRotationStartTime, postLength);
