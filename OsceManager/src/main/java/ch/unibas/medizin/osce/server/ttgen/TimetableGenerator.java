@@ -311,7 +311,8 @@ public class TimetableGenerator {
 						
 		}
 		
-		calcDayTimeByDayIndexForSequence(0);
+		if (numberDays == 1)
+			calcDayTimeByDayIndexForSequence(0);
 	}
 
 	/**
