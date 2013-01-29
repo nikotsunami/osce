@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -308,6 +310,8 @@ public class TimetableGenerator {
 			}
 						
 		}
+		
+		calcDayTimeByDayIndexForSequence(0);
 	}
 
 	/**
@@ -442,6 +446,198 @@ public class TimetableGenerator {
 				
 				if (isLongBreakBetweenTwoRotation)
 					timeUntilLastLongBreak = totalTimeForLongBreak;
+			}
+			//]spec
+			
+			// additional breaks
+			if(!lastRotation) {				
+				//SPEC[
+				//if((lunchBreakAfterRotation > 0 && (j + 1) % rotationsMax == lunchBreakAfterRotation) || (lunchBreakAfterRotation == 0 && lunchBreakNeeded((j + 1) % rotationsMax))) {
+				//if(lunchBreakRequered && ((lunchBreakAfterRotation > 0 && (j+1) % rotationsMax == lunchBreakAfterRotation) || (lunchBreakAfterRotation == 0 && lunchBreakNeeded((j ) % rotationsMax)))) {
+				if(lunchBreakRequered && j == ( ( lunchBreakRotation + (i * rotationsMax) ) ) - 1) {
+					
+					timeUntilLongORLunchBreak=0;
+					//SPEC]
+					lunchBreakByDay.add(i, dateAddMin(osceDayRef.getTimeStart(), timeNeededCurrentDay));
+					slotsSinceLastSimpatChange = 0;
+					timeNeededCurrentDay += osce.getLunchBreak();
+					timeUntilLastLongBreak = timeNeededCurrentDay; //Reset time when lunch break added
+					log.info("  lunch break");
+					breakByRoatation.add(j, (int) osce.getLunchBreak());
+				//SPEC[
+				//} else if(simpatChangeWithinSlots(slotsSinceLastSimpatChange + nPostsGeneral + rotations[0].get(j + 1)) || longBreakInRotationHalf) {
+				} else 
+					{
+						if(isLongBreakBetweenTwoRotation) {
+						//if(timeUntilLongORLunchBreak>LONG_BREAK_MIDDLE_THRESHOLD) {
+							//timeUntilLastLongBreak = timeUntilLongORLunchBreak;
+							timeUntilLongORLunchBreak=0;
+				//SPEC]
+							slotsSinceLastSimpatChange = 0;
+							timeNeededCurrentDay += osce.getLongBreak();
+							timeUntilLastLongBreak = timeNeededCurrentDay; //Reset time when long break added 
+							log.info("  long break");
+							breakByRoatation.add(j, (int) osce.getLongBreak());
+						} else {
+							timeNeededCurrentDay += osce.getMiddleBreak();
+							log.info("  middle break");
+							breakByRoatation.add(j, (int) osce.getMiddleBreak());
+						}
+					//SPEC[
+					}
+					//SPEC]
+			}
+			else
+			{
+				breakByRoatation.add(j, 0);
+			}
+			
+			
+			rotationStr = rotationStr + ctr + ":" + breakByRoatation.get(j) + "-";
+			ctr++;
+		}
+	
+		timeNeededByDay.add(i, timeNeededCurrentDay);
+		breakPerRotationByDay.add(i, rotationStr);
+		
+		lunchBreakRequiredByDay.add(i, lunchBreakRequered);
+		
+		if (!lunchBreakRequered)
+			lunchBreakByDay.add(i, osceDayRef.getTimeStart());
+		
+		timeNeeded += timeNeededCurrentDay;
+	}
+	
+	private void calcDayTimeByDayIndexForSequence(int i) {
+		int rotationsMax;
+		int totalRoationByDay = 0;
+		String rotationStr = "";
+		String timeSlotStr = "";
+		
+		// take information from DB if OSCE scaffold has already been generated
+		if(osce.getOsceStatus().equals(OsceStatus.OSCE_BLUEPRINT))
+			//by spec[
+			rotationsMax = rotationsByDay.get(i); // otherwise it start every day with more number rotation
+			//by spec]
+			//rotationsMax = rotationsPerDay > rotations[0].size() ? rotations[0].size() : rotationsPerDay;			
+		else
+			rotationsMax = rotationsByDay.get(i);
+		
+		
+		int slotsSinceLastSimpatChange = 0;
+		int timeNeededCurrentDay = 0;
+		
+		int timeUntilLongORLunchBreak = 0;
+		int timeUntilLastLongBreak = 0;
+		List<Integer> rotationTime = new ArrayList<Integer>();
+		int checkBreak = 0;
+		
+		log.info("day " + i + " (rotations: " + rotationsByDay.get(i) + ") / rotationsMax: " + rotationsMax);
+		
+		//SPEC[
+		int estimatedTimeDay = 0;
+		for(int j = (i * rotationsMax); j < (i * rotationsMax + rotationsByDay.get(i)); j++) {
+			//int numberBreakPostsThisRotation = rotations[0].get(j);
+			
+			int numberBreakPostsThisRotation = 0;
+			
+			if (rotations[0].size() > j)
+				numberBreakPostsThisRotation = rotations[0].get(j);
+			else 
+				rotations[0].add(j, 0);
+			
+			// add break posts to regular posts
+			int nPostsGeneral = numberPosts + numberBreakPosts;
+			int nPostsThisRotation = nPostsGeneral + numberBreakPostsThisRotation;
+			
+			estimatedTimeDay += (((nPostsThisRotation * osce.getPostLength()) + ((nPostsThisRotation -1) * osce.getShortBreak())));			
+		}
+		
+		estimatedTimeDay += ((rotationsMax -1) * osce.getMiddleBreak());
+		
+		int numberLongBreak = estimatedTimeDay / LONG_BREAK_MIDDLE_THRESHOLD;
+		
+		estimatedTimeDay += (numberLongBreak * osce.getLongBreak());  
+		
+		boolean lunchBreakRequered = true;
+		
+		int lunchBreakRotation = 0;
+		
+		if (lunchBreakRequered)
+			lunchBreakRotation = (int) Math.floor((double)rotationsByDay.get(i) / (double)2);
+		
+		
+		int totalRotation = rotationsByDay.get(i);
+		int longBreakRotation = (totalRotation - lunchBreakRotation) / 2;
+		//SPEC]
+		
+		int ctr = 0;
+		// rotations
+		for(int j = (i * rotationsMax); j < (i * rotationsMax + rotationsByDay.get(i)); j++) {
+			int numberBreakPostsThisRotation = rotations[0].get(j);
+			
+			// add break posts to regular posts
+			int nPostsGeneral = numberPosts + numberBreakPosts;
+			int nPostsThisRotation = nPostsGeneral + numberBreakPostsThisRotation;
+			
+			// index where a SP needs to be changed during the rotation (in the middle if there is
+			// only one change, after number of slots of most complicated role otherwise)
+			int changeIndex = nPostsThisRotation / numberSlotsUntilSPChange > 1 ? numberSlotsUntilSPChange : nPostsThisRotation / 2 + 1;
+			
+
+			boolean longBreakInRotationHalf = ((nPostsThisRotation * osce.getPostLength()) + ((nPostsThisRotation -1) * osce.getShortBreak())) > LONG_BREAK_MIDDLE_THRESHOLD;
+
+			
+			log.info("  rotation " + j + " (breakposts: " + numberBreakPostsThisRotation + ") - start: " + timeNeededCurrentDay);
+			
+			// posts
+			for(int k = 0; k < nPostsThisRotation; k++) {
+				boolean halfTimeSlots = k == nPostsThisRotation / 2 - 1;
+				
+				timeNeededCurrentDay += postLength;
+				
+				if(longBreakInRotationHalf && halfTimeSlots) {
+					slotsSinceLastSimpatChange = 0;
+					timeNeededCurrentDay += osce.getLongBreak();
+					//SPEC[
+					timeUntilLongORLunchBreak=0;
+					//SPEC]
+				} else {
+					if(simpatChangeWithinSlots(slotsSinceLastSimpatChange) && k % changeIndex == changeIndex - 1) {
+						slotsSinceLastSimpatChange = 0;
+						timeNeededCurrentDay += osce.getShortBreakSimpatChange();
+					} else {
+						if(k < nPostsThisRotation - 1)
+							timeNeededCurrentDay += osce.getShortBreak();
+					}
+				}
+				
+				slotsSinceLastSimpatChange++;
+			}
+			
+			log.info("  rotation " + j + " end: " + timeNeededCurrentDay);
+			
+			
+			boolean lastRotation = (j % rotationsMax) == rotationsByDay.get(i) - 1;
+			
+			//spec[
+			boolean isLongBreakBetweenTwoRotation = false;
+			timeUntilLongORLunchBreak += timeNeededCurrentDay;
+			timeUntilLongORLunchBreak -= timeUntilLastLongBreak;
+			if(!lastRotation)
+			{
+				int nextNumberSlotsTotal = nPostsGeneral + rotations[0].get(j+1);
+				int totalTimeForLongBreak = ((nextNumberSlotsTotal * osce.getPostLength()) +  ((nextNumberSlotsTotal - 1) * osce.getShortBreak()) + osce.getMiddleBreak());
+				totalTimeForLongBreak += timeUntilLongORLunchBreak;
+				//isLongBreakBetweenTwoRotation = totalTimeForLongBreak > LONG_BREAK_MIDDLE_THRESHOLD;
+				
+				//if (isLongBreakBetweenTwoRotation)
+				if (longBreakRotation == j)
+				{
+					timeUntilLastLongBreak = totalTimeForLongBreak;
+					isLongBreakBetweenTwoRotation = true;
+					longBreakRotation += lunchBreakRotation;
+				}
 			}
 			//]spec
 			
@@ -1036,6 +1232,10 @@ public class TimetableGenerator {
 				osceSequences.add(seq);
 			}
 			
+			/*String changeRotStr = changeRotationString(osceDay.getBreakByRotation(), rotSeq[0]);			
+			osceDay.setBreakByRotation(changeRotStr);
+			osceDay.persist();*/
+			
 			osceDay.setOsceSequences(osceSequences);
 			
 		} else { // multiple days --> one sequence for each day
@@ -1083,6 +1283,27 @@ public class TimetableGenerator {
 			}
 		}
 	}
+	
+	/*public String changeRotationString(String breakPerRotation, int rotationNo)
+	{
+		//String breakPerRotation = "0:1-1:1-2:20-3:1-4:1-5:20-6:1-7:1-8:1-9:0-";
+		
+		String[] rotationStr = breakPerRotation.split("-");
+		
+		for (int i=0; i<rotationStr.length; i++)
+		{
+			if (i > (rotationNo - 1))
+			{
+				String tempstr = rotationStr[i-rotationNo];
+				String[] strtemp = tempstr.split(":");
+				Pattern replace = Pattern.compile("-"+ i +":\\d*-");
+			    Matcher matcher2 = replace.matcher(breakPerRotation);
+			    breakPerRotation = matcher2.replaceAll("-"+ i +":"+ strtemp[1] +"-");			
+			}
+		}
+		
+		return breakPerRotation;
+	}*/
 
 	/**
 	 * Remove old calculated scaffold (when OsceStatus is changed from GENERATED to BLUEPRINT again)
