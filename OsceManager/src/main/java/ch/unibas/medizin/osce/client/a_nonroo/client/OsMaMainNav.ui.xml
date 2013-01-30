@@ -49,7 +49,7 @@
 		<g:DisclosurePanel ui:field="simPatDataPanel" width="182px" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:customHeader>
 				<g:HorizontalPanel>
-					<g:Label ui:field="simPatDataPanelHeaderText" addStyleNames="{style.headerLabel}" ></g:Label>
+					<g:Label ui:field="simPatDataPanelHeaderText" addStyleNames="{style.headerLabel}"  />
 					<s:IconButton icon="arrowreturnthick-1-w" addStyleNames='{style.closeButton}' ui:field="simPatClose" ></s:IconButton>
 				</g:HorizontalPanel>
 			</g:customHeader>
@@ -64,7 +64,7 @@
 		<g:DisclosurePanel ui:field="doctorDataPanel" width="182px" open="false" addStyleNames='{style.mainNavPanel}'>
 			<g:customHeader>
 				<g:HorizontalPanel>
-					<g:Label ui:field="doctorDataPanelHeaderText" addStyleNames="{style.headerLabel}" ></g:Label>
+					<g:Label ui:field="doctorDataPanelHeaderText" addStyleNames="{style.headerLabel}"  />
 					<s:IconButton icon="arrowreturnthick-1-w" addStyleNames='{style.closeButton}' ui:field="doctorClose" />
 				</g:HorizontalPanel>
 			</g:customHeader>
@@ -79,7 +79,7 @@
 		<g:DisclosurePanel ui:field="rolePanel" width="182px" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:customHeader>
 				<g:HorizontalPanel>
-					<g:Label ui:field="rolePanelHeaderText" addStyleNames="{style.headerLabel}" ></g:Label>
+					<g:Label ui:field="rolePanelHeaderText" addStyleNames="{style.headerLabel}"  />
 					<s:IconButton icon="arrowreturnthick-1-w" addStyleNames='{style.closeButton}' ui:field="roleClose" />
 				</g:HorizontalPanel>
 			</g:customHeader>
@@ -95,13 +95,13 @@
 		<g:DisclosurePanel ui:field="examinationsPanel" width="182px" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:customHeader>
 				<g:HorizontalPanel>
-					<g:Label ui:field="examinationsPanelHeaderText" addStyleNames="{style.headerLabel}" ></g:Label>
+					<g:Label ui:field="examinationsPanelHeaderText" addStyleNames="{style.headerLabel}"  />
 					<s:IconButton icon="arrowreturnthick-1-w" addStyleNames='{style.closeButton}' ui:field="examinationsClose" />
 				</g:HorizontalPanel>
 			</g:customHeader>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
 			<!-- G: SPEC START = -->						
-			<g:Label ui:field="labelSemester"></g:Label>				
+			<g:Label ui:field="labelSemester" />				
 			<g:HorizontalPanel>
 				<g:ValueListBox ui:field="lstSemester" />				
 				 <s:IconButton ui:field="btnEditSem" icon="pencil"></s:IconButton>
@@ -131,11 +131,11 @@
 				<g:Anchor ui:field="bellSchedule" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
 			</g:VerticalPanel>
 		
-			<g:Label ui:field="afterTheOsceHeader" addStyleNames="{style.label}">After the OSCE</g:Label>
+			<g:Label ui:field="afterTheOsceHeader" addStyleNames="{style.label}" />
 			<g:VerticalPanel>				
 				<g:Anchor ui:field="importeOSCE" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
-				<g:Anchor ui:field="payment" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
 				<g:Anchor ui:field="statisticsEvaluation" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+				<g:Anchor ui:field="payment" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
 			</g:VerticalPanel>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
@@ -144,7 +144,7 @@
 		<!-- <g:DisclosurePanel ui:field="roleAssignmentPanel" width="182px" open="true" addStyleNames='{style.mainNavPanel}'>
 			<g:customHeader>
 				<g:HorizontalPanel>
-					<g:Label ui:field="roleAssignmentPanelHeaderText" addStyleNames="{style.headerLabel}" ></g:Label>
+					<g:Label ui:field="roleAssignmentPanelHeaderText" addStyleNames="{style.headerLabel}"  />
 					<s:IconButton icon="arrowreturnthick-1-w" addStyleNames='{style.closeButton}' ui:field="roleAssignmentClose" />
 				</g:HorizontalPanel>
 			</g:customHeader>
@@ -157,22 +157,36 @@
 		<g:DisclosurePanel ui:field="administrationPanel" width="182px" open="false" addStyleNames='{style.mainNavPanel}'>
 			<g:customHeader>
 				<g:HorizontalPanel>
-					<g:Label ui:field="administrationPanelHeaderText" addStyleNames="{style.headerLabel}" ></g:Label>
+					<g:Label ui:field="administrationPanelHeaderText" addStyleNames="{style.headerLabel}"  />
 					<s:IconButton icon="arrowreturnthick-1-w" addStyleNames='{style.closeButton}' ui:field="administrationClose" />
 				</g:HorizontalPanel>
 			</g:customHeader>
 			<g:VerticalPanel addStyleNames='{style.mainNavPanelContent}'>
-				<g:Anchor ui:field="administrators"></g:Anchor>
-				<g:Anchor ui:field="nationalities"></g:Anchor>
-				<g:Anchor ui:field="languages"></g:Anchor>
-				<g:Anchor ui:field="professions"></g:Anchor>
-				<g:Anchor ui:field="roleScriptTemplate"></g:Anchor>
-				<g:Anchor ui:field="roomMaterials"></g:Anchor>
-				<g:Anchor ui:field="rooms"></g:Anchor>
-				<g:Anchor ui:field="log"></g:Anchor>
-				<g:Anchor ui:field="importObjective"></g:Anchor>
-				<g:Anchor ui:field="StudentManagment"></g:Anchor>
+				<g:Label ui:field="personDataHeader" addStyleNames="{style.label}" />
+				<g:VerticalPanel>
+					<g:Anchor ui:field="nationalities" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+					<g:Anchor ui:field="languages" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+					<g:Anchor ui:field="professions" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+				</g:VerticalPanel>
 				
+				<g:Label ui:field="masterDataHeader" addStyleNames="{style.label}" />
+				<g:VerticalPanel>
+					<g:Anchor ui:field="roleScriptTemplate" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+					<g:Anchor ui:field="importObjective" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+				</g:VerticalPanel>
+				
+				<g:Label ui:field="assetDataHeader" addStyleNames="{style.label}" />
+				<g:VerticalPanel>
+					<g:Anchor ui:field="rooms" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+					<g:Anchor ui:field="roomMaterials" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+				</g:VerticalPanel>
+				
+				<g:Label ui:field="systemDataHeader" addStyleNames="{style.label}" />
+				<g:VerticalPanel>
+					<g:Anchor ui:field="administrators" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+					<g:Anchor ui:field="log" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+					<g:Anchor ui:field="StudentManagment" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+				</g:VerticalPanel>
 			</g:VerticalPanel>
 		</g:DisclosurePanel>
 		

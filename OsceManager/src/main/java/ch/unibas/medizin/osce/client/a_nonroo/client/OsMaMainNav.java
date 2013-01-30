@@ -58,8 +58,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.event.shared.EventHandler;
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.PlaceController;
@@ -83,6 +81,209 @@ import com.google.inject.Inject;
 
 
 public class OsMaMainNav extends Composite {
+	
+	
+	@UiField
+	IconButton btnEditSem;
+	
+	@UiField
+	IconButton btnAddSem;
+	
+	// G: SPEC END =
+	
+	@UiField
+	DisclosurePanel simPatDataPanel;		// Stammdaten
+	
+	
+	//For Test
+	
+	@UiField
+	DockPanel dockPanel;
+	
+	//@UiField
+	//VerticalPanel dockPanel;
+	
+	@UiField
+	VerticalPanel menuContainer;
+	
+	@UiField
+	IconButton simPatClose;
+	
+	@UiField
+	Label simPatDataPanelHeaderText;
+	
+	@UiField
+	IconButton doctorClose;
+	
+	@UiField
+	Label doctorDataPanelHeaderText;
+	
+	@UiField
+	IconButton roleClose;
+	
+	@UiField
+	Label rolePanelHeaderText;
+	
+	@UiField
+	IconButton examinationsClose;
+	
+	@UiField
+	Label examinationsPanelHeaderText;
+	
+	/*@UiField
+	IconButton roleAssignmentClose;
+	
+	@UiField
+	Label roleAssignmentPanelHeaderText;*/
+	
+	@UiField
+	IconButton administrationClose;
+	
+	@UiField
+	Label administrationPanelHeaderText;
+	
+	//For Test
+	
+	@UiField
+	DisclosurePanel doctorDataPanel;
+	
+	@UiField
+	Anchor people;					// Personen
+	@UiField
+	Anchor scars;					// Merkmale
+	@UiField
+	Anchor anamnesisChecks;			// Anamnesewerte
+	@UiField
+	Anchor clinics;					// Spitäler
+	@UiField
+	Anchor doctors;					// Ärzte
+	
+	
+	@UiField
+	DisclosurePanel administrationPanel;	//Verwaltung
+	
+	@UiField
+	Anchor administrators;			// Benutzer
+	@UiField
+	Anchor nationalities;			// Nationalitäten
+	@UiField
+	Anchor languages;				// Sprachen
+	@UiField
+	Anchor professions;				// Berufe
+	@UiField
+	Anchor rooms;					// Räume
+	@UiField
+	Anchor log;						// Log
+	
+	
+	//By SPEC Role[
+	@UiField 
+	DisclosurePanel rolePanel;
+	
+	@UiField
+	Anchor roles;
+	
+	@UiField
+	Anchor topicsAndSpec;
+	
+	@UiField
+	Anchor roleScriptTemplate;
+	
+	@UiField
+	Anchor roomMaterials;
+	
+	//By SPEC Role]
+	
+	// Assignment : 3 By SPEC[
+	
+	/*@UiField
+	DisclosurePanel roleAssignmentPanel;*/
+	
+	@UiField
+	Anchor roleAssignment; 
+	
+	// By SPEC End//
+	
+	@UiField
+	DisclosurePanel examinationsPanel;		// Prüfungen
+	
+	@UiField
+	Anchor osces;					// OSCEs
+	@UiField
+	Anchor circuit;					// Postenlauf
+	
+	@UiField
+	Anchor statisticsEvaluation;
+	
+	@UiField
+	Anchor students;				// Studenten
+	@UiField
+	Anchor examinationSchedule;		// Prüfungsplan
+	@UiField
+	Anchor summonings;				// Aufgebote versenden
+	@UiField
+	Anchor individualSchedules; 	// Individuelle Pläne drucken
+	@UiField
+	Anchor bellSchedule;			// Klingelplan erstellen
+	@UiField
+	Label labelSemester;
+	
+	//learning objective
+	@UiField
+	Anchor importObjective;
+	
+	//eosce
+	@UiField
+	Anchor importeOSCE;
+	
+	//PAYMENT
+	
+	@UiField
+	Anchor payment;
+		
+	@UiField
+	Label createOsceHeader;
+	
+	@UiField
+	Label osceAssignmentsHeader;
+	
+	@UiField
+	Label assignmentsOutputHeader;
+	
+	@UiField
+	Label afterTheOsceHeader;
+	
+	@UiField
+	Anchor StudentManagment;
+	
+	@UiField
+	Label personDataHeader;
+	
+	@UiField
+	Label masterDataHeader;
+	
+	@UiField
+	Label assetDataHeader;
+	
+	@UiField
+	Label systemDataHeader;
+	
+	/* commented by spec
+	@UiField
+	DisclosurePanel simulationPatientsPanel;// Simulationspatienten
+	*/
+	//commented  by spec[
+	//@UiField
+	//Anchor roles;					// Rollen
+	//commented by spec]
+	
+	/* commented by spec
+	@UiField
+	Anchor roleAssignments;			// Rollenzuweisung
+	*/
+	
+	@UiField
+	Anchor exportOSCE;
 
 	private static MainNavUiBinder uiBinder = GWT.create(MainNavUiBinder.class);
 
@@ -555,10 +756,10 @@ public class OsMaMainNav extends Composite {
 		
 		labelSemester.setText(constants.semester() + ":");
 		osces.setText(constants.manageOsces());
-		circuit.setText(constants.circuit());
+		circuit.setText(constants.defineCircuit());
 		statisticsEvaluation.setText(constants.statisticsEvaluation());
 		
-		students.setText(constants.students());
+		students.setText(constants.importStudentData());
 		examinationSchedule.setText(constants.examinationSchedule());
 		summonings.setText(constants.sendSummonings());
 		individualSchedules.setText(constants.printIndividualSchedules());
@@ -578,6 +779,11 @@ public class OsMaMainNav extends Composite {
 		//payment
 		
 		StudentManagment.setText(constants.StudentDetailsPlace());
+		
+		assetDataHeader.setText(constants.manageFacilities());
+		masterDataHeader.setText(constants.manageMasterData());
+		personDataHeader.setText(constants.manageSpMasterData());
+		systemDataHeader.setText(constants.manageSystem());
 		
 		/* commented by spec
 		roleAssignments.setText(constants.roleAssignments());
@@ -653,196 +859,7 @@ public class OsMaMainNav extends Composite {
 	        	return obj == null ? "" :  renderer.render(obj.getSemester()) + " " + String.valueOf(obj.getCalYear());
 	        }
 	    });
-		
-		@UiField
-		IconButton btnEditSem;
-		
-		@UiField
-		IconButton btnAddSem;
-		
-	// G: SPEC END =
-	
-	@UiField
-	DisclosurePanel simPatDataPanel;		// Stammdaten
-	
-	
-//	For Test
-	
-	@UiField
-	DockPanel dockPanel;
-	
-//	@UiField
-//	VerticalPanel dockPanel;
-	
-	@UiField
-	VerticalPanel menuContainer;
-	
-	@UiField
-	IconButton simPatClose;
-	
-	@UiField
-	Label simPatDataPanelHeaderText;
-	
-	@UiField
-	IconButton doctorClose;
-	
-	@UiField
-	Label doctorDataPanelHeaderText;
-	
-	@UiField
-	IconButton roleClose;
-	
-	@UiField
-	Label rolePanelHeaderText;
-	
-	@UiField
-	IconButton examinationsClose;
-	
-	@UiField
-	Label examinationsPanelHeaderText;
-	
-	/*@UiField
-	IconButton roleAssignmentClose;
-	
-	@UiField
-	Label roleAssignmentPanelHeaderText;*/
-	
-	@UiField
-	IconButton administrationClose;
-	
-	@UiField
-	Label administrationPanelHeaderText;
 
-//	For Test
-	
-	@UiField
-	DisclosurePanel doctorDataPanel;
-
-	@UiField
-	Anchor people;					// Personen
-	@UiField
-	Anchor scars;					// Merkmale
-	@UiField
-	Anchor anamnesisChecks;			// Anamnesewerte
-	@UiField
-	Anchor clinics;					// Spitäler
-	@UiField
-	Anchor doctors;					// Ärzte
-
-
-	@UiField
-	DisclosurePanel administrationPanel;	//Verwaltung
-
-	@UiField
-	Anchor administrators;			// Benutzer
-	@UiField
-	Anchor nationalities;			// Nationalitäten
-	@UiField
-	Anchor languages;				// Sprachen
-	@UiField
-	Anchor professions;				// Berufe
-	@UiField
-	Anchor rooms;					// Räume
-	@UiField
-	Anchor log;						// Log
-
-	
-	//By SPEC Role[
-	@UiField 
-	DisclosurePanel rolePanel;
-	
-	@UiField
-	Anchor roles;
-	
-	@UiField
-	Anchor topicsAndSpec;
-	
-	@UiField
-	Anchor roleScriptTemplate;
-	
-	@UiField
-	Anchor roomMaterials;
-	
-	//By SPEC Role]
-
-	// Assignment : 3 By SPEC[
-
-	/*@UiField
-	DisclosurePanel roleAssignmentPanel;*/
-	
-	@UiField
-	Anchor roleAssignment; 
-
-	// By SPEC End//
-
-	@UiField
-	DisclosurePanel examinationsPanel;		// Prüfungen
-
-	@UiField
-	Anchor osces;					// OSCEs
-	@UiField
-	Anchor circuit;					// Postenlauf
-	
-	@UiField
-	Anchor statisticsEvaluation;
-	
-	@UiField
-	Anchor students;				// Studenten
-	@UiField
-	Anchor examinationSchedule;		// Prüfungsplan
-	@UiField
-	Anchor summonings;				// Aufgebote versenden
-	@UiField
-	Anchor individualSchedules; 	// Individuelle Pläne drucken
-	@UiField
-	Anchor bellSchedule;			// Klingelplan erstellen
-	@UiField
-	Label labelSemester;
-	
-	//learning objective
-	@UiField
-	Anchor importObjective;
-	
-	//eosce
-	@UiField
-	Anchor importeOSCE;
-	
-	//PAYMENT
-	
-	@UiField
-	Anchor payment;
-		
-	@UiField
-	Label createOsceHeader;
-	
-	@UiField
-	Label osceAssignmentsHeader;
-	
-	@UiField
-	Label assignmentsOutputHeader;
-	
-	@UiField
-	Label afterTheOsceHeader;
-	
-	@UiField
-	Anchor StudentManagment;
-	
-	/* commented by spec
-	@UiField
-	DisclosurePanel simulationPatientsPanel;// Simulationspatienten
-	*/
-	//commented  by spec[
-	//@UiField
-	//Anchor roles;					// Rollen
-	//commented by spec]
-	
-	/* commented by spec
-	@UiField
-	Anchor roleAssignments;			// Rollenzuweisung
-	*/
-	
-	@UiField
-	Anchor exportOSCE;
 	
 	@UiHandler("exportOSCE")
 	void exportOSCEClicked(ClickEvent event)
