@@ -1,13 +1,25 @@
 package ch.unibas.medizin.osce.client.scaffold;
 
-import ch.unibas.medizin.osce.client.managed.activity.*;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import ch.unibas.medizin.osce.client.managed.activity.ScaffoldMobileActivities;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.managed.ui.ApplicationListPlaceRenderer;
 import ch.unibas.medizin.osce.client.scaffold.activity.IsScaffoldMobileActivity;
-import ch.unibas.medizin.osce.client.scaffold.place.*;
 import ch.unibas.medizin.osce.client.scaffold.gae.GaeHelper;
+import ch.unibas.medizin.osce.client.scaffold.place.PlaceHistoryFactory;
+import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
+import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlacePicker;
+import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlaceToListPlace;
+import ch.unibas.medizin.osce.client.scaffold.place.ScaffoldPlaceHistoryMapper;
 import ch.unibas.medizin.osce.client.style.MobileListResources;
-import com.google.gwt.activity.shared.*;
+
+import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.activity.shared.Activity;
+import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.core.client.GWT;
@@ -17,19 +29,21 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.logging.client.LogConfiguration;
-import com.google.gwt.place.shared.*;
+import com.google.gwt.place.shared.Place;
+import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.requestfactory.client.RequestFactoryLogHandler;
 import com.google.gwt.requestfactory.shared.LoggingRequest;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ValuePicker;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
-
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 

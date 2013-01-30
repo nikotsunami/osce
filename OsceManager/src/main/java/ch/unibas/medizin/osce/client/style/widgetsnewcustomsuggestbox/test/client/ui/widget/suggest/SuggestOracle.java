@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
-import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 
 public abstract class SuggestOracle<T> {
 	private Response<T>	emptyResponse	= new Response<T>(new ArrayList<T>());

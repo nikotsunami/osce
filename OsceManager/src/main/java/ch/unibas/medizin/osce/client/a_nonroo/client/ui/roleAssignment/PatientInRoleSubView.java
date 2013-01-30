@@ -1,10 +1,10 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment;
 
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 public interface PatientInRoleSubView extends IsWidget{
 	
 	interface Delegate {

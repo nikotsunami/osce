@@ -1,9 +1,9 @@
 package ch.unibas.medizin.osce.client.scaffold.ui;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
-
-import java.math.BigDecimal;
 
 /**
  * A simple renderer of Float values.

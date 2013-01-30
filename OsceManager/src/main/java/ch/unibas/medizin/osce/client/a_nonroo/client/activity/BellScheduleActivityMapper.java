@@ -1,7 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.BellSchedulePlace;
-
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 
 import com.google.gwt.activity.shared.Activity;

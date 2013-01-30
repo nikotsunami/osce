@@ -1,7 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
 import javax.persistence.EntityManager;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.TypedQuery;
 

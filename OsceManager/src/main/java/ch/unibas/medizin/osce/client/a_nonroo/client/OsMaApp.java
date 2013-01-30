@@ -5,10 +5,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.activity.ApplicationMainActivitiesMapper;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlaceHistoryFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlaceHistoryMapper;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.managed.activity.ApplicationDetailsActivities;

@@ -3,7 +3,6 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.place;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.amazonaws.services.elasticmapreduce.model.HadoopJarStepConfig;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.RequestFactory;

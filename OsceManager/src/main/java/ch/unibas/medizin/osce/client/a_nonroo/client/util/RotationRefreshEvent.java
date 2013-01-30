@@ -1,15 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.util;
 
-import java.util.List;
-
-import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
-import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
-
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.Cookies;
 
 public class RotationRefreshEvent extends GwtEvent<RotationRefreshHandler> {
 	

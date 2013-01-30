@@ -6,7 +6,6 @@ import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 public interface SPView extends IsWidget {
 	interface Delegate {

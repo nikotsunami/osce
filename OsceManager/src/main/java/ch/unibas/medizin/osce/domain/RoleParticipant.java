@@ -1,21 +1,17 @@
 package ch.unibas.medizin.osce.domain;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Enumerated;
+import javax.persistence.ManyToOne;
+import javax.persistence.TypedQuery;
+import javax.validation.constraints.NotNull;
+
 import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-
-import ch.unibas.medizin.osce.domain.StandardizedRole;
-
-import javax.persistence.EntityManager;
-import javax.persistence.ManyToOne;
-import javax.persistence.TypedQuery;
-
-import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.shared.RoleParticipantTypes;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
 
 @RooJavaBean
 @RooToString

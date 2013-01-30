@@ -3,7 +3,6 @@ package ch.unibas.medizin.osce.domain;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -22,25 +21,9 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import ch.unibas.medizin.osce.shared.RoleParticipantTypes;
 import ch.unibas.medizin.osce.shared.RoleTopicSearchField;
 import ch.unibas.medizin.osce.shared.Sorting;
-import ch.unibas.medizin.osce.shared.StandardizedPatientSearchField;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import ch.unibas.medizin.osce.shared.StudyYears;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.Max;
-import java.util.Set;
-import ch.unibas.medizin.osce.domain.StandardizedRole;
-import java.util.HashSet;
-import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
-import ch.unibas.medizin.osce.domain.Specialisation;
-
-
-import javax.persistence.ManyToOne;
 
 @RooJavaBean
 @RooToString

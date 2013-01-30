@@ -1,7 +1,6 @@
 package ch.unibas.medizin.osce.client.style.resources;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.resources.client.ClientBundle.Source;
 
 public interface AnamnesisQuestionTypeImages extends ClientBundle {
 		@Source("images/questionOpen.png")

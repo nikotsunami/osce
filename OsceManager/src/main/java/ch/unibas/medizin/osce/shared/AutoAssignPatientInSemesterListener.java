@@ -1,6 +1,5 @@
 package ch.unibas.medizin.osce.shared;
 
-import ch.unibas.medizin.osce.shared.AutoAssignPatientInSemesterEvent;
 import de.novanic.eventservice.client.event.Event;
 import de.novanic.eventservice.client.event.listener.RemoteEventListener;
 /**

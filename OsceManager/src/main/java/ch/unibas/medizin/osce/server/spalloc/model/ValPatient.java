@@ -3,10 +3,10 @@ package ch.unibas.medizin.osce.server.spalloc.model;
 import java.util.Collections;
 import java.util.Map;
 
+import net.sf.cpsolver.ifs.model.Value;
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
-import net.sf.cpsolver.ifs.model.Value;
 
 /**
  * This wrapper class represents a value (SimPat) for the assignment to a variable

@@ -1,43 +1,18 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import ch.unibas.medizin.osce.client.a_nonroo.client.DockMenuSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
-import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
-import ch.unibas.medizin.osce.client.managed.request.ApplianceProxy;
-import ch.unibas.medizin.osce.client.managed.request.ClassificationTopicProxy;
-import ch.unibas.medizin.osce.client.managed.request.MainClassificationProxy;
-import ch.unibas.medizin.osce.client.managed.request.SkillLevelProxy;
-import ch.unibas.medizin.osce.client.managed.request.SkillProxy;
-import ch.unibas.medizin.osce.client.managed.request.TopicProxy;
-import ch.unibas.medizin.osce.client.style.resources.LearningObjectiveData;
-import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
-import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
-import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
-import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.logical.shared.AttachEvent;
-import com.google.gwt.text.shared.AbstractRenderer;
-import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FileUpload;

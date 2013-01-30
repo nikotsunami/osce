@@ -3,7 +3,6 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableNoHilightResources;
@@ -14,7 +13,7 @@ import ch.unibas.medizin.osce.client.style.widgets.cell.VariableSelectorCell.Ali
 import ch.unibas.medizin.osce.client.style.widgets.cell.VariableSelectorCell.Choice;
 import ch.unibas.medizin.osce.client.style.widgets.cell.VariableSelectorCell.Choices;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.FieldUpdater;

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.style.widgets.richtext.RichTextToolbar;
-//import ch.unibas.medizin.osce.client.shared.Gender;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;

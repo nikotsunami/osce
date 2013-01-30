@@ -12,7 +12,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
 
 public interface RoleBaseTableItemView extends IsWidget {
 	public interface Presenter {

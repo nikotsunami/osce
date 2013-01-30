@@ -12,7 +12,6 @@ import ch.unibas.medizin.osce.client.managed.ui.StudentOscesSetEditor;
 import ch.unibas.medizin.osce.client.managed.ui.TaskSetEditor;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;
@@ -22,7 +21,6 @@ import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;

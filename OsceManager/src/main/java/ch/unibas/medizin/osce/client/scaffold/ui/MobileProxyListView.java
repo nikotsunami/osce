@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.scaffold.ui;
 import ch.unibas.medizin.osce.client.scaffold.ScaffoldMobileApp;
 import ch.unibas.medizin.osce.client.scaffold.place.AbstractProxyListView;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyListView;
+
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.requestfactory.shared.EntityProxy;

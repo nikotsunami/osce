@@ -10,7 +10,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoomView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoomViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
-import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoomRequest;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;

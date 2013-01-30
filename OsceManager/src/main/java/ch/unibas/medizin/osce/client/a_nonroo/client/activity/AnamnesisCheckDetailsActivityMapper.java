@@ -4,7 +4,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetails
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.shared.Operation;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;

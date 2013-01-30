@@ -13,9 +13,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarRequest;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
-import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.TraitTypes;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 

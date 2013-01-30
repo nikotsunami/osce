@@ -3,9 +3,6 @@ package ch.unibas.medizin.osce.server.spalloc.heuristics;
 import java.util.Collection;
 import java.util.Map;
 
-import ch.unibas.medizin.osce.server.spalloc.model.ValPatient;
-import ch.unibas.medizin.osce.server.spalloc.model.VarAssignment;
-
 import net.sf.cpsolver.ifs.heuristics.NeighbourSelection;
 import net.sf.cpsolver.ifs.heuristics.StandardNeighbourSelection;
 import net.sf.cpsolver.ifs.model.Neighbour;
@@ -15,6 +12,8 @@ import net.sf.cpsolver.ifs.solver.Solver;
 import net.sf.cpsolver.ifs.util.DataProperties;
 import net.sf.cpsolver.ifs.util.Progress;
 import net.sf.cpsolver.ifs.util.ToolBox;
+import ch.unibas.medizin.osce.server.spalloc.model.ValPatient;
+import ch.unibas.medizin.osce.server.spalloc.model.VarAssignment;
 
 /**
  * Hill climber. <br />

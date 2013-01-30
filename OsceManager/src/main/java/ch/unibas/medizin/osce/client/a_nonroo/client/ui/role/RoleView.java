@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.ValueListBox;
-import com.google.gwt.user.datepicker.client.DateBox;
 
 /**
  * @author dk

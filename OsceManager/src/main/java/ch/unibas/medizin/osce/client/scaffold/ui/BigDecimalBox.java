@@ -1,9 +1,9 @@
 package ch.unibas.medizin.osce.client.scaffold.ui;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.user.client.ui.ValueBox;
-
-import java.math.BigDecimal;
 
 /**
  * A ValueBox that uses {@link BigDecimalParser} and {@link BigDecimalRenderer}.

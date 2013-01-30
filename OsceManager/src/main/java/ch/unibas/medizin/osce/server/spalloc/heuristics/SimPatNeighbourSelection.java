@@ -1,10 +1,5 @@
 package ch.unibas.medizin.osce.server.spalloc.heuristics;
 
-import org.apache.log4j.Logger;
-
-import ch.unibas.medizin.osce.server.spalloc.model.ValPatient;
-import ch.unibas.medizin.osce.server.spalloc.model.VarAssignment;
-
 import net.sf.cpsolver.ifs.heuristics.GeneralValueSelection;
 import net.sf.cpsolver.ifs.heuristics.NeighbourSelection;
 import net.sf.cpsolver.ifs.heuristics.StandardNeighbourSelection;
@@ -15,6 +10,11 @@ import net.sf.cpsolver.ifs.termination.TerminationCondition;
 import net.sf.cpsolver.ifs.util.Callback;
 import net.sf.cpsolver.ifs.util.DataProperties;
 import net.sf.cpsolver.ifs.util.Progress;
+
+import org.apache.log4j.Logger;
+
+import ch.unibas.medizin.osce.server.spalloc.model.ValPatient;
+import ch.unibas.medizin.osce.server.spalloc.model.VarAssignment;
 
 /**
  * Examination timetabling neighbour selection. <br>

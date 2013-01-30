@@ -4,12 +4,8 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
-import com.allen_sauer.gwt.dnd.client.PickupDragController;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public interface RoleDetailsChecklistSubViewChecklistOptionItemView  extends IsWidget{
 

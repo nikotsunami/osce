@@ -2,10 +2,6 @@ package ch.unibas.medizin.osce.server.spalloc.heuristics;
 
 import java.util.HashSet;
 
-import ch.unibas.medizin.osce.server.spalloc.model.OsceModel;
-import ch.unibas.medizin.osce.server.spalloc.model.ValPatient;
-import ch.unibas.medizin.osce.server.spalloc.model.VarAssignment;
-
 import net.sf.cpsolver.ifs.heuristics.NeighbourSelection;
 import net.sf.cpsolver.ifs.model.Neighbour;
 import net.sf.cpsolver.ifs.model.SimpleNeighbour;
@@ -13,6 +9,9 @@ import net.sf.cpsolver.ifs.solution.Solution;
 import net.sf.cpsolver.ifs.solver.Solver;
 import net.sf.cpsolver.ifs.util.DataProperties;
 import net.sf.cpsolver.ifs.util.Progress;
+import ch.unibas.medizin.osce.server.spalloc.model.OsceModel;
+import ch.unibas.medizin.osce.server.spalloc.model.ValPatient;
+import ch.unibas.medizin.osce.server.spalloc.model.VarAssignment;
 
 /**
  * Initial solution construction heuristics. <br />

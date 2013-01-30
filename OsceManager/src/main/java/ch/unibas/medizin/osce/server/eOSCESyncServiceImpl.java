@@ -3,9 +3,7 @@ package ch.unibas.medizin.osce.server;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
@@ -26,15 +24,12 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.log4j.spi.ErrorCode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncException;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncService;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.domain.Answer;
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.CheckList;
@@ -52,9 +47,6 @@ import ch.unibas.medizin.osce.domain.OsceSequence;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
-import ch.unibas.medizin.osce.shared.ColorPicker;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
-import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.amazonaws.AmazonClientException;
@@ -70,7 +62,6 @@ import com.amazonaws.services.s3.model.Region;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.sun.mail.iap.ByteArray;
 public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCESyncService {
 
 	/**

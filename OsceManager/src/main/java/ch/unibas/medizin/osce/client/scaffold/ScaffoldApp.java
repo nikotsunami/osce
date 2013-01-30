@@ -1,12 +1,12 @@
 package ch.unibas.medizin.osce.client.scaffold;
 
-import ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProcessor;
-import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
-import ch.unibas.medizin.osce.client.scaffold.gae.*;
-import com.google.gwt.requestfactory.shared.EntityProxy;
-
 import java.util.HashSet;
 import java.util.Set;
+
+import ch.unibas.medizin.osce.client.managed.request.ApplicationEntityTypesProcessor;
+import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
+
+import com.google.gwt.requestfactory.shared.EntityProxy;
 
 public class ScaffoldApp {
 

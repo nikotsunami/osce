@@ -1,8 +1,5 @@
 package ch.unibas.medizin.osce.domain;
 
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
 import java.util.Date;
 import java.util.List;
 
@@ -10,9 +7,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
+import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import javax.validation.constraints.Size;
+import org.springframework.roo.addon.entity.RooEntity;
+import org.springframework.roo.addon.javabean.RooJavaBean;
+import org.springframework.roo.addon.tostring.RooToString;
 
 @RooJavaBean
 @RooToString

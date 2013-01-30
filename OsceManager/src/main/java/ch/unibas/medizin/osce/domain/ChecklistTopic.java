@@ -1,9 +1,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
@@ -13,12 +11,11 @@ import javax.persistence.OrderBy;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
-import org.aspectj.weaver.patterns.TypePatternQuestions.Question;
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
-import org.apache.log4j.Logger;
 
 @RooJavaBean
 @RooToString

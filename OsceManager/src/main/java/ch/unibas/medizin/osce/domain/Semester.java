@@ -1,26 +1,23 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.EntityManager;
+import javax.persistence.Enumerated;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.TypedQuery;
+import javax.validation.constraints.NotNull;
+
 import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+
 import ch.unibas.medizin.osce.shared.Semesters;
-import javax.validation.constraints.NotNull;
-import javax.persistence.Enumerated;
-
-import java.util.List;
-import java.util.Set;
-import ch.unibas.medizin.osce.domain.Administrator;
-import java.util.HashSet;
-
-import javax.persistence.EntityManager;
-import javax.persistence.ManyToMany;
-import javax.persistence.CascadeType;
-import javax.persistence.TypedQuery;
-
-import ch.unibas.medizin.osce.domain.Osce;
-import javax.persistence.OneToMany;
-import ch.unibas.medizin.osce.domain.PatientInSemester;
 
 @RooJavaBean
 @RooToString

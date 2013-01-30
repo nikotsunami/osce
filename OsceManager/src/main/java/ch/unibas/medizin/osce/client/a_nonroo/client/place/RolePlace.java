@@ -1,7 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.place;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 

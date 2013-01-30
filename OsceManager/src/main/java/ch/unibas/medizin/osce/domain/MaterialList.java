@@ -11,10 +11,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
-import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.shared.MaterialType;
 import ch.unibas.medizin.osce.shared.PriceType;

@@ -2,8 +2,6 @@ package ch.unibas.medizin.osce.client.style.resources;
 
 import ch.unibas.medizin.osce.client.managed.request.SkillProxy;
 
-import com.google.gwt.user.client.ui.CheckBox;
-
 public class LearningObjectiveData {
 	
 	public SkillProxy skill;

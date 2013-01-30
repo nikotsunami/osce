@@ -11,7 +11,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ProfessionView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ProfessionViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
-import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionRequest;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;

@@ -1,8 +1,5 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
-import java.util.Iterator;
-import java.util.Set;
-
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
@@ -24,7 +21,6 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
-import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 public class AdministratorEditActivity extends AbstractActivity implements

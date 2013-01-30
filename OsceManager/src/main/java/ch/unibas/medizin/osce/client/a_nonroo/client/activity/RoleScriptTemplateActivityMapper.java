@@ -1,16 +1,10 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
-import ch.unibas.medizin.osce.client.managed.activity.StandardizedPatientDetailsActivity;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
-import ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientDetailsView;
-import ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientMobileDetailsView;
-import ch.unibas.medizin.osce.client.scaffold.ScaffoldApp;
 import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlace;
 
 import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.EntityProxyId;
 import com.google.inject.Inject;
 
 public class RoleScriptTemplateActivityMapper {

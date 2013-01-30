@@ -2,11 +2,8 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.Map;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecDetailsView.Delegate;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.TopicsAndSpecDetailsView.Presenter;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.shared.ItemDefination;
 
 import com.google.gwt.place.shared.Place;

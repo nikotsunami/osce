@@ -19,7 +19,6 @@ import net.sf.cpsolver.ifs.util.ToolBox;
 import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.Assignment;
-import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.PatientInSemester;

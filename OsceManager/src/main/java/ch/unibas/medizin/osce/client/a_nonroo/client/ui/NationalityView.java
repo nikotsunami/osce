@@ -7,7 +7,6 @@ import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 /**
  * @author dk

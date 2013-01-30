@@ -1,12 +1,8 @@
 
 package ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.ValueRendererFactory;
-
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.text.shared.Renderer;

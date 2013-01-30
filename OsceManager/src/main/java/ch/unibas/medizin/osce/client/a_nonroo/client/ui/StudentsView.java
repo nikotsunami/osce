@@ -5,7 +5,6 @@ import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TabPanel;
 
 /**
  * @author dk

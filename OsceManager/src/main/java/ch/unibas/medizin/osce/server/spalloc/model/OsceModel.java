@@ -8,16 +8,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.cpsolver.ifs.model.Model;
+import net.sf.cpsolver.ifs.util.ToolBox;
 import ch.unibas.medizin.osce.domain.Assignment;
-import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.PatientInRole;
-import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.shared.RoleTypes;
-import net.sf.cpsolver.ifs.model.Model;
-import net.sf.cpsolver.ifs.util.ToolBox;
 
 /**
  * Model for optimizing the assignment of SimPats to Assignments. This class initiates all

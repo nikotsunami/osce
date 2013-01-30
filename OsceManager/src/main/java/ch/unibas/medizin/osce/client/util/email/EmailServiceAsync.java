@@ -3,8 +3,6 @@
  */
 package ch.unibas.medizin.osce.client.util.email;
 
-import java.util.Map;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**

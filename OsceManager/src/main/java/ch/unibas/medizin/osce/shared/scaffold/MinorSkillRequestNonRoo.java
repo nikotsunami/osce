@@ -2,7 +2,6 @@ package ch.unibas.medizin.osce.shared.scaffold;
 
 import java.util.List;
 
-import ch.unibas.medizin.osce.client.managed.request.MainSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.MinorSkillProxy;
 import ch.unibas.medizin.osce.domain.MinorSkill;
 

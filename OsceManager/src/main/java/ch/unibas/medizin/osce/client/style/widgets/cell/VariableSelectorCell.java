@@ -1,7 +1,6 @@
 package ch.unibas.medizin.osce.client.style.widgets.cell;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.allen_sauer.gwt.log.client.Log;

@@ -1,11 +1,5 @@
 package ch.unibas.medizin.osce.server.i18n;
 
-import com.google.gwt.i18n.client.PluralRule;
-import com.google.gwt.i18n.client.LocalizableResource.Key;
-import com.google.gwt.i18n.client.Messages.DefaultMessage;
-import com.google.gwt.i18n.client.Messages.PluralCount;
-import com.google.gwt.i18n.client.Messages.PluralText;
-
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -14,6 +8,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.gwt.i18n.client.LocalizableResource.Key;
+import com.google.gwt.i18n.client.Messages.DefaultMessage;
+import com.google.gwt.i18n.client.Messages.PluralCount;
+import com.google.gwt.i18n.client.Messages.PluralText;
+import com.google.gwt.i18n.client.PluralRule;
 
 public class GenericMessages extends GenericX {
 

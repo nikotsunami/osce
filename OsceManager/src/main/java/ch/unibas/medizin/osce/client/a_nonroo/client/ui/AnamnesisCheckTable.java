@@ -4,17 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckView.Delegate;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
-import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.AnamnesisQuestionTypeImages;
 import ch.unibas.medizin.osce.client.style.resources.AnamnesisTableResources;
-import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
-import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
-import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.ActionCell;
@@ -27,15 +22,9 @@ import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListDataProvider;
-import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel;
-import com.google.gwt.view.client.SingleSelectionModel;
-import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 
 public class AnamnesisCheckTable {
 

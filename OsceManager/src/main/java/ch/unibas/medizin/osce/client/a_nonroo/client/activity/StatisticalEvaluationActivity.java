@@ -8,7 +8,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluation
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
-
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation.StatisticalEvaluationView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation.StatisticalEvaluationViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;

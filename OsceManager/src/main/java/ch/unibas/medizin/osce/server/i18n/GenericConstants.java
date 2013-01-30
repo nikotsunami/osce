@@ -1,6 +1,12 @@
 package ch.unibas.medizin.osce.server.i18n;
 
-import com.google.gwt.i18n.client.ConstantsWithLookup;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.security.InvalidParameterException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
+
 import com.google.gwt.i18n.client.Constants.DefaultBooleanValue;
 import com.google.gwt.i18n.client.Constants.DefaultDoubleValue;
 import com.google.gwt.i18n.client.Constants.DefaultFloatValue;
@@ -8,14 +14,8 @@ import com.google.gwt.i18n.client.Constants.DefaultIntValue;
 import com.google.gwt.i18n.client.Constants.DefaultStringArrayValue;
 import com.google.gwt.i18n.client.Constants.DefaultStringMapValue;
 import com.google.gwt.i18n.client.Constants.DefaultStringValue;
+import com.google.gwt.i18n.client.ConstantsWithLookup;
 import com.google.gwt.i18n.client.LocalizableResource.Key;
-
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.security.InvalidParameterException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
 
 public class GenericConstants extends GenericX {
 

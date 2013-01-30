@@ -1,8 +1,8 @@
 package ch.unibas.medizin.osce.client.style.widgets.cell;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.cell.client.Cell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;

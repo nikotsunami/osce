@@ -3,7 +3,6 @@ package ch.unibas.medizin.osce.server.ttgen;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,7 +11,14 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 
-import ch.unibas.medizin.osce.domain.*;
+import ch.unibas.medizin.osce.domain.Assignment;
+import ch.unibas.medizin.osce.domain.Course;
+import ch.unibas.medizin.osce.domain.Osce;
+import ch.unibas.medizin.osce.domain.OsceDay;
+import ch.unibas.medizin.osce.domain.OscePost;
+import ch.unibas.medizin.osce.domain.OscePostBlueprint;
+import ch.unibas.medizin.osce.domain.OscePostRoom;
+import ch.unibas.medizin.osce.domain.OsceSequence;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.ColorPicker;
 import ch.unibas.medizin.osce.shared.OsceSequences;

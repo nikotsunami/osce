@@ -1,6 +1,5 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
-import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.shared.BellAssignmentType;
 import ch.unibas.medizin.osce.shared.TimeBell;

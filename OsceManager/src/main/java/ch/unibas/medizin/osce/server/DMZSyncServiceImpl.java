@@ -12,18 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
@@ -40,43 +30,29 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncException;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
 import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
 import ch.unibas.medizin.osce.domain.AnamnesisForm;
-import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Bankaccount;
 import ch.unibas.medizin.osce.domain.Description;
 import ch.unibas.medizin.osce.domain.Nationality;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDay;
-import ch.unibas.medizin.osce.domain.OscePostBlueprint;
-import ch.unibas.medizin.osce.domain.OsceSequence;
-import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.Profession;
 import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
-import ch.unibas.medizin.osce.domain.StudentOsces;
-import ch.unibas.medizin.osce.domain.Task;
 import ch.unibas.medizin.osce.domain.Training;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.DMZSyncExceptionType;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
-import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
-import ch.unibas.medizin.osce.shared.OsceSecurityType;
-import ch.unibas.medizin.osce.shared.OsceStatus;
-import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
-import ch.unibas.medizin.osce.shared.StudyYears;
+import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.TraitTypes;
 import ch.unibas.medizin.osce.shared.WorkPermission;
-import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
-
-
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -85,7 +61,6 @@ import flexjson.JSONSerializer;
 import flexjson.ObjectBinder;
 import flexjson.ObjectFactory;
 import flexjson.transformer.DateTransformer;
-import ch.unibas.medizin.osce.shared.Semesters;
 
 
 public  class DMZSyncServiceImpl extends RemoteServiceServlet implements

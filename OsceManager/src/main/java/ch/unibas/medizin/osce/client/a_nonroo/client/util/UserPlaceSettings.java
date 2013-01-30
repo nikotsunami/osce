@@ -1,8 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.util;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsMaPlace;
 

@@ -2,9 +2,6 @@ package ch.unibas.medizin.osce.shared.scaffold;
 
 import java.util.List;
 
-import javax.swing.SortOrder;
-
-import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.domain.Specialisation;
 import ch.unibas.medizin.osce.shared.Sorting;

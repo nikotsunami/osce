@@ -1,8 +1,8 @@
 package ch.unibas.medizin.osce.client.scaffold.ui;
 
-import com.google.gwt.text.shared.Parser;
-
 import java.text.ParseException;
+
+import com.google.gwt.text.shared.Parser;
 
 /**
  * Simple parser of Byte that wraps {@link Byte#valueOf(String)}.

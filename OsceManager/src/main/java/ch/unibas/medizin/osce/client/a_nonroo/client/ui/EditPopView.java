@@ -1,9 +1,5 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
-import java.util.Map;
-
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoomEditPopupView.Delegate;
-
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.TextBox;

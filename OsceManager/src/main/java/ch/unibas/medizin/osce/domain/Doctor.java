@@ -4,26 +4,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-import org.apache.log4j.Logger;
-
-import ch.unibas.medizin.osce.shared.Gender;
-import ch.unibas.medizin.osce.shared.Sorting;
-
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
-import javax.persistence.OneToMany;
-import javax.persistence.TypedQuery;
-import javax.validation.constraints.Size;
-import javax.validation.constraints.Pattern;
-import ch.unibas.medizin.osce.domain.Clinic;
 import javax.persistence.ManyToOne;
-import ch.unibas.medizin.osce.domain.Office;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import ch.unibas.medizin.osce.domain.Specialisation;
+import javax.persistence.TypedQuery;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.apache.log4j.Logger;
+import org.springframework.roo.addon.entity.RooEntity;
+import org.springframework.roo.addon.javabean.RooJavaBean;
+import org.springframework.roo.addon.tostring.RooToString;
+
+import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.Sorting;
 
 @RooJavaBean
 @RooToString

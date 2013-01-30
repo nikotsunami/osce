@@ -1,7 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 

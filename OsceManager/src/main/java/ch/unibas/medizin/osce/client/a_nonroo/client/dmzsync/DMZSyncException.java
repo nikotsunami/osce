@@ -2,8 +2,6 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync;
 
 import java.io.Serializable;
 
-import com.google.gwt.user.client.Window;
-
 public class DMZSyncException extends Exception implements Serializable{
 	
 //	public static final String HOST_ADDRESS_EXCEPTION = "notSetHostAddressException";

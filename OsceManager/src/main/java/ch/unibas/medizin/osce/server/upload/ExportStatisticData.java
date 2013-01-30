@@ -19,8 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import com.allen_sauer.gwt.log.client.Log;
-
 import ch.unibas.medizin.osce.domain.Answer;
 import ch.unibas.medizin.osce.domain.ChecklistQuestion;
 import ch.unibas.medizin.osce.domain.ChecklistTopic;

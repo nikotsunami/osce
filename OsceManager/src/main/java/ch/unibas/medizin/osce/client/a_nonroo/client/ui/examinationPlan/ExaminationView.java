@@ -1,7 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan;
 
 import java.util.Date;
-import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
@@ -13,8 +12,6 @@ import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 
 public interface ExaminationView extends IsWidget{

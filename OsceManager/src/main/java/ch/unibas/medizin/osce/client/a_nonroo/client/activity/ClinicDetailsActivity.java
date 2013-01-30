@@ -1,7 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ClinicDetailsPlace;
@@ -12,11 +11,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ClinicSubViewImpl;
-
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
-import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
@@ -34,7 +31,6 @@ import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class ClinicDetailsActivity extends AbstractActivity implements

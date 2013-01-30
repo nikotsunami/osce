@@ -1,9 +1,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import java.io.OutputStream;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +13,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.TypedQuery;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -25,15 +22,14 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import com.google.gwt.requestfactory.server.RequestFactoryServlet;
-
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.RolePrintPdfUtil;
 import ch.unibas.medizin.osce.server.util.file.StudentManagementPrintPdfUtil;
 import ch.unibas.medizin.osce.server.util.file.XmlUtil;
-import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
+
+import com.google.gwt.requestfactory.server.RequestFactoryServlet;
 
 
 @RooJavaBean

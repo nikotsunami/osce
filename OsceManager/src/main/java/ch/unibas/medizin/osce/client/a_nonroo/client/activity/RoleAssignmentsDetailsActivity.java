@@ -4,6 +4,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsDetail
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoleAssignmentsDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoleAssignmentsDetailsViewImpl;
+
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;

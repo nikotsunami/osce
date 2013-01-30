@@ -2,8 +2,8 @@ package ch.unibas.medizin.osce.server.spalloc.model;
 
 import java.util.List;
 
-import ch.unibas.medizin.osce.domain.Assignment;
 import net.sf.cpsolver.ifs.model.Variable;
+import ch.unibas.medizin.osce.domain.Assignment;
 
 /**
  * This wrapper class represents a variable (Assignment) which gets a value

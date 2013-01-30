@@ -11,8 +11,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.DoctorDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsView.Presenter;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
@@ -32,7 +32,6 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.SingleSelectionModel;
 

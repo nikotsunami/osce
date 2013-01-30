@@ -1,13 +1,10 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
-import java.util.Collection;
 import java.util.Map;
 
-import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
-import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;

@@ -11,7 +11,6 @@ import ch.unibas.medizin.osce.client.style.widgets.richtext.RichTextToolbar;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.HeadElement;
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;

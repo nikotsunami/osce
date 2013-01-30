@@ -2,10 +2,7 @@ package ch.unibas.medizin.osce.shared.scaffold;
 
 import java.util.List;
 
-
-import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
-import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.domain.StudentOsces;
 
 import com.google.gwt.requestfactory.shared.Request;

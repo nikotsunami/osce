@@ -1,8 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
-import com.google.gwt.user.cellview.client.CellTable;
-
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
+
+import com.google.gwt.user.cellview.client.CellTable;
 
 public interface StandardizedPatientAnamnesisTableSubView {
 	public interface Delegate {

@@ -24,9 +24,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.gwt.view.client.RangeChangeEvent;
 
 @SuppressWarnings("deprecation")
 public class RoomMaterialsDetailsActivity extends AbstractActivity implements

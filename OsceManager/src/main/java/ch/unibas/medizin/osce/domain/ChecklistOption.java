@@ -3,7 +3,6 @@ package ch.unibas.medizin.osce.domain;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.GeneratedValue;
 import javax.persistence.ManyToOne;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;

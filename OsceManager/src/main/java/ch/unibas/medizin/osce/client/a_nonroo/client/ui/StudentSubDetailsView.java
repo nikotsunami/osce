@@ -3,7 +3,6 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.IsWidget;

@@ -3,10 +3,8 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 import java.util.List;
 import java.util.Map;
 
-import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;

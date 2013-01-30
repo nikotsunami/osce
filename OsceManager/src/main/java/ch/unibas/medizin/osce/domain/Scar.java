@@ -1,24 +1,22 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.EntityManager;
+import javax.persistence.Enumerated;
+import javax.persistence.ManyToMany;
+import javax.persistence.TypedQuery;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import java.util.List;
-import java.util.Set;
-import ch.unibas.medizin.osce.domain.AnamnesisForm;
 import ch.unibas.medizin.osce.shared.TraitTypes;
-
-import java.util.HashSet;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToMany;
-import javax.persistence.CascadeType;
-import javax.persistence.TypedQuery;
 
 @RooJavaBean
 @RooToString

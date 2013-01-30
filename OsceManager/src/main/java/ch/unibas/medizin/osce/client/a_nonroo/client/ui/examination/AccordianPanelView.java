@@ -2,7 +2,6 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
 
 
-import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 

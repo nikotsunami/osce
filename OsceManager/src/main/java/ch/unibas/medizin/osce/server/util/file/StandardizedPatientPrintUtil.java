@@ -1,11 +1,20 @@
 package ch.unibas.medizin.osce.server.util.file;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import ch.unibas.medizin.osce.domain.AnamnesisCheck;
+import ch.unibas.medizin.osce.domain.AnamnesisCheckTitle;
+import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
+import ch.unibas.medizin.osce.domain.Bankaccount;
+import ch.unibas.medizin.osce.domain.LangSkill;
+import ch.unibas.medizin.osce.domain.Scar;
+import ch.unibas.medizin.osce.domain.StandardizedPatient;
+import ch.unibas.medizin.osce.server.StandardizedPatientDetailsConstants;
+import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BaseColor;
@@ -20,19 +29,6 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-
-import ch.unibas.medizin.osce.domain.AnamnesisCheck;
-import ch.unibas.medizin.osce.domain.AnamnesisCheckTitle;
-import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
-import ch.unibas.medizin.osce.domain.Bankaccount;
-import ch.unibas.medizin.osce.domain.LangSkill;
-import ch.unibas.medizin.osce.domain.Scar;
-import ch.unibas.medizin.osce.domain.StandardizedPatient;
-import ch.unibas.medizin.osce.server.StandardizedPatientDetailsConstants;
-import ch.unibas.medizin.osce.server.i18n.GWTI18N;
-import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 public class StandardizedPatientPrintUtil extends PdfUtil {
 	private StandardizedPatient stdPat;

@@ -1,8 +1,5 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;

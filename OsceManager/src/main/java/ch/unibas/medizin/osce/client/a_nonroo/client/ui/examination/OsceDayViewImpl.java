@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RotationRefreshEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RotationRefreshHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;

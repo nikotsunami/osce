@@ -3,7 +3,6 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 import ch.unibas.medizin.osce.client.managed.request.ClassificationTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.MainClassificationProxy;
 import ch.unibas.medizin.osce.client.managed.request.SkillLevelProxy;
-import ch.unibas.medizin.osce.client.managed.request.SkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.TopicProxy;
 
 import com.google.gwt.user.client.ui.Button;

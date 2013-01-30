@@ -2,7 +2,6 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.List;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.RoomEditPopupView.Delegate;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;

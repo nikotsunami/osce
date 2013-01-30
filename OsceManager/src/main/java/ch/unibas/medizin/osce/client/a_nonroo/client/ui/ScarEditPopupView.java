@@ -1,6 +1,5 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CheckListTopicPopupView.Delegate;
 import ch.unibas.medizin.osce.shared.TraitTypes;
 
 import com.google.gwt.user.client.ui.Button;

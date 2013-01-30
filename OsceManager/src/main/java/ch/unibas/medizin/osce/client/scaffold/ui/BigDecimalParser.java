@@ -1,9 +1,9 @@
 package ch.unibas.medizin.osce.client.scaffold.ui;
 
-import com.google.gwt.text.shared.Parser;
-
 import java.math.BigDecimal;
 import java.text.ParseException;
+
+import com.google.gwt.text.shared.Parser;
 
 /**
  * Simple parser of BigDecimal that wraps {@link BigDecimal#toString()}.

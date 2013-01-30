@@ -1,6 +1,5 @@
 package ch.unibas.medizin.osce.shared;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public  class MapEnvelop {

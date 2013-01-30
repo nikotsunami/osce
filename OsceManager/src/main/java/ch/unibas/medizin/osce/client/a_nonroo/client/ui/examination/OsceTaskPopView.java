@@ -6,11 +6,9 @@ import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
-import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface OsceTaskPopView extends IsWidget{

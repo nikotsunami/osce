@@ -7,11 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-import ch.unibas.medizin.osce.domain.Semester;
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.JoinTable;
@@ -19,7 +14,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.TypedQuery;
-import ch.unibas.medizin.osce.domain.StandardizedPatient;
+
+import org.apache.log4j.Logger;
+import org.springframework.roo.addon.entity.RooEntity;
+import org.springframework.roo.addon.javabean.RooJavaBean;
+import org.springframework.roo.addon.tostring.RooToString;
+
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 
 @RooJavaBean

@@ -1,7 +1,5 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsChecklistSubView.Delegate;
-
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
 

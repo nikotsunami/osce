@@ -18,8 +18,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.activity.StudentsActivity;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.domain.StudentOsces;
@@ -27,7 +25,6 @@ import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.Gender;
 
 import com.csvreader.CsvReader;
-import com.google.gwt.user.client.Cookies;
 
 /**
  * Servlet implementation class CsvFileUploadServlet

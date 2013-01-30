@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
@@ -16,20 +17,8 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
-import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
-import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
-
-import com.google.gwt.requestfactory.shared.ServerFailure;
-import com.google.gwt.requestfactory.shared.Violation;
-
-import javax.persistence.CascadeType;
-import javax.persistence.EntityManager;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.TypedQuery;
 
 @RooJavaBean
 @RooToString

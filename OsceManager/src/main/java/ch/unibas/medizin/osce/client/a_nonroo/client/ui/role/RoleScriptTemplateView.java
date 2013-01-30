@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
-import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
-import ch.unibas.medizin.osce.shared.TraitTypes;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;

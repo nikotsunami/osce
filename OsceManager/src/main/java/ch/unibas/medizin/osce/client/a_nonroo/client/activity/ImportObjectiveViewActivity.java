@@ -1,11 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -13,7 +10,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ImportObjectiveView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ImportObjectiveViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.LearningObjectiveView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.LearningObjectiveViewImpl;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.NationalityViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
@@ -27,15 +23,10 @@ import ch.unibas.medizin.osce.client.managed.request.SkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.TopicProxy;
 import ch.unibas.medizin.osce.client.style.resources.LearningObjectiveData;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
-import ch.unibas.medizin.osce.domain.SkillHasAppliance;
-import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.text.shared.AbstractRenderer;

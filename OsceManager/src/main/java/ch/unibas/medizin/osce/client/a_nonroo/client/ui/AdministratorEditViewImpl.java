@@ -8,7 +8,6 @@ import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Element;

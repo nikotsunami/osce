@@ -3,45 +3,23 @@
  */
 package ch.unibas.medizin.osce.server;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.StringReader;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.client.RotationRefreshService;
-import ch.unibas.medizin.osce.client.SummoningsService;
-import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
-import ch.unibas.medizin.osce.client.util.email.EmailService;
-import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Course;
-import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.OscePost;
 import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.domain.OsceSequence;
-import ch.unibas.medizin.osce.domain.PatientInRole;
-import ch.unibas.medizin.osce.domain.PatientInSemester;
-import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
-import ch.unibas.medizin.osce.server.util.email.impl.EmailServiceImpl;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.html.simpleparser.HTMLWorker;
-import com.itextpdf.text.pdf.PdfWriter;
 
 /**
  * @author rahul

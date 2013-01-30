@@ -2,7 +2,6 @@ package ch.unibas.medizin.osce.server.upload;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -18,8 +17,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
-
-import ch.unibas.medizin.osce.domain.MediaContent;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 
 

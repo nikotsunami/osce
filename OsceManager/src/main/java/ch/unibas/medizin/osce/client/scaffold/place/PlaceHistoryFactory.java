@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.scaffold.place;
 
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
+
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.inject.Inject;
 

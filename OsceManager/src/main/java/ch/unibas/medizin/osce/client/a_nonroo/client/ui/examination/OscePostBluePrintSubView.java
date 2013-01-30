@@ -5,7 +5,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 public interface OscePostBluePrintSubView extends IsWidget{
 

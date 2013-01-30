@@ -2,21 +2,13 @@ package ch.unibas.medizin.osce.shared.scaffold;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
-import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
-import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
-import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
 import ch.unibas.medizin.osce.domain.Assignment;
-import ch.unibas.medizin.osce.domain.PatientInRole;
-import ch.unibas.medizin.osce.domain.StandardizedPatient;
-import ch.unibas.medizin.osce.domain.StudentOsces;
-import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.TimeBell;
 

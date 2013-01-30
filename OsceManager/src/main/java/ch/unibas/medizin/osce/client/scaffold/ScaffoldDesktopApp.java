@@ -1,27 +1,37 @@
 package ch.unibas.medizin.osce.client.scaffold;
 
-import ch.unibas.medizin.osce.client.managed.activity.*;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import ch.unibas.medizin.osce.client.managed.activity.ApplicationDetailsActivities;
+import ch.unibas.medizin.osce.client.managed.activity.ApplicationMasterActivities;
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.scaffold.gae.GaeHelper;
-import ch.unibas.medizin.osce.client.scaffold.place.*;
+import ch.unibas.medizin.osce.client.scaffold.place.PlaceHistoryFactory;
+import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlace;
+import ch.unibas.medizin.osce.client.scaffold.place.ProxyListPlacePicker;
+import ch.unibas.medizin.osce.client.scaffold.place.ProxyPlaceToListPlace;
+import ch.unibas.medizin.osce.client.scaffold.place.ScaffoldPlaceHistoryMapper;
 import ch.unibas.medizin.osce.client.scaffold.request.RequestEvent;
-import com.google.gwt.activity.shared.*;
+
+import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.activity.shared.CachingActivityMapper;
+import com.google.gwt.activity.shared.FilteredActivityMapper;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.logging.client.LogConfiguration;
-import com.google.gwt.place.shared.*;
+import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.place.shared.PlaceHistoryHandler;
 import com.google.gwt.requestfactory.client.RequestFactoryLogHandler;
 import com.google.gwt.requestfactory.shared.LoggingRequest;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasConstrainedValue;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.inject.Inject;
-
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 

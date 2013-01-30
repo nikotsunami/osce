@@ -1,14 +1,14 @@
 package ch.unibas.medizin.osce.server.i18n;
 
-import com.google.gwt.i18n.client.Constants;
-import com.google.gwt.i18n.client.Messages;
-
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.google.gwt.i18n.client.Constants;
+import com.google.gwt.i18n.client.Messages;
 
 public class GWTI18N {
 

@@ -25,10 +25,6 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import com.google.gwt.i18n.client.Constants.DefaultBooleanValue;
-import com.google.gwt.i18n.client.Constants.DefaultIntValue;
-import com.google.gwt.user.client.AsyncProxy.DefaultValue;
-
 import ch.unibas.medizin.osce.server.spalloc.SPAllocator;
 import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
@@ -37,7 +33,6 @@ import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
 import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.StudyYears;
-import ch.unibas.medizin.osce.shared.util;
 
 @RooJavaBean
 @RooToString

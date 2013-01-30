@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.scaffold.ioc;
 
 import ch.unibas.medizin.osce.client.managed.request.ApplicationRequestFactory;
 import ch.unibas.medizin.osce.client.scaffold.request.EventSourceRequestTransport;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;

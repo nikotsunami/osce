@@ -3,22 +3,16 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-
-import javax.swing.AbstractAction;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.PaymentPlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.NationalityViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.PaymentView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.PaymentViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
-import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.shared.OsMaConstant;

@@ -11,7 +11,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SpokenLanguageView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SpokenLanguageViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
-import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageRequest;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;

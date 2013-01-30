@@ -5,12 +5,10 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleTableItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTableItemValueProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;

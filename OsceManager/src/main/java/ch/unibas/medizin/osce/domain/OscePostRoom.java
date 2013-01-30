@@ -1,37 +1,23 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.EntityManager;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.TypedQuery;
+
 import org.apache.log4j.Logger;
-import org.hibernate.Query;
-import org.hibernate.mapping.Array;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-
-import ch.unibas.medizin.osce.domain.Room;
-import javax.persistence.ManyToOne;
-import ch.unibas.medizin.osce.domain.OscePost;
-import ch.unibas.medizin.osce.domain.Course;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.shared.PostType;
-
-import java.util.HashSet;
-
-import javax.persistence.EntityManager;
-import javax.persistence.OneToMany;
-import javax.persistence.CascadeType;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 @RooJavaBean
 @RooToString

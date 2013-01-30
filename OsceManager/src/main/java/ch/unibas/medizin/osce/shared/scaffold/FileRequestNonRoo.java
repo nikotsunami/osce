@@ -2,8 +2,6 @@ package ch.unibas.medizin.osce.shared.scaffold;
 
 import java.util.List;
 
-
-import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.FileProxy;
 import ch.unibas.medizin.osce.domain.File;
 
