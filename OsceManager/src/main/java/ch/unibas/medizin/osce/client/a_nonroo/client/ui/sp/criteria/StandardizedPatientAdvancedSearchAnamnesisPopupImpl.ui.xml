@@ -5,17 +5,12 @@
 	<ui:style>
 		
 	</ui:style>
-	<g:VerticalPanel>
-		<g:HorizontalPanel ui:field="parentPanel" spacing="4">
-			<g:ValueListBox ui:field="bindType" />
-			<g:SuggestBox ui:field="anamnesisQuestionSuggestBox" />
-			<g:ValueListBox ui:field="comparison"/>
-			<g:HorizontalPanel ui:field="anamnesisAnswerPanel" />
-			<my:IconButton ui:field="addAnamnesisValueButton" icon="plusthick"/>
-			<my:IconButton ui:field="closeBoxButton" icon="closethick"></my:IconButton>
-		</g:HorizontalPanel>
-		<g:HorizontalPanel spacing ="4">
-			<my:IconButton ui:field="addAnamnesisValues" icon="pencil"/>
-		</g:HorizontalPanel>
-	</g:VerticalPanel>
+	<g:HorizontalPanel ui:field="parentPanel" spacing="4">
+		<g:ValueListBox ui:field="bindType" />
+		<g:SuggestBox ui:field="anamnesisQuestionSuggestBox" />
+		<g:ValueListBox ui:field="comparison"/>
+		<g:HorizontalPanel ui:field="anamnesisAnswerPanel" />
+		<my:IconButton ui:field="addAnamnesisValueButton" icon="plusthick"/>
+		<my:IconButton ui:field="closeBoxButton" icon="closethick"></my:IconButton>
+	</g:HorizontalPanel>
 </ui:UiBinder> 

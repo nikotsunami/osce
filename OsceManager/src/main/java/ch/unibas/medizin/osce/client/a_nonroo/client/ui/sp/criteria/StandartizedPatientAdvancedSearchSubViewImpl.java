@@ -3,21 +3,15 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria;
 import java.util.ArrayList;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
-import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResourcesNoSortArrow;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
-import ch.unibas.medizin.osce.shared.Comparison;
-import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
-import ch.unibas.medizin.osce.shared.PossibleFields;
-import ch.unibas.medizin.osce.shared.TraitTypes;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.SafeHtmlCell;
@@ -25,7 +19,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -33,13 +26,10 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.IdentityColumn;
-import com.google.gwt.user.cellview.client.LoadingStateChangeEvent;
-import com.google.gwt.user.cellview.client.LoadingStateChangeEvent.LoadingState;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.RowCountChangeEvent;
 
 public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
@@ -71,6 +61,7 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 		addProfession.setText(constants.profession());
 		addWorkPermission.setText(constants.workPermission());
 		addMaritialStatus.setText(constants.maritalStatus());
+		addGender.setText(constants.gender());
 	}
 
 	@UiField
@@ -90,6 +81,8 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
     IconButton addWorkPermission;
     @UiField
     IconButton addMaritialStatus;
+    @UiField
+    IconButton addGender;
 
     //SPEC Change
 
@@ -123,6 +116,10 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 
 	public IconButton getAddMaritialStatus() {
 		return addMaritialStatus;
+	}
+	
+	public IconButton getAddGender() {
+		return addGender;
 	}
     //SPEC Change
 	
@@ -164,6 +161,11 @@ public class StandartizedPatientAdvancedSearchSubViewImpl extends Composite
 	@UiHandler("addMaritialStatus")
 	void onAddMaritialStatusClick(ClickEvent e) {
 		delegate.addMaritialStatusClicked(addMaritialStatus);
+	}
+	
+	@UiHandler("addGender")
+	void onAddGenderClick(ClickEvent e) {
+		delegate.addGenderClicked(addGender);
 	}
 	
 	

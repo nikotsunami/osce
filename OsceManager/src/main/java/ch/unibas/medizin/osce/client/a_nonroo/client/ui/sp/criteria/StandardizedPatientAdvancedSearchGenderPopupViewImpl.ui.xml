@@ -8,8 +8,8 @@
 	<g:HorizontalPanel ui:field="parentPanel" spacing="4">
 		<g:ValueListBox ui:field="bindType"/>
 		<g:ValueListBox ui:field="comparison"/>
-		<g:ValueListBox ui:field="professionBox"/>
-		<my:IconButton ui:field="addProfessionButton" icon="plusthick"/>
+		<g:ValueListBox ui:field="genderBox"/>
+		<my:IconButton ui:field="addGenderButton" icon="plusthick"/>
 		<my:IconButton ui:field="closeBoxButton" icon="closethick" />
 	</g:HorizontalPanel>
 </ui:UiBinder>

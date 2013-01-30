@@ -9,6 +9,7 @@ import ch.unibas.medizin.osce.shared.PossibleFields;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 public interface StandartizedPatientAdvancedSearchBasicCriteriaPopUp extends IsWidget, StandardizedPatientAdvancedSearchPopup {
     public interface Presenter {
@@ -27,7 +28,7 @@ public interface StandartizedPatientAdvancedSearchBasicCriteriaPopUp extends IsW
     void setDelegate(Delegate delegate);
 	void display(Button addBasicData);
 	// Highlight onViolation
-	Map getAdvanceSearchCriteriaMap();
+	Map<String, Widget> getAdvanceSearchCriteriaMap();
 	// E Highlight onViolation
 	void display(int positionX, int positionY);
 }

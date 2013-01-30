@@ -381,14 +381,13 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		email.setHref("mailto:" + (proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail())));
 		email.setText((proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail())));
 		
-		nationality.setInnerText(proxy.getNationality() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.NationalityProxyRenderer.instance().render(proxy.getNationality()));
-		profession.setInnerText(proxy.getProfession() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.ProfessionProxyRenderer.instance().render(proxy.getProfession()));
-//		langskills.setInnerText(proxy.getLangskills() == null ? "" : ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.LangSkillProxyRenderer.instance()).render(proxy.getLangskills()));
+		nationality.setInnerText(proxy.getNationality() == null ? "" : (proxy.getNationality().getNationality() == null) ? "" : proxy.getNationality().getNationality());
+		profession.setInnerText(proxy.getProfession() == null ? "" : (proxy.getProfession().getProfession() == null) ? "" : proxy.getProfession().getProfession());
 		
 //		Set<LangSkillProxy> langSkillSet = proxy.getLangskills();
 		
 		description.setInnerHTML(proxy.getDescriptions() == null ? "" : ch.unibas.medizin.osce.client.managed.ui.DescriptionProxyRenderer.instance().render(proxy.getDescriptions()));
-		displayRenderer.setInnerText(ch.unibas.medizin.osce.client.managed.ui.StandardizedPatientProxyRenderer.instance().render(proxy));
+		displayRenderer.setInnerText(((proxy.getName() == null) ? "" : proxy.getName()) + ((proxy.getPreName() == null) ? "" : " " + proxy.getPreName()));
 		
 		BankaccountProxy bank = proxy.getBankAccount();
 		bankName.setInnerText((bank == null || bank.getBankName() == null) ? "" : String.valueOf(bank.getBankName()));

@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPanel 
+public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends StandardizedPatientAbstractPopupImpl 
 		implements StandardizedPatientAdvancedSearchLanguagePopup {
 
 	private static StandardizedPatientAdvancedSearchLanguagePopupImplUiBinder uiBinder = GWT
@@ -36,14 +36,10 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
 			UiBinder<Widget, StandardizedPatientAdvancedSearchLanguagePopupImpl> {
 	}
 	
-	private Delegate delegate;
-	
 	@UiField
 	IconButton addLanguageButton;
 	@UiField
 	IconButton closeBoxButton;
-	@UiField
-	IconButton languageButton;
 	
 	@UiField (provided=true)
 	ValueListBox<SpokenLanguageProxy> language = new ValueListBox<SpokenLanguageProxy>(new AbstractRenderer<SpokenLanguageProxy>() {
@@ -61,9 +57,11 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
     @UiField(provided = true)
     ValueListBox<Comparison> comparison = new ValueListBox<Comparison>(new EnumRenderer<Comparison>(EnumRenderer.Type.LANGSKILL));
 
-    // Highlight onViolation
-    Map<String, Widget> advanceSearchCriteriaMap;
- 	// E Highlight onViolation
+	protected Delegate delegate;
+	
+	public void setDelegate(Delegate delegate) {
+		this.delegate = delegate;
+	}
     
 	public StandardizedPatientAdvancedSearchLanguagePopupImpl() {
 		setWidget(uiBinder.createAndBindUi(this));
@@ -76,7 +74,6 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
 
 		OsceConstants constants = GWT.create(OsceConstants.class);
 		addLanguageButton.setText(constants.add());
-		languageButton.setText(constants.languages());
 		
 		// Highlight onViolation			
 				advanceSearchCriteriaMap=new HashMap<String, Widget>();
@@ -137,38 +134,8 @@ public class StandardizedPatientAdvancedSearchLanguagePopupImpl extends PopupPan
 		this.hide();
 	}
 	
-	@UiHandler("languageButton")
-	public void languageButtonClicked(ClickEvent event) {
-		this.hide();
-	}
-	
-	@Override
-	public void setDelegate(Delegate delegate) {
-		this.delegate = delegate;
-	}
-
-	@Override
-	public void display(Button addLanguage) {
-		this.show();
-		this.setPopupPosition(addLanguage.getAbsoluteLeft() - this.getOffsetWidth(), addLanguage.getAbsoluteTop() - getOffsetHeight()/2 - 32);
-	}
-
-	//SPEC Change
-	@Override
-	public void display(int positionX,int positionY) {
-		this.show();
-		this.setPopupPosition(positionX-300,positionY-32);
-	}
-	//SPEC Change
-	
 	@Override
 	public ValueListBox<SpokenLanguageProxy> getLanguageBox() {
 		return language;
-	}
-
-	@Override
-	public Map getMap() {
-		// TODO Auto-generated method stub
-		return this.advanceSearchCriteriaMap;
 	}
 }

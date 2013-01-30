@@ -9,13 +9,13 @@ import java.util.Map;
 import ch.unibas.medizin.osce.client.a_nonroo.client.Validator;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -43,7 +43,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPanel
+public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends StandardizedPatientAbstractPopupImpl
 		implements StandardizedPatientAdvancedSearchAnamnesisPopup {
 
 	private static StandardizedPatientAdvancedSearchAnamnesisPopupImplUiBinder uiBinder = GWT
@@ -64,8 +64,6 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 	
 	@UiField
 	IconButton addAnamnesisValueButton;
-	@UiField
-	IconButton addAnamnesisValues;
 	@UiField
 	IconButton closeBoxButton;
 	
@@ -102,10 +100,11 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 
 	private AnamnesisCheckProxy selectedProxy;
 	private List<String> possibleAnswers;
-
-	// Highlight onViolation
-	public Map<String, Widget> advanceSearchCriteriaMap;
-	// E Highlight onViolation
+	protected Delegate delegate;
+	
+	public void setDelegate(Delegate delegate) {
+		this.delegate = delegate;
+	}
 	
 	public StandardizedPatientAdvancedSearchAnamnesisPopupImpl() {
 		
@@ -151,7 +150,6 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
 		
 		addAnamnesisValueButton.setText(constants.add());
-		addAnamnesisValues.setText(constants.anamnesisValues());
 		
 		anamnesisAnswerText.setText(constants.enterAnswer());
 		anamnesisAnswerText.addFocusHandler(new FocusHandler() {
@@ -318,47 +316,16 @@ public class StandardizedPatientAdvancedSearchAnamnesisPopupImpl extends PopupPa
 			confirmationDialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
 		}
 	}
-	
 	/*Advance search popup changes end*/
 	
-	@UiHandler("addAnamnesisValues")
-	public void addAnamnesisValuesClicked(ClickEvent e) {
-		hide();
-	}
 	
 	@UiHandler("closeBoxButton")
 	public void closeBoxButtonClicked(ClickEvent e) {
 		hide();
 	}
-	
-	private Delegate delegate;
-	@Override
-	public void setDelegate(Delegate delegate) {
-		this.delegate = delegate;
-	}
-
-	@Override
-	public void display(Button parentButton) {
-		this.show();
-		this.setPopupPosition(parentButton.getAbsoluteLeft() - 250, parentButton.getAbsoluteTop() - getOffsetHeight()/2 - 34);
-	}
-
-	//change for advance search
-		@Override
-		public void display(int positionX,int positionY) {
-			this.show();
-			this.setPopupPosition(positionX-175,positionY-34);
-		}
-		//change for advance search
 		
 	@Override
 	public SuggestBox getAnamnesisQuestionSuggestBox() {
 		return anamnesisQuestionSuggestBox;
-	}
-
-	@Override
-	public Map getMap() {
-		// TODO Auto-generated method stub
-		return this.advanceSearchCriteriaMap;
 	}
 }

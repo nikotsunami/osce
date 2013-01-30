@@ -10,6 +10,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.Widget;
 
 public interface StandardizedPatientAdvancedSearchAnamnesisPopup extends IsWidget, StandardizedPatientAdvancedSearchPopup {
 	public interface Presenter {
@@ -29,6 +30,6 @@ public interface StandardizedPatientAdvancedSearchAnamnesisPopup extends IsWidge
     void setDelegate(Delegate delegate);
 	void display(Button parentButton);
 	SuggestBox getAnamnesisQuestionSuggestBox();
-	Map getMap();
+	Map<String, Widget> getMap();
 	void display(int positionX, int positionY);
 }

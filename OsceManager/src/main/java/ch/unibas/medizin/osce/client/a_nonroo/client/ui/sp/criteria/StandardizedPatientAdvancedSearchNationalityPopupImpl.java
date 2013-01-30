@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -25,7 +25,9 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class StandardizedPatientAdvancedSearchNationalityPopupImpl extends PopupPanel implements StandardizedPatientAdvancedSearchNationalityPopup {
+public class StandardizedPatientAdvancedSearchNationalityPopupImpl extends 
+		StandardizedPatientAbstractPopupImpl implements 
+		StandardizedPatientAdvancedSearchNationalityPopup {
 
 	private static StandardizedPatientAdvancedSearchNationalityPopUpImplUiBinder uiBinder = GWT
 			.create(StandardizedPatientAdvancedSearchNationalityPopUpImplUiBinder.class);
@@ -35,14 +37,10 @@ public class StandardizedPatientAdvancedSearchNationalityPopupImpl extends Popup
 			UiBinder<Widget, StandardizedPatientAdvancedSearchNationalityPopupImpl> {
 	}
 	
-	private Delegate delegate;
-	
 	@UiField
 	IconButton addNationalityButton;
 	@UiField
 	IconButton closeBoxButton;
-	@UiField
-	IconButton nationalityButton;
 	
 	@UiField (provided=true)
 	ValueListBox<NationalityProxy> nationality = new ValueListBox<NationalityProxy>(new AbstractRenderer<NationalityProxy>() {
@@ -56,10 +54,12 @@ public class StandardizedPatientAdvancedSearchNationalityPopupImpl extends Popup
     
     @UiField(provided = true)
     ValueListBox<Comparison> comparison = new ValueListBox<Comparison>(new EnumRenderer<Comparison>(EnumRenderer.Type.NATIONALITY));
-
- // Highlight onViolation
-    Map<String, Widget> advanceSearchCriteriaMap;
- 	// E Highlight onViolation
+    
+	protected Delegate delegate;
+	
+	public void setDelegate(Delegate delegate) {
+		this.delegate = delegate;
+	}
     
 	public StandardizedPatientAdvancedSearchNationalityPopupImpl() {
 		setWidget(uiBinder.createAndBindUi(this));
@@ -70,7 +70,6 @@ public class StandardizedPatientAdvancedSearchNationalityPopupImpl extends Popup
 
 		OsceConstants constants = GWT.create(OsceConstants.class);
 		addNationalityButton.setText(constants.add());
-		nationalityButton.setText(constants.nationalities());
 		
 		// Highlight onViolation			
 		advanceSearchCriteriaMap=new HashMap<String, Widget>();
@@ -132,39 +131,9 @@ public class StandardizedPatientAdvancedSearchNationalityPopupImpl extends Popup
 	public void closeBoxButtonClicked(ClickEvent event) {
 		this.hide();
 	}
-	
-	@UiHandler("nationalityButton")
-	public void languageButtonClicked(ClickEvent event) {
-		this.hide();
-	}
 
-	@Override
-	public void setDelegate(Delegate delegate) {
-		this.delegate = delegate;
-	}
-	
-	@Override
-	public void display(Button sourceButton) {
-		this.show();
-		this.setPopupPosition(sourceButton.getAbsoluteLeft() -this.getOffsetWidth(), sourceButton.getAbsoluteTop() - getOffsetHeight()/2 - 32);
-	}
-
-	//SPEC Change
-	@Override
-	public void display(int positionX,int positionY) {
-		this.show();
-		this.setPopupPosition(positionX-200,positionY-32);
-	}
-	//SPEC Change
 	@Override
 	public ValueListBox<NationalityProxy> getNationalityBox() {
 		return nationality;
 	}
-
-	@Override
-	public Map getMap() {
-		// TODO Auto-generated method stub
-		return this.advanceSearchCriteriaMap;
-	}
-
 }

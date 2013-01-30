@@ -15,13 +15,14 @@
     <div style="height:3em;"/>
     <g:FlowPanel ui:field="buttonFlowPanel">
 		<my:IconButton ui:field="addBasicData" icon="wrench" addStyleNames="{style.advSearchBtn}" />
+		<my:IconButton ui:field="addGender" icon="person" addStyleNames="{style.advSearchBtn}" />
 	    <my:IconButton ui:field="addScar" icon="search" addStyleNames="{style.advSearchBtn}" />
 	    <my:IconButton ui:field="addAnamnesis" icon="pencil" addStyleNames="{style.advSearchBtn}" />
 	    <my:IconButton ui:field="addLanguage" icon="comment" addStyleNames="{style.advSearchBtn}" />
 	    <my:IconButton ui:field="addNationality" icon="flag" addStyleNames="{style.advSearchBtn}" />
-	    <my:IconButton ui:field="addProfession" icon="search" addStyleNames="{style.advSearchBtn}" />
-	    <my:IconButton ui:field="addWorkPermission" icon="search" addStyleNames="{style.advSearchBtn}" />
-	    <my:IconButton ui:field="addMaritialStatus" icon="search" addStyleNames="{style.advSearchBtn}" />
+	    <my:IconButton ui:field="addProfession" icon="suitcase" addStyleNames="{style.advSearchBtn}" />
+	    <my:IconButton ui:field="addWorkPermission" icon="document" addStyleNames="{style.advSearchBtn}" />
+	    <my:IconButton ui:field="addMaritialStatus" icon="link" addStyleNames="{style.advSearchBtn}" />
   	</g:FlowPanel>
   	<!-- celltable changes. start-->
     <!-- <b:CellTable pageSize="8" ui:field="table" width="100%" addStyleNames="{style.standardTable}"/> -->

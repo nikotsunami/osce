@@ -5,16 +5,11 @@
 	<ui:style>
 		
 	</ui:style>
-	<g:VerticalPanel>
-		<g:HorizontalPanel ui:field="parentPanel" spacing="4">
-			<g:ValueListBox ui:field="bindType"/>
-			<g:ValueListBox ui:field="comparison"/>
-			<g:ValueListBox ui:field="maritialStatusBox"/>
-			<my:IconButton ui:field="addMaritialStatusButton" icon="plusthick"/>
-			<my:IconButton ui:field="closeBoxButton" icon="closethick" />
-		</g:HorizontalPanel>
-		<g:HorizontalPanel spacing ="4">
-			<my:IconButton ui:field="maritialStatusButton" icon="search"/>
-		</g:HorizontalPanel>
-	</g:VerticalPanel>
+	<g:HorizontalPanel ui:field="parentPanel" spacing="4">
+		<g:ValueListBox ui:field="bindType"/>
+		<g:ValueListBox ui:field="comparison"/>
+		<g:ValueListBox ui:field="maritialStatusBox"/>
+		<my:IconButton ui:field="addMaritialStatusButton" icon="plusthick"/>
+		<my:IconButton ui:field="closeBoxButton" icon="closethick" />
+	</g:HorizontalPanel>
 </ui:UiBinder>

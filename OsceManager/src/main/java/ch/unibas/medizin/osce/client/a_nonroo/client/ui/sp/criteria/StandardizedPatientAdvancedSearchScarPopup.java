@@ -10,6 +10,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ValueListBox;
+import com.google.gwt.user.client.ui.Widget;
 
 public interface StandardizedPatientAdvancedSearchScarPopup extends IsWidget, StandardizedPatientAdvancedSearchPopup {
 	 public interface Presenter {
@@ -28,6 +29,6 @@ public interface StandardizedPatientAdvancedSearchScarPopup extends IsWidget, St
 //		ValueListBox<SpokenLanguageProxy> getLanguage();
 //		void setLanguagePickerValues(List<SpokenLanguageProxy> values);
 		ValueListBox<ScarProxy> getScarBox();
-		Map getAdvanceSearchCriteriaMap();
+		Map<String, Widget> getAdvanceSearchCriteriaMap();
 		void display(int positionX, int positionY);
 }

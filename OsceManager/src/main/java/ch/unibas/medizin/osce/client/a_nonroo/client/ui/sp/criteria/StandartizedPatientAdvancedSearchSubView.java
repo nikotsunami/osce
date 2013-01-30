@@ -29,6 +29,7 @@ public interface StandartizedPatientAdvancedSearchSubView  extends IsWidget {
 		void addPorfessionClicked(IconButton parentButton);
 		void addWorkPermissionClicked(IconButton parentButton);
 		void addMaritialStatusClicked(IconButton parentButton);
+		void addGenderClicked(IconButton addGender);
 	}
 
     CellTable<AdvancedSearchCriteriaProxy> getTable();

@@ -11,6 +11,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ValueListBox;
+import com.google.gwt.user.client.ui.Widget;
 
 public interface StandardizedPatientAdvancedSearchLanguagePopup extends IsWidget, StandardizedPatientAdvancedSearchPopup {
     public interface Presenter {
@@ -29,7 +30,7 @@ public interface StandardizedPatientAdvancedSearchLanguagePopup extends IsWidget
     void setDelegate(Delegate delegate);
 	void display(Button addLanguage);
 	ValueListBox<SpokenLanguageProxy> getLanguageBox();
-	Map getMap();
+	Map<String, Widget> getMap();
 	// SPEC Change
 	void display(int positionX, int positionY);
 }

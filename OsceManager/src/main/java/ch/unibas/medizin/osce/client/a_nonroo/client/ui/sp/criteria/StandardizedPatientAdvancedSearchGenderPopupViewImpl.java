@@ -5,16 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
+import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -25,18 +24,19 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class StandardizedPatientAdvancedSearchProfessionPopupImpl extends
-		StandardizedPatientAbstractPopupImpl implements StandardizedPatientAdvancedSearchProfessionPopup {
+public class StandardizedPatientAdvancedSearchGenderPopupViewImpl
+		extends StandardizedPatientAbstractPopupImpl implements StandardizedPatientAdvancedSearchGenderPopupView {
 
-	private static StandardizedPatientAdvancedSearchProfessionPopupImplUiBinder uiBinder = GWT
-			.create(StandardizedPatientAdvancedSearchProfessionPopupImplUiBinder.class);
+	private static StandardizedPatientAdvancedSearchGenderPopupViewImplUiBinder uiBinder = GWT
+			.create(StandardizedPatientAdvancedSearchGenderPopupViewImplUiBinder.class);
 
-	interface StandardizedPatientAdvancedSearchProfessionPopupImplUiBinder extends
-			UiBinder<Widget, StandardizedPatientAdvancedSearchProfessionPopupImpl> {
+	interface StandardizedPatientAdvancedSearchGenderPopupViewImplUiBinder
+			extends
+			UiBinder<Widget, StandardizedPatientAdvancedSearchGenderPopupViewImpl> {
 	}
-	
+
 	@UiField
-	IconButton addProfessionButton;
+	IconButton addGenderButton;
 	@UiField
 	IconButton closeBoxButton;
 	
@@ -44,14 +44,10 @@ public class StandardizedPatientAdvancedSearchProfessionPopupImpl extends
     ValueListBox<BindType> bindType = new ValueListBox<BindType>(new EnumRenderer<BindType>());
     
     @UiField(provided = true)
-    ValueListBox<Comparison> comparison = new ValueListBox<Comparison>(new EnumRenderer<Comparison>(EnumRenderer.Type.PROFESSION));
+    ValueListBox<Comparison> comparison = new ValueListBox<Comparison>(new EnumRenderer<Comparison>(EnumRenderer.Type.MARITIALSTATUS));
 	
 	@UiField (provided=true)
-	ValueListBox<ProfessionProxy> professionBox = new ValueListBox<ProfessionProxy>(new AbstractRenderer<ProfessionProxy>() {
-        public String render(ProfessionProxy obj) {
-            return obj == null ? "" : String.valueOf(obj.getProfession());
-        }
-    });
+	ValueListBox<Gender> genderBox = new ValueListBox<Gender>(new EnumRenderer<Gender>());
 	
 	protected Delegate delegate;
 	
@@ -59,14 +55,17 @@ public class StandardizedPatientAdvancedSearchProfessionPopupImpl extends
 		this.delegate = delegate;
 	}
 		
-	public StandardizedPatientAdvancedSearchProfessionPopupImpl() {
+	public StandardizedPatientAdvancedSearchGenderPopupViewImpl() {
 		OsceConstants constants = GWT.create(OsceConstants.class);
 		setWidget(uiBinder.createAndBindUi(this));
 		bindType.setValue(BindType.values()[0]);
 		bindType.setAcceptableValues(Arrays.asList(BindType.values()));
 		comparison.setValue(Comparison.EQUALS);
 		comparison.setAcceptableValues(Comparison.getNonNumericComparisons());
-		addProfessionButton.setText(constants.add());
+		
+		genderBox.setValue(Gender.values()[0]);
+		genderBox.setAcceptableValues(Arrays.asList(Gender.values()));
+		addGenderButton.setText(constants.add());
 		
 		// Highlight onViolation			
 		advanceSearchCriteriaMap=new HashMap<String, Widget>();
@@ -74,13 +73,14 @@ public class StandardizedPatientAdvancedSearchProfessionPopupImpl extends
 		advanceSearchCriteriaMap.put("comparation", comparison);
 								
 				// E Highlight onViolation
+				
 		 /*Advance search popup changes start*/
 		this.sinkEvents(Event.KEYEVENTS);
 		this.sinkEvents(Event.ONFOCUS);
 		/*Advance search popup changes end*/
 				
 	}
-	
+
 	/*Advance search popup changes start*/
 	@Override
 	public void onBrowserEvent(Event event) {
@@ -98,42 +98,45 @@ public class StandardizedPatientAdvancedSearchProfessionPopupImpl extends
 				{
 					Log.info("Enter press");
 					addAdvSearchSaveMethod();
-				}
+	}
 			break;
 		default:
 			return;
-
+	
 		}
 	}
 	
 	/*Advance search popup changes end*/
+
 	
 	/*Advance search popup changes start*/
-	
-	@UiHandler("addProfessionButton")
-	public void addScarButtonClicked(ClickEvent event) {
-		Log.info("Call Add Scar Button Clicked");
-	/*	delegate.addProfessionButtonClicked(professionBox.getValue(), bindType.getValue(), comparison.getValue());
+	@UiHandler("addGenderButton")
+	public void addGenderButtonClicked(ClickEvent event) {
+		Log.info("Call Add addGenderButton Button Clicked");
+		/*delegate.addMaritialStatusButtonClicked(maritialStatusBox.getValue(), bindType.getValue(), comparison.getValue());
+		//delegate.addProfessionButtonClicked(professionBox.getValue(), bindType.getValue(), comparison.getValue());
 		this.hide();*/
 		addAdvSearchSaveMethod();
 	}
-	
+
+
 	public void addAdvSearchSaveMethod()
 	{
 		Log.info("Call addAdvSearchSaveMethod");
-		delegate.addProfessionButtonClicked(professionBox.getValue(), bindType.getValue(), comparison.getValue());
+		delegate.addGenderButtonClicked(genderBox.getValue(), bindType.getValue(), comparison.getValue());
+		//delegate.addProfessionButtonClicked(professionBox.getValue(), bindType.getValue(), comparison.getValue());
 		this.hide();
 	}
 
 	/*Advance search popup changes end*/
-
+	
 	@UiHandler("closeBoxButton")
 	public void closeBoxButtonClicked(ClickEvent event) {
 		this.hide();
 	}
-
+		
 	@Override
-	public ValueListBox<ProfessionProxy> getProfessionBox() {
-		return professionBox;
+	public ValueListBox<Gender> getGenderBox() {
+		return genderBox;
 	}
 }

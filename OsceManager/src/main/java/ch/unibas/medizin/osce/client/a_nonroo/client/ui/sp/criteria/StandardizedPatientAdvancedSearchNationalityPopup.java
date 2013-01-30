@@ -10,6 +10,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ValueListBox;
+import com.google.gwt.user.client.ui.Widget;
 
 public interface StandardizedPatientAdvancedSearchNationalityPopup extends IsWidget, StandardizedPatientAdvancedSearchPopup {
 	
@@ -29,7 +30,7 @@ public interface StandardizedPatientAdvancedSearchNationalityPopup extends IsWid
 	void display(Button addNationality);
 
 	ValueListBox<NationalityProxy> getNationalityBox();
-	Map getMap();
+	Map<String, Widget> getMap();
 
 	// SPEC Change
 	void display(int positionX, int positionY);

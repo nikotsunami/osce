@@ -5,17 +5,12 @@
 	<ui:style>
 		
 	</ui:style>
-	<g:VerticalPanel>
-		<g:HorizontalPanel ui:field="parentPanel" spacing="4">
-			<g:ValueListBox ui:field="bindType"/>
-			<g:ValueListBox ui:field="language"/>
-			<g:ValueListBox ui:field="comparison"/>
-			<g:ValueListBox ui:field="skill"/>
-			<my:IconButton ui:field="addLanguageButton" icon="plusthick"/>
-			<my:IconButton ui:field="closeBoxButton" icon="closethick" />
-		</g:HorizontalPanel>
-		<g:HorizontalPanel spacing ="4">
-			<my:IconButton ui:field="languageButton" icon="comment"/>
-		</g:HorizontalPanel>
-	</g:VerticalPanel>
+	<g:HorizontalPanel ui:field="parentPanel" spacing="4">
+		<g:ValueListBox ui:field="bindType"/>
+		<g:ValueListBox ui:field="language"/>
+		<g:ValueListBox ui:field="comparison"/>
+		<g:ValueListBox ui:field="skill"/>
+		<my:IconButton ui:field="addLanguageButton" icon="plusthick"/>
+		<my:IconButton ui:field="closeBoxButton" icon="closethick" />
+	</g:HorizontalPanel>
 </ui:UiBinder> 

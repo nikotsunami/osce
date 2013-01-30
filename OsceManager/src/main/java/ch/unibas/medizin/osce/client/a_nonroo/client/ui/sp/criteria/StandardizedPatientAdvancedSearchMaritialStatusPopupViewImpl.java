@@ -5,12 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchWorkPermissionPopup.Delegate;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
-import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -21,16 +19,13 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class StandardizedPatientAdvancedSearchMaritialStatusPopupViewImpl
-		extends PopupPanel implements StandardizedPatientAdvancedSearchMaritialStatusPopupView {
+		extends StandardizedPatientAbstractPopupImpl implements StandardizedPatientAdvancedSearchMaritialStatusPopupView {
 
 	private static StandardizedPatientAdvancedSearchMaritialStatusPopupViewImplUiBinder uiBinder = GWT
 			.create(StandardizedPatientAdvancedSearchMaritialStatusPopupViewImplUiBinder.class);
@@ -44,8 +39,6 @@ public class StandardizedPatientAdvancedSearchMaritialStatusPopupViewImpl
 	IconButton addMaritialStatusButton;
 	@UiField
 	IconButton closeBoxButton;
-	@UiField
-	IconButton maritialStatusButton;
 	
 	@UiField(provided = true)
     ValueListBox<BindType> bindType = new ValueListBox<BindType>(new EnumRenderer<BindType>());
@@ -55,10 +48,12 @@ public class StandardizedPatientAdvancedSearchMaritialStatusPopupViewImpl
 	
 	@UiField (provided=true)
 	ValueListBox<MaritalStatus> maritialStatusBox = new ValueListBox<MaritalStatus>(new EnumRenderer<MaritalStatus>());
-
-	// Highlight onViolation
-		public Map<String, Widget> advanceSearchCriteriaMap;
-	// E Highlight onViolation		
+	
+	protected Delegate delegate;
+	
+	public void setDelegate(Delegate delegate) {
+		this.delegate = delegate;
+	}
 		
 	public StandardizedPatientAdvancedSearchMaritialStatusPopupViewImpl() {
 		OsceConstants constants = GWT.create(OsceConstants.class);
@@ -71,7 +66,6 @@ public class StandardizedPatientAdvancedSearchMaritialStatusPopupViewImpl
 		maritialStatusBox.setValue(MaritalStatus.values()[0]);
 		maritialStatusBox.setAcceptableValues(Arrays.asList(MaritalStatus.values()));
 		addMaritialStatusButton.setText(constants.add());
-		maritialStatusButton.setText(constants.maritalStatus());
 		
 		// Highlight onViolation			
 		advanceSearchCriteriaMap=new HashMap<String, Widget>();
@@ -141,44 +135,8 @@ public class StandardizedPatientAdvancedSearchMaritialStatusPopupViewImpl
 		this.hide();
 	}
 	
-	@UiHandler("maritialStatusButton")
-	public void maritialStatusButtonClicked(ClickEvent event) {
-		this.hide();
-	}
-
-	private Delegate delegate;
-
-
-	@Override
-	public void display(Button addScar) {
-		this.show();
-		this.setPopupPosition(addScar.getAbsoluteLeft()+addScar.getOffsetWidth() - this.getOffsetWidth(), addScar.getAbsoluteTop() - getOffsetHeight()/2 - 32);
-	}
-	
-	//SPEC Change
-		@Override
-		public void display(int positionX,int positionY) {
-			this.show();
-			this.setPopupPosition(positionX-10,positionY-32);
-		}
-		//SPEC Change
-		
-		
 	@Override
 	public ValueListBox<MaritalStatus> getMaritialStatusBox() {
 		return maritialStatusBox;
-	}
-	
-	// Highlight onViolation
-		@Override
-		public Map getAdvanceSearchCriteriaMap()
-		{
-			return this.advanceSearchCriteriaMap;
-		}
-	// E Highlight onViolation
-
-	@Override
-	public void setDelegate(Delegate delegate) {
-		this.delegate = delegate;
 	}
 }

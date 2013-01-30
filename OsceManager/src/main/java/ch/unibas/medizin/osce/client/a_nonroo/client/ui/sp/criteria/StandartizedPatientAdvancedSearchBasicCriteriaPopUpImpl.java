@@ -8,11 +8,11 @@ import java.util.Map;
 import ch.unibas.medizin.osce.client.a_nonroo.client.Validator;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
-import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.PossibleFields;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -25,10 +25,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -38,7 +36,7 @@ import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
- PopupPanel implements StandartizedPatientAdvancedSearchBasicCriteriaPopUp {
+		StandardizedPatientAbstractPopupImpl implements StandartizedPatientAdvancedSearchBasicCriteriaPopUp {
 
 	private static StandartizedPatientAdvancedSearchBasicCriteriaPopUpImplUiBinder uiBinder = GWT
 			.create(StandartizedPatientAdvancedSearchBasicCriteriaPopUpImplUiBinder.class);
@@ -52,6 +50,8 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	private MessageConfirmationDialogBox confirmationDialogBox;
+	
+	private Delegate delegate;
 	
 	@UiField
 	TextBox value;
@@ -131,14 +131,6 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 	/*Advance search popup changes end*/
 	
 	@UiField
-	IconButton addBasicData;
-	
-	@UiHandler ("addBasicData")
-	public void addBasicDataClicked(ClickEvent e) {
-		this.hide();
-	}
-
-	@UiField
 	IconButton closeBoxButton;
 	
 	@UiHandler ("closeBoxButton")
@@ -155,13 +147,9 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
     @UiField(provided = true)
     ValueListBox<PossibleFields> field = new ValueListBox<PossibleFields>(new EnumRenderer<PossibleFields>());
 	
-	private Delegate delegate;
-	
 	@UiField
 	HorizontalPanel parentPanel;
 	
-	// Highlight onViolation
-	Map<String, Widget> advanceSearchCriteriaMap;
 	StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl advanceSearchView;
 	// E Highlight onViolation
 
@@ -173,14 +161,13 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 		
 		field.setValue(PossibleFields.HEIGHT);
 		field.setAcceptableValues(Arrays.asList(new PossibleFields[] 
-				{PossibleFields.HEIGHT, PossibleFields.WEIGHT, PossibleFields.BMI, PossibleFields.AGE, PossibleFields.GENDER}));
+				{PossibleFields.HEIGHT, PossibleFields.WEIGHT, PossibleFields.BMI, PossibleFields.AGE}));
 		
 		comparison.setValue(Comparison.values()[0]);
 		setComparisonPickerValues(Arrays.asList(Comparison.values()));
 		
 		final OsceConstants constants = GWT.create(OsceConstants.class);
 		addAdvSeaBasicButton.setText(constants.add());
-		addBasicData.setText(constants.basicFilter());
 		unit.setText("[" + constants.heightUnit() + "]");
 		
 		value.addKeyDownHandler(new KeyDownHandler() {
@@ -209,11 +196,11 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 					comparison.setValue(Comparison.values()[0]);
 					setComparisonPickerValues(Arrays.asList(Comparison.values()));
 					unit.setText("[" + constants.weightUnit() + "]");
-				} else if (event.getValue() == PossibleFields.GENDER) {
+				}/* else if (event.getValue() == PossibleFields.GENDER) {
 					comparison.setValue(Comparison.values()[0]);
 					setComparisonPickerValues(Arrays.asList(new Comparison[]{Comparison.EQUALS, Comparison.NOT_EQUALS}));
 					unit.setText("");
-				} else if (event.getValue() == PossibleFields.AGE) {
+				}*/ else if (event.getValue() == PossibleFields.AGE) {
 					comparison.setValue(Comparison.values()[0]);
 					setComparisonPickerValues(Arrays.asList(Comparison.values()));
 					unit.setText("[" + constants.ageUnit() + "]");
@@ -254,27 +241,4 @@ public class StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl extends
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;
 	}
-
-	@Override
-	public void display(Button addBasicData) {
-		this.show();
-		this.setPopupPosition(addBasicData.getAbsoluteLeft() - 5, addBasicData.getAbsoluteTop() - getOffsetHeight()/2 - 34);
-	}
-	
-	//change for advance search
-		@Override
-		public void display(int positionX,int positionY) {
-			this.show();
-			this.setPopupPosition(positionX-240,positionY-34);
-		}
-		//change for advance search
-
-	// Highlight onViolation
-	@Override
-	public Map getAdvanceSearchCriteriaMap()
-	{
-		return this.advanceSearchCriteriaMap;
-	}
-	// E Highlight onViolation
-
 }

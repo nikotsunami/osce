@@ -14,12 +14,12 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleView;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopup;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopupImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchGenderPopupView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchGenderPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopup;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopupImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchMaritialStatusPopupView;
@@ -44,16 +44,15 @@ import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
-import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
-import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
+import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -67,15 +66,10 @@ import ch.unibas.medizin.osce.shared.scaffold.StandardizedPatientRequestNonRoo;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
-import com.google.gwt.autobean.shared.AutoBean;
-import com.google.gwt.autobean.shared.AutoBeanCodex;
-import com.google.gwt.autobean.shared.AutoBeanUtils;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.ContextMenuEvent;
-import com.google.gwt.event.dom.client.ContextMenuHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -93,14 +87,12 @@ import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.cellview.client.AbstractHasData;
-import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
@@ -116,7 +108,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		StandartizedPatientAdvancedSearchSubView.Delegate, StandartizedPatientAdvancedSearchBasicCriteriaPopUp.Delegate,
 		StandardizedPatientAdvancedSearchLanguagePopup.Delegate, StandardizedPatientAdvancedSearchScarPopup.Delegate,
 		StandardizedPatientAdvancedSearchAnamnesisPopup.Delegate, StandardizedPatientAdvancedSearchNationalityPopup.Delegate,StandardizedPatientAdvancedSearchProfessionPopup.Delegate
-		,StandardizedPatientAdvancedSearchWorkPermissionPopup.Delegate,StandardizedPatientAdvancedSearchMaritialStatusPopupView.Delegate{
+		,StandardizedPatientAdvancedSearchWorkPermissionPopup.Delegate,StandardizedPatientAdvancedSearchMaritialStatusPopupView.Delegate,
+		StandardizedPatientAdvancedSearchGenderPopupView.Delegate {
 
 	/** Holds the applications request factory */
 	private OsMaRequestFactory requests;
@@ -168,6 +161,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	private StandardizedPatientAdvancedSearchLanguagePopup languagePopup;
 	/** Holds a reference to the nationalityPopup if open */
 	private StandardizedPatientAdvancedSearchNationalityPopup nationalityPopup;
+	private StandardizedPatientAdvancedSearchGenderPopupView genderPopup;
 	
 	//issue
 	private StandardizedPatientAdvancedSearchProfessionPopup professionPopup;
@@ -1398,7 +1392,22 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		maritialStausPopup = new StandardizedPatientAdvancedSearchMaritialStatusPopupViewImpl();
 		maritialStausPopup.setDelegate(this);
 		maritialStausPopup.display(parentButton);
-		advancedSearchPopup = maritialStausPopup;		
+		advancedSearchPopup = maritialStausPopup;
+	}
+
+	@Override
+	public void addGenderClicked(IconButton addGender) {
+		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
+			advancedSearchPopup.hide();
+			if (advancedSearchPopup == genderPopup) {
+				return;
+			}
+		}
+		
+		genderPopup = new StandardizedPatientAdvancedSearchGenderPopupViewImpl();
+		genderPopup.setDelegate(this);
+		genderPopup.display(addGender);
+		advancedSearchPopup = genderPopup;
 	}
 
 	@Override
@@ -1426,6 +1435,13 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	@Override
 	public void doAnimation(boolean flag) {
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(flag));
+	}
+
+	@Override
+	public void addGenderButtonClicked(Gender gender, BindType bindType, Comparison comparison) {
+		// TODO Auto-generated method stub
+		String displayValue = new EnumRenderer<Comparison>(EnumRenderer.Type.MARITIALSTATUS).render(comparison) + " " + gender;
+		addAdvSeaBasicButtonClicked(null, gender.toString(), displayValue, bindType, PossibleFields.GENDER, comparison);
 	}
 
 }

@@ -2,7 +2,6 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -57,6 +56,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.StandardizedRoleDet
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.StandardizedRolePrintFilterViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopup;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopupImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchGenderPopupView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchGenderPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopup;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchLanguagePopupImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchMaritialStatusPopupView;
@@ -134,9 +135,9 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
-import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
+import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
@@ -209,7 +210,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		StandardizedPatientAdvancedSearchLanguagePopup.Delegate,
 		StandardizedPatientAdvancedSearchScarPopup.Delegate,
 		StandardizedPatientAdvancedSearchAnamnesisPopup.Delegate,
-		StandardizedPatientAdvancedSearchNationalityPopup.Delegate,		
+		StandardizedPatientAdvancedSearchNationalityPopup.Delegate,
+		StandardizedPatientAdvancedSearchGenderPopupView.Delegate,
 		RoleRoleParticipantSubView.Delegate, 
 		RoleKeywordSubView.Delegate,
 		ImportTopicPopupView.Delegate,DragHandler,
@@ -341,6 +343,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	private StandardizedPatientAdvancedSearchLanguagePopup languagePopup;
 	/** Holds a reference to the nationalityPopup if open */
 	private StandardizedPatientAdvancedSearchNationalityPopup nationalityPopup;
+	private StandardizedPatientAdvancedSearchGenderPopupView genderPopup;
 	/** Holds the table with the advanced search criteria */
 	private CellTable<AdvancedSearchCriteriaProxy> advancedSearchPatientTable[];
 	private StandartizedPatientAdvancedSearchSubView advancedSearchSubViews[];
@@ -3359,7 +3362,7 @@ final int index2 = index;
 		
 		int x = addBasicData.getAbsoluteLeft() - 235;
 		int y = addBasicData.getAbsoluteTop() - addBasicData.getOffsetHeight() - 15;
-		basicCriteriaPopUp.display(x,y);
+		basicCriteriaPopUp.display(addBasicData);
 		
 		//SPEC Change
 		
@@ -3390,10 +3393,26 @@ final int index2 = index;
 
 		int x = parentButton.getAbsoluteLeft() - 235;
 		int y = parentButton.getAbsoluteTop() - parentButton.getOffsetHeight() - 15;
-		scarPopup.display(x,y);
+		scarPopup.display(parentButton);
 		
 		
 		advancedSearchPopup = scarPopup;
+	}
+	
+	@Override
+	public void addGenderClicked(IconButton parentButton) {
+		Log.info("addGenderClicked()");
+		if (advancedSearchPopup != null && advancedSearchPopup.isShowing()) {
+			advancedSearchPopup.hide();
+			if (advancedSearchPopup == genderPopup) {
+				return;
+			}
+		}
+		genderPopup = new StandardizedPatientAdvancedSearchGenderPopupViewImpl();
+		genderPopup.setDelegate(this);
+		
+		genderPopup.display(parentButton);
+		advancedSearchPopup = genderPopup;
 	}
 
 	@Override
@@ -3414,7 +3433,7 @@ final int index2 = index;
 		
 		int x = parentButton.getAbsoluteLeft() - 235;
 		int y = parentButton.getAbsoluteTop() - parentButton.getOffsetHeight() - 15;
-		anamnesisPopup.display(x,y);
+		anamnesisPopup.display(parentButton);
 		advancedSearchPopup = anamnesisPopup;
 	}
 
@@ -3438,7 +3457,7 @@ final int index2 = index;
 //		languagePopup.display(addLanguageButton);
 		int x = addLanguageButton.getAbsoluteLeft() - 235;
 		int y = addLanguageButton.getAbsoluteTop() - addLanguageButton.getOffsetHeight() - 15;
-		languagePopup.display(x,y);
+		languagePopup.display(addLanguageButton);
 		
 		//SPEC Change
 		advancedSearchPopup = languagePopup;
@@ -3464,7 +3483,7 @@ final int index2 = index;
 //		nationalityPopup.display(addNationalityButton);
 		int x = addNationalityButton.getAbsoluteLeft() - 235;
 		int y = addNationalityButton.getAbsoluteTop() - addNationalityButton.getOffsetHeight() - 15;
-		nationalityPopup.display(x,y);
+		nationalityPopup.display(addNationalityButton);
 		
 		//SPEC Change
 		
@@ -7185,7 +7204,7 @@ public void onDragStart(DragStartEvent event) {
 //		professionPopup.display(parentButton);
 		int x = parentButton.getAbsoluteLeft() - 335;
 		int y = parentButton.getAbsoluteTop() - parentButton.getOffsetHeight() - 15;
-		professionPopup.display(x,y);
+		professionPopup.display(parentButton);
 		
 		//SPEC Change
 		
@@ -7206,7 +7225,7 @@ public void onDragStart(DragStartEvent event) {
 		//workPermissionPopup.display(parentButton);
 		int x = parentButton.getAbsoluteLeft() - 335;
 		int y = parentButton.getAbsoluteTop() - parentButton.getOffsetHeight() - 15;
-		workPermissionPopup.display(x,y);
+		workPermissionPopup.display(parentButton);
 		advancedSearchPopup = workPermissionPopup;		
 	}
 
@@ -7223,7 +7242,7 @@ public void onDragStart(DragStartEvent event) {
 		
 		int x = parentButton.getAbsoluteLeft() - 335;
 		int y = parentButton.getAbsoluteTop() - parentButton.getOffsetHeight() - 15;
-		maritialStausPopup.display(x,y);
+		maritialStausPopup.display(parentButton);
 		//maritialStausPopup.display(parentButton);
 		advancedSearchPopup = maritialStausPopup;		
 	}
@@ -7246,11 +7265,17 @@ public void onDragStart(DragStartEvent event) {
 	@Override
 	public void addMaritialStatusButtonClicked(MaritalStatus maritialStatus,
 			BindType bindType, Comparison comparison) {
-		String displayValue = new EnumRenderer<Comparison>(EnumRenderer.Type.MARITIALSTATUS).render(comparison) + " " + maritialStatus; 
+		String displayValue = new EnumRenderer<Comparison>(EnumRenderer.Type.MARITIALSTATUS).render(comparison) 
+				+ " " + new EnumRenderer<MaritalStatus>().render(maritialStatus); 
 		addAdvSeaBasicButtonClicked(null, maritialStatus.toString(), displayValue, bindType, PossibleFields.MARITIALSTATUS, comparison);
 	}
 	
-	
+	@Override
+	public void addGenderButtonClicked(Gender gender, BindType bindType, Comparison comparison) {
+		String displayValue = new EnumRenderer<Comparison>(EnumRenderer.Type.MARITIALSTATUS).render(comparison) 
+				+ " " + new EnumRenderer<Gender>().render(gender); 
+		addAdvSeaBasicButtonClicked(null, gender.toString(), displayValue, bindType, PossibleFields.GENDER, comparison);
+	}
 
 	@Override
 	public void updateOption(final String topic, final String description,
