@@ -718,7 +718,7 @@ public class RolePrintPdfUtil extends PdfUtil {
 		table.addCell(getPdfCellBold(constants.roleType() + ":"));
 		table.addCell(getPdfCell(roleType));
 
-		table.addCell(getPdfCellBold(constants.studyYear() + ":"));
+		table.addCell(getPdfCellBold(constants.studyYears() + ":"));
 		table.addCell(getPdfCell(studyYear));
 
 		table.addCell(getPdfCellBold(constants.factor() + ":"));

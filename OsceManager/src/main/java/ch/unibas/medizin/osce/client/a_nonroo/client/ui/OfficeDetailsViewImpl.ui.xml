@@ -9,10 +9,10 @@
 		<col></col>
 	</colgroup>
 	<tbody>
-		<tr id="title">
+<!-- 		<tr id="title">
 			<td><span class="{style.label}" ui:field="labelTitle">Title:</span></td>
 			<td><span ui:field="title"/></td>
-		</tr>
+		</tr> -->
 		<tr id="name">
 			<td><span class="{style.label}" ui:field="labelName">Name:</span></td>
 	      	<td><span ui:field="name"/></td>

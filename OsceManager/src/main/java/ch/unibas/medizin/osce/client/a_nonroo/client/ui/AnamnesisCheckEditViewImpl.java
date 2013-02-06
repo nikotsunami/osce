@@ -375,15 +375,6 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 
 	interface Driver extends RequestFactoryEditorDriver<AnamnesisCheckProxy, AnamnesisCheckEditViewImpl> {
 	}
-
-//	public void setCreating(boolean creating) {
-//		Log.debug("setCreating()");
-//		if (creating) {
-//			header.setInnerText(constants.editAnamnesisValue());
-//		} else {
-//			header.setInnerText(constants.addAnamnesisValue());
-//		}
-//	}
 	
 	@Override
 	public void setEditTitle(boolean edit) {

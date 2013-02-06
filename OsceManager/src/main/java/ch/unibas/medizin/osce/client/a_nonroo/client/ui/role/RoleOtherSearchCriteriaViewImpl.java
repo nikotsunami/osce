@@ -274,7 +274,7 @@ public class RoleOtherSearchCriteriaViewImpl extends Composite implements RoleOt
 						// Window.alert("You clicked " +
 						// institution.getInstitutionName());
 						
-						//if (Window.confirm("wirklich löschen?"))
+						//if (Window.confirm(constants.reallyDelete()))
 						
 						// Issue Role
 						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());

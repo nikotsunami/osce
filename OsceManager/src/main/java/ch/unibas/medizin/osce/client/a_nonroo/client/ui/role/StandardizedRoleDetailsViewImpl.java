@@ -492,7 +492,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		labelShortName.setInnerText(constants.roleAcronym() + ":");
 		labellongName.setInnerText(constants.name() + ":");
 		labelroletype.setInnerText(constants.roleType() + ":");
-		labelstudyYear.setInnerText(constants.studyYear() + ":");
+		labelstudyYear.setInnerText(constants.studyYears() + ":");
 		labelFactor.setInnerText(constants.factor() + ":");
 		labelSum.setInnerText(constants.sum() + ":");
 		

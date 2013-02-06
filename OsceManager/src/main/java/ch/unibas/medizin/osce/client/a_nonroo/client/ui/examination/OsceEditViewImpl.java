@@ -283,7 +283,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		labelRemark.setInnerText(constants.remark() + ":");
 		labelMaxParcours.setInnerText(constants.osceMaxCircuits() + ":");
 		labelMaxStudents.setInnerText(constants.osceMaxStudents() + ":");
-		labelStudyYear.setInnerText(constants.studyYear() + ":");
+		labelStudyYear.setInnerText(constants.studyYears() + ":");
 		labelMaxRooms.setInnerText(constants.osceMaxRooms() + ":");
 		labelIsRepe.setInnerText(constants.osceIsRepe() + ":");
 		labelOsceRepe.setInnerText(constants.osceRepe() + ":");

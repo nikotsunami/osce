@@ -16,6 +16,8 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.Semesters;
+import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
@@ -81,7 +83,11 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
     @UiField
     SpanElement telephone;
     @UiField
-    SpanElement clinic;
+    SpanElement clinicName;
+    @UiField
+    SpanElement clinicStreet;
+    @UiField
+    SpanElement clinicCity;
     
     @UiField
     SpanElement specialisation;
@@ -102,7 +108,11 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
     @UiField
     SpanElement labelTelephone;
     @UiField
-    SpanElement labelClinic;
+    SpanElement labelClinicName;
+    @UiField
+    SpanElement labelClinicStreet;
+    @UiField
+    SpanElement labelClinicCity;
     
     @UiField
     SpanElement labelSpecialisation;
@@ -163,10 +173,10 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 		
 		doctorPanel.selectTab(0);
 
-		doctorPanel.getTabBar().setTabText(0, constants.generalInformation());
+		doctorPanel.getTabBar().setTabText(0, constants.contactInfo());
 		doctorPanel.getTabBar().setTabText(1, constants.officeDetails());
-		doctorPanel.getTabBar().setTabText(2, constants.oscedoc());
-		doctorPanel.getTabBar().setTabText(3, constants.role());
+		doctorPanel.getTabBar().setTabText(2, constants.osceParticipation());
+		doctorPanel.getTabBar().setTabText(3, constants.roleParticipation());
 		
 		TabPanelHelper.moveTabBarToBottom(doctorPanel);
 		
@@ -179,8 +189,10 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 		labelPreName.setInnerText(constants.preName() + ":");
 		labelEmail.setInnerText(constants.email() + ":");
 		labelTelephone.setInnerText(constants.telephone() + ":");
-		labelClinic.setInnerText(constants.clinic() + ":");
-		labelSpecialisation.setInnerText(constants.specification() + ":");
+		labelClinicName.setInnerText(constants.clinic() + ":");
+		labelClinicStreet.setInnerText(constants.street() + ":");
+		labelClinicCity.setInnerText(constants.plzCity() + ":");
+		labelSpecialisation.setInnerText(constants.discipline() + ":");
 		
 		doctorPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 			
@@ -218,7 +230,9 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 		email.setHref("mailto:" + (proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail())));
 		email.setText((proxy.getEmail() == null ? "" : String.valueOf(proxy.getEmail())));
 		telephone.setInnerText(proxy.getTelephone() == null ? "" : String.valueOf(proxy.getTelephone()));
-		clinic.setInnerText(proxy.getClinic() == null ? "" : String.valueOf(proxy.getClinic().getName()));
+		clinicName.setInnerText(proxy.getClinic() == null ? "" : String.valueOf(proxy.getClinic().getName()));
+		clinicStreet.setInnerText(proxy.getClinic() == null ? "" : String.valueOf(proxy.getClinic().getStreet()));
+		clinicCity.setInnerText(proxy.getClinic() == null ? "" : String.valueOf(proxy.getClinic().getPostalCode() + ", " + proxy.getClinic().getCity()));
 		specialisation.setInnerText(proxy.getSpecialisation() == null ? "" : String.valueOf(proxy.getSpecialisation().getName()));
 		
 		if(proxy!=null)
@@ -305,9 +319,10 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 
 			@Override
 			public String getValue(OsceDayProxy object) {
-				return renderer.render(object.getOsce().getName());
+				return new EnumRenderer<StudyYears>().render(object.getOsce().getStudyYear()) 
+						+ "." + new EnumRenderer<Semesters>().render(object.getOsce().getSemester().getSemester());
 			}
-		}, constants.oscedoc());
+		}, constants.osce());
 		
 		paths.add("starttime");
 		oscetable.addColumn(new TextColumn<OsceDayProxy>() {
@@ -343,7 +358,7 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 	}
 	
 	public void initRoleTable()
-	{
+	{	
 		paths1.add("spshortname");
 		roletable.addColumn(new TextColumn<RoleParticipantProxy>() {
 			Renderer<String> renderer = new AbstractRenderer<String>() {
@@ -358,6 +373,21 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 				return renderer.render(object.getStandardizedRole().getShortName());
 			}
 		}, constants.roleAcronym());
+
+		paths1.add(constants.roleName());
+		roletable.addColumn(new TextColumn<RoleParticipantProxy>() {
+			Renderer<String> renderer = new AbstractRenderer<String>() {
+
+				public String render(String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(RoleParticipantProxy object) {
+				return renderer.render(object.getStandardizedRole().getLongName());
+			}
+		}, constants.roleName());
 		
 		paths1.add("version");
 		roletable.addColumn(new TextColumn<RoleParticipantProxy>() {

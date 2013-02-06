@@ -197,7 +197,7 @@ public class RoleScriptTemplateDetailsViewImpl extends Composite implements
 				}, new ActionCell.Delegate<RoleBaseItemProxy>() {
 					public void execute(RoleBaseItemProxy roleBaseItem) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						//if(Window.confirm("wirklich löschen?"))
+						//if(Window.confirm(constants.reallyDelete()))
 						delegate.restoreButtonClicked(roleBaseItem);
 						
 					}

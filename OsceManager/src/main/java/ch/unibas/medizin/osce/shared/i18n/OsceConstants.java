@@ -150,6 +150,8 @@ public interface OsceConstants extends Constants {
 
 	public String bmi();
 
+	public String bodyPart();
+
 	public String breakDuration();
 
 	public String breaks();
@@ -324,8 +326,6 @@ public interface OsceConstants extends Constants {
 
 	public String edit();
 
-	public String editAnamnesisValue();
-
 	public String editClinic();
 
 	public String editDoctor();
@@ -347,6 +347,8 @@ public interface OsceConstants extends Constants {
 	public String endtimedoc();
 
 	public String enterAnswer();
+
+	public String enterBodyPart();
 
 	public String enterKeyword();
 
@@ -477,6 +479,8 @@ public interface OsceConstants extends Constants {
 	public String furtherCriteria();
 
 	public String gender();
+
+	public String genderFilter();
 
 	public String general();
 
@@ -654,8 +658,6 @@ public interface OsceConstants extends Constants {
 
 	public String osceDaySuccess();
 
-	public String oscedoc();
-
 	public String osceForTask();
 
 	public String osceIsRepe();
@@ -675,6 +677,8 @@ public interface OsceConstants extends Constants {
 	public String osceMaxStudents();
 
 	public String osceMediumBreak();
+
+	public String osceParticipation();
 
 	public String osceRepe();
 
@@ -820,6 +824,8 @@ public interface OsceConstants extends Constants {
 
 	public String roleCriteriaLabel();
 
+	public String roleDefinitions();
+
 	public String roleDetail();
 
 	public String roleEnterPatientName();
@@ -845,6 +851,8 @@ public interface OsceConstants extends Constants {
 	public String roleOSCESecurityChange();
 
 	public String roleParticipants();
+
+	public String roleParticipation();
 
 	public String rolePatientInformation();
 

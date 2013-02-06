@@ -248,7 +248,7 @@ public class TopicsAndSpecViewImpl extends Composite implements  TopicsAndSpecVi
 					public void execute(final SpecialisationProxy specialization) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
 						
-						/*if(Window.confirm("wirklich löschen?"))
+						/*if(Window.confirm(constants.reallyDelete()))
 							delegate.deleteClicked(specialization);*/
 						
 						// Issue Role

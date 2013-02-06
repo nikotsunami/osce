@@ -415,7 +415,7 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<RoleTopicProxy>() {
 					public void execute(RoleTopicProxy roletopic) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-//						if(Window.confirm("wirklich löschen?"))
+//						if(Window.confirm(constants.reallyDelete()))
 //							delegate.deleteClicked(roletopic);
 
 						// Issue Role
@@ -434,7 +434,7 @@ public class TopicsAndSpecDetailsViewImpl  extends Composite implements  TopicsA
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleTopicProxy>() {
 					public void execute(final RoleTopicProxy roletopic) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						/*if(Window.confirm("wirklich löschen?"))
+						/*if(Window.confirm(constants.reallyDelete()))
 							delegate.deleteClicked(roletopic);*/
 						// Issue Role
 						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());

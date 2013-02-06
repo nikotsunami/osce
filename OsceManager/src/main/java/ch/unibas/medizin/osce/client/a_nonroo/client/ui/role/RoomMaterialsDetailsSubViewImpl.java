@@ -301,11 +301,11 @@ public class RoomMaterialsDetailsSubViewImpl extends Composite implements	RoomMa
 				new ActionCell.Delegate<UsedMaterialProxy>() {
 					public void execute(final UsedMaterialProxy usedMaterialProxy) {
 						
-						/*if (Window.confirm("wirklich löschen?"))
+						/*if (Window.confirm(constants.reallyDelete()))
 							delegate.deleteUsedFromClicked(usedMaterialProxy,standardizedRoleProxy);*/
 						// Issue Role
 						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
-						 dialogBox.showYesNoDialog("wirklich löschen?");
+						 dialogBox.showYesNoDialog(constants.reallyDelete());
 						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 								
 								@Override

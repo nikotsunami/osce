@@ -180,7 +180,7 @@ public class LogViewImpl extends Composite implements LogView, RecordChangeHandl
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<LogEntryProxy>() {
 					public void execute(LogEntryProxy room) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						if(Window.confirm("wirklich löschen?"))
+						if(Window.confirm(constants.reallyDelete()))
 							delegate.deleteClicked(room);
 					}
 				}), "", new GetValue<LogEntryProxy>() {

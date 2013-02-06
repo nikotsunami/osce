@@ -138,7 +138,7 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 		addColumn(new ActionCell<ScarProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ScarProxy>() {
 					public void execute(final ScarProxy scar) {
-						/*if(Window.confirm("wirklich löschen?"))
+						/*if(Window.confirm(constants.reallyDelete()))
 							delegate.deleteScarClicked(scar);*/
 						final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 						 dialogBox.showYesNoDialog(constants.reallyDelete());
@@ -273,19 +273,14 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 		scarBox.setSuggestOracle(suggestOracle1);
 		//scarBox.setRenderer(new ScarProxyRenderer());
 		scarBox.setRenderer(new AbstractRenderer<ScarProxy>() {
+			EnumRenderer<TraitTypes> enumRenderer = new EnumRenderer<TraitTypes>();
 
 			@Override
 			public String render(ScarProxy object) {
-				// TODO Auto-generated method stub
-				if(object!=null)
-				{
-				return object.getTraitType() + " " +object.getBodypart();
+				if(object!=null) {
+					return enumRenderer.render(object.getTraitType()) + " " +object.getBodypart();
 				}
-				else
-				{
-					return "";
-				}
-				//return object.get;
+				return "";
 			}
 		});
 

@@ -214,7 +214,7 @@ RoleBaseTableItemView {
 	
 	@UiHandler("close")
 	public void deleteButtonClicked(ClickEvent event){
-		/*if(Window.confirm("wirklich löschen?"))
+		/*if(Window.confirm(constants.reallyDelete()))
 		delegate.deleteButtonClickEvent(roleBasedItemProxy);*/
 		// Issue Role
 				 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
@@ -383,7 +383,7 @@ RoleBaseTableItemView {
 					public void execute(final RoleTableItemProxy roleTableItem) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
 					
-						/*if(Window.confirm("wirklich löschen?"))
+						/*if(Window.confirm(constants.reallyDelete()))
 							delegate.roleTableItemDeleteClicked(roleTableItem,roleBasedItemProxy.getId(),table);*/
 						// Issue Role
 						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());

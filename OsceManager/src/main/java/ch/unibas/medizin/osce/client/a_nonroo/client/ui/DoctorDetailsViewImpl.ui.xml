@@ -24,38 +24,46 @@
 						<col></col>
 					</colgroup>
 					<tbody>
-				      	<tr id="title">
-				                <td><span class="{style.label}" ui:field="labelTitle"></span></td>
-				                <td><span ui:field="title"/></td>
-				           </tr>
+				    	<tr id="title">
+				        	<td><span class="{style.label}" ui:field="labelTitle"></span></td>
+				            <td><span ui:field="title"/></td>
+				        </tr>
 				  	    <tr id="name">
-				                <td><span class="{style.label}" ui:field="labelName"></span></td>
-				                <td><span ui:field="name"/></td>
-				   	         </tr>
-				     	 <tr id="preName">
-				                <td><span class="{style.label}" ui:field="labelPreName"></span></td>
-				                <td><span ui:field="preName"/></td>
-				            </tr>
+				        	<td><span class="{style.label}" ui:field="labelName"></span></td>
+				        	<td><span ui:field="name"/></td>
+				   	    </tr>
+				     	<tr id="preName">
+				        	<td><span class="{style.label}" ui:field="labelPreName"></span></td>
+				        	<td><span ui:field="preName"/></td>
+				        </tr>
+						<tr id="clinicName">
+							<td><span class="{style.label}" ui:field="labelClinicName"></span></td>
+							<td><span ui:field="clinicName"/></td>
+				       	</tr>
+				        <tr id="clinicStreet">
+				        	<td><span class="{style.label}" ui:field="labelClinicStreet"></span></td>
+				        	<td><span ui:field="clinicStreet"/></td>
+				        </tr>
+				        <tr id="clinicCity">
+				        	<td><span class="{style.label}" ui:field="labelClinicCity"></span></td>
+				        	<td><span ui:field="clinicCity"/></td>
+				        </tr>  
+						<tr id="email">
+							<td><span class="{style.label}" ui:field="labelEmail"></span></td>
+							<td><g:Anchor ui:field="email"/></td>
+				        </tr>
+				      	<tr id="telephone">
+				           <td><span class="{style.label}" ui:field="labelTelephone"></span></td>
+				           <td><span ui:field="telephone"/></td>
+				       	</tr>
+				       	<tr id="specialisation">
+				        	<td><span class="{style.label}" ui:field="labelSpecialisation"></span></td>
+				        	<td><span ui:field="specialisation"/></td>
+				       </tr>
 						<tr id="gender">
                 			<td><span class="{style.label}" ui:field="labelGender"></span></td>
                 			<td><span ui:field="gender"/></td>
             			</tr>
-				      <tr id="email">
-				                <td><span class="{style.label}" ui:field="labelEmail"></span></td>
-				                <td><g:Anchor ui:field="email"/></td>
-				            </tr>
-				      <tr id="telephone">
-				                <td><span class="{style.label}" ui:field="labelTelephone"></span></td>
-				                <td><span ui:field="telephone"/></td>
-				            </tr>
-				            <tr id="specialisation">
-				           <td><span class="{style.label}" ui:field="labelSpecialisation"></span></td>
-				          <td><span ui:field="specialisation"/></td>
-				       </tr>
-				       <tr id="clinic">
-				           <td><span class="{style.label}" ui:field="labelClinic"></span></td>
-				          <td><span ui:field="clinic"/></td>
-				       </tr>
 				      
 					</tbody>
 				</table>

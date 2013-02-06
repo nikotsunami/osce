@@ -366,7 +366,7 @@ public class RoleFileSubViewImpl extends Composite implements RoleFileSubView {
 						// Window.alert("You clicked " +
 						// institution.getInstitutionName());
 						
-						/*if (Window.confirm("wirklich löschen?"))
+						/*if (Window.confirm(constants.reallyDelete()))
 							delegate.fileDeleteClicked(file, getValue());*/
 						
 						// Issue Role

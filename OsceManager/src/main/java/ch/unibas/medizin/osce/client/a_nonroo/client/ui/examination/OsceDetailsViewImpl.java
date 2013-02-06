@@ -125,7 +125,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		labelTitleBreaks.setInnerText(constants.breaks());
 		
 		labelRemark.setInnerText(constants.remark());
-		labelStudyYear.setInnerText(constants.studyYear());
+		labelStudyYear.setInnerText(constants.studyYears());
 		labelIsRepetion.setInnerText(constants.osceIsRepe());
 		labelRepetitionForOsce.setInnerText(constants.osceRepe());
 		labelMaxStudents.setInnerText(constants.osceMaxStudents());
@@ -504,7 +504,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 					public void execute(final TaskProxy task) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
 						final MessageConfirmationDialogBox valueUpdateDialogBox=new MessageConfirmationDialogBox(constants.warning());
-						valueUpdateDialogBox.showYesNoDialog("wirklich löschen?");
+						valueUpdateDialogBox.showYesNoDialog(constants.reallyDelete());
 						valueUpdateDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 							
 							@Override
@@ -525,7 +525,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 							}
 						});
 
-						/*if(Window.confirm("wirklich löschen?")) {
+						/*if(Window.confirm(constants.reallyDelete())) {
 							delegate.deleteClicked(task);
 						}*/
 					}	

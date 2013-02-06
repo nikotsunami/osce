@@ -600,7 +600,7 @@ public List<String> getWhereFilters() {
 		Complexity.setText(constants.roleComplexity());
 		Author.setText(constants.author());
 		Specification.setText(constants.specification());
-		StudyYear.setText(constants.studyYear());
+		StudyYear.setText(constants.studyYears());
 		Keyword.setText(constants.keyword());
 		
 		maxApplicableFilters = fields.size();

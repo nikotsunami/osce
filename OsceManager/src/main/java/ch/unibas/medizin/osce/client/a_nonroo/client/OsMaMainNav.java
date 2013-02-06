@@ -765,7 +765,7 @@ public class OsMaMainNav extends Composite {
 		individualSchedules.setText(constants.printIndividualSchedules());
 		bellSchedule.setText(constants.exportBellSchedule());
 
-		roles.setText(constants.roles());
+		roles.setText(constants.roleDefinitions());
 		
 		importObjective.setText(constants.importObjective());
 		

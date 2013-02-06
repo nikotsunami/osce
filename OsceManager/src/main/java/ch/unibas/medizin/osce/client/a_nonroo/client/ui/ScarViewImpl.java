@@ -34,8 +34,12 @@ import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -155,6 +159,27 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0), OsMaConstant.SPLIT_PANEL_MINWIDTH);
 		newButton.setText(constants.addTrait());
 		
+		newBodypart.setText(constants.enterBodyPart());
+		newBodypart.addFocusHandler(new FocusHandler() {
+			
+			@Override
+			public void onFocus(FocusEvent event) {
+				if (newBodypart.getText().equals(constants.enterBodyPart())) {
+					newBodypart.setText("");
+				}
+			}
+		});
+		
+		newBodypart.addBlurHandler(new BlurHandler() {
+			
+			@Override
+			public void onBlur(BlurEvent event) {
+				if (newBodypart.getText().isEmpty()) {
+					newBodypart.setText(constants.enterBodyPart());
+				}
+			}
+		});
+		
 		// Highlight onViolation
 		scarMap=new HashMap<String, Widget>();
 		scarMap.put("bodypart",newBodypart );
@@ -223,7 +248,7 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 			public String getValue(ScarProxy object) {
 				return renderer.render(object.getBodypart());
 			}
-		}, constants.location());
+		}, constants.bodyPart());
 		
 		addColumn(new ActionCell<ScarProxy>(
 				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<ScarProxy>() {
@@ -240,11 +265,11 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ScarProxy>() {
 					public void execute(final ScarProxy scar) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						/*if(Window.confirm("wirklich löschen?"))
+						/*if(Window.confirm(constants.reallyDelete()))
 							delegate.deleteClicked(scar);*/
 						
 						final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-						messageConfirmationDialogBox.showYesNoDialog("wirklich löschen?");
+						messageConfirmationDialogBox.showYesNoDialog(constants.reallyDelete());
 						
 						messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {					
 							@Override
@@ -267,7 +292,8 @@ public class ScarViewImpl extends Composite implements ScarView, RecordChangeHan
 			}
 		}, null);
 		
-		table.addColumnStyleName(2, "iconCol");
+		table.addColumnStyleName(4, "iconCol");
+		table.addColumnStyleName(5, "iconCol");
 	}
 	
 	/**

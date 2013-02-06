@@ -273,7 +273,7 @@ public class RoleDetailsViewImpl extends Composite implements RoleDetailsView
 		/*labelShortName.setInnerText(constants.shortName() + ":");
 		labellongName.setInnerText(constants.name() + ":");
 		labelroletype.setInnerText(constants.roleType() + ":");		
-		labelstudyYear.setInnerText(constants.studyYear() + ":");
+		labelstudyYear.setInnerText(constants.studyYears() + ":");
 		
 		labelShortNameValue.setInnerText("Kohler");
 		labellongValue.setInnerText("Daniel");

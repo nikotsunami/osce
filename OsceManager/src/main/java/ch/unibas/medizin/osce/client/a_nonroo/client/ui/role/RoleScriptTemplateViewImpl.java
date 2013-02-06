@@ -289,7 +289,7 @@ public class RoleScriptTemplateViewImpl extends Composite implements RoleScriptT
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<RoleTemplateProxy>() {
 					public void execute(final RoleTemplateProxy roleTemplate) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
-						/*if(Window.confirm("wirklich löschen?"))
+						/*if(Window.confirm(constants.reallyDelete()))
 							delegate.deleteClicked(roleTemplate);*/
 						// Issue Role
 						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());

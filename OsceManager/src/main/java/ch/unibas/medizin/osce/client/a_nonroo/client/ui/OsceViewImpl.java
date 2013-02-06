@@ -126,7 +126,7 @@ public class OsceViewImpl extends Composite implements  OsceView {
 			public String getValue(OsceProxy object) {
 				return renderer.render(object.getStudyYear());
 			}
-		}, constants.studyYear());
+		}, constants.studyYears());
 		paths.add("preName");
 		table.addColumn(new TextColumn<OsceProxy>() {
 

@@ -174,7 +174,7 @@ public class BellScheduleViewImpl extends Composite implements
 //		
 		
 
-		paths.add(constants.oscedoc());
+		paths.add(constants.osce());
 		table.addColumn(new TextColumn<BellAssignmentType>() {
 
 			Renderer<String> renderer = new AbstractRenderer<String>() {
@@ -188,7 +188,7 @@ public class BellScheduleViewImpl extends Composite implements
 			public String getValue(BellAssignmentType object) {
 				return renderer.render(object.getOsceName());
 			}
-		}, constants.oscedoc());
+		}, constants.osce());
 
 		paths.add(constants.bellSchedDateHeader());
 		table.addColumn(new TextColumn<BellAssignmentType>() {

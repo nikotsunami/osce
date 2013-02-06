@@ -35,8 +35,6 @@ public class OfficeDetailsViewImpl extends Composite implements OfficeDetailsVie
 	@UiField
 	SpanElement gender;
 	@UiField
-	SpanElement title;
-	@UiField
 	SpanElement name;
 	@UiField
 	SpanElement preName;
@@ -47,8 +45,6 @@ public class OfficeDetailsViewImpl extends Composite implements OfficeDetailsVie
 
 	@UiField
 	SpanElement labelGender;
-	@UiField
-	SpanElement labelTitle;
 	@UiField
 	SpanElement labelName;
 	@UiField
@@ -76,7 +72,6 @@ public class OfficeDetailsViewImpl extends Composite implements OfficeDetailsVie
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		labelGender.setInnerText(constants.gender() + ":");
-		labelTitle.setInnerText(constants.title() + ":");
 		labelName.setInnerText(constants.name() + ":");
 		labelPreName.setInnerText(constants.preName() + ":");
 		labelEmail.setInnerText(constants.email() + ":");
@@ -90,7 +85,7 @@ public class OfficeDetailsViewImpl extends Composite implements OfficeDetailsVie
 //		id.setInnerText(proxy.getId() == null ? "" : String.valueOf(proxy.getId()));
 //		version.setInnerText(proxy.getVersion() == null ? "" : String.valueOf(proxy.getVersion()));
 		gender.setInnerText(proxy.getGender() == null ? "" : new EnumRenderer<Gender>().render(proxy.getGender()));
-		title.setInnerText(proxy.getTitle() == null ? "" : String.valueOf(proxy.getTitle()));
+//		title.setInnerText(proxy.getTitle() == null ? "" : String.valueOf(proxy.getTitle()));
 		name.setInnerText(proxy.getName() == null ? "" : String.valueOf(proxy.getName()));
 		preName.setInnerText(proxy.getPreName() == null ? "" : String.valueOf(proxy.getPreName()));
 		if (proxy.getEmail() != null) {

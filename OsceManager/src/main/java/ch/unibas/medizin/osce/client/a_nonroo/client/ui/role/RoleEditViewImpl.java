@@ -239,7 +239,7 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 		labelShortName.setInnerText(constants.roleAcronym() + ":");
 		labellongName.setInnerText(constants.roleName() + ":");
 		labelroletype.setInnerText(constants.roleType() + ":");		
-		labelstudyYear.setInnerText(constants.studyYear() + ":");
+		labelstudyYear.setInnerText(constants.studyYears() + ":");
 		labelRoleTopic.setInnerText(constants.roleTopic());//spec
 		labelActive.setInnerText(constants.roleActive());
 		labelSum.setInnerText(constants.sum());

@@ -239,7 +239,7 @@ public class RoomMaterialsViewImpl extends Composite implements
 		// public void execute(MaterialListProxy specialization) {
 		// // Window.alert("You clicked " +
 		// // institution.getInstitutionName());
-		// if (Window.confirm("wirklich löschen?"))
+		// if (Window.confirm(constants.reallyDelete()))
 		// delegate.
 		// deleteClicked(specialization);
 		// }
@@ -256,7 +256,7 @@ public class RoomMaterialsViewImpl extends Composite implements
 					public void execute(final MaterialListProxy materialListProxy) {
 						// Window.alert("You clicked " +
 						// institution.getInstitutionName());
-						/*if (Window.confirm("wirklich löschen?"))
+						/*if (Window.confirm(constants.reallyDelete()))
 							delegate.deleteClicked(materialListProxy);*/
 						// Issue Role
 						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.success());

@@ -322,7 +322,7 @@ public class OsceViewImpl extends Composite implements  OsceView, RecordChangeHa
 			public String getValue(OsceProxy object) {
 				return renderer.render(object.getStudyYear().toString());
 			}
-		}, constants.studyYear());
+		}, constants.studyYears());
 		paths.add("preName");
 		table.addColumn(new TextColumn<OsceProxy>() {
 
