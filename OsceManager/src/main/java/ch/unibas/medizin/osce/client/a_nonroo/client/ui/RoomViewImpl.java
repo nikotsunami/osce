@@ -421,7 +421,7 @@ public class RoomViewImpl extends Composite implements RoomView, RecordChangeHan
 					public void execute(final RoomProxy room) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
 						final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-						messageConfirmationDialogBox.showYesNoDialog("wirklich lÃ¶schen?");
+						messageConfirmationDialogBox.showYesNoDialog(constants.reallyDelete());
 						
 						messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {					
 							@Override

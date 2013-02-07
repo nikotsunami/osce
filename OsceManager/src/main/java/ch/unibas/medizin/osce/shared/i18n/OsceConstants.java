@@ -816,8 +816,6 @@ public interface OsceConstants extends Constants {
 
 	public String roleBackupViewHeading();
 
-	public String roleBaseItemName();
-
 	public String roleComplexity();
 
 	public String roleConfirmCriterionDelete();
@@ -1009,8 +1007,6 @@ public interface OsceConstants extends Constants {
 	public String starttimedoc();
 
 	public String statisticsEvaluation();
-
-	public String statisticsEvaluationPlace();
 
 	public String stdDeviation();
 

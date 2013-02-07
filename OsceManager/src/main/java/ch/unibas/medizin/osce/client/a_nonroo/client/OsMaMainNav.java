@@ -1349,7 +1349,11 @@ public class OsMaMainNav extends Composite {
 						{						
 								Log.info("~Success...");
 								Log.info("~findAllSemesters()");
-								Log.info("~SetValueinListBox");																		
+								Log.info("~SetValueinListBox");
+//								// This is so that no null value is available
+//								if (response.size() > 0) {
+//									lstSemester.setValue(response.get(0));
+//								}
 								lstSemester.setAcceptableValues(response);									
 						}						
 			});

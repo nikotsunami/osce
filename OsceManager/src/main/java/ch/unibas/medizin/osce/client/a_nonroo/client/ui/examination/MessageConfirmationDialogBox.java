@@ -62,6 +62,7 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		dialogBox=this;
 		this.getElement().getStyle().setZIndex(3);
 	}
+	
 	public static MessageConfirmationDialogBox create(String msg)
 	{
 		if(dialogBox==null)
@@ -77,22 +78,19 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		
 		return dialogBox;
 	}
-	public void showDialog()
-	{
-		
+	
+	public void showDialog() {
 		super.center();
 		this.getElement().getStyle().setZIndex(3);
 		super.show();
-		
 	}
+	
 	public void showYesNoDialog(String str)
 	{
 		msgLbl.setText(str);
 		this.getNoBtnl().addClickHandler(new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent arg0) {
-
 				dialogBox.hide();
 			}
 		});
@@ -100,12 +98,12 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		super.center();
 		this.getElement().getStyle().setZIndex(3);
 		super.show();
-		
 	}
 	
 	public void showConfirmationDialog()
 	{
 		this.getYesBtn().setVisible(false);
+		this.getNoBtnl().setIcon("check");
 		
 		this.getNoBtnl().setText(constants.okBtn());
 		this.getCaption().setText(constants.success());
@@ -124,6 +122,7 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 	public void showConfirmationDialog(String msg)
 	{
 		this.getYesBtn().setVisible(false);
+		this.getNoBtnl().setIcon("check");
 		
 		msgLbl.setText(msg);
 		

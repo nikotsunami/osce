@@ -306,8 +306,7 @@ public class RolePrintPdfUtil extends PdfUtil {
 							.getItem_name() : "-";
 					Paragraph details = new Paragraph();
 
-					details.add(new Chunk(constants.roleBaseItemName() + ": "
-							+ itemName, subTitleFont));
+					details.add(new Chunk(itemName, subTitleFont));
 
 					// addEmptyLine(details, 1);
 

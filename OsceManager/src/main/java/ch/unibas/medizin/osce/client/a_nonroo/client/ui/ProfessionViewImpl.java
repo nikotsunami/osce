@@ -267,7 +267,7 @@ public class ProfessionViewImpl extends Composite implements  ProfessionView, Re
 					public void execute(final ProfessionProxy prof) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
 						final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-						messageConfirmationDialogBox.showYesNoDialog("wirklich lÃ¶schen?");
+						messageConfirmationDialogBox.showYesNoDialog(constants.reallyDelete());
 						
 						messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {					
 							@Override

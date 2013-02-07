@@ -467,6 +467,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		
 		okButton.setVisible(true);
 		okButton.setText(constants.exchange());
+		okButton.setIcon("refresh");
 		cancelButton.setVisible(false);
 		saveBtn.removeFromParent();
 		breakDuration.removeFromParent();
@@ -502,6 +503,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		
 		okButton.setVisible(true);
 		okButton.setText(constants.exchange());
+		okButton.setIcon("refresh");
 		cancelButton.setVisible(false);
 		saveBtn.removeFromParent();
 		breakDuration.removeFromParent();

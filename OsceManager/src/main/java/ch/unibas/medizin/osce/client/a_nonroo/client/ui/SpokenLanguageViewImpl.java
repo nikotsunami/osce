@@ -269,7 +269,7 @@ public class SpokenLanguageViewImpl extends Composite implements  SpokenLanguage
 					public void execute(final SpokenLanguageProxy lang) {
 						//Window.alert("You clicked " + institution.getInstitutionName());
 						final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-						messageConfirmationDialogBox.showYesNoDialog("wirklich lÃ¶schen?");
+						messageConfirmationDialogBox.showYesNoDialog(constants.reallyDelete());
 						
 						messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {					
 							@Override

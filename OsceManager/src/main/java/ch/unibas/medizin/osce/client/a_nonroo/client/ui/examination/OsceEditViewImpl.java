@@ -280,26 +280,26 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		labelTitleAttributes.setInnerText(constants.attributes());
 		labelTitleBreaks.setInnerText(constants.breaks());
 		
-		labelRemark.setInnerText(constants.remark() + ":");
-		labelMaxParcours.setInnerText(constants.osceMaxCircuits() + ":");
-		labelMaxStudents.setInnerText(constants.osceMaxStudents() + ":");
-		labelStudyYear.setInnerText(constants.studyYears() + ":");
-		labelMaxRooms.setInnerText(constants.osceMaxRooms() + ":");
-		labelIsRepe.setInnerText(constants.osceIsRepe() + ":");
-		labelOsceRepe.setInnerText(constants.osceRepe() + ":");
-		labelShortBreak.setInnerText(constants.osceShortBreak() + ":");
-		labelLongBreak.setInnerText(constants.osceLongBreak() + ":");
-		labelLunchBreak.setInnerText(constants.osceLunchBreak() + ":");
-		labelStationLength.setInnerText(constants.osceStationLength() + ":");
-		labelMiddleBreak.setInnerText(constants.osceMediumBreak() + ":");
-		labelOsceForTask.setInnerText(constants.osceForTask() + ":");
-		labeShortBreakSimpatChange.setInnerText(constants.osceSimpatsInShortBreak()+":");
+		labelRemark.setInnerText(constants.remark());
+		labelMaxParcours.setInnerText(constants.osceMaxCircuits());
+		labelMaxStudents.setInnerText(constants.osceMaxStudents());
+		labelStudyYear.setInnerText(constants.studyYears());
+		labelMaxRooms.setInnerText(constants.osceMaxRooms());
+		labelIsRepe.setInnerText(constants.osceIsRepe());
+		labelOsceRepe.setInnerText(constants.osceRepe());
+		labelShortBreak.setInnerText(constants.osceShortBreak());
+		labelLongBreak.setInnerText(constants.osceLongBreak());
+		labelLunchBreak.setInnerText(constants.osceLunchBreak());
+		labelStationLength.setInnerText(constants.osceStationLength());
+		labelMiddleBreak.setInnerText(constants.osceMediumBreak());
+		labelOsceForTask.setInnerText(constants.osceForTask());
+		labeShortBreakSimpatChange.setInnerText(constants.osceSimpatsInShortBreak());
 		labelSpStayInPost.setInnerText(constants.osceSpStayInPost());
 		labelLunchBreakRequiredTime.setInnerText(constants.osceLunchBreakRequiredFiled());
 		labelLOngBreakRequiredTime.setInnerText(constants.osceLongBreakRequiredFiled());
 		
 		//remove number post
-		//numberPost.setInnerText(constants.circuitStation() + ":");
+		//numberPost.setInnerText(constants.circuitStation());
 		
 		//remove number post
 		// Highlight onViolation

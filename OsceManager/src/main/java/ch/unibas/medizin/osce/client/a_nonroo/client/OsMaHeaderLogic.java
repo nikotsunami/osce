@@ -255,8 +255,8 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 			placeDescription = constants.examinationSchedule();
 		} else if (place instanceof IndividualSchedulesPlace) {
 			placeDescription = constants.printIndividualSchedules();
-		}else if (place instanceof StatisticalEvaluationPlace) {
-				placeDescription = constants.statisticsEvaluationPlace();
+		} else if (place instanceof StatisticalEvaluationPlace) {
+			placeDescription = constants.statisticsEvaluation();
 		} else if (place instanceof LogPlace) {
 			placeDescription = constants.log();
 		} else if (place instanceof NationalityPlace) {

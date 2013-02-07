@@ -731,24 +731,17 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		
 		studyYear.setInnerText(new EnumRenderer<StudyYears>().render(proxy.getStudyYear()));
 		
-		if(proxy.getIsRepeOsce()==null)
-		{
-			isRepetion.setInnerText("");
-			
-		}
-		else
-		{
-			isRepetion.setInnerText(proxy.getIsRepeOsce() == true ? "True" : "Flase");
+		if(proxy.getIsRepeOsce()==null || !proxy.getIsRepeOsce()) {
+			isRepetion.setInnerHTML(OsMaConstant.UNCHECK_ICON.asString());
+		} else {
+			isRepetion.setInnerHTML(OsMaConstant.CHECK_ICON.asString());
 		}
 		
-		if(proxy.getCopiedOsce()==null)
-		{
+		if(proxy.getCopiedOsce()==null) {
 			Log.info("osce null--");
+			labelRepetitionForOsce.setInnerText("");
 			repetitionForOsce.setInnerText("");
-			
-		}
-		else
-		{
+		} else {
 			Log.info("osce null else--"+proxy.getCopiedOsce().getName());
 			repetitionForOsce.setInnerText(proxy.getCopiedOsce().getName() == null ? "" : proxy.getCopiedOsce().getName());
 		}
