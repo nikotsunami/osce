@@ -127,6 +127,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 	public void enterButtonPressed(KeyUpEvent event) {
 		if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 			delegate.addNewTitleClicked(newTitleText.getText());
+			newTitleText.setText("");
 		}
 	}
 
@@ -170,6 +171,7 @@ public class AnamnesisCheckViewImpl extends Composite implements AnamnesisCheckV
 	public void newButtonClicked(ClickEvent event) {
 		Log.info("Call newButtonClicked");
 		delegate.addNewTitleClicked(newTitleText.getText());
+		newTitleText.setText("");
 	}
 
 	/**

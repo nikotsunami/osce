@@ -568,8 +568,11 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		requests.anamnesisCheckTitleRequestNonRoo().findMaxSortOrder().fire(new OSCEReceiver<Integer>() {
 			@Override
 			public void onSuccess(Integer response) {
-				
-				sort_order = response;
+				if (response == null) {
+					sort_order = 0;
+				} else {
+					sort_order = response;
+				}
 				
 				if (title.trim().equals(""))
 					title = null;
