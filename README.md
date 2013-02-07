@@ -3,7 +3,13 @@ OSCEManager
 
 OsceManager is rich-client web application designed for assisting in the 
 organisation of [Objective Structured Clinical Examinations][1] (OSCEs) as well as 
-documenting the whole process.
+documenting the whole process. The software has been designed at the [Faculty of
+Medicine at the University of Basel][2] and starts to be used productively there (as
+of January 2013).
+
+Complementary to OSCEManager, [OSMA-DMZ][3] and eOSCE are used to assist in 
+collecting simpat-data, and for electronic assistance during the OSCEs, 
+respectively.
 
 Known Issues
 ------------
@@ -12,6 +18,9 @@ Known Issues
     one of the users is creating a new Semester, then the other user only sees it
     when reloading the whole browser window. (because the navigation never gets
     updated with new data)
+- SimPat:
+  * *When deleting a simpat that has assigned Scars, the application tries to 
+    delete the scar as well.*
 - Examinators:
   * SimplePager is missing in Examinator table
 - Role Definitions:
@@ -25,10 +34,12 @@ Known Issues
   * "Add title" / "Add category" buttons move around when clicking "edit"
   * "Add answer" moves delete buttons around
   * Generally weird behaviour in selection / editing etc.
+  * When adding a new title the SuggestBox gets temporarily colored yellow.
 - OSCE creation:
   * When no semester has been created, the whole *OSCE Administration* submenu
     should be deactivated.
   * There is a null entry in the Semester dropdown
+- SP Assignment / Selection (RoleAssignmentPlace):
 
 Suggested Features / Improvements
 ---------------------------------
@@ -38,6 +49,10 @@ Suggested Features / Improvements
   * If tables (or other views) are empty because there is no data in the 
     database, there should be no loading gifs displayed.
   * Some kind of BreadcrumbNavigation may have been nice.
+  * The loading circle on the darkened screen may be terribly annoying in some
+    situations, especially because of the delay until it appears. E.g. when 
+    assigning a room to a station in "Define circuit details", it takes several
+    seconds between pressing the okay button and the loading circle to appear.
 - Simulated Patients:
   * Instead of having separate "Delete" and "Anonymize" buttons, a single 
     delete-button would be sufficient, if the software would automatically
@@ -65,5 +80,10 @@ Suggested Features / Improvements
     room selection or marked (and possibly moved to the bottom of the list)
   * The save button behaviour is confusing. There are basically three ways data
     in this view is saved instead of just one.
+- Cleanup:
+  * MessageConfirmationDialogBox is a widget, but is in 
+    ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination
 
 [1]: http://en.wikipedia.org/wiki/Objective_structured_clinical_examination
+[2]: http://medizin.unibas.ch/
+[3]: https://github.com/nikotsunami/osma-dmz
