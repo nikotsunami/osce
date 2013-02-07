@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
 
 
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
@@ -14,12 +15,11 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public  class MessageConfirmationDialogBox extends DialogBox{
-
 	HorizontalPanel hp;
-	 Button yesBtn;
-	
+	IconButton yesBtn;
+	IconButton noBtnl;
 	VerticalPanel vp;
-	
+	Label msgLbl;
 	
 	public static MessageConfirmationDialogBox dialogBox;
 	
@@ -28,17 +28,10 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 	public  Button  getYesBtn() {
 		return this.yesBtn;
 	}
-
 	
-	Label msgLbl;
-	
-	public  Button getNoBtnl() {
+	public IconButton getNoBtnl() {
 		return this.noBtnl;
 	}
-
-	
-
-	 Button noBtnl;
 	
 	public MessageConfirmationDialogBox(String caption) {
 		// TODO Auto-generated constructor stub
@@ -46,8 +39,10 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		vp=new VerticalPanel();
 		hp=new HorizontalPanel();
 		//vp.add(new HTML(msg));
-		yesBtn=new Button();
-		noBtnl=new Button();
+		yesBtn=new IconButton();
+		noBtnl=new IconButton();
+		yesBtn.setIcon("check");
+		noBtnl.setIcon("closethick");
 		yesBtn.setText(constants.yes());
 		noBtnl.setText(constants.no());
 		
