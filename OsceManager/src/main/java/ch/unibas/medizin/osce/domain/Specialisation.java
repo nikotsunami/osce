@@ -12,11 +12,20 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.log4j.Logger;
+import org.hibernate.sql.Select;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import ch.unibas.medizin.osce.shared.Sorting;
+import ch.unibas.medizin.osce.shared.StudyYears;
+
+
+
+import javax.persistence.CascadeType;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @RooJavaBean
 @RooToString
@@ -69,11 +78,22 @@ public class Specialisation {
     	return q.getSingleResult();
     }
     
-    public static java.util.List<Specialisation> findSpecialisationSortByName()
+    /*public static java.util.List<Specialisation> findSpecialisationSortByName()
 	{
 		Log.info("~~Inside findSpecialisationSortByName Method");
 		EntityManager em = entityManager();				
 		String queryString="select sp from Specialisation as sp order by sp.name";			
+		Log.info("~QUERY String: " + queryString);
+		TypedQuery<Specialisation> q = em.createQuery(queryString, Specialisation.class);
+		java.util.List<Specialisation> result = q.getResultList();
+		Log.info("~QUERY Result : " + result);
+		return result;
+	}*/
+    public static java.util.List<Specialisation> findSpecialisationSortByName(StudyYears studyYear)
+	{
+		Log.info("~~Inside findSpecialisationSortByName Method");
+		EntityManager em = entityManager();				
+		String queryString = "SELECT DISTINCT rt.specialisation FROM RoleTopic rt WHERE rt.studyYear = " + studyYear.ordinal() + " ORDER BY rt.specialisation.name";
 		Log.info("~QUERY String: " + queryString);
 		TypedQuery<Specialisation> q = em.createQuery(queryString, Specialisation.class);
 		java.util.List<Specialisation> result = q.getResultList();

@@ -2,11 +2,15 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Formatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.KeywordProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
@@ -21,10 +25,15 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
@@ -34,6 +43,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -41,9 +51,12 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.SuggestBox;
+import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.SuggestOracle.Suggestion;
 import com.google.gwt.user.datepicker.client.DateBox;
 
 public class RoleFilterViewTooltipImpl extends PopupPanel  implements RoleView{
@@ -223,8 +236,22 @@ public class RoleFilterViewTooltipImpl extends PopupPanel  implements RoleView{
 						
 		}
 		
+		this.TopicName.setValue(true);
+		
+		selectionChanged = true;
+		
 		StudyYearListBox.setValue(null);
 		ComplexityListBox.setValue(null);
+		
+		KeywordSugestionBox.getTextField().getAdvancedTextBox().setText("");
+		SpecificationSugestionBox.getTextField().getAdvancedTextBox().setText("");
+		reviewerSugestionBox.getTextField().getAdvancedTextBox().setText("");
+		autherSugestionBox.getTextField().getAdvancedTextBox().setText("");
+		
+		ComplexityText.setText("");
+		startDate.setValue(null);
+		endDate.setValue(null);
+		
 		
 		/* by spec code for listbox instead of suggesionbox
 		
@@ -436,7 +463,7 @@ public List<String> getWhereFilters() {
 		{
 			whereFilters.add("rt.studyYear="+ (StudyYearListBox.getValue()).ordinal());
 		}
-		if(ComplexityText.getValue()!="" && !isNumeric(ComplexityText.getValue()))
+		if(ComplexityText.getValue()!="" && isNumeric(ComplexityText.getValue()))
 		{
 		if(ComplexityListBox.getValue()!=null){
 			whereFilters.add("rt.slotsUntilChange "+ComplexityListBox.getValue().getStringValue() +" "+Integer.parseInt(ComplexityText.getValue()));
@@ -600,7 +627,7 @@ public List<String> getWhereFilters() {
 		Complexity.setText(constants.roleComplexity());
 		Author.setText(constants.author());
 		Specification.setText(constants.specification());
-		StudyYear.setText(constants.studyYears());
+		StudyYear.setText(constants.studyYear());
 		Keyword.setText(constants.keyword());
 		
 		maxApplicableFilters = fields.size();
@@ -612,6 +639,78 @@ public List<String> getWhereFilters() {
 			box.addValueChangeHandler(new CheckBoxChangeHandler());
 		}
 		
+		ComplexityText.addValueChangeHandler(new ValueChangeHandler<String>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<String> event) {
+				selectionChanged = true;
+			}
+		});
+		
+		ComplexityListBox.addValueChangeHandler(new ValueChangeHandler<Comparison>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<Comparison> event) {
+				if (ComplexityText.getText() != null)
+					selectionChanged = true;
+			}
+		});
+		
+		StudyYearListBox.addValueChangeHandler(new ValueChangeHandler<StudyYears>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<StudyYears> event) {
+				selectionChanged = true;
+			}
+		});
+		
+		startDate.addValueChangeHandler(new ValueChangeHandler<Date>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<Date> event) {
+				selectionChanged = true;
+			}
+		});
+		
+		endDate.addValueChangeHandler(new ValueChangeHandler<Date>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<Date> event) {
+				selectionChanged = true;
+			}
+		});
+		
+		autherSugestionBox.addHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				selectionChanged = true;
+			}
+		});
+		
+		KeywordSugestionBox.addHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				selectionChanged = true;
+			}
+		});
+		
+		reviewerSugestionBox.addHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				selectionChanged = true;
+			}
+		});
+		
+		SpecificationSugestionBox.addHandler(new ChangeHandler() {
+			
+			@Override
+			public void onChange(ChangeEvent event) {
+				selectionChanged = true;
+			}
+		});
 		
 		/*KeywordSugestionBox.addSelectionHandler(new SelectionHandler<SuggestOracle.Suggestion>() {
 			

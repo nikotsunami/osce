@@ -251,7 +251,7 @@ public class RoleTopic {
         	
         	String s="SELECT o FROM RoleTopic o ORDER BY "+sortColumn + " " +order;
            
-        	if (searchWord.equals(""))
+        	if (searchWord.equals("") && whereFilters.size() == 0 && tableFilters.size() == 0)
         		queryString = s;
         	
         	TypedQuery<RoleTopic> q =  em.createQuery(queryString, RoleTopic.class);

@@ -209,7 +209,7 @@ AccordianPanelView.ParcourDelegate
 			// E Module 5 Bug Test Change			
 			
 			//requests.specialisationRequest().findAllSpecialisations().with("roleTopics").fire(new OSCEReceiver<List<SpecialisationProxy>>()
-			requests.specialisationRequestNonRoo().findSpecialisationSortByName().with("roleTopics").fire(new OSCEReceiver<List<SpecialisationProxy>>()
+			/*requests.specialisationRequestNonRoo().findSpecialisationSortByName().with("roleTopics").fire(new OSCEReceiver<List<SpecialisationProxy>>()
 					{
 
 						public void onSuccess(List<SpecialisationProxy> response) 
@@ -219,708 +219,738 @@ AccordianPanelView.ParcourDelegate
 							// E Module 5 Bug Test Change
 							
 							specialisationList = new ArrayList<SpecialisationProxy>();				
-							specialisationList.addAll(response);	
+							specialisationList.addAll(response);*/	
+			/*requests.specialisationRequestNonRoo().findSpecialisationSortByName().with("roleTopics").fire(new OSCEReceiver<List<SpecialisationProxy>>()
+					{
+
+						public void onSuccess(List<SpecialisationProxy> response) 
+						{	
+							// Module 5 Bug Test Change
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+							// E Module 5 Bug Test Change
+							
+							specialisationList = new ArrayList<SpecialisationProxy>();				
+							specialisationList.addAll(response);
+						}
+					});*/
 					
 					//5C:SPEC START
 			requests.find(place.getProxyId()).with("osces").with("oscePostBlueprints","oscePostBlueprints.specialisation","oscePostBlueprints.roleTopic").with("osce_days").with("osce_days.osceSequences").with("osce_days.osceSequences.oscePosts").with("osce_days.osceSequences.oscePosts.oscePostBlueprint").with("osce_days.osceSequences.oscePosts.standardizedRole").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.roleTopic").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.specialisation").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.postType").with("osce_days.osceSequences.courses").with("osce_days.osceSequences.courses.oscePostRooms").with("osce_days.osceSequences.courses.oscePostRooms.oscePost").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.standardizedRole").with("osce_days.osceSequences.courses.oscePostRooms.room").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.roleTopic").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.postType").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<Object>() {
 
 				@Override
-				public void onSuccess(Object response) {
-					if(response instanceof OsceProxy && response != null){
-						
-						osceProxy=(OsceProxy)response;
-						Log.info("Arrived OsceProxy At CircuitDetailActivity");
-						
-						circuitOsceSubViewImpl=view.getcircuitOsceSubViewImpl();
-						
-						OsceStatus status = ((OsceProxy) response).getOsceStatus();
-						
-						
-						
-						// Module 5 Bug Solution
-						//String style = status.getOsceStatus(status);
-						//setOsceStatusStyle(style);
-						// E Module 5 Bug Solution
-						
-						//circuitOsceSubViewImpl.setStyleName(style);
-						circuitOsceSubViewImpl.shortBreakTextBox.setValue(util.checkShort((((OsceProxy) response).getShortBreak())));
-						circuitOsceSubViewImpl.longBreakTextBox.setValue(util.checkShort((((OsceProxy) response).getLongBreak())));
-						circuitOsceSubViewImpl.launchBreakTextBox.setValue(util.checkShort((((OsceProxy) response).getLunchBreak())));
-						circuitOsceSubViewImpl.maxStudentTextBox.setValue(util.checkInteger(((OsceProxy) response).getMaxNumberStudents()));
-						circuitOsceSubViewImpl.maxParcourTextBox.setValue(util.checkInteger(((OsceProxy) response).getNumberCourses()));
-						//Log.info("Room Value"+ ((OsceProxy) response).getNumberRooms());
-						circuitOsceSubViewImpl.maxRoomsTextBox.setValue(util.checkInteger((((OsceProxy) response).getNumberRooms())));
-						
-						// Module 5 bug Report Change
-						circuitOsceSubViewImpl.middleBreakTextBox.setValue(util.checkShort((((OsceProxy) response).getMiddleBreak())));
-						circuitOsceSubViewImpl.shortBreakSimpatTextBox.setValue(util.checkShort((((OsceProxy) response).getShortBreakSimpatChange())));
-						// E Module 5 bug Report Change
-						
-						
-						
-						
-						circuitOsceSubViewImpl.setProxy((OsceProxy)response);
-						circuitOsceSubViewImpl.setClearAllBtn(((OsceProxy)response).getOsceStatus() == OsceStatus.OSCE_GENRATED);
-						circuitOsceSubViewImpl.setDelegate(activity);
-						
-						// Module 5 changes {
-						
-						setOsceFixedButtonStyle(circuitOsceSubViewImpl,osceProxy);
-						
-						// Module 5 changes }
-
-						//Assignment E:Module 5[
-						//5C:SPEC START		
-						//view.getScrollPanel().setStylePrimaryName("Osce-Status");
-						//view.getScrollPanel().setStyleName("Osce-Status");
-						osceProxy=(OsceProxy)response;
-						if((osceProxy.getOsceStatus() == OsceStatus.OSCE_BLUEPRINT) || (osceProxy.getOsceStatus() == OsceStatus.OSCE_NEW))
-						{
-							// Module 5 bug Report Change
-							circuitOsceSubViewImpl.shortBreakTextBox.setEnabled(true);
-							circuitOsceSubViewImpl.longBreakTextBox.setEnabled(true);
-							circuitOsceSubViewImpl.launchBreakTextBox.setEnabled(true);
-							circuitOsceSubViewImpl.maxStudentTextBox.setEnabled(true);
-							circuitOsceSubViewImpl.maxParcourTextBox.setEnabled(true);
-							circuitOsceSubViewImpl.maxRoomsTextBox.setEnabled(true);
-							circuitOsceSubViewImpl.shortBreakSimpatTextBox.setEnabled(true);
-							circuitOsceSubViewImpl.middleBreakTextBox.setEnabled(true);
-							
-							circuitOsceSubViewImpl.saveOsce.setEnabled(true);
-							// E Module 5 bug Report Change
-							
-						// Module 5 Bug Solution
-						/*if((osceProxy.getOsceStatus() == OsceStatus.OSCE_NEW))
-						{
-							view.getScrollPanel().addStyleDependentName("NEW");
-						}
-						else
-						if((osceProxy.getOsceStatus() == OsceStatus.OSCE_BLUEPRINT))
-						{
-							view.getScrollPanel().addStyleDependentName("BluePrint");
-						}*/
-						// E Module 5 Bug Solution
-						
-						List<OscePostBlueprintProxy>listOscePostBlueprintProxy = osceProxy.getOscePostBlueprints();
-						
-						oSCENewSubViewImpl=new OSCENewSubViewImpl();//.getOSCENewSubViewImpl();
-						 
-						//view.getGenerateVP().add(new Label(enumConstants.getString(osceProxy.getOsceStatus().toString())));
-						view.getGenerateVP().insert(oSCENewSubViewImpl, view.getGenerateVP().getWidgetCount());
-						//oSCENewSubViewImpl.
-						((CircuitDetailsViewImpl)view).oSCENewSubViewImpl=oSCENewSubViewImpl;
-						oSCENewSubViewImpl.setDelegate(activity);
-						
-						//Osce Days[
-						osceDayViewImpl = oSCENewSubViewImpl.getOsceDayViewImpl();
-
-						//Module 5 Bug Report Solution
-						osceDayViewImpl.getSchedulePostponenButton().setVisible(false);
-						osceDayViewImpl.getScheduleEarlierButton().setVisible(false);
-						//E Module 5 Bug Report Solution
-						
-						//spec issue sol
-						osceDayViewImpl.getBtnShiftLunchBreakNext().setVisible(false);
-						osceDayViewImpl.getBtnShiftLunchBreakPrev().setVisible(false);
-						
-						osceDayViewImpl.setDelegate(activity);
-						// Day Assignment 
-						
-						
-						//bug solve start
-						
-						osceDayViewImpl.getInnerCalculationVerticalPanel().setVisible(false);
-						//bug solve end
-						Log.info("Before Iterator");
-						
+				public void onSuccess(final Object response) {
 					
-						
-						List<OsceDayProxy> setOsceDays = ((OsceProxy) response).getOsce_days();
-						if(setOsceDays.size()==0){
-							Log.info("OsceDay null for proxy : " +osceProxy.getId());
-							osceDayViewImpl.setOsceDayProxy(null);
-						}
-						else{
-							Log.info("Osce Exist for OsceProxy : " + osceProxy.getId());
-							//Module 5 Bug Report Solution
-							//Iterator<OsceDayProxy> osceDays = setOsceDays.iterator();
-							Iterator<OsceDayProxy> osceDaysIterator = setOsceDays.iterator();
-							if(osceDaysIterator.hasNext())
-							//E Module 5 Bug Report Solution
-							{								
-								//Module 5 Bug Report Solution
-								//osceDayViewImpl.setOsceDayProxy(osceDays.next());
-								OsceDayProxy osceDays=osceDaysIterator.next();
-								osceDayViewImpl.setOsceDayProxy(osceDays);
-
-								/*
-								if(osceDays.getOsceDate()==null)
-								{
-									osceDayViewImpl.getDateContentValueLabel().setText("");
-								}
-								else
-								{
-									osceDayViewImpl.getDateContentValueLabel().setText(osceDays.getOsceDate().getYear()+"-"+osceDays.getOsceDate().getMonth()+"-"+osceDays.getOsceDate().getDate());	
-								}
-								
-								if(osceDays.getTimeStart()==null)
-								{
-									osceDayViewImpl.getLunchBreakStartValueLabel().setText("");
-								}
-								else
-								{
-									osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getTimeStart()).substring(0,5));	
-								}
-								
-								if(osceDays.getLunchBreakStart()==null)
-								{
-									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText("");
-								}
-								else
-								{
-									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getLunchBreakStart()).substring(0,5));	
-								}
-								if(osceDays.getTimeEnd()==null)
-								{
-									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText("");
-								}
-								else
-								{
-									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getTimeEnd()).substring(0,5));	
-								}
-								
-								*/
-								if(osceDays.getOsceDate()==null)
-								{
-									osceDayViewImpl.getDateContentValueLabel().setText("  ");
-								}
-								else
-								{
-									//osceDayViewImpl.getDateContentValueLabel().setText(osceDayProxy.getOsceDate().getYear()+"-"+osceDayProxy.getOsceDate().getMonth()+"-"+osceDayProxy.getOsceDate().getDate());
-									osceDayViewImpl.getDateContentValueLabel().setText(DateTimeFormat.getFormat("yyyy-MM-dd").format(osceDays.getOsceDate()));
-								}
-																
-								if(osceDays.getTimeStart()==null)
-								{
-									osceDayViewImpl.getLunchBreakStartValueLabel().setText("");
-								}
-								else
-								{
-									osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getTimeStart()).substring(0,5));	
-								}
-								
-								if(osceDays.getLunchBreakStart()==null)
-								{
-									osceDayViewImpl.getLunchBreakValueLabel().setText(constants.notAvailable());									
-								}
-								else
-								{
-									osceDayViewImpl.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getLunchBreakStart()).substring(0,5));	
-								}
-								if(osceDays.getTimeEnd()==null)
-								{
-									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText("  ");
-								}
-								else
-								{
-									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getTimeEnd()).substring(0,5));	
-								}
-								/*if(osceDays.getOsceSequences().size()>1)
-								{
-									Log.info("setSize");
-									osceDayViewImpl.getMainDayHP().setHeight("568px");									
-									osceDayViewImpl.getCalculationVerticalPanel().getElement().getStyle().setMarginTop(30,Unit.PX);
-									osceDayViewImpl.getScheduleHP().getElement().getStyle().setMarginTop(30,Unit.PX);
-									osceDayViewImpl.getSaveVerticlePanel().getElement().getStyle().setMarginTop(50,Unit.PX);									
-								}*/
-								
-								//E Module 5 Bug Report Solution
-							}
-						}
-						
-						//setDayStatusStyle(style);
-						osceDayViewImpl.init();
-						addTimeHendlers();
-						
-						//Osce Days]
-						
-						
-						
-						//Log.info("Osce Post Blue Print Size : "+ listOscePostBlueprintProxy.size());						
-							
-							osceCreatePostBluePrintSubViewImpl=new OsceCreatePostBluePrintSubViewImpl(specialisationList);
-							osceCreatePostBluePrintSubViewImpl.setStyleName("Osce-Status-BluePrint-Create", true);
-							newPostAddHP=oSCENewSubViewImpl.getOscePostBluePrintSubViewImpl().getOscePostBluePrintSubViewImplHP();
-							newPostHP=oSCENewSubViewImpl.getOscePostBluePrintSubViewImpl().newPostHP;
-							//newPostAddHP.setStyleName("Osce_BluePrint_Status");							
-							
-							if(listOscePostBlueprintProxy.size()>0)
-							{
-								Log.info("Osce has Osce Post Blueprint " + listOscePostBlueprintProxy.size());
-								
-								int index=0;
-							
-								if(oscePostSubViewImpl == null){
-									oscePostSubViewImpl = new ArrayList<OscePostSubViewImpl>();
-								}																								
-								OscePostSubViewImpl tempOscePostSubViewImpl;				
-								
-								Iterator<OscePostBlueprintProxy> iter = listOscePostBlueprintProxy.iterator();								
-								
-									while (iter.hasNext()) 
-									{																				
-										oscePostBlueprintProxy=iter.next();
-													
-								
-										Log.info("~OsceBluerint Id: " + oscePostBlueprintProxy.getId());
-										
-										tempOscePostSubViewImpl=new OscePostSubViewImpl();										
-										tempOscePostSubViewImpl.enableDisableforBluePrintStatus();
-										tempOscePostSubViewImpl.setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW
-										tempOscePostSubViewImpl.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName()));
-										tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName());								
-										tempOscePostSubViewImpl.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName()));
-										tempOscePostSubViewImpl.getSpecializationLbl().setTitle(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName());
-										
-										setProxy(tempOscePostSubViewImpl,oscePostBlueprintProxy.getSpecialisation());
-										setProxy(tempOscePostSubViewImpl,oscePostBlueprintProxy.getRoleTopic());
-																																							
-                                                                                // Module 5 bug Report Change									
-                                        tempOscePostSubViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;
-									        // E Module 5 bug Report Change	
-									
-										oscePostViewImpl=new OscePostViewImpl();
-										oscePostViewImpl.setStyleName("Osce-Status-BluePrint-Save", true);
-										oSCENewSubViewImpl.getOscePostBluePrintSubViewImpl().getDragController().makeDraggable(oscePostViewImpl,oscePostViewImpl.getPostTypeLbl());
-										oSCENewSubViewImpl.getOscePostBluePrintSubViewImpl().getDragController().addDragHandler(activity);
-										
-										oscePostViewImpl.setDelegate(circuitDetailsActivity);	// SET DELEGATE FOR MAIN POST VIEW
-										oscePostViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;	
-										//oscePostViewImpl.getOscePostSubViewHP().setStyleName("Osce_Genrated_Status");						
-										
-										oscePostViewImpl.getPostTypeLbl().setText(enumConstants.getString(oscePostBlueprintProxy.getPostType().name()));
-										
-
-										// Module 5 bug Report Change										
-										//if(oscePostViewImpl.getPostTypeLbl().getText().compareToIgnoreCase("Break*")==0)
-										Log.info("Break Found: " + tempOscePostSubViewImpl.oscePostBlueprintProxy.getId());
-										if(tempOscePostSubViewImpl.oscePostBlueprintProxy.getPostType()==PostType.BREAK)
-										{
-											Log.info("~~~~Break Found");
-											tempOscePostSubViewImpl.getSpecializationedit().setVisible(false);
-											tempOscePostSubViewImpl.getRoleTopicEdit().setVisible(false);
-											tempOscePostSubViewImpl.getRoomedit().setVisible(false);
-											tempOscePostSubViewImpl.getStandardizedRoleEdit().setVisible(false);
-											tempOscePostSubViewImpl.getSpecializationLbl().setVisible(false);
-											tempOscePostSubViewImpl.getRoleTopicLbl().setVisible(false);
-											tempOscePostSubViewImpl.getStandardizedRoleLbl().setVisible(false);
-											tempOscePostSubViewImpl.getRoomLbl().setVisible(false);
+					if(response instanceof OsceProxy && response != null)
+					{						
+						osceProxy=(OsceProxy)response;
 											
+						requests.specialisationRequestNonRoo().findSpecialisationSortByName(osceProxy.getStudyYear()).with("roleTopics").fire(new OSCEReceiver<List<SpecialisationProxy>>()
+								{
+
+									public void onSuccess(List<SpecialisationProxy> response1) 
+									{	
+										// Module 5 Bug Test Change
+										requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+										// E Module 5 Bug Test Change
+										
+										specialisationList = new ArrayList<SpecialisationProxy>();				
+										specialisationList.addAll(response1);
+						
+										Log.info("Arrived OsceProxy At CircuitDetailActivity");
+										
+										circuitOsceSubViewImpl=view.getcircuitOsceSubViewImpl();
+										
+										OsceStatus status = ((OsceProxy) response).getOsceStatus();
+										
+										
+										
+										// Module 5 Bug Solution
+										//String style = status.getOsceStatus(status);
+										//setOsceStatusStyle(style);
+										// E Module 5 Bug Solution
+										
+										//circuitOsceSubViewImpl.setStyleName(style);
+										circuitOsceSubViewImpl.shortBreakTextBox.setValue(util.checkShort((((OsceProxy) response).getShortBreak())));
+										circuitOsceSubViewImpl.longBreakTextBox.setValue(util.checkShort((((OsceProxy) response).getLongBreak())));
+										circuitOsceSubViewImpl.launchBreakTextBox.setValue(util.checkShort((((OsceProxy) response).getLunchBreak())));
+										circuitOsceSubViewImpl.maxStudentTextBox.setValue(util.checkInteger(((OsceProxy) response).getMaxNumberStudents()));
+										circuitOsceSubViewImpl.maxParcourTextBox.setValue(util.checkInteger(((OsceProxy) response).getNumberCourses()));
+										//Log.info("Room Value"+ ((OsceProxy) response).getNumberRooms());
+										circuitOsceSubViewImpl.maxRoomsTextBox.setValue(util.checkInteger((((OsceProxy) response).getNumberRooms())));
+										
+										// Module 5 bug Report Change
+										circuitOsceSubViewImpl.middleBreakTextBox.setValue(util.checkShort((((OsceProxy) response).getMiddleBreak())));
+										circuitOsceSubViewImpl.shortBreakSimpatTextBox.setValue(util.checkShort((((OsceProxy) response).getShortBreakSimpatChange())));
+										// E Module 5 bug Report Change
+										
+										
+										
+										
+										circuitOsceSubViewImpl.setProxy((OsceProxy)response);
+										circuitOsceSubViewImpl.setClearAllBtn(((OsceProxy)response).getOsceStatus() == OsceStatus.OSCE_GENRATED);
+										circuitOsceSubViewImpl.setDelegate(activity);
+										
+										// Module 5 changes {
+										
+										setOsceFixedButtonStyle(circuitOsceSubViewImpl,osceProxy);
+										
+										// Module 5 changes }
+
+										//Assignment E:Module 5[
+										//5C:SPEC START		
+										//view.getScrollPanel().setStylePrimaryName("Osce-Status");
+										//view.getScrollPanel().setStyleName("Osce-Status");
+										osceProxy=(OsceProxy)response;
+										if((osceProxy.getOsceStatus() == OsceStatus.OSCE_BLUEPRINT) || (osceProxy.getOsceStatus() == OsceStatus.OSCE_NEW))
+										{
+											// Module 5 bug Report Change
+											circuitOsceSubViewImpl.shortBreakTextBox.setEnabled(true);
+											circuitOsceSubViewImpl.longBreakTextBox.setEnabled(true);
+											circuitOsceSubViewImpl.launchBreakTextBox.setEnabled(true);
+											circuitOsceSubViewImpl.maxStudentTextBox.setEnabled(true);
+											circuitOsceSubViewImpl.maxParcourTextBox.setEnabled(true);
+											circuitOsceSubViewImpl.maxRoomsTextBox.setEnabled(true);
+											circuitOsceSubViewImpl.shortBreakSimpatTextBox.setEnabled(true);
+											circuitOsceSubViewImpl.middleBreakTextBox.setEnabled(true);
+											
+											circuitOsceSubViewImpl.saveOsce.setEnabled(true);
+											// E Module 5 bug Report Change
+											
+										// Module 5 Bug Solution
+										/*if((osceProxy.getOsceStatus() == OsceStatus.OSCE_NEW))
+										{
+											view.getScrollPanel().addStyleDependentName("NEW");
 										}
-										// E Module 5 bug Report Change
-										
-										
-										oscePostSubViewImpl.add(tempOscePostSubViewImpl);					
-										oscePostSubViewImpl.get(index).setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW
-										oscePostSubViewImpl.get(index).oscePostBlueprintProxy=oscePostBlueprintProxy;		
-										oscePostSubViewImpl.get(index).getPostNameLbl().setText(getLabelString(constants.circuitStation() + " " + oscePostBlueprintProxy.getSequenceNumber()));
-										oscePostSubViewImpl.get(index).getPostNameLbl().setTitle(constants.circuitStation() + " " + oscePostBlueprintProxy.getSequenceNumber());
-										maxSeq=oscePostBlueprintProxy.getSequenceNumber();
-										oscePostViewImpl.getOscePostSubViewHP().add(oscePostSubViewImpl.get(index));	// ADD SUBVIEW IN POSTVIEW
-										
-										/*// Module 5 bug Report Change
-										//Try to solve bug
-										final int indexToEditSpecialisation1=index;
-										oscePostSubViewImpl.get(indexToEditSpecialisation1).getSpecializationedit().addClickHandler(new ClickHandler() 
+										else
+										if((osceProxy.getOsceStatus() == OsceStatus.OSCE_BLUEPRINT))
 										{
-											@Override
-											public void onClick(ClickEvent event) {
-												Log.info("Click Handler call from Circuit Detail Activity." + indexToEditSpecialisation1);
-												Log.info("Widget: " + oscePostSubViewImpl.get(indexToEditSpecialisation1));
-												Log.info("Osce Post Blue Print Id: " + oscePostSubViewImpl.get(indexToEditSpecialisation1).oscePostBlueprintProxy.getId());
+											view.getScrollPanel().addStyleDependentName("BluePrint");
+										}*/
+										// E Module 5 Bug Solution
+										
+										List<OscePostBlueprintProxy>listOscePostBlueprintProxy = osceProxy.getOscePostBlueprints();
+										
+										oSCENewSubViewImpl=new OSCENewSubViewImpl();//.getOSCENewSubViewImpl();
+										 
+										//view.getGenerateVP().add(new Label(enumConstants.getString(osceProxy.getOsceStatus().toString())));
+										view.getGenerateVP().insert(oSCENewSubViewImpl, view.getGenerateVP().getWidgetCount());
+										//oSCENewSubViewImpl.
+										((CircuitDetailsViewImpl)view).oSCENewSubViewImpl=oSCENewSubViewImpl;
+										oSCENewSubViewImpl.setDelegate(activity);
+										
+										//Osce Days[
+										osceDayViewImpl = oSCENewSubViewImpl.getOsceDayViewImpl();
+
+										//Module 5 Bug Report Solution
+										osceDayViewImpl.getSchedulePostponenButton().setVisible(false);
+										osceDayViewImpl.getScheduleEarlierButton().setVisible(false);
+										//E Module 5 Bug Report Solution
+										
+										//spec issue sol
+										osceDayViewImpl.getBtnShiftLunchBreakNext().setVisible(false);
+										osceDayViewImpl.getBtnShiftLunchBreakPrev().setVisible(false);
+										
+										osceDayViewImpl.setDelegate(activity);
+										// Day Assignment 
+										
+										
+										//bug solve start
+										
+										osceDayViewImpl.getInnerCalculationVerticalPanel().setVisible(false);
+										//bug solve end
+										Log.info("Before Iterator");
+										
+									
+										
+										List<OsceDayProxy> setOsceDays = ((OsceProxy) response).getOsce_days();
+										if(setOsceDays.size()==0){
+											Log.info("OsceDay null for proxy : " +osceProxy.getId());
+											osceDayViewImpl.setOsceDayProxy(null);
+										}
+										else{
+											Log.info("Osce Exist for OsceProxy : " + osceProxy.getId());
+											//Module 5 Bug Report Solution
+											//Iterator<OsceDayProxy> osceDays = setOsceDays.iterator();
+											Iterator<OsceDayProxy> osceDaysIterator = setOsceDays.iterator();
+											if(osceDaysIterator.hasNext())
+											//E Module 5 Bug Report Solution
+											{								
+												//Module 5 Bug Report Solution
+												//osceDayViewImpl.setOsceDayProxy(osceDays.next());
+												OsceDayProxy osceDays=osceDaysIterator.next();
+												osceDayViewImpl.setOsceDayProxy(osceDays);
+
+												/*
+												if(osceDays.getOsceDate()==null)
+												{
+													osceDayViewImpl.getDateContentValueLabel().setText("");
+												}
+												else
+												{
+													osceDayViewImpl.getDateContentValueLabel().setText(osceDays.getOsceDate().getYear()+"-"+osceDays.getOsceDate().getMonth()+"-"+osceDays.getOsceDate().getDate());	
+												}
+												
+												if(osceDays.getTimeStart()==null)
+												{
+													osceDayViewImpl.getLunchBreakStartValueLabel().setText("");
+												}
+												else
+												{
+													osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getTimeStart()).substring(0,5));	
+												}
+												
+												if(osceDays.getLunchBreakStart()==null)
+												{
+													osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText("");
+												}
+												else
+												{
+													osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getLunchBreakStart()).substring(0,5));	
+												}
+												if(osceDays.getTimeEnd()==null)
+												{
+													osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText("");
+												}
+												else
+												{
+													osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getTimeEnd()).substring(0,5));	
+												}
+												
+												*/
+												if(osceDays.getOsceDate()==null)
+												{
+													osceDayViewImpl.getDateContentValueLabel().setText("  ");
+												}
+												else
+												{
+													//osceDayViewImpl.getDateContentValueLabel().setText(osceDayProxy.getOsceDate().getYear()+"-"+osceDayProxy.getOsceDate().getMonth()+"-"+osceDayProxy.getOsceDate().getDate());
+													osceDayViewImpl.getDateContentValueLabel().setText(DateTimeFormat.getFormat("yyyy-MM-dd").format(osceDays.getOsceDate()));
+												}
+																				
+												if(osceDays.getTimeStart()==null)
+												{
+													osceDayViewImpl.getLunchBreakStartValueLabel().setText("");
+												}
+												else
+												{
+													osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getTimeStart()).substring(0,5));	
+												}
+												
+												if(osceDays.getLunchBreakStart()==null)
+												{
+													osceDayViewImpl.getLunchBreakValueLabel().setText(constants.notAvailable());									
+												}
+												else
+												{
+													osceDayViewImpl.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getLunchBreakStart()).substring(0,5));	
+												}
+												if(osceDays.getTimeEnd()==null)
+												{
+													osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText("  ");
+												}
+												else
+												{
+													osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getTimeEnd()).substring(0,5));	
+												}
+												/*if(osceDays.getOsceSequences().size()>1)
+												{
+													Log.info("setSize");
+													osceDayViewImpl.getMainDayHP().setHeight("568px");									
+													osceDayViewImpl.getCalculationVerticalPanel().getElement().getStyle().setMarginTop(30,Unit.PX);
+													osceDayViewImpl.getScheduleHP().getElement().getStyle().setMarginTop(30,Unit.PX);
+													osceDayViewImpl.getSaveVerticlePanel().getElement().getStyle().setMarginTop(50,Unit.PX);									
+												}*/
+												
+												//E Module 5 Bug Report Solution
 											}
-										});
-										// E Module 5 bug Report Change
-*/										
-										if(oscePostBlueprintProxy.getPostType()==PostType.ANAMNESIS_THERAPY || oscePostBlueprintProxy.getPostType()==PostType.PREPARATION)
-										{
-											Log.info("~Anemnis");				
-											if(iter.hasNext())
-											{
-												oscePostBlueprintProxy=iter.next();											
-												
-												tempOscePostSubViewImpl=new OscePostSubViewImpl();
-												tempOscePostSubViewImpl.enableDisableforBluePrintStatus();	
-												
-												// Module 5 Bug Test Change
-												tempOscePostSubViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;
-												// E Module 5 Bug Test Change
-												
-												tempOscePostSubViewImpl.setDelegate(circuitDetailsActivity);	// SET DELEGATE FOR SUBVIEW
+										}
 										
-												tempOscePostSubViewImpl.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName()));
-												tempOscePostSubViewImpl.getSpecializationLbl().setTitle(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName());
-												tempOscePostSubViewImpl.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName()));
-												tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName());
-												tempOscePostSubViewImpl.getPostNameLbl().setText(getLabelString(constants.circuitStation() + " " +oscePostBlueprintProxy.getSequenceNumber()));
-												tempOscePostSubViewImpl.getPostNameLbl().setTitle(constants.circuitStation() + " " +oscePostBlueprintProxy.getSequenceNumber());
+										//setDayStatusStyle(style);
+										osceDayViewImpl.init();
+										addTimeHendlers();
+										
+										//Osce Days]
+										
+										
+										
+										//Log.info("Osce Post Blue Print Size : "+ listOscePostBlueprintProxy.size());						
+											
+											osceCreatePostBluePrintSubViewImpl=new OsceCreatePostBluePrintSubViewImpl(specialisationList);
+											osceCreatePostBluePrintSubViewImpl.setStyleName("Osce-Status-BluePrint-Create", true);
+											newPostAddHP=oSCENewSubViewImpl.getOscePostBluePrintSubViewImpl().getOscePostBluePrintSubViewImplHP();
+											newPostHP=oSCENewSubViewImpl.getOscePostBluePrintSubViewImpl().newPostHP;
+											//newPostAddHP.setStyleName("Osce_BluePrint_Status");							
+											
+											if(listOscePostBlueprintProxy.size()>0)
+											{
+												Log.info("Osce has Osce Post Blueprint " + listOscePostBlueprintProxy.size());
 												
-												setProxy(tempOscePostSubViewImpl, oscePostBlueprintProxy.getSpecialisation());
-												setProxy(tempOscePostSubViewImpl, oscePostBlueprintProxy.getRoleTopic());																								
+												int index=0;
+											
+												if(oscePostSubViewImpl == null){
+													oscePostSubViewImpl = new ArrayList<OscePostSubViewImpl>();
+												}																								
+												OscePostSubViewImpl tempOscePostSubViewImpl;				
 												
-												Log.info("OsceBluerint Next Id: " + oscePostBlueprintProxy.getId());												
-												oscePostSubViewImpl.add(tempOscePostSubViewImpl);												
-												index++;																							
-												oscePostViewImpl.getOscePostSubViewHP().add(oscePostSubViewImpl.get(index));	// ADD SUBVIEW IN POSTVIEW
-												oscePostSubViewImpl.get(index).setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW
-												oscePostSubViewImpl.get(index).oscePostBlueprintProxy=oscePostBlueprintProxy;	
-												oscePostViewImpl.oscePostBlueprintProxyNext=oscePostBlueprintProxy;
-												maxSeq=oscePostBlueprintProxy.getSequenceNumber();
+												Iterator<OscePostBlueprintProxy> iter = listOscePostBlueprintProxy.iterator();								
+												
+													while (iter.hasNext()) 
+													{																				
+														oscePostBlueprintProxy=iter.next();
+																	
+												
+														Log.info("~OsceBluerint Id: " + oscePostBlueprintProxy.getId());
+														
+														tempOscePostSubViewImpl=new OscePostSubViewImpl();										
+														tempOscePostSubViewImpl.enableDisableforBluePrintStatus();
+														tempOscePostSubViewImpl.setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW
+														tempOscePostSubViewImpl.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName()));
+														tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName());								
+														tempOscePostSubViewImpl.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName()));
+														tempOscePostSubViewImpl.getSpecializationLbl().setTitle(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName());
+														
+														setProxy(tempOscePostSubViewImpl,oscePostBlueprintProxy.getSpecialisation());
+														setProxy(tempOscePostSubViewImpl,oscePostBlueprintProxy.getRoleTopic());
+																																											
+				                                                                                // Module 5 bug Report Change									
+				                                        tempOscePostSubViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;
+													        // E Module 5 bug Report Change	
+													
+														oscePostViewImpl=new OscePostViewImpl();
+														oscePostViewImpl.setStyleName("Osce-Status-BluePrint-Save", true);
+														oSCENewSubViewImpl.getOscePostBluePrintSubViewImpl().getDragController().makeDraggable(oscePostViewImpl,oscePostViewImpl.getPostTypeLbl());
+														oSCENewSubViewImpl.getOscePostBluePrintSubViewImpl().getDragController().addDragHandler(activity);
+														
+														oscePostViewImpl.setDelegate(circuitDetailsActivity);	// SET DELEGATE FOR MAIN POST VIEW
+														oscePostViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;	
+														//oscePostViewImpl.getOscePostSubViewHP().setStyleName("Osce_Genrated_Status");						
+														
+														oscePostViewImpl.getPostTypeLbl().setText(enumConstants.getString(oscePostBlueprintProxy.getPostType().name()));
+														
+
+														// Module 5 bug Report Change										
+														//if(oscePostViewImpl.getPostTypeLbl().getText().compareToIgnoreCase("Break*")==0)
+														Log.info("Break Found: " + tempOscePostSubViewImpl.oscePostBlueprintProxy.getId());
+														if(tempOscePostSubViewImpl.oscePostBlueprintProxy.getPostType()==PostType.BREAK)
+														{
+															Log.info("~~~~Break Found");
+															tempOscePostSubViewImpl.getSpecializationedit().setVisible(false);
+															tempOscePostSubViewImpl.getRoleTopicEdit().setVisible(false);
+															tempOscePostSubViewImpl.getRoomedit().setVisible(false);
+															tempOscePostSubViewImpl.getStandardizedRoleEdit().setVisible(false);
+															tempOscePostSubViewImpl.getSpecializationLbl().setVisible(false);
+															tempOscePostSubViewImpl.getRoleTopicLbl().setVisible(false);
+															tempOscePostSubViewImpl.getStandardizedRoleLbl().setVisible(false);
+															tempOscePostSubViewImpl.getRoomLbl().setVisible(false);
+															
+														}
+														// E Module 5 bug Report Change
+														
+														
+														oscePostSubViewImpl.add(tempOscePostSubViewImpl);					
+														oscePostSubViewImpl.get(index).setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW
+														oscePostSubViewImpl.get(index).oscePostBlueprintProxy=oscePostBlueprintProxy;		
+														oscePostSubViewImpl.get(index).getPostNameLbl().setText(getLabelString(constants.circuitStation() + " " + oscePostBlueprintProxy.getSequenceNumber()));
+														oscePostSubViewImpl.get(index).getPostNameLbl().setTitle(constants.circuitStation() + " " + oscePostBlueprintProxy.getSequenceNumber());
+														maxSeq=oscePostBlueprintProxy.getSequenceNumber();
+														oscePostViewImpl.getOscePostSubViewHP().add(oscePostSubViewImpl.get(index));	// ADD SUBVIEW IN POSTVIEW
+														
+														/*// Module 5 bug Report Change
+														//Try to solve bug
+														final int indexToEditSpecialisation1=index;
+														oscePostSubViewImpl.get(indexToEditSpecialisation1).getSpecializationedit().addClickHandler(new ClickHandler() 
+														{
+															@Override
+															public void onClick(ClickEvent event) {
+																Log.info("Click Handler call from Circuit Detail Activity." + indexToEditSpecialisation1);
+																Log.info("Widget: " + oscePostSubViewImpl.get(indexToEditSpecialisation1));
+																Log.info("Osce Post Blue Print Id: " + oscePostSubViewImpl.get(indexToEditSpecialisation1).oscePostBlueprintProxy.getId());
+															}
+														});
+														// E Module 5 bug Report Change
+				*/										
+														if(oscePostBlueprintProxy.getPostType()==PostType.ANAMNESIS_THERAPY || oscePostBlueprintProxy.getPostType()==PostType.PREPARATION)
+														{
+															Log.info("~Anemnis");				
+															if(iter.hasNext())
+															{
+																oscePostBlueprintProxy=iter.next();											
+																
+																tempOscePostSubViewImpl=new OscePostSubViewImpl();
+																tempOscePostSubViewImpl.enableDisableforBluePrintStatus();	
+																
+																// Module 5 Bug Test Change
+																tempOscePostSubViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;
+																// E Module 5 Bug Test Change
+																
+																tempOscePostSubViewImpl.setDelegate(circuitDetailsActivity);	// SET DELEGATE FOR SUBVIEW
+														
+																tempOscePostSubViewImpl.getSpecializationLbl().setText(getLabelString(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName()));
+																tempOscePostSubViewImpl.getSpecializationLbl().setTitle(oscePostBlueprintProxy.getSpecialisation()==null?constants.discipline()+": ":oscePostBlueprintProxy.getSpecialisation().getName());
+																tempOscePostSubViewImpl.getRoleTopicLbl().setText(getLabelString(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName()));
+																tempOscePostSubViewImpl.getRoleTopicLbl().setTitle(oscePostBlueprintProxy.getRoleTopic()==null?constants.topic()+": ":oscePostBlueprintProxy.getRoleTopic().getName());
+																tempOscePostSubViewImpl.getPostNameLbl().setText(getLabelString(constants.circuitStation() + " " +oscePostBlueprintProxy.getSequenceNumber()));
+																tempOscePostSubViewImpl.getPostNameLbl().setTitle(constants.circuitStation() + " " +oscePostBlueprintProxy.getSequenceNumber());
+																
+																setProxy(tempOscePostSubViewImpl, oscePostBlueprintProxy.getSpecialisation());
+																setProxy(tempOscePostSubViewImpl, oscePostBlueprintProxy.getRoleTopic());																								
+																
+																Log.info("OsceBluerint Next Id: " + oscePostBlueprintProxy.getId());												
+																oscePostSubViewImpl.add(tempOscePostSubViewImpl);												
+																index++;																							
+																oscePostViewImpl.getOscePostSubViewHP().add(oscePostSubViewImpl.get(index));	// ADD SUBVIEW IN POSTVIEW
+																oscePostSubViewImpl.get(index).setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW
+																oscePostSubViewImpl.get(index).oscePostBlueprintProxy=oscePostBlueprintProxy;	
+																oscePostViewImpl.oscePostBlueprintProxyNext=oscePostBlueprintProxy;
+																maxSeq=oscePostBlueprintProxy.getSequenceNumber();
+															}
+															else
+															{
+																Log.info("Not Next Set");
+															}
+																																
+														}										
+														newPostAddHP.add(oscePostViewImpl);												
+														index++;
+													}										
+												
 											}
 											else
 											{
-												Log.info("Not Next Set");
-											}
-																												
-										}										
-										newPostAddHP.add(oscePostViewImpl);												
-										index++;
-									}										
-								
-							}
-							else
-							{
-								Log.info("Osce has No Osce Post Blueprint");								
-							}									
-							newPostHP.add(osceCreatePostBluePrintSubViewImpl);
-							addCreateListBoxHandler(); // Create Osce Post Blueprint Handler
-							
-							// Module 5 Bug Test Change
-							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-							// E Module 5 Bug Test Change
-						
-						}
-						// Module 5 bug Report Change
-						else if(status.equals(OsceStatus.OSCE_GENRATED) || osceProxy.getOsceStatus() == OsceStatus.OSCE_FIXED || osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED)
-						// E Module 5 bug Report Change
-						{
-							
-							// Module 5 bug Report Change
-							circuitOsceSubViewImpl.shortBreakTextBox.setEnabled(false);
-							circuitOsceSubViewImpl.longBreakTextBox.setEnabled(false);
-							circuitOsceSubViewImpl.launchBreakTextBox.setEnabled(false);
-							circuitOsceSubViewImpl.maxStudentTextBox.setEnabled(false);
-							circuitOsceSubViewImpl.maxParcourTextBox.setEnabled(false);
-							circuitOsceSubViewImpl.maxRoomsTextBox.setEnabled(false);
-							circuitOsceSubViewImpl.shortBreakSimpatTextBox.setEnabled(false);
-							circuitOsceSubViewImpl.middleBreakTextBox.setEnabled(false);
-							
-							circuitOsceSubViewImpl.saveOsce.setEnabled(false);
-									
-							// E Module 5 bug Report Change
-							
-							/*view.getScrollPanel().removeStyleDependentName("BluePrint");
-							view.getScrollPanel().addStyleDependentName("Genrated");*/
-							
-							//Module 5 Bug Report Solution
-							/*if((osceProxy.getOsceStatus() == OsceStatus.OSCE_FIXED))
-							{
-								view.getScrollPanel().getElement().getStyle().setBackgroundColor("#FAF0E6");
-							}
-							if((osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED))
-							{
-								view.getScrollPanel().getElement().getStyle().setBackgroundColor("#FFCCCC");
-							}*/
-							//E Module 5 Bug Report Solution
-							
-							Iterator<OsceDayProxy> osceDayIterator=((OsceProxy)response).getOsce_days().iterator();
-							Log.info("number of Osce Day :" + ((OsceProxy)response).getOsce_days().size());
-							//changes for osce day Label
-							int dayvalue=1;
-							//changes for osce day Label
-							while(osceDayIterator.hasNext()) {
-								OsceDayProxy osceDayProxy=osceDayIterator.next();
-								OsceGenerateSubView generateView=createGenerateView((OsceDayProxy)osceDayProxy);
-								
-								Iterator<OsceSequenceProxy> osceSeqProxyIterator=osceDayProxy.getOsceSequences().iterator();
-								sequenceOsceSubViewImpl1=new ArrayList<SequenceOsceSubViewImpl>(osceDayProxy.getOsceSequences().size());
-							
-								while(osceSeqProxyIterator.hasNext()) {
-									OsceSequenceProxy osceSeqProxy=osceSeqProxyIterator.next();
-									
-									
-									//create All Parcor View
-									//Iterator<CourseProxy> courseProxyIterator=osceSeqProxy.getCourses().iterator();
-									//create Accordian
-									AccordianPanelView accordianView=new AccordianPanelViewImpl(true);
-									//ScrollPanel sp=new ScrollPanel(accordianView.asWidget());
-									//sp.setWidth("720px");																	
-									HorizontalPanel accordingHp=new HorizontalPanel();
-									
-									//Module 5 Bug Report Solution									
-									//accordingHp.add(sp);			
-									//E Module 5 Bug Report Solution
-									
-									//create each parcor
-									//while(courseProxyIterator.hasNext())
-									//{
-										//CourseProxy courseProxy=courseProxyIterator.next();
-                                                                                // Module 5 bug Report Change
-										//createParcorView(accordianView,osceSeqProxy);
+												Log.info("Osce has No Osce Post Blueprint");								
+											}									
+											newPostHP.add(osceCreatePostBluePrintSubViewImpl);
+											addCreateListBoxHandler(); // Create Osce Post Blueprint Handler
+											
+											// Module 5 Bug Test Change
+											requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+											// E Module 5 Bug Test Change
+										
+										}
+										// Module 5 bug Report Change
+										else if(status.equals(OsceStatus.OSCE_GENRATED) || osceProxy.getOsceStatus() == OsceStatus.OSCE_FIXED || osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED)
 										// E Module 5 bug Report Change
-									//}
+										{
+											
+											// Module 5 bug Report Change
+											circuitOsceSubViewImpl.shortBreakTextBox.setEnabled(false);
+											circuitOsceSubViewImpl.longBreakTextBox.setEnabled(false);
+											circuitOsceSubViewImpl.launchBreakTextBox.setEnabled(false);
+											circuitOsceSubViewImpl.maxStudentTextBox.setEnabled(false);
+											circuitOsceSubViewImpl.maxParcourTextBox.setEnabled(false);
+											circuitOsceSubViewImpl.maxRoomsTextBox.setEnabled(false);
+											circuitOsceSubViewImpl.shortBreakSimpatTextBox.setEnabled(false);
+											circuitOsceSubViewImpl.middleBreakTextBox.setEnabled(false);
+											
+											circuitOsceSubViewImpl.saveOsce.setEnabled(false);
+													
+											// E Module 5 bug Report Change
+											
+											/*view.getScrollPanel().removeStyleDependentName("BluePrint");
+											view.getScrollPanel().addStyleDependentName("Genrated");*/
+											
+											//Module 5 Bug Report Solution
+											/*if((osceProxy.getOsceStatus() == OsceStatus.OSCE_FIXED))
+											{
+												view.getScrollPanel().getElement().getStyle().setBackgroundColor("#FAF0E6");
+											}
+											if((osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED))
+											{
+												view.getScrollPanel().getElement().getStyle().setBackgroundColor("#FFCCCC");
+											}*/
+											//E Module 5 Bug Report Solution
+											
+											Iterator<OsceDayProxy> osceDayIterator=((OsceProxy)response).getOsce_days().iterator();
+											Log.info("number of Osce Day :" + ((OsceProxy)response).getOsce_days().size());
+											//changes for osce day Label
+											int dayvalue=1;
+											//changes for osce day Label
+											while(osceDayIterator.hasNext()) {
+												OsceDayProxy osceDayProxy=osceDayIterator.next();
+												OsceGenerateSubView generateView=createGenerateView((OsceDayProxy)osceDayProxy);
+												
+												Iterator<OsceSequenceProxy> osceSeqProxyIterator=osceDayProxy.getOsceSequences().iterator();
+												sequenceOsceSubViewImpl1=new ArrayList<SequenceOsceSubViewImpl>(osceDayProxy.getOsceSequences().size());
+											
+												while(osceSeqProxyIterator.hasNext()) {
+													OsceSequenceProxy osceSeqProxy=osceSeqProxyIterator.next();
+													
+													
+													//create All Parcor View
+													//Iterator<CourseProxy> courseProxyIterator=osceSeqProxy.getCourses().iterator();
+													//create Accordian
+													AccordianPanelView accordianView=new AccordianPanelViewImpl(true);
+													//ScrollPanel sp=new ScrollPanel(accordianView.asWidget());
+													//sp.setWidth("720px");																	
+													HorizontalPanel accordingHp=new HorizontalPanel();
+													
+													//Module 5 Bug Report Solution									
+													//accordingHp.add(sp);			
+													//E Module 5 Bug Report Solution
+													
+													//create each parcor
+													//while(courseProxyIterator.hasNext())
+													//{
+														//CourseProxy courseProxy=courseProxyIterator.next();
+				                                                                                // Module 5 bug Report Change
+														//createParcorView(accordianView,osceSeqProxy);
+														// E Module 5 bug Report Change
+													//}
 
-                                                                         // Module 5 bug Report Change
-									Iterator<CourseProxy> courseProxyIterator=osceSeqProxy.getCourses().iterator();
-									int i=0;
-									while(courseProxyIterator.hasNext()) {
-										CourseProxy courseProxy=courseProxyIterator.next();
-										createParcorView(accordianView,osceSeqProxy,courseProxy,i);
-										i++;
-									}
-									// E Module 5 bug Report Change
-									
-									//create Sequence View
-									
-										//sequence start
-									//	sequenceOsceSubViewImpl=new SequenceOsceSubViewImpl(osceSeqProxy);
+				                                                                         // Module 5 bug Report Change
+													Iterator<CourseProxy> courseProxyIterator=osceSeqProxy.getCourses().iterator();
+													int i=0;
+													while(courseProxyIterator.hasNext()) {
+														CourseProxy courseProxy=courseProxyIterator.next();
+														createParcorView(accordianView,osceSeqProxy,courseProxy,i);
+														i++;
+													}
+													// E Module 5 bug Report Change
+													
+													//create Sequence View
+													
+														//sequence start
+													//	sequenceOsceSubViewImpl=new SequenceOsceSubViewImpl(osceSeqProxy);
+														
+													sequenceOsceSubViewImpl = new SequenceOsceSubViewImpl();
+													
+													if(osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED || osceProxy.getOsceStatus() == OsceStatus.OSCE_FIXED)
+													{
+														sequenceOsceSubViewImpl.spliteSequence.setVisible(false);
+													}
+													
+													RotationRefreshEvent.register(requests.getEventBus(), (SequenceOsceSubViewImpl)sequenceOsceSubViewImpl);
+													//	sequenceOsceSubViewImpl=sequenceOsceSubViewImpl2;
+													//	sequenceOsceSubViewImpl1.add(sequenceOsceSubViewImpl);
+													sequenceOsceSubViewImpl.setDelegate(activity);
+													sequenceOsceSubViewImpl.nameOfSequence.setText(getLabelString(((osceSeqProxy.getLabel()==null)? constants.circuitUnnamedSequence() : osceSeqProxy.getLabel())));
+													sequenceOsceSubViewImpl.nameOfSequence.setTitle(((osceSeqProxy.getLabel()==null) 
+															? constants.circuitUnnamedSequence() : osceSeqProxy.getLabel()));
+													
+													//Module 5 Bug Report Solution
+													//sequenceOsceSubViewImpl.sequenceRotation.setText(osceSeqProxy.getNumberRotation()==null?"":osceSeqProxy.getNumberRotation().toString());
+													sequenceOsceSubViewImpl.getSequenceRotationLable().setText(getLabelString(osceSeqProxy.getNumberRotation()==null?"":osceSeqProxy.getNumberRotation().toString()));
+													//sequenceOsceSubViewImpl.getSequenceRotationLable().setTitle(osceSeqProxy.getNumberRotation()==null?"":osceSeqProxy.getNumberRotation().toString());
+													sequenceOsceSubViewImpl.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
+													//E Module 5 Bug Report Solution
+
+													// Module 5 bug Report Change
+				                                                                        //sequenceOsceSubViewImpl.sequenceRotation.setAcceptableValues(Arrays.asList(OsceSequences.values()));
+													//sequenceOsceSubViewImpl.sequenceRotation.setValue(OsceSequences.OSCE_SEQUENCES_A);
+													// E Module 5 bug Report Change
+												
+													sequenceOsceSubViewImpl.osceSequenceProxy=osceSeqProxy;
+													sequenceOsceSubViewImpl.osceDayProxy=osceDayProxy;
+													
+													//spec issue sol
+													sequenceOsceSubViewImpl1.add(sequenceOsceSubViewImpl);
+													
+													
+													//	addClickHandler(sequenceOsceSubViewImpl);
+													//sequenceOsceSubViewImpl.setStyleName(status.getOsceStatus(OsceStatus.OSCE_GENRATED));
+													accordingHp.add(sequenceOsceSubViewImpl);
+													//Module 5 Bug Report Solution
+													accordingHp.add(accordianView.asWidget());
+													//E Module 5 Bug Report Solution
+
+													//Module 5 Bug Report Solution
+													if(osceDayProxy.getOsceSequences().size()>=2) {
+														sequenceOsceSubViewImpl.spliteSequence.setVisible(false);
+													}
+													//E Module 5 Bug Report Solution
+														
+													//sequence end
+														
+													//add accordian and sequence to vertical panel
+													accordingHp.setSpacing(20);
+													generateView.getAccordianVP().insert(accordingHp, generateView.getAccordianVP().getWidgetCount());
+													
+													//Module 5 Bug Report Solution	
+													/*ScrollPanel mainSP=new ScrollPanel(generateView.getAccordianVP());
+													mainSP.setWidth("720px");*/
+													//E Module 5 Bug Report Solution
+												}
+												
+													//create Day view
+												//Osce Days[
+												osceDayViewImpl = generateView.getOsceDayViewImpl();
+												
+												RotationRefreshEvent.register(requests.getEventBus(), (OsceDayViewImpl)osceDayViewImpl);
+												
+												//spec issue sol
+												osceDayViewImpl.setSequenceOsceSubViewImplList(sequenceOsceSubViewImpl1);
+												
+												osceDayViewImpl.setDelegate(activity);
+												
+												//Module 5 Bug Report Solution
+												if(osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED)
+												{									
+													osceDayViewImpl.dateTextBox.setEnabled(false);
+													osceDayViewImpl.startTimeTextBox.setEnabled(false);
+													osceDayViewImpl.endTimeTextBox.setEnabled(false);
+													osceDayViewImpl.getSaveOsceDayValueButton().setVisible(false);	
+													
+												}
+
+												if(osceProxy.getOsceStatus() == OsceStatus.OSCE_GENRATED)
+												{
+													Log.info("Button Schedule Postpone/Earlier visible");
+													osceDayViewImpl.getSchedulePostponenButton().setText(constants.schedulePostpone());
+													osceDayViewImpl.getScheduleEarlierButton().setText(constants.scheduleEarlier());
+													osceDayViewImpl.getSchedulePostponenButton().setVisible(true);
+													osceDayViewImpl.getScheduleEarlierButton().setVisible(true);								
+													
+													//spec issue sol
+													osceDayViewImpl.getBtnShiftLunchBreakNext().setVisible(true);
+													osceDayViewImpl.getBtnShiftLunchBreakPrev().setVisible(true);
+												}
+												if(osceProxy.getOsceStatus() == OsceStatus.OSCE_FIXED || osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED)
+												{
+													Log.info("Button Schedule Postpone/Earlier visible");									
+													osceDayViewImpl.getSchedulePostponenButton().setVisible(false);
+													osceDayViewImpl.getScheduleEarlierButton().setVisible(false);								
+													
+													osceDayViewImpl.getBtnShiftLunchBreakNext().setVisible(false);
+													osceDayViewImpl.getBtnShiftLunchBreakPrev().setVisible(false);
+												}
+												//E Module 5 Bug Report Solution
+												
+												// Day Assignment 
+												
+												
+												Log.info("Before Iterator");
+												
+												//bug solve start
+												osceDayViewImpl.getSaveVerticlePanel().setVisible(false);
+												osceDayViewImpl.getPresentsVerticlePanel().setVisible(false);
+												//bug solve end
+												
+												/*Set<OsceDayProxy> setOsceDays = ((OsceProxy) response).getOsce_days();
+												if(setOsceDays.size()==0){
+													Log.info("OsceDay null for proxy : " +osceProxy.getId());
+													osceDayViewImpl.setOsceDayProxy(null);
+												}
+												else{
+													Log.info("Osce Exist for OsceProxy : " + osceProxy.getId());
+													Iterator<OsceDayProxy> osceDays = setOsceDays.iterator();
+													if(osceDays.hasNext()){
+														osceDayViewImpl.setOsceDayProxy(osceDays.next());
+													}
+												}*/
+												
+												osceDayViewImpl.setOsceDayProxy(osceDayProxy);
+												
+												if(osceDayProxy.getIsTimeSlotShifted()!=null)
+												{
+													if(osceDayProxy.getIsTimeSlotShifted()==true)
+													{
+														osceDayViewImpl.getLunchBreakValueLabel().setVisible(false);
+														osceDayViewImpl.getLunchBreakEndTimeValueLabel().setVisible(false);
+														osceDayViewImpl.getLunchBreakLabel().setVisible(false);
+														osceDayViewImpl.getLunchBreakEndTimeLabel().setVisible(false);									
+													}
+												}
+												
+												//bug solve start
+												if(osceDayProxy.getOsceDate()==null)
+												{
+													osceDayViewImpl.getDateContentValueLabel().setText("  ");
+												}
+												else
+												{
+													//osceDayViewImpl.getDateContentValueLabel().setText(osceDayProxy.getOsceDate().getYear()+"-"+osceDayProxy.getOsceDate().getMonth()+"-"+osceDayProxy.getOsceDate().getDate());
+													osceDayViewImpl.getDateContentValueLabel().setText(DateTimeFormat.getFormat("yyyy-MM-dd").format(osceDayProxy.getOsceDate()));
+												}
+												
+												if(osceDayProxy.getTimeStart()==null)
+												{
+													osceDayViewImpl.getLunchBreakStartValueLabel().setText("  ");
+												}
+												else
+												{
+													osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getTimeStart()).substring(0,5));	
+												}
+												
+												
+												if(osceDayProxy.getLunchBreakStart()==null)
+												{
+													osceDayViewImpl.getLunchBreakValueLabel().setText(constants.notAvailable());
+												}
+												else
+												{
+													int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxy.getLunchBreakStart()));
+													int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxy.getLunchBreakStart()));
+													//int lunchtime=Integer.parseInt(osceProxy.getLunchBreak());
+													int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak();
+													
+													//Window.alert("minute--"+hour+"--"+minute+"--"+totalMinute+"--"+osceProxy.getLunchBreak());
+													int newhr=(totalMinute/60);
+													int newmin=(totalMinute%60);
+													osceProxy.getLunchBreak();
+
+													// spec [
+													//osceDayViewImpl.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getLunchBreakStart()).substring(0,5)+"-"+getTimeInTwoDigit(newhr)+":"+getTimeInTwoDigit(newmin));
+													setLunchbreakStart(osceDayViewImpl,osceDayProxy.getLunchBreakStart(),newhr,newmin);
+													// spec ]
+												}
+												
+												
+												if(osceDayProxy.getTimeEnd()==null)
+												{
+													osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText("  ");
+												}
+												else
+												{
+													osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getTimeEnd()).substring(0,5));	
+												}
+												
+												/*if(osceDayProxy.getLunchBreakStart()==null)
+												{
+													osceDayViewImpl.getLunchBreakStartValueLabel().setText("");
+												}
+												else
+												{
+													osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getLunchBreakStart()).substring(0,5));	
+												}*/
+												
+												//bug solve end
+												//Module 5 Bug Report Solution
+												if(osceDayProxy.getOsceSequences().size()>1)
+												{
+													Log.info("setSize");
+													osceDayViewImpl.getMainDayHP().setHeight("594px");									
+													osceDayViewImpl.getCalculationVerticalPanel().getElement().getStyle().setMarginTop(30,Unit.PX);
+													osceDayViewImpl.getScheduleHP().getElement().getStyle().setMarginTop(30,Unit.PX);
+													osceDayViewImpl.getSaveVerticlePanel().getElement().getStyle().setMarginTop(50,Unit.PX);
+												}
+												//E Module 5 Bug Report Solution
+												
+												//setDayStatusStyle(style);
+												 //Module 5 Bug Report Solution
+												//osceDayViewImpl.getOsceDayLabel().setText("Day " + osceDayProxy.getId());
+												//changes for osce day Label
+												osceDayViewImpl.getOsceDayLabel().setText(constants.circuitDay() + dayvalue);
+												//changes for osce day Label
+												 //E Module 5 Bug Report Solution
+												osceDayViewImpl.init();
+												
+												addTimeHendlers();
+												//changes for osce day Label
+												dayvalue++;
+												//changes for osce day Label
+												//Osce Days]
+											}
+											
+											// Module 5 Bug Test Change
+											requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+											// E Module 5 Bug Test Change
+										}
+										//Assignment E:Module 5]
 										
-									sequenceOsceSubViewImpl = new SequenceOsceSubViewImpl();
-									
-									if(osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED || osceProxy.getOsceStatus() == OsceStatus.OSCE_FIXED)
-									{
-										sequenceOsceSubViewImpl.spliteSequence.setVisible(false);
-									}
-									
-									RotationRefreshEvent.register(requests.getEventBus(), (SequenceOsceSubViewImpl)sequenceOsceSubViewImpl);
-									//	sequenceOsceSubViewImpl=sequenceOsceSubViewImpl2;
-									//	sequenceOsceSubViewImpl1.add(sequenceOsceSubViewImpl);
-									sequenceOsceSubViewImpl.setDelegate(activity);
-									sequenceOsceSubViewImpl.nameOfSequence.setText(getLabelString(((osceSeqProxy.getLabel()==null)? constants.circuitUnnamedSequence() : osceSeqProxy.getLabel())));
-									sequenceOsceSubViewImpl.nameOfSequence.setTitle(((osceSeqProxy.getLabel()==null) 
-											? constants.circuitUnnamedSequence() : osceSeqProxy.getLabel()));
-									
-									//Module 5 Bug Report Solution
-									//sequenceOsceSubViewImpl.sequenceRotation.setText(osceSeqProxy.getNumberRotation()==null?"":osceSeqProxy.getNumberRotation().toString());
-									sequenceOsceSubViewImpl.getSequenceRotationLable().setText(getLabelString(osceSeqProxy.getNumberRotation()==null?"":osceSeqProxy.getNumberRotation().toString()));
-									//sequenceOsceSubViewImpl.getSequenceRotationLable().setTitle(osceSeqProxy.getNumberRotation()==null?"":osceSeqProxy.getNumberRotation().toString());
-									sequenceOsceSubViewImpl.getSequenceRotationLable().setTitle(constants.numberOfRotationsInThisSequence());
-									//E Module 5 Bug Report Solution
-
-									// Module 5 bug Report Change
-                                                                        //sequenceOsceSubViewImpl.sequenceRotation.setAcceptableValues(Arrays.asList(OsceSequences.values()));
-									//sequenceOsceSubViewImpl.sequenceRotation.setValue(OsceSequences.OSCE_SEQUENCES_A);
-									// E Module 5 bug Report Change
-								
-									sequenceOsceSubViewImpl.osceSequenceProxy=osceSeqProxy;
-									sequenceOsceSubViewImpl.osceDayProxy=osceDayProxy;
-									
-									//spec issue sol
-									sequenceOsceSubViewImpl1.add(sequenceOsceSubViewImpl);
-									
-									
-									//	addClickHandler(sequenceOsceSubViewImpl);
-									//sequenceOsceSubViewImpl.setStyleName(status.getOsceStatus(OsceStatus.OSCE_GENRATED));
-									accordingHp.add(sequenceOsceSubViewImpl);
-									//Module 5 Bug Report Solution
-									accordingHp.add(accordianView.asWidget());
-									//E Module 5 Bug Report Solution
-
-									//Module 5 Bug Report Solution
-									if(osceDayProxy.getOsceSequences().size()>=2) {
-										sequenceOsceSubViewImpl.spliteSequence.setVisible(false);
-									}
-									//E Module 5 Bug Report Solution
 										
-									//sequence end
-										
-									//add accordian and sequence to vertical panel
-									accordingHp.setSpacing(20);
-									generateView.getAccordianVP().insert(accordingHp, generateView.getAccordianVP().getWidgetCount());
 									
-									//Module 5 Bug Report Solution	
-									/*ScrollPanel mainSP=new ScrollPanel(generateView.getAccordianVP());
-									mainSP.setWidth("720px");*/
-									//E Module 5 Bug Report Solution
-								}
-								
-									//create Day view
-								//Osce Days[
-								osceDayViewImpl = generateView.getOsceDayViewImpl();
-								
-								RotationRefreshEvent.register(requests.getEventBus(), (OsceDayViewImpl)osceDayViewImpl);
-								
-								//spec issue sol
-								osceDayViewImpl.setSequenceOsceSubViewImplList(sequenceOsceSubViewImpl1);
-								
-								osceDayViewImpl.setDelegate(activity);
-								
-								//Module 5 Bug Report Solution
-								if(osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED)
-								{									
-									osceDayViewImpl.dateTextBox.setEnabled(false);
-									osceDayViewImpl.startTimeTextBox.setEnabled(false);
-									osceDayViewImpl.endTimeTextBox.setEnabled(false);
-									osceDayViewImpl.getSaveOsceDayValueButton().setVisible(false);	
-									
-								}
-
-								if(osceProxy.getOsceStatus() == OsceStatus.OSCE_GENRATED)
-								{
-									Log.info("Button Schedule Postpone/Earlier visible");
-									osceDayViewImpl.getSchedulePostponenButton().setText(constants.schedulePostpone());
-									osceDayViewImpl.getScheduleEarlierButton().setText(constants.scheduleEarlier());
-									osceDayViewImpl.getSchedulePostponenButton().setVisible(true);
-									osceDayViewImpl.getScheduleEarlierButton().setVisible(true);								
-									
-									//spec issue sol
-									osceDayViewImpl.getBtnShiftLunchBreakNext().setVisible(true);
-									osceDayViewImpl.getBtnShiftLunchBreakPrev().setVisible(true);
-								}
-								if(osceProxy.getOsceStatus() == OsceStatus.OSCE_FIXED || osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED)
-								{
-									Log.info("Button Schedule Postpone/Earlier visible");									
-									osceDayViewImpl.getSchedulePostponenButton().setVisible(false);
-									osceDayViewImpl.getScheduleEarlierButton().setVisible(false);								
-									
-									osceDayViewImpl.getBtnShiftLunchBreakNext().setVisible(false);
-									osceDayViewImpl.getBtnShiftLunchBreakPrev().setVisible(false);
-								}
-								//E Module 5 Bug Report Solution
-								
-								// Day Assignment 
-								
-								
-								Log.info("Before Iterator");
-								
-								//bug solve start
-								osceDayViewImpl.getSaveVerticlePanel().setVisible(false);
-								osceDayViewImpl.getPresentsVerticlePanel().setVisible(false);
-								//bug solve end
-								
-								/*Set<OsceDayProxy> setOsceDays = ((OsceProxy) response).getOsce_days();
-								if(setOsceDays.size()==0){
-									Log.info("OsceDay null for proxy : " +osceProxy.getId());
-									osceDayViewImpl.setOsceDayProxy(null);
-								}
-								else{
-									Log.info("Osce Exist for OsceProxy : " + osceProxy.getId());
-									Iterator<OsceDayProxy> osceDays = setOsceDays.iterator();
-									if(osceDays.hasNext()){
-										osceDayViewImpl.setOsceDayProxy(osceDays.next());
 									}
-								}*/
-								
-								osceDayViewImpl.setOsceDayProxy(osceDayProxy);
-								
-								if(osceDayProxy.getIsTimeSlotShifted()!=null)
-								{
-									if(osceDayProxy.getIsTimeSlotShifted()==true)
-									{
-										osceDayViewImpl.getLunchBreakValueLabel().setVisible(false);
-										osceDayViewImpl.getLunchBreakEndTimeValueLabel().setVisible(false);
-										osceDayViewImpl.getLunchBreakLabel().setVisible(false);
-										osceDayViewImpl.getLunchBreakEndTimeLabel().setVisible(false);									
-									}
-								}
-								
-								//bug solve start
-								if(osceDayProxy.getOsceDate()==null)
-								{
-									osceDayViewImpl.getDateContentValueLabel().setText("  ");
-								}
-								else
-								{
-									//osceDayViewImpl.getDateContentValueLabel().setText(osceDayProxy.getOsceDate().getYear()+"-"+osceDayProxy.getOsceDate().getMonth()+"-"+osceDayProxy.getOsceDate().getDate());
-									osceDayViewImpl.getDateContentValueLabel().setText(DateTimeFormat.getFormat("yyyy-MM-dd").format(osceDayProxy.getOsceDate()));
-								}
-								
-								if(osceDayProxy.getTimeStart()==null)
-								{
-									osceDayViewImpl.getLunchBreakStartValueLabel().setText("  ");
-								}
-								else
-								{
-									osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getTimeStart()).substring(0,5));	
-								}
-								
-								
-								if(osceDayProxy.getLunchBreakStart()==null)
-								{
-									osceDayViewImpl.getLunchBreakValueLabel().setText(constants.notAvailable());
-								}
-								else
-								{
-									int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxy.getLunchBreakStart()));
-									int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxy.getLunchBreakStart()));
-									//int lunchtime=Integer.parseInt(osceProxy.getLunchBreak());
-									int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak();
-									
-									//Window.alert("minute--"+hour+"--"+minute+"--"+totalMinute+"--"+osceProxy.getLunchBreak());
-									int newhr=(totalMinute/60);
-									int newmin=(totalMinute%60);
-									osceProxy.getLunchBreak();
-
-									// spec [
-									//osceDayViewImpl.getLunchBreakValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getLunchBreakStart()).substring(0,5)+"-"+getTimeInTwoDigit(newhr)+":"+getTimeInTwoDigit(newmin));
-									setLunchbreakStart(osceDayViewImpl,osceDayProxy.getLunchBreakStart(),newhr,newmin);
-									// spec ]
-								}
-								
-								
-								if(osceDayProxy.getTimeEnd()==null)
-								{
-									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText("  ");
-								}
-								else
-								{
-									osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getTimeEnd()).substring(0,5));	
-								}
-								
-								/*if(osceDayProxy.getLunchBreakStart()==null)
-								{
-									osceDayViewImpl.getLunchBreakStartValueLabel().setText("");
-								}
-								else
-								{
-									osceDayViewImpl.getLunchBreakStartValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getLunchBreakStart()).substring(0,5));	
-								}*/
-								
-								//bug solve end
-								//Module 5 Bug Report Solution
-								if(osceDayProxy.getOsceSequences().size()>1)
-								{
-									Log.info("setSize");
-									osceDayViewImpl.getMainDayHP().setHeight("594px");									
-									osceDayViewImpl.getCalculationVerticalPanel().getElement().getStyle().setMarginTop(30,Unit.PX);
-									osceDayViewImpl.getScheduleHP().getElement().getStyle().setMarginTop(30,Unit.PX);
-									osceDayViewImpl.getSaveVerticlePanel().getElement().getStyle().setMarginTop(50,Unit.PX);
-								}
-								//E Module 5 Bug Report Solution
-								
-								//setDayStatusStyle(style);
-								 //Module 5 Bug Report Solution
-								//osceDayViewImpl.getOsceDayLabel().setText("Day " + osceDayProxy.getId());
-								//changes for osce day Label
-								osceDayViewImpl.getOsceDayLabel().setText(constants.circuitDay() + dayvalue);
-								//changes for osce day Label
-								 //E Module 5 Bug Report Solution
-								osceDayViewImpl.init();
-								
-								addTimeHendlers();
-								//changes for osce day Label
-								dayvalue++;
-								//changes for osce day Label
-								//Osce Days]
-							}
-							
-							// Module 5 Bug Test Change
-							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-							// E Module 5 Bug Test Change
-						}
-						//Assignment E:Module 5]
-						
-						
+								});
 					}
 					
 				}
@@ -947,7 +977,7 @@ AccordianPanelView.ParcourDelegate
 						
 						
 			
-						}
+						/*}
 						@Override						
 						public void onFailure(ServerFailure error) {
 							// TODO Auto-generated method stub
@@ -967,7 +997,7 @@ AccordianPanelView.ParcourDelegate
 							
 						}
 						
-					});
+					});*/
 			
 			// spec End==
 			
@@ -2580,7 +2610,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						//oscePostSubViewImpledit.oscePostBlueprintProxy=this.oscePostBlueprintProxy;
 					// E Module 5 bug Report Change
 					
-					requests.specialisationRequestNonRoo().findSpecialisationSortByName().fire(new OSCEReceiver<List<SpecialisationProxy>>() 
+					requests.specialisationRequestNonRoo().findSpecialisationSortByName(osceProxy.getStudyYear()).fire(new OSCEReceiver<List<SpecialisationProxy>>() 
 					{
 						public void onSuccess(List<SpecialisationProxy> response) 
 						{											
