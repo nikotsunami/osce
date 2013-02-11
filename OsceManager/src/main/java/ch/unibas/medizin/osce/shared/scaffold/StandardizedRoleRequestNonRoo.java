@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.shared.scaffold;
 //compelete file spec
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 
@@ -24,6 +25,7 @@ public interface StandardizedRoleRequestNonRoo extends RequestContext
 	
 	//export checklist
 	abstract Request<String> exportChecklistByStandardizedRole(Long standardizedRoleId);
+	abstract Request<List<StandardizedRoleProxy>> findRoleByRoleTopic(Long roleTopicId);
 	//export checklist
 }
 

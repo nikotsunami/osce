@@ -407,11 +407,13 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 			
 			
 			//major.add(majorLbl);
+			//enable for major save
 			popupPanel.major.add(majorBtn);
+			/*
 			if(standardizedRoleProxy.getOscePosts().size() > 0)
 				majorBtn.setEnabled(false);
 			else
-				majorBtn.setEnabled(true);
+				majorBtn.setEnabled(true);*/
 			
 			popupPanel.minor.setSpacing(20);
 			popupPanel.major.setSpacing(20);

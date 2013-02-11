@@ -95,6 +95,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.EntityProxy;
+import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.text.shared.Renderer;
@@ -1381,15 +1382,16 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 		
 		public void findStandardizedRoles(final OscePostSubView view)
 		{
-			requests.roleTopicRequest().findRoleTopic(((OscePostSubViewImpl)view).getOscePostProxy().getOscePostBlueprint().getRoleTopic().getId()).with("standardizedRoles").fire(new OSCEReceiver<RoleTopicProxy>() {
-
+			//requests.roleTopicRequest().findRoleTopic(((OscePostSubViewImpl)view).getOscePostProxy().getOscePostBlueprint().getRoleTopic().getId()).with("standardizedRoles").fire(new OSCEReceiver<RoleTopicProxy>() {
+			requests.standardizedRoleRequestNonRoo().findRoleByRoleTopic(((OscePostSubViewImpl)view).getOscePostProxy().getOscePostBlueprint().getRoleTopic().getId()).fire(new Receiver<List<StandardizedRoleProxy>>() {
+			
 				@Override
-				public void onSuccess(RoleTopicProxy response) {
+				public void onSuccess(List<StandardizedRoleProxy> response) {
 					
-					Log.info("findStandardizedRoles"+response.getStandardizedRoles().get(0).getLongName());
+					Log.info("findStandardizedRoles"+response.size());
 					ArrayList list=new ArrayList();
 					//list.add( (EntityProxy)response.getStandardizedRoles().get(0));
-					list.addAll(response.getStandardizedRoles());
+					list.addAll(response);
 					
 					((OscePostSubViewImpl)view).createOptionPopup();
 					((OscePostSubViewImpl)view).popupView.setDelegate(activity);

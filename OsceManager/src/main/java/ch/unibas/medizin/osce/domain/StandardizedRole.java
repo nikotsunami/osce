@@ -598,5 +598,21 @@ public class StandardizedRole {
 		return fileName;
 	}
 	//export checklist
+	
+	public static List<StandardizedRole> findRoleByRoleTopic(Long topicId)
+	{
+		//select distinct sr.* from standardized_role sr,answer ans,osce_post_room opr,osce_post op where sr.id=op.standardized_role and op.id=opr.osce_post and opr.id=ans.osce_post_room and ans.student=1;		
+		EntityManager em = entityManager();
+		Log.info("~QUERY findRoleByRoleTopic()");
+		//String queryString="select distinct sr from StandardizedRole as sr,Answer as ans,OscePostRoom as opr,OscePost as op where sr.id=op.standardizedRole and op.id=opr.oscePost and opr.id=ans.oscePostRoom and ans.student="+studentId;
+		String queryString="select distinct sr from StandardizedRole as sr where sr.roleTopic=" +topicId +" AND sr.active=true";
+				
+		//String queryString = "Select d from OsceDay d";
+		Log.info("~QUERY String: " + queryString);
+		TypedQuery<StandardizedRole> q = em.createQuery(queryString, StandardizedRole.class);
+		java.util.List<StandardizedRole> result = q.getResultList();
+		Log.info("~QUERY Result : " + result);
+		return result;
+	}
 }
 
