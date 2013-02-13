@@ -2736,7 +2736,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 
 					((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.show();
 					
-					requests.roleTopicRequestNonRoo().findRoleTopicBySpecialisation(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation().getId()).fire(new OSCEReceiver<List<RoleTopicProxy>>() 
+					requests.roleTopicRequestNonRoo().findRoleTopicBySpecialisation(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation().getId(), oscePostSubViewImpledit.oscePostBlueprintProxy).fire(new OSCEReceiver<List<RoleTopicProxy>>() 
 					{
 						@Override
 						public void onSuccess(List<RoleTopicProxy> response) 
@@ -5383,9 +5383,15 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 									
 									if (response.size() > 0)
 									{
-										OsceSequenceProxy osceSequenceProxy = response.get(0);
+										//OsceSequenceProxy osceSequenceProxy = response.get(0);
+										int tempLunchBreakRotation = 0;
+										if (response.size() == 2)
+											tempLunchBreakRotation = response.get(0).getNumberRotation();
+										else if (response.size() == 1)
+											tempLunchBreakRotation = (response.get(0).getNumberRotation() / 2);
 										
-										requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), ((osceSequenceProxy.getNumberRotation()/2)-1), 1).fire(new OSCEReceiver<Boolean>() {
+										//requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), ((osceSequenceProxy.getNumberRotation()/2)-1), 1).fire(new OSCEReceiver<Boolean>() {
+										requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), (tempLunchBreakRotation-1), 1).fire(new OSCEReceiver<Boolean>() {
 
 											@Override
 											public void onSuccess(Boolean response1) {
@@ -5559,9 +5565,15 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 									
 									if (response.size() > 0)
 									{
-										OsceSequenceProxy osceSequenceProxy = response.get(0);
+										//OsceSequenceProxy osceSequenceProxy = response.get(0);
+										int tempLunchBreakRotation = 0;
+										if (response.size() == 2)
+											tempLunchBreakRotation = response.get(0).getNumberRotation();
+										else if (response.size() == 1)
+											tempLunchBreakRotation = (response.get(0).getNumberRotation() / 2);
 										
-										requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), ((osceSequenceProxy.getNumberRotation()/2)+1), 2).fire(new OSCEReceiver<Boolean>() {
+										//requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), ((osceSequenceProxy.getNumberRotation()/2)+1), 2).fire(new OSCEReceiver<Boolean>() {
+										requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), (tempLunchBreakRotation+1), 2).fire(new OSCEReceiver<Boolean>() {
 
 											@Override
 											public void onSuccess(Boolean response1) {

@@ -4,6 +4,7 @@ import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.domain.RoleTopic;
@@ -58,5 +59,6 @@ abstract Request<Long> advanceSearchCount(
 		List<String> whereFilters
 		
 );
-abstract Request<List<RoleTopicProxy>> findRoleTopicBySpecialisation(Long specialisationId);
+//abstract Request<List<RoleTopicProxy>> findRoleTopicBySpecialisation(Long specialisationId);
+abstract Request<List<RoleTopicProxy>> findRoleTopicBySpecialisation(Long specialisationId, OscePostBlueprintProxy proxy);
 }

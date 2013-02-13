@@ -404,7 +404,7 @@ public static java.util.List<RoleTopic> findAllRoleTopic(int id) {
 
     }
 	
-public static java.util.List<RoleTopic> findRoleTopicBySpecialisation(Long specialisationId) 
+public static java.util.List<RoleTopic> findRoleTopicBySpecialisation(Long specialisationId, OscePostBlueprint oscePostBlueprint) 
 {
 
 	Log.info("fetch data from role topic");
@@ -413,7 +413,7 @@ public static java.util.List<RoleTopic> findRoleTopicBySpecialisation(Long speci
 	String qString="select * from RoleTopic rt, StandardizedRole sr where rt.specialisation=6 and rt.standardized_role.id = sr.id";
 	//String queryString="select rt from RoleTopic rt join StandardizedRole sr where rt.specialisation.id="+specialisationId ;//+" and rt.standardizedRoles IS NOT NULL" ;
 	String queryBase = "SELECT distinct rt FROM RoleTopic as rt  Right JOIN rt.standardizedRoles as sr";// with sr.active=null or sr.active=1  ";
-	String queryString = queryBase + " where rt.specialisation.id="+specialisationId +" order by rt.name" ;
+	String queryString = queryBase + " where rt.specialisation.id="+specialisationId +" and rt.studyYear = "+ oscePostBlueprint.getOsce().getStudyYear().ordinal() +" order by rt.name" ;
 	
 	TypedQuery<RoleTopic> q = em.createQuery(queryString, RoleTopic.class);
 	java.util.List<RoleTopic> result = q.getResultList();	
