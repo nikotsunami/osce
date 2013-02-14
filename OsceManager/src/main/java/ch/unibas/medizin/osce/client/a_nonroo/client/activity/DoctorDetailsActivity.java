@@ -99,7 +99,7 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 	private void initOsceTable(DoctorProxy doctorProxy)
 	{
 		
-		requests.osceDayRequestNooRoo().findOsceDayByDoctorAssignment(doctorProxy).with("osce").fire(new OSCEReceiver<List<OsceDayProxy>>() 
+		requests.osceDayRequestNooRoo().findOsceDayByDoctorAssignment(doctorProxy).with("osce","osce.semester","osce.semester.semester").fire(new OSCEReceiver<List<OsceDayProxy>>() 
 				{
 
 			@Override
