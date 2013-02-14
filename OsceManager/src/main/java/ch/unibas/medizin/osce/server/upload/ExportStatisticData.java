@@ -294,7 +294,7 @@ public class ExportStatisticData extends HttpServlet{
 								int count = 1;
 								for (ChecklistQuestion question : questionList)
 								{
-									if (impressionQueId == null && question.getIsOveralQuestion() != null && question.getIsOveralQuestion())
+									if ((impressionQueId == null || impressionQueId == 0)  && question.getIsOveralQuestion() != null && question.getIsOveralQuestion())
 									{
 										impressionQueId = question.getId();
 									}
@@ -317,7 +317,7 @@ public class ExportStatisticData extends HttpServlet{
 						    	{
 						    		if (lastCandidateId != null)
 						    		{
-						    			if (impressionQueId != null)
+						    			if (impressionQueId != null && impressionQueId != 0)
 						    			{
 						    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, osceDay.getId());
 						    				writer.append(impressionItem1.getChecklistOption().getValue());
