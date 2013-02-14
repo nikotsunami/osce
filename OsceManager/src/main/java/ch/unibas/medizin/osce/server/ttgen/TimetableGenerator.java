@@ -2517,11 +2517,21 @@ public class TimetableGenerator {
 											}*/
 											
 											//sepc change last
-											if (numberBreakPosts == 0 && preRotNoBreakPost > 0)
+											if (parcourIndex > 0)
+											{
+												int prevParcourBreakPost = rotations[0].get(currRotationNumber);
+												
+												if (numberBreakPosts != prevParcourBreakPost)
+												{	
+													int postLength = osce.getPostLength() + osce.getShortBreak();
+													startTimeNew = dateAddMin(startTimeNew, postLength);
+												}
+											}
+											/*if (numberBreakPosts == 0 && preRotNoBreakPost > 0)
 											{
 												int postLength = osce.getPostLength() + osce.getShortBreak();
 												startTimeNew = dateAddMin(startTimeNew, postLength);
-											}
+											}*/
 											changeSP(i, osceDay, endTimeOld, startTimeNew, oscePR);
 											log.info("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(startTimeNew) + " (after rotation)");
 										}
@@ -2567,11 +2577,21 @@ public class TimetableGenerator {
 							
 							if(!lastRotation) {
 								//sepc change last
-								if (numberBreakPosts == 0 && preRotNoBreakPost > 0)
+								if (parcourIndex > 0)
+								{
+									int prevParcourBreakPost = rotations[0].get(currRotationNumber);
+									
+									if (numberBreakPosts != prevParcourBreakPost)
+									{	
+										int postLength = osce.getPostLength() + osce.getShortBreak();
+										nextRotationStartTime = dateAddMin(nextRotationStartTime, postLength);
+									}
+								}
+								/*if (numberBreakPosts == 0 && preRotNoBreakPost > 1)
 								{
 									int postLength = osce.getPostLength() + osce.getShortBreak();
 									nextRotationStartTime = dateAddMin(nextRotationStartTime, postLength);
-								}
+								}*/
 								
 								nextRotationStartTime = dateAddMin(nextRotationStartTime, breakValue);
 								// add lunch break after half of rotations or after specified number of rotations
