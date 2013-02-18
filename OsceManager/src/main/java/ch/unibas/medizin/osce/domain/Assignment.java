@@ -238,8 +238,8 @@ public class Assignment {
         Log.info("retrieveAssignmenstOfTypeStudent :");
         EntityManager em = entityManager();
         //String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.oscePost=" + oscePostId + " and opr.course=" + courseId + " ) order by a.timeStart asc";
-        String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999) and opr.course=" + courseId + " ) order by a.timeStart asc";
-        
+        //String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999) and opr.course=" + courseId + " ) order by a.timeStart asc";
+        String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where (opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999) or opr.room is null) and opr.course=" + courseId + " and opr.oscePost = " + oscePostId +  " ) order by a.timeStart asc";
         TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
         List<Assignment> assignmentList = query.getResultList();
         Log.info("retrieveAssignmenstOfTypeStudent query String :" + queryString);
@@ -1104,8 +1104,8 @@ public class Assignment {
      {
     	 Log.info("findAssignmentRotationAndCourseWise");
     	 String queryString="select a from Assignment as a where type="+type+" and osceDay="+osceDayId+" and rotationNumber = "+rotation+" and " +
-    	 		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where  " +
-    	 		"rm.course="+courseId+" and rm.version<999) and opr.course="+courseId+" ) or (oscePostRoom is null   and rotationNumber = "+rotation+" and sequenceNumber in (select distinct (sequenceNumber) from Assignment where type=0 and osceDay="+osceDayId+" and oscePostRoom in (select id from OscePostRoom where course="+courseId+")) )  order by timeStart";
+    	 		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where (opr.room in (select rm.room from OscePostRoom as rm where  " +
+    	 		"rm.course="+courseId+" and rm.version<999)  or opr.room is null) and opr.course="+courseId+" ) or (oscePostRoom is null   and rotationNumber = "+rotation+" and sequenceNumber in (select distinct (sequenceNumber) from Assignment where type=0 and osceDay="+osceDayId+" and oscePostRoom in (select id from OscePostRoom where course="+courseId+")) )  order by timeStart";
     	 
     	 if(type ==1)
     	 {

@@ -4,14 +4,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+
+import com.ibm.icu.math.BigDecimal;
 
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Course;
@@ -384,14 +388,18 @@ public class TimetableGenerator {
 		
 		lunchBreakRequered = estimatedTimeDay > LUNCH_BREAK_MIDDLE_THRESHOLD;
 		
-		int lunchBreakRotation = 0;
+		Integer lunchBreakRotation = 0;
 		
 		if (lunchBreakRequered)
 			lunchBreakRotation = (int) Math.floor((double)rotationsByDay.get(i) / (double)2);
 				
 		//SPEC]
 		
+		Map<Integer, Integer> breakForEveryRotation = new HashMap<Integer, Integer>();
+		List<Integer> longBreakAfterRotationList = new ArrayList<Integer>();
+		
 		int ctr = 0;
+		Integer totalRotation = (i * rotationsMax + rotationsByDay.get(i));
 		// rotations
 		for(int j = (i * rotationsMax); j < (i * rotationsMax + rotationsByDay.get(i)); j++) {
 			int numberBreakPostsThisRotation = rotations[0].get(j);
@@ -515,6 +523,61 @@ public class TimetableGenerator {
 		timeNeeded += timeNeededCurrentDay;
 	}
 	
+	public String checkLongBreakInRotation(Map<Integer, Integer> map, List<Integer> longBreakList, Long totalRotation, Long lunchBreakRotation)
+	{
+		if (lunchBreakRotation != 0)
+		{
+			int totalLongBreak = longBreakList.size();
+			Long firstLongBreak = 0l, secondLongBreak = 0l;
+			
+			if(totalLongBreak == 2)
+			{
+				firstLongBreak = (long) Math.round(lunchBreakRotation.doubleValue() / 2.0);
+				secondLongBreak = (long) ((Math.ceil(((totalRotation - lunchBreakRotation) / 2))) + lunchBreakRotation);
+				
+				if ((firstLongBreak.intValue() - 1) != longBreakList.get(0))
+				{	
+					map.put((firstLongBreak.intValue() - 1), osce.getLongBreak().intValue());
+					map.put(longBreakList.get(0), osce.getMiddleBreak().intValue());
+				}
+				
+				if ((secondLongBreak.intValue() - 1) != longBreakList.get(1))
+				{	
+					map.put((secondLongBreak.intValue() - 1), osce.getLongBreak().intValue());
+					map.put(longBreakList.get(1), osce.getMiddleBreak().intValue());
+				}
+			}
+		}
+		else if (lunchBreakRotation == 0)
+		{
+			int totalLongBreak = longBreakList.size();
+			Long firstLongBreak = 0l, secondLongBreak = 0l;
+			
+			if (totalLongBreak == 1)
+			{
+				firstLongBreak = (long) Math.floor((totalRotation / 2));
+				
+				if ((firstLongBreak.intValue() - 1) != longBreakList.get(0))
+				{	
+					map.put((firstLongBreak.intValue() - 1), osce.getLongBreak().intValue());
+					map.put(longBreakList.get(0), osce.getMiddleBreak().intValue());
+				}
+			}			
+		}
+		
+		Iterator<Integer> itr = map.keySet().iterator();
+		int ctr = 0;
+		String rotationStr = "";
+		while (itr.hasNext())
+		{
+			Integer key = itr.next();
+			rotationStr = rotationStr + ctr + ":" + map.get(key).toString() + "-";
+			ctr++;
+		}
+		
+		return rotationStr;
+	}
+	
 	private void calcDayTimeByDayIndexForSequence(int i) {
 		int rotationsMax;
 		int totalRoationByDay = 0;
@@ -543,6 +606,9 @@ public class TimetableGenerator {
 		
 		//SPEC[
 		int estimatedTimeDay = 0;
+		Map<Integer, Integer> breakForEveryRotation = new HashMap<Integer, Integer>();
+		List<Integer> longBreakAfterRotationList = new ArrayList<Integer>();
+		
 		for(int j = (i * rotationsMax); j < (i * rotationsMax + rotationsByDay.get(i)); j++) {
 			//int numberBreakPostsThisRotation = rotations[0].get(j);
 			
@@ -568,13 +634,13 @@ public class TimetableGenerator {
 		
 		boolean lunchBreakRequered = true;
 		
-		int lunchBreakRotation = 0;
+		Integer lunchBreakRotation = 0;
 		
 		if (lunchBreakRequered)
 			lunchBreakRotation = (int) Math.floor((double)rotationsByDay.get(i) / (double)2);
 		
 		
-		int totalRotation = rotationsByDay.get(i);
+		Integer totalRotation = rotationsByDay.get(i);
 		int longBreakRotation = (totalRotation - lunchBreakRotation) / 2;
 		//SPEC]
 		
@@ -676,6 +742,7 @@ public class TimetableGenerator {
 							timeNeededCurrentDay += osce.getLongBreak();
 							timeUntilLastLongBreak = timeNeededCurrentDay; //Reset time when long break added 
 							log.info("  long break");
+							longBreakAfterRotationList.add(j);
 							breakByRoatation.add(j, (int) osce.getLongBreak());
 						} else {
 							timeNeededCurrentDay += osce.getMiddleBreak();
@@ -691,10 +758,12 @@ public class TimetableGenerator {
 				breakByRoatation.add(j, 0);
 			}
 			
-			
-			rotationStr = rotationStr + ctr + ":" + breakByRoatation.get(j) + "-";
+			breakForEveryRotation.put(j, breakByRoatation.get(j));
+			//rotationStr = rotationStr + ctr + ":" + breakByRoatation.get(j) + "-";
 			ctr++;
 		}
+	
+		rotationStr = checkLongBreakInRotation(breakForEveryRotation, longBreakAfterRotationList, totalRotation.longValue(), lunchBreakRotation.longValue());
 	
 		timeNeededByDay.add(i, timeNeededCurrentDay);
 		breakPerRotationByDay.add(i, rotationStr);
@@ -2313,7 +2382,7 @@ public class TimetableGenerator {
 								postType = postBP.getPostType();
 								post = OscePost.findOscePostsByOscePostBlueprintAndOsceSequence(postBP, osceSequence).getSingleResult();
 								
-								if(!postType.equals(PostType.BREAK))
+								//if(!postType.equals(PostType.BREAK))
 									oscePR = OscePostRoom.firstOscePostRoomByCourseAndOscePost(course, post, (i + 1));
 							}
 							

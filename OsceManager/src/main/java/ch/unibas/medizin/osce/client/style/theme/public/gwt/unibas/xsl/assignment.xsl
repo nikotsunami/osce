@@ -32,7 +32,7 @@
           .postTR{
           	background:rgb(185,201,254);
            <!--	color:rgb(121,159,232); -->
-          	 color:blue;
+          	 
           }
           
           .studentTR{

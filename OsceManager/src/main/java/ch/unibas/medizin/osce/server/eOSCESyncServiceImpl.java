@@ -547,11 +547,11 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 									oscePostRoomElement.appendChild(roomElement);
 									
 									Element roomIdElement = doc.createElement("id");
-									roomIdElement.appendChild(doc.createTextNode(oscePostRoom.getRoom().getId().toString()));
+									roomIdElement.appendChild(doc.createTextNode(oscePostRoom.getRoom() == null ? "" : oscePostRoom.getRoom().getId().toString()));
 									roomElement.appendChild(roomIdElement);
 									
 									Element roomNumElement = doc.createElement("number");
-									roomNumElement.appendChild(doc.createCDATASection(oscePostRoom.getRoom().getRoomNumber() == null ? "" : oscePostRoom.getRoom().getRoomNumber()));
+									roomNumElement.appendChild(doc.createCDATASection(oscePostRoom.getRoom() == null ? "" : (oscePostRoom.getRoom().getRoomNumber() == null ? "" : oscePostRoom.getRoom().getRoomNumber())));
 									roomElement.appendChild(roomNumElement);
 									
 									List<Assignment> assignmentlist = Assignment.findAssignmentByOscePostRoom(oscePostRoom.getId(), osceList.get(i).getId(), l);
@@ -595,138 +595,140 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 									}
 									
 									OscePost oscepost = OscePost.findOscePost(oscePostRoom.getOscePost().getId());
-									StandardizedRole standardizedRole = StandardizedRole.findStandardizedRole(oscepost.getStandardizedRole().getId());
-									CheckList checklist = CheckList.findCheckList(standardizedRole.getCheckList().getId());
 									
-									Element checkListEle = doc.createElement("checklist");
-									oscePostRoomElement.appendChild(checkListEle);
-									
-									Element checkListIdElement = doc.createElement("id");
-									checkListIdElement.appendChild(doc.createTextNode(checklist.getId().toString()));
-									checkListEle.appendChild(checkListIdElement);
-									
-									Element checkListTitleEle = doc.createElement("title");
-									checkListTitleEle.appendChild(doc.createCDATASection(checklist.getTitle() == null ? "" : checklist.getTitle()));
-									checkListEle.appendChild(checkListTitleEle);
-									
-									Element checkListTopicsEle = doc.createElement("checklisttopics");
-									checkListEle.appendChild(checkListTopicsEle);
-									
-									List<ChecklistTopic> checklistTopicList = checklist.getCheckListTopics();
-									
-									int ctr = 1;
-									
-									for (ChecklistTopic checklistTopic : checklistTopicList)
+									if (oscepost.getStandardizedRole() != null)
 									{
-										Element checkListTopicElement = doc.createElement("checklisttopic");
-										checkListTopicsEle.appendChild(checkListTopicElement);
+										StandardizedRole standardizedRole = StandardizedRole.findStandardizedRole(oscepost.getStandardizedRole().getId());
+										CheckList checklist = CheckList.findCheckList(standardizedRole.getCheckList().getId());
 										
-										Element checkListTopicIdElement = doc.createElement("id");
-										checkListTopicIdElement.appendChild(doc.createTextNode(checklistTopic.getId().toString()));
-										checkListTopicElement.appendChild(checkListTopicIdElement);
+										Element checkListEle = doc.createElement("checklist");
+										oscePostRoomElement.appendChild(checkListEle);
 										
-										Element checkListTopicTitleEle = doc.createElement("title");
-										checkListTopicTitleEle.appendChild(doc.createCDATASection(checklistTopic.getTitle() == null ? "" : checklistTopic.getTitle()));
-										checkListTopicElement.appendChild(checkListTopicTitleEle);
+										Element checkListIdElement = doc.createElement("id");
+										checkListIdElement.appendChild(doc.createTextNode(checklist.getId().toString()));
+										checkListEle.appendChild(checkListIdElement);
 										
-										Element checkListTopicDescEle = doc.createElement("description");
-										checkListTopicDescEle.appendChild(doc.createCDATASection(checklistTopic.getDescription() == null ? "" : checklistTopic.getDescription()));
-										checkListTopicElement.appendChild(checkListTopicDescEle);
+										Element checkListTitleEle = doc.createElement("title");
+										checkListTitleEle.appendChild(doc.createCDATASection(checklist.getTitle() == null ? "" : checklist.getTitle()));
+										checkListEle.appendChild(checkListTitleEle);
 										
-										Element checkListQuestionElement = doc.createElement("checklistquestions");
-										checkListTopicElement.appendChild(checkListQuestionElement);
+										Element checkListTopicsEle = doc.createElement("checklisttopics");
+										checkListEle.appendChild(checkListTopicsEle);
 										
-										List<ChecklistQuestion> checklistQuestionsList = checklistTopic.getCheckListQuestions();
+										List<ChecklistTopic> checklistTopicList = checklist.getCheckListTopics();
 										
-										for (ChecklistQuestion checklistQuestion : checklistQuestionsList)
+										int ctr = 1;
+										
+										for (ChecklistTopic checklistTopic : checklistTopicList)
 										{
-											Element checkListQueElement = doc.createElement("checklistquestion");
-											checkListQuestionElement.appendChild(checkListQueElement);
+											Element checkListTopicElement = doc.createElement("checklisttopic");
+											checkListTopicsEle.appendChild(checkListTopicElement);
 											
-											Element checkListQueIdElement = doc.createElement("id");
-											checkListQueIdElement.appendChild(doc.createTextNode(checklistQuestion.getId().toString()));
-											checkListQueElement.appendChild(checkListQueIdElement);
+											Element checkListTopicIdElement = doc.createElement("id");
+											checkListTopicIdElement.appendChild(doc.createTextNode(checklistTopic.getId().toString()));
+											checkListTopicElement.appendChild(checkListTopicIdElement);
 											
-											Element checkListQuestEle = doc.createElement("question");
-											checkListQuestEle.appendChild(doc.createCDATASection(checklistQuestion.getQuestion() == null ? "" : checklistQuestion.getQuestion()));
-											checkListQueElement.appendChild(checkListQuestEle);
+											Element checkListTopicTitleEle = doc.createElement("title");
+											checkListTopicTitleEle.appendChild(doc.createCDATASection(checklistTopic.getTitle() == null ? "" : checklistTopic.getTitle()));
+											checkListTopicElement.appendChild(checkListTopicTitleEle);
 											
-											Element checkListQueInstEle = doc.createElement("instruction");
-											checkListQueInstEle.appendChild(doc.createCDATASection(checklistQuestion.getInstruction() == null ? "" : checklistQuestion.getInstruction()));
-											checkListQueElement.appendChild(checkListQueInstEle);
+											Element checkListTopicDescEle = doc.createElement("description");
+											checkListTopicDescEle.appendChild(doc.createCDATASection(checklistTopic.getDescription() == null ? "" : checklistTopic.getDescription()));
+											checkListTopicElement.appendChild(checkListTopicDescEle);
 											
-											Element checkListQueIsOverall = doc.createElement("key");
-											checkListQueIsOverall.appendChild(doc.createTextNode("isOverallQuestion"));
-											checkListQueElement.appendChild(checkListQueIsOverall);
-											Element checkListQueIsOverallVal = doc.createElement((checklistQuestion.getIsOveralQuestion() == null ? "false" : checklistQuestion.getIsOveralQuestion().toString()));					
-											checkListQueElement.appendChild(checkListQueIsOverallVal);
+											Element checkListQuestionElement = doc.createElement("checklistquestions");
+											checkListTopicElement.appendChild(checkListQuestionElement);
 											
-											Element checkListQueSeqNoElement = doc.createElement("sequencenumber");
-											checkListQueSeqNoElement.appendChild(doc.createTextNode(String.valueOf(ctr)));
-											checkListQueElement.appendChild(checkListQueSeqNoElement);
+											List<ChecklistQuestion> checklistQuestionsList = checklistTopic.getCheckListQuestions();
 											
-											ctr++;
-											
-											Element checkListCriteriaElement = doc.createElement("checklistcriterias");
-											checkListQueElement.appendChild(checkListCriteriaElement);
-											
-											Iterator<ChecklistCriteria> criiterator = checklistQuestion.getCheckListCriterias().iterator();
-											
-											while (criiterator.hasNext())
+											for (ChecklistQuestion checklistQuestion : checklistQuestionsList)
 											{
-												ChecklistCriteria criteria = criiterator.next();
-											
-												Element criteriaElement = doc.createElement("checklistcriteria");
-												checkListCriteriaElement.appendChild(criteriaElement);
+												Element checkListQueElement = doc.createElement("checklistquestion");
+												checkListQuestionElement.appendChild(checkListQueElement);
 												
-												Element criteriaIdElement = doc.createElement("id");
-												criteriaIdElement.appendChild(doc.createTextNode(criteria.getId().toString()));
-												criteriaElement.appendChild(criteriaIdElement);
+												Element checkListQueIdElement = doc.createElement("id");
+												checkListQueIdElement.appendChild(doc.createTextNode(checklistQuestion.getId().toString()));
+												checkListQueElement.appendChild(checkListQueIdElement);
 												
-												Element criteriaTitleEle = doc.createElement("title");
-												criteriaTitleEle.appendChild(doc.createCDATASection(criteria.getCriteria() == null ? "" : criteria.getCriteria()));
-												criteriaElement.appendChild(criteriaTitleEle);
+												Element checkListQuestEle = doc.createElement("question");
+												checkListQuestEle.appendChild(doc.createCDATASection(checklistQuestion.getQuestion() == null ? "" : checklistQuestion.getQuestion()));
+												checkListQueElement.appendChild(checkListQuestEle);
 												
-												Element criteriaSeqNoEle = doc.createElement("sequencenumber");
-												criteriaSeqNoEle.appendChild(doc.createTextNode(criteria.getSequenceNumber() == null ? "" : criteria.getSequenceNumber().toString()));
-												criteriaElement.appendChild(criteriaSeqNoEle);
+												Element checkListQueInstEle = doc.createElement("instruction");
+												checkListQueInstEle.appendChild(doc.createCDATASection(checklistQuestion.getInstruction() == null ? "" : checklistQuestion.getInstruction()));
+												checkListQueElement.appendChild(checkListQueInstEle);
+												
+												Element checkListQueIsOverall = doc.createElement("key");
+												checkListQueIsOverall.appendChild(doc.createTextNode("isOverallQuestion"));
+												checkListQueElement.appendChild(checkListQueIsOverall);
+												Element checkListQueIsOverallVal = doc.createElement((checklistQuestion.getIsOveralQuestion() == null ? "false" : checklistQuestion.getIsOveralQuestion().toString()));					
+												checkListQueElement.appendChild(checkListQueIsOverallVal);
+												
+												Element checkListQueSeqNoElement = doc.createElement("sequencenumber");
+												checkListQueSeqNoElement.appendChild(doc.createTextNode(String.valueOf(ctr)));
+												checkListQueElement.appendChild(checkListQueSeqNoElement);
+												
+												ctr++;
+												
+												Element checkListCriteriaElement = doc.createElement("checklistcriterias");
+												checkListQueElement.appendChild(checkListCriteriaElement);
+												
+												Iterator<ChecklistCriteria> criiterator = checklistQuestion.getCheckListCriterias().iterator();
+												
+												while (criiterator.hasNext())
+												{
+													ChecklistCriteria criteria = criiterator.next();
+												
+													Element criteriaElement = doc.createElement("checklistcriteria");
+													checkListCriteriaElement.appendChild(criteriaElement);
+													
+													Element criteriaIdElement = doc.createElement("id");
+													criteriaIdElement.appendChild(doc.createTextNode(criteria.getId().toString()));
+													criteriaElement.appendChild(criteriaIdElement);
+													
+													Element criteriaTitleEle = doc.createElement("title");
+													criteriaTitleEle.appendChild(doc.createCDATASection(criteria.getCriteria() == null ? "" : criteria.getCriteria()));
+													criteriaElement.appendChild(criteriaTitleEle);
+													
+													Element criteriaSeqNoEle = doc.createElement("sequencenumber");
+													criteriaSeqNoEle.appendChild(doc.createTextNode(criteria.getSequenceNumber() == null ? "" : criteria.getSequenceNumber().toString()));
+													criteriaElement.appendChild(criteriaSeqNoEle);
+												}
+												
+												Element checkListOptionElement = doc.createElement("checklistoptions");
+												checkListQueElement.appendChild(checkListOptionElement);
+												
+												Iterator<ChecklistOption> opitr = checklistQuestion.getCheckListOptions().iterator();
+												
+												while (opitr.hasNext())
+												{
+													ChecklistOption option = opitr.next();
+													
+													Element optionElement = doc.createElement("checklistoption");
+													checkListOptionElement.appendChild(optionElement);
+													
+													Element optionIdElement = doc.createElement("id");
+													optionIdElement.appendChild(doc.createTextNode(option.getId().toString()));
+													optionElement.appendChild(optionIdElement);
+													
+													Element optionTitleEle = doc.createElement("title");
+													optionTitleEle.appendChild(doc.createCDATASection(option.getOptionName() == null ? "" : option.getOptionName()));
+													optionElement.appendChild(optionTitleEle);
+													
+													Element optionValElement = doc.createElement("value");
+													optionValElement.appendChild(doc.createTextNode(option.getValue() == null ? "" : option.getValue().toString()));
+													optionElement.appendChild(optionValElement);
+													
+													Element optionSeqNoElement = doc.createElement("sequencenumber");
+													optionSeqNoElement.appendChild(doc.createTextNode(option.getSequenceNumber() == null ? "" : option.getSequenceNumber().toString()));
+													optionElement.appendChild(optionSeqNoElement);
+													
+													Element optionCriteriaCountElement = doc.createElement("criteriacount");
+													optionCriteriaCountElement.appendChild(doc.createTextNode("[" + (option.getCriteriaCount() == null ? "" : option.getCriteriaCount()) + "]"));
+													optionElement.appendChild(optionCriteriaCountElement);
+												}
 											}
-											
-											Element checkListOptionElement = doc.createElement("checklistoptions");
-											checkListQueElement.appendChild(checkListOptionElement);
-											
-											Iterator<ChecklistOption> opitr = checklistQuestion.getCheckListOptions().iterator();
-											
-											while (opitr.hasNext())
-											{
-												ChecklistOption option = opitr.next();
-												
-												Element optionElement = doc.createElement("checklistoption");
-												checkListOptionElement.appendChild(optionElement);
-												
-												Element optionIdElement = doc.createElement("id");
-												optionIdElement.appendChild(doc.createTextNode(option.getId().toString()));
-												optionElement.appendChild(optionIdElement);
-												
-												Element optionTitleEle = doc.createElement("title");
-												optionTitleEle.appendChild(doc.createCDATASection(option.getOptionName() == null ? "" : option.getOptionName()));
-												optionElement.appendChild(optionTitleEle);
-												
-												Element optionValElement = doc.createElement("value");
-												optionValElement.appendChild(doc.createTextNode(option.getValue() == null ? "" : option.getValue().toString()));
-												optionElement.appendChild(optionValElement);
-												
-												Element optionSeqNoElement = doc.createElement("sequencenumber");
-												optionSeqNoElement.appendChild(doc.createTextNode(option.getSequenceNumber() == null ? "" : option.getSequenceNumber().toString()));
-												optionElement.appendChild(optionSeqNoElement);
-												
-												Element optionCriteriaCountElement = doc.createElement("criteriacount");
-												optionCriteriaCountElement.appendChild(doc.createTextNode("[" + (option.getCriteriaCount() == null ? "" : option.getCriteriaCount()) + "]"));
-												optionElement.appendChild(optionCriteriaCountElement);
-											}
-											
 										}
-										
 									}
 									
 									Element studentElement = doc.createElement("students");
@@ -759,76 +761,76 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 											studStTimeElement.appendChild(doc.createTextNode(studAss.getTimeStart() == null ? "" :studAss.getTimeStart().toString()));
 											studElement.appendChild(studStTimeElement);
 											
-											Element studEndTimeElement = doc.createElement("id");
+											Element studEndTimeElement = doc.createElement("endtime");
 											studEndTimeElement.appendChild(doc.createTextNode(studAss.getTimeEnd() == null ? "" : studAss.getTimeEnd().toString()));
 											studElement.appendChild(studEndTimeElement);
 										}
 									}
 									
-								}
-								
-								/*String rotNum = String.format("%02d", (l+1));
-								
-								String semesterValue = osceList.get(i).getSemester().getSemester().toString();
-								
-								String calyear = osceList.get(i).getSemester().getCalYear().toString();
-								calyear = calyear.substring(2, calyear.length());
-								
-								EnumRenderer<Enum<StudyYears>> enumStudyYear = new EnumRenderer<Enum<StudyYears>>();
-								
-								String studyYear = enumStudyYear.render(osceList.get(i).getStudyYear());
-								
-								studyYear.replace(".", "");
-								
-								EnumRenderer<Enum<ColorPicker>> enumColor = new EnumRenderer<Enum<ColorPicker>>();
-								String rotationString = enumColor.render(ColorPicker.valueOf(course.getColor()));*/
-								
-								
-								
-								fileName = osceList.get(i).getSemester().getSemester().toString() 
-										+ osceList.get(i).getSemester().getCalYear().toString().substring(2, osceList.get(i).getSemester().getCalYear().toString().length()) 
-										+ "-" + (constants.getString(osceList.get(i).getStudyYear().toString()).replace(".", "")) 
-										+ "-D" + (j + 1) + "-" + String.format("%02d", (l+1)) + "-" 
-										+ (constants.getString(course.getColor()));
-								
-								//fileName = String.valueOf(osceList.get(i).getSemester().getSemester()) +  + osceList.get(i).getName() + rotNum + course.getColor() + ".xml";
-								
-								fileName = fileName + ".oscexchange";
-								
-								//System.out.println("File Name : " + fileName);
-								
-								String processedFileName = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + fileName;
-								File processfile = new File(processedFileName);
-								Boolean processCheck = processfile.exists();	
-								
-								if (!processCheck)
-								{
-									fileName = fileName.replaceAll(" ", "_");
-									fileName = OsMaFilePathConstant.EXPORT_OSCE_UNPROCESSED_FILEPATH + fileName;
-									File file = new File(fileName);
-									Boolean check = file.exists();
+									/*String rotNum = String.format("%02d", (l+1));
 									
-									if (check)
+									String semesterValue = osceList.get(i).getSemester().getSemester().toString();
+									
+									String calyear = osceList.get(i).getSemester().getCalYear().toString();
+									calyear = calyear.substring(2, calyear.length());
+									
+									EnumRenderer<Enum<StudyYears>> enumStudyYear = new EnumRenderer<Enum<StudyYears>>();
+									
+									String studyYear = enumStudyYear.render(osceList.get(i).getStudyYear());
+									
+									studyYear.replace(".", "");
+									
+									EnumRenderer<Enum<ColorPicker>> enumColor = new EnumRenderer<Enum<ColorPicker>>();
+									String rotationString = enumColor.render(ColorPicker.valueOf(course.getColor()));*/
+									
+									
+									
+									fileName = osceList.get(i).getSemester().getSemester().toString() 
+											+ osceList.get(i).getSemester().getCalYear().toString().substring(2, osceList.get(i).getSemester().getCalYear().toString().length()) 
+											+ "-" + (constants.getString(osceList.get(i).getStudyYear().toString()).replace(".", "")) 
+											+ "-D" + (j + 1) + "-" + String.format("%02d", (l+1)) + "-" 
+											+ (constants.getString(course.getColor()));
+									
+									//fileName = String.valueOf(osceList.get(i).getSemester().getSemester()) +  + osceList.get(i).getName() + rotNum + course.getColor() + ".xml";
+									
+									fileName = fileName + ".oscexchange";
+									
+									//System.out.println("File Name : " + fileName);
+									
+									String processedFileName = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + fileName;
+									File processfile = new File(processedFileName);
+									Boolean processCheck = processfile.exists();	
+									
+									if (!processCheck)
 									{
-										file.delete();
+										fileName = fileName.replaceAll(" ", "_");
+										fileName = OsMaFilePathConstant.EXPORT_OSCE_UNPROCESSED_FILEPATH + fileName;
+										File file = new File(fileName);
+										Boolean check = file.exists();
+										
+										if (check)
+										{
+											file.delete();
+										}
+										
+										FileUtils.touch(file);
+										
+										TransformerFactory transformerFactory = TransformerFactory.newInstance();
+										//transformerFactory.setAttribute("indent-number", new Integer(5));
+										Transformer transformer = transformerFactory.newTransformer();
+										transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+										transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "3");
+										//transformer.setOutputProperty("indent-amount", "3");
+										DOMSource source = new DOMSource(doc);
+										StreamResult result = new StreamResult(file);
+										transformer.transform(source, result);
+										
+										//System.out.println("* * *" + file.getName() + " IS CREATED * * *");								
+									}
+									xml = "";
+									fileName = "";
 									}
 									
-									FileUtils.touch(file);
-									
-									TransformerFactory transformerFactory = TransformerFactory.newInstance();
-									//transformerFactory.setAttribute("indent-number", new Integer(5));
-									Transformer transformer = transformerFactory.newTransformer();
-									transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-									transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "3");
-									//transformer.setOutputProperty("indent-amount", "3");
-									DOMSource source = new DOMSource(doc);
-									StreamResult result = new StreamResult(file);
-									transformer.transform(source, result);
-									
-									//System.out.println("* * *" + file.getName() + " IS CREATED * * *");								
-								}
-								xml = "";
-								fileName = "";
 							}
 							
 							rotationoffset += timeslot;
