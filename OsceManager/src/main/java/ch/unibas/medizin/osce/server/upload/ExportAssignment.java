@@ -519,7 +519,7 @@ public class ExportAssignment  extends HttpServlet {
 			TransformerFactory factory = TransformerFactory.newInstance();
 	        Transformer transformer = factory.newTransformer();
 	        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
+	        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 	        StringWriter sw = new StringWriter();
 	        StreamResult result = new StreamResult(sw);
 	        DOMSource source = new DOMSource(doc);
