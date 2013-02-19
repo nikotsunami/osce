@@ -88,7 +88,11 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	private Map<OscePostProxy,Map<Date,Long>> postAnyEndTimeBreakMap=new HashMap<OscePostProxy, Map<Date,Long>>();
 	private Map<OscePostProxy, List<Date>> postEndTimeMap=new HashMap<OscePostProxy, List<Date>>();
 	
+	private Map<OscePostProxy, List<Date>> postAllEndTimeMap=new HashMap<OscePostProxy, List<Date>>(); 
+	private Map<OscePostProxy, List<Date>> postAllStartTimeMap=new HashMap<OscePostProxy, List<Date>>(); 
+	
 	private List<DoctorProxy> doctorList;
+	
 	
 	//private Long lastOpendCourseId;
 	
@@ -536,6 +540,9 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					if(getEarlyStart() < earlyStart)
 						setEarlyStart(earlyStart);
 					
+					long decreaseHeightOfExaminer=0;
+					List<Date> startDate=new ArrayList<Date>();
+					List<Date> endDate=new ArrayList<Date>();
 					for(int j=0;j<response.size();j++)
 					{
 						 AssignmentProxy assignmentProxy=response.get(j);
@@ -548,6 +555,9 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 						 	{
 						 		studentSlotLength=studentSlotLength*2;
 						 		smallSlot=true;
+						 		startDate.add(assignmentProxy.getTimeStart());
+						 		endDate.add(assignmentProxy.getTimeEnd());
+						 		
 						 	}
 						 	
 							
@@ -582,6 +592,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							if(j==response.size()-1 && oscePostProxy.getId()==1)
 								studentView.getStudentPanel().addStyleName("leftBottom-radius");
 							
+							
+							
 							oscePostView.getStudentSlotsVP().insert(studentView, oscePostView.getStudentSlotsVP().getWidgetCount());
 							
 							
@@ -595,6 +607,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							
 							int continousShortBreak=osceProxy.getPostLength()+osceProxy.getShortBreak();
 							int continousSPChangeBreak=osceProxy.getPostLength()+osceProxy.getShortBreakSimpatChange();
+							
 							
 							//insert break if any after the student slot
 							if((long)osceProxy.getShortBreak()==breakTime)
@@ -634,7 +647,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								//insert long break
 								insertStudentBreak(breakTime, oscePostView,studentView,accordianPanelViewImpl.getOsceDayProxy().getId());
 
-								
+								decreaseHeightOfExaminer=decreaseHeightOfExaminer+breakTime;
 								//insert simpat change break
 								/*breakTime--;
 								Short simpatchangeLength=osceProxy.getLongBreak();
@@ -659,7 +672,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								
 								//insert lunch break
 								insertStudentBreak(breakTime, oscePostView,studentView,accordianPanelViewImpl.getOsceDayProxy().getId());
-								
+								decreaseHeightOfExaminer=decreaseHeightOfExaminer+breakTime;
 								//insert simpat change break
 								/*breakTime--;
 								Short simpatchangeLength=osceProxy.getLongBreak();
@@ -685,7 +698,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								
 								//insert lunch break
 								insertStudentBreak(breakTime, oscePostView,studentView,accordianPanelViewImpl.getOsceDayProxy().getId());
-								
+								decreaseHeightOfExaminer=decreaseHeightOfExaminer+breakTime;
 							}
 							
 						/*	else if(j!=response.size()-1 && (long)osceProxy.getMiddleBreak()==breakTime)
@@ -850,6 +863,9 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							studentView.getStudentPanel().setHeight(studentSlotLength.toString()+"px");
 						 
 					}
+					
+					postAllEndTimeMap.put(oscePostProxy, endDate);
+			 		postAllStartTimeMap.put(oscePostProxy,startDate);
 					//startTimeList.add(response.get(response.size()-1).getTimeEnd());
 					postLunchStartTimeMap.put(oscePostProxy, lunchstartTimeList);
 					postAnyStartTimeMap.put(oscePostProxy, anyendTimeList);
@@ -858,7 +874,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					postEndTimeMap.put(oscePostProxy, endTimeList);
 					
 					//create Examiners Slots/ Create Examiner view inside oscePostView
-					
+					final long decreaseHeightOfExaminerBy=decreaseHeightOfExaminer;
 					
 					if(oscePostProxy.getOscePostBlueprint().getPostType()!=PostType.BREAK && !isFirstPartOfPreparation)
 					requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeExaminer(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
@@ -889,6 +905,15 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								//examinerSlotLength=examinerSlotLength/60000;
 								examinerSlotLength--;
 								
+								if(osceProxy.getPostLength() <10)
+								{
+									examinerSlotLength++;
+									examinerSlotLength=examinerSlotLength*2;
+									examinerSlotLength=examinerSlotLength-decreaseHeightOfExaminerBy;
+									
+									//oscePostView.setDecreaseHeightBy(decreaseHeightOfExaminerBy);
+								}
+								
 								//create examiner slot view
 							 	ExaminationView examinationView=new ExaminationViewImpl();
 							 	examinationView.setOsceSequenceProxy(accordianPanelViewImpl.getOsceSequenceProxy());
@@ -906,9 +931,14 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 									examinationView.getExaminerPanel().setHeight(examinerSlotLength+"px");
 								
 								
+								
+								
 								oscePostView.getExaminerVP().insert(examinationView, oscePostView.getExaminerVP().getWidgetCount());
 								
 							}
+							
+							
+							
 						//	if(response.get(response.size()-1).getTimeEnd().equals(examinerTimeEnd))
 							for(int j=0;j<response.size();j++)
 							{
@@ -923,14 +953,38 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 									 else	*/						
 										 examinerSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(), assignmentProxy.getTimeStart());
 								 	 
-									//	 if(osceProxy.getPostLength() <10)
-									//		 examinerSlotLength=examinerSlotLength*2;
+										 /*if(osceProxy.getPostLength() <10)
+											 examinerSlotLength=examinerSlotLength*2;*/
 										 
 									//examinerSlotLength=examinerSlotLength/60000;
 									examinerSlotLength--;
 									//examinerSlotLength=assignmentProxy.getTimeEnd().getMinutes()-assignmentProxy.getTimeStart().getMinutes();
 									//examinerSlotLength++;
-								 
+									long decreaseHeightOfExaminerBy=0;
+									if(osceProxy.getPostLength() < 10)
+							 		{
+							 			List<Date> timeStartList=postAllStartTimeMap.get(oscePostProxy);
+							 			List<Date> timeEndList=postAllEndTimeMap.get(oscePostProxy);
+							 			
+										for(int i=0;i<timeStartList.size();i++)
+										{
+											long anyBreak=0;
+											if( timeStartList.size() -1 != i && assignmentProxy.getTimeStart().before(timeStartList.get(i)) && assignmentProxy.getTimeEnd().after( timeEndList.get(i)))
+												anyBreak=calculateTimeInMinute(timeStartList.get(i+1),timeEndList.get(i));
+											if(anyBreak > osceProxy.getShortBreak()  )
+											{
+												decreaseHeightOfExaminerBy=decreaseHeightOfExaminerBy+anyBreak;
+											}
+										}
+										
+										examinerSlotLength++;
+										examinerSlotLength=examinerSlotLength*2;
+										examinerSlotLength=examinerSlotLength-decreaseHeightOfExaminerBy-1;
+							 		}
+									
+									
+									
+									
 									//create examiner view
 								 	ExaminationView examinationView=new ExaminationViewImpl();
 								 	examinationView.setCourseProxy(contentView.getCourseProxy());
@@ -971,6 +1025,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 									int continousShortBreak=osceProxy.getPostLength()+osceProxy.getShortBreak();
 									int continousSPChangeBreak=osceProxy.getPostLength()+osceProxy.getShortBreakSimpatChange();
 									
+									
+
 									
 									//insert long or lunch break
 									if((long)osceProxy.getLongBreak()==breakTime || (long)osceProxy.getLunchBreak()==breakTime)
@@ -2293,122 +2349,157 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				//create examination slot 
 
 			//	if(response.get(response.size()-1).getTimeEnd().equals(examinerTimeEnd))
+				
+				
+				
 				for(int j=0;j<response.size();j++)
 				{
-					 AssignmentProxy assignmentProxy=response.get(j);
-					 
-					 	//calculate duration
-					 	Long examinerSlotLength=0l;
-					/* 	 if(j==0)
-						 {
-					 		examinerSlotLength=assignmentProxy.getTimeEnd().getTime()- osceDayProxy.getTimeStart().getTime();
-						 }
-						 else*/							
-							 examinerSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(),assignmentProxy.getTimeStart());
-						
-						
-					 	 
-						//examinerSlotLength=examinerSlotLength/60000;
-						examinerSlotLength--;
-						//examinerSlotLength=assignmentProxy.getTimeEnd().getMinutes()-assignmentProxy.getTimeStart().getMinutes();
-						//examinerSlotLength++;
-					 
-						//create examiner view
-					 	ExaminationView examinationView=new ExaminationViewImpl();
-					 	examinationView.setOsceDayProxy(osceDayProxy);
-					 	//examinationView.setOscePostRoomProxy(studentAssignmentProxy.get(0).getOscePostRoom());
-					 	examinationView.getExaminerPanel().addStyleName("examiner-bg");
-					 	examinationView.getExaminerPanel().addStyleName("border-bottom-red");
-						examinationView.setAssignmentProxy(assignmentProxy);
-						examinationView.setDelegate(activity);
-						examinationView.setOscePostProxy(oscePostProxy);
-						examinationView.getExaminerPanel().setHeight(examinerSlotLength+"px");
-						examinationView.setOscePostView(oscePostView);
-						examinationView.setOsceDayProxy(osceDayProxy);
-						
-						examinationView.setCourseProxy(examinationViewOld.getCourseProxy());
-					 	examinationView.setOsceSequenceProxy(examinationViewOld.getOsceSequenceProxy());
-					 	examinationView.setOsceDayProxy(examinationViewOld.getOsceDayProxy());
-					 	examinationView.setOscePostRoomProxy(examinationViewOld.getOscePostRoomProxy());
+					
+					 	final AssignmentProxy assignmentProxy=response.get(j);
 					 	
-					 	((ExaminationViewImpl)examinationView).height=examinerSlotLength.intValue();
-						
-						
-						if(j>0)
-					 		examinationView.setPreviousAssignmentProxy(response.get(j-1));
-						if(assignmentProxy.getSequenceNumber() != null)
-						{
+					 	
+
+					 
+					 		long decreaseHeightOfExaminerBy=0;
+					 		
+					 		
+						 	//calculate duration
+						 	Long examinerSlotLength=0l;
+						/* 	 if(j==0)
+							 {
+						 		examinerSlotLength=assignmentProxy.getTimeEnd().getTime()- osceDayProxy.getTimeStart().getTime();
+							 }
+							 else*/							
+								 examinerSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(),assignmentProxy.getTimeStart());
 							
-							examinationView.getExaminerLbl().setText(constants.exaPlanExaShort()+assignmentProxy.getSequenceNumber().toString());
-						}
+							
+						 	 
+							//examinerSlotLength=examinerSlotLength/60000;
+							examinerSlotLength--;
+							//examinerSlotLength=assignmentProxy.getTimeEnd().getMinutes()-assignmentProxy.getTimeStart().getMinutes();
+							//examinerSlotLength++;
+							if(osceProxy.getPostLength() < 10)
+					 		{
+					 			List<Date> timeStartList=postAllStartTimeMap.get(oscePostProxy);
+					 			List<Date> timeEndList=postAllEndTimeMap.get(oscePostProxy);
+					 			
+								for(int i=0;i<timeStartList.size();i++)
+								{
+									long anyBreak=0;
+									if(timeStartList.size() -1 != i && assignmentProxy.getTimeStart().before(timeStartList.get(i)) && assignmentProxy.getTimeEnd().after( timeEndList.get(i)))
+										anyBreak=calculateTimeInMinute(timeStartList.get(i+1),timeEndList.get(i));
+									if(anyBreak > osceProxy.getShortBreak()  )
+									{
+										decreaseHeightOfExaminerBy=decreaseHeightOfExaminerBy+anyBreak;
+									}
+								}
+								
+								examinerSlotLength++;
+							
+								examinerSlotLength=examinerSlotLength*2;
+								examinerSlotLength=examinerSlotLength-decreaseHeightOfExaminerBy-1;
+					 		}
+							
+							
+							//create examiner view
+						 	ExaminationView examinationView=new ExaminationViewImpl();
+						 	examinationView.setOsceDayProxy(osceDayProxy);
+						 	//examinationView.setOscePostRoomProxy(studentAssignmentProxy.get(0).getOscePostRoom());
+						 	examinationView.getExaminerPanel().addStyleName("examiner-bg");
+						 	examinationView.getExaminerPanel().addStyleName("border-bottom-red");
+							examinationView.setAssignmentProxy(assignmentProxy);
+							examinationView.setDelegate(activity);
+							examinationView.setOscePostProxy(oscePostProxy);
+							examinationView.getExaminerPanel().setHeight(examinerSlotLength+"px");
+							examinationView.setOscePostView(oscePostView);
+							examinationView.setOsceDayProxy(osceDayProxy);
+							
+							examinationView.setCourseProxy(examinationViewOld.getCourseProxy());
+						 	examinationView.setOsceSequenceProxy(examinationViewOld.getOsceSequenceProxy());
+						 	examinationView.setOsceDayProxy(examinationViewOld.getOsceDayProxy());
+						 	examinationView.setOscePostRoomProxy(examinationViewOld.getOscePostRoomProxy());
+						 	
+						 	((ExaminationViewImpl)examinationView).height=examinerSlotLength.intValue();
+							
+							
+							if(j>0)
+						 		examinationView.setPreviousAssignmentProxy(response.get(j-1));
+							if(assignmentProxy.getSequenceNumber() != null)
+							{
+								
+								examinationView.getExaminerLbl().setText(constants.exaPlanExaShort()+NumberFormat.getFormat("00").format(assignmentProxy.getSequenceNumber()));
+							}
+							
+							oscePostView.getExaminerVP().insert(examinationView, oscePostView.getExaminerVP().getWidgetCount());
+							
+							//calulate break
+							Long breakTime=0l;
+							if(j!=response.size()-1)
+								breakTime=response.get(j+1).getTimeStart().getTime()-assignmentProxy.getTimeEnd().getTime();
+							breakTime=breakTime/60000;
+							
+							Log.info("Break :" + breakTime);
+							
+							int continousShortBreak=osceProxy.getPostLength()+osceProxy.getShortBreak();
+							int continousSPChangeBreak=osceProxy.getPostLength()+osceProxy.getShortBreakSimpatChange();
+							
+							
+							
+							//insert long break
+							if( (long)osceProxy.getLongBreak()==breakTime)
+							{
+								//insert simpat change break
+								breakTime--;
+								
+								Short simpatchangeLength=osceProxy.getLongBreak();
+								SPView simpatBreak=new SPViewImpl();
+								simpatBreak.getSpPanel().addStyleName("empty-bg");
+								simpatBreak.getSpPanel().addStyleName("border-bottom-red");
+								simpatBreak.setDelegate(activity);
+								simpatBreak.getSpPanel().setHeight(breakTime.toString()+"px");
+								simpatBreak.getSpPanel().setWidth("30px");
+								
+								oscePostView.getExaminerVP().insert(simpatBreak, oscePostView.getExaminerVP().getWidgetCount());
+							}
+							//insert lunchBreak
+							else if( (long)osceProxy.getLunchBreak()==breakTime)
+							{
+								//insert simpat change break
+								breakTime--;
+								
+								Short simpatchangeLength=osceProxy.getLongBreak();
+								SPView simpatBreak=new SPViewImpl();
+								simpatBreak.getSpPanel().addStyleName("empty-bg");
+								simpatBreak.getSpPanel().addStyleName("border-bottom-red");
+								simpatBreak.setDelegate(activity);
+								simpatBreak.getSpPanel().setHeight(breakTime.toString()+"px");
+								simpatBreak.getSpPanel().setWidth("30px");
+								
+								oscePostView.getExaminerVP().insert(simpatBreak, oscePostView.getExaminerVP().getWidgetCount());
+							}
+							//any break
+							else if((long)osceProxy.getMiddleBreak()==breakTime || (long)osceProxy.getLunchBreak()==breakTime || (continousShortBreak+osceProxy.getMiddleBreak()==breakTime)  || (continousShortBreak+osceProxy.getLunchBreak()==breakTime) || continousShortBreak+osceProxy.getLongBreak()==breakTime || continousSPChangeBreak+osceProxy.getLongBreak()==breakTime || continousSPChangeBreak+osceProxy.getLunchBreak()==breakTime 
+									|| continousSPChangeBreak+osceProxy.getMiddleBreak()==breakTime || breakTime > 0)
+							{
+								//insert simpat change break
+								breakTime--;
+								
+								Short simpatchangeLength=osceProxy.getLongBreak();
+								SPView simpatBreak=new SPViewImpl();
+								simpatBreak.getSpPanel().addStyleName("empty-bg");
+								simpatBreak.getSpPanel().addStyleName("border-bottom-red");
+								simpatBreak.setDelegate(activity);
+								simpatBreak.getSpPanel().setHeight(breakTime.toString()+"px");
+								simpatBreak.getSpPanel().setWidth("30px");
+								
+								oscePostView.getExaminerVP().insert(simpatBreak, oscePostView.getExaminerVP().getWidgetCount());
+							}
+					
+					 	}	
 						
-						oscePostView.getExaminerVP().insert(examinationView, oscePostView.getExaminerVP().getWidgetCount());
-						
-						//calulate break
-						Long breakTime=0l;
-						if(j!=response.size()-1)
-							breakTime=response.get(j+1).getTimeStart().getTime()-assignmentProxy.getTimeEnd().getTime();
-						breakTime=breakTime/60000;
-						
-						Log.info("Break :" + breakTime);
-						
-						int continousShortBreak=osceProxy.getPostLength()+osceProxy.getShortBreak();
-						int continousSPChangeBreak=osceProxy.getPostLength()+osceProxy.getShortBreakSimpatChange();
-						
-						//insert long break
-						if( (long)osceProxy.getLongBreak()==breakTime)
-						{
-							//insert simpat change break
-							breakTime--;
-							
-							Short simpatchangeLength=osceProxy.getLongBreak();
-							SPView simpatBreak=new SPViewImpl();
-							simpatBreak.getSpPanel().addStyleName("empty-bg");
-							simpatBreak.getSpPanel().addStyleName("border-bottom-red");
-							simpatBreak.setDelegate(activity);
-							simpatBreak.getSpPanel().setHeight(breakTime.toString()+"px");
-							simpatBreak.getSpPanel().setWidth("30px");
-							
-							oscePostView.getExaminerVP().insert(simpatBreak, oscePostView.getExaminerVP().getWidgetCount());
-						}
-						//insert lunchBreak
-						else if( (long)osceProxy.getLunchBreak()==breakTime)
-						{
-							//insert simpat change break
-							breakTime--;
-							
-							Short simpatchangeLength=osceProxy.getLongBreak();
-							SPView simpatBreak=new SPViewImpl();
-							simpatBreak.getSpPanel().addStyleName("empty-bg");
-							simpatBreak.getSpPanel().addStyleName("border-bottom-red");
-							simpatBreak.setDelegate(activity);
-							simpatBreak.getSpPanel().setHeight(breakTime.toString()+"px");
-							simpatBreak.getSpPanel().setWidth("30px");
-							
-							oscePostView.getExaminerVP().insert(simpatBreak, oscePostView.getExaminerVP().getWidgetCount());
-						}
-						//any break
-						else if((long)osceProxy.getMiddleBreak()==breakTime || (long)osceProxy.getLunchBreak()==breakTime || (continousShortBreak+osceProxy.getMiddleBreak()==breakTime)  || (continousShortBreak+osceProxy.getLunchBreak()==breakTime) || continousShortBreak+osceProxy.getLongBreak()==breakTime || continousSPChangeBreak+osceProxy.getLongBreak()==breakTime || continousSPChangeBreak+osceProxy.getLunchBreak()==breakTime 
-								|| continousSPChangeBreak+osceProxy.getMiddleBreak()==breakTime || breakTime > 0)
-						{
-							//insert simpat change break
-							breakTime--;
-							
-							Short simpatchangeLength=osceProxy.getLongBreak();
-							SPView simpatBreak=new SPViewImpl();
-							simpatBreak.getSpPanel().addStyleName("empty-bg");
-							simpatBreak.getSpPanel().addStyleName("border-bottom-red");
-							simpatBreak.setDelegate(activity);
-							simpatBreak.getSpPanel().setHeight(breakTime.toString()+"px");
-							simpatBreak.getSpPanel().setWidth("30px");
-							
-							oscePostView.getExaminerVP().insert(simpatBreak, oscePostView.getExaminerVP().getWidgetCount());
-						}
 				
 						
-						
-					 
-				}
+				
 				
 				
 				
