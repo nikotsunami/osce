@@ -1283,6 +1283,12 @@ public interface OsceConstants extends Constants {
 	public String year();
 
 	public String yes();
+	
+	public String shiftBreak();
+	
+	public String prevRotation();
+	
+	public String nextRotation();
 
 }
 

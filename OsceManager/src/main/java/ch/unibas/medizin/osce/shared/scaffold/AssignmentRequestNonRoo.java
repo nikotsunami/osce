@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.shared.scaffold;
 import java.util.Date;
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.StudentAssignmentValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
@@ -24,7 +25,7 @@ public interface AssignmentRequestNonRoo extends RequestContext{
 
 	public abstract Request<List<AssignmentProxy>> retrieveAssignments(Long osceDayId,Long osceSequenceId,Long courseId,Long oscePostId);
 
-	public abstract Request<List<AssignmentProxy>> retrieveAssignmenstOfTypeStudent(Long osceDayId,Long osceSequenceId,Long courseId,Long oscePostId);
+public abstract Request<List<AssignmentProxy>> retrieveAssignmenstOfTypeStudent(Long osceDayId,Long osceSequenceId,Long courseId,Long oscePostId);
 
 	public abstract Request<List<AssignmentProxy>> retrieveAssignmenstOfTypeSP(Long osceDayId,Long osceSequenceId,Long courseId,Long oscePostId);
 
@@ -87,4 +88,6 @@ public interface AssignmentRequestNonRoo extends RequestContext{
 	//deactivate student change
 	
 	public abstract Request<List<Date>> clearExaminerAssignment(Long osceDayId,Long oscePostId,Long courseId);
+	
+	public abstract Request<Void> shiftLongBreak(AssignmentProxy currOsceDay, Date preRotOsceDayEndTime, Date nextRotOsceDayEndTime, int nextPrevFlag);
 }

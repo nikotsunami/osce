@@ -1453,4 +1453,29 @@ public class Assignment {
 		}
      }
      
+     public static void shiftLongBreak(Assignment currOsceDayId, Date preRotOsceDayEndTime, Date nextRotOsceDayEndTime, int nextPrevFlag)
+     {
+    	 //for shift long break in previous rotation
+    	 if (nextPrevFlag == 0)
+    	 {
+    		int diff = currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue(); 
+    		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, currOsceDayId.timeEnd);
+    		diff = currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue();
+    		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, preRotOsceDayEndTime);
+    	 }
+    	//for shift long break in next rotation
+    	 else if (nextPrevFlag == 1)
+    	 {
+    		int  diff = currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue();
+      		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, nextRotOsceDayEndTime); 
+    		diff = currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue(); 
+     		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, currOsceDayId.timeEnd);     		
+    	 }
+    	 
+    	 OsceDay osceDay = currOsceDayId.getOsceDay();
+     	 osceDay.setIsTimeSlotShifted(false);
+     	 osceDay.persist();
+    	 
+     }
+     
 } 
