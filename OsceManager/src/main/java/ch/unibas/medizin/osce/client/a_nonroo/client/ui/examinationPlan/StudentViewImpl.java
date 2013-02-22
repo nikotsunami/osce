@@ -317,20 +317,22 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 					for (OsceDayProxy proxy : osceProxy.getOsce_days())
 					{
 						if (proxy.getId().equals(previousAssignment.getOsceDay().getId()))
+						{
 							lunchBreakStartTime = proxy.getLunchBreakStart();
 							
-						for (OsceSequenceProxy osceSeqProxy : proxy.getOsceSequences())
-						{
-							totalRotation = totalRotation + osceSeqProxy.getNumberRotation();
-						}
-						
-						if (proxy.getOsceSequences().size() == 2)
-						{
-							if (previousAssignment.getRotationNumber() == (proxy.getOsceSequences().get(0).getNumberRotation() - 2))
-								nextPrev.setEnabled(false);
+							for (OsceSequenceProxy osceSeqProxy : proxy.getOsceSequences())
+							{
+								totalRotation = totalRotation + osceSeqProxy.getNumberRotation();
+							}
 							
-							if (previousAssignment.getRotationNumber() == proxy.getOsceSequences().get(0).getNumberRotation())
-								shiftPrev.setEnabled(false);
+							if (proxy.getOsceSequences().size() == 2)
+							{
+								if (previousAssignment.getRotationNumber() == (proxy.getOsceSequences().get(0).getNumberRotation() - 2))
+									nextPrev.setEnabled(false);
+								
+								if (previousAssignment.getRotationNumber() == proxy.getOsceSequences().get(0).getNumberRotation())
+									shiftPrev.setEnabled(false);
+							}
 						}
 					}
 				
