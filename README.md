@@ -26,6 +26,7 @@ Known Issues
 - Role Definitions:
   * The search filter does not work (nothing happens upon changing any values
     in the search filter window)
+  * When deleting checklist questions, the list numbers are not updated.
 - DefaultSuggestBox:
   * If dropdown menu open, a click on the arrow doesn't close the dropdown menu
 - Questionnaire:
@@ -39,7 +40,6 @@ Known Issues
   * When no semester has been created, the whole *OSCE Administration* submenu
     should be deactivated.
   * There is a null entry in the Semester dropdown
-- SP Assignment / Selection (RoleAssignmentPlace):
 
 Suggested Features / Improvements
 ---------------------------------
@@ -83,6 +83,9 @@ Suggested Features / Improvements
 - Cleanup:
   * MessageConfirmationDialogBox is a widget, but is in 
     ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination
+- SP-Portal:
+  * SP's should be able to write additional comments when they are surveyed for
+    availability.
 
 [1]: http://en.wikipedia.org/wiki/Objective_structured_clinical_examination
 [2]: http://medizin.unibas.ch/
