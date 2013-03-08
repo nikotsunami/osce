@@ -155,7 +155,8 @@ public class PaymentActivity extends AbstractActivity implements PaymentView.Del
 			@Override
 			public void onSuccess(String response) {
 				System.out.println("~~SUCCESS~~");
-				Window.open(response, "_blank", "enabled");
+				if (response != null && response.isEmpty() == false)
+					Window.open(GWT.getHostPageBaseURL() + response, "_blank", "enabled");
 			}
 		});
 	}

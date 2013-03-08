@@ -10,12 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-
-import com.ibm.icu.math.BigDecimal;
 
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Course;
@@ -2304,6 +2300,8 @@ public class TimetableGenerator {
 						if (temp.length > 1)						
 							breakValue = Integer.parseInt(temp[1]);
 						
+						
+						
 						int numberBreakPosts = rotations[parcourIndex].get(currRotationNumber);
 						int numberSlotsTotal = posts.size() + numberBreakPosts;
 						
@@ -2326,12 +2324,14 @@ public class TimetableGenerator {
 						
 						// get max slots from current rotation (defines when next rotation is about to
 						// start since rotations need to start at the same time!)
-						int maxPostsCurrentRotation = numberPosts + getMaxBreakPostsCurrentRotation(osceSequence.getCourses(), currRotationNumber);
+						//int maxPostsCurrentRotation = numberPosts + getMaxBreakPostsCurrentRotation(osceSequence.getCourses(), currRotationNumber);
 						
 						boolean firstRotation = currRotationNumber == rotationOffset;
 						boolean halfRotations = currRotationNumber == (rotationOffset + numberRotations) / 2 - 1;
 						boolean lastRotation = currRotationNumber == (rotationOffset + numberRotations - 1);
 						boolean changeSimpatDuringRotation = simpatChangeWithinSlots(postsSinceSimpatChange + numberSlotsTotal);
+						
+						//System.out.println("ROT NO : " + currRotationNumber + " ~~START TIME : " + rotationStartTime + " ~~LAST ROT : " + lastRotation);
 						
 						// insert long break in the middle of a rotation if the time of all posts exceeds some threshold
 						boolean longBreakInRotationHalf = numberSlotsTotal * osce.getPostLength() > LONG_BREAK_MIDDLE_THRESHOLD;
@@ -2388,6 +2388,7 @@ public class TimetableGenerator {
 							
 							// reset to the point in time where the rotation starts (necessary since
 							// we increase the time while going through all posts of a rotation)
+							
 							time = rotationStartTime;
 							
 							// post must be a possible start (PAUSE - which is at the end is always a possible start)
@@ -2601,6 +2602,13 @@ public class TimetableGenerator {
 												int postLength = osce.getPostLength() + osce.getShortBreak();
 												startTimeNew = dateAddMin(startTimeNew, postLength);
 											}*/
+											
+											if (post != null && post.getOscePostBlueprint().getPostType().equals(PostType.ANAMNESIS_THERAPY) && earlyStartFirst)
+											{
+												int postLength = osce.getPostLength() + osce.getShortBreak();
+												endTime = dateAddMin(endTime, postLength);
+												//System.out.println("FLAG : " + post.getOscePostBlueprint().getIsFirstPart() + " ~~EARLYSTARTFIRST : " + earlyStartFirst);
+											}
 											changeSP(i, osceDay, endTimeOld, startTimeNew, oscePR);
 											log.info("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(startTimeNew) + " (after rotation)");
 										}

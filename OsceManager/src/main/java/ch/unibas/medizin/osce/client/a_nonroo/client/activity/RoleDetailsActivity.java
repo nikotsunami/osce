@@ -7829,7 +7829,7 @@ public void onDragStart(DragStartEvent event) {
 		public void downloadFile(final String path)
 		{
 			Log.info(" downloadFile  :" );
-			final String url="/downloadRoleFile?path="+path;
+			final String url= GWT.getHostPageBaseURL() + "downloadRoleFile?path="+path;
 			
 		   Window.open(url, path, "enabled");
 						 

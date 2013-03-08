@@ -28,6 +28,7 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.ExcelUtil;
 import ch.unibas.medizin.osce.server.util.file.QwtUtil;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
@@ -1069,7 +1070,8 @@ public class Assignment {
      		Log.info("ERROR : " + e.getMessage());
      	}
      	
-     	return StandardizedPatient.fetchContextPath() + fileName;
+     	//return StandardizedPatient.fetchContextPath() + fileName;
+     	return OsMaFilePathConstant.DOWNLOAD_DIR_PATH + "/" + fileName;
      }
      
      public static boolean checkLunchBreak(Date timeStart, Date timeEnd, Date startLunchBreak)
