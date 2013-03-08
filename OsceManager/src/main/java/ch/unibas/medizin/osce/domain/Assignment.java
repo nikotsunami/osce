@@ -1056,9 +1056,8 @@ public class Assignment {
              			}
              		}
              	}
-             	
-             	excelUtil.writeSheet(mainMap, osce.getName(), semesterId);
-             	
+         		
+             	excelUtil.writeSheet(mainMap, (osce.getName() == null || osce.getName().isEmpty()) ? osce.getStudyYear().toString() : osce.getName(), semesterId);
          	}
          	
          	Semester semester = Semester.findSemester(semesterId);
