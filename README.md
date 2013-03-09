@@ -21,6 +21,10 @@ Known Issues
 - SimPat:
   * *When deleting a simpat that has assigned Scars, the application tries to 
     delete the scar as well.*
+  * Search criteria don' work precisely. E.g. a search for *gender != male AND 
+    gender != female* should return all the SPs that have no gender assigned, which
+	it currently doesn't (or of course if you search for *gender != male*, it should
+	return all females and NULLs).
 - Examinators:
   * SimplePager is missing in Examinator table
 - Role Definitions:
