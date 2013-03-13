@@ -14,14 +14,14 @@ respectively.
 Known Issues
 ------------
 - General Issues:
-  * Synchronicity: If multiple users work in the software at the same time and
+  * Synchronicity: If multiple users work in the application at the same time and
     one of the users is creating a new Semester, then the other user only sees it
     when reloading the whole browser window. (because the navigation never gets
     updated with new data)
 - SimPat:
   * *When deleting a simpat that has assigned Scars, the application tries to 
     delete the scar as well.*
-  * Search criteria don' work precisely. E.g. a search for *gender != male AND 
+  * Search criteria don't work precisely. E.g. a search for *gender != male AND 
     gender != female* should return all the SPs that have no gender assigned, which
 	it currently doesn't (or of course if you search for *gender != male*, it should
 	return all females and NULLs).
@@ -44,6 +44,12 @@ Known Issues
   * When no semester has been created, the whole *OSCE Administration* submenu
     should be deactivated.
   * There is a null entry in the Semester dropdown
+  * Export of SP-tables: The assigned stations are not correct if there was a
+	station without SP in the sequence. Seems to be a problem in the HTML-generation:
+	If a station does not have SP's, no <td></td> Tag-Pairs are created.
+  * The timetable in the Invitations is wrongly ordered; it starts with pm times even
+	though it should start with am times. (also customiseable time-format would be nice
+	for us Europeans that prefer 24-hour time formats)
 
 Suggested Features / Improvements
 ---------------------------------
