@@ -1,15 +1,18 @@
-OSCEManager
+OSCE Manager
 ===========
 
-OsceManager is rich-client web application designed for assisting in the 
+OSCE Manager is rich-client web application designed for assisting in the 
 organisation of [Objective Structured Clinical Examinations][1] (OSCEs) as well as 
 documenting the whole process. The software has been designed at the [Faculty of
 Medicine at the University of Basel][2] and starts to be used productively there (as
 of January 2013).
 
-Complementary to OSCEManager, [OSMA-DMZ][3] and eOSCE are used to assist in 
+Complementary to OSCE Manager, [OSMA-DMZ][3] and eOSCE are used to assist in 
 collecting simpat-data, and for electronic assistance during the OSCEs, 
 respectively.
+
+To find out more about the OSCE Manager, have a look at its website, located at
+[www.osce-manager.com][4].
 
 Known Issues
 ------------
@@ -100,3 +103,4 @@ Suggested Features / Improvements
 [1]: http://en.wikipedia.org/wiki/Objective_structured_clinical_examination
 [2]: http://medizin.unibas.ch/
 [3]: https://github.com/nikotsunami/osma-dmz
+[4]: http://www.osce-manager.com
