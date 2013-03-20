@@ -1478,5 +1478,15 @@ public class Assignment {
      	 osceDay.persist();
     	 
      }
-     
+
+     public static List<Assignment> findAssignmentOfLogicalBreakPostPerRotation(Long osceDayId, Long courseId, Integer rotationNumber)
+     {
+    	 EntityManager em = entityManager();
+    	 String query="SELECT  a FROM Assignment as a where a.osceDay="+osceDayId+"  and type=0 and a.rotationNumber = " + rotationNumber + " and oscePostRoom is null and sequenceNumber in (select distinct (sequenceNumber) from Assignment where type=0 and osceDay="+osceDayId+" and oscePostRoom in (select id from OscePostRoom where course="+courseId+")) order by a.timeStart asc";
+    	 TypedQuery<Assignment> typedQuery = em.createQuery(query, Assignment.class);
+    	 List<Assignment> assignments=typedQuery.getResultList();
+    	 Log.info("retrieveLogicalStudentInBreak query :" +query);
+    	 
+    	 return assignments;
+     }
 } 

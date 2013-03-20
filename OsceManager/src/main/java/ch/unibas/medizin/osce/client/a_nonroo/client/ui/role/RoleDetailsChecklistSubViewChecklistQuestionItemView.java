@@ -47,5 +47,9 @@ public interface RoleDetailsChecklistSubViewChecklistQuestionItemView extends Is
 	public  AbsolutePanel getRoleQueAP();
 		
 	public PickupDragController getDragController();
+	
+	public int getChecklistQuestionCount();
+	
+	public void setChecklistQuestionCount(int checklistQuestionCount);
 		
 }
