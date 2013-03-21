@@ -25,7 +25,7 @@ public class ChecklistQuestion {
 	
 	private static Logger Log = Logger.getLogger(ChecklistQuestion.class);
 	
-	@Size(max=255)
+	@Size(max=5000)
 	private String question;
 	
 	@ManyToOne
@@ -41,7 +41,7 @@ public class ChecklistQuestion {
 	@OrderBy("sequenceNumber")
     private List<ChecklistCriteria> checkListCriterias = new ArrayList<ChecklistCriteria>();
 	
-	@Size(max=50)
+	@Size(max=5000)
 	private String instruction;
 	
 	

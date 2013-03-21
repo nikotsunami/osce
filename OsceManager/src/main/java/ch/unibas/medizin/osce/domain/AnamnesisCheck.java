@@ -6,14 +6,17 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.TypedQuery;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -45,6 +48,11 @@ public class AnamnesisCheck {
     @ManyToOne
     private ch.unibas.medizin.osce.domain.AnamnesisCheckTitle anamnesisCheckTitle;
 
+    @NotNull
+	@Value("false")
+	@Column(columnDefinition="BIT", length = 1)
+    private Boolean sendToDMZ;    
+    
     public ch.unibas.medizin.osce.domain.AnamnesisCheckTitle getAnamnesisCheckTitle() {
 		return anamnesisCheckTitle;
 	}

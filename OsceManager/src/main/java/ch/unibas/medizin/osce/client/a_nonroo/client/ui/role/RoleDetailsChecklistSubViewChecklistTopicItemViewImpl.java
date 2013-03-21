@@ -79,7 +79,8 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 	@UiField
 	public VerticalPanel questionButtonVP;
 	
-	public CheckListTopicPopupView questionPopup;
+	//public CheckListTopicPopupView questionPopup;
+	public CheckListQuestionPopupView questionPopup;
 	
 	public ImportTopicPopupView importQuestionPopup;
 	
@@ -304,8 +305,56 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		//delegate.saveCheckListQuestion(checkListQuestionTxtBox.getText(),this);
 	}
 	
-	
 	public void showQuestionPopup()
+	{
+		if (questionPopup == null)
+		{
+			questionPopup = new CheckListQuestionPopupViewImpl();
+			
+			((CheckListQuestionPopupViewImpl) questionPopup).setAnimationEnabled(true);
+			
+			((CheckListQuestionPopupViewImpl) questionPopup).setWidth("350px");
+			
+			RootPanel.get().add(((CheckListQuestionPopupViewImpl) questionPopup));
+			
+			questionPopup.getOkBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+
+					if(Validator.isNotNull(questionPopup.getQuestionTextArea().getValue())){
+						delegate.saveCheckListQuestion(questionPopup.getQuestionTextArea().getValue(),questionPopup.getInstructionTextArea().getValue(),topicView);
+					}else{
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						confirmationDialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
+					}
+				}
+			});
+			
+			questionPopup.getCancelBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					((CheckListQuestionPopupViewImpl)questionPopup).hide(true);					
+					questionPopup.getQuestionTextArea().setValue("");
+					questionPopup.getInstructionTextArea().setValue("");					
+				}
+			});
+		}
+		
+		((CheckListQuestionPopupViewImpl)questionPopup).setPopupPosition(addCheckListQuestionButton.getAbsoluteLeft()-150, addCheckListQuestionButton.getAbsoluteTop()-250); //SPEC Change
+		
+		checklistQuestionMap=new HashMap<String, Widget>();
+		checklistQuestionMap.put("question", questionPopup.getQuestionTextArea());
+		checklistQuestionMap.put("instruction", questionPopup.getInstructionTextArea());
+		
+		((CheckListQuestionPopupViewImpl)questionPopup).getQuestionTextArea().setText("");
+		((CheckListQuestionPopupViewImpl)questionPopup).getInstructionTextArea().setText("");
+		
+		((CheckListQuestionPopupViewImpl)questionPopup).show();
+	}
+	
+	/*public void showQuestionPopup()
 	{
 		if(questionPopup==null)
 		{
@@ -337,11 +386,11 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 					Log.info("Call onClick");
 					// Highlight onViolation
 					//comment by user
-					/*if(questionPopup.getTopicTxtBox().getValue()=="" || questionPopup.getDescriptionTxtBox().getValue()=="")
+					if(questionPopup.getTopicTxtBox().getValue()=="" || questionPopup.getDescriptionTxtBox().getValue()=="")
 					{
 					}	
 					else
-					{	*/
+					{	
 					
 					// SPEC Change
 					if(Validator.isNotNull(questionPopup.getTopicTxtBox().getValue())){
@@ -388,7 +437,7 @@ public class RoleDetailsChecklistSubViewChecklistTopicItemViewImpl  extends Comp
 		((CheckListTopicPopupViewImpl)questionPopup).getTopicTxtBox().setText("");
 		((CheckListTopicPopupViewImpl)questionPopup).getDescriptionTxtBox().setText("");
 		((CheckListTopicPopupViewImpl)questionPopup).show();
-	}
+	}*/
 	@UiHandler("delete")
 	public void deleteCheckListTopic(ClickEvent event)
 	{

@@ -142,6 +142,12 @@ public class XmlUtil {
 					Element queIsOverallVal = doc.createElement((checklistQuestion.getIsOveralQuestion() == null ? "false" : checklistQuestion.getIsOveralQuestion().toString()));					
 					queDict.appendChild(queIsOverallVal);
 					
+					Element hasAttachment = doc.createElement("key");
+					hasAttachment.appendChild(doc.createTextNode("hasAttachment"));
+					queDict.appendChild(hasAttachment);
+					Element hasAttachmentVal = doc.createElement("false");					
+					queDict.appendChild(hasAttachmentVal);
+					
 					Element queSeqNo = doc.createElement("key");
 					queSeqNo.appendChild(doc.createTextNode("SequenceNumber"));
 					queDict.appendChild(queSeqNo);
@@ -185,14 +191,14 @@ public class XmlUtil {
 						optionValue.appendChild(doc.createTextNode("Value"));
 						optionDict.appendChild(optionValue);
 						Element optionValueVal = doc.createElement("real");
-						optionValueVal.appendChild(doc.createTextNode(checklistOption.getValue()));
+						optionValueVal.appendChild(doc.createTextNode(checklistOption.getValue() == null ? "0" : checklistOption.getValue()));
 						optionDict.appendChild(optionValueVal);
 						
 						Element criCountValue = doc.createElement("key");
 						criCountValue.appendChild(doc.createTextNode("criteriaCount"));
 						optionDict.appendChild(criCountValue);
 						Element criCountValueVal = doc.createElement("real");
-						criCountValueVal.appendChild(doc.createTextNode("[" + (checklistOption.getCriteriaCount() == null ? "" : checklistOption.getCriteriaCount().toString()) + "]"));
+						criCountValueVal.appendChild(doc.createTextNode((checklistOption.getCriteriaCount() == null ? "0" : checklistOption.getCriteriaCount().toString())));
 						optionDict.appendChild(criCountValueVal);
 						
 						Element optionSeqNo = doc.createElement("key");
@@ -262,6 +268,8 @@ public class XmlUtil {
 			// Output to console for testing
 			// StreamResult result = new StreamResult(System.out);
 			transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "Checklist.dtd");
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "3");
 			transformer.transform(source, result);
 		}
 		catch(Exception e)

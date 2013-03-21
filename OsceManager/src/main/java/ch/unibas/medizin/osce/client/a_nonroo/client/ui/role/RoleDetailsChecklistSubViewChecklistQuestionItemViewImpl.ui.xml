@@ -14,16 +14,21 @@
 	.headerLabel
 	{
 		font-size: 13px;
-		 padding-bottom: 0px;
-		 min-height: 10px;
-		 max-height: 13px; 
+		padding-bottom: 0px;
+		min-height: 10px;
+		max-height: 13px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis; 
 	}
 	.heightSet
 	{
-	font-size:11px;
-	max-height: 13px;
-	min-height: 5px;
-
+		font-size:11px;
+		max-height: 13px;
+		min-height: 5px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 .noOutline {
 		outline-style: none;
@@ -159,8 +164,8 @@ border-bottom-color:#808080;
 		<g:Image ui:field="arrow" styleName="{style.icon}" resource="{uiIcons.triangle1South}" ></g:Image>
 		<g:Image  styleName="{style.icon} " resource="{uiIcons.question}"></g:Image>			
 			<g:VerticalPanel  horizontalAlignment="left" width="500px">
-				<g:Label addStyleNames="{style.headerLabel}" ui:field="questionItemLbl" ></g:Label>
-				<g:Label ui:field="questionInstruction"  addStyleNames="{style.heightSet}"></g:Label>
+				<g:Label addStyleNames="{style.headerLabel}" ui:field="questionItemLbl" width="450px" ></g:Label>
+				<g:Label ui:field="questionInstruction"  addStyleNames="{style.heightSet}" width="450px"></g:Label>
 			</g:VerticalPanel>
 			
 			<g:HorizontalPanel width="1px" horizontalAlignment="right" verticalAlignment="middle"  >

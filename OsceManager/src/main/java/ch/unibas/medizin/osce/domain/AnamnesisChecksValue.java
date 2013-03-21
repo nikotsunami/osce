@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
@@ -30,6 +32,7 @@ public class AnamnesisChecksValue{
 
     @ManyToOne
     private AnamnesisCheck anamnesischeck;
+    
     
     private static Logger log = Logger.getLogger(AnamnesisChecksValue.class);
     
@@ -257,5 +260,15 @@ public class AnamnesisChecksValue{
             q.setParameter("anamnesischecksvalues_item" + anamnesischecksvaluesIndex++, _anamnesischecksvalue);
         }
         return q.getResultList();
+    }
+    
+    public static Set<AnamnesisChecksValue> findAnamnesisChecksValueForSetAnamnesisCheck(Long anamnesisformId)
+    {
+    	EntityManager em = entityManager();
+    	String sql = "SELECT a FROM AnamnesisChecksValue a WHERE a.anamnesischeck.sendToDMZ = true AND a.anamnesisform.id = " + anamnesisformId;
+    	TypedQuery<AnamnesisChecksValue> query = em.createQuery(sql, AnamnesisChecksValue.class);    	
+    	Set<AnamnesisChecksValue> data_Set = new HashSet<AnamnesisChecksValue>();
+    	data_Set.addAll(query.getResultList());
+    	return data_Set;
     }
 }

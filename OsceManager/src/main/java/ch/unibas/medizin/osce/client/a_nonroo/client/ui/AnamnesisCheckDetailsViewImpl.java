@@ -100,6 +100,12 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 	SpanElement labelPrevious;
 	@UiField
 	SpanElement previous;
+	
+	@UiField
+	SpanElement labelSendToDmz;
+	
+	@UiField
+	SpanElement sendToDMZValue;
 
 //	@UiField
 //	SpanElement version;
@@ -142,6 +148,9 @@ public class AnamnesisCheckDetailsViewImpl extends Composite implements Anamnesi
 		} else {
 			labelValue.setInnerText("");
 		}
+		
+		labelSendToDmz.setInnerText(constants.sendToDmz() + ":");
+		sendToDMZValue.setInnerText(proxy.getSendToDMZ().toString());
 		
 //		if(proxy.getType() == AnamnesisCheckTypes.QUESTION_TITLE){
 //			GWT.log("in AnamnesisCheckDetailsViewImpl setValue type is QUESTION_TITLE");

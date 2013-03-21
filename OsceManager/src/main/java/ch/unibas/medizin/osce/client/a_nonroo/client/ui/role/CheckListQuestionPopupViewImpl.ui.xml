@@ -1,0 +1,85 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
+  xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
+  xmlns:b='urn:import:com.google.gwt.user.cellview.client'
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role'>
+
+<ui:style src="../../styles.css" >
+.noOutline {
+		outline-style: none;
+		overflow: hidden;	
+	}
+.padleft5
+	{
+		padding-left: 5px;
+	}
+	.standardTable input {
+		width: 100%;
+		opacity: 0.8;
+	}
+	
+	.icon
+	{
+		float: left;
+		margin: 4px;
+	}
+	
+	.icon:hover {
+		cursor: pointer;
+	}
+	
+	.maxWidth {
+		margin-bottom: 8px;
+		width: 680px;
+	}
+	.right{
+		float:right;
+	}	
+	.paddRight{
+		float: right;		
+	}
+	.left{
+		float: left;
+	}
+</ui:style>
+ <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>	
+
+	<g:VerticalPanel spacing="5">
+		<g:HTML>
+			<div class="arrow-popup-border" style="left:210px;"></div>
+			<div class="arrow-popup" style="left:210px;"></div>
+		</g:HTML>
+			
+		<g:HorizontalPanel spacing="5" verticalAlignment="middle"> 
+		
+			<g:Label ui:field="questionLbl" styleName="{style.right} " width="120px"></g:Label>
+			<g:TextArea ui:field="questionTextArea" styleName="{style.left}"></g:TextArea>
+			
+		</g:HorizontalPanel>
+		
+		<g:HorizontalPanel  spacing="5" verticalAlignment="middle">
+		
+			<g:Label ui:field="instructionLbl" styleName="{style.right}" width="120px" ></g:Label>
+			<g:TextArea ui:field="instructionTextArea" styleName="{style.left}" ></g:TextArea>
+			
+		</g:HorizontalPanel>
+		
+		<g:HorizontalPanel  spacing="5" ui:field="thirtHP" verticalAlignment="middle">
+		
+			<g:Label ui:field="isOverallQuestionLbl" styleName="{style.right}" width="120px"></g:Label>
+			<g:CheckBox ui:field="isOverallQuestionChkBox" styleName="{style.left}"></g:CheckBox>
+			
+		</g:HorizontalPanel>
+		
+		<g:HorizontalPanel  spacing="5" horizontalAlignment="center" >
+			<my:IconButton icon="check" ui:field="okBtn" ></my:IconButton>
+			<my:IconButton icon="closethick" ui:field="cancelBtn"></my:IconButton>
+		</g:HorizontalPanel>
+	</g:VerticalPanel>
+	
+
+</ui:UiBinder>

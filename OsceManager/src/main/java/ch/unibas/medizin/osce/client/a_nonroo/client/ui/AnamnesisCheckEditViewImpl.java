@@ -37,6 +37,7 @@ import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -93,6 +94,11 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	@UiField
 	SpanElement labelpreviousQuestion;
 
+	@UiField
+	SpanElement labelSendToDmz;
+	
+	@UiField
+	CheckBox sendToDMZ;
 	
 	
 	//Issue # 122 : Replace pull down with autocomplete.
@@ -160,6 +166,8 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 		insideTitleListBox.setWidth(300);
 		labelType.setInnerText(constants.type() + ":");
 		labelText.setInnerText(constants.question() + ":");
+		
+		labelSendToDmz.setInnerText(constants.sendToDmz() + ":");
 //		labelpreviousQuestion.setInnerText(constants.previousQuestion() + ":");
 //		previousQuestionListBox.addItem(constants.previousQuestion(), "");
 		
@@ -641,4 +649,15 @@ public class AnamnesisCheckEditViewImpl extends Composite implements AnamnesisCh
 	}
 	// E Highlight onViolation
 
+	/*public CheckBox getSendToDMZ() {
+		return sendToDMZ;
+	}*/
+
+	/*public void setSendToDMZ(CheckBox sendToDMZ) {
+		this.sendToDMZ = sendToDMZ;
+	}*/
+
+	
+
+	
 }

@@ -28,6 +28,7 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.ExcelUtil;
 import ch.unibas.medizin.osce.server.util.file.QwtUtil;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
@@ -238,8 +239,9 @@ public class Assignment {
         Log.info("retrieveAssignmenstOfTypeStudent :");
         EntityManager em = entityManager();
         //String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.oscePost=" + oscePostId + " and opr.course=" + courseId + " ) order by a.timeStart asc";
-        String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999) and opr.course=" + courseId + " ) order by a.timeStart asc";
-        
+      //  String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999) and opr.course=" + courseId + " ) order by a.timeStart asc";
+        //String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where (opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999) or opr.room is null) and opr.course=" + courseId + " and opr.oscePost = " + oscePostId +  " ) order by a.timeStart asc";
+      String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where (opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999 ) or (opr.room is null  and opr.oscePost.id="+oscePostId+" and opr.oscePost.oscePostBlueprint.postType = " + OscePost.findOscePost(oscePostId).getOscePostBlueprint().getPostType().ordinal() + ")) and opr.course=" + courseId + "  ) order by a.timeStart asc";
         TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
         List<Assignment> assignmentList = query.getResultList();
         Log.info("retrieveAssignmenstOfTypeStudent query String :" + queryString);
@@ -1054,9 +1056,8 @@ public class Assignment {
              			}
              		}
              	}
-             	
-             	excelUtil.writeSheet(mainMap, osce.getName(), semesterId);
-             	
+         		
+             	excelUtil.writeSheet(mainMap, (osce.getName() == null || osce.getName().isEmpty()) ? osce.getStudyYear().toString() : osce.getName(), semesterId);
          	}
          	
          	Semester semester = Semester.findSemester(semesterId);
@@ -1068,7 +1069,8 @@ public class Assignment {
      		Log.info("ERROR : " + e.getMessage());
      	}
      	
-     	return StandardizedPatient.fetchContextPath() + fileName;
+     	//return StandardizedPatient.fetchContextPath() + fileName;
+     	return OsMaFilePathConstant.DOWNLOAD_DIR_PATH + "/" + fileName;
      }
      
      public static boolean checkLunchBreak(Date timeStart, Date timeEnd, Date startLunchBreak)
@@ -1104,8 +1106,8 @@ public class Assignment {
      {
     	 Log.info("findAssignmentRotationAndCourseWise");
     	 String queryString="select a from Assignment as a where type="+type+" and osceDay="+osceDayId+" and rotationNumber = "+rotation+" and " +
-    	 		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where  " +
-    	 		"rm.course="+courseId+" and rm.version<999) and opr.course="+courseId+" ) or (oscePostRoom is null   and rotationNumber = "+rotation+" and sequenceNumber in (select distinct (sequenceNumber) from Assignment where type=0 and osceDay="+osceDayId+" and oscePostRoom in (select id from OscePostRoom where course="+courseId+")) )  order by timeStart";
+    	 		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where (opr.room in (select rm.room from OscePostRoom as rm where  " +
+    	 		"rm.course="+courseId+" and rm.version<999)  or opr.room is null) and opr.course="+courseId+" ) or (oscePostRoom is null   and rotationNumber = "+rotation+" and sequenceNumber in (select distinct (sequenceNumber) from Assignment where type=0 and osceDay="+osceDayId+" and oscePostRoom in (select id from OscePostRoom where course="+courseId+")) )  order by timeStart";
     	 
     	 if(type ==1)
     	 {
@@ -1452,4 +1454,39 @@ public class Assignment {
 		}
      }
      
+     public static void shiftLongBreak(Assignment currOsceDayId, Date preRotOsceDayEndTime, Date nextRotOsceDayEndTime, int nextPrevFlag)
+     {
+    	 //for shift long break in previous rotation
+    	 if (nextPrevFlag == 0)
+    	 {
+    		int diff = currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue(); 
+    		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, currOsceDayId.timeEnd);
+    		diff = currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue();
+    		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, preRotOsceDayEndTime);
+    	 }
+    	//for shift long break in next rotation
+    	 else if (nextPrevFlag == 1)
+    	 {
+    		int  diff = currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue();
+      		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, nextRotOsceDayEndTime); 
+    		diff = currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue(); 
+     		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, currOsceDayId.timeEnd);     		
+    	 }
+    	 
+    	 OsceDay osceDay = currOsceDayId.getOsceDay();
+     	 osceDay.setIsTimeSlotShifted(false);
+     	 osceDay.persist();
+    	 
+     }
+
+     public static List<Assignment> findAssignmentOfLogicalBreakPostPerRotation(Long osceDayId, Long courseId, Integer rotationNumber)
+     {
+    	 EntityManager em = entityManager();
+    	 String query="SELECT  a FROM Assignment as a where a.osceDay="+osceDayId+"  and type=0 and a.rotationNumber = " + rotationNumber + " and oscePostRoom is null and sequenceNumber in (select distinct (sequenceNumber) from Assignment where type=0 and osceDay="+osceDayId+" and oscePostRoom in (select id from OscePostRoom where course="+courseId+")) order by a.timeStart asc";
+    	 TypedQuery<Assignment> typedQuery = em.createQuery(query, Assignment.class);
+    	 List<Assignment> assignments=typedQuery.getResultList();
+    	 Log.info("retrieveLogicalStudentInBreak query :" +query);
+    	 
+    	 return assignments;
+     }
 } 

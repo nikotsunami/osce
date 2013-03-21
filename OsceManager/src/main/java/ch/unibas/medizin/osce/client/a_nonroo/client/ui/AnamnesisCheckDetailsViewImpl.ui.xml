@@ -41,6 +41,10 @@
                                 <td><span class='{style.label}' ui:field="labelTitle" /></td>
                                 <td><span ui:field='title' /></td>
                             </tr>
+                            <tr id='sendToDmz'>
+                                <td><span class='{style.label}' ui:field="labelSendToDmz" /></td>
+                                <td><span ui:field='sendToDMZValue' /></td>
+                            </tr>
                             <tr id='previous'>
                                 <td><span class='{style.label}' ui:field="labelPrevious" /></td>
                                 <td><span ui:field='previous' /></td>

@@ -1,13 +1,20 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan;
 
+import java.util.Date;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Style.FontStyle;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ContextMenuEvent;
@@ -19,11 +26,16 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class StudentViewImpl extends Composite implements StudentView,HasMouseDownHandlers{
@@ -40,6 +52,16 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 	
 	private Long osceDayId;
 	
+	private OsceProxy osceProxy;
+	
+	public OsceProxy getOsceProxy() {
+		return osceProxy;
+	}
+
+	public void setOsceProxy(OsceProxy osceProxy) {
+		this.osceProxy = osceProxy;
+	}
+
 	public Long getOsceDayId() {
 		return osceDayId;
 	}
@@ -59,6 +81,26 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 	}
 
 	private AssignmentProxy previousAssignment;
+	
+	private AssignmentProxy preOfPrevAssignment;
+	
+	public AssignmentProxy getPreOfPrevAssignment() {
+		return preOfPrevAssignment;
+	}
+
+	public void setPreOfPrevAssignment(AssignmentProxy preOfPrevAssignment) {
+		this.preOfPrevAssignment = preOfPrevAssignment;
+	}
+
+	public AssignmentProxy getNextAssignmentProxy() {
+		return nextAssignmentProxy;
+	}
+
+	public void setNextAssignmentProxy(AssignmentProxy nextAssignmentProxy) {
+		this.nextAssignmentProxy = nextAssignmentProxy;
+	}
+
+	private AssignmentProxy nextAssignmentProxy;
 	
 	public AssignmentProxy getPreviousAssignment() {
 		return previousAssignment;
@@ -108,6 +150,33 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 	
 		initWidget(uiBinder.createAndBindUi(this));
 		
+		studentPanel.addDomHandler(new ContextMenuHandler() {
+			
+			@Override
+			public void onContextMenu(ContextMenuEvent event) {
+				
+				
+				event.preventDefault();
+				event.stopPropagation();			
+				
+				if(event.getNativeEvent().getButton()==NativeEvent.BUTTON_RIGHT)
+				{
+					if (assignmentProxy != null)
+		        	{
+		        		//event.preventDefault();
+		        		showExchangeStudentPopup();
+		        	}
+		        	
+		        	if (previousAssignment != null)
+		        	{
+		        		//event.preventDefault();
+		        		//event.stopPropagation();
+		        		showPopup();
+		        	}
+				}
+			}
+		}, ContextMenuEvent.getType());
+		
 		//by spec change
 		studentPanel.addMouseDownHandler(new MouseDownHandler() {
 			@Override
@@ -146,13 +215,25 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 		    		}
 		        }
 
-		        if (button == NativeEvent.BUTTON_RIGHT) {
+		        /*if (button == NativeEvent.BUTTON_RIGHT) {
+		        	
 		        	if (assignmentProxy == null)
 		        		return;
-		        	
 		        	event.preventDefault();
-		        	showExchangeStudentPopup();
-		         }
+		        	
+		        	if (assignmentProxy != null)
+		        	{
+		        		//event.preventDefault();
+		        		showExchangeStudentPopup();
+		        	}
+		        	
+		        	if (previousAssignment != null)
+		        	{
+		        		//event.preventDefault();
+		        		//event.stopPropagation();
+		        		showPopup();
+		        	}
+		         }*/
 				
 			}
 		});
@@ -190,6 +271,108 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 			
 		}
 	}*/
+	PopupPanel panel;
+	public void showPopup()
+	{
+		if (breakDuration == (osceProxy == null ? 0 : osceProxy.getLongBreak().intValue()))
+		{
+			panel = new PopupPanel();
+			
+			panel.setAnimationEnabled(true);
+			panel.setAutoHideEnabled(true);
+			
+			VerticalPanel mainVP = new VerticalPanel();
+			
+			mainVP.setWidth("230px");
+			mainVP.setSpacing(10);
+			
+			panel.add(mainVP);
+			
+			HorizontalPanel firstHP = new HorizontalPanel();
+			firstHP.setSpacing(10);
+			Label showLbl = new Label(constants.shiftBreak());
+			showLbl.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+			firstHP.add(showLbl);
+			mainVP.add(firstHP);
+			
+			HorizontalPanel secondHp = new HorizontalPanel();
+			secondHp.setSpacing(10);
+			Button shiftPrev = new Button();
+			Button nextPrev = new Button();
+			
+			shiftPrev.setText(constants.prevRotation());
+			nextPrev.setText(constants.nextRotation());
+			
+			secondHp.add(shiftPrev);
+			secondHp.add(nextPrev);
+			mainVP.add(secondHp);
+			
+			if (osceProxy != null)
+			{	
+				if (breakDuration == osceProxy.getLongBreak().longValue())
+				{
+					int totalRotation = 0;
+					Date lunchBreakStartTime = new Date(0);
+				
+					for (OsceDayProxy proxy : osceProxy.getOsce_days())
+					{
+						if (proxy.getId().equals(previousAssignment.getOsceDay().getId()))
+						{
+							lunchBreakStartTime = proxy.getLunchBreakStart();
+							
+							for (OsceSequenceProxy osceSeqProxy : proxy.getOsceSequences())
+							{
+								totalRotation = totalRotation + osceSeqProxy.getNumberRotation();
+							}
+							
+							if (proxy.getOsceSequences().size() == 2)
+							{
+								if (previousAssignment.getRotationNumber() == (proxy.getOsceSequences().get(0).getNumberRotation() - 2))
+									nextPrev.setEnabled(false);
+								
+								if (previousAssignment.getRotationNumber() == proxy.getOsceSequences().get(0).getNumberRotation())
+									shiftPrev.setEnabled(false);
+							}
+						}
+					}
+				
+					if (previousAssignment.getRotationNumber() == 0 || lunchBreakStartTime.equals(preOfPrevAssignment == null ? "" : preOfPrevAssignment.getTimeEnd()))
+						shiftPrev.setEnabled(false);
+					
+					if (previousAssignment.getRotationNumber() == (totalRotation-2) || lunchBreakStartTime.equals(nextAssignmentProxy == null ? "" : nextAssignmentProxy.getTimeEnd()))
+						nextPrev.setEnabled(false);
+					
+					shiftPrev.addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							panel.hide();
+							
+							if (preOfPrevAssignment != null)
+								delegate.shiftLongBreakClicked(previousAssignment, preOfPrevAssignment.getTimeEnd(), new Date(), 0, popupView);
+						}
+					});
+					
+					nextPrev.addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							panel.hide();
+							
+							if (nextAssignmentProxy != null)
+								delegate.shiftLongBreakClicked(previousAssignment, new Date(), nextAssignmentProxy.getTimeEnd(), 1, popupView);
+						}
+					});
+				}
+			}	
+			
+			RootPanel.get().add(panel);
+			
+			panel.setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-100);
+			
+			panel.show();
+		}
+	}
 	
 	public void showBreakBurationPopupView()
 	{
@@ -199,9 +382,61 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 			popupView.createEditBreakDurationPopupView();
 			
 			((PopupViewImpl)popupView).setAnimationEnabled(true);
-		
 			
-			
+			/*if (osceProxy != null)
+			{	
+				
+				if (breakDuration == osceProxy.getLongBreak().longValue())
+				{
+					int totalRotation = 0;
+					Date lunchBreakStartTime = null;
+				
+					for (OsceDayProxy proxy : osceProxy.getOsce_days())
+					{
+						if (proxy.getId().equals(previousAssignment.getOsceDay().getId()))
+							lunchBreakStartTime = proxy.getLunchBreakStart();
+							
+						for (OsceSequenceProxy osceSeqProxy : proxy.getOsceSequences())
+						{
+							totalRotation = totalRotation + osceSeqProxy.getNumberRotation();
+						}
+					}
+					
+					Button prevButton = new Button("Previous");
+					Button nextButton = new Button("Next");
+				
+					popupView.getLongBreakHorizontalPanel().add(prevButton);
+					popupView.getLongBreakHorizontalPanel().add(nextButton);
+					
+					if (previousAssignment.getRotationNumber() == 0 || lunchBreakStartTime.equals(preOfPrevAssignment.getTimeEnd()))
+						prevButton.setEnabled(false);
+					
+					if (previousAssignment.getRotationNumber() == (totalRotation-2) || lunchBreakStartTime.equals(nextAssignmentProxy.getTimeEnd()))
+						nextButton.setEnabled(false);
+					
+					prevButton.addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							((PopupViewImpl)popupView).hide();
+							
+							if (preOfPrevAssignment != null)
+								delegate.shiftLongBreakClicked(previousAssignment, preOfPrevAssignment.getTimeEnd(), new Date(), 0, popupView);
+						}
+					});
+					
+					nextButton.addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							((PopupViewImpl)popupView).hide();
+							
+							if (nextAssignmentProxy != null)
+								delegate.shiftLongBreakClicked(previousAssignment, new Date(), nextAssignmentProxy.getTimeEnd(), 1, popupView);
+						}
+					});
+				}
+			}	*/
 			
 			//((PopupViewImpl)popupView).setWidth("150px");
 

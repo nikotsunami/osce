@@ -254,8 +254,19 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 	
 	CriteriaPopupView questionPopup;
 	
-	public CheckListTopicPopupView editquestionpopup;
+	//public CheckListTopicPopupView editquestionpopup;
+	public CheckListQuestionPopupView editquestionpopup;
 	
+	public int checklistQuestionCount = 0;
+	
+	public int getChecklistQuestionCount() {
+		return checklistQuestionCount;
+	}
+
+	public void setChecklistQuestionCount(int checklistQuestionCount) {
+		this.checklistQuestionCount = checklistQuestionCount;
+	}
+
 	public ChecklistQuestionProxy getProxy() {
 		return proxy;
 	}
@@ -489,8 +500,58 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 	
 	public void showQuestionPopup()
 	{
+		if (editquestionpopup == null)
+		{
+			editquestionpopup = new CheckListQuestionPopupViewImpl();
+			
+			((CheckListQuestionPopupViewImpl)editquestionpopup).setWidth("350px");
+			
+			RootPanel.get().add(((CheckListQuestionPopupViewImpl)editquestionpopup));			
+			
+			editquestionpopup.getOkBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					
+					if(Validator.isNotNull(editquestionpopup.getQuestionTextArea().getValue()))
+					{	
+						delegate.editOption(editquestionpopup.getQuestionTextArea().getValue(),editquestionpopup.getInstructionTextArea().getValue(),questionView);						
+						((CheckListQuestionPopupViewImpl)editquestionpopup).hide(true);
+					}
+					else
+					{	
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+						confirmationDialogBox.showConfirmationDialog(constants.warningFillRequiredFields());
+					}
+				}
+			});
+			
+			editquestionpopup.getCancelBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					((CheckListQuestionPopupViewImpl)editquestionpopup).hide(true);
+				}
+			});
+		} 
+		
+		((CheckListQuestionPopupViewImpl)editquestionpopup).setPopupPosition(edit.getAbsoluteLeft()-350, edit.getAbsoluteTop()-235);
+		
+		checklistQuestionMap=new HashMap<String, Widget>();
+		checklistQuestionMap.put("question", editquestionpopup.getQuestionTextArea());
+		checklistQuestionMap.put("instruction", editquestionpopup.getInstructionTextArea());
+		
+		editquestionpopup.getQuestionTextArea().setText(proxy.getQuestion());	
+		editquestionpopup.getInstructionTextArea().setText(proxy.getInstruction());
+		editquestionpopup.getIsOverallQuestionChkBox().setChecked(proxy.getIsOveralQuestion());
+		
+		((CheckListQuestionPopupViewImpl)editquestionpopup).show();
+	}
+	
+	/*public void showQuestionPopup()
+	{
 		Log.info("Call show Question Popup()");
-		/*if(questionPopup==null)
+		if(questionPopup==null)
 		{
 			questionPopup=new CriteriaPopupViewImpl();
 		
@@ -527,7 +588,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		((CriteriaPopupViewImpl)questionPopup).show();
 		questionPopup.getCriteriaTxtBox().setText(questionItemLbl.getText());
 		questionPopup.getCriteriaTxtBox().selectAll();
-		questionPopup.getCriteriaTxtBox().setFocus(true); */
+		questionPopup.getCriteriaTxtBox().setFocus(true); 
 		
 		//spec india
 		if(editquestionpopup==null)
@@ -605,7 +666,7 @@ public class RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl extends Co
 		editquestionpopup.getIsOverallQuestionChkBox().setChecked(proxy.getIsOveralQuestion());
 		((CheckListTopicPopupViewImpl)editquestionpopup).show();
 		
-	}
+	}*/
 
 	@Override
 	public void setChecklistTopicProxy(ChecklistTopicProxy proxy) {

@@ -16,6 +16,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.LearningObjectiveView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CheckListQuestionPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CheckListTopicPopupView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CheckListTopicPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CriteriaPopupViewImpl;
@@ -2352,7 +2353,7 @@ final int index2 = index;
 				public void onSuccess(Void response) 
 				{
 					Log.info("Call Success...");	
-					((CheckListTopicPopupViewImpl)(topicView.questionPopup)).hide();
+					((CheckListQuestionPopupViewImpl)(topicView.questionPopup)).hide();
 					createQuestionView(selectedtab,proxy,topicView,++roleDetailActivity.questionCount);
 			//	roleTopicInit(topicView.getProxy(), topicView);	
 				}
@@ -2364,12 +2365,15 @@ final int index2 = index;
 			RoleDetailsChecklistSubViewChecklistQuestionItemView questionView=new RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl();
 			//questionView.getQuestionItemLbl().setText(proxy.getQuestion());
 			questionView.getQuestionItemLbl().setTitle(proxy.getQuestion());
-			questionView.getQuestionItemLbl().setText(questionCount +". "+util.getFormatedString(proxy.getQuestion(),60));
+			//questionView.getQuestionItemLbl().setText(questionCount +". "+util.getFormatedString(proxy.getQuestion(),60));
+			questionView.getQuestionItemLbl().setText(questionCount +". "+ proxy.getQuestion());
 			
+			questionView.setChecklistQuestionCount(questionCount);
 			
 			//view.getCriteriaLbl().setText(util.getFormatedString(proxy.getCriteria(),10));
 			//questionView.getQuestionInstruction().setText(proxy.getInstruction());
-			questionView.getQuestionInstruction().setText(util.getFormatedString(proxy.getInstruction(), 60));
+			//questionView.getQuestionInstruction().setText(util.getFormatedString(proxy.getInstruction(), 60));
+			questionView.getQuestionInstruction().setText(proxy.getInstruction());
 			questionView.getQuestionInstruction().setTitle(proxy.getInstruction());
 			
 			questionView.setProxy(proxy);
@@ -3145,11 +3149,14 @@ final int index2 = index;
 				
 				@Override
 				public void onSuccess(Void response) {
-					questionView.questionItemLbl.setText(question);
+					questionView.questionItemLbl.setText(questionView.getChecklistQuestionCount() + ". " + question);
 					questionView.questionInstruction.setText(instruction);
 					questionView.setProxy(finalquestionProxy);
+					
+					questionView.questionItemLbl.setTitle(question);
+					questionView.questionInstruction.setTitle(instruction);
 					// Highlight onViolation	
-					((CheckListTopicPopupViewImpl)(questionView.editquestionpopup)).hide();
+					((CheckListQuestionPopupViewImpl)(questionView.editquestionpopup)).hide();
 					// E Highlight onViolation
 				}
 			});
@@ -7829,7 +7836,7 @@ public void onDragStart(DragStartEvent event) {
 		public void downloadFile(final String path)
 		{
 			Log.info(" downloadFile  :" );
-			final String url="/downloadRoleFile?path="+path;
+			final String url= GWT.getHostPageBaseURL() + "downloadRoleFile?path="+path;
 			
 		   Window.open(url, path, "enabled");
 						 

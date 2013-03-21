@@ -1,31 +1,39 @@
-OSCEManager
+OSCE Manager
 ===========
 
-OsceManager is rich-client web application designed for assisting in the 
+OSCE Manager is rich-client web application designed for assisting in the 
 organisation of [Objective Structured Clinical Examinations][1] (OSCEs) as well as 
 documenting the whole process. The software has been designed at the [Faculty of
 Medicine at the University of Basel][2] and starts to be used productively there (as
 of January 2013).
 
-Complementary to OSCEManager, [OSMA-DMZ][3] and eOSCE are used to assist in 
+Complementary to OSCE Manager, [OSMA-DMZ][3] and eOSCE are used to assist in 
 collecting simpat-data, and for electronic assistance during the OSCEs, 
 respectively.
+
+To find out more about the OSCE Manager, have a look at its website, located at
+[www.osce-manager.com][4].
 
 Known Issues
 ------------
 - General Issues:
-  * Synchronicity: If multiple users work in the software at the same time and
+  * Synchronicity: If multiple users work in the application at the same time and
     one of the users is creating a new Semester, then the other user only sees it
     when reloading the whole browser window. (because the navigation never gets
     updated with new data)
 - SimPat:
   * *When deleting a simpat that has assigned Scars, the application tries to 
     delete the scar as well.*
+  * Search criteria don't work precisely. E.g. a search for *gender != male AND 
+    gender != female* should return all the SPs that have no gender assigned, which
+	it currently doesn't (or of course if you search for *gender != male*, it should
+	return all females and NULLs).
 - Examinators:
   * SimplePager is missing in Examinator table
 - Role Definitions:
   * The search filter does not work (nothing happens upon changing any values
     in the search filter window)
+  * When deleting checklist questions, the list numbers are not updated.
 - DefaultSuggestBox:
   * If dropdown menu open, a click on the arrow doesn't close the dropdown menu
 - Questionnaire:
@@ -38,6 +46,12 @@ Known Issues
 - OSCE creation:
   * When no semester has been created, the whole *OSCE Administration* submenu
     should be deactivated.
+  * Export of SP-tables: The assigned stations are not correct if there was a
+	station without SP in the sequence. Seems to be a problem in the HTML-generation:
+	If a station does not have SP's, no <td></td> Tag-Pairs are created.
+  * The timetable in the Invitations is wrongly ordered; it starts with pm times even
+	though it should start with am times. (also customiseable time-format would be nice
+	for us Europeans that prefer 24-hour time formats)
   * There is a null entry in the Semester dropdown
 - SP Assignment / Selection (RoleAssignmentPlace):
   * First name and name are in the wrong order
@@ -111,7 +125,11 @@ Suggested Features / Improvements
 - Cleanup:
   * MessageConfirmationDialogBox is a widget, but is in 
     ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination
+- SP-Portal:
+  * SP's should be able to write additional comments when they are surveyed for
+    availability.
 
 [1]: http://en.wikipedia.org/wiki/Objective_structured_clinical_examination
 [2]: http://medizin.unibas.ch/
 [3]: https://github.com/nikotsunami/osma-dmz
+[4]: http://www.osce-manager.com

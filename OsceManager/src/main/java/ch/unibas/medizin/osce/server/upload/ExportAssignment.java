@@ -43,6 +43,7 @@ import ch.unibas.medizin.osce.domain.OsceSequence;
 import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
+import ch.unibas.medizin.osce.shared.PostType;
 
 public class ExportAssignment  extends HttpServlet {
 	
@@ -162,15 +163,31 @@ public class ExportAssignment  extends HttpServlet {
 						OscePostRoom postRoom=OscePostRoom.findPostRoom(oscePost.getId(), course.getId());
 						if(postRoom !=null && postRoom.getRoom() != null )
 						createChildNode("postRoom", postRoom.getRoom().getRoomNumber(), doc, postElement);
+						else
+							createChildNode("postRoom", "-", doc, postElement);
+						
+						if(oscePost.getOscePostBlueprint().getPostType() != PostType.BREAK)
 						createChildNode("standardizedRole", oscePost.getStandardizedRole().getLongName(), doc, postElement);
+						else
+							createChildNode("standardizedRole", "-", doc, postElement);
 					}
 					
 					//student break
+					boolean islogicalStudentBreakAssignmentsExist=false;
 					if(type==0)
 					{
+						List<Assignment> logicalStudentBreakAssignments=Assignment.retrieveLogicalStudentInBreak(osceDay.getId(), course.getId());
+						if(logicalStudentBreakAssignments.size()==0)
+							islogicalStudentBreakAssignmentsExist=false;
+						else
+							islogicalStudentBreakAssignmentsExist=true;
+						if(islogicalStudentBreakAssignmentsExist)
+						{
 					Element postElement=createEmptyChildNode("post",doc,postsElement);
 					createChildNode("postName", "Student Break", doc, postElement);
 					}
+					}
+					
 					
 					//find examiners, rotation and course wise from Assignment table			
 					Element rotationsElement=createEmptyChildNode("rotations",doc,parcourElement);
@@ -207,10 +224,14 @@ public class ExportAssignment  extends HttpServlet {
 						}
 						
 						//Student break
+						
 						if(type==0)
 						{
+							if(islogicalStudentBreakAssignmentsExist)
+							{
 							Element examinerElement=createEmptyChildNode("examiner",doc,examinersElement);
 							createChildNode("examinerName", "NA", doc, examinerElement);
+							}
 							
 						}
 						List<Date> timeStarts=null;
@@ -249,7 +270,7 @@ public class ExportAssignment  extends HttpServlet {
 							//one more loop because of student break (k=num of post +1)
 							int looplength=0;
 							
-							if(type==0)
+							if(type==0 && islogicalStudentBreakAssignmentsExist)
 							{
 								looplength=oscePosts.size()+1;
 							}
@@ -498,7 +519,7 @@ public class ExportAssignment  extends HttpServlet {
 			TransformerFactory factory = TransformerFactory.newInstance();
 	        Transformer transformer = factory.newTransformer();
 	        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-
+	        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 	        StringWriter sw = new StringWriter();
 	        StreamResult result = new StreamResult(sw);
 	        DOMSource source = new DOMSource(doc);

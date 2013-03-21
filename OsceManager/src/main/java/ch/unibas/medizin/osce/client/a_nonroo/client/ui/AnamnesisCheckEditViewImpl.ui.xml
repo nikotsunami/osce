@@ -60,6 +60,16 @@
                                 <!-- //Issue # 122 : Replace pull down with autocomplete. -->
                                 </td>
                             </tr>
+                            
+                            <tr id='sendToDMZ'>
+                                <td>
+                                	<span class='{style.label}' ui:field="labelSendToDmz" />
+                                </td>
+                                <td>
+                                	<g:CheckBox ui:field="sendToDMZ"></g:CheckBox>
+                                </td>
+                            </tr>
+                            
 						</tbody>
 					</table>
 				</g:HTMLPanel>
