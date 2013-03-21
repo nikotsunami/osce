@@ -1290,5 +1290,6 @@ public interface OsceConstants extends Constants {
 	
 	public String nextRotation();
 
+	public String sendToDmz();
 }
 

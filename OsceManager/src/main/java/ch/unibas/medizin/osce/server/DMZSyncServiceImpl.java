@@ -76,6 +76,9 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	public List<String> pushToDMZ(Long standardizedPatientId,String locale) throws DMZSyncException {
 			StandardizedPatient patient = findPatient(standardizedPatientId);
 			AnamnesisChecksValue.fillAnamnesisChecksValues(patient.getAnamnesisForm().getId());
+			
+			patient.getAnamnesisForm().setAnamnesischecksvalues(AnamnesisChecksValue.findAnamnesisChecksValueForSetAnamnesisCheck(patient.getAnamnesisForm().getId()));
+			
 			String json = "";
 			String url = "";
 			List<String> errorMessages = null;
@@ -92,7 +95,7 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 						   .transform(new DateTransformer("yyyy-MM-dd'T'HH:mm:ss'Z'"), "birthday")
 						   .transform(new DateTransformer("yyyy-MM-dd'T'HH:mm:ss'Z'"), "anamnesisForm.createDate")
 						   .serialize(patient);
-				
+					
 					json = processSendJson(json,locale);
 				}catch(Exception e){
 					throw new DMZSyncException(DMZSyncExceptionType.SERIALIZING_EXCEPTION,e.getMessage());
