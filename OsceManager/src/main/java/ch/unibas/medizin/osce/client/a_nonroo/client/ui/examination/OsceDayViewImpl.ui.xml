@@ -20,8 +20,7 @@
 	}
 	.spacing10
 	{
-		padding: 5px;
-		padding-top: 5px;
+		padding: 2px 10px;
 	}		
 	.marginTop
 	{
@@ -31,9 +30,13 @@
 
 	.btnStyle
 	{		
-		width: 128px;
+		width: 256px;
 	}
 	
+	.heading {
+		font-weight: bold;
+		margin-bottom: 8px;
+	}
 	
 	</ui:style>
 	<g:HTMLPanel>
@@ -43,7 +46,7 @@
 		<g:HTMLPanel ui:field="mainDayHP" styleName="{style.patientTopContainer}" height="270px" width="275px">
 			<!-- Module 5 Bug Report Solution -->
 			<g:HorizontalPanel horizontalAlignment="center" width="250px">
-				 <g:Label ui:field="dayLabel" styleName="{style.spacing10} {style.label}"/>				 
+				 <g:Label ui:field="dayLabel" styleName="{style.spacing10} {style.heading}"/>				 
 			 </g:HorizontalPanel>
 			 
 			<!-- <g:Label ui:field="presentsLabel" styleName="{style.spacing10} {style.label}" > </g:Label> -->
@@ -51,7 +54,7 @@
 			<!-- bug solve start -->
 				<g:VerticalPanel ui:field="presentsVerticlePanel">
 				<g:HTMLPanel>
-					<g:Label ui:field="presentsLabel" styleName="{style.spacing10} {style.label}" > </g:Label>
+					<g:Label ui:field="presentsLabel" styleName="{style.spacing10}" > </g:Label>
 					<table>
 					<!-- <g:HorizontalPanel styleName="{style.spacing10}"> -->
 					<tr>
@@ -94,7 +97,7 @@
 					<g:Label ui:field="lbEndTimeLabel"  styleName="{style.spacing10}"></g:Label>
 					<g:Label ui:field="studentsLabel"  styleName="{style.spacing10}"></g:Label>
 					</g:VerticalPanel>		 -->
-					 <g:Label ui:field="calculationsLabel"  styleName="{style.spacing10} {style.label}" ></g:Label>
+					 <g:Label ui:field="calculationsLabel"  styleName="{style.spacing10} {style.heading}" ></g:Label>
 					 <g:HorizontalPanel>
 					 
 						 <g:VerticalPanel>
@@ -118,15 +121,12 @@
 							<my:IconButton ui:field="saveOsceDayValue" icon="disk"  ></my:IconButton>
 						</g:VerticalPanel>
 				</g:VerticalPanel>
-					<g:HorizontalPanel spacing="7" ui:field="lunchBreakHP">
-						<my:IconButton ui:field="btnShiftLunchBreakPrev" addStyleNames="{style.btnStyle}" icon="triangle-1-n" ></my:IconButton>
-						<my:IconButton ui:field="btnShiftLunchBreakNext" addStyleNames="{style.btnStyle}" icon="triangle-1-s"></my:IconButton>			
-					</g:HorizontalPanel>
-					<!-- Module 5 Bug Report Solution -->
-					<g:HorizontalPanel spacing="7" ui:field="scheduleHP">
+				<g:VerticalPanel horizontalAlignment="center" spacing="4" >
+					<my:IconButton ui:field="btnShiftLunchBreakPrev" addStyleNames="{style.btnStyle}" icon="triangle-1-n" ></my:IconButton>
+					<my:IconButton ui:field="btnShiftLunchBreakNext" addStyleNames="{style.btnStyle}" icon="triangle-1-s"></my:IconButton>
 					<my:IconButton ui:field="btnScheduleEarlier" addStyleNames="{style.btnStyle}" icon=" triangle-1-n"></my:IconButton>
-					<my:IconButton ui:field="btnSchedulePostpone" addStyleNames="{style.btnStyle}" icon="triangle-1-s"></my:IconButton>			
-				</g:HorizontalPanel>
+					<my:IconButton ui:field="btnSchedulePostpone" addStyleNames="{style.btnStyle}" icon="triangle-1-s"></my:IconButton>
+				</g:VerticalPanel>
 				<!-- E Module 5 Bug Report Solution -->						
 			</g:VerticalPanel>
 		</g:HTMLPanel>

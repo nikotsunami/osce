@@ -154,9 +154,7 @@ public class OsceDayViewImpl extends Composite implements OsceDayView,RotationRe
 	@UiField
 	IconButton btnScheduleEarlier;
 	@UiField
-	HTMLPanel mainDayHP;
-	@UiField
-	HorizontalPanel scheduleHP;	
+	HTMLPanel mainDayHP;	
 	@UiField
 	VerticalPanel calculationVPanel;
 	
@@ -174,11 +172,7 @@ public class OsceDayViewImpl extends Composite implements OsceDayView,RotationRe
 	
 	@UiField
 	IconButton btnShiftLunchBreakNext;
-	
-	@UiField
-	HorizontalPanel lunchBreakHP;
-	
-	
+		
 	//E Module 5 Bug Report Solution
 	
 	//spec issue sol
@@ -336,10 +330,6 @@ public class OsceDayViewImpl extends Composite implements OsceDayView,RotationRe
 	public HTMLPanel getMainDayHP()
 	{
 		return this.mainDayHP;
-	}
-	public HorizontalPanel getScheduleHP()
-	{
-		return this.scheduleHP;
 	}
 	public VerticalPanel getDayContentVerticalPanel()
 	{

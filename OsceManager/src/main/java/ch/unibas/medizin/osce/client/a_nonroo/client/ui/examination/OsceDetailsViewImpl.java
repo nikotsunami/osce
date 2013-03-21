@@ -114,7 +114,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 			
 		});
 		
-		labelLongNameHeader.setText(constants.manageOsces() + ": " + "should a date be displayed here?");
+		labelLongNameHeader.setText(constants.manageOsces());
 		
 		/*labelOsce labelStudyYear labelIsRepetion labelRepetitionForOsce labelMaxStudents 
 		labelMaxCircuits  labelMaxRooms labelStationLength labelShortBreak labelShortBreakSPChange labelLunchBreak

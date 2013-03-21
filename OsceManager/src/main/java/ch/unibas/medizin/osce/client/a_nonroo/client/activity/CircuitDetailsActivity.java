@@ -919,9 +919,8 @@ AccordianPanelView.ParcourDelegate
 												if(osceDayProxy.getOsceSequences().size()>1)
 												{
 													Log.info("setSize");
-													osceDayViewImpl.getMainDayHP().setHeight("594px");									
+													osceDayViewImpl.getMainDayHP().setHeight("594px");
 													osceDayViewImpl.getCalculationVerticalPanel().getElement().getStyle().setMarginTop(30,Unit.PX);
-													osceDayViewImpl.getScheduleHP().getElement().getStyle().setMarginTop(30,Unit.PX);
 													osceDayViewImpl.getSaveVerticlePanel().getElement().getStyle().setMarginTop(50,Unit.PX);
 												}
 												//E Module 5 Bug Report Solution

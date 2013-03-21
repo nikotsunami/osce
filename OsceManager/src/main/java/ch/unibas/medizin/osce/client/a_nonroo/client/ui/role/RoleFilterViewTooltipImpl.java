@@ -139,25 +139,19 @@ public class RoleFilterViewTooltipImpl extends PopupPanel  implements RoleView{
 	 @UiField(provided = true)
 	    ValueListBox<Comparison> ComplexityListBox = new ValueListBox<Comparison>(new EnumRenderer<Comparison>(EnumRenderer.Type.NUMERIC));
 	
-
+	 @UiField
+	 SpanElement labelSearch;
 	
 	@UiField
 	Label Author;
-	
 	
 	@UiField
 	Label Reviewer;
 	
 	int suggestWidth=140;
 
-
 	@UiField
 	Label Specification;
-	
-	
-	
-	
-
 	
 	@UiField
 	Label StudyYear;
@@ -585,10 +579,9 @@ public List<String> getWhereFilters() {
 		
 		labelStartDate.setText(constants.startDate());
 		labelEndDate.setText(constants.endDate());
+		labelSearch.setInnerText(constants.searchFor());
 		/*endDate.getTextBox().setReadOnly(true);
 		startDate.getTextBox().setReadOnly(true);*/
-		
-		
 	
 		ComplexityListBox.setAcceptableValues(Arrays.asList(Comparison.values()));
 		
@@ -626,8 +619,8 @@ public List<String> getWhereFilters() {
 		initCheckBox(ItemValue, "itemValue", constants.itemValue());
 		Complexity.setText(constants.roleComplexity());
 		Author.setText(constants.author());
-		Specification.setText(constants.specification());
-		StudyYear.setText(constants.studyYear());
+		Specification.setText(constants.discipline());
+		StudyYear.setText(constants.studyYears());
 		Keyword.setText(constants.keyword());
 		
 		maxApplicableFilters = fields.size();

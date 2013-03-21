@@ -40,11 +40,25 @@ Known Issues
     should be deactivated.
   * There is a null entry in the Semester dropdown
 - SP Assignment / Selection (RoleAssignmentPlace):
+  * First name and name are in the wrong order
+- Schedule:
+  * An examiner can be assigned to different stations at the same time!
+- DMZ Sync:
+  * Error messages don't seem to be displayed properly
+- IndividualSchedulesView:
+  * Color names are not rendered
 
 Suggested Features / Improvements
 ---------------------------------
+- General Deployment:
+  * Folders (e.g. for image upload) should be dynamically configured instead of
+    having these statically defined. At least the root directory should be 
+    configurable to some extent; currently it is fixed at /usr/oscemanager which
+    is problematic when running multiple instances on one server.
 - General UI:
   * Lots of views are pretty ugly; especially these grey borders.
+  * Lots of ValueListBox objects have null values. It would be nice if they 
+    didn't. (e.g. Academic year dropdown)
   * An icon class that helps getting rid of the ugly OsMaConstant-hack.
   * If tables (or other views) are empty because there is no data in the 
     database, there should be no loading gifs displayed.
@@ -53,6 +67,8 @@ Suggested Features / Improvements
     situations, especially because of the delay until it appears. E.g. when 
     assigning a room to a station in "Define circuit details", it takes several
     seconds between pressing the okay button and the loading circle to appear.
+  * Dates and times in general could be slightly beautified; maybe tied in 
+    with i18n
 - Simulated Patients:
   * Instead of having separate "Delete" and "Anonymize" buttons, a single 
     delete-button would be sufficient, if the software would automatically
@@ -80,6 +96,18 @@ Suggested Features / Improvements
     room selection or marked (and possibly moved to the bottom of the list)
   * The save button behaviour is confusing. There are basically three ways data
     in this view is saved instead of just one.
+  * Nicer fields / assistance when entering time values (e.g. user could enter
+    non-numeric values; this is ugly) and date.
+  * A possibility to have an OSCE WITHOUT lunch break may be nice?
+- Edit schedule:
+  * The right click menu for swapping students and SPs is rather obscure.
+    
+    Suggestion: Use Rollover-Tooltips for the general information (instead of
+    forcing the user to click) and have tooltips with possible actions displayed
+    on left click.
+- Error Handling in general:
+  * IN 2013, Error popup windows should be a thing of the past! Errors related
+    to user data entries should be shown where they are relevant!
 - Cleanup:
   * MessageConfirmationDialogBox is a widget, but is in 
     ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination

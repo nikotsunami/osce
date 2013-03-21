@@ -61,7 +61,7 @@
 	<g:FocusPanel ui:field="filterPanelRoot" addStyleNames="{style.noOutline}">	
 	<g:HTMLPanel addStyleNames="{style.popupPanel}">
 		<span class="ui-icon ui-icon-wrench" style="margin: 0 10px 6px 0; float:left"></span>
-				<span style="margin-left: 0px"><strong ui:field="labelSearch">Suche nach...</strong></span>
+				<span style="margin-left: 0px; font-weight: bold" ui:field="labelSearch"></span>
 			 	<my:IconButton icon="arrowreturnthick-1-w" ui:field="resetButton" addStyleNames="{style.floatRight}"></my:IconButton>
 			<div style="clear:both">
 			<g:HorizontalPanel>
@@ -78,13 +78,13 @@
 				</g:VerticalPanel>
 			</g:HorizontalPanel>
 			<g:HorizontalPanel styleName="{style.popupPanel}">
-					<g:Label ui:field="Complexity" styleName="{style.complexity}">Complexity  </g:Label>
+					<g:Label ui:field="Complexity" styleName="{style.complexity}"></g:Label>
 					<g:ValueListBox ui:field="ComplexityListBox" styleName="{style.listBoxStyle}"></g:ValueListBox>
 					<g:TextBox ui:field="ComplexityText" styleName="{style.text}"></g:TextBox>
 			</g:HorizontalPanel >
 			<g:HorizontalPanel styleName="{style.popupPanel}">
 			
-					<g:Label ui:field="Author" styleName="{style.Author}">Author</g:Label>
+					<g:Label ui:field="Author" styleName="{style.Author}"></g:Label>
 					
 					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 					<!-- <g:SuggestBox ui:field="autherSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:SuggestBox> -->
@@ -95,7 +95,7 @@
 					<!-- <g:ValueListBox ui:field="AuthorListBox" styleName="{style.listBoxStyle}" pixelSize="150,25" ></g:ValueListBox> -->
 			</g:HorizontalPanel>
 			<g:HorizontalPanel styleName="{style.popupPanel}">
-					<g:Label ui:field="Reviewer" styleName="{style.Reviewer}">Reviewer</g:Label>
+					<g:Label ui:field="Reviewer" styleName="{style.Reviewer}"></g:Label>
 					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 					<i:DefaultSuggestBox ui:field="reviewerSugestionBox" pixelSize="180,25" styleName="{style.listBoxStyle}"></i:DefaultSuggestBox>
 					<!-- <g:SuggestBox ui:field="reviewerSugestionBox"  pixelSize="150,25" styleName="{style.listBoxStyle}"></g:SuggestBox> -->
@@ -103,7 +103,7 @@
 					<!-- <g:ValueListBox ui:field="ReviewerListBox" styleName="{style.listBoxStyle}" pixelSize="150,25" ></g:ValueListBox> -->
 			</g:HorizontalPanel >
 			<g:HorizontalPanel styleName="{style.popupPanel}">
-					<g:Label ui:field="Specification" styleName="{style.Specification}">Specification</g:Label>
+					<g:Label ui:field="Specification" styleName="{style.Specification}"></g:Label>
 					<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 					<i:DefaultSuggestBox ui:field="SpecificationSugestionBox" pixelSize="180,25" styleName="{style.listBoxStyle}"></i:DefaultSuggestBox>
 					
