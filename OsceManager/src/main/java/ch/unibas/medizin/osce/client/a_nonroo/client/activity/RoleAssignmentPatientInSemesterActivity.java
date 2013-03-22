@@ -3015,9 +3015,9 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 						}
 					}
 
-					if ((tempTraining.toString().compareTo("") == 0) && (tempOsceDay.toString().compareTo("") == 0) && (tempAssignedRole.toString().compareTo("") == 0)) {
+					/*if ((tempTraining.toString().compareTo("") == 0) && (tempOsceDay.toString().compareTo("") == 0) && (tempAssignedRole.toString().compareTo("") == 0)) {
 						return;
-					}
+					}*/
 
 					RoleAssignmentPopupViewImpl.setPopUpText(tempTraining.toString(), tempOsceDay.toString(), tempAssignedRole.toString(),left,top);
 
@@ -3585,6 +3585,8 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		final VerticalPanel vp = new VerticalPanel();
 		final IconButton okBtn = new IconButton();
 		
+		panel.setWidth("250px");
+		
 		panel.setText(constants.acceptOsceDay());
 		
 		vp.setSpacing(5);
@@ -3624,13 +3626,20 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 										chekBox.setValue(true);
 									
 									checkBoxList.add(chekBox);
-									label.getElement().getStyle().setPaddingTop(9, Unit.PX);
+									label.getElement().getStyle().setPaddingTop(6, Unit.PX);
 									
 									HorizontalPanel hp = new HorizontalPanel();
 									hp.add(chekBox);
 									hp.add(label);
 									vp.add(hp);
 								}
+							}
+							else
+							{
+								Label label = new Label(constants.noEntries());
+								HorizontalPanel hp = new HorizontalPanel();
+								hp.add(label);
+								vp.add(hp);
 							}
 							
 							HorizontalPanel btnHp = new HorizontalPanel();
@@ -3648,7 +3657,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 							panel.setAutoHideEnabled(true);
 												
 							//panel.setGlassEnabled(true);					
-							panel.setPopupPosition(left-220, top-100);				
+							panel.setPopupPosition(left-250, top-100);				
 							panel.show();
 						}
 					});

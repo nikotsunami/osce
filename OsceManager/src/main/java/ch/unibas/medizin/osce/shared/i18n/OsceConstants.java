@@ -1293,5 +1293,7 @@ public interface OsceConstants extends Constants {
 	public String sendToDmz();
 	
 	public String acceptOsceDay();
+	
+	public String noEntries();
 }
 

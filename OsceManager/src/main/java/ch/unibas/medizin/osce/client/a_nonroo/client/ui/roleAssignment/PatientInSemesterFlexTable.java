@@ -91,10 +91,13 @@ public class PatientInSemesterFlexTable extends FlexTable {
 		this.setWidget(i + 1, 1, patientInSemesterData.acceptedIconBtn);
 
 		this.setWidget(i + 1, 2, patientInSemesterData.assignedTo);
-		this.setWidget(i + 1, 3, patientInSemesterData.navigationButton);
+		
+		this.setWidget(i+1, 3, patientInSemesterData.editButton);
+		
+		this.setWidget(i + 1, 4, patientInSemesterData.navigationButton);
 
 		// Module 3 Task B
-		this.setWidget(i + 1, 4, patientInSemesterData.deleteButton);
+		this.setWidget(i + 1, 5, patientInSemesterData.deleteButton);
 		//			this.getRowFormatter().addStyleName(row, "flexTableRow");
 		//			this.getCellFormatter().addStyleName(row, 0, patientInSemesterData.getRowSetColor());
 
