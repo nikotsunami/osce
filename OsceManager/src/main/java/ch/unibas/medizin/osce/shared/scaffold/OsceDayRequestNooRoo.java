@@ -31,4 +31,6 @@ public interface OsceDayRequestNooRoo extends RequestContext {
 		
 	public abstract Request<Boolean> updateRotation(Long osceDayId, Integer rotation);
 	public abstract Request<java.util.List<OsceDayProxy>> findOSceDaysForAnOsceId(Long osceId);
+	
+	public abstract Request<java.util.List<OsceDayProxy>> findOsceDayBySemester(Long semesterId);
 }

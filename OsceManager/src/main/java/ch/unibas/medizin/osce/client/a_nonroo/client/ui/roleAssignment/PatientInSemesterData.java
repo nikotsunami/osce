@@ -16,7 +16,10 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class PatientInSemesterData {
 
@@ -26,6 +29,8 @@ public class PatientInSemesterData {
 	public PatientAssignLabel assignedTo;
 	public IconButton navigationButton;
 	public IconButton deleteButton;
+	
+	public IconButton editButton;
 	// private int index;
 
 	private RoleAssignmentView.Delegate delegate;
@@ -149,6 +154,28 @@ public class PatientInSemesterData {
 					dialogBox.showYesNoDialog(constants.confirmationDeleteAssignment());
 				}
 
+			}
+		});
+		
+		this.editButton = new IconButton();
+		this.editButton.setIcon("plusthick");
+		this.editButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				//Window.alert("Clicked : " + patientInSemesterProxy.getId());
+				/*final PopupPanel panel = new PopupPanel();
+				final VerticalPanel vp = new VerticalPanel();
+				final IconButton okBtn = new IconButton();
+				okBtn.setText(constants.okBtn());
+				vp.add(okBtn);
+				
+				panel.add(vp);
+				
+				panel.center();
+				panel.show();*/
+				
+				delegate.editRoleAssignmentClicked(patientInSemesterProxy, event.getClientX(), event.getClientY());
 			}
 		});
 		

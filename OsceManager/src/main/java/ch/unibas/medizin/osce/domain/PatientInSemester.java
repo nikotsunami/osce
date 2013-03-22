@@ -355,4 +355,22 @@ public class PatientInSemester {
     	
     }
     
+    public static Boolean updatePatientInSemesterForOsceDay(Long patientInSemsterId, List<Long> osceDayIdList)
+    {
+    	Set<OsceDay> osceDaySet = new HashSet<OsceDay>();
+    	PatientInSemester pis = PatientInSemester.findPatientInSemester(patientInSemsterId);
+    	
+    	for (Long id : osceDayIdList)
+    	{
+    		OsceDay osceDay = OsceDay.findOsceDay(id);
+    		osceDaySet.add(osceDay);
+    	}
+    	
+    	pis.setOsceDays(osceDaySet);
+    	
+    	pis.persist();
+    
+    	return true;
+    }
+    
 }

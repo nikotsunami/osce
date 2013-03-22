@@ -72,6 +72,7 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
@@ -88,12 +89,14 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.Range;
 
@@ -2969,7 +2972,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 //							Log.info("TrainingProxy.getName()" + trainingProxy.getName());
 							if (trainingProxy != null) {
 								if (tempTraining.toString().compareTo("") != 0) {
-									tempTraining.append(" ,");
+									tempTraining.append(" ,");									
 								}
 								tempTraining.append(trainingProxy.getName());
 							}
@@ -2985,9 +2988,13 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 							if (osceDayProxy != null) {
 								if (tempOsceDay.toString().compareTo("") != 0) {
 									tempOsceDay.append(" ,");
+									//tempOsceDay.append(" <br> ");
 								}
+								
+								//(DateTimeFormat.getShortDateFormat().format(osceDayProxy.getOsceDate()))
+								
 								tempOsceDay.append((osceDayProxy.getOsceDate() != null) ? // dateFormat.format
-								(DateTimeFormat.getShortDateFormat().format(osceDayProxy.getOsceDate()))
+										(new EnumRenderer<StudyYears>().render(osceDayProxy.getOsce().getStudyYear()) +"." + osceDayProxy.getOsce().getName() +" - " + DateTimeFormat.getShortDateFormat().format(osceDayProxy.getOsceDate()))
 										: "" + " - " + ((osceDayProxy.getOsce() != null && osceDayProxy.getOsce().getName() != null) ? osceDayProxy.getOsce().getName() : ""));
 							}
 
@@ -3567,6 +3574,119 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 	
 		initPatientInSemester(true, false, false,value);
 		
+	}
+
+	@Override
+	public void editRoleAssignmentClicked(final PatientInSemesterProxy patientInSemProxy, final int left, final int top) {
+		
+		final List<Long> pisOsceDayIdList = new ArrayList<Long>();
+		final List<CheckBox> checkBoxList = new ArrayList<CheckBox>();
+		final DialogBox panel = new DialogBox();
+		final VerticalPanel vp = new VerticalPanel();
+		final IconButton okBtn = new IconButton();
+		
+		panel.setText(constants.acceptOsceDay());
+		
+		vp.setSpacing(5);
+		//"EEE, MMM d, ''yy"
+		
+		final DateTimeFormat fmt = DateTimeFormat.getFormat("EEEE, MMMM dd, yyyy");
+			    
+		if (semesterProxy != null)
+		{
+			requests.patientInSemesterRequest().findPatientInSemester(patientInSemProxy.getId()).with("osceDays").fire(new OSCEReceiver<PatientInSemesterProxy>() {
+
+				@Override
+				public void onSuccess(PatientInSemesterProxy response) {
+					
+					final PatientInSemesterProxy patientInSemesterProxy = response;
+					
+					requests.osceDayRequestNooRoo().findOsceDayBySemester(semesterProxy.getId()).with("osce").fire(new OSCEReceiver<List<OsceDayProxy>>() {
+
+						@Override
+						public void onSuccess(List<OsceDayProxy> response) {
+						
+							if (response.size() > 0)
+							{
+								/*for (OsceDayProxy osceDayTemp : patientInSemesterProxy.getOsceDays())
+								{
+									System.out.println("ID : " + osceDayTemp.getId());
+								}*/
+								for (OsceDayProxy osceDay : response)
+								{
+									String header = new EnumRenderer<StudyYears>().render(osceDay.getOsce().getStudyYear()) +"." + osceDay.getOsce().getName() +" - " + DateTimeFormat.getShortDateFormat().format(osceDay.getOsceDate());
+									
+									CheckBox chekBox = new CheckBox();
+									Label label = new Label(header);
+									chekBox.setFormValue( osceDay.getId().toString());
+									
+									if (patientInSemesterProxy.getOsceDays().contains(osceDay))
+										chekBox.setValue(true);
+									
+									checkBoxList.add(chekBox);
+									label.getElement().getStyle().setPaddingTop(9, Unit.PX);
+									
+									HorizontalPanel hp = new HorizontalPanel();
+									hp.add(chekBox);
+									hp.add(label);
+									vp.add(hp);
+								}
+							}
+							
+							HorizontalPanel btnHp = new HorizontalPanel();
+							btnHp.setWidth("100%");
+							btnHp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+							okBtn.setIcon("check");
+							okBtn.setText(constants.okBtn());
+							btnHp.add(okBtn);
+							vp.add(btnHp);
+							
+							panel.add(vp);
+							
+							//panel.setGlassEnabled(true);
+							//panel.setAnimationEnabled(true);
+							panel.setAutoHideEnabled(true);
+												
+							//panel.setGlassEnabled(true);					
+							panel.setPopupPosition(left-220, top-100);				
+							panel.show();
+						}
+					});
+				}
+			});
+			
+		}
+		
+		okBtn.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				panel.hide();
+				
+				if (checkBoxList.size() > 0)
+				{
+					List<Long> osceDayIdList = new ArrayList<Long>();
+					
+					for (CheckBox chekBox : checkBoxList)
+					{
+						if (chekBox.getValue())
+						{
+							osceDayIdList.add(Long.parseLong(chekBox.getFormValue()));
+						}
+					}
+					
+					requests.patientInSemesterRequestNonRoo().updatePatientInSemesterForOsceDay(patientInSemProxy.getId(), osceDayIdList).fire(new OSCEReceiver<Boolean>() {
+
+						@Override
+						public void onSuccess(Boolean response) {
+							
+						}
+					});
+				}
+			}
+		});
+
 	}
 
 }

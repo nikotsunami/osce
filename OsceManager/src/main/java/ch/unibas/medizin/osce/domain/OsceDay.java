@@ -799,5 +799,13 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 	    return 0;
 	}
 	//spec]
+	
+	public static List<OsceDay> findOsceDayBySemester(Long semesterId)
+	{
+		EntityManager em = entityManager();
+		String sql = "SELECT od FROM OsceDay od WHERE od.osce.semester.id = " + semesterId + " ORDER BY od.osceDate";
+		TypedQuery<OsceDay> query = em.createQuery(sql, OsceDay.class);
+		return query.getResultList();
+	}
 
 }

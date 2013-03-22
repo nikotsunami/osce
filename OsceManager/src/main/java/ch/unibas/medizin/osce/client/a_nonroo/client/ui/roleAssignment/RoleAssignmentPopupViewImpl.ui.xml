@@ -10,11 +10,11 @@
 	</ui:style>
 	<g:VerticalPanel spacing="10">
 		<g:Label ui:field="trainingHeaderLabel"></g:Label>
-		<g:Label ui:field="trainingTextLabel"></g:Label>
+		<g:Label ui:field="trainingTextLabel" width="210px"></g:Label>
 		<g:Label ui:field="OsceHeaderLabel"></g:Label>
-		<g:Label ui:field="OsceTextLabel"></g:Label>
+		<g:Label ui:field="OsceTextLabel" width="210px"></g:Label>
 		<g:Label ui:field="roleAssignHeaderLabel"></g:Label>
-		<g:Label ui:field="roleAssignTextLabel"></g:Label>
+		<g:Label ui:field="roleAssignTextLabel" width="210px"></g:Label>
 		<my:IconButton icon="check" ui:field="okButton"></my:IconButton>
 	</g:VerticalPanel>
 </ui:UiBinder>
