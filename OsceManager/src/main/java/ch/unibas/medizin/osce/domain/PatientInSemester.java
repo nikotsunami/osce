@@ -373,4 +373,16 @@ public class PatientInSemester {
     	return true;
     }
     
+    public static PatientInSemester findPatientInSemesterByStandardizedPatientAndSemester(StandardizedPatient patient, Semester semester) {
+        if (patient == null) return null;
+        
+        EntityManager em = entityManager();
+        String sql = "SELECT o FROM PatientInSemester AS o WHERE o.standardizedPatient.id = " + patient.getId() + " AND o.semester.id = " + semester.getId();
+        TypedQuery<PatientInSemester> query = em.createQuery(sql, PatientInSemester.class);
+        List<PatientInSemester> resultList = query.getResultList();
+        
+        if (resultList == null || resultList.size() == 0) return null;
+        return resultList.get(0);
+    }
+    
 }

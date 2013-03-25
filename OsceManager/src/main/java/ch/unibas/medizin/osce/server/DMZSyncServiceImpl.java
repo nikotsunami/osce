@@ -428,7 +428,7 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				patient.persist();
 			}
 			if(patient != null){
-				PatientInSemester semester =PatientInSemester.findPatientInSemesterByStandardizedPatient(patient);
+				/*PatientInSemester semester =PatientInSemester.findPatientInSemesterByStandardizedPatient(patient);
 				
 				Semester inSemester=null;
 				if(jsonObject.get("semester") != JSONObject.NULL){
@@ -437,7 +437,28 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				
 				if(semester == null){
 					semester = new PatientInSemester();	
+				}*/
+				
+				//SPEC Change[
+				
+				PatientInSemester semester = null;
+				Semester inSemester = null;				
+				
+				if(jsonObject.get("semester") != JSONObject.NULL){
+					inSemester = Semester.findSemester(jsonObject.getLong("semester"));	
 				}
+				
+				if(inSemester == null)
+					return;
+				else
+				{	
+					semester =PatientInSemester.findPatientInSemesterByStandardizedPatientAndSemester(patient, inSemester);
+					
+					if(semester == null){
+						semester = new PatientInSemester();	
+					}
+				}
+				//SPEC Change]
 				
 				semester.setStandardizedPatient(patient);
 				semester.setAccepted(accepted);
