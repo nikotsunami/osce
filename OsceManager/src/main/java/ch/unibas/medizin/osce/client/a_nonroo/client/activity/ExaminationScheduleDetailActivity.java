@@ -1035,7 +1035,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 									examinationView.getExaminerPanel().setHeight(examinerSlotLength+"px");
 									examinationView.setOscePostView(oscePostView);
 									((ExaminationViewImpl)examinationView).height=examinerSlotLength.intValue();
-									if(j==response.size()-1 && oscePostProxy.getId()==oscePostProxies.get(oscePostProxies.size()-1).getId())
+									if(j==response.size()-1 && oscePostProxy.getId().longValue()==oscePostProxies.get(oscePostProxies.size()-1).getId().longValue())
 										examinationView.getExaminerPanel().addStyleName("rightBottom-radius");
 									
 									if(j>0)

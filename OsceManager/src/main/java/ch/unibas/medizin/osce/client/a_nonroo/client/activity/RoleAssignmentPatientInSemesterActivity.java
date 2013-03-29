@@ -59,6 +59,7 @@ import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
+import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.StudyYears;
@@ -77,6 +78,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
@@ -1131,7 +1133,7 @@ public void refreshAllRoleSubeView(OsceDaySubViewImpl osceDaySubViewImpl,OsceSeq
 		{
 			Log.info("refreshAllRoleSubeView :"+((HorizontalPanel)((AbsolutePanel)((HorizontalPanel)osceDaySubViewImpl.getSequenceVP().getWidget(i)).getWidget(0)).getWidget(0)).getWidget(j));
 			RoleSubView roleSubView=((RoleSubView)((HorizontalPanel)((AbsolutePanel)((HorizontalPanel)osceDaySubViewImpl.getSequenceVP().getWidget(i)).getWidget(0)).getWidget(0)).getWidget(j));
-			if(roleSubView.getOsceSequenceProxy().getId()==osceSequenceProxy.getId())
+			if(roleSubView.getOsceSequenceProxy().getId().longValue()==osceSequenceProxy.getId().longValue())
 			{
 			//	if(j==((HorizontalPanel)((AbsolutePanel)((HorizontalPanel)osceDaySubViewImpl.getSequenceVP().getWidget(i)).getWidget(0)).getWidget(0)).getWidgetCount()-1)
 			//		refreshRoleSubView(roleSubView,true);
@@ -2883,7 +2885,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 				final  OsceDayProxy oDProxy=itOsceDayProxy.next();
 
 							
-				if(osceDaySubViewImpl.getOsceDayProxy().getId()==oDProxy.getId()){
+				if(osceDaySubViewImpl.getOsceDayProxy().getId().longValue() == oDProxy.getId().longValue()){
 				
 				Log.info("Impl Day Proxy :" +osceDaySubViewImpl.getOsceDayProxy().getId());
 				Log.info("Found Key For Day Proxy  :" +oDProxy.getId());
@@ -3696,6 +3698,20 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			}
 		});
 
+	}
+
+	@Override
+	public void exportCsvClicked() {
+		
+		if (semesterProxy != null)
+		{
+			String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.PATIENT_IN_SEMESTER_CSV.ordinal()));          
+			String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+					.concat("&").concat(ResourceDownloadProps.ID).concat("=").concat(URL.encodeQueryString(semesterProxy.getId().toString()));
+			Log.info("--> url is : " +url);
+			Window.open(url, "", "");
+		}
+		
 	}
 
 }

@@ -3,7 +3,6 @@ package ch.unibas.medizin.osce.server.upload;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,11 +11,13 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.Answer;
@@ -38,8 +39,11 @@ public class ExportStatisticData extends HttpServlet{
 	  protected void doGet(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException 
 	  {
 		  String osceId=request.getParameter("osceId");
-		  String fileName=createCSV(new Long(osceId),request);
+		  List<String> fileNameList = new ArrayList<String>();
+		  String fileName=createCSV(new Long(osceId),request, getServletConfig().getServletContext(), true,fileNameList);
 		  
+		  ByteArrayOutputStream os = new ByteArrayOutputStream();
+		  createZipFile("OsceStatisticData.zip", fileNameList,os);
 		  try{
 				
 				
@@ -55,16 +59,11 @@ public class ExportStatisticData extends HttpServlet{
 				Log.info(" file :" + fileName);
 				
 				OutputStream out = resp.getOutputStream();
-				FileInputStream in = new FileInputStream(fileName);
 				
-				
-				
-				byte[] buffer = new byte[4096];
-				int length;
-				while ((length = in.read(buffer)) > 0){
-				    out.write(buffer, 0, length);
+				byte[] in = os.toByteArray();
+				if (in.length > 0){
+				    out.write(in);
 				}
-				in.close();
 				
 				File htmlFile=new File(fileName);
 				htmlFile.delete();
@@ -73,6 +72,8 @@ public class ExportStatisticData extends HttpServlet{
 			}
 			catch (Exception e) {
 				Log.error(e.getMessage(),e);
+			}finally {
+				os.close();
 			}
 	  }
 	  
@@ -234,19 +235,24 @@ public class ExportStatisticData extends HttpServlet{
 		  return fileName;
 	  }*/
 	  
-	  public String createCSV(Long osceId,HttpServletRequest request)
+	  /*
+	   * flag is used to decide for which this file will generated
+	   * If flag is true then it generated for Export and
+	   * If flag is false then it generated for Rscript
+	  */
+	  public static String createCSV(Long osceId,HttpServletRequest request, ServletContext servletContext, Boolean flag,final List<String> fileNameList)
 	  {
 		  String fileName = "";
 		  String zipFileName = "";
 		  char alphaSeq = 'A';
-		  List<String> fileNameList = new ArrayList<String>();
+		  
 		  Long impressionQueId = null;
 		  
 		  try
 		  {
-			  String path=getServletConfig().getServletContext().getRealPath(OsMaFilePathConstant.assignmentHTML);
-			  System.out.println("PATH : " + path);
-			  //String fileName=path+System.currentTimeMillis()+".csv";
+			  String path = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML);
+			  //System.out.println("PATH : " + path);
+			  
 			  zipFileName = path + "OsceStatisticData.zip";
 			  
 			  Osce osce=Osce.findOsce(osceId);
@@ -266,7 +272,7 @@ public class ExportStatisticData extends HttpServlet{
 						
 						for (OscePost oscePost : oscePostList)
 						{
-							fileName = "Day"+ (i+1) + "_" + oscePost.getStandardizedRole().getShortName() + ".csv";
+							fileName = "Day"+ (i+1) + "_" + oscePost.getStandardizedRole().getShortName() + "_" + osceSeq.getLabel() +".csv";
 							fileName = path + fileName;
 							fileNameList.add(fileName);
 							
@@ -298,7 +304,12 @@ public class ExportStatisticData extends HttpServlet{
 									{
 										impressionQueId = question.getId();
 									}
-									writer.append(String.valueOf(alphaSeq) + count++);
+									
+									if (flag)
+										writer.append(String.valueOf(alphaSeq) + count++);
+									else
+										writer.append(String.valueOf(question.getId()));
+									
 									//writer.append(question.getId().toString());
 									writer.append('|');
 								}
@@ -427,7 +438,7 @@ public class ExportStatisticData extends HttpServlet{
 					}
 				}
 				
-				createZipFile(zipFileName, fileNameList, path);
+//				createZipFile(zipFileName, fileNameList, path);
 		  }
 		  catch(Exception e)
 		  {
@@ -437,11 +448,11 @@ public class ExportStatisticData extends HttpServlet{
 		  return zipFileName;
 	  }
 	  
-	 public static void createZipFile(String zipFilePath, List<String> fileNameList, String path)
+	 public static void createZipFile(String zipFilePath, List<String> fileNameList,OutputStream os)
 	 {
 				       
 		    try {
-		      ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipFilePath));
+		      ZipOutputStream zipOut = new ZipOutputStream(os);
 		      
 		      for (int i = 0 ; i < fileNameList.size() ; i ++) {
 		        
@@ -455,7 +466,14 @@ public class ExportStatisticData extends HttpServlet{
 						zipOut.write(buf, 0, len);
 					}
 					
-		            zipOut.closeEntry();
+					in.close();
+					
+		            zipOut.closeEntry();	            
+		            
+		            if(file.exists())
+		            {
+		            	file.delete();
+		            }
 		      }
 		  
 		      zipOut.close();

@@ -69,6 +69,8 @@ public interface RoleAssignmentView extends IsWidget {
 		public void performSearch(String value);
 		
 		public void editRoleAssignmentClicked(PatientInSemesterProxy patientInSemesterProxy, int left, int top);
+		
+		public void exportCsvClicked();
 	}
 
 	void setDelegate(Delegate delegate);

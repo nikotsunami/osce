@@ -49,6 +49,7 @@
 							<my:IconButton icon="gear" ui:field="autoAssignmentBtn"></my:IconButton>
 							<my:IconButton icon="plusthick" ui:field="addManuallyBtn"></my:IconButton>
 							<my:IconButton icon="arrowrefresh-1-w" ui:field="clearSelectionBtn"></my:IconButton>
+							<my:IconButton icon="extlink" ui:field="exportCsv"></my:IconButton>
 						</div>
 					<!-- </g:HTMLPanel> -->
 					<!-- <g:HorizontalPanel spacing="4">

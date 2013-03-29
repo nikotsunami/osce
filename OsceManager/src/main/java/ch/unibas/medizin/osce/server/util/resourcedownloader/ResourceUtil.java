@@ -19,6 +19,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.server.util.file.StandardizedPatientPaymentUtil;
@@ -77,6 +78,12 @@ public class ResourceUtil {
 			fileName = setStandardizedPatientPaymentResource(request, response, os);
 			break;
 		}
+		
+		case PATIENT_IN_SEMESTER_CSV : {
+			fileName = setExportPatientInSemesterCsv(request, response, os);
+			break;
+		}
+		
 		default: {
 			Log.info("Error in entity : " + entity);
 			break;
@@ -85,6 +92,18 @@ public class ResourceUtil {
 
 		sendFile(response, os.toByteArray(), fileName);
 		os = null;
+	}
+
+	private static String setExportPatientInSemesterCsv(HttpServletRequest request, HttpServletResponse response, ByteArrayOutputStream os) {
+		
+		String semesterIdTemp = request.getParameter(ResourceDownloadProps.ID);
+		String filename = "default.csv";
+		
+		if (semesterIdTemp != null && semesterIdTemp.isEmpty() == false)
+		{
+			filename = PatientInSemester.exportCsv(Long.parseLong(semesterIdTemp), os);
+		}
+		return filename;	
 	}
 
 	private static String setChecklistResouce(HttpServletRequest request,

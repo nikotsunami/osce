@@ -1295,5 +1295,7 @@ public interface OsceConstants extends Constants {
 	public String acceptOsceDay();
 	
 	public String noEntries();
+	
+	public String exportCsv();
 }
 

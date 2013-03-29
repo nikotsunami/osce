@@ -486,13 +486,13 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 		if(event.getListOsceDayProxy() !=null && event.getListOsceDayProxy().contains(osceDayProxy))
 		{
 		
-		if(osceDayProxy.getId()==event.getOsceDayProxy().getId())
+		if(osceDayProxy.getId().longValue()==event.getOsceDayProxy().getId().longValue())
 		{
 			Iterator<StandardizedRoleProxy> roles=event.getStandardizedroleProxies().iterator();
 			
 			while(roles.hasNext())
 			{
-				if(roles.next().getId()==roleProxy.getId())
+				if(roles.next().getId().longValue()==roleProxy.getId().longValue())
 				{
 						Log.info("roProxy Highlited is  :" +roleProxy.getId());
 					this.roleHeader.getWidget().addStyleName("highlight-role");
@@ -519,7 +519,7 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 		{
 			this.roleHeader.getWidget().removeStyleName("highlight-role");
 		}
-		else if(! this.isBackUpPanel && event.getStandardizedRoleProxy().getId()==roleProxy.getId()  && (event.getOsceDayProxy().getId() != this.getOsceDayProxy().getId()))
+		else if(! this.isBackUpPanel && event.getStandardizedRoleProxy().getId().longValue()==roleProxy.getId().longValue()  && (event.getOsceDayProxy().getId().longValue() != this.getOsceDayProxy().getId().longValue()))
 		{
 			this.roleHeader.getWidget().removeStyleName("highlight-role");
 		}

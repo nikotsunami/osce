@@ -1,5 +1,9 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -21,6 +25,8 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
+
+import com.csvreader.CsvWriter;
 
 @RooJavaBean
 @RooToString
@@ -383,6 +389,64 @@ public class PatientInSemester {
         
         if (resultList == null || resultList.size() == 0) return null;
         return resultList.get(0);
+    }
+    
+    private static final DateFormat dateformat = new SimpleDateFormat("dd.MM.yyyy");
+    public static String exportCsv(Long semesterId, ByteArrayOutputStream os)
+    {   	
+    	EntityManager em = entityManager();
+    	String sql = "SELECT o FROM PatientInSemester o WHERE o.semester.id = " + semesterId;
+        TypedQuery<PatientInSemester> query = em.createQuery(sql, PatientInSemester.class);
+        List<PatientInSemester> pisList = query.getResultList();
+        
+        try
+        {
+        	CsvWriter writer = new CsvWriter(os, ',', Charset.forName("ISO-8859-1"));
+    		
+    		writer.write("name");
+    		writer.write("prename");
+    		writer.write("email");
+    		writer.write("accepted");    		
+    		
+    		List<OsceDay> osceDayList = OsceDay.findOsceDayBySemester(semesterId);
+    		
+    		for (OsceDay osceDay : osceDayList)
+    		{
+    			writer.write(dateformat.format(osceDay.getOsceDate()));
+    		}
+    		
+    		writer.endRecord();
+    		
+    		for (PatientInSemester pis : pisList)
+    		{
+    			StandardizedPatient patient = pis.getStandardizedPatient();
+    			writer.write(patient.getName());
+    			writer.write(patient.getPreName());
+    			writer.write(patient.getEmail());
+    			writer.write(pis.getAccepted().toString());
+    			
+    			Set<OsceDay> osceDaySet = pis.getOsceDays();
+    			
+    			for(OsceDay osceDay : osceDayList)
+    			{
+    				if (osceDaySet.contains(osceDay))
+    					writer.write("available");
+    				else
+    					writer.write("notavailable");
+    			}
+    			
+    			writer.endRecord();
+    		}
+    		
+    		writer.close();
+        }
+        catch(Exception e)
+        {
+        	e.printStackTrace();
+        }
+        
+        return "SPInSemester.csv";
+        
     }
     
 }

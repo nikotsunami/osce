@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoleSelectedHandler;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
@@ -100,6 +101,9 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 
 	@UiField
 	Button clearSelectionBtn;
+	
+	@UiField
+	IconButton exportCsv;
 			
 	@UiField
 	public CheckBox ignoreOsceDaycheckBox;
@@ -158,6 +162,8 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 		clearSelectionBtn.setText(constants.clearSelection());
 //		ignoreOsceDaycheckBox.setStyleName("ignoreAcceptedOsceDayPadding");
 		ignoreOsceDaycheckBox.setText(constants.ignoreAcceptedOsceDay());
+		
+		exportCsv.setText(constants.exportCsv());
 		
 		headers = new String[] { constants.name(), constants.roleAccepted(),
 				constants.roleAssignTo(), "", "" };
@@ -377,4 +383,8 @@ delegate.showApplicationLoading(true);
 
 	}
 
+	@UiHandler("exportCsv")
+	public void onExportCsvClicked(ClickEvent event) {
+		delegate.exportCsvClicked();
+	}
 }

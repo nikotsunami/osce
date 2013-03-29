@@ -769,7 +769,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				
 				List<String> postValues=getValue(itemAnalysisData, postKey);
 				
-				for(int k=0;k<(postView.getPostDataHP().getWidgetCount()/2);k++)
+				for(int k=0;k<postValues.size();k++)
 				{
 					((Label)postView.getPostDataHP().getWidget(k)).setText(postValues.get(k));
 				}
@@ -924,9 +924,10 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 									
 									List<String> postValues=getValue(response, postKey);
 									
-									for(int k=0;k<(postView.getPostDataHP().getWidgetCount()/2);k++)
+									for(int k=0;k<postValues.size();k++)
 									{
-										((Label)postView.getPostDataHP().getWidget(k)).setText(postValues.get(k));
+	
+											((Label)postView.getPostDataHP().getWidget(k)).setText(postValues.get(k));
 									}
 									
 									VerticalPanel itemVP=postView.getDisclosureVP();
@@ -963,6 +964,12 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 							
 						}
 					
+						showApplicationLoading(false);
+					}
+					
+					@Override
+					public void onFailure(ServerFailure error) {
+						Log.info("on failure called : " + error.getMessage());
 						showApplicationLoading(false);
 					}
 				});

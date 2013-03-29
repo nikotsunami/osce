@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -18,9 +19,14 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import ch.unibas.medizin.osce.server.CalculateCronbachValue;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
+import ch.unibas.medizin.osce.server.upload.ExportStatisticData;
 import ch.unibas.medizin.osce.shared.MapEnvelop;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.requestfactory.server.RequestFactoryServlet;
+
 
 @RooJavaBean
 @RooToString
@@ -200,8 +206,15 @@ public class Answer {
 		{
 			Osce osce = Osce.findOsce(osceId);
 			List<OsceDay> days = osce.getOsce_days();
+			
+			ExportStatisticData.createCSV(osceId, RequestFactoryServlet.getThreadLocalRequest(),RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext(), false,new ArrayList<String>());
 
+			int dayCtr = 0;
+			
 			for (OsceDay day : days) {
+				
+				dayCtr++;
+				
 				List<OsceSequence> sequences = day.getOsceSequences();
 
 				// sequence wise calculation
@@ -218,7 +231,15 @@ public class Answer {
 					// post wise calculation
 					for (int l = 0; l < posts.size(); l++) {
 						OscePost post = posts.get(l);
+						
+						String fileName = "Day"+ (dayCtr) + "_" + post.getStandardizedRole().getShortName() + "_" + seq.getLabel() + ".csv";
 
+						fileName = RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(OsMaFilePathConstant.assignmentHTML) + fileName;
+						
+						Map<String, String> cronValMap = new CalculateCronbachValue().countValue(fileName);
+						
+						String overAllCronbachVal = cronValMap.get("overall");
+						
 						List<String> postLevelList = new ArrayList<String>();
 
 						// retrieve distict item for this post
@@ -381,7 +402,12 @@ public class Answer {
 							questionList.add(frequency);
 
 							// 6. Chronbachs alpha
-							questionList.add("-");
+							//questionList.add("-");
+							String val = cronValMap.get(item.getId().toString());
+							if (val == null)
+								questionList.add("-");
+							else	
+								questionList.add(cronValMap.get(item.getId().toString()));
 
 							MapEnvelop questionMap = new MapEnvelop();
 							questionMap.put("q" + post.getId() + item.getId(),
@@ -427,7 +453,19 @@ public class Answer {
 						}
 						totalPointsPerPost[l] = totalPointsPerPost[l]
 								+ StatUtils.sum(totalPointsPerItem);
-
+						//4.points at post level
+						postLevelList.add("-");
+						
+						//5.frequency at post level
+						postLevelList.add("-");
+						
+						//6. Crohbach's alpha at post level
+						
+						if (!overAllCronbachVal.equals("NA"))
+							postLevelList.add(overAllCronbachVal);
+						else
+							postLevelList.add("0.0");
+						
 						MapEnvelop postMap = new MapEnvelop();
 						postMap.put("p" + post.getId(), postLevelList);
 						data.add(postMap);
