@@ -25,4 +25,6 @@ public interface AnswerRequestNonRoo  extends RequestContext{
 	 public abstract Request<List<MapEnvelopProxy>> calculate(Long osceId,int analyticType,Set<Long> itemId);
 	 
 	 public abstract Request< List<ChecklistQuestionProxy>>  retrieveDistinctItems(Long osceId);
+	 
+	 public abstract Request<List<MapEnvelopProxy>> retrieveCalulatedData(Long osceId,int analyticType);
 }

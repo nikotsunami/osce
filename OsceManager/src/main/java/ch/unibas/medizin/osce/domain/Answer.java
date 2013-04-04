@@ -207,9 +207,14 @@ public class Answer {
 			Osce osce = Osce.findOsce(osceId);
 			List<OsceDay> days = osce.getOsce_days();
 			
+			//clear calculated data 
+			ItemAnalysis.clearData(osce);
+			
 			ExportStatisticData.createCSV(osceId, RequestFactoryServlet.getThreadLocalRequest(),RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext(), false,new ArrayList<String>());
 
 			int dayCtr = 0;
+			
+			
 			
 			for (OsceDay day : days) {
 				
@@ -278,7 +283,11 @@ public class Answer {
 							// of student.
 							List<Answer> itemAnswers = retrieveQuestionPerPostAndItem(
 									post.getId(), item.getId());
-
+							
+							
+							//save data at question level
+							ItemAnalysis itemAnalysis=new ItemAnalysis();
+							
 							// 1. calculate missing at item level
 							int countAnswerTableRow = itemAnswers.size();
 							Log.info("number of student answer :"
@@ -297,7 +306,10 @@ public class Answer {
 							String missingItem = missingAtItemLevel + "/"
 									+ missingPercentageAtItemLevel + "%";
 							questionList.add(missingItem);
-
+							
+							itemAnalysis.setMissing(missingAtItemLevel);
+							itemAnalysis.setMissingPercentage(new Double(missingPercentageAtItemLevel));
+							
 							// 2. calculate average at item level
 							// List<Answer>
 							// itemAnswers=retrieveQuestionPerPostAndItem(post.getId(),item.getId());
@@ -371,7 +383,9 @@ public class Answer {
 							pointAvg = roundTwoDecimals(pointAvg);
 							
 							questionList.add(pointAvg.toString());
-
+							
+							itemAnalysis.setMean(pointAvg);
+							
 							// 3.calculate S.D at item level
 							Double pointSD = Math.sqrt(StatUtils
 									.variance(points));
@@ -380,9 +394,13 @@ public class Answer {
 							
 
 							questionList.add(pointSD.toString());
-
+							
+							itemAnalysis.setStandardDeviation(pointSD);
+							
 							// 4. Point / Option Values
 							questionList.add(optionValues);
+							
+							itemAnalysis.setPoints(optionValues);
 
 							// 5. frequency
 							for (int j = 0; j < optionValuesList.size(); j++) {
@@ -400,21 +418,39 @@ public class Answer {
 
 							}
 							questionList.add(frequency);
-
+							
+							itemAnalysis.setFrequency(frequency);
 							// 6. Chronbachs alpha
 							//questionList.add("-");
 							String val = cronValMap.get(item.getId().toString());
 							if (val == null)
+							{
 								questionList.add("-");
+								itemAnalysis.setCronbach(0.0);
+							}
 							else	
+							{
 								questionList.add(cronValMap.get(item.getId().toString()));
+								itemAnalysis.setCronbach(new Double(val));
+							}
 
 							MapEnvelop questionMap = new MapEnvelop();
 							questionMap.put("q" + post.getId() + item.getId(),
 									questionList);
 							data.add(questionMap);
+							
+							//save data at item level
+							itemAnalysis.setOsce(osce);
+							itemAnalysis.setQuestion(item);
+							itemAnalysis.setOscePost(post);
+							itemAnalysis.setOsceSequence(seq);
+							itemAnalysis.persist();
 						}
-
+						
+						
+						//save data at post level
+						ItemAnalysis itemAnalysis=new ItemAnalysis();
+						
 						// 1. Missing at post level
 						double missingPercentageAtPostLevel = 0;
 						if (totalPerPost != 0)
@@ -425,6 +461,7 @@ public class Answer {
 
 						String missing = missingAtPostLevel + "/"
 								+ totalPerPost;
+						
 						postLevelList.add(missing);
 
 						Log.info("missing :" + "p" + post.getId() + "  "
@@ -434,10 +471,14 @@ public class Answer {
 						average = average / pointsPerPostSize;
 
 						if (average.isNaN())
+						{
 							postLevelList.add("0.0");
+							itemAnalysis.setMean(0.0);
+						}
 						else {
 							average = roundTwoDecimals(average);
 							postLevelList.add(average.toString());
+							itemAnalysis.setMean(average);
 						}
 
 						// 3. standard deviation
@@ -447,9 +488,12 @@ public class Answer {
 							sdPerPost = roundTwoDecimals(sdPerPost);
 							sumOfPoinstAtSeqLevel.add(sdPerPost);
 							postLevelList.add(sdPerPost.toString());
+							
+							itemAnalysis.setStandardDeviation(sdPerPost);
 						} else {
 							postLevelList.add("0.0");
 							sumOfPoinstAtSeqLevel.add(0.0);
+							itemAnalysis.setStandardDeviation(0.0);
 						}
 						totalPointsPerPost[l] = totalPointsPerPost[l]
 								+ StatUtils.sum(totalPointsPerItem);
@@ -461,14 +505,32 @@ public class Answer {
 						
 						//6. Crohbach's alpha at post level
 						
-						if (!overAllCronbachVal.equals("NA"))
+						if (overAllCronbachVal != null && !overAllCronbachVal.equals("NA"))
+						{
 							postLevelList.add(overAllCronbachVal);
+							itemAnalysis.setCronbach(new Double(overAllCronbachVal));
+						}
 						else
+						{
 							postLevelList.add("0.0");
+							itemAnalysis.setCronbach(0.0);
+						}
 						
 						MapEnvelop postMap = new MapEnvelop();
 						postMap.put("p" + post.getId(), postLevelList);
 						data.add(postMap);
+						
+						//save data at post level
+						itemAnalysis.setMissing(missingAtPostLevel);
+						itemAnalysis.setMissingPercentage(new Double(totalPerPost));
+						itemAnalysis.setOsce(osce);
+						itemAnalysis.setOscePost(post);
+						itemAnalysis.setOsceSequence(seq);
+						
+						
+						itemAnalysis.persist();
+						
+						
 					}
 
 					// 1. standard deviation per sequence
@@ -481,22 +543,37 @@ public class Answer {
 
 					Log.info("Sum of point per sequence :"
 							+ StatUtils.sum(totalPointsPerSum));
-
+					
+					//save data at sequence level
+					ItemAnalysis itemAnalysis=new ItemAnalysis();
+					
 					if (totalPointsPerSum.length != 0) {
 						Double sdPerSequence = Math.sqrt(StatUtils
 								.variance(totalPointsPerSum));
 						sdPerSequence = roundTwoDecimals(sdPerSequence);
 						seqLevelList.add(sdPerSequence.toString());
+						itemAnalysis.setStandardDeviation(sdPerSequence);
 					} else {
 						seqLevelList.add("0.0");
+						itemAnalysis.setStandardDeviation(0.0);
 					}
 					MapEnvelop seqMap = new MapEnvelop();
 
 					seqMap.put("s" + seq.getId(), seqLevelList);
 					data.add(seqMap);
+					
+					//save data at sequence level
+					itemAnalysis.setOsce(osce);
+					itemAnalysis.setOsceSequence(seq);
+					itemAnalysis.persist();
+					
 				}
 
 			}
+			
+			
+			
+			
 
 		} else if (analyticType == 1)// post analysis
 		{
@@ -652,7 +729,180 @@ public class Answer {
 
 		return data;
 	}
+	
+	public static List<MapEnvelop> retrieveCalulatedData(Long osceId,int analyticType)
+	{
+		
+		List<MapEnvelop> data = new ArrayList<MapEnvelop>();
 
+		if (analyticType == 0)// item analysis
+		{
+			Osce osce = Osce.findOsce(osceId);
+			
+			if(ItemAnalysis.countItemAnalysesByOsce(osce) > 0)
+			{
+			
+				
+				List<OsceDay> days = osce.getOsce_days();
+				
+				for(int i=0;i<days.size();i++)
+				{
+					OsceDay day=days.get(i);
+					List<OsceSequence> seqs=day.getOsceSequences();
+					
+					for(int j=0;j<seqs.size();j++)
+					{
+						
+						OsceSequence seq=seqs.get(j);
+						
+						//1. find seq level Data
+						List<ItemAnalysis> seqDatas=ItemAnalysis.findSeqLevelData(osce, seq);
+						
+						List<String> seqLevelList = new ArrayList<String>();
+						
+						
+						for(int k=0;k<seqDatas.size();k++)
+						{
+							ItemAnalysis seqData=seqDatas.get(k);
+							
+							//create seq level list
+							seqLevelList.add(seqData.getStandardDeviation().toString());
+				
+						}
+						
+						//add seq level list to MAP
+						MapEnvelop seqMap = new MapEnvelop();
+						seqMap.put("s" + seq.getId(), seqLevelList);
+						data.add(seqMap);
+						
+						List<OscePost> posts=seq.getOscePosts();
+						
+						for(int l=0;l<posts.size();l++)
+						{
+							
+							
+							OscePost post=posts.get(l);
+							//2. find post level Data
+							List<ItemAnalysis> postDatas=ItemAnalysis.findPostLevelData(osce, seq,post);
+							List<String> postLevelList = new ArrayList<String>();
+							
+							for(int m=0;m<postDatas.size();m++)
+							{
+								ItemAnalysis postData=postDatas.get(m);
+								
+								//2. create post level list
+								postLevelList.add(postData.getMissing().toString() +"/"+postData.getMissingPercentage().intValue());
+
+								Log.info("missing :" + "p" + post.getId() + "  "
+										+ postData.getMissing());
+
+							
+
+									postLevelList.add(postData.getMean().toString());
+									postLevelList.add(postData.getStandardDeviation().toString());
+							
+							
+
+								
+								//4.points at post level
+								postLevelList.add("-");
+								
+								//5.frequency at post level
+								postLevelList.add("-");
+								
+								//6. Crohbach's alpha at post level
+								
+								postLevelList.add(postData.getCronbach().toString());
+								
+								
+								
+								
+					
+							}
+							
+							
+							
+							//add post level list to MAP
+							MapEnvelop postMap = new MapEnvelop();
+							postMap.put("p" + post.getId(), postLevelList);
+							data.add(postMap);
+							
+							// retrieve distict item for this post
+							List<ChecklistQuestion> items = retrieveDistinctQuestion(post
+									.getId());
+							
+							for(int n=0;n<items.size();n++)
+							{
+								ChecklistQuestion item=items.get(n);
+								
+								//2. find post level Data
+								List<ItemAnalysis> itemDatas=ItemAnalysis.findItemLevelData(osce, seq,post,item);
+								List<String> questionList = new ArrayList<String>();
+								
+								for(int p=0;p<itemDatas.size();p++)
+								{
+									ItemAnalysis itemData=itemDatas.get(p);
+									
+									//2. create post level list
+									questionList.add(itemData.getMissing().toString() +"/"+itemData.getMissingPercentage().intValue()+"%");
+
+									Log.info("missing :" + "p" + post.getId() + "  "
+											+ itemData.getMissing());
+
+								
+
+									questionList.add(itemData.getMean().toString());
+									questionList.add(itemData.getStandardDeviation().toString());
+								
+								
+
+									
+									//4.points at post level
+									questionList.add(itemData.getPoints());
+									
+									//5.frequency at post level
+									questionList.add(itemData.getFrequency());
+									
+									//6. Crohbach's alpha at post level
+									
+									questionList.add(itemData.getCronbach().toString());
+									
+									
+									
+									
+						
+								}
+								
+								MapEnvelop questionMap = new MapEnvelop();
+								questionMap.put("q" + post.getId() + item.getId(),
+										questionList);
+								data.add(questionMap);
+							}
+							
+							
+							
+						}
+						
+						
+						
+					}
+				}
+				
+				
+				return data;
+			}
+			else //no data exist
+			{
+				return null;
+			}
+		}
+		
+		
+		
+		
+		return null;
+	}
+	
 	public static double percentage(int a, int b) {
 		double c = a;
 		double d = b;
@@ -733,4 +983,7 @@ public class Answer {
 			return null;
 
 	}
+	
+	
+	
 }

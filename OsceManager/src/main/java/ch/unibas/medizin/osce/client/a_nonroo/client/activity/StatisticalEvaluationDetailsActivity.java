@@ -180,7 +180,24 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 						if(response !=null && response instanceof OsceProxy)
 						{
 							osceProxy=(OsceProxy)response;
-							refreshAllSequences();
+							//retrieve calculated data from database if exist
+							if(analysisType.equals(AnalysisType.item_analysis))
+							{
+								
+								showApplicationLoading(true);
+								requests.answerRequestNonRoo().retrieveCalulatedData(osceProxy.getId(),0).fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
+
+									@Override
+									public void onSuccess(List<MapEnvelopProxy> response) {
+										
+										itemAnalysisData=response;
+										refreshAllSequences();
+										
+										showApplicationLoading(false);
+									}
+								});
+							}
+							
 							
 						}
 						
@@ -233,6 +250,8 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 					createSequence(osceSequenceProxy,osceDayProxy);
 				}
 			}
+			
+			
 		}
 		
 		public void createSequence(OsceSequenceProxy osceSequenceProxy,OsceDayProxy osceDayProxy)
@@ -865,11 +884,12 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 		public void analysisListBoxValueChanged(AnalysisType a) {
 			Log.info("analysisListBoxValueChanged");
 			analysisType=a;
+			retrieveItemAnalysisData();
 			
-	
-				retrieveItemAnalysisData();
 			
-				Log.info(a.toString());
+				
+			
+				
 			
 			
 		}
