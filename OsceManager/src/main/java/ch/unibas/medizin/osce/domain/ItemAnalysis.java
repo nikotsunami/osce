@@ -42,6 +42,8 @@ public class ItemAnalysis {
 	
 	Double missingPercentage;
 	
+	Boolean deActivate;
+	
 	
 	public static void clearData(Osce osce)
 	{
@@ -110,5 +112,25 @@ public class ItemAnalysis {
 		return q.getResultList().get(0);
 	
 	}
-
+	
+	public static Boolean deActivateItem(Long osceId,Long itemId,Boolean deActivate)
+	{
+		EntityManager em = entityManager();
+		
+		String qlString="select i from ItemAnalysis i where  osce.id=:osceId and question.id=:itemId";
+		TypedQuery<ItemAnalysis> q=em.createQuery(qlString, ItemAnalysis.class);
+		q.setParameter("osceId", osceId);
+		q.setParameter("itemId", itemId);
+		List<ItemAnalysis> items=q.getResultList();
+		if(items.size() >0)
+		{
+			ItemAnalysis i=q.getResultList().get(0);
+			i.setDeActivate(deActivate);
+			i.persist();
+			return true;
+		}
+		else
+			return false;
+		
+	}
 }

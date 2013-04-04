@@ -1126,9 +1126,23 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 		
 		public void onOffButtonClicked(Long id,Boolean missing)
 		{
-			if(missing)
+			if(missing)//red
 				missingItemId.add(id);
-			else
+			else//green
 				missingItemId.remove(id);
+			
+			
+			requests.itemAnalysisNonRoo().deActivateItem(osceProxy.getId(), id, missing).fire(new OSCEReceiver<Boolean>() {
+
+				@Override
+				public void onSuccess(Boolean response) {
+					Log.info("deActivateItem"+response);
+					if(!response)
+					{
+						//item is not calculated
+					}
+					
+				}
+			});
 		}
 }

@@ -80,4 +80,6 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	SemesterRequestNonRoo semesterRequestNonRoo();
 	
 	BucketInformationRequestNonRoo bucketInformationRequestNonRoo();
+	
+	ItemAnalysisNonRoo itemAnalysisNonRoo();
 }
