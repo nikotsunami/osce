@@ -325,12 +325,16 @@ public class Answer {
 									break;
 								}
 							}
-
+							itemAnalysis.setDeActivate(isMissing);
 							if (isMissing)
+							{
+								
 								points = new double[itemAnswers.size()];
+							}
 							else
+							{
 								points = new double[totalStudent];
-
+							}
 							int[] optionCounts = new int[item
 									.getCheckListOptions().size()];
 							List<String> optionValuesList = new ArrayList<String>();
@@ -842,6 +846,8 @@ public class Answer {
 								for(int p=0;p<itemDatas.size();p++)
 								{
 									ItemAnalysis itemData=itemDatas.get(p);
+									
+									questionList.add(itemData.getDeActivate().toString());
 									
 									//2. create post level list
 									questionList.add(itemData.getMissing().toString() +"/"+itemData.getMissingPercentage().intValue()+"%");

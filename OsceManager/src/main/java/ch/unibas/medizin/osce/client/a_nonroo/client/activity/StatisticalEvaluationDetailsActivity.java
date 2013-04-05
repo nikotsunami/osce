@@ -648,17 +648,33 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				for(int l=0;l<questionView.getPostDataHP().getWidgetCount();l++)
 				{
 					String itemValue=itemValues.get(l);
-					if(l==0)
+					
+					if(l==0)//missing
+					{
+						if(itemValue.equals("true"))
+						{
+							questionView.getOnOffButton().setDown(true);
+							missingItemId.add(questionView.getChecklistQuestionProxy().getId());
+						}
+						else
+						{
+							questionView.getOnOffButton().setDown(false);
+							missingItemId.remove(questionView.getChecklistQuestionProxy().getId());
+						}
+						continue;
+					}
+					
+					if(l==1)
 					{
 						
 						String temp[]=itemValue.split("/");
 						if(new Double(temp[0]) != 0)
 						{
-							((Label)questionView.getPostDataHP().getWidget(l)).getElement().getStyle().setColor("red");
+							((Label)questionView.getPostDataHP().getWidget(l-1)).getElement().getStyle().setColor("red");
 						}
 					}
 					
-					((Label)questionView.getPostDataHP().getWidget(l)).setText(itemValue);
+					((Label)questionView.getPostDataHP().getWidget(l-1)).setText(itemValue);
 				}
 			}
 		}
@@ -966,16 +982,19 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 											
 											for(int l=0;l<itemView.getPostDataHP().getWidgetCount();l++)
 											{
+												String itemValue=itemValues.get(l);
+												
+												
 												if(l==0)
 												{
-													String itemValue=itemValues.get(l);
+													
 													String temp[]=itemValue.split("/");
 													if(new Double(temp[0]) != 0)
 													{
 														(itemView.getPostDataHP().getWidget(l)).getElement().getStyle().setColor("red");
 													}
 												}
-												((Label)itemView.getPostDataHP().getWidget(l)).setText(itemValues.get(l));
+												((Label)itemView.getPostDataHP().getWidget(l)).setText(itemValue);
 											}
 										}
 									}
@@ -1132,7 +1151,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				missingItemId.remove(id);
 			
 			
-			requests.itemAnalysisNonRoo().deActivateItem(osceProxy.getId(), id, missing).fire(new OSCEReceiver<Boolean>() {
+			/*requests.itemAnalysisNonRoo().deActivateItem(osceProxy.getId(), id, missing).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
 				public void onSuccess(Boolean response) {
@@ -1143,6 +1162,6 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 					}
 					
 				}
-			});
+			});*/
 		}
 }
