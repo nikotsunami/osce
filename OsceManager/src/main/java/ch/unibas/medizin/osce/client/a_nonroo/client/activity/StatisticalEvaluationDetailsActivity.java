@@ -645,7 +645,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				
 				List<String> itemValues=getValue(itemAnalysisData, itemKey);
 				
-				for(int l=0;l<questionView.getPostDataHP().getWidgetCount();l++)
+				for(int l=0;l<itemValues.size();l++)
 				{
 					String itemValue=itemValues.get(l);
 					
@@ -980,7 +980,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 											
 											List<String> itemValues=getValue(response, itemKey);
 											
-											for(int l=0;l<itemView.getPostDataHP().getWidgetCount();l++)
+											for(int l=0;l<itemValues.size();l++)
 											{
 												String itemValue=itemValues.get(l);
 												

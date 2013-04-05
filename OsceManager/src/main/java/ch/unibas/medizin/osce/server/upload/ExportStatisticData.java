@@ -308,7 +308,7 @@ public class ExportStatisticData extends HttpServlet{
 									if (flag)
 										writer.append(String.valueOf(alphaSeq) + count++);
 									else
-										writer.append(String.valueOf(question.getId()));
+										writer.append("Q" + String.valueOf(question.getId()));
 									
 									//writer.append(question.getId().toString());
 									writer.append('|');
@@ -372,11 +372,20 @@ public class ExportStatisticData extends HttpServlet{
 						    		}
 						    		
 						    		writer.append('\n');
-						    		
-						    		writer.append(answer.getDoctor().getPreName() + " "+ answer.getDoctor().getName());
-						    		writer.append('|');
-						    		writer.append(answer.getStudent().getPreName() + " "+ answer.getStudent().getName());
-						    		writer.append('|');
+						    		if (flag == false)
+						    		{
+						    			writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
+							    		writer.append('|');
+							    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
+							    		writer.append('|');
+						    		}
+						    		else	
+						    		{
+						    			writer.append(answer.getDoctor().getPreName() + " " + answer.getDoctor().getName());
+						    			writer.append('|');
+							    		writer.append(answer.getStudent().getPreName() + " " + answer.getStudent().getName());
+							    		writer.append('|');
+						    		}		    		
 						    		
 						    		lastCandidateId = answer.getStudent().getId();
 						    	}
