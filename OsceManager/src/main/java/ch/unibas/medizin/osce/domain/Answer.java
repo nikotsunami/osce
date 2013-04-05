@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.domain;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -288,6 +289,29 @@ public class Answer {
 							//save data at question level
 							ItemAnalysis itemAnalysis=new ItemAnalysis();
 							
+							
+							double[] points = null;
+							boolean isMissing = false;
+							for (int i = 0; i < missingItemId.size(); i++) {
+								if (missingItemId.contains(item.getId())) {
+									isMissing = true;
+									break;
+								}
+							}
+							itemAnalysis.setDeActivate(isMissing);
+							
+							questionList.add(new Boolean(isMissing).toString());
+							if (isMissing)
+							{
+								
+								points = new double[itemAnswers.size()];
+							}
+							else
+							{
+								points = new double[totalStudent];
+							}
+							
+							
 							// 1. calculate missing at item level
 							int countAnswerTableRow = itemAnswers.size();
 							Log.info("number of student answer :"
@@ -317,24 +341,7 @@ public class Answer {
 							String optionValues = "";
 							String frequency = "";
 
-							double[] points = null;
-							boolean isMissing = false;
-							for (int i = 0; i < missingItemId.size(); i++) {
-								if (missingItemId.contains(item.getId())) {
-									isMissing = true;
-									break;
-								}
-							}
-							itemAnalysis.setDeActivate(isMissing);
-							if (isMissing)
-							{
-								
-								points = new double[itemAnswers.size()];
-							}
-							else
-							{
-								points = new double[totalStudent];
-							}
+							
 							int[] optionCounts = new int[item
 									.getCheckListOptions().size()];
 							List<String> optionValuesList = new ArrayList<String>();
@@ -897,9 +904,10 @@ public class Answer {
 				
 				return data;
 			}
-			else //no data exist
+			else //no data exist, than calculate with all item enable
 			{
-				return null;
+				
+				return calculate(osceId, analyticType, new HashSet<Long>());
 			}
 		}
 		

@@ -649,7 +649,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				{
 					String itemValue=itemValues.get(l);
 					
-					if(l==0)//missing
+					if(l==0)//disable item / not
 					{
 						if(itemValue.equals("true"))
 						{
@@ -985,16 +985,32 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 												String itemValue=itemValues.get(l);
 												
 												
-												if(l==0)
+												if(l==0)//disable item / not
+												{
+													if(itemValue.equals("true"))
+													{
+														itemView.getOnOffButton().setDown(true);
+														missingItemId.add(itemView.getChecklistQuestionProxy().getId());
+													}
+													else
+													{
+														itemView.getOnOffButton().setDown(false);
+														missingItemId.remove(itemView.getChecklistQuestionProxy().getId());
+													}
+													continue;
+												}
+												
+												if(l==1)
 												{
 													
 													String temp[]=itemValue.split("/");
 													if(new Double(temp[0]) != 0)
 													{
-														(itemView.getPostDataHP().getWidget(l)).getElement().getStyle().setColor("red");
+														((Label)itemView.getPostDataHP().getWidget(l-1)).getElement().getStyle().setColor("red");
 													}
 												}
-												((Label)itemView.getPostDataHP().getWidget(l)).setText(itemValue);
+												
+												((Label)itemView.getPostDataHP().getWidget(l-1)).setText(itemValue);
 											}
 										}
 									}
