@@ -17,6 +17,8 @@ public interface StatisticalEvaluationDetailsItemView {
 		interface Delegate 
 		{
 			public void onOffButtonClicked(Long id,Boolean missing);
+
+			public void setAddPoint(DoctorProxy doctorProxy, Integer value);
 		}
 
 		

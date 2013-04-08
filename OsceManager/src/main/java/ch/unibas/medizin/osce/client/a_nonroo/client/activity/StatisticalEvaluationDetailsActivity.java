@@ -85,6 +85,8 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 		
 		private List<MapEnvelopProxy> itemAnalysisData=null;
 		private List<MapEnvelopProxy> postAnalysisData=null;
+		private List<Long> examinerId=new ArrayList<Long>();
+		private List<Integer> addPoint=new ArrayList<Integer>();
 		
 		public StatisticalEvaluationDetailsActivity(StatisticalEvaluationDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) 
 		{
@@ -191,6 +193,23 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 									public void onSuccess(List<MapEnvelopProxy> response) {
 										
 										itemAnalysisData=response;
+										refreshAllSequences();
+										
+										showApplicationLoading(false);
+									}
+								});
+							}
+							else if(analysisType.equals(AnalysisType.post_analysys))
+							{
+								showApplicationLoading(true);
+								requests.answerRequestNonRoo().retrieveCalulatedData(osceProxy.getId(),1).fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
+
+									@Override
+									public void onSuccess(List<MapEnvelopProxy> response) {
+										
+										if(response.size() !=0)											
+										postAnalysisData=response;
+										
 										refreshAllSequences();
 										
 										showApplicationLoading(false);
@@ -917,7 +936,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			if(analysisType.equals(AnalysisType.item_analysis))
 			{
 				showApplicationLoading(true);
-				requests.answerRequestNonRoo().calculate(osceProxy.getId(),0,missingItemId).with("").fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
+				requests.answerRequestNonRoo().calculate(osceProxy.getId(),0,missingItemId,null,null).with("").fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
 	
 					@Override
 					public void onSuccess(List<MapEnvelopProxy> response) {
@@ -1032,7 +1051,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			else if(analysisType.equals(AnalysisType.post_analysys))
 			{
 				showApplicationLoading(true);
-					requests.answerRequestNonRoo().calculate(osceProxy.getId(), 1, null).fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
+					requests.answerRequestNonRoo().calculate(osceProxy.getId(), 1, null,examinerId,addPoint).fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
 
 						@Override
 						public void onSuccess(List<MapEnvelopProxy> response) {
@@ -1179,5 +1198,22 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 					
 				}
 			});*/
+		}
+
+		@Override
+		public void setAddPoint(DoctorProxy doctorProxy, Integer value) {
+			if(value !=null && doctorProxy != null)
+			{
+				if(examinerId.contains(doctorProxy.getId()))
+				{
+					int index=examinerId.indexOf(doctorProxy);
+					addPoint.set(index, value);
+				}
+				else
+				{
+				examinerId.add(doctorProxy.getId());
+				addPoint.add(value);
+				}
+			}
 		}
 }

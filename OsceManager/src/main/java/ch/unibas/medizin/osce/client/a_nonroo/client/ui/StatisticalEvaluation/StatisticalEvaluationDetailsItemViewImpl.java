@@ -42,7 +42,7 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 	@UiField
 	 ToggleButton onOffButton;
 	
-	
+	 PopupPanel addPointPopup;
 	
 	public DoctorProxy getDoctorProxy() {
 		return doctorProxy;
@@ -172,21 +172,27 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 	public void showPopup()
 	{
 		Log.info("showPopup");
-		final PopupPanel popup=new PopupPanel(true);
+		//final PopupPanel popup=new PopupPanel(true);
+		
+		if(addPointPopup==null)
+		{
+			addPointPopup=new PopupPanel(true);
+		
 		
 		HorizontalPanel hp1=new HorizontalPanel();
 		
-		Label minLbl=new Label(constants.minmum());
-		final IntegerBox minTxtBox=new IntegerBox();
-		if(!((Label)postDataHP.getWidget(6)).getText().equalsIgnoreCase("-"))
+		Label addPointLbl=new Label(constants.addPoint()+":");
+		final IntegerBox addPointTxtBox=new IntegerBox();
+		
+		/*if(!((Label)postDataHP.getWidget(6)).getText().equalsIgnoreCase("-"))
 		{
 			minTxtBox.setText(((Label)postDataHP.getWidget(6)).getText());
-		}
+		}*/
 		hp1.setSpacing(3);
-		hp1.add(minLbl);
-		hp1.add(minTxtBox);
+		hp1.add(addPointLbl);
+		hp1.add(addPointTxtBox);
 		
-		HorizontalPanel hp2=new HorizontalPanel();
+/*		HorizontalPanel hp2=new HorizontalPanel();
 		Label maxLbl=new Label(constants.max());
 		final IntegerBox maxTxtBox=new IntegerBox();
 		if(!((Label)postDataHP.getWidget(7)).getText().equalsIgnoreCase("-"))
@@ -195,7 +201,7 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 		}
 		hp2.setSpacing(3);
 		hp2.add(maxLbl);
-		hp2.add(maxTxtBox);
+		hp2.add(maxTxtBox);*/
 		
 		HorizontalPanel hp3=new HorizontalPanel();
 		Button saveBtn=new Button();
@@ -208,16 +214,19 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				if(minTxtBox.getText().equals("") || maxTxtBox.getText().equals(""))
+				if(addPointTxtBox.getText().equals(""))
 				{
 					MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 					dialogBox.showConfirmationDialog(constants.minMaxNotNull());
 					
 					return;
 				}
-				((Label)postDataHP.getWidget(6)).setText(minTxtBox.getText());
-				((Label)postDataHP.getWidget(7)).setText(maxTxtBox.getText());
-				popup.hide();
+				
+				
+				delegate.setAddPoint(doctorProxy,addPointTxtBox.getValue());
+				//((Label)postDataHP.getWidget(6)).setText(minTxtBox.getText());
+				//((Label)postDataHP.getWidget(7)).setText(maxTxtBox.getText());
+				addPointPopup.hide();
 			}
 		});
 		
@@ -225,11 +234,12 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 		vp.setSpacing(5);
 		vp.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 		vp.add(hp1);
-		vp.add(hp2);
+		//vp.add(hp2);
 		vp.add(hp3);
 		
-		popup.add(vp);
-		popup.setPopupPosition(fourthColumnHP.getWidget(0).getAbsoluteLeft()-70, fourthColumnHP.getWidget(0).getAbsoluteTop()-110);
-		popup.show();
+		addPointPopup.add(vp);
+		}
+		addPointPopup.setPopupPosition(fourthColumnHP.getWidget(0).getAbsoluteLeft()-70, fourthColumnHP.getWidget(0).getAbsoluteTop()-110);
+		addPointPopup.show();
 	}
 }

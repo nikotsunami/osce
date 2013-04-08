@@ -199,7 +199,7 @@ public class Answer {
 	// spec]
 
 	public static List<MapEnvelop> calculate(Long osceId, int analyticType,
-			Set<Long> missingItemId) {
+			Set<Long> missingItemId,List<Long> examinerId,List<Integer> addPoints) {
 		// List<Map<String,List<String>>> data=new
 		// ArrayList<Map<String,List<String>>>();
 
@@ -663,6 +663,26 @@ public class Answer {
 							Doctor doctor = doctors.get(a);
 							List<String> examinerLevelList = new ArrayList<String>();
 
+							PostAnalysis postAnalysis=PostAnalysis.findExaminerLevelData(osce, post, doctor);
+							boolean insert=false;
+							if(postAnalysis==null)//insert
+							{
+								postAnalysis=new PostAnalysis();
+								insert=true;
+							}
+							
+							
+							//login of save add point in database
+ 							if(examinerId.contains(doctor.getId()))
+ 							{
+ 								int index=examinerId.indexOf(doctor.getId());
+ 								postAnalysis.setPointsCorrected(addPoints.get(index));
+ 							}
+ 							else
+ 							{
+ 								postAnalysis.setPointsCorrected(0);
+ 							}
+							
 							// student count
 							List<Answer> answers = retrieveDistinctStudentExamined(
 									doctor.getId(), post.getId());
@@ -676,14 +696,32 @@ public class Answer {
 							examinerLevelList.add(new Integer(
 									countOfStudentList.intValue()).toString());
 
+							postAnalysis.setNumOfStudents(countOfStudentList.intValue());
+							
 							// pass
-							examinerLevelList.add("0");
+							examinerLevelList.add("0(0)");
+							if(insert)
+							{
+								postAnalysis.setPassOrignal(0);
+								postAnalysis.setPassCorrected(0);
+							}
+							else
+								postAnalysis.setPassCorrected(0);
 
 							// fail
-							examinerLevelList.add("0");
+							examinerLevelList.add("0(0)");
+							if(insert)
+							{
+							postAnalysis.setFailOrignal(0);
+							postAnalysis.setFailCorrected(0);
+							}
+							else
+								postAnalysis.setFailCorrected(0);
 
 							// passing grade
 							examinerLevelList.add("0");
+							postAnalysis.setBoundary(0);
+							
 
 							// average
 							double points[] = new double[answers.size()];
@@ -701,6 +739,8 @@ public class Answer {
 								average = roundTwoDecimals(average);
 							
 							examinerLevelList.add(String.valueOf(average));
+							postAnalysis.setMean(average);
+							
 
 							// sd
 							Double sd = Math.sqrt(StatUtils.variance(points));
@@ -709,46 +749,79 @@ public class Answer {
 								sd = roundTwoDecimals(sd);
 							
 							examinerLevelList.add(String.valueOf(sd));
+							postAnalysis.setStandardDeviation(sd);
 
 							// minimum
 							double min = StatUtils.min(points);
 							minPerDoctor[a] = min;
 							examinerLevelList.add(String.valueOf((int) min));
+							postAnalysis.setMinOrignal((int) min);
 
 							// maximum
 							double max = StatUtils.max(points);
 							maxPerDoctor[a] = max;
 							examinerLevelList.add(String.valueOf((int) max));
+							postAnalysis.setMaxOrignal((int) max);
 
 							MapEnvelop examinerMap = new MapEnvelop();
 							examinerMap.put(
 									"e" + post.getId() + doctor.getId(),
 									examinerLevelList);
 							data.add(examinerMap);
+							
+							postAnalysis.setOsce(osce);
+							postAnalysis.setOscePost(post);
+							postAnalysis.setExaminer(doctor);
+							postAnalysis.persist();
+						}
+						
+						
+						//save post data
+						PostAnalysis postAnalysis=PostAnalysis.findPostLevelData(osce, post);
+						boolean insert=false;
+						if(postAnalysis==null)//insert
+						{
+							postAnalysis=new PostAnalysis();
+							insert=true;
 						}
 
 						// student count
 						System.out.println("Post : " + post.getSequenceNumber()
 								+ " Student count : " + numOfStudentPerPost);
 						postLevelList.add(numOfStudentPerPost.toString());
+						postAnalysis.setNumOfStudents(numOfStudentPerPost);
+						
 
 						// pass
 						postLevelList.add("0");
+						if(insert)
+							postAnalysis.setPassOrignal(0);
+						else
+							postAnalysis.setPassCorrected(0);
+						
 
 						// fail
 						postLevelList.add("0");
+						postAnalysis.setFailOrignal(0);
+						if(insert)
+							postAnalysis.setFailOrignal(0);
+							else
+								postAnalysis.setFailCorrected(0);
 
 						// passing grade
 						postLevelList.add("0");
+						postAnalysis.setBoundary(0);
 
 						// average
 						averagePerPost = averagePerPost / pointsPerPostLength;
 
 						if (averagePerPost.isNaN()) {
 							postLevelList.add("0");
+							postAnalysis.setMean(0.0);
 						} else {
 							averagePerPost = roundTwoDecimals(averagePerPost);
 							postLevelList.add(averagePerPost.toString());
+							postAnalysis.setMean(averagePerPost);
 						}
 
 						// sd
@@ -757,27 +830,40 @@ public class Answer {
 
 						if (sdPerPost.isNaN()) {
 							postLevelList.add("0");
+							postAnalysis.setStandardDeviation(0.0);
 						} else {
 							sdPerPost = roundTwoDecimals(sdPerPost);
 							postLevelList.add(String.valueOf(sdPerPost));
+							postAnalysis.setStandardDeviation(sdPerPost);
 						}
 						// min
 						Double min = StatUtils.min(minPerDoctor);
 						if (min.isNaN()) {
+							postAnalysis.setMinOrignal(0);
 							postLevelList.add("0");
 						} else
+						{
 							postLevelList.add(String.valueOf(min.intValue()));
-
+							postAnalysis.setMinOrignal(min.intValue());
+						}
 						// max
 						Double max = StatUtils.min(maxPerDoctor);
 						if (max.isNaN()) {
 							postLevelList.add("0");
+							postAnalysis.setMaxOrignal(0);
 						} else
+						{
 							postLevelList.add(String.valueOf(max.intValue()));
-
+							postAnalysis.setMaxOrignal(max.intValue());
+						}
 						MapEnvelop postMap = new MapEnvelop();
 						postMap.put("p" + post.getId(), postLevelList);
 						data.add(postMap);
+						
+						
+						postAnalysis.setOsce(osce);
+						postAnalysis.setOscePost(post);
+						postAnalysis.persist();
 					}
 				}
 			}
@@ -952,7 +1038,115 @@ public class Answer {
 			else //no data exist, than calculate with all item enable
 			{
 				
-				return calculate(osceId, analyticType, new HashSet<Long>());
+				return calculate(osceId, analyticType, new HashSet<Long>(),null,null);
+			}
+		}
+		else if(analyticType==1)
+		{
+			Osce osce = Osce.findOsce(osceId);
+			
+			if(ItemAnalysis.countItemAnalysesByOsce(osce) > 0)
+			{
+				
+				List<PostAnalysis> postLevelDatas=PostAnalysis.findPostLevelDatas(osce);
+				
+				for(int i=0;i<postLevelDatas.size();i++)
+				{
+					List<String> postLevelList = new ArrayList<String>();
+					PostAnalysis postAnalysis=postLevelDatas.get(i);
+					
+					postLevelList.add(postAnalysis.getNumOfStudents().toString());
+					
+					
+					
+					// pass
+					postLevelList.add(postAnalysis.getPassOrignal().toString()+"("+postAnalysis.getPassCorrected()+")");		
+				
+					
+					
+					// fail
+					postLevelList.add(postAnalysis.getFailOrignal()+"("+postAnalysis.getFailCorrected()+")");
+					
+					
+					// passing grade
+					postLevelList.add(postAnalysis.getBoundary().toString());
+				
+					
+					// average
+					postLevelList.add(postAnalysis.getMean().toString());
+							
+					// sd
+					postLevelList.add(postAnalysis.getStandardDeviation().toString());
+					
+					// min
+					postLevelList.add(postAnalysis.getMinOrignal().toString());
+					
+					// max
+					postLevelList.add(postAnalysis.getMaxOrignal().toString());
+					
+					
+					OscePost oscePost=postAnalysis.getOscePost();
+					
+					MapEnvelop postMap = new MapEnvelop();
+					postMap.put("p" + oscePost.getId(), postLevelList);
+					data.add(postMap);
+					
+					
+					
+					List<PostAnalysis> examinerLevelDatas=PostAnalysis.findExaminerLevelDatas(osce,oscePost);
+					
+					for(int j=0;j<examinerLevelDatas.size();j++)
+					{
+						List<String> examinerLevelList = new ArrayList<String>();
+						PostAnalysis examinerPostAnalysis=examinerLevelDatas.get(j);
+						
+						//num of student
+						examinerLevelList.add(examinerPostAnalysis.getNumOfStudents().toString());
+						
+						
+						
+						// pass
+						examinerLevelList.add(examinerPostAnalysis.getPassOrignal().toString()+"("+examinerPostAnalysis.getPassCorrected()+")");		
+					
+						
+						
+						// fail
+						examinerLevelList.add(examinerPostAnalysis.getFailOrignal()+"("+examinerPostAnalysis.getFailCorrected()+")");
+						
+						
+						// passing grade
+						examinerLevelList.add(examinerPostAnalysis.getBoundary().toString());
+					
+						
+						// average
+						examinerLevelList.add(examinerPostAnalysis.getMean().toString());
+								
+						// sd
+						examinerLevelList.add(examinerPostAnalysis.getStandardDeviation().toString());
+						
+						// min
+						examinerLevelList.add(examinerPostAnalysis.getMinOrignal().toString());
+						
+						// max
+						examinerLevelList.add(examinerPostAnalysis.getMaxOrignal().toString());
+						
+						MapEnvelop examinerMap = new MapEnvelop();
+						examinerMap.put(
+								"e" + oscePost.getId() + examinerPostAnalysis.getExaminer().getId(),
+								examinerLevelList);
+						data.add(examinerMap);
+						
+					}
+					
+				}
+				
+
+				return data;
+				
+			}
+			else //no data exist return null
+			{
+				return null;
 			}
 		}
 		
