@@ -246,7 +246,7 @@ public class Answer {
 							
 							String fileName = "Day"+ (dayCtr) + "_" + post.getStandardizedRole().getShortName() + "_" + seq.getLabel() + ".csv";
 
-							fileName = RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(OsMaFilePathConstant.assignmentHTML) + fileName;
+							fileName = RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(OsMaFilePathConstant.assignmentHTML + fileName);
 							
 							calculateCronbachValue.countValue(fileName, missingItemId);
 							

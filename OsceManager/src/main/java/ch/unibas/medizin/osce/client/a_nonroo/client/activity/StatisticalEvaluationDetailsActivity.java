@@ -53,6 +53,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.text.shared.Renderer;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
@@ -1236,16 +1237,10 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				@Override
 				public void onSuccess(String response) {
 					
-					showApplicationLoading(false);
-					
-					String name = GWT.getHostPageBaseURL() + response.substring(1);
+					final String name = GWT.getHostPageBaseURL() + response.substring(1);
 					Log.info("RESPONSE : " + name);
 					
 					final GraphTemplatePopupViewImpl graphTemplateView = new GraphTemplatePopupViewImpl();
-					
-					graphTemplateView.getGraphImage().setUrl(name);
-					
-					graphTemplateView.getGraphImage().setVisible(true);
 					
 					graphTemplateView.addCloseClickHandler(new ClickHandler() {
 						
@@ -1255,8 +1250,16 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 						}
 					});
 					
-					graphTemplateView.center();
-					graphTemplateView.show();
+					new Timer() {						
+						@Override
+						public void run() {
+							showApplicationLoading(false);
+							graphTemplateView.getGraphImage().setUrl(name);							
+							graphTemplateView.getGraphImage().setVisible(true);
+							graphTemplateView.center();
+							graphTemplateView.show();							
+						}
+					}.schedule(2000);
 				}
 				
 				@Override

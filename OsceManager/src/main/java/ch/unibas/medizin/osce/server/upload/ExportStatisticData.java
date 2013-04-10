@@ -255,10 +255,10 @@ public class ExportStatisticData extends HttpServlet{
 		  
 		  try
 		  {
-			  String path = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML);
+			 // String path = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML);
 			  //System.out.println("PATH : " + path);
 			  
-			  zipFileName = path + "OsceStatisticData.zip";
+			  zipFileName = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML + "OsceStatisticData.zip");
 			  
 			  Osce osce=Osce.findOsce(osceId);
 				
@@ -280,7 +280,7 @@ public class ExportStatisticData extends HttpServlet{
 						for (OscePost oscePost : oscePostList)
 						{
 							fileName = "Day"+ (i+1) + "_" + oscePost.getStandardizedRole().getShortName() + "_" + osceSeq.getLabel() +".csv";
-							fileName = path + fileName;
+							fileName = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML + fileName);
 							fileNameList.add(fileName);
 							
 							//System.out.println("FILE PATH : " + fileName);
@@ -334,8 +334,13 @@ public class ExportStatisticData extends HttpServlet{
 								}
 								alphaSeq++;
 							}
-							writer.append("AddPoint");
-							writer.append('|');
+							
+							if (flag)
+							{
+								writer.append("AddPoint");
+								writer.append('|');
+							}
+							
 							writer.append("impression ");
 						    //writer.append('\n');
 						    
@@ -737,11 +742,15 @@ public class ExportStatisticData extends HttpServlet{
 		  
 		  try
 		  {
-			  	String path = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML);
+			  	String path = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML + fileName);
+			  	
+			  	Log.info("PATH : " + path);
 				
 				CalculateCronbachValue calculateCronbachValue = new CalculateCronbachValue();
 	
-				fileName = path + fileName;
+				fileName = path;
+				
+				Log.info("fileName : " + fileName);
 				
 				FileWriter writer = new FileWriter(fileName);
 				writer.append("examiners");
