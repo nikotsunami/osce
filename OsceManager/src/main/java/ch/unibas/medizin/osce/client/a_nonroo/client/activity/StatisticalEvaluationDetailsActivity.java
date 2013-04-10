@@ -1253,9 +1253,18 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 					new Timer() {						
 						@Override
 						public void run() {
-							showApplicationLoading(false);
-							graphTemplateView.getGraphImage().setUrl(name);							
-							graphTemplateView.getGraphImage().setVisible(true);
+							graphTemplateView.getGraphImage().setUrl(name);
+						}
+					}.schedule(1000);
+					
+					new Timer() {						
+						@Override
+						public void run() {
+							showApplicationLoading(false);									
+							if (graphTemplateView.getGraphImage().getWidth() == 0 && graphTemplateView.getGraphImage().getHeight() == 0)
+								graphTemplateView.getImgErrorLbl().setVisible(true);
+							else
+								graphTemplateView.getGraphImage().setVisible(true);
 							graphTemplateView.center();
 							graphTemplateView.show();							
 						}
