@@ -11,6 +11,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.MapEnvelopProxy;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.GraphTemplatePopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation.StatisticalEvaluationDetailPostView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation.StatisticalEvaluationDetailPostViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation.StatisticalEvaluationDetailSequenceView;
@@ -19,6 +20,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation.St
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation.StatisticalEvaluationDetailsItemViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation.StatisticalEvaluationDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation.StatisticalEvaluationDetailsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
@@ -39,6 +41,7 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -54,7 +57,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 
@@ -85,7 +90,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 		
 		private List<MapEnvelopProxy> itemAnalysisData=null;
 		private List<MapEnvelopProxy> postAnalysisData=null;
-		private List<Long> examinerId=new ArrayList<Long>();
+		private List<String> examinerId=new ArrayList<String>();
 		private List<Integer> addPoint=new ArrayList<Integer>();
 		
 		public StatisticalEvaluationDetailsActivity(StatisticalEvaluationDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) 
@@ -307,6 +312,8 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			else if(analysisType.equals(AnalysisType.post_analysys))
 			{
 				sequenceView.getSequenceLbl().getElement().getParentElement().getStyle().setWidth(23, Unit.PCT);
+				
+				//sequenceView.getGraphBtn().setVisible(true);
 				
 				createColumnHeader(sequenceView);
 				for(int i=0;i<postAnalysisColumnName.size();i++)
@@ -565,6 +572,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			examinerView.getSequenceLbl().setWidth("248px");
 			examinerView.getOnOffButton().setVisible(false);
 			examinerView.setDoctorProxy(doctorProxy);
+			examinerView.setOscePostProxy(statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy());
 			examinerView.getSequenceLbl().setText(doctorProxy.getPreName() + " " + doctorProxy.getName());
 			examinerView.getSumPerSequenceLbl().setText("");
 			examinerView.getFourthColumnHP().clear();
@@ -731,6 +739,8 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			}
 			else if(analysisType.equals(AnalysisType.post_analysys))
 			{
+				postView.getGraphBtn().setVisible(true);
+				
 				postView.getSequenceLbl().getElement().getParentElement().getStyle().setWidth(22, Unit.PCT);
 				postView.getSequenceLbl().setWidth("248px");
 				postView.getFourthColumnHP().getElement().getParentElement().getStyle().setWidth(28, Unit.PCT);
@@ -1201,19 +1211,64 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 		}
 
 		@Override
-		public void setAddPoint(DoctorProxy doctorProxy, Integer value) {
-			if(value !=null && doctorProxy != null)
+		public void setAddPoint(OscePostProxy oscePostProxy,DoctorProxy doctorProxy, Integer value) {
+			if(value !=null && doctorProxy != null && oscePostProxy != null)
 			{
-				if(examinerId.contains(doctorProxy.getId()))
+				String key="p"+oscePostProxy.getId()+"e"+doctorProxy.getId();
+				if(examinerId.contains(key))
 				{
 					int index=examinerId.indexOf(doctorProxy);
 					addPoint.set(index, value);
 				}
 				else
 				{
-				examinerId.add(doctorProxy.getId());
+				examinerId.add(key);
 				addPoint.add(value);
 				}
 			}
+		}
+
+		@Override
+		public void graphBtnClicked(Long oscePostId) {
+			showApplicationLoading(true);
+			requests.answerRequestNonRoo().createGraph(oscePostId).fire(new OSCEReceiver<String>() {
+
+				@Override
+				public void onSuccess(String response) {
+					
+					showApplicationLoading(false);
+					
+					String name = GWT.getHostPageBaseURL() + response.substring(1);
+					Log.info("RESPONSE : " + name);
+					
+					final GraphTemplatePopupViewImpl graphTemplateView = new GraphTemplatePopupViewImpl();
+					
+					graphTemplateView.getGraphImage().setUrl(name);
+					
+					graphTemplateView.getGraphImage().setVisible(true);
+					
+					graphTemplateView.addCloseClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							graphTemplateView.hide();
+						}
+					});
+					
+					graphTemplateView.center();
+					graphTemplateView.show();
+				}
+				
+				@Override
+				public void onFailure(ServerFailure error) {
+					showApplicationLoading(false);
+					
+					MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+					dialogBox.showConfirmationDialog(constants.graphError());
+				}
+				
+			});
+			
+			
 		}
 }

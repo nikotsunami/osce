@@ -4,6 +4,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfi
 import ch.unibas.medizin.osce.client.managed.request.AnswerProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -29,6 +30,16 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 	private static StatisticalEvaluationDetailsItemViewImplUiBinder uiBinder = GWT.create(StatisticalEvaluationDetailsItemViewImplUiBinder.class);
 
 	interface StatisticalEvaluationDetailsItemViewImplUiBinder extends UiBinder<Widget, StatisticalEvaluationDetailsItemViewImpl> {
+	}
+	
+	private OscePostProxy oscePostProxy;
+	
+	public OscePostProxy getOscePostProxy() {
+		return oscePostProxy;
+	}
+
+	public void setOscePostProxy(OscePostProxy oscePostProxy) {
+		this.oscePostProxy = oscePostProxy;
 	}
 
 	private Delegate delegate;
@@ -223,7 +234,7 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 				}
 				
 				
-				delegate.setAddPoint(doctorProxy,addPointTxtBox.getValue());
+				delegate.setAddPoint(oscePostProxy,doctorProxy,addPointTxtBox.getValue());
 				//((Label)postDataHP.getWidget(6)).setText(minTxtBox.getText());
 				//((Label)postDataHP.getWidget(7)).setText(maxTxtBox.getText());
 				addPointPopup.hide();

@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
@@ -85,4 +86,23 @@ public class OscePost {
 	}
 	  //E Module 5 Bug Report Solution
 	
+	public static Integer findMaxValueOfCheckListQuestionByOscePost(Long oscePostId)
+	{
+		Integer maxValue = 0;
+		EntityManager em = entityManager();
+		/*select sum(max_value) from
+		(select max(opt.value) max_value from checklist_option opt, checklist_question que, item_analysis ia where opt.checklist_question = que.id
+		and que.id = ia.question and ia.osce_post =23 and ia.de_activate = 0
+		group by que.id) a;*/
+		/*String sql = "SELECT sum(max_value) FROM SELECT max(opt.value) AS max_value FROM ChecklistOption opt, ChecklistQuestion que, ItemAnalysis ia WHERE opt.checklistQuestion = que.id" +
+				" AND que.id = ia.question AND ia.oscePost = " + oscePostId + " AND ia.deActivate = 0 GROUP BY que.id";*/
+		String sql = "SELECT max(opt.value) AS max_value FROM ChecklistOption opt, ChecklistQuestion que, ItemAnalysis ia WHERE opt.checklistQuestion = que.id" +
+				" AND que.id = ia.question AND ia.oscePost = " + oscePostId + " AND ia.deActivate = 0 GROUP BY que.id";
+		Query query = em.createQuery(sql, String.class);
+		
+		for (Object object : query.getResultList())
+			maxValue += Integer.parseInt(object.toString());
+		
+		return maxValue;
+	}
 }

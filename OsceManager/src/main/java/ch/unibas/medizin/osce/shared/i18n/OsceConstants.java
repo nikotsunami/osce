@@ -1297,5 +1297,13 @@ public interface OsceConstants extends Constants {
 	public String noEntries();
 	
 	public String exportCsv();
+	
+	public String graph();
+
+	public String imgError();
+	
+	public String graphError();
+	
+	public String graphPopupTitle();
 }
 

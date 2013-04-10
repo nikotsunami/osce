@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 /**
  * Simple Wrapper to call R script out of java and parse the following console output.
  * 
@@ -15,6 +17,8 @@ import java.util.Map;
  *
  */
 public class WrapR {
+	
+	private static Logger log = Logger.getLogger(WrapR.class);
 	
 	/* program with which R scripts are run (use absolute path if script-path is not contained in PATH variable) */
 	//private String rInterpreter = "C:/Program Files/R/R-2.15.2/bin/x64/Rscript";
@@ -59,12 +63,15 @@ public class WrapR {
 			// add user parameters
 			paramsAll.addAll(params);
 			
+			for (String temp : paramsAll)
+				log.info("TEMP : " + temp);
+			
 			pb = new ProcessBuilder(paramsAll);
 			p = pb.start();
 			
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("ERROR IN R : " , e);
 			return false;
 		}
 	}
@@ -170,7 +177,7 @@ public class WrapR {
 	public void printEnv() {
 		Map<String, String> env = pb.environment();
 		for(String s : env.keySet()) {
-			System.out.println(s + " = " + env.get(s));
+			log.info(s + " = " + env.get(s));
 		}
 	}
 }

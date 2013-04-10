@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -7,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -132,5 +134,25 @@ public class ItemAnalysis {
 		else
 			return false;
 		
+	}
+	
+	public static String findDeactivatedItemByOscePost(Long oscePostId)
+	{
+		EntityManager em = entityManager();
+		//SELECT group_concat(concat('Q' , question)) FROM osce26_03_2013.item_analysis where osce_post=23 and question is not null and de_activate=1;
+		//String sql = "SELECT (concat(concat('Q' , ia.question.id))) as missingQuestion FROM ItemAnalysis ia WHERE ia.oscePost.id = " + oscePostId + " AND ia.question IS NOT NULL AND ia.deActivate = 1";
+		String sql = "SELECT ia.question.id FROM ItemAnalysis ia WHERE ia.oscePost.id = " + oscePostId + " AND ia.question IS NOT NULL AND ia.deActivate = 1";
+		TypedQuery<Long> q = em.createQuery(sql, Long.class);
+		List<Long> questionList = q.getResultList();
+		String missingQue = questionList.isEmpty() ? "0" : ("Q" + StringUtils.join(questionList,",Q"));
+		return missingQue;
+	}
+	
+	public static List<Long> findDeactivatedItemByOscePostAndOsceSeq(Long oscePostId, Long osceSeqId)
+	{
+		EntityManager em = entityManager();
+		String sql = "SELECT ia.question.id FROM ItemAnalysis ia WHERE ia.osceSequence.id = " + osceSeqId + " AND ia.oscePost.id = " + oscePostId + " AND ia.question IS NOT NULL AND ia.deActivate = 1";
+		TypedQuery<Long> q = em.createQuery(sql, Long.class);
+		return q.getResultList();
 	}
 }

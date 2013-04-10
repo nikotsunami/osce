@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -146,6 +147,9 @@ public class StatisticalEvaluationDetailSequenceViewImpl  extends Composite impl
 	@UiField
 	HorizontalPanel fourthColumnHP;
 	
+	@UiField
+	IconButton graphBtn;
+	
 	public HorizontalPanel getFourthColumnHP() {
 		return fourthColumnHP;
 	}
@@ -202,7 +206,7 @@ public class StatisticalEvaluationDetailSequenceViewImpl  extends Composite impl
 		initWidget(uiBinder.createAndBindUi(this));
 		sequenceDisclosurePanel.addStyleName("custom-disclosure");
 		
-		
+		graphBtn.setText(constants.graph());
 		
 	}
 	
@@ -225,12 +229,21 @@ public class StatisticalEvaluationDetailSequenceViewImpl  extends Composite impl
 		};
 		headerPanel.sinkEvents(Event.ONCLICK);
 		getFourthColumnHP().insert(headerPanel,0);
+		
+		graphBtn.setText(constants.graph());
 	}
 	
 
 	@Override
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;
+	}
+	
+	@UiHandler("graphBtn")
+	public void graphBtnClicked(ClickEvent event)
+	{
+		if (oscePostProxy != null)
+			delegate.graphBtnClicked(oscePostProxy.getId());
 	}
 	
 	@UiHandler("sequenceLbl")
@@ -289,4 +302,16 @@ public class StatisticalEvaluationDetailSequenceViewImpl  extends Composite impl
 	public Widget asWidget() {
 		return this;
 	}
+
+
+	public IconButton getGraphBtn() {
+		return graphBtn;
+	}
+
+
+	public void setGraphBtn(IconButton graphBtn) {
+		this.graphBtn = graphBtn;
+	}
+	
+	
 }

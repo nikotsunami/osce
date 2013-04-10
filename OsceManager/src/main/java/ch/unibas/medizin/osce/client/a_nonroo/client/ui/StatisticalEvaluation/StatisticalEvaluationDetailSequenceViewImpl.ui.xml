@@ -29,7 +29,12 @@
 						<tbody>
 						<tr valign="middle">
 							<td width="2%"><g:Image ui:field="minMaxImage" addStyleNames="{style.icon}" resource="{uiIcons.triangle1East}"></g:Image></td>
-							<td width="40%"><g:Label ui:field="sequenceLbl"  height="100%" addStyleNames="{style.sequenceLabel}">Sequence A</g:Label></td>
+							<td width="40%">
+								<g:HorizontalPanel>
+									<g:Label ui:field="sequenceLbl"  height="100%" addStyleNames="{style.sequenceLabel}">Sequence A</g:Label>
+									<my:IconButton ui:field="graphBtn" visible="false"></my:IconButton>
+								</g:HorizontalPanel>
+							</td>
 							<td>
 									<g:HorizontalPanel ui:field="postDataHP" addStyleNames="{style.postDataHP}">
 										<g:Label addStyleNames="{style.postData}" wordWrap="true">12</g:Label>

@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -24,8 +25,6 @@ public class PostAnalysis {
 	@ManyToOne
 	Osce osce;
 	
-	
-	
 	Integer numOfStudents;
 	
 	Integer passOrignal;
@@ -36,7 +35,7 @@ public class PostAnalysis {
 	
 	Integer failCorrected;
 	
-	Integer boundary;
+	Double boundary;
 	
 	Double mean;
 	
@@ -123,6 +122,23 @@ public class PostAnalysis {
 		
 		List<PostAnalysis> items=q.getResultList();
 		return items;
+	}
+	
+	public static Integer findAddPointByExaminerAndOscePost(Long oscePostId, Long examinerId)
+	{
+		Integer addPoint = 0;
+		EntityManager em = entityManager();
+		String sql = "SELECT pa FROM PostAnalysis pa WHERE pa.oscePost.id = " + oscePostId + " AND pa.examiner.id = " + examinerId;
+		TypedQuery<PostAnalysis> query = em.createQuery(sql, PostAnalysis.class);
+		
+		PostAnalysis postAnalysis = null;
+		if (query.getResultList().size() > 0)
+			postAnalysis = query.getSingleResult();
+		
+		if (postAnalysis != null)
+			addPoint = postAnalysis.getPointsCorrected();
+			
+		return addPoint;
 	}
 	
 	

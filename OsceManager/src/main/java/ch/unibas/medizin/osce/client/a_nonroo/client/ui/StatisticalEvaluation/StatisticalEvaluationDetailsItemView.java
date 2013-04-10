@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation;
 import ch.unibas.medizin.osce.client.managed.request.AnswerProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 
 import com.google.gwt.dom.client.TableElement;
 import com.google.gwt.user.client.ui.Button;
@@ -18,7 +19,7 @@ public interface StatisticalEvaluationDetailsItemView {
 		{
 			public void onOffButtonClicked(Long id,Boolean missing);
 
-			public void setAddPoint(DoctorProxy doctorProxy, Integer value);
+			public void setAddPoint(OscePostProxy oscePostProxy,DoctorProxy doctorProxy, Integer value);
 		}
 
 		
@@ -57,5 +58,8 @@ public interface StatisticalEvaluationDetailsItemView {
 		public HorizontalPanel getFourthColumnHP();
 		
 		public Button createAddPointButton();
+		public OscePostProxy getOscePostProxy() ;
+
+		public void setOscePostProxy(OscePostProxy oscePostProxy) ;
 	
 }

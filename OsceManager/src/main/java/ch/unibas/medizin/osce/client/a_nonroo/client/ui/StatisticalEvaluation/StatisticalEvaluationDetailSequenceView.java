@@ -5,6 +5,7 @@ import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.google.gwt.dom.client.TableElement;
 import com.google.gwt.place.shared.Place;
@@ -28,6 +29,8 @@ public interface StatisticalEvaluationDetailSequenceView {
 			public void sequenceDisclosurePanelOpen(StatisticalEvaluationDetailSequenceViewImpl view);
 			
 			public void parcourDisclosurePanelOpen(StatisticalEvaluationDetailSequenceViewImpl view);
+			
+			public void graphBtnClicked(Long osceId);
 		}
 
 		
@@ -85,4 +88,6 @@ public interface StatisticalEvaluationDetailSequenceView {
 		public void setPostPanel(boolean isPostPanel);
 		
 		public HorizontalPanel getFourthColumnHP();
+		
+		public IconButton getGraphBtn();
 }

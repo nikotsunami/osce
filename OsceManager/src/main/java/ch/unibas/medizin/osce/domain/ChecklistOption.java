@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -88,4 +89,19 @@ public class ChecklistOption implements Comparable<ChecklistOption> {
 		else
 			return null;
 	}
+	
+ 	public static List<Long> findCheckListOptionValueByQuestion(Long questionId)
+ 	{
+ 		List<Long> valueList = new ArrayList<Long>(); 
+ 		EntityManager em = entityManager();
+ 		String sql = "SELECT c FROM ChecklistOption c WHERE c.checklistQuestion.id = " + questionId;
+ 		TypedQuery<ChecklistOption> query = em.createQuery(sql, ChecklistOption.class);
+ 		
+ 		for (ChecklistOption option : query.getResultList())
+ 		{
+ 			valueList.add(Long.parseLong(option.getValue()));
+ 		}
+ 		
+ 		return valueList;
+ 	}
 }

@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -21,12 +22,16 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.Answer;
+import ch.unibas.medizin.osce.domain.ChecklistOption;
 import ch.unibas.medizin.osce.domain.ChecklistQuestion;
 import ch.unibas.medizin.osce.domain.ChecklistTopic;
+import ch.unibas.medizin.osce.domain.ItemAnalysis;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.OscePost;
 import ch.unibas.medizin.osce.domain.OsceSequence;
+import ch.unibas.medizin.osce.domain.PostAnalysis;
+import ch.unibas.medizin.osce.server.CalculateCronbachValue;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 
 public class ExportStatisticData extends HttpServlet{
@@ -259,6 +264,8 @@ public class ExportStatisticData extends HttpServlet{
 				
 				List<OsceDay> osceDays=osce.getOsce_days();
 				
+				CalculateCronbachValue calculateCronbachValue = new CalculateCronbachValue();
+				
 				for(int i=0;i<osceDays.size();i++)
 				{
 					OsceDay osceDay=osceDays.get(i);
@@ -283,7 +290,10 @@ public class ExportStatisticData extends HttpServlet{
 							writer.append('|');
 							writer.append("students");
 							writer.append('|');
-							 
+							
+							List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
+							String missingQue = "";
+							
 							List<ChecklistTopic> checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
 							alphaSeq = 'A';
 							
@@ -306,15 +316,26 @@ public class ExportStatisticData extends HttpServlet{
 									}
 									
 									if (flag)
-										writer.append(String.valueOf(alphaSeq) + count++);
+										writer.append(String.valueOf(alphaSeq) + count);
 									else
 										writer.append("Q" + String.valueOf(question.getId()));
 									
+									if (flag == true && postMissingQueList.contains(question.getId()))
+									{
+										if (missingQue == null || missingQue.isEmpty())
+											missingQue = String.valueOf(alphaSeq) + count;
+										else
+											missingQue = missingQue + "," + String.valueOf(alphaSeq) + count;
+									}
+									
+									count += 1;
 									//writer.append(question.getId().toString());
 									writer.append('|');
 								}
 								alphaSeq++;
 							}
+							writer.append("AddPoint");
+							writer.append('|');
 							writer.append("impression ");
 						    //writer.append('\n');
 						    
@@ -328,6 +349,13 @@ public class ExportStatisticData extends HttpServlet{
 						    	{
 						    		if (lastCandidateId != null)
 						    		{
+						    			if (flag)
+						    			{	
+						    				Integer addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(j-1).getDoctor().getId());
+						    				writer.append(addPoint.toString());
+						    				writer.append('|');
+						    			}
+						    			
 						    			if (impressionQueId != null && impressionQueId != 0)
 						    			{
 						    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, osceDay.getId());
@@ -337,55 +365,22 @@ public class ExportStatisticData extends HttpServlet{
 							    		{
 							    			writer.append('0');//impression
 							    		}
-						    			
-						    			/*String impressionItemString=request.getParameter("p"+answer.getOscePostRoom().getOscePost().getId().toString());
-								    	if(impressionItemString==null)
-								    	{
-								    		if (impressionQueId != null)
-							    			{
-							    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, osceDay.getId());
-							    				writer.append(impressionItem1.getChecklistOption().getValue());
-							    			}
-								    		else
-								    		{
-								    			writer.append('0');//impression
-								    		}
-								    	}
-								    	else
-								    	{
-								    		if(impressionItemString.equals("0"))
-								    			writer.append('0');
-								    		else
-								    		{
-								    			Answer impressionItem=Answer.findAnswer(lastCandidateId, new Long(impressionItemString), osceDay.getId());
-								    			if(impressionItem !=null)
-								    				writer.append(impressionItem.getChecklistOption().getValue());
-								    			else if (impressionQueId != null)
-								    			{
-								    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, osceDay.getId());
-								    				writer.append(impressionItem1.getChecklistOption().getValue());
-								    			}
-								    			else
-								    				writer.append('0');
-								    		}
-								    	}*/
 						    		}
 						    		
 						    		writer.append('\n');
-						    		if (flag == false)
-						    		{
-						    			writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
-							    		writer.append('|');
-							    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
-							    		writer.append('|');
-						    		}
-						    		else	
+						    		
+					    			writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
+						    		writer.append('|');
+						    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
+						    		writer.append('|');
+						    		
+						    		/*else	
 						    		{
 						    			writer.append(answer.getDoctor().getPreName() + " " + answer.getDoctor().getName());
 						    			writer.append('|');
 							    		writer.append(answer.getStudent().getPreName() + " " + answer.getStudent().getName());
 							    		writer.append('|');
-						    		}		    		
+						    		}	*/	    		
 						    		
 						    		lastCandidateId = answer.getStudent().getId();
 						    	}
@@ -397,6 +392,13 @@ public class ExportStatisticData extends HttpServlet{
 						    
 						    if (answerList.size() > 0)
 						    {
+						    	if (flag)
+				    			{	
+				    				Integer addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(answerList.size()-1).getDoctor().getId());
+				    				writer.append(addPoint.toString());
+				    				writer.append('|');
+				    			}
+						    	
 						    	if (impressionQueId != null)
 				    			{
 				    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, osceDay.getId());
@@ -406,43 +408,13 @@ public class ExportStatisticData extends HttpServlet{
 					    		{
 					    			writer.append('0');//impression
 					    		}
-						    	/*answer = answerList.get(answerList.size() - 1);
-							    
-							    String impressionItemString=request.getParameter("p"+answer.getOscePostRoom().getOscePost().getId().toString());
-						    	if(impressionItemString==null)
-						    	{	
-						    		if (impressionQueId != null)
-					    			{
-					    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, osceDay.getId());
-					    				writer.append(impressionItem1.getChecklistOption().getValue());
-					    			}
-						    		else
-						    		{
-						    			writer.append('0');//impression
-						    		}
-						    	}
-						    	else
-						    	{
-						    		if(impressionItemString.equals("0"))
-						    			writer.append('0');
-						    		else
-						    		{
-						    			Answer impressionItem=Answer.findAnswer(lastCandidateId, new Long(impressionItemString), osceDay.getId());
-						    			if(impressionItem !=null)
-						    				writer.append(impressionItem.getChecklistOption().getValue());
-						    			else if (impressionQueId != null)
-						    			{
-						    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, osceDay.getId());
-						    				writer.append(impressionItem1.getChecklistOption().getValue());
-						    			}
-						    			else
-						    				writer.append('0');
-						    		}
-						    	}*/
 						    }
 					    	
 						    writer.flush();
 						    writer.close();
+						    
+						    if (flag)
+						    	calculateCronbachValue.calculatePassFail(fileName, missingQue);
 						}
 					}
 				}
@@ -495,4 +467,413 @@ public class ExportStatisticData extends HttpServlet{
 		    	Log.error(e.getMessage(),e);
 		    }
 	 }
+
+	 public static String createExaminerCSV(HttpServletRequest request, ServletContext servletContext, Long oscePostId, Long examinerId, String fileName, Integer addPoint)
+	  {
+		  
+		  Long impressionQueId = null;
+		  
+		  try
+		  {
+  				String path = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML);
+
+				fileName = path + fileName;
+				
+				//System.out.println("FILE PATH : " + fileName);
+				
+				FileWriter writer = new FileWriter(fileName);
+				writer.append("examiners");
+				writer.append('|');
+				writer.append("students");
+				writer.append('|');
+				
+				OscePost oscePost = OscePost.findOscePost(oscePostId);
+				
+				List<ChecklistTopic> checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
+				
+				impressionQueId = null;
+				
+				String impressionItemString=request.getParameter("p"+oscePost.getId().toString());							
+				
+				if (impressionItemString != null)
+					impressionQueId=Long.parseLong(impressionItemString);
+				
+				for (ChecklistTopic checklistTopic : checklistTopicList)
+				{
+					List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
+					
+					int count = 1;
+					for (ChecklistQuestion question : questionList)
+					{
+						if ((impressionQueId == null || impressionQueId == 0)  && question.getIsOveralQuestion() != null && question.getIsOveralQuestion())
+						{
+							impressionQueId = question.getId();
+						}
+						
+						writer.append("Q" + String.valueOf(question.getId()));
+						
+						writer.append('|');
+					}
+				}
+				writer.append("AddPoint");
+				writer.append('|');
+				writer.append("impression ");
+			    
+			    List<Answer> answerList = Answer.retrieveExportCsvDataByOscePostAndExaminer(oscePostId, examinerId);
+			    Long lastCandidateId = null;
+			    Answer answer = null;
+			    for (int j=0; j<answerList.size(); j++)
+			    {
+			    	answer = answerList.get(j);
+			    	if (lastCandidateId == null || (!lastCandidateId.equals(answer.getStudent().getId())))
+			    	{
+			    		if (lastCandidateId != null)
+			    		{
+			    			if (impressionQueId != null && impressionQueId != 0)
+			    			{
+			    				writer.append(addPoint.toString());
+			    				writer.append('|');
+			    				
+			    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
+			    				writer.append(impressionItem1.getChecklistOption().getValue());
+			    			}
+				    		else
+				    		{
+				    			writer.append(addPoint.toString());
+			    				writer.append('|');
+				    			writer.append('0');//impression
+				    		}
+			    		}
+			    		
+			    		writer.append('\n');
+		    			writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
+			    		writer.append('|');
+			    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
+			    		writer.append('|');
+			    			    		
+			    		
+			    		lastCandidateId = answer.getStudent().getId();
+			    	}
+			    	
+			    	writer.append(answer.getChecklistOption().getValue());
+			    	writer.append('|');
+			    }
+			    
+			    if (answerList.size() > 0)
+			    {
+			    	if (impressionQueId != null)
+	    			{
+			    		writer.append(addPoint.toString());
+	    				writer.append('|');
+	    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
+	    				writer.append(impressionItem1.getChecklistOption().getValue());
+	    			}
+		    		else
+		    		{
+		    			writer.append(addPoint.toString());
+	    				writer.append('|');
+		    			writer.append('0');//impression
+		    		}
+			    }
+		    	
+			    writer.flush();
+			    writer.close();
+							
+			    return fileName;			    
+		  }
+		  catch(Exception e)
+		  {
+			  Log.error(e.getMessage(),e);
+		  }
+		 
+		  return fileName;
+	  }
+	 
+	 public static String createOscePostCSV(HttpServletRequest request, ServletContext servletContext, Long oscePostId, String fileName, List<String> examinerId, List<Integer> addPoints)
+	  {
+		  
+		  Long impressionQueId = null;
+		  
+		  try
+		  {
+  				String path = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML);
+  				fileName = path + fileName;
+				
+				//System.out.println("FILE PATH : " + fileName);
+				
+				FileWriter writer = new FileWriter(fileName);
+				writer.append("examiners");
+				writer.append('|');
+				writer.append("students");
+				writer.append('|');
+				
+				OscePost oscePost = OscePost.findOscePost(oscePostId);
+				
+				List<ChecklistTopic> checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
+				
+				impressionQueId = null;
+				
+				String impressionItemString=request.getParameter("p"+oscePost.getId().toString());							
+				if (impressionItemString != null)
+					impressionQueId=Long.parseLong(impressionItemString);
+				
+				for (ChecklistTopic checklistTopic : checklistTopicList)
+				{
+					List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
+					
+					int count = 1;
+					for (ChecklistQuestion question : questionList)
+					{
+						if ((impressionQueId == null || impressionQueId == 0)  && question.getIsOveralQuestion() != null && question.getIsOveralQuestion())
+						{
+							impressionQueId = question.getId();
+						}
+						
+						writer.append("Q" + String.valueOf(question.getId()));
+						
+						writer.append('|');
+					}
+					
+				}
+				writer.append("AddPoint");
+				writer.append('|');
+				writer.append("impression ");
+			   
+			    List<Answer> answerList = Answer.retrieveExportCsvDataByOscePost(oscePost.getOsceSequence().getOsceDay().getOsce().getId(), oscePost.getId());
+			    Long lastCandidateId = null;
+			    Answer answer = null;
+			    for (int j=0; j<answerList.size(); j++)
+			    {
+			    	answer = answerList.get(j);
+			    	if (lastCandidateId == null || (!lastCandidateId.equals(answer.getStudent().getId())))
+			    	{
+			    		if (lastCandidateId != null)
+			    		{
+			    			Integer addPoint = 0;
+			    			String key="p"+oscePostId+"e"+answerList.get(j-1).getDoctor().getId();
+			    			if (examinerId.contains(key))
+			    			{
+			    				int index = examinerId.indexOf(key);
+			    				addPoint = addPoints.get(index);
+			    			}
+			    			
+			    			if (impressionQueId != null && impressionQueId != 0)
+			    			{
+			    				writer.append(addPoint.toString());
+			    				writer.append('|');
+			    				
+			    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
+			    				writer.append(impressionItem1.getChecklistOption().getValue());
+			    			}
+				    		else
+				    		{
+				    			writer.append(addPoint.toString());
+			    				writer.append('|');
+			    				
+				    			writer.append('0');//impression
+				    		}
+			    			
+			    		}
+			    		
+			    		writer.append('\n');
+			    		
+		    			writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
+			    		writer.append('|');
+			    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
+			    		writer.append('|');
+			    		
+			    		lastCandidateId = answer.getStudent().getId();
+			    	}
+			    	
+			    	writer.append(answer.getChecklistOption().getValue());
+			    	writer.append('|');
+			    }
+			    
+			    if (answerList.size() > 0)
+			    {
+			    	answer = answerList.get(answerList.size() - 1);
+			    	Integer addPoint = 0;
+	    			String key="p"+oscePostId+"e"+answer.getDoctor().getId();
+	    			if (examinerId.contains(key))
+	    			{
+	    				int index = examinerId.indexOf(key);
+	    				addPoint = addPoints.get(index);
+	    			}
+			    	
+			    	if (impressionQueId != null)
+	    			{
+			    		writer.append(addPoint.toString());
+	    				writer.append('|');
+	    				
+	    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
+	    				writer.append(impressionItem1.getChecklistOption().getValue());
+	    			}
+		    		else
+		    		{
+		    			writer.append(addPoint.toString());
+	    				writer.append('|');
+	    				
+		    			writer.append('0');//impression
+		    		}
+			    	
+			    }
+		    	
+			    writer.flush();
+			    writer.close();
+		  }
+		  catch(Exception e)
+		  {
+			  Log.error(e.getMessage(),e);
+		  }
+		 
+		  return fileName;
+	  }
+
+	 public static String createOscePostGraphCSV(HttpServletRequest request, ServletContext servletContext, String fileName, OscePost oscePost)
+	  {
+		  
+		  char alphaSeq = 'A';
+		  Long impressionQueId = null;
+		  
+		  try
+		  {
+			  	String path = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML);
+				
+				CalculateCronbachValue calculateCronbachValue = new CalculateCronbachValue();
+	
+				fileName = path + fileName;
+				
+				FileWriter writer = new FileWriter(fileName);
+				writer.append("examiners");
+				writer.append('|');
+				writer.append("students");
+				writer.append('|');
+				
+				List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), oscePost.getOsceSequence().getId());
+				String missingQue = "";
+				
+				List<ChecklistTopic> checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
+				alphaSeq = 'A';
+				
+				impressionQueId = null;
+				
+				String impressionItemString=request.getParameter("p"+oscePost.getId().toString());							
+				if (impressionItemString != null)
+					impressionQueId=Long.parseLong(impressionItemString);
+				
+				for (ChecklistTopic checklistTopic : checklistTopicList)
+				{
+					List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
+					
+					int count = 1;
+					for (ChecklistQuestion question : questionList)
+					{
+						if ((impressionQueId == null || impressionQueId == 0)  && question.getIsOveralQuestion() != null && question.getIsOveralQuestion())
+						{
+							impressionQueId = question.getId();
+						}
+						
+						writer.append("Q" + String.valueOf(question.getId()));
+						
+						if (postMissingQueList.contains(question.getId()))
+						{
+							if (missingQue == null || missingQue.isEmpty())
+								missingQue = "Q" + String.valueOf(question.getId());
+							else
+								missingQue = missingQue + "," + "Q" + String.valueOf(question.getId());
+						}
+						
+						count += 1;
+						//writer.append(question.getId().toString());
+						writer.append('|');
+					}
+					alphaSeq++;
+				}
+				writer.append("AddPoint");
+				writer.append('|');
+				writer.append("impression ");
+			    //writer.append('\n');
+			    
+			    List<Answer> answerList = Answer.retrieveExportCsvDataByOscePost(oscePost.getOsceSequence().getOsceDay().getId(), oscePost.getId());
+			    Long lastCandidateId = null;
+			    Answer answer = null;
+			    for (int j=0; j<answerList.size(); j++)
+			    {
+			    	answer = answerList.get(j);
+			    	if (lastCandidateId == null || (!lastCandidateId.equals(answer.getStudent().getId())))
+			    	{
+			    		if (lastCandidateId != null)
+			    		{
+		    				Integer addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(j-1).getDoctor().getId());
+		    				writer.append(addPoint.toString());
+		    				writer.append('|');
+			    			
+			    			
+			    			if (impressionQueId != null && impressionQueId != 0)
+			    			{
+			    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
+			    				writer.append(impressionItem1.getChecklistOption().getValue());
+			    			}
+				    		else
+				    		{
+				    			writer.append('0');//impression
+				    		}
+			    		}
+			    		
+			    		writer.append('\n');
+			    		
+		    			writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
+			    		writer.append('|');
+			    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
+			    		writer.append('|');
+			    		
+			    		lastCandidateId = answer.getStudent().getId();
+			    	}
+			    	
+			    	writer.append(answer.getChecklistOption().getValue());
+			    	//writer.append(answer.getChecklistQuestion().getId().toString());
+		    		writer.append('|');
+			    }
+			    
+			    if (answerList.size() > 0)
+			    {
+		    		Integer addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(answerList.size()-1).getDoctor().getId());
+    				writer.append(addPoint.toString());
+    				writer.append('|');
+	    			
+			    	
+			    	if (impressionQueId != null)
+	    			{
+	    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
+	    				writer.append(impressionItem1.getChecklistOption().getValue());
+	    			}
+		    		else
+		    		{
+		    			writer.append('0');//impression
+		    		}
+			    }
+		    	
+			    writer.flush();
+			    writer.close();
+			    
+			    List<Long> valueList = new ArrayList<Long>();
+			    valueList = ChecklistOption.findCheckListOptionValueByQuestion(impressionQueId);
+			    
+			    Collections.sort(valueList);
+			    
+			    if (valueList.size() > 0)
+			    	calculateCronbachValue.createGraph(fileName, missingQue, valueList.get(0), valueList.get(valueList.size()-1));
+			    else
+			    	calculateCronbachValue.createGraph(fileName, missingQue, 0l, 0l);
+			   	
+			   	fileName = fileName.replace(".csv", ".png");
+
+		  }
+		  catch(Exception e)
+		  {
+			  Log.error(e.getMessage(),e);
+		  }
+		 
+		  return fileName;
+	  }
 }

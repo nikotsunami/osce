@@ -199,7 +199,7 @@ public class Answer {
 	// spec]
 
 	public static List<MapEnvelop> calculate(Long osceId, int analyticType,
-			Set<Long> missingItemId,List<Long> examinerId,List<Integer> addPoints) {
+			Set<Long> missingItemId,List<String> examinerId,List<Integer> addPoints) {
 		// List<Map<String,List<String>>> data=new
 		// ArrayList<Map<String,List<String>>>();
 
@@ -635,6 +635,9 @@ public class Answer {
 		{
 			Osce osce = Osce.findOsce(osceId);
 			List<OsceDay> days = osce.getOsce_days();
+			CalculateCronbachValue calculateCronbachValue;
+			CalculateCronbachValue calculatePostCronbachValue;
+			
 
 			for (OsceDay day : days) {
 				List<OsceSequence> sequences = day.getOsceSequences();
@@ -645,22 +648,54 @@ public class Answer {
 
 					// post wise calculation
 					for (int l = 0; l < posts.size(); l++) {
+						calculatePostCronbachValue = new CalculateCronbachValue();
+						
 						OscePost post = posts.get(l);
+						
+						String fileName = post.getStandardizedRole().getShortName() + "_" + seq.getLabel() +".csv";
+						fileName = ExportStatisticData.createOscePostCSV(RequestFactoryServlet.getThreadLocalRequest(),RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext(), post.getId(), fileName, examinerId, addPoints);
 
+						Map<String, String> postResultMap = calculatePostCronbachValue.calculateOscePostResult(fileName, post.getId());
+						
+						String postPassingStr = postResultMap.get("passMark") == null ? "0" : postResultMap.get("passMark");
+						
 						List<Doctor> doctors = retrieveDistinctExaminer(post
 								.getId());
 
 						List<String> postLevelList = new ArrayList<String>();
 
 						Integer numOfStudentPerPost = 0;
+						
+						Integer maxCountValue = OscePost.findMaxValueOfCheckListQuestionByOscePost(post.getId());
 
 						Double averagePerPost = 0.0;
 						int pointsPerPostLength=0;
 						double sdPerDoctor[] = new double[doctors.size()];
 						double minPerDoctor[] = new double[doctors.size()];
 						double maxPerDoctor[] = new double[doctors.size()];
+						
+						int postPassCtr = 0;
+						int postFailCtr = 0;
+						
 						for (int a = 0; a < doctors.size(); a++) {
+							
+							calculateCronbachValue = new CalculateCronbachValue();
+							
 							Doctor doctor = doctors.get(a);
+							
+							String filename = post.getStandardizedRole().getShortName() + "_" + doctor.getName() + "_" + seq.getLabel() + ".csv";
+							Integer addPoint = 0;
+							String key="p"+post.getId()+"e"+doctor.getId();
+							if (examinerId.contains(key))
+							{
+								int index=examinerId.indexOf(key);
+								addPoint = addPoints.get(index);
+							}
+							
+							filename = ExportStatisticData.createExaminerCSV(RequestFactoryServlet.getThreadLocalRequest(),RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext(), post.getId(), doctor.getId(), filename, addPoint);
+							
+							Map<String, String> resultMap = calculateCronbachValue.calculateResult(filename, post.getId(), postPassingStr);
+							
 							List<String> examinerLevelList = new ArrayList<String>();
 
 							PostAnalysis postAnalysis=PostAnalysis.findExaminerLevelData(osce, post, doctor);
@@ -673,9 +708,9 @@ public class Answer {
 							
 							
 							//login of save add point in database
- 							if(examinerId.contains(doctor.getId()))
+ 							if(examinerId.contains(key))
  							{
- 								int index=examinerId.indexOf(doctor.getId());
+ 								int index=examinerId.indexOf(key);
  								postAnalysis.setPointsCorrected(addPoints.get(index));
  							}
  							else
@@ -699,69 +734,102 @@ public class Answer {
 							postAnalysis.setNumOfStudents(countOfStudentList.intValue());
 							
 							// pass
-							examinerLevelList.add("0(0)");
+							String passCountStr = resultMap.get("passCount") == null ? "0" : resultMap.get("passCount");
+							Integer passCount = Integer.parseInt(passCountStr);							
+							//examinerLevelList.add("0(0)");
+							
 							if(insert)
 							{
-								postAnalysis.setPassOrignal(0);
-								postAnalysis.setPassCorrected(0);
+								postAnalysis.setPassOrignal(passCount);
+								postAnalysis.setPassCorrected(passCount);
 							}
 							else
-								postAnalysis.setPassCorrected(0);
+								postAnalysis.setPassCorrected(passCount);
+							
+							examinerLevelList.add(postAnalysis.getPassOrignal().toString() + "("+ postAnalysis.getPassCorrected().toString() +")");
+							postPassCtr += passCount;
 
 							// fail
-							examinerLevelList.add("0(0)");
+							String failCountStr = resultMap.get("failCount") == null ? "0" : resultMap.get("failCount");
+							
+							//examinerLevelList.add("0(0)");
 							if(insert)
 							{
-							postAnalysis.setFailOrignal(0);
-							postAnalysis.setFailCorrected(0);
+								postAnalysis.setFailOrignal(Integer.parseInt(failCountStr));
+								postAnalysis.setFailCorrected(Integer.parseInt(failCountStr));
 							}
 							else
-								postAnalysis.setFailCorrected(0);
+								postAnalysis.setFailCorrected(Integer.parseInt(failCountStr));
+							
+							examinerLevelList.add(postAnalysis.getFailOrignal().toString() + "("+ postAnalysis.getFailCorrected().toString() +")");
+							postFailCtr += Integer.parseInt(failCountStr);
 
 							// passing grade
-							examinerLevelList.add("0");
-							postAnalysis.setBoundary(0);
-							
+							//String passingGradeStr = resultMap.get("passMark") == null ? "0" : resultMap.get("passMark"); 
+							examinerLevelList.add("-");
+							postAnalysis.setBoundary(0.0);							
 
 							// average
-							double points[] = new double[answers.size()];
+							/*double points[] = new double[answers.size()];
 							for (int i = 0; i < answers.size(); i++) {
 								points[i] = new Double(answers.get(i)
 										.getChecklistOption().getValue());
 
 							}
-							Double average = StatUtils.mean(points);
-							
+							Double average = StatUtils.mean(points);		
 							
 							averagePerPost = averagePerPost + StatUtils.sum(points);
 							pointsPerPostLength=pointsPerPostLength+points.length;
 							if (!average.isNaN())
-								average = roundTwoDecimals(average);
+								average = roundTwoDecimals(average);*/
 							
-							examinerLevelList.add(String.valueOf(average));
+							
+							
+							Double average,averagePer;
+							average = resultMap.get("mean") == null ? 0 : Double.parseDouble(resultMap.get("mean"));
+							averagePer = average;
+							if (maxCountValue > 0)
+								averagePer = (average * 100) / maxCountValue;
+							
+							examinerLevelList.add(String.format("%.2f", averagePer));
 							postAnalysis.setMean(average);
 							
 
 							// sd
-							Double sd = Math.sqrt(StatUtils.variance(points));
+							/*Double sd = Math.sqrt(StatUtils.variance(points));
 							sdPerDoctor[a] = sd;
 							if (!sd.isNaN())
-								sd = roundTwoDecimals(sd);
+								sd = roundTwoDecimals(sd);*/
+							Double sd,sdPer;
+							sd = resultMap.get("sd") == null ? 0 : Double.parseDouble(resultMap.get("sd"));
+							sdPer = sd;
+							if (maxCountValue > 0)
+								sdPer = (sd * 100)/maxCountValue;
 							
-							examinerLevelList.add(String.valueOf(sd));
+							examinerLevelList.add(String.format("%.2f", sdPer));
 							postAnalysis.setStandardDeviation(sd);
 
 							// minimum
-							double min = StatUtils.min(points);
-							minPerDoctor[a] = min;
-							examinerLevelList.add(String.valueOf((int) min));
-							postAnalysis.setMinOrignal((int) min);
+							/*double min = StatUtils.min(points);
+							minPerDoctor[a] = min;*/
+							int min, minPer;
+							min = resultMap.get("min") == null ? 0 : Integer.parseInt(resultMap.get("min"));
+							minPer = min;
+							if (maxCountValue > 0)
+								minPer = (minPer * 100) / maxCountValue;
+							examinerLevelList.add(String.valueOf(minPer));
+							postAnalysis.setMinOrignal(min);
 
 							// maximum
-							double max = StatUtils.max(points);
-							maxPerDoctor[a] = max;
-							examinerLevelList.add(String.valueOf((int) max));
-							postAnalysis.setMaxOrignal((int) max);
+							/*double max = StatUtils.max(points);
+							maxPerDoctor[a] = max;*/
+							int max, maxPer;
+							max = resultMap.get("max") == null ? 0 : Integer.parseInt(resultMap.get("max"));
+							maxPer = max;
+							if (maxCountValue > 0)
+								maxPer = (maxPer * 100) / maxCountValue;
+							examinerLevelList.add(String.valueOf(maxPer));
+							postAnalysis.setMaxOrignal(max);
 
 							MapEnvelop examinerMap = new MapEnvelop();
 							examinerMap.put(
@@ -786,34 +854,44 @@ public class Answer {
 						}
 
 						// student count
-						System.out.println("Post : " + post.getSequenceNumber()
-								+ " Student count : " + numOfStudentPerPost);
+						/*System.out.println("Post : " + post.getSequenceNumber()
+								+ " Student count : " + numOfStudentPerPost);*/
 						postLevelList.add(numOfStudentPerPost.toString());
 						postAnalysis.setNumOfStudents(numOfStudentPerPost);
 						
 
 						// pass
-						postLevelList.add("0");
+						//postLevelList.add(String.valueOf(postPassCtr));
 						if(insert)
-							postAnalysis.setPassOrignal(0);
+						{
+							postAnalysis.setPassOrignal(postPassCtr);
+							postAnalysis.setPassCorrected(postPassCtr);
+						}
 						else
-							postAnalysis.setPassCorrected(0);
+							postAnalysis.setPassCorrected(postPassCtr);
 						
+						postLevelList.add(postAnalysis.getPassOrignal().toString() + "("+ postAnalysis.getPassCorrected().toString() +")");
 
 						// fail
-						postLevelList.add("0");
-						postAnalysis.setFailOrignal(0);
+						//postLevelList.add(String.valueOf(postFailCtr));
+						//postAnalysis.setFailOrignal(postFailCtr);
 						if(insert)
-							postAnalysis.setFailOrignal(0);
-							else
-								postAnalysis.setFailCorrected(0);
+						{
+							postAnalysis.setFailOrignal(postFailCtr);
+							postAnalysis.setFailCorrected(postFailCtr);
+						}
+						else
+							postAnalysis.setFailCorrected(postFailCtr);
+						
+						postLevelList.add(postAnalysis.getFailOrignal().toString() + "(" + postAnalysis.getFailCorrected().toString() + ")");
 
 						// passing grade
-						postLevelList.add("0");
-						postAnalysis.setBoundary(0);
+						
+						postLevelList.add(postPassingStr);
+						postAnalysis.setBoundary(Double.parseDouble(postPassingStr));
 
 						// average
-						averagePerPost = averagePerPost / pointsPerPostLength;
+						/*averagePerPost = averagePerPost / pointsPerPostLength;
 
 						if (averagePerPost.isNaN()) {
 							postLevelList.add("0");
@@ -822,10 +900,18 @@ public class Answer {
 							averagePerPost = roundTwoDecimals(averagePerPost);
 							postLevelList.add(averagePerPost.toString());
 							postAnalysis.setMean(averagePerPost);
-						}
+						}*/
+						String meanStr = postResultMap.get("mean") == null ? "0" : postResultMap.get("mean");
+						Double postMeanPer = Double.parseDouble(meanStr);
+						
+						if (maxCountValue > 0)
+							postMeanPer = (postMeanPer * 100) / maxCountValue;
+						
+						postLevelList.add(String.format("%.2f", postMeanPer));
+						postAnalysis.setMean(Double.parseDouble(meanStr));
 
 						// sd
-						Double sdPerPost = Math.sqrt(StatUtils
+						/*Double sdPerPost = Math.sqrt(StatUtils
 								.variance(sdPerDoctor));
 
 						if (sdPerPost.isNaN()) {
@@ -835,9 +921,18 @@ public class Answer {
 							sdPerPost = roundTwoDecimals(sdPerPost);
 							postLevelList.add(String.valueOf(sdPerPost));
 							postAnalysis.setStandardDeviation(sdPerPost);
-						}
+						}*/
+						String sdStr = postResultMap.get("sd") == null ? "0" : postResultMap.get("sd");
+						Double postSdPer = Double.parseDouble(sdStr);
+						
+						if (maxCountValue > 0)
+							postSdPer = (postSdPer * 100) / maxCountValue;
+							
+						postLevelList.add(String.format("%.2f", postSdPer));
+						postAnalysis.setStandardDeviation(Double.parseDouble(sdStr));
+						
 						// min
-						Double min = StatUtils.min(minPerDoctor);
+						/*Double min = StatUtils.min(minPerDoctor);
 						if (min.isNaN()) {
 							postAnalysis.setMinOrignal(0);
 							postLevelList.add("0");
@@ -845,9 +940,16 @@ public class Answer {
 						{
 							postLevelList.add(String.valueOf(min.intValue()));
 							postAnalysis.setMinOrignal(min.intValue());
-						}
+						}*/
+						String minStr = postResultMap.get("min") == null ? "0" : postResultMap.get("min");
+						int minPer = Integer.parseInt(minStr);
+						if (maxCountValue > 0)
+							minPer = (minPer * 100) / maxCountValue;
+						postLevelList.add(String.valueOf(minPer));
+						postAnalysis.setMinOrignal(Integer.parseInt(minStr));
+						
 						// max
-						Double max = StatUtils.min(maxPerDoctor);
+						/*Double max = StatUtils.min(maxPerDoctor);
 						if (max.isNaN()) {
 							postLevelList.add("0");
 							postAnalysis.setMaxOrignal(0);
@@ -855,7 +957,14 @@ public class Answer {
 						{
 							postLevelList.add(String.valueOf(max.intValue()));
 							postAnalysis.setMaxOrignal(max.intValue());
-						}
+						}*/
+						String maxStr = postResultMap.get("max") == null ? "0" : postResultMap.get("max");
+						int maxPer = Integer.parseInt(maxStr);
+						if (maxCountValue > 0)
+							maxPer = (maxPer * 100) / maxCountValue;
+						postLevelList.add(String.valueOf(maxPer));
+						postAnalysis.setMaxOrignal(Integer.parseInt(maxStr));
+						
 						MapEnvelop postMap = new MapEnvelop();
 						postMap.put("p" + post.getId(), postLevelList);
 						data.add(postMap);
@@ -1054,9 +1163,12 @@ public class Answer {
 				{
 					List<String> postLevelList = new ArrayList<String>();
 					PostAnalysis postAnalysis=postLevelDatas.get(i);
+				
+					OscePost oscePost=postAnalysis.getOscePost();
+					
+					Integer maxCountValue = OscePost.findMaxValueOfCheckListQuestionByOscePost(oscePost.getId());
 					
 					postLevelList.add(postAnalysis.getNumOfStudents().toString());
-					
 					
 					
 					// pass
@@ -1073,19 +1185,29 @@ public class Answer {
 				
 					
 					// average
-					postLevelList.add(postAnalysis.getMean().toString());
+					Double postMeanPer = postAnalysis.getMean();
+					if (maxCountValue > 0)
+						postMeanPer = (postMeanPer * 100) / maxCountValue;
+					postLevelList.add(String.format("%.2f", postMeanPer));
 							
 					// sd
-					postLevelList.add(postAnalysis.getStandardDeviation().toString());
+					Double postSdPer = postAnalysis.getStandardDeviation();
+					if (maxCountValue > 0)
+						postSdPer = (postSdPer * 100) / maxCountValue;
+					postLevelList.add(String.format("%.2f", postSdPer));
+					
 					
 					// min
-					postLevelList.add(postAnalysis.getMinOrignal().toString());
+					Integer postMinPer = postAnalysis.getMinOrignal();
+					if (maxCountValue > 0)
+						postMinPer = (postMinPer * 100) / maxCountValue;
+					postLevelList.add(String.valueOf(postMinPer));
 					
 					// max
-					postLevelList.add(postAnalysis.getMaxOrignal().toString());
-					
-					
-					OscePost oscePost=postAnalysis.getOscePost();
+					Integer postMaxPer = postAnalysis.getMaxOrignal();
+					if (maxCountValue > 0)
+						postMaxPer = (postMaxPer * 100) / maxCountValue;
+					postLevelList.add(String.valueOf(postMaxPer));					
 					
 					MapEnvelop postMap = new MapEnvelop();
 					postMap.put("p" + oscePost.getId(), postLevelList);
@@ -1115,20 +1237,38 @@ public class Answer {
 						
 						
 						// passing grade
-						examinerLevelList.add(examinerPostAnalysis.getBoundary().toString());
+						if (examinerPostAnalysis.getBoundary() != null)
+							examinerLevelList.add( examinerPostAnalysis.getBoundary().equals(Double.valueOf(0)) ? "-" : examinerPostAnalysis.getBoundary().toString());
+						else
+							examinerLevelList.add("-");
 					
 						
 						// average
-						examinerLevelList.add(examinerPostAnalysis.getMean().toString());
+						Double meanPer = examinerPostAnalysis.getMean();
+						if (maxCountValue > 0)
+							meanPer = (meanPer * 100) / maxCountValue;
+						examinerLevelList.add(String.format("%.2f", meanPer));
 								
 						// sd
-						examinerLevelList.add(examinerPostAnalysis.getStandardDeviation().toString());
+						Double sdPer = examinerPostAnalysis.getStandardDeviation();
+						if (maxCountValue > 0)
+							sdPer = (sdPer * 100) / maxCountValue;
+						examinerLevelList.add(String.format("%.2f", sdPer));
+					
 						
 						// min
-						examinerLevelList.add(examinerPostAnalysis.getMinOrignal().toString());
+						Integer minPer = examinerPostAnalysis.getMinOrignal();
+						if (maxCountValue > 0)
+							minPer = (minPer * 100) / maxCountValue;
+						
+						examinerLevelList.add(String.valueOf(minPer));
 						
 						// max
-						examinerLevelList.add(examinerPostAnalysis.getMaxOrignal().toString());
+						Integer maxPer = examinerPostAnalysis.getMaxOrignal();
+						if (maxCountValue > 0)
+							maxPer = (maxPer * 100) / maxCountValue; 
+						
+						examinerLevelList.add(String.valueOf(maxPer));
 						
 						MapEnvelop examinerMap = new MapEnvelop();
 						examinerMap.put(
@@ -1219,6 +1359,18 @@ public class Answer {
 		return q.getResultList();
 	}
 
+	public static List<Answer> retrieveExportCsvDataByOscePostAndExaminer(Long oscePostId, Long examinerId) {
+		EntityManager em = entityManager();
+		// String
+		// queryString="SELECT a FROM Answer a where oscePostRoom in (select distinct (oscePostRoom) from Assignment where osceDay in (select id from OsceDay where osce="+
+		// osceId +")) group by doctor,student";
+		String queryString = "SELECT a FROM Answer a join a.checklistQuestion c join c.checkListTopic t WHERE a.doctor.id = " + examinerId + " AND a.oscePostRoom.oscePost.id = "
+				+ oscePostId
+				+ " ORDER BY a.doctor, a.student, t.sort_order, c.sequenceNumber, c.id";
+		TypedQuery<Answer> q = em.createQuery(queryString, Answer.class);
+		return q.getResultList();
+	}
+	
 	public static Answer findAnswer(Long studentId, Long questionId,
 			Long osceDayId) {
 		EntityManager em = entityManager();
@@ -1237,6 +1389,14 @@ public class Answer {
 
 	}
 	
-	
+	public static String createGraph(Long oscePostId)
+	{
+		OscePost oscePost = OscePost.findOscePost(oscePostId);
+		String fileName = oscePost.getStandardizedRole().getShortName() + ".csv";
+		String fullFileName = ExportStatisticData.createOscePostGraphCSV(RequestFactoryServlet.getThreadLocalRequest(),RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext(), fileName, oscePost);
+		fileName = fileName.replace(".csv", ".png");
+		fileName = OsMaFilePathConstant.assignmentHTML + fileName;
+		return fileName;
+	}
 	
 }

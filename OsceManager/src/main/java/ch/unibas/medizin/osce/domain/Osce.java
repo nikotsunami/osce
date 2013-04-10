@@ -342,12 +342,12 @@ public class Osce {
     
     public static List<Osce> findAllOsceBySemster(Long id) {
     	EntityManager em = entityManager();
-    	System.out.println("BEFORE CALL------->");
+    	//System.out.println("BEFORE CALL------->");
     	String queryString="SELECT o FROM Osce as o  where o.semester.id="+id + " order by studyYear desc";
-    	System.out.println("query--"+ queryString);
+    //	System.out.println("query--"+ queryString);
     	TypedQuery<Osce> q = em.createQuery(queryString, Osce.class);
     //	TypedQuery<Osce> q = em.createQuery("SELECT o FROM Osce as o  where o.semester=1 " , Osce.class);
-    	System.out.println("success done with size");
+    //	System.out.println("success done with size");
     	
     	return q.getResultList();
     }
