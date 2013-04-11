@@ -279,7 +279,11 @@ public class ExportStatisticData extends HttpServlet{
 						
 						for (OscePost oscePost : oscePostList)
 						{
-							fileName = "Day"+ (i+1) + "_" + oscePost.getStandardizedRole().getShortName() + "_" + osceSeq.getLabel() +".csv";
+							if (oscePost.getStandardizedRole() != null)
+								fileName = "Day"+ (i+1) + "_" + oscePost.getStandardizedRole().getShortName() + "_" + osceSeq.getLabel() +".csv";
+							else
+								fileName = "Day"+ (i+1) + "_" + "post" + oscePost.getId() + "_" + osceSeq.getLabel() +".csv";
+								
 							fileName = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML + fileName);
 							fileNameList.add(fileName);
 							
@@ -294,7 +298,11 @@ public class ExportStatisticData extends HttpServlet{
 							List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
 							String missingQue = "";
 							
-							List<ChecklistTopic> checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
+							List<ChecklistTopic> checklistTopicList = new ArrayList<ChecklistTopic>();
+
+							if (oscePost.getStandardizedRole() != null)
+								checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
+							
 							alphaSeq = 'A';
 							
 							impressionQueId = null;
@@ -502,8 +510,12 @@ public class ExportStatisticData extends HttpServlet{
 				writer.append('|');
 				
 				OscePost oscePost = OscePost.findOscePost(oscePostId);
+
 				
-				List<ChecklistTopic> checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
+				List<ChecklistTopic> checklistTopicList = new ArrayList<ChecklistTopic>();
+				
+				if (oscePost.getStandardizedRole() != null)
+					checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
 				
 				impressionQueId = null;
 				
@@ -623,7 +635,10 @@ public class ExportStatisticData extends HttpServlet{
 				
 				OscePost oscePost = OscePost.findOscePost(oscePostId);
 				
-				List<ChecklistTopic> checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
+				List<ChecklistTopic> checklistTopicList = new ArrayList<ChecklistTopic>();
+				
+				if (oscePost.getStandardizedRole() != null)
+					checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
 				
 				impressionQueId = null;
 				
@@ -770,7 +785,10 @@ public class ExportStatisticData extends HttpServlet{
 				List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), oscePost.getOsceSequence().getId());
 				String missingQue = "";
 				
-				List<ChecklistTopic> checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
+				List<ChecklistTopic> checklistTopicList = new ArrayList<ChecklistTopic>();
+				
+				if (oscePost.getStandardizedRole() != null)
+					checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
 				alphaSeq = 'A';
 				
 				impressionQueId = null;

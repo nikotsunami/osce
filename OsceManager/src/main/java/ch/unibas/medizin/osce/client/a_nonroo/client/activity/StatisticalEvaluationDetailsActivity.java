@@ -217,6 +217,12 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 									@Override
 									public void onSuccess(List<MapEnvelopProxy> response) {
 										
+										if (response == null)
+										{
+											showApplicationLoading(false);
+											return;
+										}
+										
 										if(response.size() !=0)											
 										postAnalysisData=response;
 										

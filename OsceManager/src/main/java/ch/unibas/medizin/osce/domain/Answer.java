@@ -244,7 +244,11 @@ public class Answer {
 							
 							OscePost post = posts.get(l);
 							
-							String fileName = "Day"+ (dayCtr) + "_" + post.getStandardizedRole().getShortName() + "_" + seq.getLabel() + ".csv";
+							String fileName;
+							if (post.getStandardizedRole() != null)
+								fileName = "Day"+ (dayCtr) + "_" + post.getStandardizedRole().getShortName() + "_" + seq.getLabel() + ".csv";
+							else
+								fileName = "Day"+ (dayCtr) + "_" + "post" + post.getId() + "_" + seq.getLabel() + ".csv";
 
 							fileName = RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(OsMaFilePathConstant.assignmentHTML + fileName);
 							
@@ -651,8 +655,12 @@ public class Answer {
 						calculatePostCronbachValue = new CalculateCronbachValue();
 						
 						OscePost post = posts.get(l);
-						
-						String fileName = post.getStandardizedRole().getShortName() + "_" + seq.getLabel() +".csv";
+						String fileName;
+						if (post.getStandardizedRole() != null)
+							fileName = post.getStandardizedRole().getShortName() + "_" + seq.getLabel() +".csv";
+						else
+							fileName = "post" + post.getId() + "_" + seq.getLabel() +".csv";
+							
 						fileName = ExportStatisticData.createOscePostCSV(RequestFactoryServlet.getThreadLocalRequest(),RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext(), post.getId(), fileName, examinerId, addPoints);
 
 						Map<String, String> postResultMap = calculatePostCronbachValue.calculateOscePostResult(fileName, post.getId());
@@ -682,8 +690,12 @@ public class Answer {
 							calculateCronbachValue = new CalculateCronbachValue();
 							
 							Doctor doctor = doctors.get(a);
-							
-							String filename = post.getStandardizedRole().getShortName() + "_" + doctor.getName() + "_" + seq.getLabel() + ".csv";
+							String filename;
+							if (post.getStandardizedRole() != null)
+								filename = post.getStandardizedRole().getShortName() + "_" + doctor.getName() + "_" + seq.getLabel() + ".csv";
+							else
+								filename = "post" + post.getId() + "_" + doctor.getName() + "_" + seq.getLabel() + ".csv";
+								
 							Integer addPoint = 0;
 							String key="p"+post.getId()+"e"+doctor.getId();
 							if (examinerId.contains(key))
@@ -1392,7 +1404,13 @@ public class Answer {
 	public static String createGraph(Long oscePostId)
 	{
 		OscePost oscePost = OscePost.findOscePost(oscePostId);
-		String fileName = oscePost.getStandardizedRole().getShortName() + ".csv";
+		String fileName;
+		
+		if (oscePost.getStandardizedRole() != null)
+			fileName = oscePost.getStandardizedRole().getShortName() + ".csv";
+		else
+			fileName = "oscePost" + oscePost.getId() + ".csv";		
+		
 		String fullFileName = ExportStatisticData.createOscePostGraphCSV(RequestFactoryServlet.getThreadLocalRequest(),RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext(), fileName, oscePost);
 		fileName = fileName.replace(".csv", ".png");
 		fileName = OsMaFilePathConstant.assignmentHTML + fileName;
