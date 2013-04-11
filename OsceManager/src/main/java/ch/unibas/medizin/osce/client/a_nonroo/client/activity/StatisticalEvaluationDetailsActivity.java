@@ -41,10 +41,13 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
@@ -52,6 +55,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -1223,8 +1227,8 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				}
 				else
 				{
-				examinerId.add(key);
-				addPoint.add(value);
+					examinerId.add(key);
+					addPoint.add(value);
 				}
 			}
 		}
@@ -1236,12 +1240,14 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 
 				@Override
 				public void onSuccess(String response) {
-					
+					showApplicationLoading(false);
 					final String name = GWT.getHostPageBaseURL() + response.substring(1);
 					Log.info("RESPONSE : " + name);
-					
+					 
 					final GraphTemplatePopupViewImpl graphTemplateView = new GraphTemplatePopupViewImpl();
 					
+					graphTemplateView.getGraphImage().setUrl(name);
+										
 					graphTemplateView.addCloseClickHandler(new ClickHandler() {
 						
 						@Override
@@ -1250,25 +1256,10 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 						}
 					});
 					
-					new Timer() {						
-						@Override
-						public void run() {
-							graphTemplateView.getGraphImage().setUrl(name);
-						}
-					}.schedule(1000);
+					graphTemplateView.getGraphImage().setVisible(true);
 					
-					new Timer() {						
-						@Override
-						public void run() {
-							showApplicationLoading(false);									
-							if (graphTemplateView.getGraphImage().getWidth() == 0 && graphTemplateView.getGraphImage().getHeight() == 0)
-								graphTemplateView.getImgErrorLbl().setVisible(true);
-							else
-								graphTemplateView.getGraphImage().setVisible(true);
-							graphTemplateView.center();
-							graphTemplateView.show();							
-						}
-					}.schedule(2000);
+					graphTemplateView.center();
+					graphTemplateView.show();
 				}
 				
 				@Override

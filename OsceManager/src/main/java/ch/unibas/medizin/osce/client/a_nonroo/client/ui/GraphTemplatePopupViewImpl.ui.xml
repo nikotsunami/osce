@@ -127,7 +127,7 @@
 		<g:HTMLPanel addStyleNames="{style.contentPanelStyle}">
 			<g:VerticalPanel>
 				<g:Image ui:field="graphImage" visible="false" addStyleNames="{style.imgLbl}"></g:Image>
-				<g:Label ui:field="imgErrorLbl" visible="false" addStyleNames="{style.errorLbl}"></g:Label>
+				<!-- <g:Label ui:field="imgErrorLbl" visible="false" addStyleNames="{style.errorLbl}"></g:Label> -->
 			</g:VerticalPanel>
 		</g:HTMLPanel>
 	</g:HTMLPanel>

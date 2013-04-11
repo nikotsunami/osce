@@ -194,4 +194,6 @@ names(df)[nCol+1]<-"pass/fall"
 
 write.table(df,file=filename,row.names=FALSE,col.names=names(df),sep="|",quote=FALSE)
 
+print(paste(filename));
+
 .endOfProgram()

@@ -34,8 +34,8 @@ public class GraphTemplatePopupViewImpl extends PopupPanel {
 	@UiField
 	Image graphImage;
 	
-	@UiField
-	Label imgErrorLbl;	
+	/*@UiField
+	Label imgErrorLbl;	*/
 	
 	
 	public GraphTemplatePopupViewImpl() {
@@ -43,9 +43,9 @@ public class GraphTemplatePopupViewImpl extends PopupPanel {
 		this.setGlassEnabled(true);
 		this.addStyleName("printPopupPanel");
 		add(BINDER.createAndBindUi(this));
-		imgErrorLbl.setText(constants.imgError());
+		//imgErrorLbl.setText(constants.imgError());
 		popupTitle.setInnerText(constants.graphPopupTitle());	
-		//graphImage.setAltText(constants.imgError());
+		graphImage.setAltText(constants.imgError());
 	}
 
 	public IconButton getCloseButton() {
@@ -64,13 +64,13 @@ public class GraphTemplatePopupViewImpl extends PopupPanel {
 		this.popupTitle = title;
 	}
 
-	public Label getImgErrorLbl() {
+	/*public Label getImgErrorLbl() {
 		return imgErrorLbl;
 	}
 
 	public void setImgErrorLbl(Label imgErrorLbl) {
 		this.imgErrorLbl = imgErrorLbl;
-	}
+	}*/
 
 	public Image getGraphImage() {
 		return graphImage;

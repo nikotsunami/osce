@@ -240,6 +240,12 @@ public class CalculateCronbachValue {
 			
 			execute(RESULT_FILE);
 			
+			List<String> response = r.getResponse();
+			
+			if (response.size() > 0)
+			{
+				log.info("Response : " + response.get(0));
+			}
 		}
 	}
 	
@@ -267,6 +273,14 @@ public class CalculateCronbachValue {
 			
 			execute(POST_GRAPH_FILE);
 			
+			log.info("~~~Executed Successfully");
+			
+			List<String> response = r.getResponse();
+			
+			if (response.size() > 0)
+			{
+				log.info("Response : " + response.get(0));
+			}
 			//csvFile.delete();
 		}
 	}

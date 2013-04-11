@@ -264,4 +264,6 @@ cat(paste("  generating graphics (s. file '",fname,"')\n",sep=""))
 
 .visualize(fname)
 
+print(paste(fname));
+
 .endOfProgram()
