@@ -342,11 +342,12 @@ public class ExportStatisticData extends HttpServlet{
 							}
 							
 							writer.append("impression ");
-						    //writer.append('\n');
+							//writer.append('\n');
 						    
 						    List<Answer> answerList = Answer.retrieveExportCsvDataByOscePost(osceDay.getId(), oscePost.getId());
 						    Long lastCandidateId = null;
 						    Answer answer = null;
+						    
 						    for (int j=0; j<answerList.size(); j++)
 						    {
 						    	answer = answerList.get(j);
@@ -417,6 +418,14 @@ public class ExportStatisticData extends HttpServlet{
 					    	
 						    writer.flush();
 						    writer.close();
+						    
+						    if (answerList.size() == 0)
+						    {
+						    	FileWriter writer2 = new FileWriter(fileName);
+						    	writer2.write("examiners|students|impression|pass/fall");
+						    	writer2.flush();
+						    	writer2.close();						    
+						    }
 						    
 						    if (flag)
 						    	calculateCronbachValue.calculatePassFail(fileName, missingQue);
