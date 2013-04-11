@@ -316,8 +316,8 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			}
 			else if(analysisType.equals(AnalysisType.post_analysys))
 			{
-				sequenceView.getSequenceLbl().getElement().getParentElement().getStyle().setWidth(23, Unit.PCT);
-				
+				sequenceView.getSequenceLbl().getElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getStyle().setWidth(21, Unit.PCT);
+				sequenceView.getSequenceLbl().getElement().getStyle().setWidth(260, Unit.PX);
 				//sequenceView.getGraphBtn().setVisible(true);
 				
 				createColumnHeader(sequenceView);
@@ -739,15 +739,15 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			
 			if(analysisType.equals(AnalysisType.item_analysis))
 			{
-				postView.getSequenceLbl().getElement().getParentElement().getStyle().setWidth(24, Unit.PCT);
+				postView.getSequenceLbl().getElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getStyle().setWidth(24, Unit.PCT);
 				postView.getSequenceLbl().setWidth("442px");
 			}
 			else if(analysisType.equals(AnalysisType.post_analysys))
 			{
 				postView.getGraphBtn().setVisible(true);
 				
-				postView.getSequenceLbl().getElement().getParentElement().getStyle().setWidth(22, Unit.PCT);
-				postView.getSequenceLbl().setWidth("248px");
+				postView.getSequenceLbl().getElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getStyle().setWidth(20, Unit.PCT);
+				postView.getSequenceLbl().setWidth("188px");
 				postView.getFourthColumnHP().getElement().getParentElement().getStyle().setWidth(28, Unit.PCT);
 				//postView.getSequenceHeader().getTBodies().getItem(0).getElementsByTagName("td").getItem(3).setPropertyString("width", "28%");
 				
