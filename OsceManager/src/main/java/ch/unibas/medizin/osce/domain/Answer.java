@@ -703,6 +703,10 @@ public class Answer {
 								int index=examinerId.indexOf(key);
 								addPoint = addPoints.get(index);
 							}
+							else
+							{
+								addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(post.getId(), doctor.getId());
+							}
 							
 							filename = ExportStatisticData.createExaminerCSV(RequestFactoryServlet.getThreadLocalRequest(),RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext(), post.getId(), doctor.getId(), filename, addPoint);
 							

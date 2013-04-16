@@ -233,6 +233,13 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 					return;
 				}
 				
+				if (!isNumber(addPointTxtBox.getText()))
+				{
+					MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+					dialogBox.showConfirmationDialog(constants.addPointErr());
+					
+					return;
+				}
 				
 				delegate.setAddPoint(oscePostProxy,doctorProxy,addPointTxtBox.getValue());
 				//((Label)postDataHP.getWidget(6)).setText(minTxtBox.getText());
@@ -252,5 +259,22 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 		}
 		addPointPopup.setPopupPosition(fourthColumnHP.getWidget(0).getAbsoluteLeft()-70, fourthColumnHP.getWidget(0).getAbsoluteTop()-110);
 		addPointPopup.show();
+	}
+	
+	public static boolean isNumber(String value) {
+		
+		  try  
+		  {  
+		    Integer.parseInt(value);  
+		  }  
+		  catch(NumberFormatException nfe)  
+		  {  
+		    return false;  
+		  }  
+		  catch (Exception e) {
+			  return false;
+		  }
+		  
+		  return true;  
 	}
 }

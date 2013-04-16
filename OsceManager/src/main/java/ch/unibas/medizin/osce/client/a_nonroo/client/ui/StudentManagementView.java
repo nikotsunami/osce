@@ -6,6 +6,7 @@ import java.util.Map;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
+import ch.unibas.medizin.osce.shared.Gender;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -27,7 +28,7 @@ public interface StudentManagementView extends IsWidget {
 
 		void doAnimation(boolean b);
 
-		void editStudentData(StudentProxy studentProxy, String string, String string2, String string3);
+		void editStudentData(StudentProxy studentProxy, String string, String string2, String string3, Gender gender);
 
 		void performSearch(String value);
 		

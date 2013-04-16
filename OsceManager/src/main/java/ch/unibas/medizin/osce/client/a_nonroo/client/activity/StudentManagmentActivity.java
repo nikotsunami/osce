@@ -20,6 +20,7 @@ import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentRequest;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
+import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.Sorting;
@@ -509,18 +510,20 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 
 
 	@Override
-	public void editStudentData(StudentProxy studentProxy, String name,
-			String preName, String email) {
+	public void editStudentData(StudentProxy studentProxy, String name, String preName, String email, Gender gender) {
 		StudentRequest studentRequest = requests.studentRequest();
 		studentProxy = studentRequest.edit(studentProxy);
 		
 		studentProxy.setName(name);
 		studentProxy.setPreName(preName);
 		studentProxy.setEmail(email);
-			if(email=="")
-			{
-				studentProxy.setEmail(null);
-			}
+		studentProxy.setGender(gender);
+		
+		if(email=="")
+		{
+			studentProxy.setEmail(null);
+		}
+		
 		studentRequest.persist().using(studentProxy).fire(new OSCEReceiver<Void>() {
 
 			@Override

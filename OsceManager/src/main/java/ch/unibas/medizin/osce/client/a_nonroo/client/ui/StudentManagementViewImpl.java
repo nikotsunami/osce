@@ -234,11 +234,12 @@ public class StudentManagementViewImpl extends Composite implements StudentManag
 		
 		((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).setAnimationEnabled(true);
 		
-		((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).setWidth("200px");
+		((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).setWidth("225px");
 		
 		studentManagementEditPopupView.getNewName().setValue(studentProxy.getName());
 		studentManagementEditPopupView.getNewPreName().setValue(studentProxy.getPreName());
 		studentManagementEditPopupView.getNewEmail().setValue(studentProxy.getEmail());
+		studentManagementEditPopupView.getGenderListBox().setValue(studentProxy.getGender());
 		
 		RootPanel.get().add(((StudentManagementEditPopupViewImpl)studentManagementEditPopupView));
 		
@@ -248,6 +249,7 @@ public class StudentManagementViewImpl extends Composite implements StudentManag
 		studentManagementMap.put("name",((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).getNewName());
 		studentManagementMap.put("prename",((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).getNewPreName());
 		studentManagementMap.put("email",((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).getNewEmail());
+		//studentManagementMap.put("gender",((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).getGenderListBox());
 		
 		// E Highlight onViolation
 		Log.info("email value--"+((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).getNewEmail().getText());
@@ -256,7 +258,7 @@ public class StudentManagementViewImpl extends Composite implements StudentManag
 			
 			@Override
 			public void onClick(ClickEvent arg0) {
-				delegate.editStudentData(studentProxy, studentManagementEditPopupView.getNewName().getValue(),studentManagementEditPopupView.getNewPreName().getValue(),studentManagementEditPopupView.getNewEmail().getValue());
+				delegate.editStudentData(studentProxy, studentManagementEditPopupView.getNewName().getValue(),studentManagementEditPopupView.getNewPreName().getValue(),studentManagementEditPopupView.getNewEmail().getValue(), studentManagementEditPopupView.getGenderListBox().getValue());
 				/*String email=((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).getNewEmail().getText();
 				if(email=="")
 				{
@@ -289,7 +291,7 @@ public class StudentManagementViewImpl extends Composite implements StudentManag
 			}
 		});
 		
-		((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).setPopupPosition(left-450, top - 50);
+		((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).setPopupPosition(left-225, top - 50);
 		
 		((StudentManagementEditPopupViewImpl)studentManagementEditPopupView).show();
 	}

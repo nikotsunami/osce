@@ -81,7 +81,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 		
 		private final OsceConstants constants;
 		
-		StatisticalEvaluationDetailsActivity statisticalEvaluationDetailsActivity;		
+		StatisticalEvaluationDetailsActivity statisticalEvaluationDetailsActivity;
 			
 		private int numOfPosts=0;
 		private StatisticalEvaluationDetailsPlace place;
@@ -1228,8 +1228,17 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				String key="p"+oscePostProxy.getId()+"e"+doctorProxy.getId();
 				if(examinerId.contains(key))
 				{
-					int index=examinerId.indexOf(doctorProxy);
-					addPoint.set(index, value);
+					int index = -1;
+					for (int i=0; i<examinerId.size(); i++)
+					{
+						if (examinerId.get(i).equals(key))
+						{
+							index = i;
+							break;
+						}
+					}
+					if (index >= 0)
+						addPoint.set(index, value);
 				}
 				else
 				{

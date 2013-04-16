@@ -1305,5 +1305,7 @@ public interface OsceConstants extends Constants {
 	public String graphError();
 	
 	public String graphPopupTitle();
+	
+	public String addPointErr();
 }
 

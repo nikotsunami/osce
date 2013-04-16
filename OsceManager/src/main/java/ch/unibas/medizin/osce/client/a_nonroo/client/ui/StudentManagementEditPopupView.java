@@ -1,8 +1,11 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import ch.unibas.medizin.osce.shared.Gender;
+
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ValueListBox;
 
 public interface StudentManagementEditPopupView extends IsWidget {
 	
@@ -21,4 +24,6 @@ public interface StudentManagementEditPopupView extends IsWidget {
 	public Button getOkBtn();
 	
 	public Button getCancelBtn();
+	
+	public ValueListBox<Gender> getGenderListBox();
 }

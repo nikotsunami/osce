@@ -685,6 +685,10 @@ public class ExportStatisticData extends HttpServlet{
 			    				int index = examinerId.indexOf(key);
 			    				addPoint = addPoints.get(index);
 			    			}
+			    			else
+			    			{
+			    				addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(j-1).getDoctor().getId());
+			    			}
 			    			
 			    			if (impressionQueId != null && impressionQueId != 0)
 			    			{
@@ -727,6 +731,10 @@ public class ExportStatisticData extends HttpServlet{
 	    			{
 	    				int index = examinerId.indexOf(key);
 	    				addPoint = addPoints.get(index);
+	    			}
+	    			else
+	    			{
+	    				addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(answerList.size()-1).getDoctor().getId());
 	    			}
 			    	
 			    	if (impressionQueId != null)
