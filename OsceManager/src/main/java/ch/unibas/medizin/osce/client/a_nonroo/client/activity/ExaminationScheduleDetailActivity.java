@@ -1868,7 +1868,13 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					 
 
 					 	 spSlotLength=calculateTimeInMinute(assignmentProxy.getTimeEnd(),assignmentProxy.getTimeStart());
-					 
+					 	 
+
+					 	 if(osceProxy.getPostLength() < 10)
+					 	 {
+					 		spSlotLength=spSlotLength*2;
+					 	 }
+					 	 
 						//spSlotLength=spSlotLength/60000;
 						spSlotLength--;
 						
@@ -1918,6 +1924,14 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 						if(j!=response.size()-1)
 							breakTime=response.get(j+1).getTimeStart().getTime()-assignmentProxy.getTimeEnd().getTime();
 						breakTime=breakTime/60000;
+						
+						
+
+					 	 if(osceProxy.getPostLength() < 10)
+					 	 {
+					 		breakTime=breakTime*2;
+					 	 }
+						
 						Log.info("Break :" + breakTime);
 						
 																								
@@ -1941,7 +1955,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							oscePostView.getStudentSlotsVP().insert(breakHP, oscePostView.getStudentSlotsVP().getWidgetCount());
 						}
 						//insert lunch/long/middle break
-						else if((long)osceProxy.getLongBreak()==breakTime || (long)osceProxy.getMiddleBreak()==breakTime || (long)osceProxy.getLunchBreak()==breakTime)
+						else if((long)osceProxy.getLongBreak()==breakTime || (long)osceProxy.getMiddleBreak()==breakTime || (long)osceProxy.getLunchBreak()==breakTime || breakTime > 0)
 						{
 							//insert simpat change break
 							breakTime--;

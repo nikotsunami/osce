@@ -19,18 +19,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.math.stat.StatUtils;
 import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.Answer;
 import ch.unibas.medizin.osce.domain.ChecklistOption;
 import ch.unibas.medizin.osce.domain.ChecklistQuestion;
 import ch.unibas.medizin.osce.domain.ChecklistTopic;
+import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.domain.ItemAnalysis;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.OscePost;
 import ch.unibas.medizin.osce.domain.OsceSequence;
 import ch.unibas.medizin.osce.domain.PostAnalysis;
+import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.server.CalculateCronbachValue;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 
@@ -44,42 +47,86 @@ public class ExportStatisticData extends HttpServlet{
 	  protected void doGet(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException 
 	  {
 		  String osceId=request.getParameter("osceId");
-		  List<String> fileNameList = new ArrayList<String>();
-		  String fileName=createCSV(new Long(osceId),request, getServletConfig().getServletContext(), true,fileNameList);
+		  String exportType=request.getParameter("export");
 		  
-		  ByteArrayOutputStream os = new ByteArrayOutputStream();
-		  createZipFile("OsceStatisticData.zip", fileNameList,os);
-		  try{
+		  if(exportType.equals("old"))
+		  {
+			  List<String> fileNameList = new ArrayList<String>();
+			  String fileName=createCSV(new Long(osceId),request, getServletConfig().getServletContext(), true,fileNameList);
+			  
+			  ByteArrayOutputStream os = new ByteArrayOutputStream();
+			  createZipFile("OsceStatisticData.zip", fileNameList,os);
+			  try{
+					
+					
+					
+				  resp.setContentType("application/x-download");
+					
+				  resp.setHeader("Content-Disposition", "attachment; filename=" + "OsceStatisticData.zip");
+					
+					   
+	
+					Log.info("path :" + fileName);
+					//String file=OsMaFilePathConstant.ROLE_IMAGE_FILEPATH+path;
+					Log.info(" file :" + fileName);
+					
+					OutputStream out = resp.getOutputStream();
+					
+					byte[] in = os.toByteArray();
+					if (in.length > 0){
+					    out.write(in);
+					}
+					
+					File htmlFile=new File(fileName);
+					htmlFile.delete();
+					out.flush();
 				
-				
-				
-			  resp.setContentType("application/x-download");
-				
-			  resp.setHeader("Content-Disposition", "attachment; filename=" + "OsceStatisticData.zip");
-				
-				   
-
-				Log.info("path :" + fileName);
-				//String file=OsMaFilePathConstant.ROLE_IMAGE_FILEPATH+path;
-				Log.info(" file :" + fileName);
-				
-				OutputStream out = resp.getOutputStream();
-				
-				byte[] in = os.toByteArray();
-				if (in.length > 0){
-				    out.write(in);
 				}
+				catch (Exception e) {
+					Log.error(e.getMessage(),e);
+				}finally {
+					os.close();
+				}
+		  }
+		  else if(exportType.equals("new"))
+		  {
+			  List<String> fileNameList = new ArrayList<String>();
+			  String fileName=createNewCSV(new Long(osceId),request, getServletConfig().getServletContext(), true,fileNameList);
+			  
+			  ByteArrayOutputStream os = new ByteArrayOutputStream();
+			  createZipFile("NewOsceStatisticData.zip", fileNameList,os);
+			  try{
+					
+					
+					
+				  resp.setContentType("application/x-download");
+					
+				  resp.setHeader("Content-Disposition", "attachment; filename=" + "NewOsceStatisticData.zip");
+					
+					   
+	
+					Log.info("path :" + fileName);
+					//String file=OsMaFilePathConstant.ROLE_IMAGE_FILEPATH+path;
+					Log.info(" file :" + fileName);
+					
+					OutputStream out = resp.getOutputStream();
+					
+					byte[] in = os.toByteArray();
+					if (in.length > 0){
+					    out.write(in);
+					}
+					
+					File htmlFile=new File(fileName);
+					htmlFile.delete();
+					out.flush();
 				
-				File htmlFile=new File(fileName);
-				htmlFile.delete();
-				out.flush();
-			
-			}
-			catch (Exception e) {
-				Log.error(e.getMessage(),e);
-			}finally {
-				os.close();
-			}
+				}
+				catch (Exception e) {
+					Log.error(e.getMessage(),e);
+				}finally {
+					os.close();
+				}
+		  }
 	  }
 	  
 	  
@@ -245,6 +292,416 @@ public class ExportStatisticData extends HttpServlet{
 	   * If flag is true then it generated for Export and
 	   * If flag is false then it generated for Rscript
 	  */
+	  public static String createNewCSV(Long osceId,HttpServletRequest request, ServletContext servletContext, Boolean flag,final List<String> fileNameList)
+	  {
+		  String fileName = "";
+		  String zipFileName = "";
+		  char alphaSeq = 'A';
+		  
+		  Long impressionQueId = null;
+		  List<Long> impressionQuestion=new ArrayList<Long>();
+		  
+		  try
+		  {
+			 // String path = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML);
+			  //System.out.println("PATH : " + path);
+			  
+			  zipFileName = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML + "NewOsceStatisticData.zip");
+			  
+			  Osce osce=Osce.findOsce(osceId);
+				
+				List<OsceDay> osceDays=osce.getOsce_days();
+				
+				CalculateCronbachValue calculateCronbachValue = new CalculateCronbachValue();
+				
+				for(int i=0;i<osceDays.size();i++)
+				{
+					OsceDay osceDay=osceDays.get(i);
+					List<OsceSequence> osceSequences=osceDay.getOsceSequences();
+					
+					for(int a=0;a<osceSequences.size();a++)
+					{
+						OsceSequence osceSeq=osceSequences.get(a);
+						
+						List<OscePost> oscePostList = osceSeq.getOscePosts();
+						
+						for (OscePost oscePost : oscePostList)
+						{
+							
+							ArrayList<String> fileNames=new ArrayList<String>();
+							fileNames.add("data");
+							fileNames.add("examiner");
+							fileNames.add("student");
+							fileNames.add("post");
+							fileNames.add("items");
+							for(int k=0;k<5;k++)
+							{
+								if (oscePost.getStandardizedRole() != null)
+									fileName = "Day"+ (i+1) + "_" + oscePost.getStandardizedRole().getShortName() + "_" + fileNames.get(k) +".csv";
+								else
+									fileName = "Day"+ (i+1) + "_" + "post" + oscePost.getId() + "_" + fileNames.get(k) +".csv";
+									
+								fileName = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML + fileName);
+								fileNameList.add(fileName);
+								
+								
+								if(k==0)//data file
+								{
+									//System.out.println("FILE PATH : " + fileName);
+									
+									FileWriter writer = new FileWriter(fileName);
+									writer.append("examiners");
+									writer.append('|');
+									writer.append("students");
+									writer.append('|');
+									
+									List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
+									String missingQue = "";
+									
+									List<ChecklistTopic> checklistTopicList = new ArrayList<ChecklistTopic>();
+
+									if (oscePost.getStandardizedRole() != null)
+										checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
+									
+									alphaSeq = 'A';
+									
+									impressionQueId = null;
+									impressionQuestion.clear();
+									
+									
+									for (ChecklistTopic checklistTopic : checklistTopicList)
+									{
+										List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
+										
+										int count = 1;
+										for (ChecklistQuestion question : questionList)
+										{
+											if ((impressionQueId == null || impressionQueId == 0)  && question.getIsOveralQuestion() != null && question.getIsOveralQuestion())
+											{
+												impressionQueId = question.getId();
+											}
+											
+											if(question.getIsOveralQuestion() != null && question.getIsOveralQuestion())
+											{
+												impressionQuestion.add(question.getId());
+											}
+											
+											if (flag)
+												writer.append(String.valueOf(alphaSeq) + count);
+											else
+												writer.append("Q" + String.valueOf(question.getId()));
+											
+											if (flag == true && postMissingQueList.contains(question.getId()))
+											{
+												if (missingQue == null || missingQue.isEmpty())
+													missingQue = String.valueOf(alphaSeq) + count;
+												else
+													missingQue = missingQue + "," + String.valueOf(alphaSeq) + count;
+											}
+											
+											count += 1;
+											//writer.append(question.getId().toString());
+											writer.append('|');
+										}
+										alphaSeq++;
+									}
+									
+									String impressionItemString=request.getParameter("p"+oscePost.getId().toString());							
+									if (impressionItemString != null)
+										impressionQueId=Long.parseLong(impressionItemString);
+									
+									for(int l=0;l<impressionQuestion.size();l++)
+									{
+										writer.append("impression l");
+										writer.append('|');
+									}
+									//writer.append('\n');
+								    
+									if (flag)
+									{
+										writer.append("Bonus Point");
+										
+									}
+									
+								    List<Answer> answerList = Answer.retrieveExportCsvDataByOscePost(osceDay.getId(), oscePost.getId());
+								    Long lastCandidateId = null;
+								    Answer answer = null;
+								    
+								    for (int j=0; j<answerList.size(); j++)
+								    {
+								    	answer = answerList.get(j);
+								    	if (lastCandidateId == null || (!lastCandidateId.equals(answer.getStudent().getId())))
+								    	{
+								    		if (lastCandidateId != null)
+								    		{
+								    			
+								    			
+								    			for(int l=0;l<impressionQuestion.size();l++)
+								    			{
+								    				
+								    				
+								    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
+								    				writer.append(impressionItem1.getChecklistOption().getValue());
+								    				writer.append('|');
+								    			}
+									    		/*else
+									    		{
+									    			writer.append('0');//impression
+									    		}*/
+								    			
+								    			if (flag)
+								    			{	
+								    				Integer addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(j-1).getDoctor().getId());
+								    				writer.append(addPoint.toString());
+								    				//writer.append('|');
+								    			}
+								    		}
+								    		
+								    		writer.append('\n');
+								    		
+							    			writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
+								    		writer.append('|');
+								    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
+								    		writer.append('|');
+								    		
+								    		/*else	
+								    		{
+								    			writer.append(answer.getDoctor().getPreName() + " " + answer.getDoctor().getName());
+								    			writer.append('|');
+									    		writer.append(answer.getStudent().getPreName() + " " + answer.getStudent().getName());
+									    		writer.append('|');
+								    		}	*/	    		
+								    		
+								    		lastCandidateId = answer.getStudent().getId();
+								    	}
+								    	
+								    	writer.append(answer.getChecklistOption().getValue());
+								    	//writer.append(answer.getChecklistQuestion().getId().toString());
+							    		writer.append('|');
+								    }
+								    
+								    if (answerList.size() > 0)
+								    {
+								    	
+								    	
+								    	for(int l=0;l<impressionQuestion.size();l++)
+						    			{
+						    				
+						    				
+						    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
+						    				writer.append(impressionItem1.getChecklistOption().getValue());
+						    				writer.append('|');
+						    			}
+							    		/*else
+							    		{
+							    			writer.append('0');//impression
+							    		}*/
+								    	
+								    	if (flag)
+						    			{	
+						    				Integer addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(answerList.size()-1).getDoctor().getId());
+						    				writer.append(addPoint.toString());
+						    				
+						    			}
+								    }
+							    	
+								    writer.flush();
+								    writer.close();
+								    
+								    if (answerList.size() == 0)
+								    {
+								    	FileWriter writer2 = new FileWriter(fileName);
+								    	writer2.write("examiners|students|impression|pass/fall");
+								    	writer2.flush();
+								    	writer2.close();						    
+								    }
+								    
+								    if (flag)
+								    	calculateCronbachValue.calculatePassFail(fileName, missingQue);
+								}
+								
+								if(k==1)//examiner file-- id, gender , name, prename
+								{
+									FileWriter writer = new FileWriter(fileName);
+									writer.append("id");
+									writer.append('|');
+									writer.append("gender");
+									writer.append('|');
+									writer.append("name");
+									writer.append('|');
+									writer.append("prename");
+									writer.append('|');
+									writer.append("\n");
+									
+									//data
+									List<Doctor> examiner=Answer.retrieveDistinctExaminer(oscePost.getId());
+									
+									for(Doctor d:examiner)
+									{
+										writer.append(d.getId().toString());
+										writer.append('|');
+										writer.append(d.getGender().toString());
+										writer.append('|');
+										writer.append(d.getName());
+										writer.append('|');
+										writer.append(d.getPreName());
+										writer.append('|');
+										writer.append("\n");
+									}
+									
+									writer.flush();
+								    writer.close();
+								}
+								
+								if(k==2)// Students file (id, gender, name, prename, student_id)
+								{
+									FileWriter writer = new FileWriter(fileName);
+									writer.append("id");
+									writer.append('|');
+									writer.append("gender");
+									writer.append('|');
+									writer.append("name");
+									writer.append('|');
+									writer.append("prename");
+									writer.append('|');
+									writer.append("student_id");
+									writer.append('|');
+									writer.append("\n");
+									//data
+									List<Student> examiner=Answer.retrieveDistinctStudent(oscePost.getId());
+									
+									for(Student d:examiner)
+									{
+										writer.append(d.getId().toString());
+										writer.append('|');
+										if(d.getGender() != null)
+										writer.append(d.getGender().toString());
+										writer.append('|');
+										writer.append(d.getName());
+										writer.append('|');
+										writer.append(d.getPreName());
+										writer.append('|');
+										writer.append(d.getStudentId());
+								
+										writer.append("\n");
+									}
+									
+									
+									writer.flush();
+								    writer.close();
+								}
+								
+								if(k==3)// Postfile (id, short_name, long_name)
+								{
+									FileWriter writer = new FileWriter(fileName);
+									writer.append("id");
+									writer.append('|');
+									writer.append("short_name");
+									writer.append('|');
+									writer.append("long_name");
+									writer.append('|');
+									writer.append("\n");
+									
+									writer.append(oscePost.getId().toString());
+									writer.append('|');
+									if(oscePost.getStandardizedRole() !=null)
+									writer.append(oscePost.getStandardizedRole().getShortName());
+									writer.append('|');
+									if(oscePost.getStandardizedRole() !=null)
+									writer.append(oscePost.getStandardizedRole().getLongName());
+									writer.append('|');
+									writer.append("\n");
+									
+									writer.flush();
+								    writer.close();
+									
+								}
+								
+								if(k==4)// Item file (id, item_text, points (example 0|1|2.5|3), is_eval_item, weight)
+								{
+									FileWriter writer = new FileWriter(fileName);
+									writer.append("id");
+									writer.append('|');
+									writer.append("item_text");
+									writer.append('|');
+									writer.append("points");
+									writer.append('|');
+									writer.append("is_eval_item");
+									writer.append('|');
+									writer.append("weight");
+									writer.append('|');
+									writer.append("\n");
+									
+									List<ChecklistQuestion> items=Answer.retrieveDistinctQuestion(oscePost.getId());
+									for(ChecklistQuestion d:items)
+									{
+										writer.append(d.getId().toString());
+										writer.append('|');
+										writer.append(d.getQuestion());
+										writer.append('|');
+										
+										List<ChecklistOption> options=d.getCheckListOptions();
+										String points="";
+										double pointList[] = new double[options.size()];
+										
+										for(int m=0;m<options.size();m++)
+										{
+											
+											pointList[m]=new Double(options.get(m).getValue());
+											if(m==0)
+											{
+												points=options.get(m).getValue();
+											}
+											else
+											{
+												points=points+"/"+options.get(m).getValue();
+											}
+										}
+										
+										double maxPoint=StatUtils.max(pointList);
+										double average=StatUtils.mean(pointList);
+										
+										double weight=Answer.roundTwoDecimals(Answer.percentage(average, maxPoint));
+										
+										writer.append(points);
+										writer.append('|');
+										writer.append(d.getIsOveralQuestion().toString());
+										writer.append('|');
+										writer.append(""+weight);
+										writer.append('|');
+										writer.append("\n");
+									}
+									
+									writer.flush();
+								    writer.close();
+								}
+								
+								
+							}
+							
+							
+							
+
+						}
+					}
+				}
+				
+//				createZipFile(zipFileName, fileNameList, path);
+		  }
+		  catch(Exception e)
+		  {
+			  Log.error(e.getMessage(),e);
+		  }
+		 
+		  return zipFileName;
+	  }
+	  
+	  
+	  /*
+	   * flag is used to decide for which this file will generated
+	   * If flag is true then it generated for Export and
+	   * If flag is false then it generated for Rscript
+	  */
 	  public static String createCSV(Long osceId,HttpServletRequest request, ServletContext servletContext, Boolean flag,final List<String> fileNameList)
 	  {
 		  String fileName = "";
@@ -307,9 +764,7 @@ public class ExportStatisticData extends HttpServlet{
 							
 							impressionQueId = null;
 							
-							String impressionItemString=request.getParameter("p"+oscePost.getId().toString());							
-							if (impressionItemString != null)
-								impressionQueId=Long.parseLong(impressionItemString);
+							
 							
 							for (ChecklistTopic checklistTopic : checklistTopicList)
 							{
@@ -343,18 +798,30 @@ public class ExportStatisticData extends HttpServlet{
 								alphaSeq++;
 							}
 							
+							
+							//find impression item
+							//Answer.findImpressionItems(oscePost);
+							
+							String impressionItemString=request.getParameter("p"+oscePost.getId().toString());							
+							if (impressionItemString != null)
+								impressionQueId=Long.parseLong(impressionItemString);
+							
 							if (flag)
 							{
 								writer.append("AddPoint");
 								writer.append('|');
 							}
-							
 							writer.append("impression ");
+
 							//writer.append('\n');
 						    
 						    List<Answer> answerList = Answer.retrieveExportCsvDataByOscePost(osceDay.getId(), oscePost.getId());
 						    Long lastCandidateId = null;
 						    Answer answer = null;
+						    
+						    
+						    
+						   
 						    
 						    for (int j=0; j<answerList.size(); j++)
 						    {
@@ -462,14 +929,18 @@ public class ExportStatisticData extends HttpServlet{
 					byte[] buf = new byte[1024];
 					int len;
 					File file = new File(fileNameList.get(i));
-					FileInputStream in = new FileInputStream(file);
+					FileInputStream in=null;
+					if(file.exists())
+					{
+					 in = new FileInputStream(file);
 					zipOut.putNextEntry(new ZipEntry(file.getName()));
-					
 					while ((len = in.read(buf)) > 0) {
 						zipOut.write(buf, 0, len);
 					}
 					
 					in.close();
+					
+					}
 					
 		            zipOut.closeEntry();	            
 		            
@@ -494,7 +965,7 @@ public class ExportStatisticData extends HttpServlet{
 	  {
 		  
 		  Long impressionQueId = null;
-		  
+		   
 		  try
 		  {
   				String path = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML);

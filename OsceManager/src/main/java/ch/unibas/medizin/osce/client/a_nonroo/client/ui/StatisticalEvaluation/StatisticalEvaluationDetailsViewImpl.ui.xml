@@ -34,8 +34,14 @@
 		<g:ScrollPanel  ui:field="scrollPanel" >
 		<g:HTMLPanel width="100%">	
 						
-						<div style="float:left;">
-							<g:Button ui:field="exportBtn"></g:Button>
+		    			<div style="float:left; padding-right:10px;">
+							
+								
+								
+								<g:Button ui:field="exportBtn"></g:Button>
+								
+								<g:Button ui:field="newexportBtn"></g:Button>
+							
 						</div>
 						<div style="float:right;">
 							<g:HorizontalPanel spacing="5" horizontalAlignment="right" >

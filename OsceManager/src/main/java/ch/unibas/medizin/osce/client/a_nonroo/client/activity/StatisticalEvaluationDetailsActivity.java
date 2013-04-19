@@ -266,11 +266,14 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			if(analysisType.equals(AnalysisType.item_analysis))
 			{
 				view.getExportBtn().setVisible(false);
+				view.getNewexportBtn().setVisible(false);
 			}
 			else if(analysisType.equals(AnalysisType.post_analysys))
 			{
 				view.getExportBtn().setVisible(true);
+				view.getNewexportBtn().setVisible(true);
 				view.getExportBtn().setText(constants.export());
+				view.getNewexportBtn().setText(constants.newExport());
 			}
 			
 			Iterator<OsceDayProxy> osceDayProxyIterator=osceProxy.getOsce_days().iterator();
@@ -1157,7 +1160,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 		
 		public void exportStatisticData()
 		{
-			 String url=GWT.getHostPageBaseURL()+"exportStatisticData?osceId="+osceProxy.getId();
+			 String url=GWT.getHostPageBaseURL()+"exportStatisticData?osceId="+osceProxy.getId()+"&export=old";
 			
 			VerticalPanel vp=view.getSequenceVP();
 			for(int i=0;i<vp.getWidgetCount();i++)
@@ -1184,6 +1187,39 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			Log.info("exportStatisticData url :" + url);
 			   Window.open(url, osceProxy.getName(), "enabled");
 		}
+		
+		
+		@Override
+		public void newexportStatisticData() {
+			
+			String url=GWT.getHostPageBaseURL()+"exportStatisticData?osceId="+osceProxy.getId()+"&export=new";
+			
+			VerticalPanel vp=view.getSequenceVP();
+			for(int i=0;i<vp.getWidgetCount();i++)
+			{
+				StatisticalEvaluationDetailSequenceViewImpl seqView=((StatisticalEvaluationDetailSequenceViewImpl)(vp.getWidget(i)));
+				VerticalPanel postVP=seqView.getDisclosureVP();
+				if(seqView.getSequenceDisclosurePanel().isOpen())
+				{
+					for(int j=0;j<postVP.getWidgetCount();j++)
+					{
+						StatisticalEvaluationDetailSequenceViewImpl postView=((StatisticalEvaluationDetailSequenceViewImpl)(postVP.getWidget(j)));
+						Long postId=postView.getOscePostProxy().getId();
+						ChecklistQuestionProxy questionProxy=(ChecklistQuestionProxy)((FocusableValueListBox)postView.getFourthColumnHP().getWidget(1)).getValue();
+						
+						Long questionId=0l;
+						if(questionProxy!=null)
+						  questionId=questionProxy.getId();
+						
+						url=url+"&p"+postId.toString()+"="+questionId.toString();
+						
+					}
+				}
+			}
+			Log.info("exportStatisticData url :" + url);
+			   Window.open(url, osceProxy.getName(), "enabled");
+		}
+		
 		
 		public static List<String>  getValue(List<MapEnvelopProxy> map,String key)
 		{
@@ -1289,4 +1325,6 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			
 			
 		}
+
+		
 }

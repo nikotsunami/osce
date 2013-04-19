@@ -65,6 +65,16 @@ public class StatisticalEvaluationDetailsViewImpl extends Composite implements S
 	@UiField
 	Button exportBtn;
 	
+	@UiField 
+	Button newexportBtn;
+	
+	public Button getNewexportBtn() {
+		return newexportBtn;
+	}
+
+
+
+
 	public Button getExportBtn() {
 		return exportBtn;
 	}
@@ -201,5 +211,11 @@ public class StatisticalEvaluationDetailsViewImpl extends Composite implements S
 	public void exportBtnClick(ClickEvent event)
 	{
 		delegate.exportStatisticData();
+	}
+	
+	@UiHandler("newexportBtn")
+	public void newExportBtnClick(ClickEvent event)
+	{
+		delegate.newexportStatisticData();
 	}
 }

@@ -101,7 +101,21 @@ public class Answer {
 		log.info("Assignment List Size :" + questionList.size());
 		return questionList;
 	}
+	
+	public static List<Student> retrieveDistinctStudent(Long postId) {
+		log.info("retrieveDistinctExaminer :");
+		EntityManager em = entityManager();
+		String queryString = "SELECT  distinct a.student FROM Answer as a where  a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.oscePost="
+				+ postId + " ) order by a.checklistQuestion.sequenceNumber asc";
 
+		TypedQuery<Student> query = em.createQuery(queryString, Student.class);
+		List<Student> questionList = query.getResultList();
+
+		log.info("retrieveQuestion query String :" + queryString);
+		log.info("Assignment List Size :" + questionList.size());
+		return questionList;
+	}
+	
 	public static List<Answer> retrieveQuestionPerPostAndItem(Long postId,
 			Long itemId) {
 		log.info("retrieveStudent :");
@@ -1320,7 +1334,16 @@ public class Answer {
 		else
 			return ((c / d) * 100);
 	}
-
+	public static double percentage(double a, double b) {
+		double c = a;
+		double d = b;
+		if (b == 0)
+			return 0;
+		else
+			return ((c / d) * 100);
+	}
+	
+	
 	public static double roundTwoDecimals(double d) {
 		DecimalFormat twoDForm = new DecimalFormat("#.##");
 		return Double.valueOf(twoDForm.format(d));

@@ -26,6 +26,8 @@ public interface StatisticalEvaluationDetailsView extends IsWidget{
 		public void calculate();
 		
 		public void exportStatisticData();
+
+		public void newexportStatisticData();
 	}
 
 	public VerticalPanel getSequenceVP();
@@ -36,4 +38,5 @@ public interface StatisticalEvaluationDetailsView extends IsWidget{
     
     public Button getExportBtn();
    
+    public Button getNewexportBtn();
 }

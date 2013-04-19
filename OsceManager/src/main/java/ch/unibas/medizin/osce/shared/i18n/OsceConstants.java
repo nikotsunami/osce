@@ -423,6 +423,8 @@ public interface OsceConstants extends Constants {
 	public String exchangeStudError();
 
 	public String export();
+	
+	public String newExport();
 
 	public String exportAllFilesProcessed();
 
