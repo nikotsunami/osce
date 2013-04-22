@@ -802,14 +802,27 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				List<ChecklistQuestionProxy> questions=new ArrayList<ChecklistQuestionProxy>();
 				
 				
-				
+				ChecklistQuestionProxy impressionItem=null;
 				
 				for(ChecklistTopicProxy topicProxy:topicProxies)
 				{
 					questions.addAll(topicProxy.getCheckListQuestions());
+					
+					List<ChecklistQuestionProxy> questionProxies=topicProxy.getCheckListQuestions();
+					for(ChecklistQuestionProxy questionProxy:questionProxies)
+					{
+						if(questionProxy.getIsOveralQuestion())
+						{
+							impressionItem=questionProxy;
+							break;
+						}
+					}
 				}
 				itemList.setAcceptableValues(questions);
-				
+				if(impressionItem!=null)
+				{
+					itemList.setValue(impressionItem);
+				}
 				itemList.addValueChangeHandler(new ValueChangeHandler<ChecklistQuestionProxy>() {
 					
 					@Override
