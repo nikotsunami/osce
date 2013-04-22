@@ -350,9 +350,9 @@ public class ExportStatisticData extends HttpServlet{
 									//System.out.println("FILE PATH : " + fileName);
 									
 									FileWriter writer = new FileWriter(fileName);
-									writer.append("examiners");
+									writer.append("examiner_id");
 									writer.append('|');
-									writer.append("students");
+									writer.append("student_id");
 									writer.append('|');
 									
 									List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
@@ -459,9 +459,9 @@ public class ExportStatisticData extends HttpServlet{
 								    		
 								    		writer.append('\n');
 								    		
-							    			writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
+							    			writer.append(answer.getDoctor().getId().toString());
 								    		writer.append('|');
-								    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
+								    		writer.append(answer.getStudent().getId().toString() );
 								    		writer.append('|');
 								    		
 								    		/*else	

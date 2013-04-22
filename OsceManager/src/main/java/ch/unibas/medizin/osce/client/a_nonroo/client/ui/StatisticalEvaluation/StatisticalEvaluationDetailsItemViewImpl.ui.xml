@@ -25,7 +25,7 @@
 								<g:Label ui:field="sequenceLbl"  height="100%" addStyleNames="{style.sequenceLabel}">Sequence A</g:Label>
 							</td>
 										
-							<td width="1%"><g:ToggleButton ui:field="onOffButton" ></g:ToggleButton></td>
+							<td width="10px"><g:ToggleButton ui:field="onOffButton" ></g:ToggleButton></td>
 							
 							<td>
 									<g:HorizontalPanel ui:field="postDataHP" addStyleNames="{style.postDataHP}">

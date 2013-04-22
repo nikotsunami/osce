@@ -325,8 +325,8 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			}
 			else if(analysisType.equals(AnalysisType.post_analysys))
 			{
-				sequenceView.getSequenceLbl().getElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getStyle().setWidth(21, Unit.PCT);
-				sequenceView.getSequenceLbl().getElement().getStyle().setWidth(260, Unit.PX);
+				sequenceView.getSequenceLbl().getElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getStyle().setWidth(337, Unit.PX);
+				sequenceView.getSequenceLbl().getElement().getStyle().setWidth(337, Unit.PX);
 				//sequenceView.getGraphBtn().setVisible(true);
 				
 				createColumnHeader(sequenceView);
@@ -378,6 +378,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			Log.info("createItemAnalysisColumnHeader");
 			if(analysisType.equals(AnalysisType.item_analysis))
 			{
+				sequenceView.getPostViewHP().clear();
 				for(String headerName:itemAnalysisColumnName)
 				{
 					StatisticalEvaluationDetailPostView header=new StatisticalEvaluationDetailPostViewImpl();
@@ -388,10 +389,12 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 						//header.asWidget().getElement().getStyle().setProperty("borderLeftWidth", "3px");
 					}
 					sequenceView.getPostViewHP().add(header.asWidget());
+					sequenceView.getPostViewHP().getElement().getStyle().setLeft(444, Unit.PX);
 				}
 			}
 			else if(analysisType.equals(AnalysisType.post_analysys))
 			{
+				sequenceView.getPostViewHP().clear();
 				for(String headerName:postAnalysisColumnName)
 				{
 					StatisticalEvaluationDetailPostView header=new StatisticalEvaluationDetailPostViewImpl();
@@ -400,7 +403,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 					header.getPostNameHP().setWidth("63px");
 					header.getPostNameLbl().getElement().getStyle().setProperty("maxWidth", "61px");
 					sequenceView.getPostViewHP().add(header.asWidget());
-					sequenceView.getPostViewHP().getElement().getStyle().setLeft(293, Unit.PX);
+					sequenceView.getPostViewHP().getElement().getStyle().setLeft(371, Unit.PX);
 				}
 			}
 			
@@ -581,9 +584,9 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			StatisticalEvaluationDetailsItemView examinerView=new StatisticalEvaluationDetailsItemViewImpl();
 			examinerView.setDelegate(this);
 			//examinerView.getSequenceLbl().getElement().getParentElement().getStyle().setWidth(22, Unit.PCT);
-			examinerView.getSequenceLbl().getElement().getStyle().setWidth(22, Unit.PCT);
+			examinerView.getSequenceLbl().getElement().getParentElement().getStyle().setWidth(318, Unit.PX);
 			examinerView.getSequenceLbl().getElement().getStyle().setFontSize(12, Unit.PX);
-			examinerView.getSequenceLbl().setWidth("248px");
+			examinerView.getSequenceLbl().setWidth("318px");
 			examinerView.getOnOffButton().setVisible(false);
 			examinerView.setDoctorProxy(doctorProxy);
 			examinerView.setOscePostProxy(statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy());
@@ -632,9 +635,9 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			
 			StatisticalEvaluationDetailsItemView questionView=new StatisticalEvaluationDetailsItemViewImpl();
 			questionView.setDelegate(this);
-			questionView.getSequenceLbl().getElement().getParentElement().getStyle().setWidth(23, Unit.PCT);
+			questionView.getSequenceLbl().getElement().getParentElement().getStyle().setWidth(388, Unit.PX);
 			questionView.getSequenceLbl().getElement().getStyle().setFontSize(12, Unit.PX);
-			questionView.getSequenceLbl().setWidth("439px");
+			questionView.getSequenceLbl().setWidth("388px");
 			
 			questionView.setChecklistQuestionProxy(checklistQuestionProxy);
 			String question=checklistQuestionProxy.getQuestion();
@@ -748,15 +751,16 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			
 			if(analysisType.equals(AnalysisType.item_analysis))
 			{
-				postView.getSequenceLbl().getElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getStyle().setWidth(24, Unit.PCT);
-				postView.getSequenceLbl().setWidth("442px");
+				postView.getSequenceLbl().getElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getStyle().setWidth(395, Unit.PX);
+				postView.getSequenceLbl().setWidth("395px");
+				
 			}
 			else if(analysisType.equals(AnalysisType.post_analysys))
 			{
 				postView.getGraphBtn().setVisible(true);
 				
-				postView.getSequenceLbl().getElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getStyle().setWidth(20, Unit.PCT);
-				postView.getSequenceLbl().setWidth("188px");
+				postView.getSequenceLbl().getElement().getParentElement().getParentElement().getParentElement().getParentElement().getParentElement().getStyle().setWidth(324, Unit.PX);
+				postView.getSequenceLbl().setWidth("264px");
 				postView.getFourthColumnHP().getElement().getParentElement().getStyle().setWidth(28, Unit.PCT);
 				//postView.getSequenceHeader().getTBodies().getItem(0).getElementsByTagName("td").getItem(3).setPropertyString("width", "28%");
 				
