@@ -22,7 +22,7 @@ public interface AnswerRequestNonRoo  extends RequestContext{
 	 
 	 public abstract Request< List<DoctorProxy>>  retrieveDistinctExaminer(Long postId);
 	 
-	 public abstract Request<List<MapEnvelopProxy>> calculate(Long osceId,int analyticType,Set<Long> itemId,List<String> examinerId,List<Integer> addPoints);
+	 public abstract Request<List<MapEnvelopProxy>> calculate(Long osceId,int analyticType,Set<Long> itemId,List<String> examinerId,List<Integer> addPoints, List<String> postId, List<Long> queId);
 	 
 	 public abstract Request< List<ChecklistQuestionProxy>>  retrieveDistinctItems(Long osceId);
 	 

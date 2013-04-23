@@ -47,6 +47,9 @@ public class PostAnalysis {
 	
 	Integer pointsCorrected;
 	
+	@ManyToOne
+	ChecklistQuestion checklistQuestion;
+	
 	public static PostAnalysis findExaminerLevelData(Osce osce, OscePost oscePost,Doctor examiner)
 	{
 		EntityManager em = entityManager();
@@ -140,6 +143,16 @@ public class PostAnalysis {
 			
 		return addPoint;
 	}
-	
+
+	public static Long findImpressionQuestionByOscePostAndOsce(Long oscePostId, Long osceId)
+	{
+		EntityManager em = entityManager();
+		String sql = "SELECT pa FROM PostAnalysis pa WHERE pa.boundary != NULL AND pa.boundary > 0 AND pa.oscePost.id = " + oscePostId + " AND pa.osce.id = " + osceId;
+		TypedQuery<PostAnalysis> query = em.createQuery(sql, PostAnalysis.class);
+		if (query.getResultList().size() > 0 && query.getSingleResult().getChecklistQuestion() != null)
+			return query.getSingleResult().getChecklistQuestion().getId();
+		else
+			return null;
+	}
 	
 }

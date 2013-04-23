@@ -4,6 +4,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnswerProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
+import ch.unibas.medizin.osce.client.style.widgets.NumberSpinner;
 
 import com.google.gwt.dom.client.TableElement;
 import com.google.gwt.user.client.ui.Button;
@@ -57,9 +58,11 @@ public interface StatisticalEvaluationDetailsItemView {
 
 		public HorizontalPanel getFourthColumnHP();
 		
-		public Button createAddPointButton();
+		public NumberSpinner createAddPointButton();
+		
 		public OscePostProxy getOscePostProxy() ;
 
 		public void setOscePostProxy(OscePostProxy oscePostProxy) ;
-	
+		
+		public NumberSpinner getAddPoint();
 }

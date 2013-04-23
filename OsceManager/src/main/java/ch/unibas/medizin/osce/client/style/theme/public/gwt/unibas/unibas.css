@@ -3684,3 +3684,25 @@ color: #f1b532;
 .impressionItemListBox:hover {
 	background-color: white !important;
 }
+
+.numberSpinnerDownIcon{
+	background-image: url("images/ui-icons_454545.png");
+    background-position: -68px -22px;
+    background-repeat: no-repeat;
+    display: block;
+    height: 11px;
+    overflow: hidden;
+    text-indent: -99999px;
+    width: 11px;
+}
+
+.numberSpinnerUpIcon{
+	background-image: url("images/ui-icons_454545.png");
+   	background-position: -3px -22px;
+    background-repeat: no-repeat;
+    display: block;
+    height: 11px;
+    overflow: hidden;
+    text-indent: -99999px;
+    width: 11px;
+}

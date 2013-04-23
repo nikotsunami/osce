@@ -35,19 +35,16 @@ import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
+import ch.unibas.medizin.osce.client.style.widgets.NumberSpinner;
 import ch.unibas.medizin.osce.shared.AnalysisType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
-import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.LoadEvent;
-import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
@@ -55,16 +52,12 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.text.shared.Renderer;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 
@@ -97,6 +90,12 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 		private List<MapEnvelopProxy> postAnalysisData=null;
 		private List<String> examinerId=new ArrayList<String>();
 		private List<Integer> addPoint=new ArrayList<Integer>();
+		
+		//by spec
+		private StatisticalEvaluationDetailSequenceViewImpl postStatisticalEvaluationDetailSequenceViewImpl;
+		private List<String> postId = new ArrayList<String>();
+		private List<Long> impressionQueId = new ArrayList<Long>();
+		//by spec
 		
 		public StatisticalEvaluationDetailsActivity(StatisticalEvaluationDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) 
 		{
@@ -540,6 +539,10 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			}
 			else if(analysisType.equals(AnalysisType.post_analysys) && statisticalEvaluationDetailSequenceViewImpl.isPostPanel())
 			{
+				//by spec
+				postStatisticalEvaluationDetailSequenceViewImpl = statisticalEvaluationDetailSequenceViewImpl;
+				//by spec
+				
 				Log.info("create all item panel");
 				requests.answerRequestNonRoo().retrieveDistinctExaminer(statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy().getId()).with("checkListOptions").fire(new OSCEReceiver<List<DoctorProxy>>() {
 
@@ -547,8 +550,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 					public void onSuccess(List<DoctorProxy> response) {
 						statisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().clear();
 						for(DoctorProxy doctorProxy:response)
-						{
-							
+						{	
 							createExaminerPanel(doctorProxy, statisticalEvaluationDetailSequenceViewImpl);
 						}
 					}
@@ -617,13 +619,16 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				
 				List<String> examinerValues=getValue(postAnalysisData, examinerKey);
 				
-				for(int l=0;l<examinerValues.size();l++)
+				for(int l=0;l<examinerValues.size()-1;l++)
 				{
 					String examinerValue=examinerValues.get(l);
 					
 					
 					((Label)examinerView.getPostDataHP().getWidget(l)).setText(examinerValue);
 				}
+				
+				if (examinerValues.size() > 0 && examinerView.getFourthColumnHP().getWidget(0) != null)
+					((NumberSpinner)examinerView.getFourthColumnHP().getWidget(0)).setValue(Integer.parseInt(examinerValues.get(examinerValues.size() -1)));
 			}
 		}
 		
@@ -725,7 +730,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 		
 		
 		//create post panel
-		public void createPostPanel(OscePostProxy oscePostProxy,StatisticalEvaluationDetailSequenceViewImpl statisticalEvaluationDetailSequenceViewImpl)
+		public void createPostPanel(final OscePostProxy oscePostProxy,StatisticalEvaluationDetailSequenceViewImpl statisticalEvaluationDetailSequenceViewImpl)
 		{
 			Log.info("createPostPanel");
 			
@@ -819,16 +824,24 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 					}
 				}
 				itemList.setAcceptableValues(questions);
-				if(impressionItem!=null)
+				
+				if (postAnalysisData == null)
 				{
-					itemList.setValue(impressionItem);
+					if(impressionItem!=null)
+					{
+						itemList.setValue(impressionItem);
+						addImpressionQuestion(oscePostProxy.getId(), impressionItem.getId());
+					}					
 				}
+				
 				itemList.addValueChangeHandler(new ValueChangeHandler<ChecklistQuestionProxy>() {
 					
 					@Override
 					public void onValueChange(ValueChangeEvent<ChecklistQuestionProxy> event) {
-						
-						
+						if (oscePostProxy != null)
+						{
+							addImpressionQuestion(oscePostProxy.getId(), event.getValue().getId());
+						}
 					}
 				});
 				
@@ -878,9 +891,29 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				
 				List<String> postValues=getValue(postAnalysisData, postKey);
 				
-				for(int k=0;k<postValues.size();k++)
+				for(int k=0;k<postValues.size()-1;k++)
 				{
 					((Label)postView.getPostDataHP().getWidget(k)).setText(postValues.get(k));
+				}
+				
+				if (postValues.size() > 0 && postView.getFourthColumnHP().getWidget(1) != null && postView.getFourthColumnHP().getWidget(1) instanceof FocusableValueListBox)
+				{
+					requests.checklistQuestionRequest().findChecklistQuestion(Long.parseLong(postValues.get(postValues.size() - 1))).fire(new OSCEReceiver<ChecklistQuestionProxy>() {
+						@Override
+						public void onFailure(ServerFailure error) {
+							
+						}
+						
+						@Override
+						public void onSuccess(ChecklistQuestionProxy question) {							
+							if (oscePostProxy != null && question != null)
+							{
+								addImpressionQuestion(oscePostProxy.getId(), question.getId());
+								((FocusableValueListBox)postView.getFourthColumnHP().getWidget(1)).setValue(question);
+							}
+						}
+					});
+					
 				}
 			}
 		}
@@ -961,13 +994,6 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			Log.info("analysisListBoxValueChanged");
 			analysisType=a;
 			retrieveItemAnalysisData();
-			
-			
-				
-			
-				
-			
-			
 		}
 		
 		public void calculate()
@@ -977,7 +1003,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			if(analysisType.equals(AnalysisType.item_analysis))
 			{
 				showApplicationLoading(true);
-				requests.answerRequestNonRoo().calculate(osceProxy.getId(),0,missingItemId,null,null).with("").fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
+				requests.answerRequestNonRoo().calculate(osceProxy.getId(),0,missingItemId,null,null,null,null).with("").fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
 	
 					@Override
 					public void onSuccess(List<MapEnvelopProxy> response) {
@@ -1092,10 +1118,28 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			else if(analysisType.equals(AnalysisType.post_analysys))
 			{
 				showApplicationLoading(true);
-					requests.answerRequestNonRoo().calculate(osceProxy.getId(), 1, null,examinerId,addPoint).fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
+					if (postStatisticalEvaluationDetailSequenceViewImpl != null)
+					{
+						for(int i=0;i<postStatisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().getWidgetCount();i++)
+						{
+							if (postStatisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().getWidget(i) != null && postStatisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().getWidget(i) instanceof StatisticalEvaluationDetailsItemViewImpl)
+							{
+								StatisticalEvaluationDetailsItemViewImpl examinerView = (StatisticalEvaluationDetailsItemViewImpl) postStatisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().getWidget(i);
+								
+								if (examinerView.getOscePostProxy() != null && examinerView.getDoctorProxy() != null && examinerView.getAddPoint() != null)
+								{
+									setAddPoint(examinerView.getOscePostProxy(), examinerView.getDoctorProxy(), examinerView.getAddPoint().getValue());
+									//System.out.println("ADDPOINT : " + examinerView.getAddPoint().getValue());
+								}
+							}
+						}
+					}
+				
+					requests.answerRequestNonRoo().calculate(osceProxy.getId(), 1, null, examinerId, addPoint, postId, impressionQueId).fire(new OSCEReceiver<List<MapEnvelopProxy>>() 
+					{
 
 						@Override
-						public void onSuccess(List<MapEnvelopProxy> response) {
+						public void onSuccess(final List<MapEnvelopProxy> response) {
 							
 							postAnalysisData=response;
 							
@@ -1109,8 +1153,8 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 									for(String value:valueList)
 									Log.info("value :" + value);
 								}
-							}
-							*/
+							}*/
+							
 							VerticalPanel vp=view.getSequenceVP();
 							for(int i=0;i<vp.getWidgetCount();i++)
 							{
@@ -1128,16 +1172,37 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 								{
 									for(int j=0;j<postVP.getWidgetCount();j++)
 									{
-										StatisticalEvaluationDetailSequenceViewImpl postView=((StatisticalEvaluationDetailSequenceViewImpl)(postVP.getWidget(j)));
+										final StatisticalEvaluationDetailSequenceViewImpl postView=((StatisticalEvaluationDetailSequenceViewImpl)(postVP.getWidget(j)));
 										String postKey="p"+postView.getOscePostProxy().getId();
 										
 										Log.info("key :" +postKey);
 										
 										List<String> postValues=getValue(response, postKey);
 										
-										for(int k=0;k<postValues.size();k++)
+										for(int k=0;k<postValues.size()-1;k++)
 										{
 											((Label)postView.getPostDataHP().getWidget(k)).setText(postValues.get(k));
+										}
+										
+										//abhay
+										if (postValues.size() > 0 && postView.getFourthColumnHP().getWidget(1) != null && postView.getFourthColumnHP().getWidget(1) instanceof FocusableValueListBox)
+										{
+											requests.checklistQuestionRequest().findChecklistQuestion(Long.parseLong(postValues.get(postValues.size() - 1))).fire(new OSCEReceiver<ChecklistQuestionProxy>() {
+												@Override
+												public void onFailure(ServerFailure error) {
+													
+												}
+												
+												@Override
+												public void onSuccess(ChecklistQuestionProxy question) {													
+													if (postView.getOscePostProxy() != null && question != null)
+													{
+														addImpressionQuestion(postView.getOscePostProxy().getId(), question.getId());
+														((FocusableValueListBox)postView.getFourthColumnHP().getWidget(1)).setValue(question);
+													}
+												}
+											});
+											
 										}
 										
 										VerticalPanel itemVP=postView.getDisclosureVP();
@@ -1154,11 +1219,15 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 												
 												List<String> itemValues=getValue(response, itemKey);
 												
-												for(int l=0;l<itemValues.size();l++)
+												for(int l=0;l<itemValues.size()-1;l++)
 												{
 													
 													((Label)itemView.getPostDataHP().getWidget(l)).setText(itemValues.get(l));
 												}
+												
+												if (itemValues.size() > 0 && itemView.getPostDataHP().getWidget(0) != null)
+													((NumberSpinner)itemView.getFourthColumnHP().getWidget(0)).setValue(Integer.parseInt(itemValues.get(itemValues.size() - 1)));
+												
 											}
 										}
 									}
@@ -1343,5 +1412,31 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			
 		}
 
+		public void addImpressionQuestion(Long oscePostId, Long questionId)
+		{
+			String key = "p" + oscePostId;
+			
+			if(postId.contains(key))
+			{
+				int index = -1;
+				
+				for (int i=0; i<postId.size(); i++)
+				{
+					if(postId.get(i).equals(key))
+					{
+						index = i;
+						break;		
+					}
+				}
+				
+				if	(index >= 0)
+					impressionQueId.set(index, questionId);
+			}
+			else
+			{	
+				postId.add(key);
+				impressionQueId.add(questionId);
+			}
+		}
 		
 }

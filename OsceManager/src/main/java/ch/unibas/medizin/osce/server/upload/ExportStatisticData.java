@@ -350,9 +350,9 @@ public class ExportStatisticData extends HttpServlet{
 									//System.out.println("FILE PATH : " + fileName);
 									
 									FileWriter writer = new FileWriter(fileName);
-									writer.append("examiner_id");
+									writer.append("examiners");
 									writer.append('|');
-									writer.append("student_id");
+									writer.append("students");
 									writer.append('|');
 									
 									List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
@@ -459,9 +459,9 @@ public class ExportStatisticData extends HttpServlet{
 								    		
 								    		writer.append('\n');
 								    		
-							    			writer.append(answer.getDoctor().getId().toString());
+							    			writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
 								    		writer.append('|');
-								    		writer.append(answer.getStudent().getId().toString() );
+								    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
 								    		writer.append('|');
 								    		
 								    		/*else	
@@ -762,10 +762,8 @@ public class ExportStatisticData extends HttpServlet{
 							
 							alphaSeq = 'A';
 							
-							impressionQueId = null;
-							
-							
-							
+							impressionQueId = PostAnalysis.findImpressionQuestionByOscePostAndOsce(oscePost.getId(), osceId);
+														
 							for (ChecklistTopic checklistTopic : checklistTopicList)
 							{
 								List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
@@ -840,7 +838,11 @@ public class ExportStatisticData extends HttpServlet{
 						    			if (impressionQueId != null && impressionQueId != 0)
 						    			{
 						    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, osceDay.getId());
-						    				writer.append(impressionItem1.getChecklistOption().getValue());
+						    				//writer.append(impressionItem1.getChecklistOption().getValue());
+						    				if (impressionItem1 != null)
+						    					writer.append(impressionItem1.getChecklistOption().getValue());
+						    				else
+						    					writer.append('0');
 						    			}
 							    		else
 							    		{
@@ -883,7 +885,11 @@ public class ExportStatisticData extends HttpServlet{
 						    	if (impressionQueId != null)
 				    			{
 				    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, osceDay.getId());
-				    				writer.append(impressionItem1.getChecklistOption().getValue());
+				    				//writer.append(impressionItem1.getChecklistOption().getValue());
+				    				if (impressionItem1 != null)
+				    					writer.append(impressionItem1.getChecklistOption().getValue());
+				    				else
+				    					writer.append('0');
 				    			}
 					    		else
 					    		{
@@ -961,10 +967,10 @@ public class ExportStatisticData extends HttpServlet{
 		    }
 	 }
 
-	 public static String createExaminerCSV(HttpServletRequest request, ServletContext servletContext, Long oscePostId, Long examinerId, String fileName, Integer addPoint)
+	 public static String createExaminerCSV(HttpServletRequest request, ServletContext servletContext, Long oscePostId, Long examinerId, String fileName, Integer addPoint, Long impressionQueId)
 	  {
 		  
-		  Long impressionQueId = null;
+		  //Long impressionQueId = null;
 		   
 		  try
 		  {
@@ -988,12 +994,12 @@ public class ExportStatisticData extends HttpServlet{
 				if (oscePost.getStandardizedRole() != null)
 					checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
 				
-				impressionQueId = null;
+				//impressionQueId = null;
 				
-				String impressionItemString=request.getParameter("p"+oscePost.getId().toString());							
+				//String impressionItemString=request.getParameter("p"+oscePost.getId().toString());							
 				
-				if (impressionItemString != null)
-					impressionQueId=Long.parseLong(impressionItemString);
+				/*if (impressionItemString != null)
+					impressionQueId=Long.parseLong(impressionItemString);*/
 				
 				for (ChecklistTopic checklistTopic : checklistTopicList)
 				{
@@ -1002,7 +1008,7 @@ public class ExportStatisticData extends HttpServlet{
 					int count = 1;
 					for (ChecklistQuestion question : questionList)
 					{
-						if ((impressionQueId == null || impressionQueId == 0)  && question.getIsOveralQuestion() != null && question.getIsOveralQuestion())
+						if ((impressionQueId == null || impressionQueId.equals(0))  && question.getIsOveralQuestion() != null && question.getIsOveralQuestion())
 						{
 							impressionQueId = question.getId();
 						}
@@ -1032,7 +1038,11 @@ public class ExportStatisticData extends HttpServlet{
 			    				writer.append('|');
 			    				
 			    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
-			    				writer.append(impressionItem1.getChecklistOption().getValue());
+			    				//writer.append(impressionItem1.getChecklistOption().getValue());
+			    				if (impressionItem1 != null)
+			    					writer.append(impressionItem1.getChecklistOption().getValue());
+			    				else
+			    					writer.append('0');
 			    			}
 				    		else
 				    		{
@@ -1063,7 +1073,10 @@ public class ExportStatisticData extends HttpServlet{
 			    		writer.append(addPoint.toString());
 	    				writer.append('|');
 	    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
-	    				writer.append(impressionItem1.getChecklistOption().getValue());
+	    				if (impressionItem1 != null)
+	    					writer.append(impressionItem1.getChecklistOption().getValue());
+	    				else
+	    					writer.append('0');
 	    			}
 		    		else
 		    		{
@@ -1086,10 +1099,12 @@ public class ExportStatisticData extends HttpServlet{
 		  return fileName;
 	  }
 	 
-	 public static String createOscePostCSV(HttpServletRequest request, ServletContext servletContext, Long oscePostId, String fileName, List<String> examinerId, List<Integer> addPoints)
+	 public static List<String> createOscePostCSV(HttpServletRequest request, ServletContext servletContext, Long oscePostId, String fileName, List<String> examinerId, List<Integer> addPoints, Long impressionQueId)
 	  {
 		  
-		  Long impressionQueId = null;
+		 // Long impressionQueId = null;
+		 List<String> valueList = new ArrayList<String>();
+		 
 		  
 		  try
 		  {
@@ -1111,11 +1126,11 @@ public class ExportStatisticData extends HttpServlet{
 				if (oscePost.getStandardizedRole() != null)
 					checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
 				
-				impressionQueId = null;
+				//impressionQueId = null;
 				
-				String impressionItemString=request.getParameter("p"+oscePost.getId().toString());							
-				if (impressionItemString != null)
-					impressionQueId=Long.parseLong(impressionItemString);
+				//String impressionItemString=request.getParameter("p"+oscePost.getId().toString());							
+				/*if (impressionQueId != null && impressionQueId > 0l)
+					impressionQueId=Long.parseLong(impressionItemString);*/
 				
 				for (ChecklistTopic checklistTopic : checklistTopicList)
 				{
@@ -1150,7 +1165,7 @@ public class ExportStatisticData extends HttpServlet{
 			    		if (lastCandidateId != null)
 			    		{
 			    			Integer addPoint = 0;
-			    			String key="p"+oscePostId+"e"+answerList.get(j-1).getDoctor().getId();
+			    			/*String key="p"+oscePostId+"e"+answerList.get(j-1).getDoctor().getId();
 			    			if (examinerId.contains(key))
 			    			{
 			    				int index = examinerId.indexOf(key);
@@ -1159,7 +1174,7 @@ public class ExportStatisticData extends HttpServlet{
 			    			else
 			    			{
 			    				addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(j-1).getDoctor().getId());
-			    			}
+			    			}*/
 			    			
 			    			if (impressionQueId != null && impressionQueId != 0)
 			    			{
@@ -1167,7 +1182,10 @@ public class ExportStatisticData extends HttpServlet{
 			    				writer.append('|');
 			    				
 			    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
-			    				writer.append(impressionItem1.getChecklistOption().getValue());
+			    				if (impressionItem1 != null)
+			    					writer.append(impressionItem1.getChecklistOption().getValue());
+			    				else
+			    					writer.append('0');
 			    			}
 				    		else
 				    		{
@@ -1197,7 +1215,7 @@ public class ExportStatisticData extends HttpServlet{
 			    {
 			    	answer = answerList.get(answerList.size() - 1);
 			    	Integer addPoint = 0;
-	    			String key="p"+oscePostId+"e"+answer.getDoctor().getId();
+	    			/*String key="p"+oscePostId+"e"+answer.getDoctor().getId();
 	    			if (examinerId.contains(key))
 	    			{
 	    				int index = examinerId.indexOf(key);
@@ -1206,7 +1224,7 @@ public class ExportStatisticData extends HttpServlet{
 	    			else
 	    			{
 	    				addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(answerList.size()-1).getDoctor().getId());
-	    			}
+	    			}*/
 			    	
 			    	if (impressionQueId != null)
 	    			{
@@ -1214,7 +1232,11 @@ public class ExportStatisticData extends HttpServlet{
 	    				writer.append('|');
 	    				
 	    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
-	    				writer.append(impressionItem1.getChecklistOption().getValue());
+	    				//writer.append(impressionItem1.getChecklistOption().getValue());
+	    				if (impressionItem1 != null)
+	    					writer.append(impressionItem1.getChecklistOption().getValue());
+	    				else
+	    					writer.append('0');
 	    			}
 		    		else
 		    		{
@@ -1234,7 +1256,9 @@ public class ExportStatisticData extends HttpServlet{
 			  Log.error(e.getMessage(),e);
 		  }
 		 
-		  return fileName;
+		  valueList.add(fileName);
+		  valueList.add(impressionQueId == null ? null : String.valueOf(impressionQueId));
+		  return valueList;
 	  }
 
 	 public static String createOscePostGraphCSV(HttpServletRequest request, ServletContext servletContext, String fileName, OscePost oscePost)
@@ -1270,11 +1294,11 @@ public class ExportStatisticData extends HttpServlet{
 					checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
 				alphaSeq = 'A';
 				
-				impressionQueId = null;
+				impressionQueId = PostAnalysis.findImpressionQuestionByOscePostAndOsce(oscePost.getId(), oscePost.getOsceSequence().getOsceDay().getOsce().getId());
 				
-				String impressionItemString=request.getParameter("p"+oscePost.getId().toString());							
+				/*String impressionItemString=request.getParameter("p"+oscePost.getId().toString());							
 				if (impressionItemString != null)
-					impressionQueId=Long.parseLong(impressionItemString);
+					impressionQueId=Long.parseLong(impressionItemString);*/
 				
 				for (ChecklistTopic checklistTopic : checklistTopicList)
 				{
@@ -1327,7 +1351,10 @@ public class ExportStatisticData extends HttpServlet{
 			    			if (impressionQueId != null && impressionQueId != 0)
 			    			{
 			    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
-			    				writer.append(impressionItem1.getChecklistOption().getValue());
+			    				if (impressionItem1 != null)
+			    					writer.append(impressionItem1.getChecklistOption().getValue());
+			    				else
+			    					writer.append('0');
 			    			}
 				    		else
 				    		{
@@ -1360,7 +1387,10 @@ public class ExportStatisticData extends HttpServlet{
 			    	if (impressionQueId != null)
 	    			{
 	    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
-	    				writer.append(impressionItem1.getChecklistOption().getValue());
+	    				if (impressionItem1 != null)
+	    					writer.append(impressionItem1.getChecklistOption().getValue());
+	    				else
+	    					writer.append('0');
 	    			}
 		    		else
 		    		{

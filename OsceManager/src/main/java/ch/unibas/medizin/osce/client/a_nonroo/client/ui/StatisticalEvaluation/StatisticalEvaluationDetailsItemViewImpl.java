@@ -5,6 +5,7 @@ import ch.unibas.medizin.osce.client.managed.request.AnswerProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
+import ch.unibas.medizin.osce.client.style.widgets.NumberSpinner;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -18,7 +19,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ToggleButton;
@@ -92,6 +92,8 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 	@UiField
 	HorizontalPanel fourthColumnHP;
 	
+	NumberSpinner addPoint;
+	
 	public HorizontalPanel getFourthColumnHP() {
 		return fourthColumnHP;
 	}
@@ -162,9 +164,11 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 		delegate.onOffButtonClicked(checklistQuestionProxy.getId(),onOffButton.isDown());
 	}
 	
-	public Button createAddPointButton()
+	public NumberSpinner createAddPointButton()
 	{
-		Button addPointBtn=new Button();
+		addPoint = new NumberSpinner();
+		return addPoint;
+		/*Button addPointBtn=new Button();
 		addPointBtn.setText(constants.addPoint());
 		
 		addPointBtn.addClickHandler(new ClickHandler() {
@@ -177,7 +181,7 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 			}
 		});
 		
-		return addPointBtn;
+		return addPointBtn;*/
 	}
 	
 	public void showPopup()
@@ -193,7 +197,8 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 		HorizontalPanel hp1=new HorizontalPanel();
 		
 		Label addPointLbl=new Label(constants.addPoint()+":");
-		final IntegerBox addPointTxtBox=new IntegerBox();
+		//final IntegerBox addPointTxtBox=new IntegerBox();
+		final NumberSpinner addPointTxtBox = new NumberSpinner();
 		
 		/*if(!((Label)postDataHP.getWidget(6)).getText().equalsIgnoreCase("-"))
 		{
@@ -225,7 +230,7 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				if(addPointTxtBox.getText().equals(""))
+				if(addPointTxtBox.getValue() == null)
 				{
 					MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 					dialogBox.showConfirmationDialog(constants.minMaxNotNull());
@@ -233,7 +238,7 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 					return;
 				}
 				
-				if (!isNumber(addPointTxtBox.getText()))
+				if (!isNumber(addPointTxtBox.getValue().toString()))
 				{
 					MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 					dialogBox.showConfirmationDialog(constants.addPointErr());
@@ -277,4 +282,14 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 		  
 		  return true;  
 	}
+
+	public NumberSpinner getAddPoint() {
+		return addPoint;
+	}
+
+	public void setAddPoint(NumberSpinner addPoint) {
+		this.addPoint = addPoint;
+	}
+	
+	
 }
