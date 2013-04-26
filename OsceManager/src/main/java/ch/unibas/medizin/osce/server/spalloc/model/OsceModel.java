@@ -318,8 +318,13 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 			StandardizedRole assignmentRole = vAssignment.getOsceAssignment().getOscePostRoom().getOscePost().getStandardizedRole();
 			
 			// only generate values for SPs that are able to play the desired role (line is basically equal to RoleConstraint!)
-			if(patientRole.equals(assignmentRole) || assignmentRole.getRoleType().equals(RoleTypes.Statist))
+			/*if(patientRole.equals(assignmentRole) || assignmentRole.getRoleType().equals(RoleTypes.Statist))
+				values.add(new ValPatient(vAssignment, patient));*/
+			
+			//by spec
+			if(patientRole.equals(assignmentRole))
 				values.add(new ValPatient(vAssignment, patient));
+			//by spec
 		}
 		
 		return values;

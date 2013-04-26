@@ -602,10 +602,13 @@ public class PatientInRole {
  
  	public static List<PatientInRole> findPatientInRoleByRotation(Assignment ass)
  	{
+ 		//spec india changes
  		EntityManager em = entityManager();     
-     	String queryString = "SELECT DISTINCT pir FROM PatientInRole pir, PatientInSemester pis, StandardizedPatient sp, Assignment a WHERE" +
-     			" a.patientInRole = pir.id" +
-     			" AND pir.id != " + ass.getPatientInRole().getId() + " AND" +
+     	String queryString = "SELECT DISTINCT pir FROM PatientInRole pir, PatientInRole pir1, PatientInSemester pis, StandardizedPatient sp, Assignment a WHERE" +
+     			" a.patientInRole = pir.id AND" +
+     			" pir.id != " + ass.getPatientInRole().getId() + " AND" +
+     			" pir.patientInSemester = pir1.patientInSemester AND" +
+     			" pir1.oscePost.standardizedRole.id = " + ass.getPatientInRole().getOscePost().getStandardizedRole().getId() + " AND" +
      			" pir.oscePost IS NULL AND" +
      			" pir.patientInSemester = pis.id AND" +
      			" pis.standardizedPatient = sp.id AND" +
@@ -617,5 +620,13 @@ public class PatientInRole {
      			
      	TypedQuery<PatientInRole> q = em.createQuery(queryString,PatientInRole.class);		
      	return q.getResultList();
+ 	}
+ 	
+ 	public static List<PatientInRole> findPatientInRoleByOsceDayAndOscePostOrderById(Long osceDayId, Long oscePostId)
+ 	{
+ 		EntityManager em = entityManager();
+ 		String sql = "SELECT pir FROM PatientInRole pir WHERE pir.oscePost.osceSequence.osceDay.id = " + osceDayId + " AND pir.oscePost.id = " + oscePostId + " ORDER BY pir.id";
+ 		TypedQuery<PatientInRole> query = em.createQuery(sql, PatientInRole.class);
+ 		return query.getResultList();
  	}
 }

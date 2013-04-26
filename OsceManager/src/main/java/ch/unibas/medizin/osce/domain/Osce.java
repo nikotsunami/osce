@@ -26,6 +26,7 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import ch.unibas.medizin.osce.server.spalloc.SPAllocator;
+import ch.unibas.medizin.osce.server.spalloc.SPFederalAllocator;
 import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
@@ -261,16 +262,34 @@ public class Osce {
     		spAlloc.saveSolution();*/
     		
     		//spec[
-    		Iterator<OsceDay> itr = OsceDay.findOsceDayByOsce(osceId).iterator();
+    		Osce osce = Osce.findOsce(osceId);
     		
-    		while (itr.hasNext())
+    		if (osce.getOsceSecurityTypes().equals(OsceSecurityType.federal))
     		{
-    			OsceDay osceDay = itr.next();
-    			SPAllocator spAlloc = new SPAllocator(osceDay);    			
-        		spAlloc.getSolution();
-        		spAlloc.printSolution();
-        		spAlloc.saveSolution();
-    		}    		
+    			Iterator<OsceDay> itr = OsceDay.findOsceDayByOsce(osceId).iterator();
+        		
+        		while (itr.hasNext())
+        		{
+        			OsceDay osceDay = itr.next();
+        			SPFederalAllocator spFederalAllocator = new SPFederalAllocator(osceDay);
+        			spFederalAllocator.allocateSp();
+        		} 
+    		}
+    		else if (osce.getOsceSecurityTypes().equals(OsceSecurityType.simple))
+    		{
+    			Iterator<OsceDay> itr = OsceDay.findOsceDayByOsce(osceId).iterator();
+        		
+        		while (itr.hasNext())
+        		{
+        			OsceDay osceDay = itr.next();
+        			SPAllocator spAlloc = new SPAllocator(osceDay);    			
+            		spAlloc.getSolution();
+            		spAlloc.printSolution();
+            		spAlloc.saveSolution();
+        		} 
+    		}
+    		
+    		   		
     		//spec]
     	} catch(Exception e) {
     		e.printStackTrace();

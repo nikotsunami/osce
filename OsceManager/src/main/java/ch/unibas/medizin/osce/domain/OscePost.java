@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -104,5 +105,13 @@ public class OscePost {
 			maxValue += Integer.parseInt(object.toString());
 		
 		return maxValue;
+	}
+	
+	public static List<OscePost> findOscePostByOsceDay(Long osceDayId)
+	{
+		EntityManager em = entityManager();
+		String sql = "SELECT op FROM OscePost op WHERE op.osceSequence.osceDay.id = " + osceDayId;
+		TypedQuery<OscePost> query = em.createQuery(sql, OscePost.class);
+		return query.getResultList();		
 	}
 }

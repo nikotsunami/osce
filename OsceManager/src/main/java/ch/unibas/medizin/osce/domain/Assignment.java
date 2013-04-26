@@ -1489,4 +1489,43 @@ public class Assignment {
     	 
     	 return assignments;
      }
+     
+     public static List<Assignment> findAssignmentByOscePostAndOsceDay(Long osceDayId, Long oscePostId)
+     {
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE type = 1 AND osce_day = " + osceDayId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " GROUP BY a.timeStart ORDER BY a.timeStart";
+    	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    	 return query.getResultList();
+     }
+     
+     public static List<Assignment> findAssignmentByOscePostAndOsceDayAndTimeStartAndTimeEnd(Long osceDayId, Long oscePostId, Date timeStart, Date timeEnd, Integer sequenceNumber)
+     {
+    	 EntityManager em = entityManager();
+    	 //String sql = "SELECT a FROM Assignment a WHERE type = 1 AND osce_day = " + osceDayId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " AND ( (a.timeStart = '" + timeStart + "' AND a.timeEnd = '" + timeEnd + "') OR a.sequenceNumber = " + sequenceNumber + ") ORDER BY a.timeStart";
+    	 String sql = "SELECT a FROM Assignment a WHERE type = 1 AND osce_day = " + osceDayId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " AND a.sequenceNumber = " + sequenceNumber + " ORDER BY a.oscePostRoom.course.id";
+    	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    	 
+    	 Assignment assignmentSpBreakSlot = findAssignmentForSPBreak(osceDayId, timeStart, timeEnd);
+    	 
+    	 List<Assignment> listAssignmentSPslot = query.getResultList();
+    	 
+    	 if(listAssignmentSPslot != null)
+    	 {
+    		 listAssignmentSPslot.add(assignmentSpBreakSlot);
+    	 }	 
+    	 
+    	 return listAssignmentSPslot;
+     }
+     
+     public static Assignment findAssignmentForSPBreak(Long osceDayId, Date timeStart, Date timeEnd)
+     {
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE type = 1 AND osce_day = " + osceDayId + " AND a.oscePostRoom IS NULL AND a.patientInRole IS NULL AND a.timeStart = '" + timeStart + "' AND a.timeEnd = '" + timeEnd + "' ORDER BY a.timeStart";
+    	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    	 
+    	 if (query.getResultList().size() > 0)
+    		 return query.getResultList().get(0);
+    	 else
+    		 return null;
+     }
 } 
