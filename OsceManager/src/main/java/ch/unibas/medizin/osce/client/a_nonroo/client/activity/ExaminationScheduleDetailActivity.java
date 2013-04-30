@@ -2909,13 +2909,13 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	//by spec change]		
 
 	@Override
-	public void shiftLongBreakClicked(AssignmentProxy currOsceDayId, Date preRotOsceDayEndTime, Date nextRotOsceDayEndTime, int nextPrevFlag, final PopupView popupView) {
+	public void shiftLongBreakClicked(AssignmentProxy currOsceDayId, int nextPrevFlag, final PopupView popupView) {
 		
 		Log.info("Inside shiftLongBreakClicked");
 		
 		showLoadingScreen(true);
 		
-		requests.assignmentRequestNonRoo().shiftLongBreak(currOsceDayId, preRotOsceDayEndTime, nextRotOsceDayEndTime, nextPrevFlag).fire(new OSCEReceiver<Void>() {
+		requests.assignmentRequestNonRoo().shiftLongBreak(currOsceDayId, nextPrevFlag).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {

@@ -88,5 +88,5 @@ public abstract Request<List<AssignmentProxy>> retrieveAssignmenstOfTypeStudent(
 	
 	public abstract Request<List<Date>> clearExaminerAssignment(Long osceDayId,Long oscePostId,Long courseId);
 	
-	public abstract Request<Void> shiftLongBreak(AssignmentProxy currOsceDay, Date preRotOsceDayEndTime, Date nextRotOsceDayEndTime, int nextPrevFlag);
+	public abstract Request<Void> shiftLongBreak(AssignmentProxy currOsceDay, int nextPrevFlag);
 }

@@ -348,8 +348,8 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 						public void onClick(ClickEvent event) {
 							panel.hide();
 							
-							if (preOfPrevAssignment != null)
-								delegate.shiftLongBreakClicked(previousAssignment, preOfPrevAssignment.getTimeEnd(), new Date(), 0, popupView);
+							if (previousAssignment != null)
+								delegate.shiftLongBreakClicked(previousAssignment, 0, popupView);
 						}
 					});
 					
@@ -359,8 +359,8 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 						public void onClick(ClickEvent event) {
 							panel.hide();
 							
-							if (nextAssignmentProxy != null)
-								delegate.shiftLongBreakClicked(previousAssignment, new Date(), nextAssignmentProxy.getTimeEnd(), 1, popupView);
+							if (previousAssignment != null)
+								delegate.shiftLongBreakClicked(previousAssignment, 1, popupView);
 						}
 					});
 				}

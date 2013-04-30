@@ -241,7 +241,7 @@ public class Assignment {
         //String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.oscePost=" + oscePostId + " and opr.course=" + courseId + " ) order by a.timeStart asc";
       //  String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999) and opr.course=" + courseId + " ) order by a.timeStart asc";
         //String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where (opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999) or opr.room is null) and opr.course=" + courseId + " and opr.oscePost = " + oscePostId +  " ) order by a.timeStart asc";
-      String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where (opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999 ) or (opr.room is null  and opr.oscePost.id="+oscePostId+" and opr.oscePost.oscePostBlueprint.postType = " + OscePost.findOscePost(oscePostId).getOscePostBlueprint().getPostType().ordinal() + ")) and opr.course=" + courseId + "  ) order by a.timeStart asc";
+        String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where (opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999 ) or (opr.room is null  and opr.oscePost.id="+oscePostId+" and opr.oscePost.oscePostBlueprint.postType = " + OscePost.findOscePost(oscePostId).getOscePostBlueprint().getPostType().ordinal() + ")) and opr.course=" + courseId + "  ) order by a.timeStart asc";
         TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
         List<Assignment> assignmentList = query.getResultList();
         Log.info("retrieveAssignmenstOfTypeStudent query String :" + queryString);
@@ -1454,23 +1454,40 @@ public class Assignment {
 		}
      }
      
-     public static void shiftLongBreak(Assignment currOsceDayId, Date preRotOsceDayEndTime, Date nextRotOsceDayEndTime, int nextPrevFlag)
+     public static void shiftLongBreak(Assignment currOsceDayId, int nextPrevFlag)
      {
     	 //for shift long break in previous rotation
     	 if (nextPrevFlag == 0)
     	 {
-    		int diff = currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue(); 
-    		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, currOsceDayId.timeEnd);
-    		diff = currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue();
-    		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, preRotOsceDayEndTime);
+    		 if (currOsceDayId.getRotationNumber() > 0)
+    		 {
+    			 Date preRotOsceDayEndTime = getPreviousNextRotationEndTime(currOsceDayId.getOsceDay().getId(), (currOsceDayId.getRotationNumber() - 1));
+    			if (preRotOsceDayEndTime != null)
+    			{
+    				int diff = currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue(); 
+        			updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, currOsceDayId.timeEnd);
+        			diff = currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue();
+        			updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, preRotOsceDayEndTime);
+    			}
+    		 }	
+    		
     	 }
     	//for shift long break in next rotation
     	 else if (nextPrevFlag == 1)
     	 {
-    		int  diff = currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue();
-      		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, nextRotOsceDayEndTime); 
-    		diff = currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue(); 
-     		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, currOsceDayId.timeEnd);     		
+    		int maxRotation = getMaxRotationNumber(currOsceDayId.getOsceDay().getId());
+    		
+    		if ((currOsceDayId.getRotationNumber() + 1) < maxRotation)
+    		{
+    			Date nextRotOsceDayEndTime = getPreviousNextRotationEndTime(currOsceDayId.getOsceDay().getId(), (currOsceDayId.getRotationNumber() + 1));
+    			if (nextRotOsceDayEndTime != null)
+    			{
+    				int  diff = currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue();
+              		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, nextRotOsceDayEndTime); 
+            		diff = currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue(); 
+             		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, currOsceDayId.timeEnd);
+    			}    		
+    		}    		
     	 }
     	 
     	 OsceDay osceDay = currOsceDayId.getOsceDay();
@@ -1493,7 +1510,7 @@ public class Assignment {
      public static List<Assignment> findAssignmentByOscePostAndOsceDay(Long osceDayId, Long oscePostId)
      {
     	 EntityManager em = entityManager();
-    	 String sql = "SELECT a FROM Assignment a WHERE type = 1 AND osce_day = " + osceDayId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " GROUP BY a.timeStart ORDER BY a.timeStart";
+    	 String sql = "SELECT a FROM Assignment a WHERE type = 1 AND a.osceDay = " + osceDayId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " GROUP BY a.timeStart ORDER BY a.timeStart";
     	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
     	 return query.getResultList();
      }
@@ -1502,7 +1519,7 @@ public class Assignment {
      {
     	 EntityManager em = entityManager();
     	 //String sql = "SELECT a FROM Assignment a WHERE type = 1 AND osce_day = " + osceDayId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " AND ( (a.timeStart = '" + timeStart + "' AND a.timeEnd = '" + timeEnd + "') OR a.sequenceNumber = " + sequenceNumber + ") ORDER BY a.timeStart";
-    	 String sql = "SELECT a FROM Assignment a WHERE type = 1 AND osce_day = " + osceDayId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " AND a.sequenceNumber = " + sequenceNumber + " ORDER BY a.oscePostRoom.course.id";
+    	 String sql = "SELECT a FROM Assignment a WHERE type = 1 AND a.osceDay = " + osceDayId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " AND a.sequenceNumber = " + sequenceNumber + " ORDER BY a.oscePostRoom.course.id";
     	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
     	 
     	 Assignment assignmentSpBreakSlot = findAssignmentForSPBreak(osceDayId, timeStart, timeEnd);
@@ -1520,12 +1537,36 @@ public class Assignment {
      public static Assignment findAssignmentForSPBreak(Long osceDayId, Date timeStart, Date timeEnd)
      {
     	 EntityManager em = entityManager();
-    	 String sql = "SELECT a FROM Assignment a WHERE type = 1 AND osce_day = " + osceDayId + " AND a.oscePostRoom IS NULL AND a.patientInRole IS NULL AND a.timeStart = '" + timeStart + "' AND a.timeEnd = '" + timeEnd + "' ORDER BY a.timeStart";
+    	 String sql = "SELECT a FROM Assignment a WHERE type = 1 AND a.osceDay = " + osceDayId + " AND a.oscePostRoom IS NULL AND a.patientInRole IS NULL AND a.timeStart = '" + timeStart + "' AND a.timeEnd = '" + timeEnd + "' ORDER BY a.timeStart";
     	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
     	 
     	 if (query.getResultList().size() > 0)
     		 return query.getResultList().get(0);
     	 else
     		 return null;
+     }
+     
+     public static Date getPreviousNextRotationEndTime(Long osceDayId, int rotationNumber)
+     {
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE a.type = 0 AND a.osceDay.id = " + osceDayId + " AND a.rotationNumber = " + rotationNumber + " ORDER BY timeEnd DESC";
+    	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    	 
+    	 if (query.getResultList().size() > 0)
+    		 return query.getResultList().get(0).getTimeEnd();
+    	 else 
+    		 return null;
+     }
+     
+     public static int getMaxRotationNumber(Long osceDayId)
+     {
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE a.type = 0 AND a.osceDay.id = " + osceDayId + " ORDER BY a.rotationNumber DESC";
+    	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    
+    	 if (query.getResultList().size() > 0)
+    		 return query.getResultList().get(0).getRotationNumber();
+    	 else
+    		 return 0;
      }
 } 

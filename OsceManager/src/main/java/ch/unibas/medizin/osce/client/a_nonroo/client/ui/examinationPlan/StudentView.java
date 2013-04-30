@@ -22,7 +22,7 @@ public interface StudentView extends IsWidget{
 		public void exchangeStudentClicked(AssignmentProxy ass, StudentProxy exchangeStudent);
 		//by spec change]
 		
-		public void shiftLongBreakClicked(AssignmentProxy currOsceDayId, Date preRotOsceDayEndTime, Date nextRotOsceDayEndTime, int nextPrevFlag, PopupView popupView);
+		public void shiftLongBreakClicked(AssignmentProxy currOsceDayId, int nextPrevFlag, PopupView popupView);
 	}
 	
 	void setDelegate(Delegate delegate);
