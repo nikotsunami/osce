@@ -129,7 +129,10 @@ public class UploadServlet extends HttpServlet {
                  if (!appdir.exists() && !appdir.mkdirs()) {
                      throw new IOException("Unable to create " + appdir.getAbsolutePath());
                  }	
-            		
+                 
+                 //replace non ascii to "_"
+            		fileName=fileName.replaceAll("[^\\x00-\\x7F]", "_");
+
                 File appUploadedFile = new File(appUploadDirectory, fileName);
                
               
