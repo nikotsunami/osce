@@ -1569,4 +1569,37 @@ public class Assignment {
     	 else
     		 return 0;
      }
+     
+     public static OsceDay updateTimeForOsceDay(Long osceDayId, int newStartDiffTime, int newLunchDiffTime)
+     {
+    	 OsceDay osceDay = OsceDay.findOsceDay(osceDayId);
+    	 
+    	 if (newStartDiffTime != 0)
+    	 {
+    		 updateAssignmentByDiff(osceDay.getId(), newStartDiffTime, osceDay.getTimeStart());
+    		 osceDay.setTimeStart(dateAddMin(osceDay.getTimeStart(), newStartDiffTime));
+    		 osceDay.setTimeEnd(dateAddMin(osceDay.getTimeEnd(), newStartDiffTime));
+    		 osceDay.setLunchBreakStart(dateAddMin(osceDay.getLunchBreakStart(), newStartDiffTime));
+    		 osceDay.setIsTimeSlotShifted(false);
+    		 osceDay.persist();
+    	 }
+    	 
+    	 if (newLunchDiffTime != 0)
+    	 {
+    		 if(osceDay.getLunchBreakStart() != null)
+    		 {
+    			 Date lunchBreakTime = dateAddMin(osceDay.getLunchBreakStart(), osceDay.getOsce().getLunchBreak().intValue());
+    			 updateAssignmentByDiff(osceDay.getId(), newLunchDiffTime, lunchBreakTime);
+    			 
+    			 int oldAdjustedTime = osceDay.getLunchBreakAdjustedTime();
+    			 
+    			 osceDay.setTimeEnd(dateAddMin(osceDay.getTimeEnd(), newLunchDiffTime));
+    			 osceDay.setIsTimeSlotShifted(false);
+    			 osceDay.setLunchBreakAdjustedTime(oldAdjustedTime + newLunchDiffTime);
+        		 osceDay.persist();    			 
+    		 }
+    	 }
+    	 
+    	 return osceDay;
+     }
 } 

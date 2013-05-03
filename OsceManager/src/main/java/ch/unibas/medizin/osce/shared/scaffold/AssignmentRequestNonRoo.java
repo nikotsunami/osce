@@ -1,3 +1,4 @@
+
 package ch.unibas.medizin.osce.shared.scaffold;
 
 import java.util.Date;
@@ -5,6 +6,7 @@ import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
@@ -89,4 +91,6 @@ public abstract Request<List<AssignmentProxy>> retrieveAssignmenstOfTypeStudent(
 	public abstract Request<List<Date>> clearExaminerAssignment(Long osceDayId,Long oscePostId,Long courseId);
 	
 	public abstract Request<Void> shiftLongBreak(AssignmentProxy currOsceDay, int nextPrevFlag);
+	
+	public abstract Request<OsceDayProxy> updateTimeForOsceDay(Long osceDayId, int newStartTime, int newLunchTime);
 }

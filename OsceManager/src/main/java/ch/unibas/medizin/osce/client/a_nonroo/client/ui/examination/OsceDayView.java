@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -28,6 +29,8 @@ public interface OsceDayView extends IsWidget{
 		 public void shiftLucnkBreakNextClicked(OsceDayProxy osceDayProxy, OsceDayViewImpl osceDayViewImpl);
 		 
 		 void setOsceDayTime(OsceDayViewImpl osceDayViewImpl,Long dayId);
+		 
+		 void btnChangeClicked(OsceDayProxy osceDayProxy, OsceDayViewImpl osceDayViewImpl, int x, int y);
 		}
 	 
 	 void setDelegate(Delegate delegate);
@@ -38,4 +41,5 @@ public interface OsceDayView extends IsWidget{
 	 public HTMLPanel getMainDayHP();
 	 //E Module 5 Bug Report Solution
 
+	  public IconButton getBtnChangeTime();
 }

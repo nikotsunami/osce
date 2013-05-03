@@ -127,6 +127,10 @@
 					<my:IconButton ui:field="btnScheduleEarlier" addStyleNames="{style.btnStyle}" icon=" triangle-1-n"></my:IconButton>
 					<my:IconButton ui:field="btnSchedulePostpone" addStyleNames="{style.btnStyle}" icon="triangle-1-s"></my:IconButton>
 				</g:VerticalPanel>
+				
+				<g:VerticalPanel horizontalAlignment="center" spacing="4">	
+					<my:IconButton ui:field="btnChangeTime" addStyleNames="{style.btnStyle}" visible="false"></my:IconButton>
+				</g:VerticalPanel>
 				<!-- E Module 5 Bug Report Solution -->						
 			</g:VerticalPanel>
 		</g:HTMLPanel>

@@ -172,11 +172,22 @@ public class OsceDayViewImpl extends Composite implements OsceDayView,RotationRe
 	
 	@UiField
 	IconButton btnShiftLunchBreakNext;
+	
+	@UiField
+	IconButton btnChangeTime;
 		
 	//E Module 5 Bug Report Solution
 	
 	//spec issue sol
 	List<SequenceOsceSubViewImpl> sequenceOsceSubViewImplList = new ArrayList<SequenceOsceSubViewImpl>();
+	
+	@UiHandler("btnChangeTime")
+	public void btnChangeTimeClicked(ClickEvent event)
+	{
+		if (osceDayProxy != null)
+			delegate.btnChangeClicked(osceDayProxy, this, event.getClientX(), event.getClientY());
+	}
+	
 	
 	@UiHandler("saveOsceDayValue")
 	public void saveOsceDayValueClicked(ClickEvent event){
@@ -240,7 +251,7 @@ public class OsceDayViewImpl extends Composite implements OsceDayView,RotationRe
 		
 			if(osceDayProxy != null){
 				insertflag=false;
-				System.out.println("Formated Date is :"+DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getTimeStart()));
+				//System.out.println("Formated Date is :"+DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getTimeStart()));
 				
 				
 				dateTextBox.setFormat(new DateBox.DefaultFormat(DateTimeFormat.getFormat("MMM dd, yyyy")));
@@ -287,8 +298,9 @@ public class OsceDayViewImpl extends Composite implements OsceDayView,RotationRe
 			btnShiftLunchBreakNext.setText(constants.shiftLunchBreakNext());
 		btnShiftLunchBreakPrev.setText(constants.ShiftLunchBreakPrev());
 
-
-		 ;
+		
+		
+		btnChangeTime.setText(constants.changeTime());
 		/*bug report end*/
 		
 		// Highlight onViolation
@@ -463,5 +475,13 @@ public class OsceDayViewImpl extends Composite implements OsceDayView,RotationRe
 				delegate.setOsceDayTime(this, Long.valueOf(event.getPreviousDayId()));
 			}
 		}
+	}
+	
+	public void setBtnChangeTime(IconButton btnChangeTime) {
+		this.btnChangeTime = btnChangeTime;
+	}
+	
+	public IconButton getBtnChangeTime() {
+		return btnChangeTime;
 	}
 }

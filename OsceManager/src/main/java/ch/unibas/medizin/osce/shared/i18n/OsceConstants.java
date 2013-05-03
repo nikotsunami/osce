@@ -1309,5 +1309,11 @@ public interface OsceConstants extends Constants {
 	public String graphPopupTitle();
 	
 	public String addPointErr();
+	
+	public String changeTime();
+	
+	public String osceDayStartTimeAdj();
+	
+	public String afterLunchBreakTimeAdj();
 }
 

@@ -66,9 +66,11 @@ import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpecialisationProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.ColorPicker;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.OsceSequences;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PostType;
@@ -106,6 +108,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -350,6 +353,7 @@ AccordianPanelView.ParcourDelegate
 										//spec issue sol
 										osceDayViewImpl.getBtnShiftLunchBreakNext().setVisible(false);
 										osceDayViewImpl.getBtnShiftLunchBreakPrev().setVisible(false);
+										osceDayViewImpl.getBtnChangeTime().setVisible(false);
 										
 										osceDayViewImpl.setDelegate(activity);
 										// Day Assignment 
@@ -804,6 +808,7 @@ AccordianPanelView.ParcourDelegate
 													//spec issue sol
 													osceDayViewImpl.getBtnShiftLunchBreakNext().setVisible(true);
 													osceDayViewImpl.getBtnShiftLunchBreakPrev().setVisible(true);
+													osceDayViewImpl.getBtnChangeTime().setVisible(false);
 												}
 												if(osceProxy.getOsceStatus() == OsceStatus.OSCE_FIXED || osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED)
 												{
@@ -813,6 +818,11 @@ AccordianPanelView.ParcourDelegate
 													
 													osceDayViewImpl.getBtnShiftLunchBreakNext().setVisible(false);
 													osceDayViewImpl.getBtnShiftLunchBreakPrev().setVisible(false);
+													
+													if (osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED)
+														osceDayViewImpl.getBtnChangeTime().setVisible(true);
+													else if (osceProxy.getOsceStatus() == OsceStatus.OSCE_FIXED)
+														osceDayViewImpl.getBtnChangeTime().setVisible(false);
 												}
 												//E Module 5 Bug Report Solution
 												
@@ -882,7 +892,7 @@ AccordianPanelView.ParcourDelegate
 													int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxy.getLunchBreakStart()));
 													int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxy.getLunchBreakStart()));
 													//int lunchtime=Integer.parseInt(osceProxy.getLunchBreak());
-													int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak();
+													int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak() + osceDayProxy.getLunchBreakAdjustedTime();
 													
 													//Window.alert("minute--"+hour+"--"+minute+"--"+totalMinute+"--"+osceProxy.getLunchBreak());
 													int newhr=(totalMinute/60);
@@ -5241,7 +5251,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 												int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxyTemp.getLunchBreakStart()));
 												int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxyTemp.getLunchBreakStart()));
 												
-												int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak();
+												int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak()+osceDayProxyTemp.getLunchBreakAdjustedTime();
 											
 
 												int newhr=(totalMinute/60);
@@ -5408,7 +5418,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 															int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxyTemp.getLunchBreakStart()));
 															int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxyTemp.getLunchBreakStart()));
 															
-															int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak();
+															int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak()+osceDayProxyTemp.getLunchBreakAdjustedTime();
 														
 
 															int newhr=(totalMinute/60);
@@ -5588,7 +5598,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 															int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxyTemp.getLunchBreakStart()));
 															int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxyTemp.getLunchBreakStart()));
 															
-															int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak();
+															int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak() + osceDayProxyTemp.getLunchBreakAdjustedTime();
 														
 
 															int newhr=(totalMinute/60);
@@ -5722,7 +5732,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 												int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxyTemp.getLunchBreakStart()));
 												int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxyTemp.getLunchBreakStart()));
 												
-												int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak();
+												int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak() + osceDayProxyTemp.getLunchBreakAdjustedTime();
 											
 
 												int newhr=(totalMinute/60);
@@ -6033,7 +6043,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxy.getLunchBreakStart()));
 			int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxy.getLunchBreakStart()));
 			//int lunchtime=Integer.parseInt(osceProxy.getLunchBreak());
-			int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak();
+			int totalMinute=(hour*60)+minute+osceProxy.getLunchBreak()+osceDayProxy.getLunchBreakAdjustedTime();
 			
 			//Window.alert("minute--"+hour+"--"+minute+"--"+totalMinute+"--"+osceProxy.getLunchBreak());
 			int newhr=(totalMinute/60);
@@ -6051,5 +6061,177 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getTimeEnd()).substring(0,5));	
 		
 	}
+
+	@Override
+	public void btnChangeClicked(final OsceDayProxy osceDayProxy, final OsceDayViewImpl osceDayViewImpl, int x, int y) {
+		
+		int hour=Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxy.getLunchBreakStart()));
+		int minute=Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxy.getLunchBreakStart()));
+		int totalMinute=(hour*60) + minute + osceProxy.getLunchBreak() + osceDayProxy.getLunchBreakAdjustedTime();
+		
+		int lunchNewhr=(totalMinute/60);
+		int lunchNewmin=(totalMinute%60);
+		
+		int osceDayHr = Integer.parseInt(DateTimeFormat.getFormat("HH").format(osceDayProxy.getTimeStart()));
+		int osceDaymin = Integer.parseInt(DateTimeFormat.getFormat("mm").format(osceDayProxy.getTimeStart()));
+		
+		final int osceDayStartMin = (osceDayHr * 60) + osceDaymin;
+		final int osceDayLunchMin = (lunchNewhr * 60) + lunchNewmin;
+		
+		final PopupPanel panel = new PopupPanel();
+		
+		VerticalPanel mainVp = new VerticalPanel();
+		mainVp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		mainVp.setSpacing(10);
+		
+		HorizontalPanel startTimeHp = new HorizontalPanel();
+		
+		Label osceDayStartLbl = new Label(constants.osceDayStartTimeAdj());
+		
+		osceDayStartLbl.setWidth("150px");
+		osceDayStartLbl.getElement().getStyle().setMarginTop(5, Unit.PX);
+		
+		final TextBox osceDayStartTxtBox = new TextBox();
+		osceDayStartTxtBox.setWidth("100px");
+		osceDayStartTxtBox.setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getTimeStart()).substring(0,5));
+		startTimeHp.add(osceDayStartLbl);
+		startTimeHp.add(osceDayStartTxtBox);
+		
+		HorizontalPanel lunchHp = new HorizontalPanel();
+		
+		Label lunchStartLbl = new Label(constants.afterLunchBreakTimeAdj());
+		
+		lunchStartLbl.setWidth("150px");
+		lunchStartLbl.getElement().getStyle().setMarginTop(5, Unit.PX);
+		
+		final TextBox lunchStartTxtBox = new TextBox();
+		lunchStartTxtBox.setWidth("100px");
+		lunchStartTxtBox.setText(getTimeInTwoDigit(lunchNewhr) + ":" + getTimeInTwoDigit(lunchNewmin));
+		lunchHp.add(lunchStartLbl);
+		lunchHp.add(lunchStartTxtBox);
+		
+		mainVp.add(startTimeHp);
+		mainVp.add(lunchHp);
+		
+		HorizontalPanel okHp = new HorizontalPanel();
+		okHp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);		
+		IconButton okBtn = new IconButton();
+		okBtn.setIcon("check");
+		okBtn.setText(constants.okBtn());
+		
+		okBtn.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				panel.hide();
+				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));	
+				
+				if (osceDayStartTxtBox.getValue() == null || osceDayStartTxtBox.getValue().isEmpty())
+				{
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));	
+					return;
+				}
+				
+				if (lunchStartTxtBox.getValue() == null || lunchStartTxtBox.getValue().isEmpty())
+				{
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+					return;
+				}
+				
+				if (!checkTime(osceDayStartTxtBox.getValue()))
+				{
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+					return;
+				}
+				
+				if (!checkTime(lunchStartTxtBox.getValue()))
+				{
+					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+					return;
+				}
+				
+				String[] osceDayTime = osceDayStartTxtBox.getValue().split(":");
+				String[] lunchTime = lunchStartTxtBox.getValue().split(":");
+
+				int osceDayDiff = 0;
+				int afterLunchDiff = 0;
+				
+				if (osceDayTime.length == 2)
+				{
+					int newOsceDayTime = (Integer.parseInt(osceDayTime[0]) * 60) + Integer.parseInt(osceDayTime[1]);
+					osceDayDiff = newOsceDayTime - osceDayStartMin;
+				}
+
+				if (lunchTime.length == 2)
+				{
+					int newLunchAfterStart = (Integer.parseInt(lunchTime[0]) * 60) + Integer.parseInt(lunchTime[1]);
+					afterLunchDiff = newLunchAfterStart - osceDayLunchMin; 
+				}
+				
+				requests.assignmentRequestNonRoo().updateTimeForOsceDay(osceDayProxy.getId(), osceDayDiff, afterLunchDiff).with("osce").fire(new OSCEReceiver<OsceDayProxy>() {
+
+					@Override
+					public void onSuccess(OsceDayProxy response) {
+						osceProxy = response.getOsce();
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						goTo(new CircuitDetailsPlace(response.getOsce().stableId(),Operation.DETAILS));
+					}
+					
+					@Override
+					public void onFailure(ServerFailure error) {
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));	
+					}
+				});
+			}
+		});
+		
+		okHp.add(okBtn);
+		
+		mainVp.add(okHp);		
+		
+		panel.add(mainVp);
+		
+		panel.setAutoHideEnabled(true);
+		panel.setPopupPosition(x, y-115);
+		panel.show();
+		
+	}
+	
+	public boolean checkTime(String value){
+		
+		boolean dayStartTimeValidflag = true;
+		String sTimeValue = value;
+		
+		if(!sTimeValue.matches("^[0-9]{2}\\:[0-9]{2}$"))
+		{
+			MessageConfirmationDialogBox sTimeValueDialog=new MessageConfirmationDialogBox(constants.warning());
+			sTimeValueDialog.showConfirmationDialog(constants.warningTimeFormat());
+			osceDayViewImpl.startTimeTextBox.setValue("");
+			dayStartTimeValidflag=false;
+			return dayStartTimeValidflag;
+		}
+		
+		if(new Integer(sTimeValue.substring(0,2)) >= 24)
+		{	MessageConfirmationDialogBox dialog1=new MessageConfirmationDialogBox(constants.warning());
+			dialog1.showConfirmationDialog(constants.warningTimeHour());
+			osceDayViewImpl.startTimeTextBox.setValue("");
+			dayStartTimeValidflag=false;
+			return dayStartTimeValidflag;
+		}
+		
+		if(new Integer(sTimeValue.substring(3,5))> 59)
+		{
+			MessageConfirmationDialogBox dialog2=new MessageConfirmationDialogBox(constants.warning());
+			dialog2.showConfirmationDialog(constants.warningTimeMinute());
+			osceDayViewImpl.startTimeTextBox.setValue("");
+			dayStartTimeValidflag=false;
+			return dayStartTimeValidflag;
+		}
+		
+		return dayStartTimeValidflag;
+	}
+
 }
 

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -74,6 +75,9 @@ public class OsceDay {
 	//ttGen Change By Spec
 	private String breakByRotation;
 	//ttGen Change By Spec
+	
+	@Column(nullable=false, columnDefinition = "int default 0")
+	private Integer lunchBreakAdjustedTime = 0;
 	
 	/**
 	 * Sum up number of rotations of sequences belonging to this OSCE day
