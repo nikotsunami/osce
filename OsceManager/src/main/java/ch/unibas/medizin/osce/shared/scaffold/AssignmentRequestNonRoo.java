@@ -93,4 +93,6 @@ public abstract Request<List<AssignmentProxy>> retrieveAssignmenstOfTypeStudent(
 	public abstract Request<Void> shiftLongBreak(AssignmentProxy currOsceDay, int nextPrevFlag);
 	
 	public abstract Request<OsceDayProxy> updateTimeForOsceDay(Long osceDayId, int newStartTime, int newLunchTime);
+	
+	public abstract Request<Void> moveLunchBreakOsceDay(int flag, Long osceDayId);
 }

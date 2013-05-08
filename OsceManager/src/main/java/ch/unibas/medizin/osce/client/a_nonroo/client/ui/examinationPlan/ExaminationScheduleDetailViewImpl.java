@@ -6,13 +6,21 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.OsMaMainNav;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -22,6 +30,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -142,6 +151,9 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 	@UiField
 	VerticalPanel sequenceVP;
 	
+	@UiField
+	IconButton moveLunchBreakRotation;
+	
 	private OsceProxy osceProxy;
 	
 	public OsceProxy getOsceProxy() {
@@ -170,9 +182,127 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		exportButtonStudent.setText(constants.exportStudent());
 		exportButtonSP.setText(constants.exportSP());
 		int height = ResolutionSettings.getRightWidgetHeight() - 55;
-		scrollPanel.setHeight(height+"px");		
+		scrollPanel.setHeight(height+"px");
+		
+		moveLunchBreakRotation.setText(constants.moveRotLunchBreak());
+		moveLunchBreakRotation.setIcon("triangle-2-n-s");
+		//moveLunchBreakRotation.setIcon("triangle-1-s");
 	}
 	
+	@UiHandler("moveLunchBreakRotation")
+	public void moveLunchBreakRotationClicked(ClickEvent event)
+	{
+		showOsceDayPopup(event.getScreenX(), event.getScreenY());
+	}
+	
+	private void showOsceDayPopup(int x, int y) {
+		
+		final PopupPanel panel = new PopupPanel();
+		panel.setAutoHideEnabled(true);
+		
+		VerticalPanel mainVp = new VerticalPanel();
+		mainVp.setSpacing(10);		
+		
+		Label label = new Label(constants.osceDay());
+		
+		final ValueListBox<OsceDayProxy> listBox = new ValueListBox<OsceDayProxy>(new AbstractRenderer<OsceDayProxy>() {
+
+			@Override
+			public String render(OsceDayProxy object) {
+				String dateVal = "";
+				if (object != null)
+					dateVal = DateTimeFormat.getFormat("yyyy-MM-dd").format(object.getOsceDate());
+				
+				return dateVal;
+			}
+		});
+		
+		OsceDayProxy osceDayProxy = null;
+		
+		if (osceProxy != null && osceProxy.getOsce_days() != null && osceProxy.getOsce_days().size() > 0)
+		{
+			osceDayProxy = osceProxy.getOsce_days().get(0);
+			listBox.setValue(osceProxy.getOsce_days().get(0));
+			listBox.setAcceptableValues(osceProxy.getOsce_days());
+		}
+		
+		HorizontalPanel listHp = new HorizontalPanel();
+		listHp.setSpacing(5);
+		listHp.add(label);
+		listHp.add(listBox);
+		
+		HorizontalPanel btnHp = new HorizontalPanel();
+		btnHp.setSpacing(5);
+		final IconButton upRot = new IconButton(constants.upRotation());
+		final IconButton downRot = new IconButton(constants.downRotation());
+		
+		upRot.setIcon("triangle-1-n");
+		downRot.setIcon("triangle-1-s");		
+		
+		if (osceDayProxy != null)
+		{
+			if (osceDayProxy.getLunchBreakStart() == null)
+			{
+				upRot.setEnabled(false);
+				downRot.setEnabled(false);
+			}
+			else
+			{
+				upRot.setEnabled(true);
+				downRot.setEnabled(true);
+			}
+		}
+		
+		listBox.addValueChangeHandler(new ValueChangeHandler<OsceDayProxy>() {
+			
+			@Override
+			public void onValueChange(ValueChangeEvent<OsceDayProxy> event) {
+				if (event.getValue() != null)
+				{
+					if (event.getValue().getLunchBreakStart() == null)
+					{
+						upRot.setEnabled(false);
+						downRot.setEnabled(false);
+					}
+					else
+					{
+						upRot.setEnabled(true);
+						downRot.setEnabled(true);
+					}
+				}
+			}
+		});
+		
+		upRot.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				panel.hide();
+				delegate.moveLunchBreak(1, listBox.getValue());
+			}
+		});
+		
+		downRot.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				panel.hide();
+				delegate.moveLunchBreak(2, listBox.getValue());
+			}
+		});
+		
+		btnHp.add(upRot);
+		btnHp.add(downRot);
+		
+		mainVp.add(listHp);
+		mainVp.add(btnHp);
+		
+		panel.add(mainVp);
+		
+		panel.setPopupPosition(x - 150, y - 175);
+		panel.show();
+	}
+
 	@Override
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;

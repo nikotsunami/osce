@@ -21,6 +21,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -1601,5 +1602,321 @@ public class Assignment {
     	 }
     	 
     	 return osceDay;
+     }
+     
+     //flag has two value :
+     //1 : For Move Rotation Up From Lunch Break
+     //2 : For Move Rotation Down From Lunch Break
+     public static void moveLunchBreakOsceDay(int flag, Long osceDayId)
+     {
+    	 OsceDay osceDay = OsceDay.findOsceDay(osceDayId);
+    	 
+    	 if (osceDay.getOsceSequences().size() == 1)
+    	 {
+    		Date lunchBreakTime = osceDay.getLunchBreakStart();
+ 			int beforeDiff = osceDay.getOsce().getMiddleBreak() - osceDay.getOsce().getLunchBreak();
+ 			int afterDiff = osceDay.getOsce().getLunchBreak() - osceDay.getOsce().getMiddleBreak();
+ 			Date afterLunchBreakTime = dateAddMin(osceDay.getLunchBreakStart(), osceDay.getOsce().getLunchBreak());
+ 			
+ 			if (flag == 1) // up rotation
+    		{
+ 				//add lunch break after rotation
+ 				Assignment assignment = findEndTimeAfterLunchBreakRotation(osceDayId, afterLunchBreakTime);
+ 				String rotationStr[] = osceDay.getBreakByRotation().split("-");
+    			
+ 				if (assignment.getRotationNumber() < rotationStr.length)
+  				{
+ 					if (assignment != null)
+ 	    				updateAssignmentByDiff(osceDayId, afterDiff, assignment.getTimeEnd());
+ 	    			
+ 	    			//remove lunch break
+ 	    			updateAssignmentByDiff(osceDayId, beforeDiff, lunchBreakTime);
+ 	    			
+ 	    			//update breakByRotation String
+ 	    			for (int i=0; i<rotationStr.length; i++)
+ 	    			{
+ 	    				if (rotationStr[i].contains(osceDay.getOsce().getLunchBreak().toString()))
+ 	    				{
+ 	    					if ((i+1) < rotationStr.length)
+ 	    					{	
+ 	    						String nextS[] = rotationStr[(i+1)].split(":");
+ 	    								
+ 	    						String s[] = rotationStr[i].split(":");
+ 	    						
+ 	    						if (s.length > 1 && nextS.length > 1)
+ 	    						{
+ 	    							String tmp = s[1];
+ 	    							s[1] = nextS[1];
+ 	    							nextS[1] = tmp;    									
+ 	    						}
+ 	    					
+ 	    						rotationStr[i] = StringUtils.join(s,":");
+ 	    						rotationStr[i+1]  = StringUtils.join(nextS,":");
+ 	    					}
+ 	    					break;	
+ 	    				}
+ 	    			}
+ 	    			
+ 	    			//persist new value of osceday
+ 	    			Assignment tempAss = Assignment.findAssignment(assignment.getId());
+ 	    			String newStr = StringUtils.join(rotationStr, "-");
+ 	    			osceDay.setBreakByRotation(newStr);
+ 	    			osceDay.setIsTimeSlotShifted(false);
+ 	    			osceDay.setLunchBreakStart(tempAss.getTimeEnd());
+ 	    			osceDay.persist();
+  				}    			
+    		}
+    		else if (flag == 2) // down rotation
+    		{
+    			Assignment tempAss = findRotationNumberOfLunchBreakStart(osceDayId, lunchBreakTime);
+    			
+    			if (tempAss != null)
+    			{
+    				if (tempAss.getRotationNumber() > 0)
+    				{
+    					Assignment ass = findAssignmentByRotationAndOsceDay(osceDayId, (tempAss.getRotationNumber() - 1));
+        				
+        				if (ass != null)
+        				{
+        					//remove lunch break
+        					updateAssignmentByDiff(osceDayId, beforeDiff, lunchBreakTime);
+        					
+        					//add lunch break
+        					updateAssignmentByDiff(osceDayId, afterDiff, ass.getTimeEnd());
+        					
+        					String rotationStr[] = osceDay.getBreakByRotation().split("-");
+        	    			
+        	    			for (int i=0; i<rotationStr.length; i++)
+        	    			{
+        	    				if (rotationStr[i].contains(osceDay.getOsce().getLunchBreak().toString()))
+        	    				{
+        	    					if ((i-1) >= 0)
+        	    					{	
+        	    						String nextS[] = rotationStr[(i-1)].split(":");
+        	    								
+        	    						String s[] = rotationStr[i].split(":");
+        	    						
+        	    						if (s.length > 1 && nextS.length > 1)
+        	    						{
+        	    							String tmp = s[1];
+        	    							s[1] = nextS[1];
+        	    							nextS[1] = tmp;    									
+        	    						}
+        	    					
+        	    						rotationStr[i] = StringUtils.join(s,":");
+        	    						rotationStr[i-1]  = StringUtils.join(nextS,":");
+        	    					}
+        	    					break;	
+        	    				}
+        	    			}
+        	    			
+        	    			String newStr = StringUtils.join(rotationStr, "-");
+        	    			osceDay.setBreakByRotation(newStr);
+        					osceDay.setLunchBreakStart(ass.getTimeEnd());
+        					osceDay.setIsTimeSlotShifted(false);
+        					osceDay.persist();
+        				}
+    				}
+    			}
+    		}
+    	 }
+    	 else if (osceDay.getOsceSequences().size() == 2)
+    	 {
+    		OsceSequence firstSeq = osceDay.getOsceSequences().get(0);
+    		OsceSequence secondSeq = osceDay.getOsceSequences().get(1);
+    		
+    		Date lunchBreakTime = osceDay.getLunchBreakStart();
+  			int beforeDiff = osceDay.getOsce().getMiddleBreak() - osceDay.getOsce().getLunchBreak();
+  			int afterDiff = osceDay.getOsce().getLunchBreak() - osceDay.getOsce().getMiddleBreak();
+  			Date afterLunchBreakTime = dateAddMin(osceDay.getLunchBreakStart(), osceDay.getOsce().getLunchBreak());
+  			
+  			if (flag == 1) // up rotation
+     		{
+  				//add lunch break after rotation
+  				Assignment assignment = findEndTimeAfterLunchBreakRotation(osceDayId, afterLunchBreakTime);
+  				String rotationStr[] = osceDay.getBreakByRotation().split("-");
+  				
+  				if (assignment.getRotationNumber() < rotationStr.length)
+  				{
+  					if (assignment != null)
+  	     				updateAssignmentByDiff(osceDayId, afterDiff, assignment.getTimeEnd());
+  	     			
+  	     			//remove lunch break
+  	     			updateAssignmentByDiff(osceDayId, beforeDiff, lunchBreakTime);
+  	     			
+  	     			//update breakByRotation String     			
+  	     			for (int i=0; i<rotationStr.length; i++)
+  	     			{
+  	     				if (rotationStr[i].contains(osceDay.getOsce().getLunchBreak().toString()))
+  	     				{
+  	     					if ((i+1) < rotationStr.length)
+  	     					{	
+  	     						String nextS[] = rotationStr[(i+1)].split(":");
+  	     								
+  	     						String s[] = rotationStr[i].split(":");
+  	     						
+  	     						if (s.length > 1 && nextS.length > 1)
+  	     						{
+  	     							String tmp = s[1];
+  	     							s[1] = nextS[1];
+  	     							nextS[1] = tmp;    									
+  	     						}
+  	     					
+  	     						rotationStr[i] = StringUtils.join(s,":");
+  	     						rotationStr[i+1]  = StringUtils.join(nextS,":");
+  	     					}
+  	     					break;	
+  	     				}
+  	     			}
+  	     			
+  	     			//persist new value of osceday
+  	     			Assignment tempAss = Assignment.findAssignment(assignment.getId());
+  	     			String newStr = StringUtils.join(rotationStr, "-");
+  	     			osceDay.setBreakByRotation(newStr);
+  	     			osceDay.setIsTimeSlotShifted(false);
+  	     			osceDay.setLunchBreakStart(tempAss.getTimeEnd());
+  	     			osceDay.persist();
+  	     			
+  	     			Date newLunchStartTime = tempAss.getTimeEnd();
+  	     			
+  	     			//update oscepostroom
+  	     			updateOscePostRoom(osceDayId, lunchBreakTime, newLunchStartTime, firstSeq.getId());
+  				}     			
+     		}
+     		else if (flag == 2) // down rotation
+     		{
+     			Assignment tempAss = findRotationNumberOfLunchBreakStart(osceDayId, lunchBreakTime);
+     			
+     			if (tempAss != null)
+     			{
+     				if (tempAss.getRotationNumber() > 0)
+     				{
+     					Assignment ass = findAssignmentByRotationAndOsceDay(osceDayId, (tempAss.getRotationNumber() - 1));
+         				
+         				if (ass != null)
+         				{
+         					//remove lunch break
+         					updateAssignmentByDiff(osceDayId, beforeDiff, lunchBreakTime);
+         					
+         					//add lunch break
+         					updateAssignmentByDiff(osceDayId, afterDiff, ass.getTimeEnd());
+         					
+         					String rotationStr[] = osceDay.getBreakByRotation().split("-");
+         	    			
+         	    			for (int i=0; i<rotationStr.length; i++)
+         	    			{
+         	    				if (rotationStr[i].contains(osceDay.getOsce().getLunchBreak().toString()))
+         	    				{
+         	    					if ((i-1) >= 0)
+         	    					{	
+         	    						String nextS[] = rotationStr[(i-1)].split(":");
+         	    								
+         	    						String s[] = rotationStr[i].split(":");
+         	    						
+         	    						if (s.length > 1 && nextS.length > 1)
+         	    						{
+         	    							String tmp = s[1];
+         	    							s[1] = nextS[1];
+         	    							nextS[1] = tmp;    									
+         	    						}
+         	    					
+         	    						rotationStr[i] = StringUtils.join(s,":");
+         	    						rotationStr[i-1]  = StringUtils.join(nextS,":");
+         	    					}
+         	    					break;	
+         	    				}
+         	    			}
+         	    			
+         	    			String newStr = StringUtils.join(rotationStr, "-");
+         	    			osceDay.setBreakByRotation(newStr);
+         					osceDay.setLunchBreakStart(ass.getTimeEnd());
+         					osceDay.setIsTimeSlotShifted(false);
+         					osceDay.persist();
+         					
+         					//update oscepostroom
+         					Assignment tempAssignment = findAssignmentByRotationAndOsceDay(osceDayId, (ass.getRotationNumber()+1));
+         					if (tempAssignment != null)
+         						updateOscePostRoom(osceDayId, ass.getTimeEnd(), tempAssignment.getTimeEnd(), secondSeq.getId());         					
+         				}
+     				}
+     			}
+     		}
+    	 }
+     }
+     
+     public static Assignment findEndTimeAfterLunchBreakRotation(Long osceDayId, Date afterLunchBreakTime)
+     {
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE a.osceDay.id = " + osceDayId + " AND a.type = 0 AND a.rotationNumber IN (SELECT DISTINCT a.rotationNumber FROM Assignment a WHERE a.osceDay.id = " + osceDayId + " AND a.timeStart = :timeStart AND a.type = 0) GROUP BY a.timeEnd ORDER BY a.timeEnd DESC ";
+    	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    	 query.setParameter("timeStart", afterLunchBreakTime);
+    	 
+    	 if (query.getResultList().size() > 0)
+    		 return query.getResultList().get(0);
+    	 else
+    		 return null;
+     }
+     
+     public static Assignment findRotationNumberOfLunchBreakStart(Long osceDayId, Date lunchBreakStartTime)
+     {
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE a.osceDay.id = " + osceDayId + " AND a.timeEnd = :timeend AND a.type = 0 ORDER BY a.timeStart";
+    	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    	 query.setParameter("timeend", lunchBreakStartTime);
+    	 
+    	 if (query.getResultList().size() > 0)
+    		 return query.getResultList().get(0);
+    	 else
+    		 return null;
+     }
+     
+     public static Assignment findAssignmentByRotationAndOsceDay(Long osceDayId, int rotationNumber)
+     {
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE a.osceDay.id = " + osceDayId + " AND a.type = 0 AND a.rotationNumber = " + rotationNumber + " GROUP BY a.timeEnd ORDER BY a.timeEnd DESC";
+    	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    	 
+    	 if (query.getResultList().size() > 0)
+    		 return query.getResultList().get(0);
+    	 else
+    		 return null;
+     }
+     
+     public static List<Assignment> findExaminerByLunchBreakEnd(Long osceDayId, Date lunchBreakTime)
+     {
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE a.type = 2 AND a.osceDay.id = " + osceDayId + " AND a.timeStart > :timeend AND a.timeEnd < :timeend ORDER BY a.timeStart";
+    	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    	 query.setParameter("timeend", lunchBreakTime);
+    	 
+    	 return query.getResultList();
+     }
+     
+     public static void updateOscePostRoom(Long osceDayId, Date startTime, Date endTime, Long seqId)
+     {
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE a.osceDay.id = " + osceDayId + " AND a.timeStart > :startTime AND a.timeEnd <= :endtime ORDER BY a.timeStart";
+    	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    	 query.setParameter("startTime", startTime);
+    	 query.setParameter("endtime", endTime);
+    	 
+    	 List<Assignment> assList = query.getResultList();
+    	 
+    	 for (Assignment ass : assList)
+    	 {
+    		 if (ass.getOscePostRoom() != null)
+    		 {
+    			OscePostRoom oscePostRoom = ass.getOscePostRoom();
+    			String oprSql = "SELECT opr FROM OscePostRoom opr WHERE opr.room.id = " + oscePostRoom.getRoom().getId() + " AND opr.oscePost.oscePostBlueprint.id = " + oscePostRoom.getOscePost().getOscePostBlueprint().getId() + " AND opr.oscePost.osceSequence.id = " + seqId;
+    			TypedQuery<OscePostRoom> oprQuery = em.createQuery(oprSql, OscePostRoom.class);
+    			
+    			if (oprQuery.getResultList().size() > 0)
+    			{
+    				ass.setOscePostRoom(oprQuery.getResultList().get(0));
+    				ass.persist();
+    			}
+    		 }
+    	 }
+    	 
      }
 } 

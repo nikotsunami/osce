@@ -63,6 +63,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -2920,6 +2921,29 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			@Override
 			public void onSuccess(Void response) {
 				init();
+				showLoadingScreen(false);
+			}
+		});
+	}
+
+	//flag has two value :
+    //1 : For Move Rotation Up From Lunch Break
+    //2 : For Move Rotation Down From Lunch Break
+	@Override
+	public void moveLunchBreak(int flag, OsceDayProxy osceDayProxy) {
+	
+		showLoadingScreen(true);
+		
+		requests.assignmentRequestNonRoo().moveLunchBreakOsceDay(flag, osceDayProxy.getId()).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				showLoadingScreen(false);
+				init();
+			}
+			
+			@Override
+			public void onFailure(ServerFailure error) {
 				showLoadingScreen(false);
 			}
 		});

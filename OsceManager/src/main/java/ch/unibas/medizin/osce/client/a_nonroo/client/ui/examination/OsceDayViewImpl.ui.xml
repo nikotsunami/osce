@@ -129,7 +129,7 @@
 				</g:VerticalPanel>
 				
 				<g:VerticalPanel horizontalAlignment="center" spacing="4">	
-					<my:IconButton ui:field="btnChangeTime" addStyleNames="{style.btnStyle}" visible="false"></my:IconButton>
+					<my:IconButton ui:field="btnChangeTime" addStyleNames="{style.btnStyle}" visible="false" icon="triangle-2-n-s"></my:IconButton>
 				</g:VerticalPanel>
 				<!-- E Module 5 Bug Report Solution -->						
 			</g:VerticalPanel>

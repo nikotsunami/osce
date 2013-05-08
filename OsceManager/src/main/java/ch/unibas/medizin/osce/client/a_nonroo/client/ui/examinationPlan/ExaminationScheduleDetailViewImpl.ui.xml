@@ -39,10 +39,13 @@
 					<my:IconButton ui:field="spAssignmentButton" icon="contact" />
 					
 				</g:HorizontalPanel>
+				
 				<g:HorizontalPanel spacing="5" horizontalAlignment="left">
 					<my:IconButton ui:field="exportButtonStudent" icon="extlink"/>
 					<my:IconButton ui:field="exportButtonSP" icon="extlink"/>
-				</g:HorizontalPanel>	
+					<my:IconButton ui:field="moveLunchBreakRotation"/>
+				</g:HorizontalPanel>
+				
 			</g:VerticalPanel>
 		</g:HorizontalPanel>
 		

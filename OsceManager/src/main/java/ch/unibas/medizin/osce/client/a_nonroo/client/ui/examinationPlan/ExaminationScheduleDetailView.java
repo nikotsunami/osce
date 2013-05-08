@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan;
 
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 
 import com.google.gwt.place.shared.Place;
@@ -23,6 +24,8 @@ public interface ExaminationScheduleDetailView extends IsWidget{
 		public void autoAssignStudent(long id,Integer orderType);
 		
 		public void exportAssignment(Long osceId,int type);
+		
+		public void moveLunchBreak(int flag, OsceDayProxy osceDayProxy);
 	}
 	
 	 void setDelegate(Delegate delegate);

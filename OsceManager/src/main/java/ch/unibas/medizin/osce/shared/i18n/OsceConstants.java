@@ -1315,5 +1315,13 @@ public interface OsceConstants extends Constants {
 	public String osceDayStartTimeAdj();
 	
 	public String afterLunchBreakTimeAdj();
+	
+	public String osceDay();
+	
+	public String upRotation();
+			
+	public String downRotation();
+	
+	public String moveRotLunchBreak();
 }
 

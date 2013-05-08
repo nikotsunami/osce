@@ -986,6 +986,10 @@ public class Osce {
  			//Assignment assignmentProxynew;
 			
 			for(OsceDay osceDay: osce.getOsce_days()) {
+				
+				osceDay.setLunchBreakAdjustedTime(0);
+				osceDay.persist();
+				
 				Set<Assignment> assignmentProxiesList=osceDay.getAssignments();
 				ArrayList<Assignment> listRemoveAssignment = new ArrayList<Assignment>();
 				Iterator<Assignment> assignmentIterator=assignmentProxiesList.iterator();
