@@ -10,6 +10,8 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.LocaleInfo;
@@ -36,7 +38,7 @@ public class OsMaHeaderImpl extends Composite implements OsMaHeader {
 	UiStyles uiStyles;
 	
 	@UiField
-	IconButton logoutButton;
+	IconButton helpButton;
 	
 	@UiField
 	Label selectLanguageLabel;
@@ -69,9 +71,9 @@ public class OsMaHeaderImpl extends Composite implements OsMaHeader {
 		Log.info("getModuleBaseURL(): " + GWT.getModuleBaseURL());
 		Log.info("getModuleName(): " + GWT.getModuleName());
 		Log.info("getPermutationStrongName(): " + GWT.getPermutationStrongName());
-		logoutButton.setText(constants.logout());
 		selectLanguageLabel.setText(constants.selectLanguage());
 		recordView.setText(constants.tableSize());
+		helpButton.setText(constants.help());
 		
 		Locale[] locales = Locale.values();
 		String currentLocale = LocaleInfo.getCurrentLocale().getLocaleName();
@@ -99,6 +101,14 @@ public class OsMaHeaderImpl extends Composite implements OsMaHeader {
 			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
 				delegate.changeRecordValue(selectRecordBox.getValue());			
+			}
+		});
+		
+		helpButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+				delegate.showHelp();
 			}
 		});
 				

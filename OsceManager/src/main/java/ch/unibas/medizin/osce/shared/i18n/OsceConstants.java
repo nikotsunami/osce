@@ -499,6 +499,8 @@ public interface OsceConstants extends Constants {
 	public String height();
 
 	public String heightUnit();
+	
+	public String help();
 
 	public String homeRole();
 

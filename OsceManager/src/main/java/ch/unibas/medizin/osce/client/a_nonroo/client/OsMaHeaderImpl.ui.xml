@@ -19,7 +19,7 @@
 			<g:ValueListBox ui:field="selectRecordBox"></g:ValueListBox>			
 			<g:Label ui:field="selectLanguageLabel"></g:Label>
 			<g:ValueListBox ui:field="selectLanguageBox"></g:ValueListBox>
-			<my:IconButton icon="power" ui:field="logoutButton" />
+			<my:IconButton icon="help" ui:field="helpButton" />
 		</g:HorizontalPanel>
 	</g:HTMLPanel>
 </ui:UiBinder>

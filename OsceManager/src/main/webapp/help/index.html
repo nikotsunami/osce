@@ -1,0 +1,387 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
+  <script type="text/javascript" src="js/run.js"></script>
+  <link type="image/x-icon" href="favicon.ico" rel="shortcut icon" />
+
+
+  <title>The OSCE Manager Manual</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  
+
+
+  <link rel="stylesheet" href="github.css" type="text/css" />
+
+
+</head>
+
+<body>
+<div class="overlay" style="display:none"></div>
+
+<div id="content-container">
+  
+  <div id="content">
+      <div id="header">
+      <h1 class="title">The OSCE Manager Manual</h1>
+
+    
+    
+    </div>
+      <div class="warning">
+      <h2><img src="img/icons/alert.png alt="Warning" /> Important!</h2>
+      <p>Please be aware that this manual is still in the process of being 
+      written and therefore not yet complete!</p>
+    </div>
+    <p><em>The OSCE Manager Manual</em> is a user guide for the <a href="http://www.osce-manager.com" title="OSCE Manager Website">OSCE Manager</a>. It mainly serves as a reference guide that should cover most of the questions that may arise in everyday use of the application. For a general overview and quick introduction to the <em>OSCE Manager</em> we advise you to have a look at the 12 minute <a href="http://www.youtube.com/watch?v=M_yJG9bPF_Q" title="OSCE Manager - An Introduction">introduction video</a>.</p>
+    <p>Like the <em>OSCE Manager</em>, the manual is written and maintained by the <a href="http://medizin.unibas.ch">Medical Faculty Of The University of Basel</a> For any inquiries regarding this manual, please write an email to <script type="text/javascript">
+    <!--
+    h='&#x75;&#110;&#x69;&#98;&#x61;&#x73;&#46;&#x63;&#104;';a='&#64;';n='&#x73;&#x75;&#112;&#112;&#x6f;&#114;&#116;&#x2d;&#x6d;&#x65;&#100;&#x69;&#122;&#x69;&#110;';e=n+a+h;
+    document.write('<a h'+'ref'+'="ma'+'ilto'+':'+e+'">'+e+'<\/'+'a'+'>');
+    // -->
+    </script><noscript>&#x73;&#x75;&#112;&#112;&#x6f;&#114;&#116;&#x2d;&#x6d;&#x65;&#100;&#x69;&#122;&#x69;&#110;&#32;&#x61;&#116;&#32;&#x75;&#110;&#x69;&#98;&#x61;&#x73;&#32;&#100;&#x6f;&#116;&#32;&#x63;&#104;</noscript>.</p>
+    <div id="introduction-and-overview" class="section level1">
+    <h1><a href="#introduction-and-overview"><span class="header-section-number">1</span> Introduction and overview</a></h1>
+    <p>As has been mentioned in the abstract, we suggest to have a look at the <a href="http://www.youtube.com/watch?v=M_yJG9bPF_Q" title="OSCE Manager - An Introduction">introduction video</a>. It guides you through the process of organising an Objective Structured Clinical Examination step by step and thereby gives you an overview of all the modules of the <em>OSCE Manager</em> and how they roughly interact with each other. This video is the quickest way to delve into the matter.</p>
+    <p>This first chapter of the manual will give you a more general overview about what the <em>OSCE Manager</em> consists of. First the rough architecture of the system the software runs on is explained without getting too technical. This may help you to better understand certain features of the software. Furthermore we will explain the basic user interface of the application as well as how the software is divided up in several modules and how they interact.</p>
+    <div id="system-architecture" class="section level2">
+    <h2><a href="#system-architecture"><span class="header-section-number">1.1</span> System Architecture</a></h2>
+    <p>The <em>OSCE Manager</em> as a whole basically consists of two seperate applications, that would usually be running on different servers. The first is the <em>OSCE Manager</em> itself, while the second application is the <em>SP Portal</em>, which is intended to be accessible via the internet, so as to allow simulated patients to fill in their personal details or participate in surveys. In figure 1-1 you see this concept graphically illustrated.</p>
+    <div class="figure">
+    <img src="img/1-1-system_architecture.png" title="Graphical illustration of OSCE Manager and SP Portal architecture" alt="1-1: Graphical illustration of OSCE Manager and SP Portal architecture." /><p class="caption">1-1: Graphical illustration of OSCE Manager and SP Portal architecture.</p>
+    </div>
+    <p>The data synchronisation between the two applications is initiated manually by a user of the <em>OSCE Manager</em>. The <em>SP Portal</em> application only stores simulated patient data temporarily, for as long as it is required to be accessible by the SP. Typically both applications are installed on different web servers and therefore are accessed via different URLs, for example the <em>OSCE Manager</em> may be accessible through <em>https://osce-manager.private.myuniversity.edu</em> whereas the <em>SP Portal</em> could be reachable by e.g. entering <em>https://sp-portal.myuniversity.edu</em> in your web-browsers address bar.</p>
+    <blockquote>
+    <p><em>Important</em> Please be aware that the above URLs are only examples! Please ask your system administrator for the URLs that are used at your institution!</p>
+    </blockquote>
+    </div>
+    <div id="user-interface" class="section level2">
+    <h2><a href="#user-interface"><span class="header-section-number">1.2</span> User Interface</a></h2>
+    <p>When you start the <em>OSCE Manager</em> you will be confronted with the SP management view. As soon as you click on an entry of the table you will see that the view is roughly divided into four segments. Illustrated in figure 1-2 is said perspective with the four segments, colored in red, green, blue and yellow for ease of explanation.</p>
+    <div class="figure">
+    <img src="img/1-2-ui.png" title="Overview of user interface" alt="1-2: The main user interface segments of the application, which are colored red, green, blue and yellow in this screen shot." /><p class="caption">1-2: The main user interface segments of the application, which are colored red, green, blue and yellow in this screen shot.</p>
+    </div>
+    <p>The main components are:</p>
+    <ul>
+    <li><strong>Red</strong>: The applications navigation menu where you select the actions you want to perform.</li>
+    <li><strong>Green</strong>: In the section to the right of the navigation you often have a table like the one here. There are tools available to filter, navigate and sort the table.</li>
+    <li><strong>Blue</strong>: If there is a table in the green area, often there is the possibility to see more details for the objects that are displayed in the table by clicking on them. If this is the case, you will see more details pop up in the blue marked area.</li>
+    <li><strong>Yellow</strong>: Throughout the whole application you have the possibility to change the display language as well as the table size. The table size is the number of entries that is usually displayed per page in tables.</li>
+    </ul>
+    <p>You will mostly only use the left mouse button for clicking. There are very few instances where the right mouse button is used.</p>
+    <p><strong>TODO: FFINISH THIS CHAPTER... GONNA DO MORE PRACTICAL STUFF NOW...</strong></p>
+    </div>
+    <div id="modules" class="section level2">
+    <h2><a href="#modules"><span class="header-section-number">1.3</span> Modules</a></h2>
+    <p>The <em>OSCE Manager</em> consists of several modules that play together. In the navigation menu of the software you see several boxes that basically make up these modules. In figure 1-3 you see all the elements of said menu.</p>
+    <div class="figure">
+    <img src="img/1-3-navigation.png" title="Navigation menu of the *OSCE Manager*" alt="1-3: Navigation menu of the OSCE Manager." /><p class="caption">1-3: Navigation menu of the OSCE Manager.</p>
+    </div>
+    <p>The elements <em>SP</em>, <em>Examiners</em>, <em>Role</em>, <em>OSCE Administration</em> and <em>System Administrations</em> are outlining everything that is possible in this application.</p>
+    <ul>
+    <li>Under <strong>SP</strong>, the simulated patient database can be found. There, you have the possibility to enter SP data, search for SPs, create and edit a custom questionnaire that you want SPs to fill out and you may also define body attributes that SPs may have.</li>
+    <li><strong>Examiners</strong> contains the database of examiners, that could participate in OSCEs. It is structured similar to the SP database, but is less sophisticated. In the <em>OSCE Manager</em>, examiners belong to clinics, which are also managed within this module.</li>
+    <li>The <strong>Role</strong> menu entry is basically a database of all the roles that could be used or played by an SP during an OSCE, wehereas each role consists of everything required to discribe it such as scripts, checklists, inventory lists, etc. The roles are categorized and these categories are managed within this module as well.</li>
+    <li>In <strong>OSCE Administration</strong> you plan, schedule, execute and analyse the OSCE. For each semester in which you want to organize OSCEs you usually go through a step-by-step progress that is mirrored by this menu.</li>
+    <li><strong>System Administration</strong> is a collection of things and tools that are not used on a daily basis. These are mainly masks for entering specific data into the database that has not to be regularly used or updated, such as the rooms which could be used for conducting an OSCE within.</li>
+    </ul>
+    <p>Detailed descriptions of the modules can be found in the respective chapters.</p>
+    <p>As mentioned in <a href="#system-architecture">chapter 1.1</a>, there is also the <em>SP Portal</em>, which could be considered a module as well, but is actually rather a tool that helps you work with the modules <strong>SP</strong> and <strong>OSCE Administration</strong>.</p>
+    </div>
+    </div>
+    <div id="the-simulated-patient-database" class="section level1">
+    <h1><a href="#the-simulated-patient-database"><span class="header-section-number">2</span> The simulated patient database</a></h1>
+    <p>The simulated patient or SP database is a core part of the OSCE Manager application. Stored within it are all the SPs that did or will participate in an OSCE. This chapter focuses on working with said database and explains what can be done with it. Note, that some functionality is aided by the <em>SP Portal</em> which will be explained in <a href="#the-sp-portal">chapter 6</a>.</p>
+    <div id="sp-table-view" class="section level2">
+    <h2><a href="#sp-table-view"><span class="header-section-number">2.1</span> SP table view</a></h2>
+    <p>When opening the SP database view by clicking on <em>Simulated patients</em> in the main menu, you will be confronted with a table which contains all the SPs that are stored in the database. The table has some features which you will find throughout the <em>OSCE Manager</em> in other tables.</p>
+    <p>In figure 2-1, highlighted in blue, you see the list of SPs that are in the database. When you click on a single entry of this table, you get to see the <a href="#sp-details-view">detailed information about an SP</a> in an area that will scroll into the screen on the right side.</p>
+    <p>The number of records you see is governed by the <em>table size</em> setting in the top right, marked in orange. you can use the <em>pager</em> on the right side below the table (highlighted in yellow) to browse to the entries that can not be displayed on the first page. Marked in red, you see the <a href="#quick-search">quick search field and search settings</a> that can be used for simple text search of the database. The green column bar allows you to <a href="#sorting">sort the table</a> and <a href="#sorting">select the columns to display</a>.</p>
+    <div class="figure">
+    <img src="img/2-1-sp_table.png" alt="2-1: The SP database table with the quick search field (red), column bar (green), the tables contents (blue), the &quot;Add SP&quot;-button (pink), the pager (yellow) and the advanced filters (turquoise)." /><p class="caption">2-1: The SP database table with the quick search field (red), column bar (green), the tables contents (blue), the &quot;Add SP&quot;-button (pink), the pager (yellow) and the advanced filters (turquoise).</p>
+    </div>
+    <p>If you want to create a new entry in the database you click on the <em>Add SP</em> button <img src="img/icons/plus.png" alt="plus icon" /> (highlighted in pink). This will present you with the <a href="#editing-sp_data">SP editing view</a>. Finally, there are also <a href="#advanced-filters">advanced filtering features</a> that allow you to narrow down the search even more.</p>
+    <div id="sorting" class="section level3">
+    <h3><a href="#sorting"><span class="header-section-number">2.1.1</span> Sorting</a></h3>
+    <p>The column controls pictured in figure 2-2 allow you to sort the table by any column available.</p>
+    <div class="figure">
+    <img src="img/2-2-column-controls.png" alt="2-2: Column controls" /><p class="caption">2-2: Column controls</p>
+    </div>
+    <blockquote>
+    <p><strong>Example: Sorting a table by an arbitrary column</strong></p>
+    <p>To sort the table by a certain column:</p>
+    <ol style="list-style-type: decimal">
+    <li>Click on the name of the column by which you want to sort the data! <img src="img/examples/sorting-1.png" alt="a" /></li>
+    <li>You now see, that the table is sorted by first name. This is also indicated by the arrow besides the column name. To reverse the sort order, simply click the same column name again. <img src="img/examples/sorting-2.png" alt="a" /></li>
+    <li>As you can see, the sort order has been reversed. <img src="img/examples/sorting-3.png" alt="a" /></li>
+    </ol>
+    </blockquote>
+    <p>Additionally, you have the possibility to select the columns which you want to display in the table.</p>
+    <blockquote>
+    <p><strong>Example: Selecting the displayed columns</strong></p>
+    <p>To display additional columns:</p>
+    <ol style="list-style-type: decimal">
+    <li>Click on the arrow button on the right side of a column. <img src="img/examples/columns-1.png" alt="Screenshot depicting &#39;Click on the arrow button on the right side of a column.&#39;" /></li>
+    <li>You now see a list of all columns that are available for display. <img src="img/examples/columns-2.png" alt="Screenshot depicting &#39;all columns that are available for sorting.&#39;" /></li>
+    <li>In this list, click on the checkbox besides the column names to activate or deactivate the columns you want to show / hide in the table. <img src="img/examples/columns-3.png" alt="Screenshot depicting &#39;click on the checkbox besides the column names to activate or deactivate the columns&#39;" /></li>
+    </ol>
+    </blockquote>
+    </div>
+    <div id="quick-search" class="section level3">
+    <h3><a href="#quick-search"><span class="header-section-number">2.1.2</span> Quick search</a></h3>
+    <p>The quick search window on the top left of the SP table allows you to search for any text within the SP records. As soon as you enter any text in the search field, the table will be filtered and only SPs that match your search will be shown.</p>
+    <blockquote>
+    <p><strong>Example: Searching for an SP by name</strong></p>
+    <p>To search for an SP by name, e.g. you search for Mr. <em>Henry Jones</em>.</p>
+    <ol style="list-style-type: decimal">
+    <li>Click the search box on the top left of the screen. <img src="img/examples/quicksearch-1.png" alt="Click the search box" /></li>
+    <li>Enter their name, e.g. <em>Henry</em> and you will see the results almost immediately. <img src="img/examples/quicksearch-2.png" alt="Enter the name of the person you want to search" /></li>
+    </ol>
+    </blockquote>
+    <p>Besides searching for SPs by name you can also search by other attributes.</p>
+    <blockquote>
+    <p><strong>Example: General use of quick search</strong></p>
+    <p>To search for an SP by city, follow these steps:</p>
+    <ol style="list-style-type: decimal">
+    <li>Move the cursor over the wrench symbol to the right of the search box <img src="img/icons/wrench.png" alt="wrench icon" />. <img src="img/examples/quicksearch-3.png" alt="Move the cursor over the wrench symbol" /></li>
+    <li>Click the columns in which you want to search, e.g. <em>City</em>. <img src="img/examples/quicksearch-4.png" alt="Click the columns in which you want to search" /></li>
+    <li>Enter the search term you want to search by, e.g. the name of the city. As in the previous example you will see the results almost immediately. <img src="img/examples/quicksearch-5.png" alt="Enter the search term" /></li>
+    </ol>
+    </blockquote>
+    <p>As you could see in the two examples you can search the following columns via the quick search box: <em>Name</em>, <em>First Name</em>, <em>Postal code</em>, <em>City</em>, <em>Street</em>, <em>Telephone</em>, <em>Telephone 2</em>, <em>Mobile</em>, <em>Email</em>, <em>Bank</em>, <em>BIC</em>, <em>IBAN</em>, <em>Comment</em>.</p>
+    <p>A click on the arrow symbol <img src="img/icons/arrowrefresh-1-w.png" alt="refresh arrow icon" /> executes the search once again.</p>
+    </div>
+    </div>
+    <div id="advanced-filters" class="section level2">
+    <h2><a href="#advanced-filters"><span class="header-section-number">2.2</span> Advanced filters</a></h2>
+    <p>Since there are many non-textual fields that characterise an SP in the database, more sophisticated search methods are available. With the advanced filters that can be found below the SP table, it is possible to filter the table by numeric ranges, gender, profession or even custom information defined in the <a href="#the-questionnaire">questionnaire</a>.</p>
+    <p>To filter the table with one of the advanced filters, click on one of the available filter buttons shown in figure 2-4.</p>
+    <div class="figure">
+    <img src="img/2-4-advanced_filters.png" alt="2-4: The advanced filters, available for searching SPs" /><p class="caption">2-4: The advanced filters, available for searching SPs</p>
+    </div>
+    <p>After you click on one of the buttons a dialog window comes up. For example, if you click on the <em>numeric filter</em> button <img src="img/icons/wrench.png" alt="wrench icon" />, a dialog like the one shown in figure 2-5 appears.</p>
+    <div class="figure">
+    <img src="img/2-5-numeric_filter.png" alt="2-5: The numeric filter box with the linkage field, parameter field, comparison field and the value field." /><p class="caption">2-5: The numeric filter box with the linkage field, parameter field, comparison field and the value field.</p>
+    </div>
+    <p>Most of the filters and filter options are rather straight forward and don't need a lot of explanation. The ones that do are treated in the following three chapters.</p>
+    <div id="linkage" class="section level3">
+    <h3><a href="#linkage"><span class="header-section-number">2.2.1</span> Linkage</a></h3>
+    <p>The leftmost dropdown menu from figure 2-5 is the same for all of the filter boxes. It contains the linkage operation which defines how the filter is applied in conjunction with the preceding filter. The two possible values are:</p>
+    <ul>
+    <li><strong>OR</strong>: means that an SP has to match with either the preceding filter <em>or</em> the filter that is getting the <em>OR</em>-linkage attribute.</li>
+    <li><strong>AND</strong>: defines that the criteria of this current filter <em>and</em> the criteria of the previous filter have to apply <em>both</em>.</li>
+    </ul>
+    <p>Note, that the order of criteria is relevant for the linkage-attribute. The linkage setting of the first-defined filter is irrelevant, but the last criterion is always the strongest.</p>
+    <blockquote>
+    <p><strong>Example: Multiple linked search filters</strong></p>
+    <p>You want to search for female SPs that are either more than 60 years old or younger than 30 years old. Thus, you'd follow these steps:</p>
+    <ol style="list-style-type: decimal">
+    <li>Click on the <em>gender</em> button <img src="img/icons/person.png" alt="person icon" />. In the menu that appears you select the gender to be <em>female</em>. <img src="img/examples/2-1-gender.png" alt="Adding a filter by gender" /></li>
+    <li>Now you select women who are younger than 30. To do that you click on the <em>numeric filter</em> button <img src="img/icons/wrench.png" alt="wrench icon" />, select the <em>smaller than</em> sign (<em>&lt;</em>) and enter the number 30. <img src="img/examples/2-2-age30.png" alt="Adding a filter by age" /></li>
+    <li>Finally, you do the same as in item two, but now you select the <em>larger than</em> sign (<em>&gt;</em>), enter the number 60 and select the <em>linkage</em> to be of type <em>OR</em>. <img src="img/examples/2-3-age60.png" alt="Adding a filter by age" /></li>
+    </ol>
+    <p>If you have a look at the result now, you will notice that there are male SPs in the result. This is because the last criterion is linked with <em>OR</em>-Linkage, which basically makes this selection to be: <em>Show all SPs who are female and younger than 30 years old, or show all SPs who are older than 60 years old</em>.</p>
+    <p>Instead we wanted a selection which shows <em>all SPs who are younger than 30 years old or older than 60 years old and are female</em>. To achieve this now, we continue:</p>
+    <ol start="4" style="list-style-type: decimal">
+    <li>In the criteria table that appeared, click on the trash symbol <img src="img/icons/trash.png" alt="trash icon" /> besides the filter where you filtered by gender. <img src="img/examples/2-4-remove_filter.png" alt="Removing a filter" /></li>
+    <li>Now we add the same filter again at the end of the list, as described in item 1. (Click on the <em>gender</em> button. In the menu that appears you select the gender to be <em>female</em>.) <img src="img/examples/2-1-gender.png" alt="Adding the filter by gender to the end of the filter list" /></li>
+    </ol>
+    <p>Now you see the results you actually wanted.</p>
+    <div class="figure">
+    <img src="img/examples/2-5-results.png" alt="The SP database, showing only SPs who are female and either younger than 30 years old or older than 60 years." /><p class="caption">The SP database, showing only SPs who are female and either younger than 30 years old or older than 60 years.</p>
+    </div>
+    </blockquote>
+    </div>
+    <div id="comparisons" class="section level3">
+    <h3><a href="#comparisons"><span class="header-section-number">2.2.2</span> Comparisons</a></h3>
+    <p>Most filters have a comparison operation, where in the simplest case you can just select whether an SP should have a certain attribute or not. For example when using the <em>Profession</em>-filter, you can select if the SP should have a certain profession, but it is also possible to select that he must not have a certain profession.</p>
+    <p>The <em>numeric filter</em> allows for mathematical comparisons such as <em>equal</em> (=), <em>not equal</em> (≠), <em>greater than</em> (&gt;) and <em>less than</em> (&lt;). Similarly the <em>Languages</em> filter allows the same comparisons to language skill levels.</p>
+    </div>
+    <div id="attribute-and-questionnaire-filters" class="section level3">
+    <h3><a href="#attribute-and-questionnaire-filters"><span class="header-section-number">2.2.3</span> Attribute and Questionnaire filters</a></h3>
+    <p>Whereas most of the filters are rather straight forward to use, the <em>Attributes</em> and <em>Questionnaire</em> filters are special. The <em>Attributes</em> filter, shown in figure 2-6, is used to search for user definable attributes (see chapter <a href="#define-and-use-attributes">Define and use attributes</a>). It is easy to use, as it only shows a simple drop-down menu from which you can select all of the available attributes.</p>
+    <div class="figure">
+    <img src="img/2-6-attributes_filter.png" alt="2-6: The attributes filter popup. The drop-down menu shows all the attributes that are available for selection." /><p class="caption">2-6: The attributes filter popup. The drop-down menu shows all the attributes that are available for selection.</p>
+    </div>
+    <p>The more interesting filter is the <em>Questionnaire</em> filter. In it, the <a href="#the-questionnaire">questionnaire</a> can be searched. This is a collection of user definable questions, that each SP can answer. For more information on how to use the questionnaire, plese see <a href="#the-questionnaire">the chapter in question</a>. With this filter it is possible to efficiently search this questionnaire. When you first click the <em>Questionnaire</em> filter button, you are confronted with a text field into which you can type a keyword to help find the question (see figure 2-7). As soon as you enter something into this textbox, a menu with matching questions appears.</p>
+    <div class="figure">
+    <img src="img/2-7-questionnaire_filter.png" alt="2-7: The questionnaire filter after entering a letter in the suggestive search field, showing matching suggestions" /><p class="caption">2-7: The questionnaire filter after entering a letter in the suggestive search field, showing matching suggestions</p>
+    </div>
+    <p>After selecting a question, you can define what answer you are looking for. Depending on the type of the question, either a drop-down menu appears (see figure 2-8) for multiple choice or yes/no-questions, in which you can select the answer you are looking for, or in case of an open question answered with written text, you can enter text in a textbox (see figure 2-9).</p>
+    <div class="figure">
+    <img src="img/2-8-questionnaire-mc.png" alt="2-8: The questionnaire filter after selecting a multiple choice question, showing the possible answers in a drop-down menu" /><p class="caption">2-8: The questionnaire filter after selecting a multiple choice question, showing the possible answers in a drop-down menu</p>
+    </div>
+    <div class="figure">
+    <img src="img/2-9-questionnaire-open.png" alt="2-9: The questionnaire filter after selecting an open question, showing a text field in which text can be entered" /><p class="caption">2-9: The questionnaire filter after selecting an open question, showing a text field in which text can be entered</p>
+    </div>
+    <blockquote>
+    <p><strong>Example: Searching SPs by questionnaire items</strong></p>
+    <p><strong>Important</strong>: <em>Note, that you have to have these questions defined in the questionnaire before this example works. See chapter <a href="#the-questionnaire">The questionnaire</a>.</em></p>
+    <p>You want to list all the SPs that wear glasses and are motivated by money. This means that the questionnaire has to have some questions defined, which cover these two points. In our example the two following questions are predefined:</p>
+    <ul>
+    <li>Do you wear glasses?</li>
+    <li>What motivated you to participate in our simulation patient program?</li>
+    </ul>
+    <p>The first of the above questions is a Yes/No question, while the latter is an open question.</p>
+    <p>To create the filters, follow these steps:</p>
+    <ol style="list-style-type: decimal">
+    <li>Click on the <em>Questionnaire</em> button <img src="img/icons/pencil.png" alt="pencil icon" />. <img src="img/examples/3-1-questionnaire.png" alt="Click on the Questionnaire button" /></li>
+    <li>Enter the word &quot;glasses&quot; and select the question <em>Do you wear glasses</em> by clicking it. <img src="img/examples/3-2-glasses.png" alt="Enter the word &quot;glasses&quot;..." /></li>
+    <li>Make sure that the two drop-down-menus are set to <em>answered with</em> and <em>Yes</em>, then click <img src="img/icons/plus.png" alt="plus icon" /> <em>Add</em>. <img src="img/examples/3-3-add.png" alt="Add" /></li>
+    <li>Now to add the second filter you click the <em>Questionnaire</em> button <img src="img/icons/pencil.png" alt="pencil icon" /> again.</li>
+    <li>Enter the word <em>&quot;motiv&quot;</em> and select the question <em>What motivated you to participate in our simulation patient program?</em>. <img src="img/examples/3-4-motiv.png" alt="Enter the word &quot;motiv&quot;" /></li>
+    <li>Make sure that the drop-down-menu reads <em>ansawered with</em> and enter the word <em>&quot;money&quot;</em> in the textbox. Then, click <img src="img/icons/plus.png" alt="plus-icon" /> <em>Add</em>. <img src="img/examples/3-5-money.png" alt="Add" /></li>
+    </ol>
+    <p>Now you see all the simulated patients that wear glasses and answered the motivation-question with an answer containing the word <em>&quot;money&quot;</em>.</p>
+    <div class="figure">
+    <img src="img/examples/3-6-result.png" alt="SP database with all SPs wearing glasses and motivated by money" /><p class="caption">SP database with all SPs wearing glasses and motivated by money</p>
+    </div>
+    </blockquote>
+    </div>
+    </div>
+    <div id="sp-details-view" class="section level2">
+    <h2><a href="#sp-details-view"><span class="header-section-number">2.3</span> SP details view</a></h2>
+    <p>As has been mentioned in chapter <a href="#sp-table-view">SP table view</a>, as soon as you click on an entry in the SP table, you are presented with a view that presents all the details that have been recorded of the given simulated patient. In figure 2-10, this view is depicted with highlighted areas of interest.</p>
+    <p>The general controls on the top right of the screen, highlighted in red, allow you to change the <a href="#sp-status">status</a> of the SP or delete the SP, synchronize the data on this SP with the <a href="#the-sp-portal">SP Portal</a>, go to the editing screen or print the SPs data.</p>
+    <p>In the area highlighted in green you have all the regular information about the selected SP. The information is divided up in several categories to not clutter the screen. In the bottom part (yellow highlight) you see the questionnaire for the current SP. Note that the questionnaire contents here are consisting of example data and can be customized to your liking (see chapter <a href="#the-questionnaire">The questionnaire</a>).</p>
+    <div class="figure">
+    <img src="img/2-10-sp-details.png" alt="2-10: The SP details view with the general controls highlighted in red, the details tabs highlighted in green and the questionnaire highlighted in yellow." /><p class="caption">2-10: The SP details view with the general controls highlighted in red, the details tabs highlighted in green and the questionnaire highlighted in yellow.</p>
+    </div>
+    <div id="editing-sp-data" class="section level3">
+    <h3><a href="#editing-sp-data"><span class="header-section-number">2.3.1</span> Editing SP data</a></h3>
+    <p>There are several types of data that can be edited. Let's concentrate on the SPs basic data first. The following example shows you how to change SP details. When you click on <img src="img/icons/plus.png" alt="plus icon" /> <em>Add SP</em> below the <a href="#sp-table-view">SP table view</a> or if you click on <img src="img/icons/pencil.png" alt="pencil icon" /> <em>Edit</em> in the controls panel in the top right of the screen, the same mask will show. So the procedure for editing SP data or adding a new SP is basically the same.</p>
+    <blockquote>
+    <p><strong>Example: Adding a new SP or Editing SP basic data</strong></p>
+    <p>We want to edit some basic attributes of the simulated patient <em>Isaac Hausner</em>. After we selected him in the <a href="#sp-table-view">SP table view</a> by clicking on his name, we can edit his data by following these steps:</p>
+    <ol style="list-style-type: decimal">
+    <li>Click on <img src="img/icons/pencil.png" alt="pencil icon" /> <em>Edit</em> in the controls panel in the top right of the screen. <img src="img/examples/edit-sp-1.png" alt="Click on Edit" /></li>
+    <li>In the upcoming screen you can edit the name and contact data of the SP. For example you can change his email address. <img src="img/examples/edit-sp-2.png" alt="Editing the mail address" /></li>
+    <li>If you click on the tab <em>particulars</em>, you're able to edit additional information, such as birth date, height, weight, marital status etc. We can e.g. change his profession by clicking on the profession suggest box and clicking or typing a new profession. <img src="img/examples/edit-sp-3.png" alt="Select a new profession" /></li>
+    <li>Editing bank account information works the same way. You can enter account number and bank address information in the entry mask. The country dropdown is the same type of dropdown menu as the <em>profession</em> and <em>nationality</em> boxes found in the <em>Particulars</em> tab. <img src="img/examples/edit-sp-4.png" alt="Changing bank account information" /></li>
+    <li>You may also add comments with custom formatting to each SP. These comments can also be searched using the <a href="#quick-search">quick search</a> and can therefore be used to add custom information. The formatting options are a subset of those found in regular word processing software. <img src="img/examples/edit-sp-5.png" alt="Adding comments" /></li>
+    <li>After you have done your changes, click on <img src="img/icons/disk.png" alt="disk icon" /> <em>Save</em> on the top right of the control panel. If you decided to throw away your changes, you can also click on <img src="img/icons/closethick.png" alt="close icon" /> <em>Cancel</em>. <img src="img/examples/edit-sp-6.png" alt="Saving your changes" /></li>
+    </ol>
+    </blockquote>
+    <p>Additionally, there are some attributes that have to be edited by other means. These would be the <em>Language skill</em>, the <a href="#define-and-use-attributes">attributes</a> and <a href="#the-questionnaire">the questionnaire</a>. The latter two are treated in their own chapters.</p>
+    <p>You may want to have certain SPs who are able to communicate in certain languages. The language skills tab allows you to specifically define which languages a simulated patient is able to speak on what level.</p>
+    <blockquote>
+    <p><strong>Example: Editing language skills</strong></p>
+    <p>You want to add language skills to a certain SP.</p>
+    <ol style="list-style-type: decimal">
+    <li>Go to the <em>Language skills</em> tab in the <a href="#sp-details-view">SP details view</a>. <img src="img/examples/langSkill-1.png" alt="Select the language skills tab" /></li>
+    <li>Select one of the pre-defined languages from the language drop down. <img src="img/examples/langSkill-2.png" alt="Select a language" /></li>
+    <li>Select the skill level at which the SP is speaking this language. <img src="img/examples/langSkill-3.png" alt="Select the language skill level" /></li>
+    <li>Click on <img src="img/icons/plus.png" alt="plus icon" /> <em>Add language skill</em> <img src="img/examples/langSkill-4.png" alt="Click on Add language skill" /></li>
+    <li>You will now see the language skill has been added. To delete it again, click on the <img src="img/icons/trash.png" alt="trash icon" /> icon on the right side of the entry you want to delete. <img src="img/examples/langSkill-5.png" alt="To delete, click on the trash icon" /></li>
+    </ol>
+    </blockquote>
+    </div>
+    <div id="status-deletion-and-synchronisation" class="section level3">
+    <h3><a href="#status-deletion-and-synchronisation"><span class="header-section-number">2.3.2</span> Status, deletion and synchronisation</a></h3>
+    <p>In the SP database, each SP has a status. There are several statuses an SP can be in and these all have different implications which mainly show in the possible actions of the control panel. In the following list, the implications of each status is described.</p>
+    <ul>
+    <li><strong>Active</strong>: This is the default status and means, that the SP is available for OSCEs and can be modified in any way you like.</li>
+    <li><strong>Inactive</strong>: An SP can be excluded from participating in future OSCEs by deactivating the SP. This means, that he cannot be selected in any new OSCEs and his data can not be exported to the <a href="#the-sp-portal">SP Portal</a></li>
+    <li><strong>Anonymized</strong>: After an SP has decided that he does not want to take part in any OSCEs anymore but he has been in OSCEs in the past, the SP can be anonyized. This means that any personal data of the SP gets erased.</li>
+    <li><strong>Exported</strong>: This status indicates, that the SPs personal data is currently accessible through the <a href="#the-sp-portal">SP Portal</a> and to prevent inconsistencies the SPs data can not be edited.</li>
+    </ul>
+    <p>Now a few examples follow to help you with actions that are relevant to the statuses.</p>
+    <blockquote>
+    <p><strong>Example: Deleting / anonymizing an SP</strong></p>
+    <p>To delete an SP, follow these steps:</p>
+    <ol style="list-style-type: decimal">
+    <li>After you selected the SP to delete from the table, click on the <a href="img/icons/trash.png">trash icon</a> <em>Delete</em> button on the right side of the SP controls panel. <img src="img/examples/delete-sp-1.png" alt="Click the delete button" /></li>
+    <li>You will be presented with a pop-up that asks you for confirmation. In this pop-up, click &quot;OK&quot;. <img src="img/examples/delete-sp-2.png" alt="Confirm delete" /></li>
+    </ol>
+    <p>If the SP has already been assigned to a role in an OSCE in the past, the SP cannot be physically deleted from the database. Instead, all SP data will be <em>anonymized</em> (replaced with <em>xxx</em>).</p>
+    </blockquote>
+    <blockquote>
+    <p><strong>Example: Deactivating and reactivating an SP</strong></p>
+    <ol style="list-style-type: decimal">
+    <li>If an SP should be deactivated, click on the <img src="img/icons/closethick.png" alt="close icon" /> <em>Deactivate</em> button. <img src="img/examples/deactivate-sp-1.png" alt="Deactivate SP" /></li>
+    <li>After the SP has been deactivated, you can choose to reactivate the SP again by clicking on the <img src="img/icons/check.png" alt="check icon" /> <em>Activate</em> button to reactivate the SP. <img src="img/examples/deactivate-sp-3.png" alt="Reactivating the SP" /></li>
+    </ol>
+    </blockquote>
+    </div>
+    <div id="define-and-use-attributes" class="section level3">
+    <h3><a href="#define-and-use-attributes"><span class="header-section-number">2.3.3</span> Define and use attributes</a></h3>
+    <p>For SPs it is often desirable to exclude certain body parts from examination, e.g. if they are scarred somewhere or just don't feel comfortable with it. Defining such attributes will later on help in assigning suited SPs to roles.</p>
+    <p>There are three different types of <em>attributes</em>: <em>scar</em>, <em>tattoo</em> and <em>Do not examine</em>. These are pretty self-explanatory.</p>
+    <p>All the attributes can be found when you click on <em>Attributes</em> in the <em>SP</em>-section of the <em>OSCE Managers</em> navigation. You will be</p>
+    <blockquote>
+    <p><strong>Example: Defining new attributes</strong></p>
+    <p>To add new attributes that could be assigned to SPs, follow these steps:</p>
+    <ol style="list-style-type: decimal">
+    <li>In the navigation menu on the left in the <em>SP</em>-box, select <em>Attributes</em>. <img src="img/examples/2.5.4a-1-attributes.png" alt="Bla" /></li>
+    <li>You will now see a list with</li>
+    </ol>
+    </blockquote>
+    <blockquote>
+    <p><strong>Example: Changing and deleting attributes</strong></p>
+    </blockquote>
+    <blockquote>
+    <p><strong>Example: Assigning predefined attributes</strong></p>
+    <p>To assign attributes that have been previously defined (see next</p>
+    </blockquote>
+    </div>
+    </div>
+    <div id="the-questionnaire" class="section level2">
+    <h2><a href="#the-questionnaire"><span class="header-section-number">2.4</span> The questionnaire</a></h2>
+    </div>
+    </div>
+    <div id="the-examiner-database" class="section level1">
+    <h1><a href="#the-examiner-database"><span class="header-section-number">3</span> The examiner database</a></h1>
+    </div>
+    <div id="role-management" class="section level1">
+    <h1><a href="#role-management"><span class="header-section-number">4</span> Role management</a></h1>
+    </div>
+    <div id="osce-creation" class="section level1">
+    <h1><a href="#osce-creation"><span class="header-section-number">5</span> OSCE creation</a></h1>
+    <p>Sequence of actions</p>
+    </div>
+    <div id="the-sp-portal" class="section level1">
+    <h1><a href="#the-sp-portal"><span class="header-section-number">6</span> The SP Portal</a></h1>
+    </div>
+  </div>
+
+    <div id="TOC-container">
+    <div id="TOC">
+      <h2>Table of contents</h2>
+    <ul>
+    <li><a href="#introduction-and-overview"><span class="toc-section-number">1</span> Introduction and overview</a><ul>
+    <li><a href="#system-architecture"><span class="toc-section-number">1.1</span> System Architecture</a></li>
+    <li><a href="#user-interface"><span class="toc-section-number">1.2</span> User Interface</a></li>
+    <li><a href="#modules"><span class="toc-section-number">1.3</span> Modules</a></li>
+    </ul></li>
+    <li><a href="#the-simulated-patient-database"><span class="toc-section-number">2</span> The simulated patient database</a><ul>
+    <li><a href="#sp-table-view"><span class="toc-section-number">2.1</span> SP table view</a><ul>
+    <li><a href="#sorting"><span class="toc-section-number">2.1.1</span> Sorting</a></li>
+    <li><a href="#quick-search"><span class="toc-section-number">2.1.2</span> Quick search</a></li>
+    </ul></li>
+    <li><a href="#advanced-filters"><span class="toc-section-number">2.2</span> Advanced filters</a><ul>
+    <li><a href="#linkage"><span class="toc-section-number">2.2.1</span> Linkage</a></li>
+    <li><a href="#comparisons"><span class="toc-section-number">2.2.2</span> Comparisons</a></li>
+    <li><a href="#attribute-and-questionnaire-filters"><span class="toc-section-number">2.2.3</span> Attribute and Questionnaire filters</a></li>
+    </ul></li>
+    <li><a href="#sp-details-view"><span class="toc-section-number">2.3</span> SP details view</a><ul>
+    <li><a href="#editing-sp-data"><span class="toc-section-number">2.3.1</span> Editing SP data</a></li>
+    <li><a href="#status-deletion-and-synchronisation"><span class="toc-section-number">2.3.2</span> Status, deletion and synchronisation</a></li>
+    <li><a href="#define-and-use-attributes"><span class="toc-section-number">2.3.3</span> Define and use attributes</a></li>
+    </ul></li>
+    <li><a href="#the-questionnaire"><span class="toc-section-number">2.4</span> The questionnaire</a></li>
+    </ul></li>
+    <li><a href="#the-examiner-database"><span class="toc-section-number">3</span> The examiner database</a></li>
+    <li><a href="#role-management"><span class="toc-section-number">4</span> Role management</a></li>
+    <li><a href="#osce-creation"><span class="toc-section-number">5</span> OSCE creation</a></li>
+    <li><a href="#the-sp-portal"><span class="toc-section-number">6</span> The SP Portal</a></li>
+    </ul>
+    </div>
+   </div>
+  
+  </div>
+</body>
+</html>

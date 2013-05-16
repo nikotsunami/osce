@@ -343,6 +343,7 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 		}
 	}
 	
+	@Override
 	public void changeLocale(Locale locale) {
 		int indexOfHash;
 		String newLocaleString;
@@ -363,6 +364,17 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 			}
 		}
 		Window.open(url, "_self", "");
+	}
+	
+	@Override
+	public void showHelp() {
+		String url = Location.getHref();
+		url = url.replaceAll("[a-zA-Z0-9_-]+\\.html.*", "");
+		if (url.lastIndexOf('/') + 1 != url.length()) {
+			url = url + "/";
+		}
+		url = url + "help";
+		Window.open(url, "_blank", "");
 	}
 
 	@Override
