@@ -253,10 +253,22 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 			}
 		}
 		
+		
+		
 		if(value==null)	
 			this.addStyleDependentName("selectedwhite");
 		else
+		{
+			if(value.ordinal()==15)
+			{
+				headerLabel.getElement().getStyle().setColor("white");
+			}
+			else
+			{
+				headerLabel.getElement().getStyle().setColor("black");
+			}
 			this.addStyleDependentName("selected" +value.toString());
+		}
 	}
 	
 	public void changeParcourHeaderColor(String value)

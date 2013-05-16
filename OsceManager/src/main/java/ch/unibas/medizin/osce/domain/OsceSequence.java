@@ -33,7 +33,7 @@ public class OsceSequence {
 	 private OsceDay osceDay;
 	 
 	 @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceSequence")
-	 @OrderBy("color")
+	 //@OrderBy("color")
 	 private List<Course> courses = new ArrayList<Course>();
 	 
 	 @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceSequence")

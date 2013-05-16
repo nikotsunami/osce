@@ -1520,8 +1520,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				//Module 5 Bug Report Solution
 				if(osceProxy.getOsceStatus() == OsceStatus.OSCE_CLOSED)
 				{
-					headerView.getColorPicker().setVisible(false);	
-					headerView.getHeaderSimplePanel().setHeight("265px");
+					//headerView.getColorPicker().setVisible(false);	
+					headerView.getHeaderSimplePanel().setHeight("230px");
 				}
 				if(osceProxy.getOsceStatus()==OsceStatus.OSCE_FIXED || osceProxy.getOsceStatus()==OsceStatus.OSCE_GENRATED)
 				{
