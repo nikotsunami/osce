@@ -259,16 +259,22 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 			public void onValueChange(ValueChangeEvent<OsceDayProxy> event) {
 				if (event.getValue() != null)
 				{
-					if (event.getValue().getLunchBreakStart() == null)
+					if (osceProxy != null)
 					{
-						upRot.setEnabled(false);
-						downRot.setEnabled(false);
-					}
-					else
-					{
-						upRot.setEnabled(true);
-						downRot.setEnabled(true);
-					}
+						OsceDayProxy osceDayProxy = event.getValue();
+						String rotationStr = osceDayProxy.getBreakByRotation();
+						
+						if (rotationStr.contains(osceProxy.getLunchBreak().toString()))
+						{
+							upRot.setEnabled(true);
+							downRot.setEnabled(true);
+						}
+						else
+						{
+							upRot.setEnabled(false);
+							downRot.setEnabled(false);
+						}
+					}					
 				}
 			}
 		});
