@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncException;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
@@ -48,6 +49,8 @@ import ch.unibas.medizin.osce.shared.scaffold.AnamnesisChecksValueRequestNonRoo;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.LocaleInfo;
@@ -108,7 +111,7 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	private DMZSyncServiceAsync dmxSyncService = null;
 	private OsceConstantsWithLookup messageLookup = GWT.create(OsceConstantsWithLookup.class);
 	private static final OsceConstants constants = GWT.create(OsceConstants.class);
-	private String stringForAnonymize = new String("XXX");
+	private static final String stringForAnonymize = constants.anonymisationString();
 	private int intForAnomize = 1000;
 
 	public StandardizedPatientDetailsActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
@@ -745,40 +748,40 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 
 	}
 	
-	public void onAnonymizeClicked(){
+	public void onAnonymizeClicked() {
 		StandardizedPatientRequest standardizedPatientRequest = requests
 				.standardizedPatientRequest();
 		standardizedPatientProxy = standardizedPatientRequest
 				.edit(standardizedPatientProxy);
-		standardizedPatientProxy
-				.setStatus(StandardizedPatientStatus.ANONYMIZED);
 		
 		//Fields which are not include : Nationality,Professional,Description,imagePath,videoPath,birthday,email,Bank.Nationality
-		standardizedPatientProxy.setName((standardizedPatientProxy.getName() !=null)?standardizedPatientProxy.getName().concat(stringForAnonymize):stringForAnonymize);
-		standardizedPatientProxy.setPreName((standardizedPatientProxy.getPreName() !=null)?standardizedPatientProxy.getPreName().concat(stringForAnonymize):stringForAnonymize);
-		standardizedPatientProxy.setStreet((standardizedPatientProxy.getStreet() !=null)?standardizedPatientProxy.getStreet().concat(stringForAnonymize):stringForAnonymize);
-		standardizedPatientProxy.setCity((standardizedPatientProxy.getCity() !=null)?standardizedPatientProxy.getCity().concat(stringForAnonymize):stringForAnonymize);
-		standardizedPatientProxy.setPostalCode((standardizedPatientProxy.getPostalCode() !=null)?standardizedPatientProxy.getPostalCode().concat(stringForAnonymize):stringForAnonymize);
-		standardizedPatientProxy.setTelephone((standardizedPatientProxy.getTelephone() !=null)?standardizedPatientProxy.getTelephone().concat(stringForAnonymize):stringForAnonymize);
+		standardizedPatientProxy.setName(constants.anonymisationString());
+		standardizedPatientProxy.setPreName(constants.anonymisationString());
+		standardizedPatientProxy.setStreet(constants.anonymisationString());
+		standardizedPatientProxy.setCity(constants.anonymisationString());
+		standardizedPatientProxy.setPostalCode(constants.anonymisationString());
+		standardizedPatientProxy.setTelephone(constants.anonymisationString());
 		
-		standardizedPatientProxy.setTelephone2((standardizedPatientProxy.getTelephone2() !=null)? standardizedPatientProxy.getTelephone2().concat(stringForAnonymize):stringForAnonymize);
-		standardizedPatientProxy.setMobile((standardizedPatientProxy.getMobile() !=null)?standardizedPatientProxy.getMobile().concat(stringForAnonymize):stringForAnonymize);
+		standardizedPatientProxy.setTelephone2(constants.anonymisationString());
+		standardizedPatientProxy.setMobile(constants.anonymisationString());
 		
-//		standardizedPatientProxy.setHeight(standardizedPatientProxy.getHeight()*intForAnomize);
-//		standardizedPatientProxy.setWeight(standardizedPatientProxy.getWeight()*intForAnomize);
+		standardizedPatientProxy.setHeight(150 + (new Random()).nextInt(51));
+		standardizedPatientProxy.setWeight(50 + (new Random()).nextInt(51));
 		
-//		standardizedPatientProxy.getNationality().setNationality(standardizedPatientProxy.getNationality().getNationality().concat(stringForAnonymize));
-//		standardizedPatientProxy.getProfession().setProfession(standardizedPatientProxy.getProfession().getProfession().concat(stringForAnonymize));
-//		standardizedPatientProxy.getDescriptions().setDescription(standardizedPatientProxy.getDescriptions().getDescription().concat(stringForAnonymize));
+//		standardizedPatientProxy.setNationality(null);
+//		standardizedPatientProxy.setProfession(null);
+//		standardizedPatientProxy.setLangskills(null);
 		
-		standardizedPatientProxy.getBankAccount().setBankName((standardizedPatientProxy.getBankAccount().getBankName() !=null)?standardizedPatientProxy.getBankAccount().getBankName().concat(stringForAnonymize):stringForAnonymize);
-		standardizedPatientProxy.getBankAccount().setIBAN((standardizedPatientProxy.getBankAccount().getIBAN() !=null)?standardizedPatientProxy.getBankAccount().getIBAN().concat(stringForAnonymize):stringForAnonymize);
-		standardizedPatientProxy.getBankAccount().setBIC((standardizedPatientProxy.getBankAccount().getBIC() !=null)?standardizedPatientProxy.getBankAccount().getBIC().concat(stringForAnonymize):stringForAnonymize);
-		standardizedPatientProxy.getBankAccount().setOwnerName((standardizedPatientProxy.getBankAccount().getOwnerName() !=null)?standardizedPatientProxy.getBankAccount().getOwnerName().concat(stringForAnonymize):stringForAnonymize) ;
-		standardizedPatientProxy.getBankAccount().setPostalCode((standardizedPatientProxy.getBankAccount().getPostalCode() !=null)?standardizedPatientProxy.getBankAccount().getPostalCode().concat(stringForAnonymize):stringForAnonymize);
-		standardizedPatientProxy.getBankAccount().setCity((standardizedPatientProxy.getBankAccount().getCity() !=null)?standardizedPatientProxy.getBankAccount().getCity().concat(stringForAnonymize):stringForAnonymize);
+		standardizedPatientProxy.getDescriptions().setDescription(constants.anonymisationString());
 		
-		standardizedPatientProxy.setSocialInsuranceNo((standardizedPatientProxy.getSocialInsuranceNo() !=null)?standardizedPatientProxy.getSocialInsuranceNo().concat(stringForAnonymize):stringForAnonymize);
+		standardizedPatientProxy.getBankAccount().setBankName(constants.anonymisationString());
+		standardizedPatientProxy.getBankAccount().setIBAN(constants.anonymisationString());
+		standardizedPatientProxy.getBankAccount().setBIC(constants.anonymisationString());
+		standardizedPatientProxy.getBankAccount().setOwnerName(constants.anonymisationString()) ;
+		standardizedPatientProxy.getBankAccount().setPostalCode(constants.anonymisationString());
+		standardizedPatientProxy.getBankAccount().setCity(constants.anonymisationString());
+		
+		standardizedPatientProxy.setSocialInsuranceNo(constants.anonymisationString());
 		
 		standardizedPatientRequest.persist()
 				.using(standardizedPatientProxy)
@@ -787,7 +790,8 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 					@Override
 					public void onSuccess(Void arg0) {
 						// init();
-					
+						standardizedPatientProxy
+								.setStatus(StandardizedPatientStatus.ANONYMIZED);
 						view.setStatusIcon(StandardizedPatientStatus.ANONYMIZED);
 						placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatientProxy.stableId(), Operation.NEW));
 					}
@@ -797,47 +801,35 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	
 	@Override
 	public void deletePatientClicked() {
-		// TODO replace with appropriate message
+		MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
 
+		// if patient is in a role; anonymize data; else delete SP
 		if (standardizedPatientProxy.getPatientInSemester() != null
 				&& standardizedPatientProxy.getPatientInSemester().size() > 0) {
-
-			StandardizedPatientRequest standardizedPatientRequest = requests
-					.standardizedPatientRequest();
-			standardizedPatientProxy = standardizedPatientRequest
-					.edit(standardizedPatientProxy);
-			standardizedPatientProxy
-					.setStatus(StandardizedPatientStatus.ANONYMIZED);
-			standardizedPatientRequest.persist()
-					.using(standardizedPatientProxy)
-					.fire(new OSCEReceiver<Void>() {
-
-						@Override
-						public void onSuccess(Void arg0) {
-							// init();
-
-							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
-							dialogBox.showConfirmationDialog(constants.warningPatientHasRole());
-							view.setStatusIcon(StandardizedPatientStatus.ANONYMIZED);
-						}
-
-					});
-		
-			//Module 3 : Task B
+			dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent e) {
+					onAnonymizeClicked();
+				}
+			});
+			
+			dialogBox.showYesNoDialog(constants.warningAnonymizeSp());
 		} else {
-		
-		if (!Window.confirm("Really delete this entry? You cannot undo this change.")) {
-            return;
-        }
-		
-        requests.standardizedPatientRequest().remove().using(standardizedPatientProxy).fire(new OSCEReceiver<Void>() {
-            public void onSuccess(Void ignore) {
-                if (widget == null) {
-                    return;
-                }
-            	placeController.goTo(new StandardizedPatientPlace("StandardizedPatientPlace!DELETED"));
-            }
-        });
+			dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent e) {
+					requests.standardizedPatientRequest().remove().using(standardizedPatientProxy).fire(new OSCEReceiver<Void>() {
+			            public void onSuccess(Void ignore) {
+			                if (widget == null) {
+			                    return;
+			                }
+			            	placeController.goTo(new StandardizedPatientPlace("StandardizedPatientPlace!DELETED"));
+			            }
+			        });
+				}
+			});
+			
+			dialogBox.showYesNoDialog(constants.warningDeleteSp());
 		}
 		
 	}

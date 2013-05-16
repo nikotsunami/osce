@@ -91,6 +91,8 @@ public interface OsceConstants extends Constants {
 	public String anamnesisValues();
 
 	public String anonymize();
+	
+	public String anonymisationString();
 
 	public String answer();
 
@@ -1185,12 +1187,16 @@ public interface OsceConstants extends Constants {
 	public String violationMessage();
 
 	public String warning();
+	
+	public String warningAnonymizeSp();
 
 	public String warningAssignedRoleTopic();
 
 	public String warningBreakIsAtEnd();
 
 	public String warningDateEmpty();
+	
+	public String warningDeleteSp();
 
 	public String warningEndTime();
 
