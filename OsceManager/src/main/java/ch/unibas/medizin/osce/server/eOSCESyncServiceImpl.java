@@ -582,6 +582,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 								rotationsElement.appendChild(rotationElement);
 								
 								rotationElement.setAttribute("sequence", String.format("%02d", (l+1)));
+								rotationElement.setAttribute("id", ("r" + String.format("%02d", (l+1)) + "p" + course.getId()));
+								rotationElement.setAttribute("title", ("Rotation " + String.format("%02d", (l+1)) + " " + constants.getString(course.getColor())));
 								
 								Element oscePostRoomsEle = doc.createElement("oscepostrooms");
 								rotationElement.appendChild(oscePostRoomsEle);
