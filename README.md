@@ -28,6 +28,12 @@ Known Issues
     gender != female* should return all the SPs that have no gender assigned, which
 	it currently doesn't (or of course if you search for *gender != male*, it should
 	return all females and NULLs).
+  * When anonymizing an SP, nothing is anonymized; some fields just get an "XXX"
+	attached to them.
+  * When deleting an SP that has an assigned role; a warning pops up, that the 
+	SP can not be deleted because uf assigned roles, but then tha status of the
+	SP will be changed to ANONYMIZED without actually trying to anonymize 
+	anything or warning the user, that it is going to anonymize data.
 - Examinators:
   * SimplePager is missing in Examinator table
 - Role Definitions:
@@ -86,7 +92,8 @@ Suggested Features / Improvements
 - Simulated Patients:
   * Instead of having separate "Delete" and "Anonymize" buttons, a single 
     delete-button would be sufficient, if the software would automatically
-    determine wether an SP could be deleted or has to be anonymized.
+    determine wether an SP could be deleted or has to be anonymized. (Of course
+	the user should be informed about what is going to happen and why!)
 - Attributes:
   * Possibly exchange TraitTypes enum with a traitType-table in database, so as 
     to allow for more customisation.
