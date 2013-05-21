@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.BellScheduleView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.BellScheduleViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
@@ -15,24 +16,47 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BellAssignmentType;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.Semesters;
+import ch.unibas.medizin.osce.shared.TimeBell;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.http.client.URL;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ValueListBox;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
 
@@ -63,6 +87,8 @@ public class BellScheduleActivity extends AbstractActivity implements
 	
 	private SelectChangeHandler removeHandler;
 	List<BellAssignmentType> bellAssignmentTypes;
+	
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 
 	public BellScheduleActivity(OsMaRequestFactory requests,
 			PlaceController placeController) {
@@ -298,5 +324,297 @@ public class BellScheduleActivity extends AbstractActivity implements
 		requests.getEventBus().fireEvent(
 				new ApplicationLoadingScreenEvent(false));
 
+	}
+
+	@Override
+	public void exportCsvSupervisorClicked(final int x, final int y) {
+		final PopupPanel popupPanel = new PopupPanel();
+		
+		popupPanel.setAutoHideEnabled(true);
+		popupPanel.setAnimationEnabled(true);
+		
+		final VerticalPanel mainVp = new VerticalPanel();
+		mainVp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		mainVp.setSpacing(7);
+		
+		final HorizontalPanel osceDayHp = new HorizontalPanel();
+		Label osceDayLbl = new Label(constants.osceDay() + " : ");
+		osceDayLbl.setWidth("130px");
+		final ValueListBox<OsceDayProxy> listBox = new ValueListBox<OsceDayProxy>(new AbstractRenderer<OsceDayProxy>() {
+
+			@Override
+			public String render(OsceDayProxy object) {
+				String dateVal = "";
+				if (object != null)
+					dateVal = DateTimeFormat.getFormat("yyyy-MM-dd").format(object.getOsceDate());
+				
+				return dateVal;
+			}
+		});
+		osceDayHp.add(osceDayLbl);
+		osceDayHp.add(listBox);
+		
+		requests.semesterRequestNonRoo().findAllOsceDayBySemester(semesterProxy.getId()).fire(new OSCEReceiver<List<OsceDayProxy>>() {
+
+			@Override
+			public void onSuccess(List<OsceDayProxy> response) {
+				if (response.size() > 0)
+					listBox.setValue(response.get(0));
+				
+				listBox.setAcceptableValues(response);		
+				
+				HorizontalPanel startToneHp = new HorizontalPanel();
+				Label startToneLbl = new Label(constants.startTone() + " : ");
+				startToneLbl.setWidth("130px");
+				final TextBox startToneTxtBox = new TextBox();
+				startToneTxtBox.setWidth("95px");
+				startToneHp.add(startToneLbl);
+				startToneHp.add(startToneTxtBox);
+				startToneTxtBox.setValue("Sound");
+				startToneTxtBox.addBlurHandler(new BlurHandler() {
+					
+					@Override
+					public void onBlur(BlurEvent event) {
+						if (startToneTxtBox.getValue().isEmpty())
+							startToneTxtBox.setValue("Sound");
+					}
+				});
+				startToneTxtBox.addFocusHandler(new FocusHandler() {
+					
+					@Override
+					public void onFocus(FocusEvent event) {
+						if (startToneTxtBox.getValue().equals("Sound"))
+							startToneTxtBox.setValue("");
+					}
+				});
+				
+				
+				HorizontalPanel endToneHp = new HorizontalPanel();
+				Label endToneLbl = new Label(constants.endDate() + " : ");
+				endToneLbl.setWidth("130px");
+				final TextBox endToneTxtBox = new TextBox();
+				endToneTxtBox.setWidth("95px");
+				endToneHp.add(endToneLbl);
+				endToneHp.add(endToneTxtBox);
+				
+				endToneTxtBox.setValue("Sound");
+				endToneTxtBox.addBlurHandler(new BlurHandler() {
+					
+					@Override
+					public void onBlur(BlurEvent event) {
+						if (endToneTxtBox.getValue().isEmpty())
+							endToneTxtBox.setValue("Sound");
+					}
+				});
+				endToneTxtBox.addFocusHandler(new FocusHandler() {
+					
+					@Override
+					public void onFocus(FocusEvent event) {
+						if (endToneTxtBox.getValue().equals("Sound"))
+							endToneTxtBox.setValue("");
+					}
+				});
+				
+				HorizontalPanel prePostHp = new HorizontalPanel();
+				Label prePostLbl = new Label(constants.prePostEnd() + " : ");
+				prePostLbl.setWidth("130px");
+				final TextBox prePostTxtBox = new TextBox();
+				final TextBox prePostToneTxtBox = new TextBox();
+				prePostTxtBox.setWidth("42px");
+				prePostTxtBox.getElement().getStyle().setMarginRight(5, Unit.PX);
+				prePostToneTxtBox.setWidth("42px");
+				prePostHp.add(prePostLbl);
+				prePostHp.add(prePostTxtBox);
+				prePostHp.add(prePostToneTxtBox);
+				
+				prePostTxtBox.setValue("Minutes");
+				prePostToneTxtBox.setValue("Sound");
+				prePostTxtBox.addBlurHandler(new BlurHandler() {
+					
+					@Override
+					public void onBlur(BlurEvent event) {
+						if (prePostTxtBox.getValue().isEmpty())
+							prePostTxtBox.setValue("Minutes");
+					}
+				});
+				prePostTxtBox.addFocusHandler(new FocusHandler() {
+					
+					@Override
+					public void onFocus(FocusEvent event) {
+						if (prePostTxtBox.getValue().equals("Minutes"))
+							prePostTxtBox.setValue("");
+					}
+				});
+				
+				prePostToneTxtBox.addBlurHandler(new BlurHandler() {
+					
+					@Override
+					public void onBlur(BlurEvent event) {
+						if (prePostToneTxtBox.getValue().isEmpty())
+							prePostToneTxtBox.setValue("Sound");
+					}
+				});
+				prePostToneTxtBox.addFocusHandler(new FocusHandler() {
+					
+					@Override
+					public void onFocus(FocusEvent event) {
+						if (prePostToneTxtBox.getValue().equals("Sound"))
+							prePostToneTxtBox.setValue("");
+					}
+				});
+				
+				HorizontalPanel preBreakHp = new HorizontalPanel();
+				Label preBreakLbl = new Label(constants.preBreakEnd() + " : ");
+				preBreakLbl.setWidth("130px");
+				final TextBox preBreakTxtBox = new TextBox();
+				final TextBox preBreakToneTxtBox = new TextBox();
+				preBreakTxtBox.getElement().getStyle().setMarginRight(5, Unit.PX);
+				preBreakTxtBox.setWidth("42px");
+				preBreakToneTxtBox.setWidth("42px");				
+				preBreakHp.add(preBreakLbl);
+				preBreakHp.add(preBreakTxtBox);
+				preBreakHp.add(preBreakToneTxtBox);
+				
+				preBreakTxtBox.setValue("Minutes");
+				preBreakToneTxtBox.setValue("Sound");
+				preBreakTxtBox.addBlurHandler(new BlurHandler() {
+					
+					@Override
+					public void onBlur(BlurEvent event) {
+						if (preBreakTxtBox.getValue().isEmpty())
+							preBreakTxtBox.setValue("Minutes");
+					}
+				});
+				preBreakTxtBox.addFocusHandler(new FocusHandler() {
+					
+					@Override
+					public void onFocus(FocusEvent event) {
+						if (preBreakTxtBox.getValue().equals("Minutes"))
+							preBreakTxtBox.setValue("");
+					}
+				});
+				
+				preBreakToneTxtBox.addBlurHandler(new BlurHandler() {
+					
+					@Override
+					public void onBlur(BlurEvent event) {
+						if (preBreakToneTxtBox.getValue().isEmpty())
+							preBreakToneTxtBox.setValue("Sound");
+					}
+				});
+				preBreakToneTxtBox.addFocusHandler(new FocusHandler() {
+					
+					@Override
+					public void onFocus(FocusEvent event) {
+						if (preBreakToneTxtBox.getValue().equals("Sound"))
+							preBreakToneTxtBox.setValue("");
+					}
+				});
+				
+				HorizontalPanel okHp = new HorizontalPanel();
+				okHp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);		
+				IconButton okBtn = new IconButton();
+				okBtn.setIcon("check");
+				okBtn.setText(constants.okBtn());
+				
+				okBtn.addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						
+						if (startToneTxtBox.getValue().isEmpty() || startToneTxtBox.getValue().equals("Sound") || endToneTxtBox.getValue().isEmpty() || endToneTxtBox.getValue().equals("Sound"))
+						{
+							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+							dialogBox.showConfirmationDialog(constants.startEndToneErr());
+							return;							
+						}
+						
+						if (!startToneTxtBox.getValue().matches("[0-9]+"))
+						{
+							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+							dialogBox.showConfirmationDialog("Enter correct value for start tone");
+							return;
+						}
+						
+						if (!endToneTxtBox.getValue().matches("[0-9]+"))
+						{
+							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+							dialogBox.showConfirmationDialog("Enter correct value for end tone");
+							return;
+						}
+						
+						if (!prePostTxtBox.getValue().matches("[0-9]+"))
+						{
+							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+							dialogBox.showConfirmationDialog("Enter correct value for pre post end time");
+							return;
+						}
+						
+						if (!prePostToneTxtBox.getValue().matches("[0-9]+"))
+						{
+							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+							dialogBox.showConfirmationDialog("Enter correct value for pre post end tone");
+							return;
+						}
+						
+						if (!preBreakTxtBox.getValue().matches("[0-9]+"))
+						{
+							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+							dialogBox.showConfirmationDialog("Enter correct value for pre break end value");
+							return;
+						}
+						
+						if (!preBreakToneTxtBox.getValue().matches("[0-9]+"))
+						{
+							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+							dialogBox.showConfirmationDialog("Enter correct value for pre break tone");
+							return;
+						}
+						
+						popupPanel.hide();
+						OsceDayProxy osceDayProxy = listBox.getValue();
+						
+						int time = view.getTimeInMinute();
+						TimeBell timeBell = view.isPlusTime();
+						if (timeBell.equals(TimeBell.FALSE))
+							time = -time;
+						else if (timeBell.equals(TimeBell.NONE))
+							time = 0;
+						
+						String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.ALARM_SCHEDULE_SUPERVISOR.ordinal()));          
+						String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+								.concat("&").concat(ResourceDownloadProps.OSCEDAYID).concat("=").concat(URL.encodeQueryString(osceDayProxy.getId().toString()))
+								.concat("&").concat(ResourceDownloadProps.START_TONE).concat("=").concat(URL.encodeQueryString(startToneTxtBox.getValue()))
+								.concat("&").concat(ResourceDownloadProps.END_TONE).concat("=").concat(URL.encodeQueryString(endToneTxtBox.getValue()))
+								.concat("&").concat(ResourceDownloadProps.PRE_POST_END_TIME).concat("=").concat(URL.encodeQueryString((prePostTxtBox.getValue().isEmpty() || prePostTxtBox.getValue().equals("Minutes")) ? "0" : prePostTxtBox.getValue()))
+								.concat("&").concat(ResourceDownloadProps.PRE_POST_END_TONE).concat("=").concat(URL.encodeQueryString((prePostToneTxtBox.getValue().isEmpty() || prePostToneTxtBox.getValue().equals("Tone")) ? "0" : prePostToneTxtBox.getValue()))
+								.concat("&").concat(ResourceDownloadProps.PRE_BREAK_END_TIME).concat("=").concat(URL.encodeQueryString((preBreakTxtBox.getValue().isEmpty() || preBreakTxtBox.getValue().equals("Minutes")) ? "0" : preBreakTxtBox.getValue()))
+								.concat("&").concat(ResourceDownloadProps.PRE_BREAK_END_TONE).concat("=").concat(URL.encodeQueryString((preBreakToneTxtBox.getValue().isEmpty() || preBreakToneTxtBox.getValue().equals("Tone")) ? "0" : preBreakToneTxtBox.getValue()))
+								.concat("&").concat(ResourceDownloadProps.PLUS_TIME).concat("=").concat(URL.encodeQueryString(String.valueOf(time)));
+						Log.info("--> url is : " +url);
+						Window.open(url, "", "");	
+						
+					}
+				});
+				
+				okHp.add(okBtn);
+				
+				mainVp.add(osceDayHp);
+				mainVp.add(startToneHp);
+				mainVp.add(endToneHp);
+				mainVp.add(prePostHp);
+				//mainVp.add(prePostToneHp);
+				mainVp.add(preBreakHp);
+				//mainVp.add(preBreakToneHp);
+				mainVp.add(okHp);
+				
+				popupPanel.add(mainVp);
+				
+				popupPanel.setPopupPosition(x, y-275);
+				popupPanel.show();
+			}
+		});
+		
+		
 	}
 }

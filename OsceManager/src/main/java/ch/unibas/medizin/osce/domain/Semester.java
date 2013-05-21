@@ -60,5 +60,12 @@ public class Semester {
     	Log.info("Query String: " + query);
     	return q.getResultList();
     }    
-    
+
+    public static List<OsceDay> findAllOsceDayBySemester(Long semesterId)
+    {
+    	EntityManager em = entityManager();
+    	String sql = "SELECT od FROM OsceDay od WHERE od.osce.semester.id = " + semesterId;
+    	TypedQuery<OsceDay> query = em.createQuery(sql, OsceDay.class);
+    	return query.getResultList();
+    }
 }

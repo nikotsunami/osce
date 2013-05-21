@@ -781,7 +781,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 													optionElement.appendChild(optionSeqNoElement);
 													
 													Element optionCriteriaCountElement = doc.createElement("criteriacount");
-													optionCriteriaCountElement.appendChild(doc.createTextNode("[" + (option.getCriteriaCount() == null ? "0" : option.getCriteriaCount()) + "]"));
+													optionCriteriaCountElement.appendChild(doc.createTextNode((option.getCriteriaCount() == null ? "0" : option.getCriteriaCount().toString())));
 													optionElement.appendChild(optionCriteriaCountElement);
 												}
 											}

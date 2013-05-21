@@ -2624,5 +2624,13 @@ public class Assignment {
     		 }
     	 }
 		
-     }    	
+     }
+     
+     public static List<Assignment> findAssignmentByOsceDay(Long osceDayId)
+     {
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE a.type = 0 AND a.osceDay.id = " + osceDayId + " GROUP BY a.timeStart ORDER BY a.timeStart";
+    	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    	 return query.getResultList();
+     }
 } 

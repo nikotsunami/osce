@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BellAssignmentType;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.TimeBell;
@@ -100,6 +101,16 @@ public class BellScheduleViewImpl extends Composite implements
 
 	@UiField
 	Button okBtn;
+	
+	@UiField
+	IconButton csvExport;
+	
+	@UiHandler("csvExport")
+	public void csvExportClickec(ClickEvent event)
+	{
+		delegate.exportCsvSupervisorClicked(event.getScreenX(), event.getScreenY());
+	}
+	
 
 	@UiHandler("okBtn")
 	public void okButtonClicked(ClickEvent event) {
@@ -146,6 +157,8 @@ public class BellScheduleViewImpl extends Composite implements
 		pager = new SimplePager(SimplePager.TextLocation.RIGHT, pagerResources,
 				true, OsMaConstant.TABLE_JUMP_SIZE, true);
 
+		
+		
 		initWidget(uiBinder.createAndBindUi(this));
 		init(semesterName);
 
@@ -244,6 +257,8 @@ public class BellScheduleViewImpl extends Composite implements
 
 	private void initView(String semesterName) {
 
+		csvExport.setText(constants.exportCsvSuper());
+		
 		lblTitle.setText(constants.bellSchedule() + " " + semesterName);
 		lblMoveTime.setText(constants.bellSchedAdjustTime());
 		lblMin.setText(constants.bellSchedMinute());

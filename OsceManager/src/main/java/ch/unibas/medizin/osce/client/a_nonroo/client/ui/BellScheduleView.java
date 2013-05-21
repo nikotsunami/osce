@@ -25,6 +25,7 @@ public interface BellScheduleView extends IsWidget{
 		public SemesterProxy getSemester();
 		public void getNewSchedule();
 		public void onBellScheduleUpload();
+		public void exportCsvSupervisorClicked(int x, int y);
 	}
 
     String[] getPaths();
