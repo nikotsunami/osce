@@ -816,12 +816,12 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 										studElement.appendChild(studIdElement);
 										
 										Element studFirstNameEle = doc.createElement("firstname");
-										String firstName = studAss.getStudent() == null ? "" : (studAss.getStudent().getPreName() == null ? "" : studAss.getStudent().getPreName()); 
+										String firstName = studAss.getStudent() == null ? ("S" + String.format("%03d", studAss.getSequenceNumber())) : (studAss.getStudent().getPreName() == null ? "" : studAss.getStudent().getPreName()); 
 										studFirstNameEle.appendChild(doc.createCDATASection(firstName));
 										studElement.appendChild(studFirstNameEle);
 										
 										Element studlastNameEle = doc.createElement("lastname");
-										String lastName = studAss.getStudent() == null ? "" : (studAss.getStudent().getName() == null ? "" : studAss.getStudent().getName());
+										String lastName = studAss.getStudent() == null ? ("S" + String.format("%03d", studAss.getSequenceNumber())) : (studAss.getStudent().getName() == null ? "" : studAss.getStudent().getName());
 										studlastNameEle.appendChild(doc.createCDATASection(lastName));
 										studElement.appendChild(studlastNameEle);
 										
@@ -860,12 +860,12 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 									studElement.setAttribute("isBreakCandidate", "yes");
 																		
 									Element studIdElement = doc.createElement("id");
-									String id = assignment.getStudent() == null ? "" : assignment.getStudent().getId().toString(); 
+									String id = assignment.getStudent() == null ? ("S" + String.format("%03d", assignment.getSequenceNumber())) : assignment.getStudent().getId().toString(); 
 									studIdElement.appendChild(doc.createTextNode(id));
 									studElement.appendChild(studIdElement);
 									
 									Element studFirstNameEle = doc.createElement("firstname");
-									String firstName = assignment.getStudent() == null ? "" : assignment.getStudent().getPreName() == null ? "" : assignment.getStudent().getPreName();
+									String firstName = assignment.getStudent() == null ? ("S" + String.format("%03d", assignment.getSequenceNumber())) : assignment.getStudent().getPreName() == null ? "" : assignment.getStudent().getPreName();
 									studFirstNameEle.appendChild(doc.createCDATASection(firstName));
 									studElement.appendChild(studFirstNameEle);
 									
