@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -38,10 +39,13 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
 import ch.unibas.medizin.osce.client.style.widgets.SimpleShowErrorDialogBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
+import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
+import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 import ch.unibas.medizin.osce.shared.scaffold.AnamnesisChecksValueRequestNonRoo;
@@ -761,9 +765,15 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		standardizedPatientProxy.setCity(constants.anonymisationString());
 		standardizedPatientProxy.setPostalCode(constants.anonymisationString());
 		standardizedPatientProxy.setTelephone(constants.anonymisationString());
+		standardizedPatientProxy.setEmail(constants.anonymisationString() + "@" + constants.anonymisationString() + ".xxx");
 		
 		standardizedPatientProxy.setTelephone2(constants.anonymisationString());
 		standardizedPatientProxy.setMobile(constants.anonymisationString());
+		
+		standardizedPatientProxy.setGender(Gender.values()[(new Random()).nextInt(Gender.values().length)]);
+		standardizedPatientProxy.setWorkPermission(WorkPermission.values()[(new Random()).nextInt(WorkPermission.values().length)]);
+		standardizedPatientProxy.setMaritalStatus(MaritalStatus.values()[(new Random()).nextInt(MaritalStatus.values().length)]);
+		standardizedPatientProxy.setBirthday(new Date());
 		
 		standardizedPatientProxy.setHeight(150 + (new Random()).nextInt(51));
 		standardizedPatientProxy.setWeight(50 + (new Random()).nextInt(51));
@@ -782,6 +792,7 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		standardizedPatientProxy.getBankAccount().setCity(constants.anonymisationString());
 		
 		standardizedPatientProxy.setSocialInsuranceNo(constants.anonymisationString());
+		standardizedPatientProxy.setStatus(StandardizedPatientStatus.ANONYMIZED);
 		
 		standardizedPatientRequest.persist()
 				.using(standardizedPatientProxy)
@@ -790,25 +801,24 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 					@Override
 					public void onSuccess(Void arg0) {
 						// init();
-						standardizedPatientProxy
-								.setStatus(StandardizedPatientStatus.ANONYMIZED);
-						view.setStatusIcon(StandardizedPatientStatus.ANONYMIZED);
+//						view.setStatusIcon(StandardizedPatientStatus.ANONYMIZED);
 						placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatientProxy.stableId(), Operation.NEW));
 					}
-
 				});
 	}
 	
 	@Override
 	public void deletePatientClicked() {
-		MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+		final MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
 
 		// if patient is in a role; anonymize data; else delete SP
+		
 		if (standardizedPatientProxy.getPatientInSemester() != null
 				&& standardizedPatientProxy.getPatientInSemester().size() > 0) {
 			dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent e) {
+					dialogBox.hide();
 					onAnonymizeClicked();
 				}
 			});
@@ -818,6 +828,7 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 			dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent e) {
+					dialogBox.hide();
 					requests.standardizedPatientRequest().remove().using(standardizedPatientProxy).fire(new OSCEReceiver<Void>() {
 			            public void onSuccess(Void ignore) {
 			                if (widget == null) {
