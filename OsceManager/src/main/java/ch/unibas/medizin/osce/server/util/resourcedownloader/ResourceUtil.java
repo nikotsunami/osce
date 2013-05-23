@@ -19,6 +19,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
@@ -84,6 +85,11 @@ public class ResourceUtil {
 			break;
 		}
 		
+		case ALARM_SCHEDULE_SUPERVISOR: {
+			fileName = setExportScheduleCsv(request, response, os);
+			break;
+		}
+		
 		default: {
 			Log.info("Error in entity : " + entity);
 			break;
@@ -92,6 +98,26 @@ public class ResourceUtil {
 
 		sendFile(response, os.toByteArray(), fileName);
 		os = null;
+	}
+
+	private static String setExportScheduleCsv(HttpServletRequest request, HttpServletResponse response, ByteArrayOutputStream os) {
+		
+		String fileName = "Schedule.csv";
+		String osceDayId = request.getParameter(ResourceDownloadProps.OSCEDAYID);
+		String plusTime = request.getParameter(ResourceDownloadProps.PLUS_TIME);
+		String startTone = request.getParameter(ResourceDownloadProps.START_TONE);
+		String endTone = request.getParameter(ResourceDownloadProps.END_TONE);
+		String prePostEndTime = request.getParameter(ResourceDownloadProps.PRE_POST_END_TIME);
+		String prePostEndTone = request.getParameter(ResourceDownloadProps.PRE_POST_END_TONE);
+		String preBreakEndTime = request.getParameter(ResourceDownloadProps.PRE_BREAK_END_TIME);
+		String preBreakEndTone = request.getParameter(ResourceDownloadProps.PRE_BREAK_END_TONE);
+		
+		if (osceDayId != null && plusTime != null && startTone != null && endTone != null && prePostEndTime != null && prePostEndTone != null && preBreakEndTime != null && preBreakEndTone != null)
+		{
+			OsceDay.exportCsvClicked(os, Long.parseLong(osceDayId), Integer.parseInt(startTone), Integer.parseInt(endTone), Integer.parseInt(prePostEndTime), Integer.parseInt(prePostEndTone), Integer.parseInt(preBreakEndTime), Integer.parseInt(preBreakEndTone), Integer.parseInt(plusTime));
+		}
+		
+		return fileName;
 	}
 
 	private static String setExportPatientInSemesterCsv(HttpServletRequest request, HttpServletResponse response, ByteArrayOutputStream os) {

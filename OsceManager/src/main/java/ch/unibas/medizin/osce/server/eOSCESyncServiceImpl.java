@@ -781,7 +781,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 													optionElement.appendChild(optionSeqNoElement);
 													
 													Element optionCriteriaCountElement = doc.createElement("criteriacount");
-													optionCriteriaCountElement.appendChild(doc.createTextNode("[" + (option.getCriteriaCount() == null ? "0" : option.getCriteriaCount()) + "]"));
+													optionCriteriaCountElement.appendChild(doc.createTextNode((option.getCriteriaCount() == null ? "0" : option.getCriteriaCount().toString())));
 													optionElement.appendChild(optionCriteriaCountElement);
 												}
 											}
@@ -793,40 +793,51 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 									
 									for (Assignment studAss : assignmentlist)
 									{	
-										if (studAss.getStudent() != null)
+										/*if (studAss.getStudent() != null)
+										{*/
+										Element studElement = doc.createElement("student");
+										studentElement.appendChild(studElement);
+										
+										if (studAss.getStudent() == null)
 										{
-											Element studElement = doc.createElement("student");
-											studentElement.appendChild(studElement);
-											
+											studElement.setAttribute("isBreakCandidate", "yes");
+										}
+										else
+										{
 											if (oscePostRoom.getRoom() == null)
 												studElement.setAttribute("isBreakCandidate", "yes");
 											else
 												studElement.setAttribute("isBreakCandidate", "no");
-											
-											Element studIdElement = doc.createElement("id");
-											studIdElement.appendChild(doc.createTextNode(studAss.getStudent().getId().toString()));
-											studElement.appendChild(studIdElement);
-											
-											Element studFirstNameEle = doc.createElement("firstname");
-											studFirstNameEle.appendChild(doc.createCDATASection(studAss.getStudent().getPreName() == null ? "" : studAss.getStudent().getPreName()));
-											studElement.appendChild(studFirstNameEle);
-											
-											Element studlastNameEle = doc.createElement("lastname");
-											studlastNameEle.appendChild(doc.createCDATASection(studAss.getStudent().getName() == null ? "" : studAss.getStudent().getName()));
-											studElement.appendChild(studlastNameEle);
-											
-											Element studEmailEle = doc.createElement("email");
-											studEmailEle.appendChild(doc.createCDATASection(studAss.getStudent().getEmail() == null ? "" : studAss.getStudent().getEmail()));
-											studElement.appendChild(studEmailEle);
-											
-											Element studStTimeElement = doc.createElement("starttime");
-											studStTimeElement.appendChild(doc.createTextNode(studAss.getTimeStart() == null ? "" :studAss.getTimeStart().toString()));
-											studElement.appendChild(studStTimeElement);
-											
-											Element studEndTimeElement = doc.createElement("endtime");
-											studEndTimeElement.appendChild(doc.createTextNode(studAss.getTimeEnd() == null ? "" : studAss.getTimeEnd().toString()));
-											studElement.appendChild(studEndTimeElement);
 										}
+										
+										Element studIdElement = doc.createElement("id");
+										String studId = studAss.getStudent() == null ? "" : studAss.getStudent().getId().toString();
+										studIdElement.appendChild(doc.createTextNode(studId));
+										studElement.appendChild(studIdElement);
+										
+										Element studFirstNameEle = doc.createElement("firstname");
+										String firstName = studAss.getStudent() == null ? ("S" + String.format("%03d", studAss.getSequenceNumber())) : (studAss.getStudent().getPreName() == null ? "" : studAss.getStudent().getPreName()); 
+										studFirstNameEle.appendChild(doc.createCDATASection(firstName));
+										studElement.appendChild(studFirstNameEle);
+										
+										Element studlastNameEle = doc.createElement("lastname");
+										String lastName = studAss.getStudent() == null ? ("S" + String.format("%03d", studAss.getSequenceNumber())) : (studAss.getStudent().getName() == null ? "" : studAss.getStudent().getName());
+										studlastNameEle.appendChild(doc.createCDATASection(lastName));
+										studElement.appendChild(studlastNameEle);
+										
+										Element studEmailEle = doc.createElement("email");
+										String email = studAss.getStudent() == null ? "" : (studAss.getStudent().getEmail() == null ? "" : studAss.getStudent().getEmail());
+										studEmailEle.appendChild(doc.createCDATASection(email));
+										studElement.appendChild(studEmailEle);
+										
+										Element studStTimeElement = doc.createElement("starttime");
+										studStTimeElement.appendChild(doc.createTextNode(studAss.getTimeStart() == null ? "" :studAss.getTimeStart().toString()));
+										studElement.appendChild(studStTimeElement);
+										
+										Element studEndTimeElement = doc.createElement("endtime");
+										studEndTimeElement.appendChild(doc.createTextNode(studAss.getTimeEnd() == null ? "" : studAss.getTimeEnd().toString()));
+										studElement.appendChild(studEndTimeElement);
+										//}
 									}
 								}
 								
@@ -841,37 +852,41 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 								
 								for (Assignment assignment : logicalBreakAssignment)
 								{
-									if (assignment.getStudent() != null)
-									{
-										Element studElement = doc.createElement("student");
-										logicalStudentElement.appendChild(studElement);
-										
-										studElement.setAttribute("isBreakCandidate", "yes");
-																			
-										Element studIdElement = doc.createElement("id");
-										studIdElement.appendChild(doc.createTextNode(assignment.getStudent().getId().toString()));
-										studElement.appendChild(studIdElement);
-										
-										Element studFirstNameEle = doc.createElement("firstname");
-										studFirstNameEle.appendChild(doc.createCDATASection(assignment.getStudent().getPreName() == null ? "" : assignment.getStudent().getPreName()));
-										studElement.appendChild(studFirstNameEle);
-										
-										Element studlastNameEle = doc.createElement("lastname");
-										studlastNameEle.appendChild(doc.createCDATASection(assignment.getStudent().getName() == null ? "" : assignment.getStudent().getName()));
-										studElement.appendChild(studlastNameEle);
-										
-										Element studEmailEle = doc.createElement("email");
-										studEmailEle.appendChild(doc.createCDATASection(assignment.getStudent().getEmail() == null ? "" : assignment.getStudent().getEmail()));
-										studElement.appendChild(studEmailEle);
-										
-										Element studStTimeElement = doc.createElement("starttime");
-										studStTimeElement.appendChild(doc.createTextNode(assignment.getTimeStart() == null ? "" :assignment.getTimeStart().toString()));
-										studElement.appendChild(studStTimeElement);
-										
-										Element studEndTimeElement = doc.createElement("endtime");
-										studEndTimeElement.appendChild(doc.createTextNode(assignment.getTimeEnd() == null ? "" : assignment.getTimeEnd().toString()));
-										studElement.appendChild(studEndTimeElement);
-									}
+									/*if (assignment.getStudent() != null)
+									{*/
+									Element studElement = doc.createElement("student");
+									logicalStudentElement.appendChild(studElement);
+									
+									studElement.setAttribute("isBreakCandidate", "yes");
+																		
+									Element studIdElement = doc.createElement("id");
+									String id = assignment.getStudent() == null ? ("S" + String.format("%03d", assignment.getSequenceNumber())) : assignment.getStudent().getId().toString(); 
+									studIdElement.appendChild(doc.createTextNode(id));
+									studElement.appendChild(studIdElement);
+									
+									Element studFirstNameEle = doc.createElement("firstname");
+									String firstName = assignment.getStudent() == null ? ("S" + String.format("%03d", assignment.getSequenceNumber())) : assignment.getStudent().getPreName() == null ? "" : assignment.getStudent().getPreName();
+									studFirstNameEle.appendChild(doc.createCDATASection(firstName));
+									studElement.appendChild(studFirstNameEle);
+									
+									Element studlastNameEle = doc.createElement("lastname");
+									String lastName = assignment.getStudent() == null ? "" : assignment.getStudent().getName() == null ? "" : assignment.getStudent().getName();
+									studlastNameEle.appendChild(doc.createCDATASection(lastName));
+									studElement.appendChild(studlastNameEle);
+									
+									Element studEmailEle = doc.createElement("email");
+									String email = assignment.getStudent() == null ? "" : assignment.getStudent().getEmail() == null ? "" : assignment.getStudent().getEmail();
+									studEmailEle.appendChild(doc.createCDATASection(email));
+									studElement.appendChild(studEmailEle);
+									
+									Element studStTimeElement = doc.createElement("starttime");
+									studStTimeElement.appendChild(doc.createTextNode(assignment.getTimeStart() == null ? "" :assignment.getTimeStart().toString()));
+									studElement.appendChild(studStTimeElement);
+									
+									Element studEndTimeElement = doc.createElement("endtime");
+									studEndTimeElement.appendChild(doc.createTextNode(assignment.getTimeEnd() == null ? "" : assignment.getTimeEnd().toString()));
+									studElement.appendChild(studEndTimeElement);
+									//}
 								}
 							}
 						}

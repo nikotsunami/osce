@@ -1,7 +1,12 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,12 +25,17 @@ import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
+import ch.unibas.medizin.osce.shared.RingtoneTypes;
+
+import com.csvreader.CsvWriter;
 
 
 @RooJavaBean
@@ -811,5 +821,180 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 		TypedQuery<OsceDay> query = em.createQuery(sql, OsceDay.class);
 		return query.getResultList();
 	}
+	
+	public static void exportCsvClicked(OutputStream os, Long osceDayId, int startTone, int endTone, int prePostEndTime, int prePostEndTone, int preBreakEndTime, int preBreakEndTone, int plusTime)
+	{
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+		try
+		{
+			OsceDay osceDay = OsceDay.findOsceDay(osceDayId);
+			
+			Integer longBreak = null;
+			Integer lunchBreak = null;
+			Integer middleBreak = null;
+			if(osceDay.getOsce() != null) {
+				longBreak = osceDay.getOsce().getLongBreak() == null ? null : osceDay.getOsce().getLongBreak().intValue();
+				lunchBreak = osceDay.getOsce().getLunchBreak() == null ? null : osceDay.getOsce().getLunchBreak().intValue();
+				middleBreak = osceDay.getOsce().getMiddleBreak() == null ? null : osceDay.getOsce().getMiddleBreak().intValue();
+			}
+			
+			List<Assignment> assList = Assignment.findAssignmentByOsceDay(osceDayId);
+			CsvWriter writer = new CsvWriter(os, ',', Charset.forName("ISO-8859-1"));
 
+			writer.write("Time");
+			writer.write("Tone");
+			writer.write("isShow"); //always 1 its fix
+			writer.write("Type");
+			writer.endRecord();
+			
+			DateTime lastEndTime = null;
+			if (assList.size() > 0)
+				lastEndTime = new DateTime(assList.get(0).getTimeEnd());
+			
+			List<Schedule> scheduleList = new ArrayList<Schedule>();
+			
+			for (Assignment assignment : assList)
+			{
+				DateTime currentEndTime =  new DateTime(assignment.getTimeEnd());
+				DateTime currentStartTime = new DateTime(assignment.getTimeStart());
+				
+				/* for post begin */
+				{
+					Schedule schedule = new Schedule();
+					schedule.setTime(currentStartTime.plusMinutes(plusTime));
+					schedule.setTone(String.valueOf(startTone));
+					schedule.setIsShow("1");
+					schedule.setType(RingtoneTypes.START);
+					scheduleList.add(schedule);
+				}
+				
+				/* For before post end*/
+				if (prePostEndTime > 0 && prePostEndTone > 0)
+				{
+					Schedule schedule = new Schedule();
+					DateTime tempCurrEndTime = currentEndTime.plusMinutes(plusTime);
+					schedule.setTime(tempCurrEndTime.minusMinutes(prePostEndTime));
+					schedule.setTone(String.valueOf(prePostEndTone));
+					schedule.setIsShow("1");
+					schedule.setType(RingtoneTypes.PRE_END);
+					scheduleList.add(schedule);
+				}
+				
+				/* For before post break*/
+				if (preBreakEndTime > 0 && preBreakEndTone > 0) 
+				{
+					if(isLunchOrLongOrMiddleBreak(lastEndTime, currentStartTime, lunchBreak, longBreak, middleBreak) == true)
+					{
+						Schedule schedule = new Schedule();
+						DateTime tempCurrStTime = currentStartTime.plusMinutes(plusTime);
+						schedule.setTime(tempCurrStTime.minusMinutes(preBreakEndTime));
+						schedule.setTone(String.valueOf(preBreakEndTime));
+						schedule.setIsShow("1");
+						schedule.setType(RingtoneTypes.PRE_BREAK);
+						scheduleList.add(schedule);
+					}					
+				}
+				
+				/* for post end */
+				{
+					Schedule schedule = new Schedule();
+					DateTime endTime = currentEndTime.plusMinutes(plusTime);
+					schedule.setTime(endTime);
+					schedule.setTone(String.valueOf(endTone));
+					schedule.setIsShow("1");
+					schedule.setType(RingtoneTypes.END);
+					scheduleList.add(schedule);
+				}
+				
+				lastEndTime = new DateTime(assignment.getTimeEnd());
+			}			
+			
+			Collections.sort(scheduleList, new Comparator<Schedule>() {
+
+				@Override
+				public int compare(Schedule o1, Schedule o2) {
+					return o1.getTime().compareTo(o2.getTime());
+				}
+			});
+			
+			for (Schedule schedule : scheduleList)
+			{
+				writer.write(dateFormat.format(schedule.getTime().toDate()));
+				writer.write(schedule.getTone());
+				writer.write(schedule.getIsShow());
+				writer.write(String.valueOf(schedule.getType().ordinal()));
+				writer.endRecord();		
+			}
+			
+			writer.close();			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static boolean isLunchOrLongOrMiddleBreak(DateTime lastEndTime, DateTime currentStartTime, Integer lunchBreak, Integer longBreak, Integer middleBreak) {
+		
+		if(lastEndTime == null || currentStartTime == null) {
+			return false;
+		}
+		
+		if(lunchBreak == null && longBreak == null /*&& middleBreak == null*/) {
+			return false;
+		}
+		
+		Duration duration = new Duration(currentStartTime,lastEndTime);
+		
+		
+		if(lunchBreak != null && lunchBreak == Math.abs(duration.getStandardSeconds()/60)) {
+			return true;
+		}
+		
+		if(longBreak != null && longBreak == Math.abs(duration.getStandardSeconds()/60)) {
+			return true;
+		}
+		
+		/*if(middleBreak != null && middleBreak == Math.abs(duration.getStandardMinutes()) && isRotationChanged == true) {
+			return true;
+		}*/
+		
+		return false;
+	}
+	
+	
+}
+
+class Schedule
+{
+	DateTime time;
+	String tone;
+	String isShow;
+	RingtoneTypes type;
+	
+	
+	public DateTime getTime() {
+		return time;
+	}
+	public void setTime(DateTime time) {
+		this.time = time;
+	}
+	public String getTone() {
+		return tone;
+	}
+	public void setTone(String tone) {
+		this.tone = tone;
+	}
+	public String getIsShow() {
+		return isShow;
+	}
+	public void setIsShow(String isShow) {
+		this.isShow = isShow;
+	}
+	public RingtoneTypes getType() {
+		return type;
+	}
+	public void setType(RingtoneTypes type) {
+		this.type = type;
+	}	
 }

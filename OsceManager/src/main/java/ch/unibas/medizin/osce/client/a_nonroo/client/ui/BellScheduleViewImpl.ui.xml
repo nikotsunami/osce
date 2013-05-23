@@ -38,6 +38,7 @@
 						<g:HorizontalPanel spacing="4">
 							<my:IconButton icon="arrowthickstop-1-n" ui:field="bellScheduleUpload" />
 							<my:IconButton icon="extlink" ui:field="bellScheduleExport" />
+							<my:IconButton icon="extlink" ui:field="csvExport" />
 						</g:HorizontalPanel>
 					</g:VerticalPanel>
 				</g:HTMLPanel>

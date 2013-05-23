@@ -2500,8 +2500,8 @@ public class Assignment {
     	 //String sql = "SELECT a FROM Assignment AS a WHERE a.oscePostRoom IS NOT NULL AND a.oscePostRoom.course.id = " + courseId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " AND a.osceDay = " + osceDayId + " AND a.rotationNumber = " + rotationNumber + " GROUP BY a.rotationNumber";
     	 
     	// OscePost oscePost = OscePost.findOscePost(oscePostId);
-    	 String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.rotationNumber = " + rotationNumber + " and a.oscePostRoom in(select opr.id from OscePostRoom as opr where (opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999 ) or (opr.room is null  and opr.oscePost.id="+oscePostId+" and opr.course=" + courseId + " and opr.oscePost.oscePostBlueprint.postType = " + OscePost.findOscePost(oscePostId).getOscePostBlueprint().getPostType().ordinal() + ")) and opr.course=" + courseId + ") order by a.timeStart asc";
-    	
+    	// String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.rotationNumber = " + rotationNumber + " and a.oscePostRoom in(select opr.id from OscePostRoom as opr where (opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + " and rm.version<999 ) or (opr.room is null  and opr.oscePost.id="+oscePostId+" and opr.course=" + courseId + " and opr.oscePost.oscePostBlueprint.postType = " + OscePost.findOscePost(oscePostId).getOscePostBlueprint().getPostType().ordinal() + ")) and opr.course=" + courseId + ") order by a.timeStart asc";
+    	 String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.rotationNumber = " + rotationNumber + " and a.oscePostRoom in(select opr.id from OscePostRoom as opr where (opr.room in (select rm.room from OscePostRoom as rm where rm.oscePost = " + oscePostId +  " and rm.course= " + courseId + ") or (opr.room is null  and opr.oscePost.id="+oscePostId+" and opr.course=" + courseId + "))) order by a.timeStart asc";
     	 
     	 /*if (oscePost.getOscePostBlueprint().getPostType() == PostType.NORMAL || oscePost.getOscePostBlueprint().getPostType() == PostType.BREAK)
     	 {
@@ -2624,5 +2624,13 @@ public class Assignment {
     		 }
     	 }
 		
-     }    	
+     }
+     
+     public static List<Assignment> findAssignmentByOsceDay(Long osceDayId)
+     {
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE a.type = 0 AND a.osceDay.id = " + osceDayId + " GROUP BY a.timeStart ORDER BY a.timeStart";
+    	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    	 return query.getResultList();
+     }
 } 

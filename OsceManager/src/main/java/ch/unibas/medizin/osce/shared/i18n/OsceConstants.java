@@ -1331,5 +1331,29 @@ public interface OsceConstants extends Constants {
 	public String downRotation();
 	
 	public String moveRotLunchBreak();
+	
+	public String exportCsvSuper();
+	
+	public String startTone();
+			
+	public String endTone();
+			
+	public String prePostEnd();
+			
+	public String preBreakEnd();
+			
+	public String startEndToneErr();
+	
+	public String startToneErr();
+			
+	public String endToneErr();
+	
+	public String prePostToneErr();
+			
+	public String prePostTimeErr();
+			
+	public String preBreakTimeErr();
+			
+	public String preBreakToneErr();
 }
 
