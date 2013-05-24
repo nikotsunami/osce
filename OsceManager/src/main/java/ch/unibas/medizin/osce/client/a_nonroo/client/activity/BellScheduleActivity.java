@@ -529,42 +529,42 @@ public class BellScheduleActivity extends AbstractActivity implements
 							return;							
 						}
 						
-						if (!startToneTxtBox.getValue().matches("[0-9]+"))
+						if ((startToneTxtBox.getValue().equals("Sound")) && startToneTxtBox.getValue().matches("[0-9]+"))
 						{
 							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
 							dialogBox.showConfirmationDialog("Enter correct value for start tone");
 							return;
 						}
 						
-						if (!endToneTxtBox.getValue().matches("[0-9]+"))
+						if ((endToneTxtBox.getValue().equals("Sound")) && !endToneTxtBox.getValue().matches("[0-9]+"))
 						{
 							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
 							dialogBox.showConfirmationDialog("Enter correct value for end tone");
 							return;
 						}
 						
-						if (!prePostTxtBox.getValue().matches("[0-9]+"))
+						if ((!prePostTxtBox.getValue().equals("Minutes")) && !prePostTxtBox.getValue().matches("[0-9]+"))
 						{
 							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
 							dialogBox.showConfirmationDialog("Enter correct value for pre post end time");
 							return;
 						}
 						
-						if (!prePostToneTxtBox.getValue().matches("[0-9]+"))
+						if ((!prePostToneTxtBox.getValue().equals("Sound")) && !prePostToneTxtBox.getValue().matches("[0-9]+"))
 						{
 							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
 							dialogBox.showConfirmationDialog("Enter correct value for pre post end tone");
 							return;
 						}
 						
-						if (!preBreakTxtBox.getValue().matches("[0-9]+"))
+						if ((!preBreakTxtBox.getValue().equals("Minutes")) && !preBreakTxtBox.getValue().matches("[0-9]+"))
 						{
 							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
 							dialogBox.showConfirmationDialog("Enter correct value for pre break end value");
 							return;
 						}
 						
-						if (!preBreakToneTxtBox.getValue().matches("[0-9]+"))
+						if ((!preBreakToneTxtBox.getValue().equals("Sound")) && !preBreakToneTxtBox.getValue().matches("[0-9]+"))
 						{
 							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
 							dialogBox.showConfirmationDialog("Enter correct value for pre break tone");
@@ -587,9 +587,9 @@ public class BellScheduleActivity extends AbstractActivity implements
 								.concat("&").concat(ResourceDownloadProps.START_TONE).concat("=").concat(URL.encodeQueryString(startToneTxtBox.getValue()))
 								.concat("&").concat(ResourceDownloadProps.END_TONE).concat("=").concat(URL.encodeQueryString(endToneTxtBox.getValue()))
 								.concat("&").concat(ResourceDownloadProps.PRE_POST_END_TIME).concat("=").concat(URL.encodeQueryString((prePostTxtBox.getValue().isEmpty() || prePostTxtBox.getValue().equals("Minutes")) ? "0" : prePostTxtBox.getValue()))
-								.concat("&").concat(ResourceDownloadProps.PRE_POST_END_TONE).concat("=").concat(URL.encodeQueryString((prePostToneTxtBox.getValue().isEmpty() || prePostToneTxtBox.getValue().equals("Tone")) ? "0" : prePostToneTxtBox.getValue()))
+								.concat("&").concat(ResourceDownloadProps.PRE_POST_END_TONE).concat("=").concat(URL.encodeQueryString((prePostToneTxtBox.getValue().isEmpty() || prePostToneTxtBox.getValue().equals("Sound")) ? "0" : prePostToneTxtBox.getValue()))
 								.concat("&").concat(ResourceDownloadProps.PRE_BREAK_END_TIME).concat("=").concat(URL.encodeQueryString((preBreakTxtBox.getValue().isEmpty() || preBreakTxtBox.getValue().equals("Minutes")) ? "0" : preBreakTxtBox.getValue()))
-								.concat("&").concat(ResourceDownloadProps.PRE_BREAK_END_TONE).concat("=").concat(URL.encodeQueryString((preBreakToneTxtBox.getValue().isEmpty() || preBreakToneTxtBox.getValue().equals("Tone")) ? "0" : preBreakToneTxtBox.getValue()))
+								.concat("&").concat(ResourceDownloadProps.PRE_BREAK_END_TONE).concat("=").concat(URL.encodeQueryString((preBreakToneTxtBox.getValue().isEmpty() || preBreakToneTxtBox.getValue().equals("Sound")) ? "0" : preBreakToneTxtBox.getValue()))
 								.concat("&").concat(ResourceDownloadProps.PLUS_TIME).concat("=").concat(URL.encodeQueryString(String.valueOf(time)));
 						Log.info("--> url is : " +url);
 						Window.open(url, "", "");	

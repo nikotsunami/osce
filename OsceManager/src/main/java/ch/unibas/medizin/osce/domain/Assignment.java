@@ -1171,11 +1171,24 @@ public class Assignment {
      //by spec change[
      public static Boolean exchangeStudent(Assignment ass, Long studentId)
      {
-    	 Student oldStudent = ass.getStudent();
-    	 Student exchangeStudent = Student.findStudent(studentId);
-    	 
     	 EntityManager em = entityManager();
-    	 String sql = "SELECT a FROM Assignment a WHERE a.student = " + oldStudent.getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId();
+    	 
+    	 Student exchangeStudent = Student.findStudent(studentId);
+    	 String sql = "";
+    	 
+    	 Student oldStudent = null;
+    	 if (ass.getStudent() == null)
+    	 {
+    		 int seqNo = ass.getSequenceNumber();
+    		 sql = "SELECT a FROM Assignment a WHERE a.sequenceNumber = " + seqNo + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId();
+    	 }
+    	 else
+    	 {
+    		 oldStudent = ass.getStudent();
+    		 sql = "SELECT a FROM Assignment a WHERE a.student = " + oldStudent.getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId();
+    	 }
+    	 
+    	 
     	 TypedQuery<Assignment> oldStudQuery = em.createQuery(sql, Assignment.class);
     	 Iterator<Assignment> oldStudItr = oldStudQuery.getResultList().iterator();
     	 
@@ -1794,6 +1807,16 @@ public class Assignment {
   	     			osceDay.setIsTimeSlotShifted(true);
   	     			osceDay.setLunchBreakStart(ass.getTimeEnd());
   	     			osceDay.persist();
+  	     			
+  	     			if(secondSeq.getNumberRotation() > 0)
+  	     			{
+  	     				secondSeq.setNumberRotation((secondSeq.getNumberRotation() - 1));
+  	     				secondSeq.persist();
+  	     			}
+  	     			
+  	     			firstSeq.setNumberRotation((firstSeq.getNumberRotation()+1));
+  	     			firstSeq.persist();
+  	     			
   	     		}
          		else if (flag == 2) // down rotation
          		{
@@ -1846,11 +1869,20 @@ public class Assignment {
  	    			}
  	    			
  	    			String newStr = StringUtils.join(rotationStr, "-");
- 	    			Assignment ass = findAssignmentByRotationAndOsceDay(osceDayId, (rotationNumber - 1));
+ 	    			Assignment ass = findAssignmentByRotationAndOsceDay(osceDayId, (rotationNumber-1));
  	    			osceDay.setBreakByRotation(newStr);
  					osceDay.setLunchBreakStart(ass.getTimeEnd());
  					osceDay.setIsTimeSlotShifted(true);
  					osceDay.persist();
+ 					
+ 					if (firstSeq.getNumberRotation() > 0)
+ 					{
+ 						firstSeq.setNumberRotation((firstSeq.getNumberRotation()-1));
+ 						firstSeq.persist();
+ 					}
+ 					
+ 					secondSeq.setNumberRotation((secondSeq.getNumberRotation()+1));
+ 					secondSeq.persist();
          		}
         	 }
     	 }
@@ -2091,31 +2123,62 @@ public class Assignment {
 	        		 {
 	        			 if (ass.getOscePostRoom() != null)
 	        			 {
-	        				 OscePostRoom oscePostRoom = ass.getOscePostRoom();
-	        				 OscePostRoom opr = findOscePostRoomByCourseAndOscePostBluePrint(firstSeq.getId(), oscePostRoom, firstSeqCourse.getId());
-	        				 Integer maxSeqNo = getMaxSequenceNumberOfExaminer(osceDay.getId(), firstSeqCourse.getId(), oscePostRoom.getOscePost().getOscePostBlueprint().getId());
 	        				 
-	        				 if (opr != null && maxSeqNo > 0)
-	        				 {	
-	        					 ass.setOscePostRoom(opr);
-	        					 ass.setSequenceNumber((maxSeqNo + 1));
-	        					 ass.persist();
-	        				 }
-	        				 
+	        				 List<Assignment> preRorAssList = maxEndTimeSlot((rotationNumber - 1), osceDay.getId(), oscePost.getId(), secondSeqCourse.getId());
+         					
+        					 Date tmpEndTimeSlot = new Date();
+           					 if (preRorAssList != null && preRorAssList.size() > 0)
+           					 {
+           						 tmpEndTimeSlot = preRorAssList.get((preRorAssList.size() - 1)).getTimeEnd();
+           					 }
+           					 
+           					 String sql2 = "SELECT a FROM Assignment AS a WHERE a.type = 2 AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.course.id = " + firstSeqCourse.getId() + " AND a.oscePostRoom.oscePost.id = " + otherOscePost.getId() + " AND a.osceDay = " + osceDay.getId() + " AND a.timeEnd = :timeEnd AND a.examiner.id = " + ass.getExaminer().getId();
+           					// String sql2 = "SELECT a FROM Assignment AS a WHERE a.type = 2 AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.course.id = " + firstSeqCourse.getId() + " AND a.oscePostRoom.oscePost.id = " + otherOscePost.getId() + " AND a.osceDay = " + osceDay.getId() + " AND a.timeEnd = :timeEnd";
+           					 TypedQuery<Assignment> q2 = em.createQuery(sql2, Assignment.class);	
+           					 q2.setParameter("timeEnd", tmpEndTimeSlot);
+           					 
+           					// boolean exminerUpdate = false;
+           					 
+           					 if (q2.getResultList().size() > 0)
+           					 {
+           						 for (Assignment tempass : q2.getResultList())
+           						 {
+           							tempass.setTimeEnd(endTimeSlot);
+               						tempass.persist();
+           						 }
+           						 
+           						 ass.remove();
+           						
+           						 updateSequenceNumberOfExaminer(osceDay.getId(), endTimeSlot, -1, secondSeqCourse.getId(), oscePost.getId());
+           					 }
+           					 else
+           					 {
+           						 OscePostRoom oscePostRoom = ass.getOscePostRoom();
+	   	        				 OscePostRoom opr = findOscePostRoomByCourseAndOscePostBluePrint(firstSeq.getId(), oscePostRoom, firstSeqCourse.getId());
+	   	        				 Integer maxSeqNo = getMaxSequenceNumberOfExaminer(osceDay.getId(), firstSeqCourse.getId(), oscePostRoom.getOscePost().getOscePostBlueprint().getId());
+	   	        				 
+	   	        				 if (opr != null && maxSeqNo > 0)
+	   	        				 {	
+	   	        					 ass.setOscePostRoom(opr);
+	   	        					 ass.setSequenceNumber((maxSeqNo + 1));
+	   	        					 ass.persist();
+	   	        				 }
+           					 }
 	        			 }
 	        		 }
 	        	 }
 	        	 else
-	        	 {
-	        		 String sql1 = "SELECT a FROM Assignment a WHERE a.type = 2 AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.course.id = " + secondSeqCourse.getId() + " AND a.oscePostRoom.oscePost.id = " + oscePost.getId() + " AND a.osceDay.id = " + osceDay.getId() + " AND a.timeStart >= :timeStart AND a.timeEnd > :timeEnd ORDER BY a.timeStart";
+	        	 { 
+					 String sql1 = "SELECT a FROM Assignment a WHERE a.type = 2 AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.course.id = " + secondSeqCourse.getId() + " AND a.oscePostRoom.oscePost.id = " + oscePost.getId() + " AND a.osceDay.id = " + osceDay.getId() + " AND a.timeStart >= :timeStart AND a.timeEnd > :timeEnd ORDER BY a.timeStart";
 	            	 TypedQuery<Assignment> query1 = em.createQuery(sql1, Assignment.class);
 	            	 query1.setParameter("timeStart", startTimeSlot);
 	            	 query1.setParameter("timeEnd", endTimeSlot);
 	            	 
 	            	 if (query1.getResultList().size() > 0)
 	            	 { 
-	            		 for (Assignment ass : query1.getResultList())
+	            		 //for (Assignment ass : query1.getResultList())
 	            		 {
+	            			Assignment ass = query1.getResultList().get(0);
 	            			if (ass.getOscePostRoom() != null)
 	            			{
 	            				OscePostRoom oscePostRoom = ass.getOscePostRoom();
@@ -2124,24 +2187,51 @@ public class Assignment {
 	            				
 	            				if (opr != null && maxSeqNo > 0)
 	            				{
-	            					Assignment newAss = new Assignment();
-	            					newAss.setSequenceNumber((maxSeqNo + 1));
-	                				newAss.setTimeStart(startTimeSlot);
-	                				newAss.setTimeEnd(endTimeSlot);
-	                				newAss.setType(AssignmentTypes.EXAMINER);
-	                				newAss.setExaminer(ass.getExaminer());
-	                				newAss.setOsceDay(osceDay);
-	                				newAss.setOscePostRoom(opr);
-	                				newAss.persist();
-	                				
-	                				Date newTimeStart = dateAddMin(endTimeSlot, (newLunchValue + osceDay.getOsce().getMiddleBreak().intValue()));
-	                				ass.setTimeStart(newTimeStart);
-	                				ass.persist();
+	            					 List<Assignment> preRorAssList = maxEndTimeSlot((rotationNumber - 1), osceDay.getId(), oscePost.getId(), secondSeqCourse.getId());
+	            					
+	            					 Date tmpEndTimeSlot = new Date();
+		           					 if (preRorAssList != null && preRorAssList.size() > 0)
+		           					 {
+		           						 tmpEndTimeSlot = preRorAssList.get((preRorAssList.size() - 1)).getTimeEnd();
+		           					 }
+		           					 
+		           					 String sql2 = "SELECT a FROM Assignment AS a WHERE a.type = 2 AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.course.id = " + firstSeqCourse.getId() + " AND a.oscePostRoom.oscePost.id = " + otherOscePost.getId() + " AND a.osceDay = " + osceDay.getId() + " AND a.timeEnd = :timeEnd AND a.examiner.id = " + ass.getExaminer().getId();
+		           					 //String sql2 = "SELECT a FROM Assignment AS a WHERE a.type = 2 AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.course.id = " + firstSeqCourse.getId() + " AND a.oscePostRoom.oscePost.id = " + otherOscePost.getId() + " AND a.osceDay = " + osceDay.getId() + " AND a.timeEnd = :timeEnd";
+		           					 TypedQuery<Assignment> q2 = em.createQuery(sql2, Assignment.class);	
+		           					 q2.setParameter("timeEnd", tmpEndTimeSlot);
+		           					 
+		           					 //boolean examinerUpdate = false;
+		           					 
+		           					 if (q2.getResultList().size() > 0)
+		           					 {
+		           						 for (Assignment tempass : q2.getResultList())
+		           						 {
+		           							 tempass.setTimeEnd(endTimeSlot);
+		           							 tempass.persist();		           									           							 
+		           						 }
+		           					 }
+		           					 else
+		           					 {
+		           						Assignment newAss = new Assignment();
+		            					newAss.setSequenceNumber((maxSeqNo + 1));
+		                				newAss.setTimeStart(startTimeSlot);
+		                				newAss.setTimeEnd(endTimeSlot);
+		                				newAss.setType(AssignmentTypes.EXAMINER);
+		                				newAss.setExaminer(ass.getExaminer());
+		                				newAss.setOsceDay(osceDay);
+		                				newAss.setOscePostRoom(opr);
+		                				newAss.persist();
+		           					 }
+	           					 	
+		           					 Date newTimeStart = dateAddMin(endTimeSlot, (newLunchValue + osceDay.getOsce().getMiddleBreak().intValue()));
+		           					 ass.setTimeStart(newTimeStart);
+		           					 ass.persist();
 	            				}
 	            				
 	            			}
 	            		 }
 	            	 }
+					
 	        	 }
 	        	 
 	        	 //updateSequenceNumberOfExaminer(osceDay.getId(), timeEnd, -1);
@@ -2218,26 +2308,55 @@ public class Assignment {
 	        		 {
 	        			 if (ass.getOscePostRoom() != null)
 	        			 {
-	        				 OscePostRoom oscePostRoom = ass.getOscePostRoom();
-	        				 OscePostRoom opr = findOscePostRoomByCourseAndOscePostBluePrint(secondSeq.getId(), oscePostRoom, secondSeqCourse.getId());
+	        				 List<Assignment> nextRotAssList = maxEndTimeSlot((rotationNumber+1), osceDay.getId(), otherOscePost.getId(), secondSeqCourse.getId());
+        					 
+        					 Date nextRotStartTimeSlot = new Date();
+        					 if (nextRotAssList != null && nextRotAssList.size() > 0)
+        					 {
+        						 nextRotStartTimeSlot = nextRotAssList.get(0).getTimeStart();	            						 
+        					 }
+        					 
+        					 String nextRotql = "SELECT a FROM Assignment AS a WHERE a.type = 2 AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.course.id = " + secondSeqCourse.getId() + " AND a.oscePostRoom.oscePost.id = " + otherOscePost.getId() + " AND a.osceDay = " + osceDay.getId() + " AND a.timeStart = :timeStart AND a.examiner.id = " + ass.getExaminer().getId();
+        					 //String nextRotql = "SELECT a FROM Assignment AS a WHERE a.type = 2 AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.course.id = " + secondSeqCourse.getId() + " AND a.oscePostRoom.oscePost.id = " + otherOscePost.getId() + " AND a.osceDay = " + osceDay.getId() + " AND a.timeStart = :timeStart";
+        					 TypedQuery<Assignment> q2 = em.createQuery(nextRotql, Assignment.class);	
+        					 q2.setParameter("timeStart", nextRotStartTimeSlot);	  
+        					 //boolean examinerUpdate = false;
+        					 
+        					 if (q2.getResultList().size() > 0)
+        					 {
+        						 for (Assignment assignment : q2.getResultList())
+        						 {
+        							  assignment.setTimeStart(startTimeSlot);
+        							  assignment.persist();        
+        							  
+        						 }
+        						 ass.remove();
+        					 }
+        					 else
+        					 {
+        						 OscePostRoom oscePostRoom = ass.getOscePostRoom();
+    	        				 OscePostRoom opr = findOscePostRoomByCourseAndOscePostBluePrint(secondSeq.getId(), oscePostRoom, secondSeqCourse.getId());
+    	        				 
+    	        				 ass.setSequenceNumber(1);
+    	        				 ass.setOscePostRoom(opr);
+    	        				 ass.persist();
+        					 }
 	        				 
-	        				 ass.setSequenceNumber(1);
-	        				 ass.setOscePostRoom(opr);
-	        				 ass.persist();
 	        			 }
 	        		 }
 	        	 }
 	        	 else
 	        	 {
-	        		 String sql1 = "SELECT a FROM Assignment a WHERE a.type = 2 AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.course.id = " + firstSeqCourse.getId() + " AND a.oscePostRoom.oscePost.id = " + oscePost.getId() + " AND a.osceDay.id = " + osceDay.getId() + " AND a.timeStart < :timeStart AND a.timeEnd <= :timeEnd ORDER BY a.timeStart";
+	        		 String sql1 = "SELECT a FROM Assignment a WHERE a.type = 2 AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.course.id = " + firstSeqCourse.getId() + " AND a.oscePostRoom.oscePost.id = " + oscePost.getId() + " AND a.osceDay.id = " + osceDay.getId() + " AND a.timeStart < :timeStart AND a.timeEnd <= :timeEnd ORDER BY a.timeEnd DESC";
 	        		 TypedQuery<Assignment> query1 = em.createQuery(sql1, Assignment.class);
 	            	 query1.setParameter("timeStart", startTimeSlot);
 	            	 query1.setParameter("timeEnd", endTimeSlot);
 	            	 
 	            	 if (query1.getResultList().size() > 0)
 	            	 { 
-	            		 for (Assignment ass : query1.getResultList())
+	            		 //for (Assignment ass : query1.getResultList())
 	            		 {
+	            			Assignment ass = query1.getResultList().get(0);
 	            			if (ass.getOscePostRoom() != null)
 	            			{
 	            				OscePostRoom oscePostRoom = ass.getOscePostRoom();
@@ -2254,15 +2373,41 @@ public class Assignment {
 	            					/*Date newTimeStart = dateAddMin(startTimeSlot, -osceDay.getOsce().getMiddleBreak().intValue());
 	            					newTimeStart = dateAddMin(newTimeStart, osceDay.getOsce().getLunchBreak().intValue());*/
 	            					
-	            					Assignment newAss = new Assignment();
-	            					newAss.setSequenceNumber(1);
-	                				newAss.setTimeStart(startTimeSlot);
-	                				newAss.setTimeEnd(endTimeSlot);
-	                				newAss.setType(AssignmentTypes.EXAMINER);
-	                				newAss.setExaminer(ass.getExaminer());
-	                				newAss.setOsceDay(osceDay);
-	                				newAss.setOscePostRoom(opr);
-	                				newAss.persist();
+	            					 List<Assignment> nextRotAssList = maxEndTimeSlot((rotationNumber+1), osceDay.getId(), otherOscePost.getId(), secondSeqCourse.getId());
+	            					 
+	            					 Date nextRotStartTimeSlot = new Date();
+	            					 if (nextRotAssList != null && nextRotAssList.size() > 0)
+	            					 {
+	            						 nextRotStartTimeSlot = nextRotAssList.get(0).getTimeStart();	            						 
+	            					 }
+	            					 
+	            					 String nextRotql = "SELECT a FROM Assignment AS a WHERE a.type = 2 AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.course.id = " + secondSeqCourse.getId() + " AND a.oscePostRoom.oscePost.id = " + otherOscePost.getId() + " AND a.osceDay = " + osceDay.getId() + " AND a.timeStart = :timeStart AND a.examiner.id = " + ass.getExaminer().getId();
+	            					 //String nextRotql = "SELECT a FROM Assignment AS a WHERE a.type = 2 AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.course.id = " + secondSeqCourse.getId() + " AND a.oscePostRoom.oscePost.id = " + otherOscePost.getId() + " AND a.osceDay = " + osceDay.getId() + " AND a.timeStart = :timeStart";
+	            					 TypedQuery<Assignment> q2 = em.createQuery(nextRotql, Assignment.class);	
+	            					 q2.setParameter("timeStart", nextRotStartTimeSlot);	  
+	            					 
+	            					 //boolean examinerUpdate = false;
+	            					 
+	            					 if (q2.getResultList().size() > 0)
+	            					 {
+	            						 for (Assignment assignment : q2.getResultList())
+	            						 {
+	            							 assignment.setTimeStart(startTimeSlot);
+	            							 assignment.persist();	            								            							 
+	            						 }
+	            					 }
+	            					 else
+	            					 {
+	            						 Assignment newAss = new Assignment();
+		            					 newAss.setSequenceNumber(1);
+		            					 newAss.setTimeStart(startTimeSlot);
+		            					 newAss.setTimeEnd(endTimeSlot);
+		            					 newAss.setType(AssignmentTypes.EXAMINER);
+		            					 newAss.setExaminer(ass.getExaminer());
+		            					 newAss.setOsceDay(osceDay);
+		            					 newAss.setOscePostRoom(opr);
+		            					 newAss.persist();
+	            					 }
 	            				}        				
 	            			}
 	            		 }

@@ -2786,7 +2786,12 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 
 			@Override
 			public void onSuccess(List<StudentProxy> response) {
-				popupView.getNameValue().setText(ass.getStudent().getName());
+				
+				if (ass.getStudent() == null)
+					popupView.getNameValue().setText(constants.notAssigned());
+				else
+					popupView.getNameValue().setText(ass.getStudent().getName());
+				
 				popupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(ass.getTimeStart()));
 				popupView.getEndTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(ass.getTimeEnd()));
 				
@@ -2944,6 +2949,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			
 			@Override
 			public void onFailure(ServerFailure error) {
+				Log.error(error.getMessage());
 				showLoadingScreen(false);
 			}
 		});

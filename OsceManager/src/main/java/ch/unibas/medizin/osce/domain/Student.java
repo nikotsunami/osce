@@ -149,7 +149,11 @@ public class Student {
     	Assignment ass = Assignment.findAssignment(assId);
     	
     	EntityManager em = entityManager();
-    	String sql = "SELECT DISTINCT s FROM Student s, Assignment a WHERE s.id = a.student AND s.id <> " + ass.getStudent().getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " ORDER BY s.id";
+    	String sql = "";
+    	if (ass.getStudent() == null)
+    		sql = "SELECT DISTINCT s FROM Student s, Assignment a WHERE s.id = a.student AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " ORDER BY s.id";
+    	else	
+    		sql = "SELECT DISTINCT s FROM Student s, Assignment a WHERE s.id = a.student AND s.id <> " + ass.getStudent().getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " ORDER BY s.id";
     	//System.out.println("~~QUERY : " + sql);
     	TypedQuery<Student> q = em.createQuery(sql, Student.class);
     	return q.getResultList();

@@ -562,7 +562,7 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 		
 		//setDAta		
 		
-		if (assignmentProxy.getStudent() == null)
+		/*if (assignmentProxy.getStudent() == null)
 		{
 			exchangePopupView.getExchangeStudentListBox().setEnabled(false);
 			
@@ -573,8 +573,9 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 			exchangePopupView.getEndTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd()));
 			((PopupViewImpl)exchangePopupView).show();
 		}
-		else
-			delegate.showExchangeStudentPopup(exchangePopupView, assignmentProxy);
+		else*/
+		
+		delegate.showExchangeStudentPopup(exchangePopupView, assignmentProxy);
 		
 	}
 	//by spec change]
