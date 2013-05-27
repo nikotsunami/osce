@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -249,9 +251,12 @@ public class ExportAssignment  extends HttpServlet {
 						//retrieve startEndtimes and student for particular course and rotation
 						List<Assignment> assignments=Assignment.findAssignmentRotationAndCourseWise(osceDay.getId(), j, course.getId(),type);
 						Element startEndTimesElement=createEmptyChildNode("startEndTimes",doc,rotationElement);
+						List<PatientInRole> patientInRoleList=new ArrayList<PatientInRole>(); 
+						
 						for(int d=0;d<timeStarts.size();d++)
 						{
 							
+							ArrayList<Integer> numOfRow=new ArrayList<Integer>();
 							Date timeStart=timeStarts.get(d);
 							Date timeEnd=null;
 							if(type==1)
@@ -286,10 +291,11 @@ public class ExportAssignment  extends HttpServlet {
 									oscePost=oscePosts.get(k);
 								
 								boolean found=false;
+								boolean spEqlToNxtSlot=true;
 								
 								String spBreakName="";
 								
-								
+								Assignment prevSPAssignment=null;
 								
 								for(int b=0;b<assignments.size();b++)
 								{
@@ -328,6 +334,60 @@ public class ExportAssignment  extends HttpServlet {
 											//for SP
 											 if(type ==1 && timeEnd != null && assignmentPost != null && oscePost !=null &&  oscePost.getId() == assignmentPost.getId() && (assignment.getTimeEnd().equals(timeEnd) || assignment.getTimeEnd().after(timeEnd)) &&(assignment.getTimeStart().equals(timeStart) || assignment.getTimeStart().before(timeStart)))
 											{
+												
+												 /*prevSPAssignment=assignment;
+												 
+												 if(prevSPAssignment!=null && assignment.getPatientInRole().equals(prevSPAssignment.getPatientInRole()))
+												 {
+													 	d++;
+														timeEnd=timeEnds.get(d);
+														found=true;
+														break;
+												 }*/
+												 
+												 //logic for merge sp
+												 if( d!=timeStarts.size()-1)//not last
+												 {
+													 
+													 
+													 int numOfRowToMerge=0;
+													 for(int temp=d+1;temp<timeStarts.size();temp++)
+													 {
+														 Date timeStartTemp=timeStarts.get(temp);
+														 Assignment nxtSPassignment=Assignment.findNxtSPSlot(osceDay.getId(), osceSeq.getId(), course.getId(), assignment.getOscePostRoom().getOscePost().getId(), timeStartTemp);
+														 
+														 
+														 if(nxtSPassignment==null)
+														 {
+															 spEqlToNxtSlot=false;
+															 break;
+														 }
+														 if(nxtSPassignment != null && spEqlToNxtSlot && nxtSPassignment.getPatientInRole()==null)// sp not assigned
+														 {
+															 if(nxtSPassignment.getSequenceNumber()!= null && !nxtSPassignment.getSequenceNumber().equals(assignment.getSequenceNumber()))
+															 {
+																 spEqlToNxtSlot=false;
+																 break;
+															 }
+														 }
+														 if(nxtSPassignment != null && spEqlToNxtSlot && nxtSPassignment.getPatientInRole() != null && !nxtSPassignment.getPatientInRole().equals(assignment.getPatientInRole()))
+														 {
+															 spEqlToNxtSlot=false;
+															 break;
+														 }
+														 
+														 if(spEqlToNxtSlot)
+														 {
+															 numOfRowToMerge++;
+															
+														 }
+													 }
+													 
+													 numOfRow.add(numOfRowToMerge);
+													 
+												 }
+												
+												 
 												Element studentElement=createEmptyChildNode("student",doc,studentsElement);
 												PatientInRole patientInRole=assignment.getPatientInRole();
 												String studentName="-";
@@ -397,12 +457,32 @@ public class ExportAssignment  extends HttpServlet {
 									Element studentElement=createEmptyChildNode("student",doc,studentsElement);
 									createChildNode("studentName", "NA", doc, studentElement);
 								}
-								else if(!found && endTime !=null )
+								else if(!found && type==1 )
 								{
 									Element studentElement=createEmptyChildNode("student",doc,studentsElement);
 									createChildNode("studentName", "NA", doc, studentElement);
 								}
 							}
+							
+							//merge
+							if(type==1)
+							{
+								if(d!=timeStarts.size()-1)
+								{
+									if(numOfRow.size()>0)
+									{
+									d=d+Collections.min(numOfRow);
+									timeEnd=timeEnds.get(d);
+									numOfRow.clear();
+									}
+									/*else
+										d++;*/
+									
+								}
+								
+								
+							}
+							
 							if(type==0)
 							{
 								timeStartValue=timeStartValue +"-"+ String.format("%tR", endTime);
@@ -460,16 +540,62 @@ public class ExportAssignment  extends HttpServlet {
 									
 									//Date timeStart=assignment.getTimeStart();
 									//Date timeEnd=assignment.getTimeEnd();
-									createChildNode("startEndTimeValue", String.format("%tR", timeStart) +"-" + String.format("%tR", timeEnd), doc, startEndTimeElement);
-									createChildNode("spBreakPostCount", String.valueOf(osceSeq.getOscePosts().size()), doc, startEndTimeElement);
-									String commaSeperatedSpBreak="";
 									
+									String commaSeperatedSpBreak="";
+									boolean spEqlToNxtSlot=true;
+									ArrayList<Integer> rowNum=new ArrayList<Integer>();
+											
 									for(int k=0;k<spBreakAssignments.size();k++)
 									{
 										Assignment assignment=spBreakAssignments.get(k);
+										
+										 
+										
+										
+										
 										if((assignment.getTimeEnd().equals(timeEnd) || assignment.getTimeEnd().after(timeEnd)) &&(assignment.getTimeStart().equals(timeStart) || assignment.getTimeStart().before(timeStart)))
 										//if(assignment.getTimeStart().equals(timeStart))
 										{
+											
+											//logic for merge sp
+											 if( l!=timeStarts.size()-1)//not last
+											 {
+												
+												 
+												 int numOfRowToMerge=0;
+												 for(int temp=l+1;temp<timeStarts.size();temp++)
+												 {
+													 Date timeStartTemp=timeStarts.get(temp);
+													 List<PatientInRole> nxtSPassignments=Assignment.findNxtSPLogicalBreak(osceDay.getId(), osceSeq.getId(),  timeStartTemp);
+													 
+													 
+													 if(nxtSPassignments==null || nxtSPassignments.size()==0)
+													 {
+														 spEqlToNxtSlot=false;
+														 break;
+													 }
+													 if(assignment.getPatientInRole()==null)
+													 {
+														 spEqlToNxtSlot=false;
+														 break;
+													 }
+													 if(nxtSPassignments != null && spEqlToNxtSlot && !nxtSPassignments.contains(assignment.getPatientInRole()))
+													 {
+														 spEqlToNxtSlot=false;
+														 break;
+													 }
+													 
+													 if(spEqlToNxtSlot)
+													 {
+														 numOfRowToMerge++;
+														
+													 }
+												 }
+												 
+												 rowNum.add(numOfRowToMerge);
+												 
+											 }
+											
 											if(commaSeperatedSpBreak.equals(""))
 											{
 												if(assignment.getPatientInRole() !=null )
@@ -492,6 +618,27 @@ public class ExportAssignment  extends HttpServlet {
 										}
 										*/
 									}
+									
+									//merge
+									if(type==1)
+									{
+										if(l!=timeStarts.size()-1)
+										{
+											if(rowNum.size()>0)
+											{
+											l=l+Collections.min(rowNum);
+											timeEnd=timeEnds.get(l);
+											rowNum.clear();
+											}
+											/*else
+												d++;*/
+											
+										}
+										
+										
+									}
+									createChildNode("startEndTimeValue", String.format("%tR", timeStart) +"-" + String.format("%tR", timeEnd), doc, startEndTimeElement);
+									createChildNode("spBreakPostCount", String.valueOf(osceSeq.getOscePosts().size()), doc, startEndTimeElement);
 									
 									createChildNode("commaSeperatedSpBreak", commaSeperatedSpBreak, doc, startEndTimeElement);
 								}

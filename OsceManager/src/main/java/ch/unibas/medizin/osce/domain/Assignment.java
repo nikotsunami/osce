@@ -264,6 +264,23 @@ public class Assignment {
         return assignmentList;
     }
 
+    public static Assignment findNxtSPSlot(Long osceDayId, Long osceSequenceId, Long courseId, Long oscePostId,Date timeStart) {
+        Log.info("retrieveAssignmenstOfTypeSP :");
+        EntityManager em = entityManager();
+        String queryString = "SELECT  a FROM Assignment as a where a.timeStart<=:timeStart and a.timeEnd>=:timeEnd and a.osceDay=" + osceDayId + "  and type=1 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.oscePost=" + oscePostId + " and opr.course=" + courseId + " ) order by a.timeStart asc";
+        TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
+        query.setParameter("timeStart", timeStart);
+        query.setParameter("timeEnd", timeStart);
+        List<Assignment> assignmentList = query.getResultList();
+        Log.info("retrieveAssignmenstOfTypeSP query String :" + queryString);
+        Log.info("Assignment List Size :" + assignmentList.size());
+        
+        if(assignmentList.size()>0)
+        return assignmentList.get(0);
+        else
+        	return null;
+    }
+    
     public static List<Assignment> retrieveAssignmenstOfTypeExaminer(Long osceDayId, Long osceSequenceId, Long courseId, Long oscePostId) {
         Log.info("retrieveAssignmenstOfTypeExaminer :");
         EntityManager em = entityManager();
@@ -298,6 +315,35 @@ public class Assignment {
          List<Assignment> assignmentList = query.getResultList();
          Log.info("retrieveAssignmentOfLogicalBreakPost query String :" + queryString);
          Log.info("Assignment List Size :" + assignmentList.size());
+         return assignmentList;
+    }
+    
+  //retrieve Logical break post
+    public static List<PatientInRole> findNxtSPLogicalBreak(Long osceDayId,Long osceSequenceId,Date timeStart)
+    {
+    	Log.info("findNxtSPLogicalBreak :");
+    	 EntityManager em = entityManager();
+    	 OsceSequence seq=OsceSequence.findOsceSequence(osceSequenceId);
+    	 Long courseId=seq.getCourses().get(0).getId();
+    	 
+    	/* String maxTimeStartString= "SELECT  max(a.timeStart) FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=1 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.course=" + courseId + " ) order by a.timeStart asc";
+    	 TypedQuery<Date> maxTimeStartquery = em.createQuery(maxTimeStartString, Date.class);
+    	 Date maxTimeStart=maxTimeStartquery.getResultList().get(0);
+    	 
+    	 String minTimeStartString= "SELECT  min(a.timeStart) FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=1 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.course=" + courseId + " ) order by a.timeStart asc";
+    	 TypedQuery<Date> minTimeStartquery = em.createQuery(minTimeStartString, Date.class);
+    	 Date minTimeStart=minTimeStartquery.getResultList().get(0);*/
+    	 
+         String queryString = "SELECT  a.patientInRole FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=1 and a.oscePostRoom=null and a.timeStart <= :timeStart and a.timeEnd >= :timeEnd order by a.timeStart asc ";
+         TypedQuery<PatientInRole> query = em.createQuery(queryString, PatientInRole.class);
+         query.setParameter("timeStart", timeStart);
+         query.setParameter("timeEnd", timeStart);
+         List<PatientInRole> assignmentList = query.getResultList();
+         Log.info("retrieveAssignmentOfLogicalBreakPost query String :" + queryString);
+         Log.info("Assignment List Size :" + assignmentList.size());
+         
+         
+         
          return assignmentList;
     }
     

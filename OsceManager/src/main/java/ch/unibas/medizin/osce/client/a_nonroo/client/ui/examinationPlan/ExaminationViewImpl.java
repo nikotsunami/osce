@@ -185,7 +185,8 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 	{
 		
 		
-		if(assignmentProxy==null || assignmentProxy.getExaminer() ==null)
+		//if(assignmentProxy==null || assignmentProxy.getExaminer() ==null)
+		if(assignmentProxy==null || assignmentProxy.getSequenceNumber() == null)
 		{
 			delegate.retrieveAllExaminers(this);
 			
@@ -296,8 +297,12 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 				}
 			});
 			//set data in information popup view
+			
+			if(assignmentProxy.getExaminer() !=null)
 			examInfoPopupView.getExaminerNameValue().setText(assignmentProxy.getExaminer().getPreName()+" "+assignmentProxy.getExaminer().getName());
-		
+			else
+				examInfoPopupView.getExaminerNameValue().setText("");
+			
 			examInfoPopupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeStart()));
 			examInfoPopupView.getEndTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd()));
 			
