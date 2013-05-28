@@ -225,7 +225,7 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 				
 				@Override
 				public void onClick(ClickEvent event) {
-					if(examInfoPopupView.getExaminerSuggestionBox().getValue()==null || examInfoPopupView.getExaminerSuggestionBox().getValue()=="")
+					if(examInfoPopupView.getExaminerSuggestionBox().getValue()==null || examInfoPopupView.getExaminerSuggestionBox().getValue()=="" || examInfoPopupView.getEndTimeListBox().getValue() == null )
 					{
 						MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
 						dialogBox.showConfirmationDialog(constants.warningExaminer());
@@ -241,6 +241,8 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 				public void onClick(ClickEvent event) {
 					delegate.retrieveAllExaminers(examInfoPopupView,examInfoPopupView.getExaminerSuggestionBox());
 					
+					if(assignmentProxy.getExaminer() != null)
+					examInfoPopupView.getExaminerSuggestionBox().setValue(assignmentProxy.getExaminer().getPreName() +" "+ assignmentProxy.getExaminer().getName());
 					examInfoPopupView.getExaminerNameValue().setVisible(false);
 					
 					examInfoPopupView.getExaminerSuggestionBox().setVisible(true);
@@ -249,8 +251,9 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 					
 					examInfoPopupView.getSaveBtn().setText(constants.save());
 					examInfoPopupView.getSaveBtn().setVisible(true);
-					
-					
+					examInfoPopupView.getEndTimeValue().setVisible(false);
+					examInfoPopupView.getEndTimeListBox().setVisible(true);
+					delegate.populateEndTimeListBox(examinationViewImpl);
 					//create edit popupview
 					/*if(editPopup==null)
 					{
@@ -304,7 +307,11 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 				examInfoPopupView.getExaminerNameValue().setText("");
 			
 			examInfoPopupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeStart()));
+			
 			examInfoPopupView.getEndTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd()));
+			
+			//populate end time list box
+			//delegate.populateEndTimeListBox(this);
 			
 			examInfoPopupView.getClearButton().addClickHandler(new ClickHandler() {
 				

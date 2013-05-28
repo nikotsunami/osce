@@ -323,10 +323,11 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		examinerSuggestionBox.setVisible(false);
 		examinerNameValue.setVisible(true);
 		edit.setVisible(true);
+		edit.setText(constants.edit());
 		saveBtn.setVisible(false);
 		
-		nameLbl.setVisible(false);
-		nameValue.setVisible(false);
+		nameLbl.removeFromParent();
+		nameValue.removeFromParent();
 		
 		//nameLbl.setText(constants.examinerName());
 		
@@ -339,8 +340,10 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		cancelButton.setVisible(false);
 		
 		endTimeLbl.setVisible(true);
-		endTimeListBox.removeFromParent();
+		endTimeListBox.setVisible(false);
+		//endTimeListBox.setVisible(true);
 		endTimeValue.setVisible(true);
+		//endTimeValue.removeFromParent();
 		endTimeLbl.setText(constants.circuitEndTime());
 		breakDuration.removeFromParent();
 		
@@ -365,6 +368,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		
 		//enable
 		examinerNameLbl.setVisible(true);
+		examinerNameLbl.getElement().getStyle().setProperty("maxWidth", "70px");
 		examinerSuggestionBox.setVisible(true);
 		startTimeLbl.setVisible(true);
 		

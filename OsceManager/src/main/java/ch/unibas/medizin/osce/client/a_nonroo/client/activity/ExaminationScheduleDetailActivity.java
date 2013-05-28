@@ -58,6 +58,8 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -87,6 +89,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	private Map<OscePostProxy, List<Date>> postLongStartTimeMap=new HashMap<OscePostProxy, List<Date>>();
 	private Map<OscePostProxy, List<Date>> postAnyStartTimeMap=new HashMap<OscePostProxy, List<Date>>();
 	private Map<OscePostProxy,Map<Date,Long>> postAnyEndTimeBreakMap=new HashMap<OscePostProxy, Map<Date,Long>>();
+	private Map<OscePostProxy,Map<Date,Long>> anyBreakUpMap=new HashMap<OscePostProxy, Map<Date,Long>>();
 	private Map<OscePostProxy, List<Date>> postEndTimeMap=new HashMap<OscePostProxy, List<Date>>();
 	
 	private Map<OscePostProxy, List<Date>> postAllEndTimeMap=new HashMap<OscePostProxy, List<Date>>(); 
@@ -419,8 +422,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		requests.getEventBus().fireEvent(
 				new ApplicationLoadingScreenEvent(true));
 		Log.info("retrieveContent :");
-		if(doctorList!=null)
-		doctorList.clear();
+		//if(doctorList!=null)
+		//doctorList.clear();
 		earlyStartPost.clear();
 		setEarlyStart(0);
 		//Iterator<OscePostProxy> oscePostProxyIterator=accordianPanelViewImpl.getOsceSequenceProxy().getOscePosts().iterator();
@@ -536,6 +539,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					List<Date> lunchstartTimeList=new ArrayList<Date>();
 					List<Date> longstartTimeList=new ArrayList<Date>();
 					Map<Date, Long> dateBreakTimeMap=new HashMap<Date, Long>();
+					Map<Date, Long> anydateBreakTimeMap=new HashMap<Date, Long>();
 					List<Date> anyendTimeList=new ArrayList<Date>();
 					
 					//1. calculate early start time duration
@@ -656,7 +660,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								longstartTimeList.add(DateTimeFormat.getShortDateTimeFormat().parse(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd())));
 								
 								studentSlotLength--;
-								
+								anydateBreakTimeMap.put(DateTimeFormat.getShortDateTimeFormat().parse(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd())), breakTime);
 								if(previousStudentBreakView !=null)
 								{
 									previousStudentBreakView.setNextAssignmentProxy(assignmentProxy);
@@ -690,6 +694,9 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 							{
 								
 								lunchstartTimeList.add(DateTimeFormat.getShortDateTimeFormat().parse(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd())));
+								
+								anydateBreakTimeMap.put(DateTimeFormat.getShortDateTimeFormat().parse(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd())), breakTime);
+								
 								studentSlotLength--;
 								if(previousStudentBreakView !=null)
 								{
@@ -722,6 +729,9 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 									|| continousSPChangeBreak+osceProxy.getMiddleBreak()==breakTime || breakTime > 0)
 							{
 								anyendTimeList.add(DateTimeFormat.getShortDateTimeFormat().parse(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd())));
+								
+								anydateBreakTimeMap.put(DateTimeFormat.getShortDateTimeFormat().parse(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd())), breakTime);
+								
 								dateBreakTimeMap.put(DateTimeFormat.getShortDateTimeFormat().parse(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeEnd())), breakTime);
 								studentSlotLength--;
 								if(previousStudentBreakView !=null)
@@ -909,6 +919,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					postAnyStartTimeMap.put(oscePostProxy, anyendTimeList);
 					postLongStartTimeMap.put(oscePostProxy, longstartTimeList);
 					postAnyEndTimeBreakMap.put(oscePostProxy, dateBreakTimeMap);
+					anyBreakUpMap.put(oscePostProxy, anydateBreakTimeMap);
 					postEndTimeMap.put(oscePostProxy, endTimeList);
 					
 					//create Examiners Slots/ Create Examiner view inside oscePostView
@@ -2086,34 +2097,102 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	
 	public void saveExaminer(final String value,final ExaminationViewImpl view){
 		AssignmentRequest assignmentRequest=requests.assignmentRequest();
-		AssignmentProxy assignmentProxy=view.getAssignmentProxy();
-		assignmentProxy=assignmentRequest.edit(view.getAssignmentProxy());
 		
+		AssignmentProxy assignmentProxy=view.getAssignmentProxy();
+		final Date timeEnd=assignmentProxy.getTimeEnd();
+		final Integer seqNum=assignmentProxy.getSequenceNumber();
+		assignmentProxy=assignmentRequest.edit(view.getAssignmentProxy());
+
 		DoctorProxy doctorProxy=null;
 		for(DoctorProxy dp:doctorList)
 		{
-			if(dp.getName().equals(value))
+			String displayString=dp.getPreName()+" "+dp.getName();
+			if(displayString.equals(value))
 			{
 				doctorProxy=dp;
 				break;
 			}
 		}
 		assignmentProxy.setExaminer(doctorProxy);
+		
+		
+		assignmentProxy.setTimeEnd(view.getExamInfoPopupView().getEndTimeListBox().getValue());
 		assignmentRequest.persist().using(assignmentProxy).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("saveExaminer Success");
 				
-				view.getExamInfoPopupView().getExaminerNameValue().setVisible(true);
-				
-				view.getExamInfoPopupView().getExaminerSuggestionBox().setVisible(false);
-				
-				view.getExamInfoPopupView().getEdit().setVisible(true);
-				
-				
-				view.getExamInfoPopupView().getSaveBtn().setVisible(false);
-				view.getExamInfoPopupView().getExaminerNameValue().setText(value);
+				if(!view.getExamInfoPopupView().getEndTimeListBox().getValue().equals(view.getAssignmentProxy().getTimeEnd()))// split logic
+				{
+					
+					
+					Map<Date,Long> dateBreakMap=anyBreakUpMap.get(view.getOscePostProxy());
+					
+					Date startTime=view.getExamInfoPopupView().getEndTimeListBox().getValue();
+					 
+					if(dateBreakMap != null && dateBreakMap.containsKey(startTime))
+					{
+						
+						AssignmentRequest assignmentRequest1=requests.assignmentRequest();
+						AssignmentProxy assignmentProxy1=assignmentRequest1.create(AssignmentProxy.class);
+						
+						Short breakTime=dateBreakMap.get(startTime).shortValue();
+						Log.info("Any Break :" + breakTime);
+						String startTimeDateString=DateTimeFormat.getFullDateTimeFormat().format(startTime);
+						Date startDate=DateTimeFormat.getFullDateTimeFormat().parse(startTimeDateString);
+						int mt=startDate.getMinutes();
+						int hr=startDate.getHours();
+						mt=mt+breakTime;
+						if(mt>59)
+						{
+							hr++;
+							mt=mt-60;
+						}
+						startDate.setMinutes(mt);
+						startDate.setHours(hr);
+						
+						assignmentProxy1.setTimeStart(startDate);
+						assignmentProxy1.setTimeEnd(timeEnd);
+						assignmentProxy1.setType(AssignmentTypes.EXAMINER);
+						//assignmentProxy1.setSequenceNumber(view.getPreviousAssignmentProxy().getSequenceNumber()+2);
+						assignmentProxy1.setOsceDay(view.getOsceDayProxy());
+						assignmentProxy1.setOscePostRoom(view.getOscePostRoomProxy());
+						assignmentProxy1.setSequenceNumber(seqNum+1);
+						assignmentRequest1.persist().using(assignmentProxy1).fire(new OSCEReceiver<Void>() {
+
+							@Override
+							public void onSuccess(Void response) {
+								Log.info("createExaminerAssignmnet Success Splited Row ");
+								((PopupViewImpl)view.getExamInfoPopupView()).hide();
+								//refresh ExaminerView;
+								refreshExaminerView(view,null,null);
+							}
+						});
+						
+					}
+					
+					
+					
+					//a2.setS
+				}
+				else
+				{
+					view.getExamInfoPopupView().getExaminerNameValue().setVisible(true);
+					
+					view.getExamInfoPopupView().getExaminerSuggestionBox().setVisible(false);
+					
+					view.getExamInfoPopupView().getEndTimeListBox().setVisible(false);
+					view.getExamInfoPopupView().getEndTimeValue().setVisible(true);
+					
+					
+					view.getExamInfoPopupView().getEdit().setVisible(true);
+					
+					
+					view.getExamInfoPopupView().getSaveBtn().setVisible(false);
+					view.getExamInfoPopupView().getExaminerNameValue().setText(value);
+					
+				}
 				//view.getEditPopup().hide();
 			}
 		});
@@ -2595,6 +2674,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		});
 		else
 		{
+			((ProxySuggestOracle<DoctorProxy>)sb.getSuggestOracle()).clear();
 			((ProxySuggestOracle<DoctorProxy>)sb.getSuggestOracle()).addAll(doctorList);
 		}
 	}
@@ -2953,5 +3033,35 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				showLoadingScreen(false);
 			}
 		});
+	}
+	
+	public void populateEndTimeListBox(ExaminationViewImpl examinationView)
+	{
+		ArrayList<Date> endTimeList=new ArrayList<Date>();
+		endTimeList.addAll(postLongStartTimeMap.get(examinationView.getOscePostProxy()));
+		endTimeList.addAll(postLunchStartTimeMap.get(examinationView.getOscePostProxy()));
+		endTimeList.addAll(postEndTimeMap.get(examinationView.getOscePostProxy()));
+		endTimeList.addAll(postAnyStartTimeMap.get(examinationView.getOscePostProxy()));
+		Collections.sort(endTimeList);
+		int i=0;
+		Date timeStart=examinationView.getAssignmentProxy().getTimeStart();
+		Date endTime=examinationView.getAssignmentProxy().getTimeEnd();
+		while(i<endTimeList.size())
+		{
+			
+			Date d=endTimeList.get(i);
+			if(d.before(timeStart) || d.after(endTime) )
+			{
+				endTimeList.remove(i);
+				i=0;
+			}
+			else
+				i++;
+		}
+		
+		examinationView.getExamInfoPopupView().getEndTimeListBox().setAcceptableValues(endTimeList);
+		
+		if(examinationView.getAssignmentProxy() != null)
+		examinationView.getExamInfoPopupView().getEndTimeListBox().setValue(examinationView.getAssignmentProxy().getTimeEnd());
 	}
 }

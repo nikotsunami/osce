@@ -27,6 +27,7 @@ public interface ExaminationView extends IsWidget{
 		public void saveExaminer(String value,ExaminationViewImpl view);
 		
 		public void clearExaminerAssignment(Long postId,Long osceDayId,Long courseId,final ExaminationViewImpl examView);
+		public void populateEndTimeListBox(ExaminationViewImpl examinationView);
 	}
 	
 	 void setDelegate(Delegate delegate);
