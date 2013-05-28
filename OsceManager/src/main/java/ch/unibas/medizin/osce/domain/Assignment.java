@@ -2232,6 +2232,7 @@ public class Assignment {
 	            		 //for (Assignment ass : query1.getResultList())
 	            		 {
 	            			Assignment ass = query1.getResultList().get(0);
+	            			
 	            			if (ass.getOscePostRoom() != null)
 	            			{
 	            				OscePostRoom oscePostRoom = ass.getOscePostRoom();
@@ -2268,7 +2269,20 @@ public class Assignment {
 		           						 for (Assignment tempass : q2.getResultList())
 		           						 {
 		           							 tempass.setTimeEnd(endTimeSlot);
-		           							 tempass.persist();		           									           							 
+		           							 tempass.persist();		 
+		           							 
+		           							 List<Assignment> tempAssList1 = maxEndTimeSlot((rotationNumber+1), osceDay.getId(), oscePost.getId(), secondSeqCourse.getId());
+		         							 
+		           							 Date startTimeSlot1 = new Date();
+		           							 Date endTimeSlot1 = new Date();
+		           							 if (tempAssList1 != null && tempAssList1.size() > 0)
+		           							 {
+		           								 startTimeSlot1 = tempAssList1.get(0).getTimeStart();
+		           								 endTimeSlot1 = tempAssList1.get((tempAssList1.size() - 1)).getTimeEnd();
+		           							 }	
+		           							 
+		           							 ass.setTimeStart(startTimeSlot1);
+		           							 ass.persist();
 		           						 }
 		           					 }
 		           					 else
@@ -2305,13 +2319,12 @@ public class Assignment {
 				                				newAss.persist();
 				           					 }
 		                				}
+		                				
+		                				 Date newTimeStart = dateAddMin(endTimeSlot, (newLunchValue + osceDay.getOsce().getMiddleBreak().intValue()));
+			           					 ass.setTimeStart(newTimeStart);
+			           					 ass.persist();
 		           					 }
-	           					 	
-		           					 Date newTimeStart = dateAddMin(endTimeSlot, (newLunchValue + osceDay.getOsce().getMiddleBreak().intValue()));
-		           					 ass.setTimeStart(newTimeStart);
-		           					 ass.persist();
 	            				}
-	            				
 	            			}
 	            		 }
 	            	 }
@@ -2444,6 +2457,19 @@ public class Assignment {
         							  assignment.setTimeStart(startTimeSlot);
         							  assignment.persist();        
         							  
+        							  List<Assignment> tempAssList1 = maxEndTimeSlot((rotationNumber-1), osceDay.getId(), oscePost.getId(), firstSeqCourse.getId());
+         							 
+        							  Date startTimeSlot1 = new Date();
+        							  Date endTimeSlot1 = new Date();
+        							  if (tempAssList1 != null && tempAssList1.size() > 0)
+        							  {
+        								  startTimeSlot1 = tempAssList1.get(0).getTimeStart();
+        								  endTimeSlot1 = tempAssList1.get((tempAssList1.size() - 1)).getTimeEnd();
+        							  }	
+         							 
+        							  ass.setTimeEnd(endTimeSlot1);
+        							  ass.persist();
+        							  
         						 }
         						 ass.remove();
         					 }
@@ -2515,7 +2541,20 @@ public class Assignment {
 	            						 for (Assignment assignment : q2.getResultList())
 	            						 {
 	            							 assignment.setTimeStart(startTimeSlot);
-	            							 assignment.persist();	            								            							 
+	            							 assignment.persist();	
+	            							 
+	            							 List<Assignment> tempAssList1 = maxEndTimeSlot((rotationNumber-1), osceDay.getId(), oscePost.getId(), firstSeqCourse.getId());
+	            							 
+	            							 Date startTimeSlot1 = new Date();
+	            							 Date endTimeSlot1 = new Date();
+	            							 if (tempAssList1 != null && tempAssList1.size() > 0)
+	            							 {
+	            								 startTimeSlot1 = tempAssList1.get(0).getTimeStart();
+	            								 endTimeSlot1 = tempAssList1.get((tempAssList1.size() - 1)).getTimeEnd();
+	            							 }
+	            							 
+	            							 ass.setTimeEnd(endTimeSlot1);
+	            							 ass.persist();
 	            						 }
 	            					 }
 	            					 else
@@ -2553,6 +2592,8 @@ public class Assignment {
 		            					 
 		            					 updateSequenceNumberOfExaminer(osceDay.getId(), endTimeSlot, +1, secondSeqCourse.getId(), otherOscePost.getId());
 	            					 }
+	            					 
+	            					 
 	            				}        				
 	            			}
 	            		 }

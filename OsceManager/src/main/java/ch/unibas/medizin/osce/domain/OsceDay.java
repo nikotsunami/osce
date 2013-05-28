@@ -959,6 +959,11 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 			return true;
 		}*/
 		
+		if(middleBreak != null && Math.abs((duration.getStandardSeconds() / 60)) > middleBreak) {
+			return true;
+		}
+
+		 
 		return false;
 	}
 	
