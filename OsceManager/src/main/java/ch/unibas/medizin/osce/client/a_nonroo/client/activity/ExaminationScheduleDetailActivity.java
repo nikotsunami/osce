@@ -1385,7 +1385,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	{
 		Log.info("createLogicalStudentBreak");
 		showLoadingScreen(true);
-		requests.assignmentRequestNonRoo().retrieveLogicalStudentInBreak(osceDayId, courseId).with("osceDay").fire(new OSCEReceiver<List<AssignmentProxy>>() {
+		requests.assignmentRequestNonRoo().retrieveLogicalStudentInBreak(osceDayId, courseId).with("osceDay","student").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 
 			@Override
 			public void onSuccess(List<AssignmentProxy> response) {
