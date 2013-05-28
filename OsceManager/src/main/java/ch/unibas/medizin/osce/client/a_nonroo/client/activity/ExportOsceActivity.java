@@ -75,6 +75,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 			@Override
 			public void onSelectionChange(SelectChangeEvent event) {
 				semesterProxy = event.getSemesterProxy();
+				loadBucketInformation(semesterProxy);
 				generateXMLFile(event.getSemesterProxy().getId());			
 			}
 		});
@@ -93,6 +94,15 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 		//requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		//System.out.println("SEMESTER ID : " + semesterProxy.getId());
 		
+		loadBucketInformation(semesterProxy);
+		
+		generateXMLFile(semesterProxy.getId());
+		
+		view.setDelegate(this);		
+	}
+	
+	public void loadBucketInformation(SemesterProxy semesterProxy)
+	{
 		requests.bucketInformationRequestNonRoo().findBucketInformationBySemester(semesterProxy.getId()).fire(new OSCEReceiver<BucketInformationProxy>() {
 
 			@Override
@@ -115,6 +125,9 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 				}
 				else
 				{
+					view.getBucketName().setText("");
+					view.getAccessKey().setText("");
+					view.getSecretKey().setText("");
 					//System.out.println("RESPONSE NOT FOUND");
 					view.getSaveEditButton().setText(constants.save());
 					
@@ -122,11 +135,8 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 				}
 			}
 		});
-		
-		generateXMLFile(semesterProxy.getId());
-		
-		view.setDelegate(this);		
 	}
+	
 	
 	@Override
 	public void onStop() {	
