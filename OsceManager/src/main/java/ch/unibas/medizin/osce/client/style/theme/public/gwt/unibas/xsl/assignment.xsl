@@ -513,7 +513,9 @@
 		            		</xsl:otherwise>
 		            </xsl:choose>
 		            
-		            <xsl:for-each select="rotations/rotation">            
+		            <xsl:for-each select="rotations/rotation">
+		            <xsl:choose>    
+		            			<xsl:when test="type = '0'">        
 						            <tr>
 						               
 						               <td><b><xsl:value-of select="rotationId" /></b></td>
@@ -522,7 +524,8 @@
 						               		<td><xsl:value-of select="examinerName" /></td>
 						               </xsl:for-each>
 						            </tr>
-				           
+				           		</xsl:when>
+				       </xsl:choose>
 				            
 						            <xsl:for-each select="startEndTimes/startEndTime">  
 						            	
@@ -557,8 +560,8 @@
            			 
            			 <xsl:for-each select="spBreakrotations/rotation"> 
 	           			
-	            
-				            
+	             <xsl:choose> 
+				            	<xsl:when test="type = '0'">  
 						            <tr>
 						            <td>
 						            <xsl:attribute name="colSpan">
@@ -568,7 +571,8 @@
 						            	<b><xsl:value-of select="rotationId" /></b>
 						            	</td>
 						            </tr>
-					            	
+					            </xsl:when>
+					 </xsl:choose>           
 					            	 <xsl:for-each select="startEndTimes/startEndTime">  
 					            	 	<tr >
 		           									  		<td bgColor="#E5EBEB"><xsl:value-of select="startEndTimeValue" /></td>

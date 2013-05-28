@@ -203,8 +203,13 @@ public class ExportAssignment  extends HttpServlet {
 						
 						
 						Element rotationElement=createEmptyChildNode("rotation",doc,rotationsElement);
-						createChildNode("rotationId", "rotation "+(j+1), doc, rotationElement);
 						
+						createChildNode("type", new Integer(type).toString(), doc, rotationElement);
+						if(type==0) //for student only show rotattion
+						{
+							
+							createChildNode("rotationId", "rotation "+(j+1), doc, rotationElement);
+						}
 						//retrieve examiners
 						Element examinersElement=createEmptyChildNode("examiners",doc,rotationElement);
 						for(OscePost oscePost:oscePosts)
@@ -222,6 +227,7 @@ public class ExportAssignment  extends HttpServlet {
 							else
 								examinerName="NA";
 							
+							if(type==0)  //for student only show rotattion
 							createChildNode("examinerName", examinerName, doc, examinerElement);
 						}
 						
@@ -516,7 +522,12 @@ public class ExportAssignment  extends HttpServlet {
 								Element rotationElement=createEmptyChildNode("rotation",doc,spBreakRotationsElement);
 								
 								createChildNode("rotationPostCount", String.valueOf(osceSeq.getOscePosts().size()+1), doc, rotationElement);
-								createChildNode("rotationId", "rotation "+(j+1), doc, rotationElement);
+								createChildNode("type", new Integer(type).toString(), doc, rotationElement);
+								if(type==0)
+								{
+									
+									createChildNode("rotationId", "rotation "+(j+1), doc, rotationElement);
+								}
 							//	List<Assignment> spBreakAssignments=Assignment.retrieveAssignmentOfLogicalBreakPost(osceDay.getId(), osceSeq.getId());
 								
 								//rotation
