@@ -1652,7 +1652,8 @@ public class Assignment {
     	 {
     		 if(osceDay.getLunchBreakStart() != null)
     		 {
-    			 Date lunchBreakTime = dateAddMin(osceDay.getLunchBreakStart(), osceDay.getOsce().getLunchBreak().intValue());
+    			 int lunchTime = (osceDay.getOsce().getLunchBreak().intValue() + osceDay.getLunchBreakAdjustedTime()) / 2;
+    			 Date lunchBreakTime = dateAddMin(osceDay.getLunchBreakStart(), lunchTime);
     			 updateAssignmentByDiff(osceDay.getId(), newLunchDiffTime, lunchBreakTime);
     			 
     			 int oldAdjustedTime = osceDay.getLunchBreakAdjustedTime();
