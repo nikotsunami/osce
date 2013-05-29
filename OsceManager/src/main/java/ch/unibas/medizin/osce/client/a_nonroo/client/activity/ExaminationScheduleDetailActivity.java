@@ -2827,7 +2827,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	}
 
 	@Override
-	public void shiftBreak(Long osceDayId, Date endDate, int diff,final PopupView popupView) {
+	public void shiftBreak(final Long osceDayId, Date endDate, final int diff,final PopupView popupView) {
 		Log.info("shiftBreak");
 		showLoadingScreen(true);
 		requests.assignmentRequestNonRoo().updateAssignmentByDiff(osceDayId, diff, endDate).fire(new OSCEReceiver<Void>() {
@@ -2835,9 +2835,25 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			@Override
 			public void onSuccess(Void response) {
 				
-				Log.info("shiftBreak success");
-				((PopupViewImpl)popupView).hide();
-				init();
+				requests.assignmentRequestNonRoo().updateLunchBreak(osceDayId, diff).fire(new OSCEReceiver<Void>() {
+
+					@Override
+					public void onSuccess(Void response) {
+						Log.info("shiftBreak success");
+						((PopupViewImpl)popupView).hide();
+						init();
+						showLoadingScreen(false);
+					}
+					
+					@Override
+					public void onFailure(ServerFailure error) {
+						showLoadingScreen(false);
+					}
+				});				
+			}
+			
+			@Override
+			public void onFailure(ServerFailure error) {
 				showLoadingScreen(false);
 			}
 		});

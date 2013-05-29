@@ -1601,6 +1601,7 @@ public class Assignment {
      {
     	 EntityManager em = entityManager();
     	 String sql = "SELECT a FROM Assignment a WHERE type = 1 AND a.osceDay = " + osceDayId + " AND a.oscePostRoom IS NULL AND a.patientInRole IS NULL AND a.timeStart = '" + timeStart + "' AND a.timeEnd = '" + timeEnd + "' ORDER BY a.timeStart";
+    	 //String sql = "SELECT a FROM Assignment a WHERE type = 1 AND a.osceDay = " + osceDayId + " AND a.oscePostRoom IS NULL AND a.timeStart = '" + timeStart + "' AND a.timeEnd = '" + timeEnd + "' ORDER BY a.timeStart";
     	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
     	 
     	 if (query.getResultList().size() > 0)
@@ -3006,5 +3007,35 @@ public class Assignment {
     		 return null;
      }
 
+	public static Boolean clearSPAssignmentByOsceDay(Long osceDayId) {
+		try
+		{
+			EntityManager em = entityManager();
+			String sql = "SELECT a FROM Assignment a WHERE a.type = 1 and a.osceDay.id = " + osceDayId;
+			TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+			
+			for (Assignment ass : query.getResultList())
+			{
+				ass.setPatientInRole(null);
+				ass.persist();				
+			}
+			return true;
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+	}
+
+	public static void updateLunchBreak(Long osceDayId, int diff)
+	{
+		OsceDay osceDay = OsceDay.findOsceDay(osceDayId);
+		if (osceDay.getLunchBreakStart() != null)
+		{
+			Date lunchBreak = dateAddMin(osceDay.getLunchBreakStart(), diff);
+			osceDay.setLunchBreakStart(lunchBreak);
+			osceDay.persist();
+		}	
+	}
      
 } 
