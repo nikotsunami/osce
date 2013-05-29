@@ -14,6 +14,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsView.Presen
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.OfficeDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
+import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
@@ -99,11 +100,11 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 	private void initOsceTable(DoctorProxy doctorProxy)
 	{
 		
-		requests.osceDayRequestNooRoo().findOsceDayByDoctorAssignment(doctorProxy).with("osce","osce.semester","osce.semester.semester").fire(new OSCEReceiver<List<OsceDayProxy>>() 
+		requests.osceDayRequestNooRoo().findOsceDayByDoctorAssignment(doctorProxy).with("osceDay","osceDay.osce","osceDay.osce.semester","osceDay.osce.semester.semester").fire(new OSCEReceiver<List<AssignmentProxy>>() 
 				{
 
 			@Override
-			public void onSuccess(List<OsceDayProxy> response) {
+			public void onSuccess(List<AssignmentProxy> response) {
 				
 				view.getTable().setRowData(response);
 			}

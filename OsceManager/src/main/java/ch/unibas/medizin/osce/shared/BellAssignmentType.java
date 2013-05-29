@@ -309,28 +309,52 @@ public class BellAssignmentType implements Serializable {
 					bellAssignmentTypes.add(endBellAssignmentType);
 				}
 				
-				if (assignmentNext != null)
+				if (assignmentNext == null)
 				{
 					BellAssignmentType startBellAssignmentType = new BellAssignmentType();				
-					startBellAssignmentType = getBellAssignmentType(assignmentNext
-							.getOsceDay().getOsceDate(), assignmentNext.getOsceDay()
+					startBellAssignmentType = getBellAssignmentType(assignment
+							.getOsceDay().getOsceDate(), assignment.getOsceDay()
 							.getOsce().getName());
 					startBellAssignmentType.setBellTone(BellTone.TONE_2);
 					startBellAssignmentType.setOsceTime(getNewDate(
-							assignmentNext.getTimeStart(), time, 0, isPlusTime));
+							assignment.getTimeStart(), time, 0, isPlusTime));
 					bellAssignmentTypes.add(startBellAssignmentType);
 					
 					
 					BellAssignmentType endBellAssignmentType = new BellAssignmentType();				
-					endBellAssignmentType = getBellAssignmentType(assignmentNext
-							.getOsceDay().getOsceDate(), assignmentNext.getOsceDay()
+					endBellAssignmentType = getBellAssignmentType(assignment
+							.getOsceDay().getOsceDate(), assignment.getOsceDay()
 							.getOsce().getName());
 					endBellAssignmentType.setOsceTime(getNewDate(
-							assignmentNext.getTimeEnd(), time, 0, isPlusTime));
+							assignment.getTimeEnd(), time, 0, isPlusTime));
 					endBellAssignmentType.setBellTone(BellTone.TONE_4);				
 					bellAssignmentTypes.add(endBellAssignmentType);
 				}
 			}
+			
+			
+			/*if(assignmentProxyList.size()>1)
+			{
+			AssignmentProxy lastAssignment=assignmentProxyList.get(assignmentProxyList.size()-1);
+			BellAssignmentType startBellAssignmentType = new BellAssignmentType();				
+			startBellAssignmentType = getBellAssignmentType(lastAssignment
+					.getOsceDay().getOsceDate(), lastAssignment.getOsceDay()
+					.getOsce().getName());
+			startBellAssignmentType.setBellTone(BellTone.TONE_2);
+			startBellAssignmentType.setOsceTime(getNewDate(
+					lastAssignment.getTimeStart(), time, 0, isPlusTime));
+			bellAssignmentTypes.add(startBellAssignmentType);
+			
+			
+			BellAssignmentType endBellAssignmentType = new BellAssignmentType();				
+			endBellAssignmentType = getBellAssignmentType(lastAssignment
+					.getOsceDay().getOsceDate(), lastAssignment.getOsceDay()
+					.getOsce().getName());
+			endBellAssignmentType.setOsceTime(getNewDate(
+					lastAssignment.getTimeEnd(), time, 0, isPlusTime));
+			endBellAssignmentType.setBellTone(BellTone.TONE_4);				
+			bellAssignmentTypes.add(endBellAssignmentType);
+			}*/
 		}	
 		return bellAssignmentTypes;
 

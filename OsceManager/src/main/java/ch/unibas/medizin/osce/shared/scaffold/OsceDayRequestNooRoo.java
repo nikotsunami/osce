@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.shared.scaffold;
 
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
@@ -18,7 +19,7 @@ public interface OsceDayRequestNooRoo extends RequestContext {
 	public abstract Request<List<StandardizedRoleProxy>> findRoleForSPInSemester (Long patientInSemesterId,Long osceDayId);
 	public abstract Request<Boolean> findRoleAssignedInOsceDay(Long standardizedRoleId, Long OsceDayId);
 	
-	abstract Request<java.util.List<OsceDayProxy>> findOsceDayByDoctorAssignment(DoctorProxy proxy);
+	abstract Request<java.util.List<AssignmentProxy>> findOsceDayByDoctorAssignment(DoctorProxy proxy);
 	
 	public abstract Request<Boolean> updateLunchBreak(Long osceDayId, Integer afterRotation, Integer flag);
 	public abstract Request<Boolean> updateTimesAfterRotationShift(Long osceDayIdFrom, Long osceDayIdTo);

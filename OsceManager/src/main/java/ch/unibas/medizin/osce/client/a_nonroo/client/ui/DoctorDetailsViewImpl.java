@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
@@ -119,7 +120,7 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
     
     //Module : 6
     @UiField (provided = true)
-	CellTable<OsceDayProxy> oscetable;
+	CellTable<AssignmentProxy> oscetable;
     
 	@UiField(provided = true)
 	public SimplePager pager;
@@ -149,7 +150,7 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 		//Module 6 START
 		CellTable.Resources tableResources = GWT
 				.create(MyCellTableResources.class);
-		oscetable = new CellTable<OsceDayProxy>(5, tableResources);
+		oscetable = new CellTable<AssignmentProxy>(5, tableResources);
 
 		SimplePager.Resources pagerResources = GWT
 				.create(MySimplePagerResources.class);
@@ -309,7 +310,7 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 	public void initTableOsce()
 	{
 		paths.add("oscename");
-		oscetable.addColumn(new TextColumn<OsceDayProxy>() {
+		oscetable.addColumn(new TextColumn<AssignmentProxy>() {
 			Renderer<String> renderer = new AbstractRenderer<String>() {
 
 				public String render(String obj) {
@@ -318,14 +319,14 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 			};
 
 			@Override
-			public String getValue(OsceDayProxy object) {
-				return new EnumRenderer<StudyYears>().render(object.getOsce().getStudyYear()) 
-						+ "." + new EnumRenderer<Semesters>().render(object.getOsce().getSemester().getSemester());
+			public String getValue(AssignmentProxy object) {
+				return new EnumRenderer<StudyYears>().render(object.getOsceDay().getOsce().getStudyYear()) 
+						+ "." + new EnumRenderer<Semesters>().render(object.getOsceDay().getOsce().getSemester().getSemester());
 			}
 		}, constants.osce());
 		
 		paths.add("starttime");
-		oscetable.addColumn(new TextColumn<OsceDayProxy>() {
+		oscetable.addColumn(new TextColumn<AssignmentProxy>() {
 
 			Renderer<Date> renderer = new AbstractRenderer<Date>() {
 
@@ -335,13 +336,13 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 			};
 
 			@Override
-			public String getValue(OsceDayProxy object) {
+			public String getValue(AssignmentProxy object) {
 				return renderer.render(object.getTimeStart());
 			}
 		}, constants.starttimedoc());
 		
 		paths.add("endtime");
-		oscetable.addColumn(new TextColumn<OsceDayProxy>() {
+		oscetable.addColumn(new TextColumn<AssignmentProxy>() {
 			Renderer<Date> renderer = new AbstractRenderer<Date>() {
 				public String render(Date obj){
 					return obj == null ? "" : String.valueOf(DateTimeFormat.getFormat("HH:mm").format(obj).substring(0,5));
@@ -349,7 +350,7 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 			};
 			
 			@Override
-			public  String getValue(OsceDayProxy object)
+			public  String getValue(AssignmentProxy object)
 			{
 				return renderer.render(object.getTimeEnd());
 			}
@@ -423,7 +424,7 @@ public class DoctorDetailsViewImpl extends Composite implements  DoctorDetailsVi
 	}
 
 	@Override
-	public CellTable<OsceDayProxy> getTable() {
+	public CellTable<AssignmentProxy> getTable() {
 		return oscetable;
 	}
 

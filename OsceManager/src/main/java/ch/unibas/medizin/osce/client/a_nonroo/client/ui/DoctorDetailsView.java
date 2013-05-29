@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleParticipantProxy;
@@ -37,7 +38,7 @@ public interface DoctorDetailsView extends IsWidget{
 	public int getSelectedDetailsTab();
 	
 	//Module : 6
-	CellTable<OsceDayProxy> getTable();
+	CellTable<AssignmentProxy> getTable();
     String[] getPaths();
     
     CellTable<RoleParticipantProxy> getRoleTable();

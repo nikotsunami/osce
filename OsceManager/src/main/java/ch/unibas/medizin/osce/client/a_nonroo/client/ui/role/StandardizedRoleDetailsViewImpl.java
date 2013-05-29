@@ -231,6 +231,8 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	
 	@UiField
 	public TabPanel roleSubPanel;
+	
+	StandardizedRolePrintFilterViewImpl standardizedRolePrintFilterViewImpl = null;
 	/*
 	 * @UiField(provided = true) public FocusableValueListBox<StudyYears>
 	 * studyYear = new FocusableValueListBox<StudyYears>(new
@@ -566,8 +568,10 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 //	}
 
 	private void showPrintFilterPanel(int left, int top) {
-		StandardizedRolePrintFilterViewImpl standardizedRolePrintFilterViewImpl = StandardizedRolePrintFilterViewImpl
-				.getStandardizedRolePrintFilterViewImpl(getValue(),delegate);				
+					
+		if(standardizedRolePrintFilterViewImpl==null)
+		standardizedRolePrintFilterViewImpl = StandardizedRolePrintFilterViewImpl
+				.getStandardizedRolePrintFilterViewImpl(getValue(),delegate);	
 		standardizedRolePrintFilterViewImpl.setPopupPosition(left-193, top-5);
 //		standardizedRolePrintFilterViewImpl.setPopupPosition(left, top);
 		standardizedRolePrintFilterViewImpl.show();
