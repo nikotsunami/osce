@@ -85,6 +85,7 @@ public class RolePrintPdfUtil extends PdfUtil {
 			document.open();
 			addMetaData();
 			addHeader();
+			addTitle();
 
 			for (String items : itemsList) {
 				log.info("items is : " + items);
@@ -100,14 +101,24 @@ public class RolePrintPdfUtil extends PdfUtil {
 				if (items.compareToIgnoreCase(constants.basicData()) == 0) {
 					log.info("items is : addDetails");
 					addDetails();
+					
 				} else if (items.compareTo(constants.checkList()) == 0) {
 					log.info("items is : addCheckList");
 					addCheckListDetails();
+					
 				} else if (items.compareTo(constants.roomMaterials()) == 0) {
 					log.info("items is : addRoomMaterial");
+					
+					if (itemsList.contains(constants.basicData()) || itemsList.contains(constants.checkList()))
+						document.newPage();
+					
 					addRoomMaterialDetails();
 				} else if (items.compareTo(constants.fileDetail()) == 0) {
 					log.info("items is : addFiles");
+					
+					if (itemsList.contains(constants.basicData()) || itemsList.contains(constants.checkList()) || itemsList.contains(constants.roomMaterials()))
+						document.newPage();
+					
 					addFileDetails();
 				}
 			}
@@ -140,6 +151,7 @@ public class RolePrintPdfUtil extends PdfUtil {
 			document.open();
 			addMetaData();
 			addHeader();
+			addTitle();
 
 			for (String items : itemsList) {
 				log.info("==========> items is : " + items);
@@ -160,9 +172,17 @@ public class RolePrintPdfUtil extends PdfUtil {
 					addCheckListDetails();
 				} else if (items.compareTo(constants.roomMaterials()) == 0) {
 					log.info("items is : addRoomMaterial");
+					
+					if (itemsList.contains(constants.basicData()) || itemsList.contains(constants.checkList()))
+						document.newPage();
+					
 					addRoomMaterialDetails();
 				} else if (items.compareTo(constants.fileDetail()) == 0) {
 					log.info("items is : addFiles");
+					
+					if (itemsList.contains(constants.basicData()) || itemsList.contains(constants.checkList()) || itemsList.contains(constants.roomMaterials()))
+						document.newPage();
+					
 					addFileDetails();
 				}
 			}
@@ -205,6 +225,18 @@ public class RolePrintPdfUtil extends PdfUtil {
 	//
 	// }
 
+	private void addTitle()
+	{
+		Paragraph titleDetails = new Paragraph();
+		Font roleTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 15,Font.BOLD);
+		titleDetails.add(new Chunk(constants.standardizedRole()+": "+ util.getEmptyIfNull(standardizedRole.getLongName()), roleTitleFont));
+		addEmptyLine(titleDetails, 1);
+		try {
+			document.add(titleDetails);
+		} catch (DocumentException e) {
+			log.error("in PdfUtil.addDetails(): " + e.getMessage());
+		}
+	}
 	private void addMetaData() {
 		document.addTitle(title);
 		document.addSubject(constants.roleDetail());
@@ -233,9 +265,10 @@ public class RolePrintPdfUtil extends PdfUtil {
 	}
 
 	private void addDetails() {
+		PdfPTable table = createDetailsTable();
+		
 		if (isValueAvailable[0]) {
-			Paragraph details = new Paragraph();
-			PdfPTable table = createDetailsTable();
+			Paragraph details = new Paragraph();			
 			table.setSpacingBefore(titleTableSpacing);
 			details.add(new Chunk(constants.roleDetail(), paragraphTitleFont));
 			details.add(table);
@@ -422,7 +455,7 @@ public class RolePrintPdfUtil extends PdfUtil {
 			addEmptyLine(details, 1);
 
 			try {
-				document.newPage();
+				//document.newPage();
 				document.add(details);
 			} catch (DocumentException e) {
 				log.error("in PdfUtil.addDetails(): " + e.getMessage());
@@ -441,7 +474,7 @@ public class RolePrintPdfUtil extends PdfUtil {
 			addEmptyLine(details, 1);
 
 			try {
-				document.newPage();
+				//document.newPage();
 				document.add(details);
 			} catch (DocumentException e) {
 				log.error("in PdfUtil.addDetails(): " + e.getMessage());
@@ -468,11 +501,11 @@ public class RolePrintPdfUtil extends PdfUtil {
 			// addEmptyLine(details, 1);
 
 			try {
-				document.add(titleDetails);
-				document.add(createDetailsTable());
-				Paragraph emptyLineParagraph=new Paragraph();
-				addEmptyLine(emptyLineParagraph, 1);
-				document.add(emptyLineParagraph);
+				//document.add(titleDetails);
+				//document.add(createDetailsTable());
+				//Paragraph emptyLineParagraph=new Paragraph();
+				//addEmptyLine(emptyLineParagraph, 1);
+				//document.add(emptyLineParagraph);
 				document.add(details);
 			} catch (DocumentException e) {
 				log.error("in PdfUtil.addDetails(): " + e.getMessage());
