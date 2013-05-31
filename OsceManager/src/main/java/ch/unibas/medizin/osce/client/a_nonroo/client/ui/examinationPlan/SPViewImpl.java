@@ -179,7 +179,7 @@ public class SPViewImpl extends Composite implements SPView, HasMouseDownHandler
 		//setDAta
 		
 		if(assignmentProxy.getPatientInRole()!=null)
-			popupView.getNameValue().setText(assignmentProxy.getPatientInRole().getPatientInSemester().getStandardizedPatient().getName());
+			popupView.getNameValue().setText(assignmentProxy.getPatientInRole().getPatientInSemester().getStandardizedPatient().getPreName() + " " + assignmentProxy.getPatientInRole().getPatientInSemester().getStandardizedPatient().getName());
 		else
 			popupView.getNameValue().setText(constants.notAssigned());
 		popupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeStart()));

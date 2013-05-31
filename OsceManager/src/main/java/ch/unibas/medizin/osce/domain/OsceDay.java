@@ -4,13 +4,16 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -24,6 +27,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -849,15 +853,30 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 			writer.endRecord();
 			
 			DateTime lastEndTime = null;
+			Integer currentRoatation;
+			Integer previousRoatation = 0;
+			
+			if (assList.size() == 0)
+				return;
+			
 			if (assList.size() > 0)
+			{
 				lastEndTime = new DateTime(assList.get(0).getTimeEnd());
+				previousRoatation = assList.get(0).getRotationNumber();
+			}
 			
 			List<Schedule> scheduleList = new ArrayList<Schedule>();
+			
+			/* rotation map with break true*/
+			Map<Integer,Boolean> rotationBreak = getRotationToBreakBoolean(osceDay.getBreakByRotation(),longBreak,lunchBreak,middleBreak);
+			
 			
 			for (Assignment assignment : assList)
 			{
 				DateTime currentEndTime =  new DateTime(assignment.getTimeEnd());
 				DateTime currentStartTime = new DateTime(assignment.getTimeStart());
+				
+				currentRoatation = assignment.getRotationNumber();
 				
 				/* for post begin */
 				{
@@ -884,12 +903,12 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 				/* For before post break*/
 				if (preBreakEndTime > 0 && preBreakEndTone > 0) 
 				{
-					if(isLunchOrLongOrMiddleBreak(lastEndTime, currentStartTime, lunchBreak, longBreak, middleBreak) == true)
+					if(isLunchOrLongOrMiddleBreak(lastEndTime,currentStartTime,lunchBreak,longBreak,middleBreak,previousRoatation,(!currentRoatation.equals(previousRoatation)),rotationBreak) == true)
 					{
 						Schedule schedule = new Schedule();
 						DateTime tempCurrStTime = currentStartTime.plusMinutes(plusTime);
 						schedule.setTime(tempCurrStTime.minusMinutes(preBreakEndTime));
-						schedule.setTone(String.valueOf(preBreakEndTime));
+						schedule.setTone(String.valueOf(preBreakEndTone));
 						schedule.setIsShow("1");
 						schedule.setType(RingtoneTypes.PRE_BREAK);
 						scheduleList.add(schedule);
@@ -908,6 +927,7 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 				}
 				
 				lastEndTime = new DateTime(assignment.getTimeEnd());
+				previousRoatation = assignment.getRotationNumber();
 			}			
 			
 			Collections.sort(scheduleList, new Comparator<Schedule>() {
@@ -934,7 +954,7 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 		}
 	}
 	
-	private static boolean isLunchOrLongOrMiddleBreak(DateTime lastEndTime, DateTime currentStartTime, Integer lunchBreak, Integer longBreak, Integer middleBreak) {
+	private static boolean isLunchOrLongOrMiddleBreak(DateTime lastEndTime, DateTime currentStartTime, Integer lunchBreak, Integer longBreak, Integer middleBreak, Integer previousRotation, boolean isRotationChanged, Map<Integer, Boolean> rotationBreak) {
 		
 		if(lastEndTime == null || currentStartTime == null) {
 			return false;
@@ -942,6 +962,13 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 		
 		if(lunchBreak == null && longBreak == null /*&& middleBreak == null*/) {
 			return false;
+		}
+		
+		if(rotationBreak != null && rotationBreak.isEmpty() == false && isRotationChanged == true) {
+			Boolean bool = rotationBreak.get(previousRotation);
+			if(bool != null){
+				return bool;
+			}
 		}
 		
 		Duration duration = new Duration(currentStartTime,lastEndTime);
@@ -959,12 +986,46 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 			return true;
 		}*/
 		
-		if(middleBreak != null && Math.abs((duration.getStandardSeconds() / 60)) > middleBreak) {
+		/*if(middleBreak != null && Math.abs((duration.getStandardSeconds() / 60)) > middleBreak) {
 			return true;
-		}
+		}*/
 
 		 
 		return false;
+	}
+	
+	private static Map<Integer, Boolean> getRotationToBreakBoolean(String breakByRotation, Integer longBreak, Integer lunchBreak, Integer middleBreak) {
+		
+		Map<Integer,Boolean> rotationBreak = new HashMap<Integer, Boolean>();
+		
+		if(StringUtils.isBlank(breakByRotation)) {
+			return rotationBreak;
+		}
+		
+		List<String> rotationList = Arrays.asList(breakByRotation.split("-"));
+		
+		for (String rotation : rotationList) {
+			List<String> currentRotation = Arrays.asList(rotation.split(":"));
+			
+			if(currentRotation.size() == 2) {
+				Integer rotationNumber = Integer.parseInt(currentRotation.get(0));
+				Integer breakTime = Integer.parseInt(currentRotation.get(1));
+				
+				if(lunchBreak != null && breakTime == lunchBreak) {
+					rotationBreak.put(rotationNumber, Boolean.TRUE);
+				}
+				
+				if(longBreak != null && breakTime == longBreak) {
+					rotationBreak.put(rotationNumber, Boolean.TRUE);
+				}
+				
+				if(middleBreak != null && breakTime == middleBreak) {
+					rotationBreak.put(rotationNumber, Boolean.FALSE);
+				}
+			}
+		}
+		
+		return rotationBreak;
 	}
 	
 	

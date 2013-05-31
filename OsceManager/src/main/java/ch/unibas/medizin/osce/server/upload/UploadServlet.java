@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.ProgressListener;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -30,6 +29,12 @@ public class UploadServlet extends HttpServlet {
 	private static String localUploadDirectory=OsMaFilePathConstant.localImageUploadDirectory;
 //	private static String srcPath=OsMaFilePathConstant.imagesrcPath;
 	//SPEC]End
+	
+	// upload settings
+	private static final int MEMORY_THRESHOLD= 1024 * 1024 * 3;// 3MB
+	private static final int MAX_FILE_SIZE= 1024 * 1024 * 40; // 40MB
+	private static final int MAX_REQUEST_SIZE= 1024 * 1024 * 50; // 50MB
+	
 	/**
 	 * Generated 
 	 */
@@ -50,7 +55,10 @@ public class UploadServlet extends HttpServlet {
 		//SPEC]End
 		
     	// Create a factory for disk-based file items
-        FileItemFactory factory = new DiskFileItemFactory();
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+     // sets memory threshold - beyond which files are stored in disk 
+        factory.setSizeThreshold(MEMORY_THRESHOLD);
+        factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
 
         // Create a new file upload handler
         ServletFileUpload upload = new ServletFileUpload(factory);
