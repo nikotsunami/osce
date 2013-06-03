@@ -776,6 +776,10 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 													optionValElement.appendChild(doc.createTextNode(option.getValue() == null ? "" : option.getValue().toString()));
 													optionElement.appendChild(optionValElement);
 													
+													Element instructionElement = doc.createElement("instruction");
+													instructionElement.appendChild(doc.createCDATASection(option.getInstruction() == null ? "" : option.getInstruction()));
+													optionElement.appendChild(instructionElement);
+													
 													Element optionSeqNoElement = doc.createElement("sequencenumber");
 													optionSeqNoElement.appendChild(doc.createTextNode(option.getSequenceNumber() == null ? "" : option.getSequenceNumber().toString()));
 													optionElement.appendChild(optionSeqNoElement);

@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -111,6 +112,12 @@ public class CheckListTopicPopupViewImpl extends PopupPanel implements CheckList
 	@UiField
 	HorizontalPanel thirtHP;
 	
+	@UiField
+	Label optionDescLbl;
+	
+	@UiField
+	TextArea optionDescTextArea;
+	
 	private Label criteriaCountLbl;
 	
 	private ListBox criteriaCountLstBox=new ListBox();
@@ -129,6 +136,9 @@ public class CheckListTopicPopupViewImpl extends PopupPanel implements CheckList
 		isOverallQuestionLbl.removeFromParent();
 		isOverallQuestionChkBox.removeFromParent();
 		
+		optionDescLbl.removeFromParent();
+		optionDescTextArea.removeFromParent();
+		
 	}
 	
 	public CheckListTopicPopupViewImpl(boolean isQuestionView) {
@@ -146,14 +156,20 @@ public class CheckListTopicPopupViewImpl extends PopupPanel implements CheckList
 			isOverallQuestionLbl.setText(constants.isOverallQuestion());
 			isOverallQuestionLbl.setVisible(true);
 			isOverallQuestionChkBox.setVisible(true);
+			
+			optionDescLbl.removeFromParent();
+			optionDescTextArea.removeFromParent();
 		}
 		else
 		{
+			optionDescLbl.setText(constants.roleQuestionInstruction() + ":");
+			
 			isOverallQuestionLbl.removeFromParent();
 			isOverallQuestionChkBox.removeFromParent();
 			
 			criteriaCountLbl=new Label();
 			criteriaCountLbl.setText(constants.criteraCount());
+			criteriaCountLbl.setWidth("100px");
 			
 			ArrayList<Integer> integers=new ArrayList<Integer>();
 			for(int i=0;i<11;i++)
@@ -175,4 +191,22 @@ public class CheckListTopicPopupViewImpl extends PopupPanel implements CheckList
 	
 	interface Binder extends UiBinder<Widget, CheckListTopicPopupViewImpl> {
 	}
+
+	public Label getOptionDescLbl() {
+		return optionDescLbl;
+	}
+
+	public void setOptionDescLbl(Label optionDescLbl) {
+		this.optionDescLbl = optionDescLbl;
+	}
+
+	public TextArea getOptionDescTextArea() {
+		return optionDescTextArea;
+	}
+
+	public void setOptionDescTextArea(TextArea optionDescTextArea) {
+		this.optionDescTextArea = optionDescTextArea;
+	}
+	
+	
 }

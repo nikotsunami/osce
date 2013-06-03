@@ -17,7 +17,7 @@ public interface RoleDetailsChecklistSubViewChecklistQuestionItemView extends Is
 
 	interface Delegate {
 		void saveCriteria(String criteria,RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl view);
-		void saveOption(String option,String value,RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl view);
+		void saveOption(String option,String value,String description, RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl view);
 		void editOption(String question, String instruction, RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView);
 		void deleteQuestion(RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView);
 		void questionMoveUp(RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView,ChecklistTopicProxy topicProxy,RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView);
