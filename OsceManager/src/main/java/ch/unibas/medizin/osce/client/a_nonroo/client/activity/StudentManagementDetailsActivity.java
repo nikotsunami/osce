@@ -93,6 +93,7 @@ public class StudentManagementDetailsActivity extends AbstractActivity implement
 					studentProxy=(StudentProxy)response;
 					
 					studentManagementDetailsViewImpl.setStudentProxy(studentProxy);
+					studentDetailsViewImpl.studIdValLbl.setText(util.getEmptyIfNull(studentProxy.getStudentId()));
 					studentDetailsViewImpl.Name.setText(util.getEmptyIfNull(studentProxy.getName()));
 					studentDetailsViewImpl.Prename.setText(util.getEmptyIfNull(studentProxy.getPreName()));
 					studentDetailsViewImpl.Street.setText(util.getEmptyIfNull(studentProxy.getStreet()));

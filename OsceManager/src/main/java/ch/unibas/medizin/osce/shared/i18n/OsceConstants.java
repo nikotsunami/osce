@@ -1355,5 +1355,7 @@ public interface OsceConstants extends Constants {
 	public String preBreakTimeErr();
 			
 	public String preBreakToneErr();
+	
+	public String studentId();
 }
 
