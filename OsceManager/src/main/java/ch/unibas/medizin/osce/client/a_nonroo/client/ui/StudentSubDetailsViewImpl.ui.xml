@@ -4,7 +4,11 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:r="urn:import:ch.unibas.medizin.osce.client.style.resources">
 
-	<ui:style src="../styles.css" />
+	<ui:style src="../styles.css" >
+	.noteLbl{
+		margin-top: 10px;
+	}
+	</ui:style>
 	
 	
 <g:ScrollPanel >
@@ -36,6 +40,11 @@
 
 			</g:HorizontalPanel>
 		</g:FormPanel>
+		
+		<div class="{style.noteLbl}">
+			<span ui:field="noteLbl"></span>
+			<span ui:field="noteValue"></span>
+		</div>
 
 	</g:HTMLPanel>
 	

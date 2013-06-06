@@ -24,6 +24,8 @@ import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.AbstractRenderer;
@@ -85,7 +87,12 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 	@UiField Button importfile;
 
 //	public OsceProxy osceProxy;
+	
+	@UiField
+	SpanElement noteLbl;
 
+	@UiField
+	SpanElement noteValue;
 	
 
 	protected Set<String> paths = new HashSet<String>();
@@ -136,6 +143,10 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 		 hidden.setName("hidden");
 		 importfile.setText(constants.importStudents());	 
 		
+		 noteLbl.setInnerText("*" + constants.note() + " : ");
+		 noteLbl.getStyle().setFontWeight(FontWeight.BOLD);
+		 
+		 noteValue.setInnerText(constants.noteValue());
 		 
 		 uploadFormPanel.addSubmitHandler(new FormPanel.SubmitHandler()
 		    {
@@ -210,6 +221,10 @@ private final OsceConstants constants = GWT.create(OsceConstants.class);
 		 hidden.setValue(String.valueOf(osceProxy.getId()));
 		 importfile.setText(constants.importStudents());	 
 		
+		 noteLbl.setInnerText("*" + constants.note() + " : ");
+		 noteLbl.getStyle().setFontWeight(FontWeight.BOLD);
+		 
+		 noteValue.setInnerText(constants.noteValue());
 		 
 		 uploadFormPanel.addSubmitHandler(new FormPanel.SubmitHandler()
 		    {

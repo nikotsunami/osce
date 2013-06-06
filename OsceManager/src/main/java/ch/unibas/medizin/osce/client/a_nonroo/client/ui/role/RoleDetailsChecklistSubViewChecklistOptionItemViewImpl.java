@@ -152,12 +152,21 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 				
 				if(Validator.isNotNull(optionPopup.getTopicTxtBox().getValue(),optionPopup.getDescriptionTxtBox().getValue()))
 				{
-					//delegate.saveCheckListTopic(optionPopup.getTopicTxtBox().getValue(),optionPopup.getDescriptionTxtBox().getValue());
-					delegate.updateOption(optionPopup.getTopicTxtBox().getValue(), optionPopup.getDescriptionTxtBox().getValue(), optionPopup.getOptionDescTextArea().getValue(), roleDetailsChecklistSubViewChecklistOptionItemViewImpl);
-					((CheckListTopicPopupViewImpl)optionPopup).hide(true);
+					if (!optionPopup.getDescriptionTxtBox().getValue().matches("[0-9]+"))
+					{
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+						confirmationDialogBox.showConfirmationDialog(constants.checklistOptionErr());
+					}
+					else
+					{
+						//delegate.saveCheckListTopic(optionPopup.getTopicTxtBox().getValue(),optionPopup.getDescriptionTxtBox().getValue());
+						delegate.updateOption(optionPopup.getTopicTxtBox().getValue(), optionPopup.getDescriptionTxtBox().getValue(), optionPopup.getOptionDescTextArea().getValue(), roleDetailsChecklistSubViewChecklistOptionItemViewImpl);
+						((CheckListTopicPopupViewImpl)optionPopup).hide(true);
+						
+						optionPopup.getTopicTxtBox().setValue("");
+						optionPopup.getDescriptionTxtBox().setValue("");
+					}
 					
-					optionPopup.getTopicTxtBox().setValue("");
-					optionPopup.getDescriptionTxtBox().setValue("");
 				}
 				else
 				{

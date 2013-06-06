@@ -903,7 +903,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 						+ osceList.get(i).getSemester().getCalYear().toString().substring(2, osceList.get(i).getSemester().getCalYear().toString().length()) 
 						+ "-" + (constants.getString(osceList.get(i).getStudyYear().toString()).replace(".", "")); 
 										
-				fileName = fileName + ".oscexchange";
+				fileName = fileName + ".osceexchange";
 				
 				String processedFileName = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + fileName;
 				File processfile = new File(processedFileName);

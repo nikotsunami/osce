@@ -20,6 +20,8 @@ public interface StudentManagementDetailsView extends IsWidget {
 
 	 interface Delegate {
 		 public void printCheckList(OsceProxy osceProxy,StudentProxy studentProxy);
+
+		 public void printCheckListForMinVal(OsceProxy osceProxy, StudentProxy studentProxy);
 		
 	 }
 

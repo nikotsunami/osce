@@ -90,6 +90,11 @@ public class ResourceUtil {
 			break;
 		}
 		
+		case STUDENT_MANAGEMENT_MIN_OPTION_VALUE:{
+			fileName = setStudentManagementResouceMinValue(request,os);
+			break;
+		}
+		
 		default: {
 			Log.info("Error in entity : " + entity);
 			break;
@@ -98,6 +103,17 @@ public class ResourceUtil {
 
 		sendFile(response, os.toByteArray(), fileName);
 		os = null;
+	}
+
+	private static String setStudentManagementResouceMinValue(HttpServletRequest request, ByteArrayOutputStream os) {
+		Long studentId = Long
+				.parseLong(request.getParameter(ResourceDownloadProps.ID));		
+		Long osceId = Long
+				.parseLong(request.getParameter(ResourceDownloadProps.OSCE_ID));
+		String locale = request.getParameter(ResourceDownloadProps.LOCALE);
+		
+		String fileName = StandardizedRole.getRolePrintPDFByStudentForMinValueUsingServlet(studentId, osceId, locale, os);
+		return fileName;
 	}
 
 	private static String setExportScheduleCsv(HttpServletRequest request, HttpServletResponse response, ByteArrayOutputStream os) {

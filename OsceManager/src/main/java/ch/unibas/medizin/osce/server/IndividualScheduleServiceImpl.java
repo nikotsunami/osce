@@ -221,9 +221,10 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 					    {
 					    	
 					    	PatientInSemester patientInSemester=(PatientInSemester) pisIterator.next();
+					    	
 					    	Log.info("Patient In Semester: " + patientInSemester.getId());
 					    	//Set<PatientInRole> lstPatientInRole=patientInSemester.getPatientInRole();
-					    	List<PatientInRole> lstPatientInRole=PatientInRole.findPatientInRoleByPatientInSemesterOrderById(patientInSemester.getId());
+					    	List<PatientInRole> lstPatientInRole=PatientInRole.findPatientInRoleByPatientInSemesterOrderById(patientInSemester.getId(), osceDay.getId());
 					    	
 					    	//Log.info("Total Patient In Role " + lstPatientInRole.size() + " for Semester: " + patientInSemester.getId());
 					    	Iterator pirIterator = lstPatientInRole.iterator();					    	
@@ -266,7 +267,10 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 					    for (PatientInRole patientInRole : listOfPatientInRole) 
 					    {	
 					    	if(checkNotNull(patientInRole,"getOscePost","getStandardizedRole","getLongName")==true)
-					    		patientInRoleNameList.add(patientInRole.getOscePost().getStandardizedRole().getLongName());
+					    	{
+					    		if (!patientInRoleNameList.contains(patientInRole.getOscePost().getStandardizedRole().getLongName()))
+					    			patientInRoleNameList.add(patientInRole.getOscePost().getStandardizedRole().getLongName());
+					    	}
 						}
 					    
 					    tempOsceDayContent=tempOsceDayContent.replace("[ROLE]",""+StringUtils.join(patientInRoleNameList, ", "));
@@ -378,7 +382,9 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 										tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR]", "");
 										tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR.]", "");*/
 										
-										hasLongBreak=getAssignmentBreak(nextAssignment.getTimeStart(),spCurrentAssignment.getTimeEnd(),osce.getLongBreak());
+										int newLunchTime = osce.getLunchBreak() + (osceDay.getLunchBreakAdjustedTime() == null ? 0 : osceDay.getLunchBreakAdjustedTime());
+										//hasLongBreak=getAssignmentBreak(nextAssignment.getTimeStart(),spCurrentAssignment.getTimeEnd(),osce.getLongBreak());
+										hasLongBreak=getAssignmentLongBreak(nextAssignment.getTimeStart(),spCurrentAssignment.getTimeEnd(),osce.getLongBreak(), newLunchTime);
 										if(hasLongBreak==true)
 										{
 											System.out.println("Assignment has longBreak between : " + spCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
@@ -389,8 +395,10 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 										{
 											tempBreakContent=tempBreakContent.replace("[LONG BREAK]","");
 										}
-*/											
-										hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),spCurrentAssignment.getTimeEnd(),osce.getLunchBreak());
+*/										
+										
+										//hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),spCurrentAssignment.getTimeEnd(),osce.getLunchBreak());
+										hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),spCurrentAssignment.getTimeEnd(),newLunchTime);
 										if(hasLunchBreak==true)
 										{
 											System.out.println("Assignment has lunchBreak between : " + spCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
@@ -914,7 +922,10 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								if(assignment.getOscePostRoom()!=null && assignment.getOscePostRoom().getOscePost()!=null && assignment.getOscePostRoom().getOscePost().getOscePostBlueprint()!=null)
 								{
 									tempScheduleContentStud=tempScheduleContentStud.replace("[POST]", "P"+ assignment.getOscePostRoom().getOscePost().getOscePostBlueprint().getSequenceNumber().toString());
-									tempScheduleContentStud=tempScheduleContentStud.replace("[ROOM]", assignment.getOscePostRoom().getRoom().getRoomNumber().toString());
+									if (assignment.getOscePostRoom().getRoom() == null)
+										tempScheduleContentStud=tempScheduleContentStud.replace("[ROOM]", " Break");
+									else
+										tempScheduleContentStud=tempScheduleContentStud.replace("[ROOM]", assignment.getOscePostRoom().getRoom().getRoomNumber().toString());
 								}
 								else
 								{
@@ -955,7 +966,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									tempBreakContentStud=tempBreakContentStud.replace("[BREAK SEPARATOR]", "");
 									tempBreakContentStud=tempBreakContentStud.replace("[BREAK SEPARATOR.]", "");*/
 									
-									hasLongBreak=getAssignmentBreak(nextAssignment.getTimeStart(),assignment.getTimeEnd(),osce.getLongBreak());
+									int newLunchTime = osce.getLunchBreak() + (osceDayEntity.getLunchBreakAdjustedTime() == null ? 0 : osceDayEntity.getLunchBreakAdjustedTime());
+									hasLongBreak=getAssignmentLongBreak(nextAssignment.getTimeStart(),assignment.getTimeEnd(),osce.getLongBreak(), newLunchTime);
 									if(hasLongBreak==true)
 									{
 										System.out.println("Assignment has longBreak between : " + assignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
@@ -966,8 +978,10 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									{
 										tempBreakContentStud=tempBreakContentStud.replace("Kaffee break is between [LONG BREAK] and ","");
 									}*/
-										
-									hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),assignment.getTimeEnd(),osce.getLunchBreak());
+									
+									
+									//hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),assignment.getTimeEnd(),osce.getLunchBreak());
+									hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),assignment.getTimeEnd(),newLunchTime);
 									if(hasLunchBreak==true)
 									{
 										System.out.println("Assignment has lunchBreak between : " + assignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
@@ -1074,7 +1088,18 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 	private boolean getAssignmentBreak(Date timeEnd, Date timeStart,int breakTime) 
 	{
 		int timeDifference=(int) (timeEnd.getTime() - timeStart.getTime()) / (60 * 1000);
-		if(timeDifference==breakTime)
+		if(timeDifference>=breakTime)
+		{			
+			return true;
+		}
+		return false;
+		
+	}
+	
+	private boolean getAssignmentLongBreak(Date timeEnd, Date timeStart,int breakTime, int newLunchTime) 
+	{
+		int timeDifference=(int) (timeEnd.getTime() - timeStart.getTime()) / (60 * 1000);
+		if(timeDifference >= breakTime && timeDifference < newLunchTime)
 		{			
 			return true;
 		}
@@ -1352,7 +1377,9 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								tempBreakContentExaminer=tempBreakContentExaminer.replace("[BREAK SEPARATOR]", "");
 								tempBreakContentExaminer=tempBreakContentExaminer.replace("[BREAK SEPARATOR.]", "");								
 								*/
-								hasLongBreak=getAssignmentBreak(nextAssignment.getTimeStart(),examinerCurrentAssignment.getTimeEnd(),osce.getLongBreak());
+								
+								int newLunchTime = osce.getLunchBreak() + (osceDayEntity.getLunchBreakAdjustedTime() == null ? 0 : osceDayEntity.getLunchBreakAdjustedTime());
+								hasLongBreak=getAssignmentLongBreak(nextAssignment.getTimeStart(),examinerCurrentAssignment.getTimeEnd(),osce.getLongBreak(), newLunchTime);
 								
 								if(hasLongBreak==true)
 								{
@@ -1365,7 +1392,9 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									tempBreakContentExaminer=tempBreakContentExaminer.replace("Kaffee break is between [LONG BREAK] and","");
 								}*/
 									
-								hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),examinerCurrentAssignment.getTimeEnd(),osce.getLunchBreak());
+								
+								//hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),examinerCurrentAssignment.getTimeEnd(),osce.getLunchBreak());
+								hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),examinerCurrentAssignment.getTimeEnd(),newLunchTime);
 								if(hasLunchBreak==true)
 								{
 									System.out.println("Assignment has lunchBreak between : " + examinerCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());

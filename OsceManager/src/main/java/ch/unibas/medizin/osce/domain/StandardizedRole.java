@@ -24,6 +24,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.RolePrintPdfUtil;
+import ch.unibas.medizin.osce.server.util.file.StudentManagementPrintMinOptionPdfUtil;
 import ch.unibas.medizin.osce.server.util.file.StudentManagementPrintPdfUtil;
 import ch.unibas.medizin.osce.server.util.file.XmlUtil;
 import ch.unibas.medizin.osce.shared.RoleTypes;
@@ -555,7 +556,33 @@ public class StandardizedRole {
 			{			
 				System.out.println("Standardized_Role Id : " + standardizedRoleIterator.next().getId());				
 			}*/	
-		studentRolePrintPdfUtil.writeStudentChecklistFile(standardizedRoleList,studentId,os);
+			studentRolePrintPdfUtil.writeStudentChecklistFile(standardizedRoleList,studentId,os);
+		}
+		else
+		{
+			studentRolePrintPdfUtil.noDataFound(os);
+		}
+		
+		return fileName;
+		
+	}
+	
+	public static String getRolePrintPDFByStudentForMinValueUsingServlet(Long studentId, Long osceId, String locale, ByteArrayOutputStream os) 
+	{
+		String fileName = OsMaFilePathConstant.ROLE_FILE_STUDENT_MANAGEMENT_PDF_FORMAT;
+		System.out.println("Id: " + studentId + " Locale: " + locale);
+		//Student student=Student.findStudent(studentId);	
+		List<StandardizedRole> standardizedRoleList=findRoleByStudentUsingAnswer(studentId, osceId);
+		StudentManagementPrintMinOptionPdfUtil studentRolePrintPdfUtil = new StudentManagementPrintMinOptionPdfUtil(locale);
+		System.out.println("Standardized Role Size for Student : " + standardizedRoleList.size());		
+		if(standardizedRoleList.size()>0)
+		{			
+			/*Iterator<StandardizedRole> standardizedRoleIterator=standardizedRoleList.iterator();
+			while(standardizedRoleIterator.hasNext())
+			{			
+				System.out.println("Standardized_Role Id : " + standardizedRoleIterator.next().getId());				
+			}*/	
+			studentRolePrintPdfUtil.writeStudentChecklistFile(standardizedRoleList,studentId,os);
 		}
 		else
 		{
