@@ -1441,6 +1441,27 @@ public class Answer {
 		log.info("~QUERY Result : " + result);
 		return result;
 	}
+	
+	public static List<Long> findCheckListOptionsByStudentIdAndQuestionIdMinOption(long studId, Long questionId) {
+		EntityManager em = entityManager();
+		List<Long> result = new ArrayList<Long>();
+		String queryString = "select ans.checklistOption.id from Answer as ans where ans.student=" + studId + " and ans.checklistQuestion=" + questionId;
+		TypedQuery<Long> q = em.createQuery(queryString, Long.class);
+		result = q.getResultList();
+		
+		String sql = "SELECT co FROM ChecklistOption co WHERE co.checklistQuestion.id = " + questionId + " ORDER BY co.value DESC";
+		TypedQuery<ChecklistOption> query = em.createQuery(sql, ChecklistOption.class);
+		
+		if (query.getResultList() != null && query.getResultList().size() > 0)
+		{
+			ChecklistOption option = query.getResultList().get(0);
+			
+			if (result.contains(option.getId()))
+				result.clear();
+		}
+		
+		return result;
+	}
 
 	public static List<ChecklistQuestion> retrieveDistinctItems(Long osceId) {
 		EntityManager em = entityManager();

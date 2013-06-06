@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 
 public interface CheckListTopicPopupView extends IsWidget{
@@ -33,5 +34,7 @@ public interface CheckListTopicPopupView extends IsWidget{
 	public Button getCancelBtn();
 	
 	public ListBox getCriteriaCountLstBox();
+	
+	public TextArea getOptionDescTextArea();
 }
 

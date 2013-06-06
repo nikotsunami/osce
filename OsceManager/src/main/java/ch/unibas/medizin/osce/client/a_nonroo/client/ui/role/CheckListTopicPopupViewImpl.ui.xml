@@ -54,21 +54,26 @@
 	<div class="arrow-popup-border" style="left:210px;"></div>
 	<div class="arrow-popup" style="left:210px;"></div>
 </g:HTML>
-	<g:HorizontalPanel  spacing="10">
+	<g:HorizontalPanel  spacing="5">
 	
 		<g:Label ui:field="topicLbl" styleName="{style.right} " width="100px"></g:Label>
 		<g:TextBox ui:field="topicTxtBox" styleName="{style.left}" ></g:TextBox>
 		
 	</g:HorizontalPanel>
 	
-	<g:HorizontalPanel  spacing="10">
+	<g:HorizontalPanel  spacing="5">
 	
 		<g:Label ui:field="descriptionLbl" styleName="{style.right}" width="100px" ></g:Label>
 		<g:TextBox ui:field="descriptionTxtBox" styleName="{style.left}" ></g:TextBox>
 		
 	</g:HorizontalPanel>
 	
-	<g:HorizontalPanel  spacing="10" ui:field="thirtHP">
+	<g:HorizontalPanel  spacing="5" verticalAlignment="middle">	
+		<g:Label ui:field="optionDescLbl" styleName="{style.right}" width="100px" ></g:Label>
+		<g:TextArea ui:field="optionDescTextArea" styleName="{style.left}" width="135px"></g:TextArea>		
+	</g:HorizontalPanel>
+	
+	<g:HorizontalPanel  spacing="5" ui:field="thirtHP">
 	
 		<g:Label ui:field="isOverallQuestionLbl" styleName="{style.right}" width="100px" visible="false"></g:Label>
 		
@@ -76,7 +81,7 @@
 		
 	</g:HorizontalPanel>
 	
-	<g:HorizontalPanel  spacing="10" horizontalAlignment="center" >
+	<g:HorizontalPanel  spacing="5" horizontalAlignment="center" >
 		<my:IconButton icon="check" ui:field="okBtn" ></my:IconButton>
 		<!-- Issue Role -->
 		<my:IconButton icon="closethick" ui:field="cancelBtn"></my:IconButton>

@@ -93,6 +93,7 @@ public class StudentManagementDetailsActivity extends AbstractActivity implement
 					studentProxy=(StudentProxy)response;
 					
 					studentManagementDetailsViewImpl.setStudentProxy(studentProxy);
+					studentDetailsViewImpl.studIdValLbl.setText(util.getEmptyIfNull(studentProxy.getStudentId()));
 					studentDetailsViewImpl.Name.setText(util.getEmptyIfNull(studentProxy.getName()));
 					studentDetailsViewImpl.Prename.setText(util.getEmptyIfNull(studentProxy.getPreName()));
 					studentDetailsViewImpl.Street.setText(util.getEmptyIfNull(studentProxy.getStreet()));
@@ -149,6 +150,26 @@ public class StudentManagementDetailsActivity extends AbstractActivity implement
 		Window.open(url, "", "");
 		
 		
+	}
+	
+	public void printCheckListForMinVal(OsceProxy osceProxy, StudentProxy studentProxy)
+	{
+		Log.info("printCheckList Call");
+		Log.info("Osce: " + osceProxy.getId()+" Student: " + studentProxy.getId());
+		Log.info("Standardized Role: ");
+		
+		String locale = LocaleInfo.getCurrentLocale().getLocaleName();	
+		StringBuilder requestData = new StringBuilder();
+		String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.STUDENT_MANAGEMENT_MIN_OPTION_VALUE.ordinal()));
+		requestData.append(ResourceDownloadProps.ENTITY).append("=").append(ordinal).append("&")
+					.append(ResourceDownloadProps.ID).append("=").append(URL.encodeQueryString(studentProxy.getId().toString())).append("&")
+					.append(ResourceDownloadProps.OSCE_ID).append("=").append(URL.encodeQueryString(osceProxy.getId().toString())).append("&");
+					
+		requestData.append(ResourceDownloadProps.LOCALE).append("=").append(URL.encodeQueryString(locale));
+		
+		String url = GWT.getHostPageBaseURL() + "downloadFile?" + requestData.toString(); 
+		Log.info("--> url is : " +url);
+		Window.open(url, "", "");
 	}
 
 	/**

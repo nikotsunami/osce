@@ -776,6 +776,10 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 													optionValElement.appendChild(doc.createTextNode(option.getValue() == null ? "" : option.getValue().toString()));
 													optionElement.appendChild(optionValElement);
 													
+													Element instructionElement = doc.createElement("instruction");
+													instructionElement.appendChild(doc.createCDATASection(option.getInstruction() == null ? "" : option.getInstruction()));
+													optionElement.appendChild(instructionElement);
+													
 													Element optionSeqNoElement = doc.createElement("sequencenumber");
 													optionSeqNoElement.appendChild(doc.createTextNode(option.getSequenceNumber() == null ? "" : option.getSequenceNumber().toString()));
 													optionElement.appendChild(optionSeqNoElement);
@@ -899,7 +903,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 						+ osceList.get(i).getSemester().getCalYear().toString().substring(2, osceList.get(i).getSemester().getCalYear().toString().length()) 
 						+ "-" + (constants.getString(osceList.get(i).getStudyYear().toString()).replace(".", "")); 
 										
-				fileName = fileName + ".oscexchange";
+				fileName = fileName + ".osceexchange";
 				
 				String processedFileName = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + fileName;
 				File processfile = new File(processedFileName);

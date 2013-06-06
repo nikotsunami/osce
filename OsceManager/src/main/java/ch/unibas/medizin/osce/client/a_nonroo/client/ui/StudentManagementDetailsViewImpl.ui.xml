@@ -30,6 +30,14 @@
 		<g:HTMLPanel height="100%">
 		<table cellspacing="10">
 			<tr>
+				<td><g:Label addStyleNames="{style.myLabel}" ui:field="studIdLbl"></g:Label></td>
+				<td><g:Label ui:field="studIdValLbl"></g:Label></td>
+			</tr>
+			<tr>
+				<td><g:Label addStyleNames="{style.myLabel}" ui:field="genderLbl"></g:Label></td>
+				<td><g:Label ui:field="Gender"></g:Label></td>
+			</tr>
+			<tr>
 				<td><g:Label addStyleNames="{style.myLabel}" ui:field="nameLbl"></g:Label></td>
 				<td><g:Label ui:field="Name"></g:Label></td>
 			</tr>
@@ -44,11 +52,7 @@
 			<tr>
 				<td><g:Label addStyleNames="{style.myLabel}" ui:field="cityLbl"></g:Label></td>
 				<td><g:Label ui:field="City"></g:Label></td>
-			</tr>
-			<tr>
-				<td><g:Label addStyleNames="{style.myLabel}" ui:field="genderLbl"></g:Label></td>
-				<td><g:Label ui:field="Gender"></g:Label></td>
-			</tr>
+			</tr>			
 			<tr>
 				<td><g:Label addStyleNames="{style.myLabel}" ui:field="emailLbl"></g:Label></td>
 				<td><g:Label ui:field="Email"></g:Label></td>

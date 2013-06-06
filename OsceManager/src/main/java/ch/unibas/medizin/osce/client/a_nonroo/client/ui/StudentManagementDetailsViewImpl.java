@@ -93,6 +93,12 @@ public class StudentManagementDetailsViewImpl extends Composite implements Stude
 	@UiField
 	public Label emailLbl;
 	
+	@UiField
+	public Label studIdLbl;
+	
+	@UiField
+	public Label studIdValLbl;
+	
 	@UiField(provided = true)
 	public CellTable<OsceProxy> table;
 	
@@ -115,6 +121,8 @@ public class StudentManagementDetailsViewImpl extends Composite implements Stude
 		cityLbl.setText(constants.city().concat(":"));
 		genderLbl.setText(constants.gender().concat(":"));
 		emailLbl.setText(constants.email().concat(":"));
+		
+		studIdLbl.setText(constants.studentId().concat(":"));
 		
 		studentDetailPanel.setVisible(true);
 		studentDetailPanel.getTabBar().selectTab(0);
@@ -154,6 +162,18 @@ public class StudentManagementDetailsViewImpl extends Composite implements Stude
 				return renderer.render(object.getSemester().getCalYear().toString());
 			}
 		}, constants.semester());
+		
+		addColumn(new ActionCell<OsceProxy>(
+				OsMaConstant.PRINT_ICON, new ActionCell.Delegate<OsceProxy>() {
+					public void execute(OsceProxy osceProxy) {
+						//showEditPopUp(nation);
+						delegate.printCheckListForMinVal(osceProxy,studentProxy);
+					}
+				}), "", new GetValue<OsceProxy>() {
+			public OsceProxy getValue(OsceProxy osceProxy) {
+				return osceProxy;
+			}
+		}, null);
 		
 		addColumn(new ActionCell<OsceProxy>(
 				OsMaConstant.PRINT_ICON, new ActionCell.Delegate<OsceProxy>() {

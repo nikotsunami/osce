@@ -32,6 +32,8 @@ public class ChecklistOption implements Comparable<ChecklistOption> {
 	@Size(max=50)
 	private String value;
 	
+	@Size(max=5000)
+	private String instruction;
 	
 	private Integer sequenceNumber;
 	

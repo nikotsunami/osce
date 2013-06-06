@@ -194,6 +194,13 @@ public class XmlUtil {
 						optionValueVal.appendChild(doc.createTextNode(checklistOption.getValue() == null ? "0" : checklistOption.getValue()));
 						optionDict.appendChild(optionValueVal);
 						
+						Element instTitle = doc.createElement("key");
+						instTitle.appendChild(doc.createTextNode("Instruction"));
+						optionDict.appendChild(instTitle);
+						Element instTitleValue = doc.createElement("string");
+						instTitleValue.appendChild(doc.createCDATASection(checklistOption.getInstruction() == null ? "" : checklistOption.getInstruction()));
+						optionDict.appendChild(instTitleValue);
+						
 						Element criCountValue = doc.createElement("key");
 						criCountValue.appendChild(doc.createTextNode("criteriaCount"));
 						optionDict.appendChild(criCountValue);

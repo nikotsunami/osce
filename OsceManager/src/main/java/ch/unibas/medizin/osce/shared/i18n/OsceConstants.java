@@ -1355,5 +1355,13 @@ public interface OsceConstants extends Constants {
 	public String preBreakTimeErr();
 			
 	public String preBreakToneErr();
+	
+	public String studentId();
+	
+	public String checklistOptionErr();
+	
+	public String note();
+			
+	public String noteValue();
 }
 

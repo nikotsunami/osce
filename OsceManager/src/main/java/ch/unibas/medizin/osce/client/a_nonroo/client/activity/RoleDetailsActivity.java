@@ -2435,7 +2435,7 @@ final int index2 = index;
 //			questionView.criteriaHorizontalPanel.insert(new Label(),questionView.criteriaHorizontalPanel.getWidgetCount());
 		}
 		
-		public void saveOption(String option,String value,final RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView)
+		public void saveOption(String option,String value,String description, final RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl questionView)
 		{
 			Log.info("saveOption");
 			//ScrolledTab Changes start
@@ -2448,6 +2448,7 @@ final int index2 = index;
 			proxy.setOptionName(option);
 			proxy.setChecklistQuestion(questionView.getProxy());
 			proxy.setValue(value);
+			proxy.setInstruction(description);
 			proxy.setSequenceNumber(questionView.optionVerticalPanel.getWidgetCount());
 			proxy.setCriteriaCount(new Integer(questionView.optionPopup.getCriteriaCountLstBox().getValue(questionView.optionPopup.getCriteriaCountLstBox().getSelectedIndex())));
 			// Highlight onViolation
@@ -7285,7 +7286,7 @@ public void onDragStart(DragStartEvent event) {
 	}
 
 	@Override
-	public void updateOption(final String topic, final String description,
+	public void updateOption(final String topic, final String description, String optionDesc,
 			final RoleDetailsChecklistSubViewChecklistOptionItemViewImpl optionView) {
 		Log.info("saveOption");
 		//ScrolledTab Changes start
@@ -7299,6 +7300,7 @@ public void onDragStart(DragStartEvent event) {
 		proxy.setOptionName(topic);
 		proxy.setChecklistQuestion(optionView.getProxy().getChecklistQuestion());
 		proxy.setValue(description);
+		proxy.setInstruction(optionDesc);
 		proxy.setCriteriaCount(new Integer(optionView.optionPopup.getCriteriaCountLstBox().getValue(optionView.optionPopup.getCriteriaCountLstBox().getSelectedIndex())));
 		// Highlight onViolation
 		request.persist().using(proxy).fire(new OSCEReceiver<Void>(optionView.getChecklistOptionMap()) 
