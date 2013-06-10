@@ -418,7 +418,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			
 			Statement st = connection.createStatement();
 			
-			String sql = "SELECT  cand.zcandidateid, ex.zexaminerid, que.zquestionid, opt.zvalue, st.zstationid, ans.zanswerquestion, ans.ztimestamp, ans.zanswerassessment FROM zanswer ans , zassessment ass, zschedule sch, z_1answeroptions ansopt, zoption opt, zcandidate cand, zquestion que, zstation st, zexaminer ex"
+			/*String sql = "SELECT  cand.zcandidateid, ex.zexaminerid, que.zquestionid, opt.zvalue, st.zstationid, ans.zanswerquestion, ans.ztimestamp, ans.zanswerassessment FROM zanswer ans , zassessment ass, zschedule sch, z_1answeroptions ansopt, zoption opt, zcandidate cand, zquestion que, zstation st, zexaminer ex"
 					+ " WHERE ans.zanswerassessment = ass.z_pk"
 					+ " and  ass.zschedule = sch.z_pk"
 					+ " and ansopt.z_1optionanswers = ans.z_pk"
@@ -427,14 +427,21 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					+ " and sch.zstation = st.z_pk"
 					+ " and st.zexaminer = ex.z_pk"
 					+ " and ans.zanswerquestion = que.z_pk"
+					+ " order by sch.zcandidate asc";*/
+			
+			String sql = "SELECT  cand.zcandidateid, ex.zexaminerid, que.zquestionid, opt.zvalue, st.zstationid, ans.zanswerquestion, ans.ztimestamp, ans.zanswerassessment FROM zanswer ans , zassessment ass, zschedule sch, zoption opt, zcandidate cand, zquestion que, zstation st, zexaminer ex"
+					+ " WHERE ans.zanswerassessment = ass.z_pk"
+					+ " and  ass.zschedule = sch.z_pk"
+					+ " and opt.z_pk = ans.zansweroption"
+					+ " and sch.zcandidate = cand.z_pk"
+					+ " and sch.zstation = st.z_pk"
+					+ " and st.zexaminer = ex.z_pk"
+					+ " and ans.zanswerquestion = que.z_pk"
 					+ " order by sch.zcandidate asc";
 			
 			ResultSet resultset = statement.executeQuery(sql);
 			
-			ResultSet rs;
-			
-			long candidateId, criteriaId, optionId, questionId, osmaid, roomid = 0, examinerid = 0;
-			long tempcandidateid, tempquestionid, tempexaminerid = 0;
+			long candidateId, questionId, roomid = 0, examinerid = 0;
 			String optionvalue;
 			Answer answerTable;
 			
@@ -446,13 +453,11 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				optionvalue = String.valueOf((int)resultset.getFloat(4));
 				roomid = Long.parseLong(resultset.getString(5));
 				
-				
-				
 				Student stud = Student.findStudent(candidateId);
 				ChecklistQuestion checklistQuestion = ChecklistQuestion.findChecklistQuestion(questionId);
 				
-				
-				OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoomByRoomAndStudent(candidateId, roomid);
+				//OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoomByRoomAndStudent(candidateId, roomid);
+				OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoom(roomid);
 				Doctor doctor = Doctor.findDoctor(examinerid);
 				ChecklistOption checklistOption = ChecklistOption.findChecklistOptionByValueAndQuestion(questionId, String.valueOf(optionvalue));
 				

@@ -901,7 +901,7 @@ public class Answer {
 							// 6. Chronbachs alpha
 							//questionList.add("-");
 							String val = cronValMap.get(item.getId().toString());
-							if (val == null)
+							if (val == null || val.equals("NaN"))
 							{
 								questionList.add("-");
 								itemAnalysis.setCronbach(0.0);
