@@ -83,6 +83,13 @@ I use the word "group" sometimes to refer to the entity AnamnesisCheckTitle!
 	therefore can not be deleted anymore.
   * There is an *Export* button  in the Role table view, but nothing happens
 	when it is clicked.
+  * Deleting a role does not work.
+  * Copying a role does not work as intended. When copying a role, *the 
+	checklist will not be copied*, instead the same checklist as the original
+	role uses, will be linked. This makes the copy feature basically useless.
+	When copying a role, the checklist should be copied as well and the 
+	standardized_role should link the copied checklist. The same seems to be the 
+	case for role scripts!
 	
 ### Questionnaire
   * "previous question" has no influence on the ordering of questions
@@ -190,13 +197,14 @@ Suggested Features / Improvements
   * The abbreviated dicipline / role / skill names in the accordeonView should 
     be abbreviated in a way that takes advantage of the width of the fields they
     are contained in.
-  * Deleting a role does not work.
-  * Copying a role does not work as intended. When copying a role, *the 
-	checklist will not be copied*, instead the same checklist as the original
-	role uses, will be linked. This makes the copy feature basically useless.
-	When copying a role, the checklist should be copied as well and the 
-	standardized_role should link the copied checklist. The same seems to be the 
-	case for role scripts!
+  * Printing:
+	- When printing a role, if you want to print all the scripts at once, they get
+	printed continuously. It would be helpful if these were all on seperate 
+	pages.
+	- The checkboxes for checklist don't get displayed correctly.
+	- it would be helpful if there was some kind of header/footer with at least
+	the roles' abbreviated name, or even both, the abbreviated and the full name;
+	for easier identification.
 	
 ### Edit Circuit Details
   * Rooms that already have a station assigned should be either removed from 
