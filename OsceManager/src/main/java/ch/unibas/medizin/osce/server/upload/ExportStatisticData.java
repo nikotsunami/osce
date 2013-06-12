@@ -387,7 +387,7 @@ public class ExportStatisticData extends HttpServlet{
 											}
 											
 											if (flag)
-												writer.append(String.valueOf(alphaSeq) + count);
+												writer.append(question.getId().toString());
 											else
 												writer.append("Q" + String.valueOf(question.getId()));
 											
@@ -459,9 +459,9 @@ public class ExportStatisticData extends HttpServlet{
 								    		
 								    		writer.append('\n');
 								    		
-							    			writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
+							    			writer.append(answer.getDoctor().getId().toString());
 								    		writer.append('|');
-								    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
+								    		writer.append(answer.getStudent().getId().toString());
 								    		writer.append('|');
 								    		
 								    		/*else	
@@ -622,6 +622,8 @@ public class ExportStatisticData extends HttpServlet{
 									FileWriter writer = new FileWriter(fileName);
 									writer.append("id");
 									writer.append('|');
+									writer.append("topic");
+									writer.append('|');
 									writer.append("item_text");
 									writer.append('|');
 									writer.append("points");
@@ -636,6 +638,8 @@ public class ExportStatisticData extends HttpServlet{
 									for(ChecklistQuestion d:items)
 									{
 										writer.append(d.getId().toString());
+										writer.append('|');
+										writer.append(d.getCheckListTopic().getId().toString());
 										writer.append('|');
 										writer.append(d.getQuestion());
 										writer.append('|');
