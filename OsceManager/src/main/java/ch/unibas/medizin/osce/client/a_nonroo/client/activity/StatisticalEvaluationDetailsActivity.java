@@ -37,6 +37,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.style.widgets.FocusableValueListBox;
 import ch.unibas.medizin.osce.client.style.widgets.NumberSpinner;
 import ch.unibas.medizin.osce.shared.AnalysisType;
+import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -488,7 +489,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			if(analysisType.equals(AnalysisType.item_analysis) && statisticalEvaluationDetailSequenceViewImpl.isSequencePanel())
 			{
 				Log.info("create all post panel");
-				requests.osceSequenceRequest().findOsceSequence(sequenceProxy.getId()).with("oscePosts").fire(new OSCEReceiver<OsceSequenceProxy>() {
+				requests.osceSequenceRequest().findOsceSequence(sequenceProxy.getId()).with("oscePosts","oscePosts.oscePostBlueprint").fire(new OSCEReceiver<OsceSequenceProxy>() {
 
 					@Override
 					public void onSuccess(OsceSequenceProxy response) {
@@ -497,7 +498,8 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 						statisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().clear();
 						for(OscePostProxy oscePostProxy:OscePostProxies)
 						{
-							createPostPanel(oscePostProxy, statisticalEvaluationDetailSequenceViewImpl);
+							if (!oscePostProxy.getOscePostBlueprint().getPostType().equals(PostType.BREAK))
+								createPostPanel(oscePostProxy, statisticalEvaluationDetailSequenceViewImpl);
 						}
 						
 					}
@@ -522,7 +524,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			else if(analysisType.equals(AnalysisType.post_analysys) && statisticalEvaluationDetailSequenceViewImpl.isSequencePanel())
 			{
 				Log.info("create all post panel");
-				requests.osceSequenceRequest().findOsceSequence(sequenceProxy.getId()).with("oscePosts","oscePosts.standardizedRole","oscePosts.standardizedRole","oscePosts.standardizedRole","oscePosts.standardizedRole.checkList","oscePosts.standardizedRole.checkList.checkListTopics","oscePosts.standardizedRole.checkList.checkListTopics.checkListQuestions").fire(new OSCEReceiver<OsceSequenceProxy>() {
+				requests.osceSequenceRequest().findOsceSequence(sequenceProxy.getId()).with("oscePosts","oscePosts.oscePostBlueprint","oscePosts.standardizedRole","oscePosts.standardizedRole","oscePosts.standardizedRole","oscePosts.standardizedRole.checkList","oscePosts.standardizedRole.checkList.checkListTopics","oscePosts.standardizedRole.checkList.checkListTopics.checkListQuestions").fire(new OSCEReceiver<OsceSequenceProxy>() {
 
 					@Override
 					public void onSuccess(OsceSequenceProxy response) {
@@ -531,6 +533,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 						statisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().clear();
 						for(OscePostProxy oscePostProxy:OscePostProxies)
 						{
+							if (!oscePostProxy.getOscePostBlueprint().getPostType().equals(PostType.BREAK))
 							createPostPanel(oscePostProxy, statisticalEvaluationDetailSequenceViewImpl);
 						}
 						

@@ -190,9 +190,9 @@ public class StandardizedPatientPaymentUtil {
 
 		// place
 		String place = "";
-		if (sp.getNationality() != null && isNotBlank(sp.getNationality().getNationality())) {
+		/*if (sp.getNationality() != null && isNotBlank(sp.getNationality().getNationality())) {
 			place += sp.getNationality().getNationality() + ", ";
-		}
+		}*/
 		if (isNotBlank(sp.getPostalCode())) {
 			place += sp.getPostalCode() + ", ";
 		}

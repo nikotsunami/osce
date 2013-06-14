@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -767,6 +769,8 @@ public class ExportStatisticData extends HttpServlet{
 							alphaSeq = 'A';
 							
 							impressionQueId = PostAnalysis.findImpressionQuestionByOscePostAndOsce(oscePost.getId(), osceId);
+							
+							List<Long> questionIdList = new ArrayList<Long>();
 														
 							for (ChecklistTopic checklistTopic : checklistTopicList)
 							{
@@ -779,6 +783,8 @@ public class ExportStatisticData extends HttpServlet{
 									{
 										impressionQueId = question.getId();
 									}
+									
+									questionIdList.add(question.getId());
 									
 									if (flag)
 										writer.append(String.valueOf(alphaSeq) + count);
@@ -815,15 +821,68 @@ public class ExportStatisticData extends HttpServlet{
 							}
 							writer.append("impression ");
 
-							//writer.append('\n');
+							writer.append('\n');
+							
+							List<Student> studentList = Answer.findDistinctStudentByOscePost(oscePost.getId());
+							
+							for (Student student : studentList) {
+								
+								List<Answer> answerList = Answer.retrieveExportCsvDataByOscePostAndStudent(oscePost.getId(), student.getId());
+								
+								if (answerList.size() > 0 && answerList.size() <= questionIdList.size())
+								{
+									Answer answer = answerList.get(0);		
+									writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
+						    		writer.append('|');
+						    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
+						    		writer.append('|');
+						    		
+						    		Map<Long, ChecklistOption> answerMap = new HashMap<Long, ChecklistOption>();
+						    		
+						    		for (Answer ans : answerList) {
+						    			if (ans.getChecklistQuestion() != null)
+						    				answerMap.put(ans.getChecklistQuestion().getId(), ans.getChecklistOption());
+									}
+						    		
+						    		for (Long queId : questionIdList)
+						    		{
+						    			if (answerMap.containsKey(queId))
+						    				writer.append(answerMap.get(queId) == null ? "0" : answerMap.get(queId).getValue());
+						    			else
+						    				writer.append("0");
+						    			
+						    			writer.append('|');
+						    		}
+						    		
+						    		if (flag)
+					    			{	
+					    				Integer addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(answerList.size() - 1).getDoctor().getId());
+					    				writer.append(addPoint.toString());
+					    				writer.append('|');
+					    			}
+					    			
+					    			if (impressionQueId != null && impressionQueId != 0)
+					    			{
+					    				Answer impressionItem1=Answer.findAnswer(student.getId(), impressionQueId, osceDay.getId());
+					    				//writer.append(impressionItem1.getChecklistOption().getValue());
+					    				if (impressionItem1 != null)
+					    					writer.append(impressionItem1.getChecklistOption().getValue());
+					    				else
+					    					writer.append('0');
+					    			}
+						    		else
+						    		{
+						    			writer.append('0');//impression
+						    		}	    			
+					    			
+					    			writer.append('\n');
+								}
+								
+							}
 						    
-						    List<Answer> answerList = Answer.retrieveExportCsvDataByOscePost(osceDay.getId(), oscePost.getId());
+						    /*List<Answer> answerList = Answer.retrieveExportCsvDataByOscePost(osceDay.getId(), oscePost.getId());
 						    Long lastCandidateId = null;
 						    Answer answer = null;
-						    
-						    
-						    
-						   
 						    
 						    for (int j=0; j<answerList.size(); j++)
 						    {
@@ -861,13 +920,13 @@ public class ExportStatisticData extends HttpServlet{
 						    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
 						    		writer.append('|');
 						    		
-						    		/*else	
+						    		else	
 						    		{
 						    			writer.append(answer.getDoctor().getPreName() + " " + answer.getDoctor().getName());
 						    			writer.append('|');
 							    		writer.append(answer.getStudent().getPreName() + " " + answer.getStudent().getName());
 							    		writer.append('|');
-						    		}	*/	    		
+						    		}		    		
 						    		
 						    		lastCandidateId = answer.getStudent().getId();
 						    	}
@@ -899,12 +958,12 @@ public class ExportStatisticData extends HttpServlet{
 					    		{
 					    			writer.append('0');//impression
 					    		}
-						    }
+						    }*/
 					    	
 						    writer.flush();
 						    writer.close();
 						    
-						    if (answerList.size() == 0)
+						    if (studentList.size() == 0)
 						    {
 						    	FileWriter writer2 = new FileWriter(fileName);
 						    	writer2.write("examiners|students|impression|pass/fall");
@@ -1005,6 +1064,8 @@ public class ExportStatisticData extends HttpServlet{
 				/*if (impressionItemString != null)
 					impressionQueId=Long.parseLong(impressionItemString);*/
 				
+				List<Long> questionIdList = new ArrayList<Long>();
+				
 				for (ChecklistTopic checklistTopic : checklistTopicList)
 				{
 					List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
@@ -1017,16 +1078,73 @@ public class ExportStatisticData extends HttpServlet{
 							impressionQueId = question.getId();
 						}
 						
-						writer.append("Q" + String.valueOf(question.getId()));
+						questionIdList.add(question.getId());
 						
+						writer.append("Q" + String.valueOf(question.getId()));					
 						writer.append('|');
 					}
 				}
 				writer.append("AddPoint");
 				writer.append('|');
 				writer.append("impression ");
+				writer.append('\n');
+				
+				List<Student> studentList = Answer.findDistinctStudentByExaminerAndOscePost(oscePostId, examinerId);
+				
+				for (Student student : studentList) {
+					
+					List<Answer> answerList = Answer.retrieveExportCsvDataByOscePostAndStudent(oscePost.getId(), student.getId());
+					
+					if (answerList.size() > 0 && answerList.size() <= questionIdList.size())
+					{
+						Answer answer = answerList.get(0);		
+						writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
+			    		writer.append('|');
+			    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
+			    		writer.append('|');
+			    		
+			    		Map<Long, ChecklistOption> answerMap = new HashMap<Long, ChecklistOption>();
+			    		
+			    		for (Answer ans : answerList) {
+			    			if (ans.getChecklistQuestion() != null)
+			    				answerMap.put(ans.getChecklistQuestion().getId(), ans.getChecklistOption());
+						}
+			    		
+			    		for (Long queId : questionIdList)
+			    		{
+			    			if (answerMap.containsKey(queId))
+			    				writer.append(answerMap.get(queId) == null ? "0" : answerMap.get(queId).getValue());
+			    			else
+			    				writer.append("0");
+			    			
+			    			writer.append('|');
+			    		}
+			    		
+			    		if (impressionQueId != null)
+		    			{
+			    			writer.append(addPoint.toString());
+		    				writer.append('|');
+		    				
+		    				Answer impressionItem1=Answer.findAnswer(student.getId(), impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
+		    				
+		    				if (impressionItem1 != null)
+		    					writer.append(impressionItem1.getChecklistOption().getValue());
+		    				else
+		    					writer.append('0');
+		    			}
+			    		else
+			    		{
+			    			writer.append(addPoint.toString());
+		    				writer.append('|');
+			    			writer.append('0');//impression
+			    		}
+			    		
+			    		writer.append('\n');
+					}
+				}
+				
 			    
-			    List<Answer> answerList = Answer.retrieveExportCsvDataByOscePostAndExaminer(oscePostId, examinerId);
+			    /*List<Answer> answerList = Answer.retrieveExportCsvDataByOscePostAndExaminer(oscePostId, examinerId);
 			    Long lastCandidateId = null;
 			    Answer answer = null;
 			    for (int j=0; j<answerList.size(); j++)
@@ -1088,7 +1206,7 @@ public class ExportStatisticData extends HttpServlet{
 	    				writer.append('|');
 		    			writer.append('0');//impression
 		    		}
-			    }
+			    }*/
 		    	
 			    writer.flush();
 			    writer.close();
@@ -1136,6 +1254,8 @@ public class ExportStatisticData extends HttpServlet{
 				/*if (impressionQueId != null && impressionQueId > 0l)
 					impressionQueId=Long.parseLong(impressionItemString);*/
 				
+				List<Long> questionIdList = new ArrayList<Long>();
+				
 				for (ChecklistTopic checklistTopic : checklistTopicList)
 				{
 					List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
@@ -1151,14 +1271,84 @@ public class ExportStatisticData extends HttpServlet{
 						writer.append("Q" + String.valueOf(question.getId()));
 						
 						writer.append('|');
+						
+						questionIdList.add(question.getId());
 					}
 					
 				}
 				writer.append("AddPoint");
 				writer.append('|');
 				writer.append("impression ");
-			   
-			    List<Answer> answerList = Answer.retrieveExportCsvDataByOscePost(oscePost.getOsceSequence().getOsceDay().getOsce().getId(), oscePost.getId());
+				writer.append('\n');
+				
+				List<Student> studentList = Answer.findDistinctStudentByOscePost(oscePost.getId());
+				
+				for (Student student : studentList) {
+					
+					List<Answer> answerList = Answer.retrieveExportCsvDataByOscePostAndStudent(oscePost.getId(), student.getId());
+					
+					if (answerList.size() > 0 && answerList.size() <= questionIdList.size())
+					{
+						Answer answer = answerList.get(0);		
+						writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
+			    		writer.append('|');
+			    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
+			    		writer.append('|');
+			    		
+			    		Map<Long, ChecklistOption> answerMap = new HashMap<Long, ChecklistOption>();
+			    		
+			    		for (Answer ans : answerList) {
+			    			if (ans.getChecklistQuestion() != null)
+			    				answerMap.put(ans.getChecklistQuestion().getId(), ans.getChecklistOption());
+						}
+			    		
+			    		for (Long queId : questionIdList)
+			    		{
+			    			if (answerMap.containsKey(queId))
+			    				writer.append(answerMap.get(queId) == null ? "0" : answerMap.get(queId).getValue());
+			    			else
+			    				writer.append("0");
+			    			
+			    			writer.append('|');
+			    		}
+			    		
+			    		Integer addPoint = 0;
+		    			String key="p"+oscePostId+"e"+answerList.get(answerList.size()-1).getDoctor().getId();
+		    			if (examinerId.contains(key))
+		    			{
+		    				int index = examinerId.indexOf(key);
+		    				addPoint = addPoints.get(index);
+		    			}
+		    			else
+		    			{
+		    				addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(answerList.size()-1).getDoctor().getId());
+		    			}
+		    			
+		    			if (impressionQueId != null && impressionQueId != 0)
+		    			{
+		    				writer.append(addPoint.toString());
+		    				writer.append('|');
+		    				
+		    				Answer impressionItem1=Answer.findAnswer(student.getId(), impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
+		    				//writer.append(impressionItem1.getChecklistOption().getValue());
+		    				if (impressionItem1 != null)
+		    					writer.append(impressionItem1.getChecklistOption().getValue());
+		    				else
+		    					writer.append('0');
+		    			}
+			    		else
+			    		{
+			    			writer.append(addPoint.toString());
+		    				writer.append('|');
+			    			writer.append('0');//impression
+			    		}	    			
+		    			
+		    			writer.append('\n');
+					}
+					
+				}
+				
+			    /*List<Answer> answerList = Answer.retrieveExportCsvDataByOscePost(oscePost.getOsceSequence().getOsceDay().getOsce().getId(), oscePost.getId());
 			    Long lastCandidateId = null;
 			    Answer answer = null;
 			    for (int j=0; j<answerList.size(); j++)
@@ -1169,7 +1359,7 @@ public class ExportStatisticData extends HttpServlet{
 			    		if (lastCandidateId != null)
 			    		{
 			    			Integer addPoint = 0;
-			    			/*String key="p"+oscePostId+"e"+answerList.get(j-1).getDoctor().getId();
+			    			String key="p"+oscePostId+"e"+answerList.get(j-1).getDoctor().getId();
 			    			if (examinerId.contains(key))
 			    			{
 			    				int index = examinerId.indexOf(key);
@@ -1178,7 +1368,7 @@ public class ExportStatisticData extends HttpServlet{
 			    			else
 			    			{
 			    				addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(j-1).getDoctor().getId());
-			    			}*/
+			    			}
 			    			
 			    			if (impressionQueId != null && impressionQueId != 0)
 			    			{
@@ -1219,7 +1409,7 @@ public class ExportStatisticData extends HttpServlet{
 			    {
 			    	answer = answerList.get(answerList.size() - 1);
 			    	Integer addPoint = 0;
-	    			/*String key="p"+oscePostId+"e"+answer.getDoctor().getId();
+	    			String key="p"+oscePostId+"e"+answer.getDoctor().getId();
 	    			if (examinerId.contains(key))
 	    			{
 	    				int index = examinerId.indexOf(key);
@@ -1228,7 +1418,7 @@ public class ExportStatisticData extends HttpServlet{
 	    			else
 	    			{
 	    				addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(answerList.size()-1).getDoctor().getId());
-	    			}*/
+	    			}
 			    	
 			    	if (impressionQueId != null)
 	    			{
@@ -1250,7 +1440,7 @@ public class ExportStatisticData extends HttpServlet{
 		    			writer.append('0');//impression
 		    		}
 			    	
-			    }
+			    }*/
 		    	
 			    writer.flush();
 			    writer.close();
@@ -1304,6 +1494,8 @@ public class ExportStatisticData extends HttpServlet{
 				if (impressionItemString != null)
 					impressionQueId=Long.parseLong(impressionItemString);*/
 				
+				List<Long> questionIdList = new ArrayList<Long>();
+				
 				for (ChecklistTopic checklistTopic : checklistTopicList)
 				{
 					List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
@@ -1315,6 +1507,8 @@ public class ExportStatisticData extends HttpServlet{
 						{
 							impressionQueId = question.getId();
 						}
+						
+						questionIdList.add(question.getId());
 						
 						writer.append("Q" + String.valueOf(question.getId()));
 						
@@ -1337,7 +1531,60 @@ public class ExportStatisticData extends HttpServlet{
 				writer.append("impression ");
 			    //writer.append('\n');
 			    
-			    List<Answer> answerList = Answer.retrieveExportCsvDataByOscePost(oscePost.getOsceSequence().getOsceDay().getId(), oscePost.getId());
+				List<Student> studentList = Answer.findDistinctStudentByOscePost(oscePost.getId());
+				
+				for (Student student : studentList) {
+					
+					List<Answer> answerList = Answer.retrieveExportCsvDataByOscePostAndStudent(oscePost.getId(), student.getId());
+					
+					if (answerList.size() > 0 && answerList.size() <= questionIdList.size())
+					{
+						Answer answer = answerList.get(0);		
+						writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
+			    		writer.append('|');
+			    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
+			    		writer.append('|');
+			    		
+			    		Map<Long, ChecklistOption> answerMap = new HashMap<Long, ChecklistOption>();
+			    		
+			    		for (Answer ans : answerList) {
+			    			if (ans.getChecklistQuestion() != null)
+			    				answerMap.put(ans.getChecklistQuestion().getId(), ans.getChecklistOption());
+						}
+			    		
+			    		for (Long queId : questionIdList)
+			    		{
+			    			if (answerMap.containsKey(queId))
+			    				writer.append(answerMap.get(queId) == null ? "0" : answerMap.get(queId).getValue());
+			    			else
+			    				writer.append("0");
+			    			
+			    			writer.append('|');
+			    		}
+			    		
+			    		Integer addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(answerList.size()-1).getDoctor().getId());
+	    				writer.append(addPoint.toString());
+	    				writer.append('|');		    			
+		    			
+		    			if (impressionQueId != null && impressionQueId != 0)
+		    			{
+		    				Answer impressionItem1=Answer.findAnswer(student.getId(), impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
+		    				if (impressionItem1 != null)
+		    					writer.append(impressionItem1.getChecklistOption().getValue());
+		    				else
+		    					writer.append('0');
+		    			}
+			    		else
+			    		{
+			    			writer.append('0');//impression
+			    		}
+		    			
+		    			writer.append('\n');
+					}
+					
+				}
+				
+			   /* List<Answer> answerList = Answer.retrieveExportCsvDataByOscePost(oscePost.getOsceSequence().getOsceDay().getId(), oscePost.getId());
 			    Long lastCandidateId = null;
 			    Answer answer = null;
 			    for (int j=0; j<answerList.size(); j++)
@@ -1400,7 +1647,7 @@ public class ExportStatisticData extends HttpServlet{
 		    		{
 		    			writer.append('0');//impression
 		    		}
-			    }
+			    }*/
 		    	
 			    writer.flush();
 			    writer.close();
