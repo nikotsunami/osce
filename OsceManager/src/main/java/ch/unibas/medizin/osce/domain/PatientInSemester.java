@@ -405,8 +405,12 @@ public class PatientInSemester {
     		
     		writer.write("name");
     		writer.write("prename");
+    		writer.write("street");
+    		writer.write("plz");
+    		writer.write("ort");
     		writer.write("email");
-    		writer.write("accepted");    		
+    		writer.write("accepted");    	
+    		
     		
     		List<OsceDay> osceDayList = OsceDay.findOsceDayBySemester(semesterId);
     		
@@ -422,8 +426,38 @@ public class PatientInSemester {
     			StandardizedPatient patient = pis.getStandardizedPatient();
     			writer.write(patient.getName());
     			writer.write(patient.getPreName());
+    			
+    			String address="";
+    			if(patient.getStreet() != null)
+    			{
+    				writer.write(patient.getStreet());
+    			}
+    			else
+    			{
+    				writer.write("");
+    			}
+    			if(patient.getPostalCode() !=null)
+    			{
+    				writer.write(patient.getPostalCode());
+    			}
+    			else
+    			{
+    				writer.write("");
+    			}
+    			if(patient.getCity() !=null)
+    			{
+    				writer.write(patient.getCity());
+    			}
+    			else
+    			{
+    				writer.write("");
+    			}
+    			
+    			
     			writer.write(patient.getEmail());
     			writer.write(pis.getAccepted().toString());
+    			
+    			
     			
     			Set<OsceDay> osceDaySet = pis.getOsceDays();
     			

@@ -339,9 +339,9 @@ public class ExportStatisticData extends HttpServlet{
 							for(int k=0;k<5;k++)
 							{
 								if (oscePost.getStandardizedRole() != null)
-									fileName = "Day"+ (i+1) + "_" + oscePost.getStandardizedRole().getShortName() + "_" + fileNames.get(k) +".csv";
+									fileName = "Day"+ (i+1) + "_" + oscePost.getStandardizedRole().getShortName() + "_" +osceSeq.getLabel()+"_"+ fileNames.get(k) +".csv";
 								else
-									fileName = "Day"+ (i+1) + "_" + "post" + oscePost.getId() + "_" + fileNames.get(k) +".csv";
+									fileName = "Day"+ (i+1) + "_" + "post" + oscePost.getId() + "_" + osceSeq.getLabel()+"_"+fileNames.get(k) +".csv";
 									
 								fileName = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML + fileName);
 								fileNameList.add(fileName);
@@ -753,10 +753,15 @@ public class ExportStatisticData extends HttpServlet{
 							//System.out.println("FILE PATH : " + fileName);
 							
 							FileWriter writer = new FileWriter(fileName);
-							writer.append("examiners");
+							writer.append("name of examiner");
 							writer.append('|');
-							writer.append("students");
+							writer.append("id of examiner");
 							writer.append('|');
+							writer.append("name of student");
+							writer.append('|');
+							writer.append("id of student");
+							writer.append('|');
+							
 							
 							List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
 							String missingQue = "";
@@ -834,7 +839,11 @@ public class ExportStatisticData extends HttpServlet{
 									Answer answer = answerList.get(0);		
 									writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
 						    		writer.append('|');
+						    		writer.append(answer.getDoctor().getId().toString() );
+						    		writer.append('|');
 						    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
+						    		writer.append('|');
+						    		writer.append(answer.getStudent().getId().toString() );
 						    		writer.append('|');
 						    		
 						    		Map<Long, ChecklistOption> answerMap = new HashMap<Long, ChecklistOption>();
@@ -915,17 +924,26 @@ public class ExportStatisticData extends HttpServlet{
 						    		
 						    		writer.append('\n');
 						    		
+					    			
 					    			writer.append("\"" + answer.getDoctor().getPreName() + " " + answer.getDoctor().getName() + "\"");
 						    		writer.append('|');
+						    		writer.append("\"" + answer.getDoctor().getId() );
+						    		writer.append('|');
 						    		writer.append("\"" + answer.getStudent().getPreName() + " " + answer.getStudent().getName() + "\"");
+						    		writer.append('|');
+						    		writer.append("\"" + answer.getStudent().getId());
 						    		writer.append('|');
 						    		
 						    		else	
 						    		{
 						    			writer.append(answer.getDoctor().getPreName() + " " + answer.getDoctor().getName());
 						    			writer.append('|');
+writer.append(answer.getDoctor().getId() );
+						    			writer.append('|');
 							    		writer.append(answer.getStudent().getPreName() + " " + answer.getStudent().getName());
 							    		writer.append('|');
+writer.append(answer.getStudent().getId() );
+						    			writer.append('|');
 						    		}		    		
 						    		
 						    		lastCandidateId = answer.getStudent().getId();
@@ -966,7 +984,7 @@ public class ExportStatisticData extends HttpServlet{
 						    if (studentList.size() == 0)
 						    {
 						    	FileWriter writer2 = new FileWriter(fileName);
-						    	writer2.write("examiners|students|impression|pass/fall");
+						    	writer2.write("name of examiner | id of examiner | name of student | id of student | impression | pass/fall");
 						    	writer2.flush();
 						    	writer2.close();						    
 						    }
