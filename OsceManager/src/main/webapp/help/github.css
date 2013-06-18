@@ -1,7 +1,7 @@
 body {
   font-family: Helvetica, arial, sans-serif;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.3;
   padding-top: 10px;
   padding-bottom: 10px;
   background-color: white;
@@ -78,11 +78,11 @@ h6 tt, h6 code {
   font-size: inherit; }
 
 h1 {
-  font-size: 28px;
+  font-size: 24px;
   color: black; }
 
 h2 {
-  font-size: 24px;
+  font-size: 21px;
   border-bottom: 1px solid #cccccc;
   color: black; }
 
@@ -406,6 +406,7 @@ a.toplink:hover {
 	padding: 10px 0;
 	box-shadow: 10px 10px 10px #ddd;
 	
+	font-size: 0.9em;
 	line-height: 1.2;
 }
 
@@ -446,4 +447,13 @@ p img, ul img, ol img {
 
 .warning h2 {
 	border: 0;
+}
+
+blockquote {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+blockquote + blockquote {
+	margin-top: 40px;
 }
