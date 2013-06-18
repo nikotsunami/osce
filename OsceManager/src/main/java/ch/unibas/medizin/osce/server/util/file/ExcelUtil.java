@@ -52,8 +52,12 @@ public class ExcelUtil
 	}
 	
 	public void writeSheet(Map<Long, List<Long>> map, String osceName, Long semesterId)
-	{
-		HSSFSheet sheet = workbook.createSheet(osceName);
+	{	
+		HSSFSheet sheet = workbook.getSheet(osceName);
+		
+		if (sheet == null)
+			sheet = workbook.createSheet(osceName);
+		
 		
 		sheet.setColumnWidth(0, 5500);
 		sheet.setColumnWidth(1, 5500);

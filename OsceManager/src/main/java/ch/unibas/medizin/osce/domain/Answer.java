@@ -1498,6 +1498,18 @@ public class Answer {
 		TypedQuery<Answer> q = em.createQuery(queryString, Answer.class);
 		return q.getResultList();
 	}
+	
+	public static List<Answer> retrieveExportCsvDataByOscePostAndStudent(Long oscePostId, Long studentId) {
+		EntityManager em = entityManager();
+		// String
+		// queryString="SELECT a FROM Answer a where oscePostRoom in (select distinct (oscePostRoom) from Assignment where osceDay in (select id from OsceDay where osce="+
+		// osceId +")) group by doctor,student";
+		String queryString = "SELECT a FROM Answer a join a.checklistQuestion c join c.checkListTopic t WHERE a.oscePostRoom.oscePost.id = "
+				+ oscePostId + " AND a.student.id = " + studentId 
+				+ " ORDER BY a.doctor, a.student, t.sort_order, c.sequenceNumber, c.id";
+		TypedQuery<Answer> q = em.createQuery(queryString, Answer.class);
+		return q.getResultList();
+	}
 
 	public static List<Answer> retrieveExportCsvDataByOscePostAndExaminer(Long oscePostId, Long examinerId) {
 		EntityManager em = entityManager();
@@ -1544,5 +1556,20 @@ public class Answer {
 		fileName = OsMaFilePathConstant.assignmentHTML + fileName;
 		return fileName;
 	}
+
+	public static List<Student> findDistinctStudentByOscePost(Long oscePostId)
+	{
+		EntityManager em = entityManager();
+		String sql = "SELECT DISTINCT a.student FROM Answer a WHERE a.oscePostRoom.oscePost.id = " + oscePostId;
+		TypedQuery<Student> query = em.createQuery(sql, Student.class);
+		return query.getResultList();
+	}
 	
+	public static List<Student> findDistinctStudentByExaminerAndOscePost(Long oscePostId, Long examinerId)
+	{
+		EntityManager em = entityManager();
+		String sql = "SELECT DISTINCT a.student FROM Answer a WHERE a.doctor.id = " + examinerId + " AND a.oscePostRoom.oscePost.id = " + oscePostId;
+		TypedQuery<Student> query = em.createQuery(sql, Student.class);
+		return query.getResultList();
+	}
 }

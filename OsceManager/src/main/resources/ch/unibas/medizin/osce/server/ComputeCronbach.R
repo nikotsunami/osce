@@ -86,8 +86,8 @@ df<-read.table(filename,header=T,sep="|",na.strings=c("NA","na","NULL","#NULL!")
 nRow<-nrow(df)
 nCol<-ncol(df)
 
-df1<-df[3:(nCol-1)]
-df<-df[3:(nCol-1)]
+df1<-df[5:(nCol-1)]
+df<-df[5:(nCol-1)]
 df2 <- df1
 nCol<-ncol(df)
 
