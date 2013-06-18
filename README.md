@@ -90,6 +90,110 @@ I use the word "group" sometimes to refer to the entity AnamnesisCheckTitle!
 	When copying a role, the checklist should be copied as well and the 
 	standardized_role should link the copied checklist. The same seems to be the 
 	case for role scripts!
+  * Learning objectives:
+  
+	- Each of the tables should have a header, saying "Primary skills" for the
+		first one and "Secondary skills" for the second one. (please use the 
+		appropriate constants, translations should already exist)
+	- Instead of "main classification" and "Secondary classification", show the
+		combined field "classification", with the same contents as the "code"
+		column in the "Add skill" dialog.
+	- It would probably be helpful if the text, that can be seen in the "text" 
+		column of the "Add skill" dialog could be seen when one clicks on one
+		of the skill items in the "Learning objectives" table.
+	- The "Add skill" button should be in the bottom instead of on top.
+	- In the "Add skill" dialog, that appears upon clicking on the "add skill" 
+		button, the following improvements would be helpful:
+		
+		* after closing the add skill dialog and reopening it, the displayed 
+			page is the one that was last paged to, but it appears as the
+			first page in the pager. Instead it should display the correct
+			pages on the pager *or* jump to the first entry no matter what has
+			been selected before! (I.e. if it was displaying the entries 151-165,
+			then I close the dialog and reopen the dialog, it shows the same
+			entries, but the pager displays entries "1-15", thus it is 
+			impossible to immediately jump to pages *before* the previously
+			selected entries)
+		* when selecting a row by clicking the checkbox, sometimes the row 
+		above gets highlighted as well.
+		* when unchecking a checkbox, the highlight does only disappear after 
+		clicking somewhere else on the screen.
+		* the vertival scrollbar should only appear for the content rows and
+			not for the table header row.
+		* The *Clear all* button does not work as intended.
+		* If I add one or multiple skills, the window stays open and all the 
+			checked checkboxes remain checked. If I want to add more skills 
+			without closing the window, I have to manually uncheck all the 
+			checkboxes that were previously checked, otherwise the previously
+			selected skills will be added a second time. (This is especially 
+			annoying because the *Clear all* button does not work either)
+			
+			You should either force close the dialog when clicking on one of the
+			*add* buttons; or better: *correctly* uncheck all the previously
+			selected checkboxes.
+			
+			Also it should not be possible to add the same skill to the role
+			multiple times.
+			
+  * *Past use of role*: The table should also display at least the year and if
+	possible also the dates on which these roles where used in the corresponding
+	OSCE. If the OSCE designation is used as it is now (in the "OSCE" column), 
+	the "Semester" column is not necessary anymore.
+  * *Past use of role*: Nice to have: when clicking on the OSCE, the view could
+	immediately go to the circuit details view of the corresponding OSCE. (if 
+	you implement this, make sure, that the correct semester will also be 
+	selected in the dropdown menu on the left).
+  * For some reason, the OSCEs a role has been used in, seem to be displayed
+	twice.
+  * The date search functionality in *Past use of role* could be simplified:
+	
+	- Remove the search button. If the start and end date fields are empty,
+	show all matches.
+	- If only one is filled, ignore that the other is empty. E.g. if only 
+	"End date" is filled, show all of them up to the selected "end date". On the
+	other hand, if only "Start date" is filled, show all matches *after* the
+	selected date.
+	- The fields would rather be named "Earliest occurrence" and "Latest 
+	occurrence" than "start date" and "end date".
+	- Once the dates have been filled in, they can not be cleared anymore. It
+	should be possible to clear them, though!
+  * **Checklist**:
+		
+		- When adding a new section (ChecklistTopic), in the dialog that comes 
+		up where it is possible to enter the title and description, there are no
+		limitations on the length of either even though they are both limited to
+		50 characters in the database! The maximum number of characters that are
+		enterable in these text boxes should be limited to the actual maximum
+		of characters that are allowed in the entity.
+		- When reordering the checklist, the numbers of the questions and 
+		sections are only updated when reloading the checklist. They should be 
+		updated as soon as the item drops into the destination.
+		- When importing questions, the dropdown boxes have the wrong 
+		designations: currently the designations are *role*, *skill*, 
+		*questions*, but they should be *role*, *section*, *questions*!
+
+  * Criteria for SP-selection:
+	
+	- When deleting a criterion, the criterion gets correctly deleted but the 
+		whole criteria table gets removed from the view and thus nothing is
+		visible anymore!
+	- When deleting one of the further criteria, you will be asked twice if you
+		really want to delete it. Once would be enough!
+		
+  * Cards: 
+  
+	- The "File uploaded successfully" message is not necessary at all, 
+	since if it works, you will see the file in the table anyway. 
+	Only show a message dialog on error!
+	- The original file name is irrelevant to the user. The table only needs to 
+	show the description.
+	- When downloading a file from cards, the file name should be created out of
+	the description and not necessarily out of the original file name.
+	
+  * rOLE SCRIPTS:
+  
+	- Table items don't seem to work. There is just nothing you can do with them
+		in this perspective. If possible: remove.
 	
 ### Questionnaire
   * "previous question" has no influence on the ordering of questions
@@ -205,6 +309,7 @@ Suggested Features / Improvements
 	- it would be helpful if there was some kind of header/footer with at least
 	the roles' abbreviated name, or even both, the abbreviated and the full name;
 	for easier identification.
+  * Past use of role: 
 	
 ### Edit Circuit Details
   * Rooms that already have a station assigned should be either removed from 
