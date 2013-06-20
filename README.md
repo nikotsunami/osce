@@ -325,12 +325,15 @@ Suggested Features / Improvements
     Suggestion: Use Rollover-Tooltips for the general information (instead of
     forcing the user to click) and have tooltips with possible actions displayed
     on left click.
+	
 ###Error Handling in general
   * IN 2013, Error popup windows should be a thing of the past! Errors related
     to user data entries should be shown where they are relevant!
+	
 ###Cleanup
   * MessageConfirmationDialogBox is a widget, but is in 
     ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination
+	
 ###SP-Portal:
   * SP's should be able to write additional comments when they are surveyed for
     availability.
