@@ -108,7 +108,7 @@ public class SPViewImpl extends Composite implements SPView, HasMouseDownHandler
 				
 				if (event.getNativeButton() == NativeEvent.BUTTON_RIGHT)
 				{
-					if (assignmentProxy == null)
+					if (assignmentProxy == null || assignmentProxy.getOscePostRoom() == null)
 		        		return;
 					
 					event.preventDefault();
@@ -231,7 +231,7 @@ public class SPViewImpl extends Composite implements SPView, HasMouseDownHandler
 		
 		if(assignmentProxy.getPatientInRole()!=null)
 		{
-			exchangePopupView.getNameValue().setText(assignmentProxy.getPatientInRole().getPatientInSemester().getStandardizedPatient().getName());
+			exchangePopupView.getNameValue().setText(assignmentProxy.getPatientInRole().getPatientInSemester().getStandardizedPatient().getPreName() + " " + assignmentProxy.getPatientInRole().getPatientInSemester().getStandardizedPatient().getName());
 			delegate.showExchangeSpPopup(exchangePopupView, assignmentProxy);
 		}
 		else

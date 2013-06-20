@@ -107,7 +107,7 @@ public class SPFederalAllocator {
 					}
 					
 					//load assignment for particular rotation for rotation wise
-					List<Assignment> assList = Assignment.findAssignmentByOscePostAndOsceDayAndTimeStartAndTimeEnd(osceDay.getId(), oscePost.getId(), ass.getTimeStart(), ass.getTimeEnd(), ass.getSequenceNumber());
+					List<Assignment> assList = Assignment.findAssignmentByOscePostAndOsceDayAndTimeStartAndTimeEnd(osceDay.getId(), oscePost.getId(), ass.getTimeStart(), ass.getTimeEnd(), ass.getSequenceNumber(), patientInRoleModelList.size());
 					//System.out.println("assList SIZE : " + assList.size());
 					
 					int i = 0;
@@ -126,17 +126,26 @@ public class SPFederalAllocator {
 								continue;
 							
 							//System.out.println("PIR ID : " + pir.getId() + " SP NAME : " + pir.getPatientInSemester().getStandardizedPatient().getName() + " : " + pir.getPatientInSemester().getStandardizedPatient().getPreName());
-							assignment.setPatientInRole(pir);
-							assignment.persist();
+							
 							
 							int value = patientInRoleModelList.get(i).getValue();
 							
 							if(assignment.getOscePostRoom() == null)
-							{							
+							{	
+								PatientInRole breakPir = PatientInRole.findPatientInRoleByPatientInSemesterAndOscePostNull(pir.getPatientInSemester().getId());
+								
+								if (breakPir != null)
+								{
+									assignment.setPatientInRole(breakPir);
+									assignment.persist();
+								}
 								patientInRoleModelBreakList.add(new SPModel(pir, value));
 							}
 							else
 							{
+								assignment.setPatientInRole(pir);
+								assignment.persist();
+								
 								value += 1;
 								patientInRoleModelSlotList.add(new SPModel(pir, value));
 							}

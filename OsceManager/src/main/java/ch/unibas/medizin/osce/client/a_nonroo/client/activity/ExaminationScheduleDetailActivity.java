@@ -1154,7 +1154,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				requests.getEventBus().fireEvent(
 						new ApplicationLoadingScreenEvent(true));
 			requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeSP(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
-			.with("patientInRole","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<AssignmentProxy>>() {
+			.with("oscePostRoom","patientInRole","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 
 				@Override
 				public void onSuccess(List<AssignmentProxy> response) {
@@ -1838,7 +1838,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				new ApplicationLoadingScreenEvent(true));
 		//create logical break post
 		//retrieve data of logical sp break and create slots.
-		requests.assignmentRequestNonRoo().retrieveAssignmentOfLogicalBreakPost(osceDayProxy.getId(), osceSequenceProxy.getId()).with("patientInRole","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<AssignmentProxy>>() {
+		requests.assignmentRequestNonRoo().retrieveAssignmentOfLogicalBreakPost(osceDayProxy.getId(), osceSequenceProxy.getId()).with("oscePostRoom","patientInRole","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 
 			@Override
 			public void onSuccess(List<AssignmentProxy> response) {
@@ -2940,7 +2940,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					@Override
 					public String render(PatientInRoleProxy object) {
 						if (object != null)
-							return object.getPatientInSemester().getStandardizedPatient().getName();
+							return (object.getPatientInSemester().getStandardizedPatient().getPreName() + " " + object.getPatientInSemester().getStandardizedPatient().getName());
 						else 
 							return "";
 					}

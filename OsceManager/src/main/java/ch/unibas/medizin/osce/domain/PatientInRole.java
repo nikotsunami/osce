@@ -638,4 +638,16 @@ public class PatientInRole {
  		TypedQuery<PatientInRole> query = em.createQuery(sql, PatientInRole.class);
  		return query.getResultList();
  	}
+ 	
+ 	public static PatientInRole findPatientInRoleByPatientInSemesterAndOscePostNull(Long patientInSemId)
+ 	{
+ 		EntityManager em = entityManager();
+ 		String sql = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester.id = " + patientInSemId + " AND pir.oscePost IS NULL";
+ 		TypedQuery<PatientInRole> query = em.createQuery(sql, PatientInRole.class);
+ 		
+ 		if (query.getResultList().size() > 0)
+ 			return query.getResultList().get(0);
+ 		else
+ 			return null;
+ 	}
 }

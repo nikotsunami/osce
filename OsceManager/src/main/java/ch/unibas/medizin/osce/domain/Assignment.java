@@ -1113,9 +1113,11 @@ public class Assignment {
          	Semester semester = Semester.findSemester(semesterId);
          	fileName = semester.getCalYear().toString() + ".xls";
          	excelUtil.writeExcel(fileName);
+         	System.out.println("File Name : " + fileName);
      	}
      	catch(Exception e)
      	{
+     		e.printStackTrace();
      		Log.info("ERROR : " + e.getMessage());
      	}
      	
@@ -1274,13 +1276,19 @@ public class Assignment {
     	 
     	 while (oldSpItr.hasNext())
     	 {
-    		 String pirSql = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester = " + exchangePir.getPatientInSemester().getId() + " AND pir.oscePost IS NOT NULL";
-    		 TypedQuery<PatientInRole> pirQuery = em.createQuery(pirSql, PatientInRole.class);
-    		 PatientInRole exchangePatientInRole = pirQuery.getSingleResult();
-    		 
-    		 Assignment assignment = oldSpItr.next();
-    		 assignment.setPatientInRole(exchangePatientInRole);
-    		 assignment.persist();
+    		 if (ass.getPatientInRole().getOscePost() != null && ass.getPatientInRole().getOscePost().getStandardizedRole() != null)
+    		 {
+    			 String pirSql = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester = " + exchangePir.getPatientInSemester().getId() + " AND pir.oscePost IS NOT NULL AND pir.oscePost.standardizedRole.id = " + ass.getPatientInRole().getOscePost().getStandardizedRole().getId();
+    			 TypedQuery<PatientInRole> pirQuery = em.createQuery(pirSql, PatientInRole.class);
+    			 
+    			 if (pirQuery.getResultList().size() > 0)
+        		 {
+    				 PatientInRole exchangePatientInRole = pirQuery.getResultList().get(0);
+    				 Assignment assignment = oldSpItr.next();
+            		 assignment.setPatientInRole(exchangePatientInRole);
+            		 assignment.persist();
+        		 }
+    		 }
     	 }
     	 
     	 while (exchangeSpItr.hasNext())
@@ -1578,7 +1586,7 @@ public class Assignment {
     	 return query.getResultList();
      }
      
-     public static List<Assignment> findAssignmentByOscePostAndOsceDayAndTimeStartAndTimeEnd(Long osceDayId, Long oscePostId, Date timeStart, Date timeEnd, Integer sequenceNumber)
+     public static List<Assignment> findAssignmentByOscePostAndOsceDayAndTimeStartAndTimeEnd(Long osceDayId, Long oscePostId, Date timeStart, Date timeEnd, Integer sequenceNumber, int spCountForPost)
      {
     	 EntityManager em = entityManager();
     	 //String sql = "SELECT a FROM Assignment a WHERE type = 1 AND osce_day = " + osceDayId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " AND ( (a.timeStart = '" + timeStart + "' AND a.timeEnd = '" + timeEnd + "') OR a.sequenceNumber = " + sequenceNumber + ") ORDER BY a.timeStart";
@@ -1589,10 +1597,34 @@ public class Assignment {
     	 
     	 List<Assignment> listAssignmentSPslot = query.getResultList();
     	 
-    	 if(listAssignmentSPslot != null)
+    	 if(assignmentSpBreakSlot != null)
     	 {
     		 listAssignmentSPslot.add(assignmentSpBreakSlot);
     	 }	 
+    	 else if (assignmentSpBreakSlot == null)
+    	 {
+    		if (listAssignmentSPslot.size() != 0 && spCountForPost > listAssignmentSPslot.size())
+    		{
+    			int diff = spCountForPost - listAssignmentSPslot.size();
+    			
+    			for (int i=0; i<diff; i++)
+    			{
+    				// create break assignment
+    				Assignment assignment = listAssignmentSPslot.get(0);
+    				
+					Assignment ass = new Assignment();
+					ass.setType(AssignmentTypes.PATIENT);
+					ass.setOscePostRoom(null);
+					ass.setOsceDay(assignment.getOsceDay());
+					ass.setTimeStart(assignment.getTimeStart());
+					ass.setTimeEnd(assignment.getTimeEnd());
+					ass.setSequenceNumber(assignment.getSequenceNumber());
+					ass.persist();
+					
+					listAssignmentSPslot.add(ass);
+    			}
+    		}
+    	 }
     	 
     	 return listAssignmentSPslot;
      }
