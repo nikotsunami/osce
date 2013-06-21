@@ -631,10 +631,16 @@ public class PatientInRole {
      	return q.getResultList();
  	}
  	
- 	public static List<PatientInRole> findPatientInRoleByOsceDayAndOscePostOrderById(Long osceDayId, Long oscePostId)
+ 	public static List<PatientInRole> findPatientInRoleByOsceSequenceAndOscePostOrderById(Long osceSeqId, Long oscePostId, boolean isAscending)
  	{
  		EntityManager em = entityManager();
- 		String sql = "SELECT pir FROM PatientInRole pir WHERE pir.oscePost.osceSequence.osceDay.id = " + osceDayId + " AND pir.oscePost.id = " + oscePostId + " ORDER BY pir.id";
+ 		
+ 		String sql = "";
+ 		if (isAscending)
+ 			sql = "SELECT pir FROM PatientInRole pir WHERE pir.oscePost.osceSequence.id = " + osceSeqId + " AND pir.oscePost.id = " + oscePostId + " ORDER BY pir.id";
+ 		else
+ 			sql = "SELECT pir FROM PatientInRole pir WHERE pir.oscePost.osceSequence.id = " + osceSeqId + " AND pir.oscePost.id = " + oscePostId + " ORDER BY pir.id DESC";
+
  		TypedQuery<PatientInRole> query = em.createQuery(sql, PatientInRole.class);
  		return query.getResultList();
  	}

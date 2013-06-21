@@ -107,10 +107,10 @@ public class OscePost {
 		return maxValue;
 	}
 	
-	public static List<OscePost> findOscePostByOsceDay(Long osceDayId)
+	public static List<OscePost> findOscePostByOsceSequenceId(Long osceSeqId)
 	{
 		EntityManager em = entityManager();
-		String sql = "SELECT op FROM OscePost op WHERE op.osceSequence.osceDay.id = " + osceDayId;
+		String sql = "SELECT op FROM OscePost op WHERE op.osceSequence.id = " + osceSeqId;
 		TypedQuery<OscePost> query = em.createQuery(sql, OscePost.class);
 		return query.getResultList();		
 	}
