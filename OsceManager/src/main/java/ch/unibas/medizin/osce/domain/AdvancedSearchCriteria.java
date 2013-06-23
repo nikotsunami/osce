@@ -61,7 +61,7 @@ public class AdvancedSearchCriteria {
 		EntityManager em = entityManager();
 		TypedQuery<AdvancedSearchCriteria> q = em
 				.createQuery(
-						"SELECT o FROM AdvancedSearchCriteria AS o WHERE o.standardizedRole.id = :standardizedRoleID",
+						"SELECT o. FROM AdvancedSearchCriteria AS o WHERE o.standardizedRole.id = :standardizedRoleID",
 						AdvancedSearchCriteria.class);
 		q.setParameter("standardizedRoleID", standardizedRoleID);
 		// System.out.println("^standardizedRoleID: " + standardizedRoleID);
@@ -71,6 +71,42 @@ public class AdvancedSearchCriteria {
 		q.setMaxResults(maxResults);
 
 		return q.getResultList();
+	}
+	
+	public static String findAdvancedSearchCriteriasByStandardizedRoleID(
+			StandardizedRole standardizedRoleID) {
+		if (standardizedRoleID == null)
+			throw new IllegalArgumentException("The name argument is required");
+		EntityManager em = entityManager();
+		TypedQuery<String> q = em
+				.createQuery(
+						"SELECT o.shownValue FROM AdvancedSearchCriteria AS o WHERE o.standardizedRole = :standardizedRoleID",
+						String.class);
+		q.setParameter("standardizedRoleID", standardizedRoleID);
+		// System.out.println("^standardizedRoleID: " + standardizedRoleID);
+		// System.out.println("^ Size  : " + q.getMaxResults());
+
+		//q.setFirstResult(firstResult);
+		//q.setMaxResults(maxResults);
+		List<String> advanceSearchCriteriaList=q.getResultList();
+		String returnValue="";
+		for(int i=0;i<advanceSearchCriteriaList.size();i++)
+		{
+			if(i==advanceSearchCriteriaList.size()-1)
+			{
+				returnValue=returnValue+advanceSearchCriteriaList.get(i);
+			}
+			else if(i!=0)
+			{
+				returnValue=returnValue+advanceSearchCriteriaList.get(i)+",";
+			}
+			else
+			{
+				returnValue=advanceSearchCriteriaList.get(i)+",";
+			}
+		}
+		
+		return returnValue;
 	}
 	// ]Assignment F
 }

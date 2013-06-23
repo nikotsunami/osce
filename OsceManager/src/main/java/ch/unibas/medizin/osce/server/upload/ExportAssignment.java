@@ -30,10 +30,23 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
+import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Course;
 import ch.unibas.medizin.osce.domain.Doctor;
@@ -43,9 +56,15 @@ import ch.unibas.medizin.osce.domain.OscePost;
 import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.domain.OsceSequence;
 import ch.unibas.medizin.osce.domain.PatientInRole;
+import ch.unibas.medizin.osce.domain.Room;
+import ch.unibas.medizin.osce.domain.StandardizedPatient;
+import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.PostType;
+import ch.unibas.medizin.osce.shared.RoleTypes;
+import ch.unibas.medizin.osce.shared.Semesters;
+import ch.unibas.medizin.osce.shared.StudyYears;
 
 public class ExportAssignment  extends HttpServlet {
 	
@@ -67,9 +86,11 @@ public class ExportAssignment  extends HttpServlet {
 				 response.setContentType("application/x-download");
 				 if(new Integer(type) ==0)
 				    response.setHeader("Content-Disposition", "attachment; filename=" + "assignment_student_"+osceId+".html");
-				 else
+				 else if(new Integer(type) ==1)
 					 response.setHeader("Content-Disposition", "attachment; filename=" + "assignment_sp_"+osceId+".html");
-				   
+				 else
+					 response.setHeader("Content-Disposition", "attachment; filename=" + "assignment_sp_plans_"+osceId+".xlsx");
+
 
 				Log.info("path :" + fileName);
 				//String file=OsMaFilePathConstant.ROLE_IMAGE_FILEPATH+path;
@@ -99,9 +120,16 @@ public class ExportAssignment  extends HttpServlet {
 		 
 		
 	}
-	
+	/*If type =2 export SP Plans*/
 	public  String createHtml(Long osceId,int type)
 	{
+		if(type==2)
+		{
+			String fileName=createExcel(osceId, type);
+			return fileName;
+		}
+		else
+		{
 		Osce osce=Osce.findOsce(osceId);
 		
 		List<OsceDay> osceDays=osce.getOsce_days();
@@ -201,7 +229,7 @@ public class ExportAssignment  extends HttpServlet {
 					{
 						
 						
-						
+		 				
 						Element rotationElement=createEmptyChildNode("rotation",doc,rotationsElement);
 						
 						createChildNode("type", new Integer(type).toString(), doc, rotationElement);
@@ -669,8 +697,698 @@ public class ExportAssignment  extends HttpServlet {
 		}
 		
 		return saveXML(doc);
+		}
 	}
-	
+	/*create xls for Sp Plans*/
+	private String createExcel(Long osceId, int type) {
+		
+		
+		 String path=getServletConfig().getServletContext().getRealPath(OsMaFilePathConstant.assignmentHTML);
+         String outputFileName =path +System.currentTimeMillis()+".xlsx";
+		 
+         try
+         {
+        	 //create xls file
+	         Workbook wb = new XSSFWorkbook();
+	         Sheet sheet=wb.createSheet("Einsatzplan Simulationspatienten");
+	         
+	         // create header inside sheet
+	         //the header row: centered text in 48pt font
+	        Row headerRow = sheet.createRow(0);
+	        headerRow.setHeightInPoints(80);
+	        Cell titleCell = headerRow.createCell(0);
+	        titleCell.setCellValue("Einsatzplan Simulationspatienten");
+	        
+	        CellStyle titleStyle;
+	        Font titleFont = wb.createFont();
+	        titleFont.setFontHeightInPoints((short)18);
+	        titleFont.setColor(IndexedColors.BLACK.getIndex());
+	        titleStyle = wb.createCellStyle();
+	        titleStyle.setAlignment(CellStyle.ALIGN_CENTER);
+	        titleStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+	        titleStyle.setFont(titleFont);
+	        titleCell.setCellStyle(titleStyle);
+	        
+	        
+	       //  titleCell.setCellStyle(styles.get("title"));
+	       // sheet.addMergedRegion(CellRangeAddress.valueOf("$A$1:$N$1"));
+	        
+	        //osce
+	        Osce osce=Osce.findOsce(osceId);
+	        List<OsceDay> osceDays=osce.getOsce_days();
+	        
+	        List<List<Object>> completeExcel=new ArrayList<List<Object>>();
+	        for(OsceDay osceDay:osceDays)
+	        {
+	        	//osce day
+	        	
+	        	List<Object> excelWholeDayDetail=new ArrayList<Object>();
+	        	completeExcel.add(excelWholeDayDetail);
+	        	String osceDayIDNodeValue=new SimpleDateFormat("dd.MM.yyyy").format(osceDay.getOsceDate());
+	        	
+	        	String osceLable = /*new EnumRenderer<StudyYears>().render(osce.getStudyYear().name()) +*/  
+						/*+ new EnumRenderer<Semesters>().render(osce.getSemester().getSemester())*/ osceDay.getOsce().getName()+"  " + osceDayIDNodeValue;
+	        	
+	        	OsceDayDetail osceDayDetail=new OsceDayDetail();
+	        	osceDayDetail.setHeaderLabel(osceLable);
+	        	excelWholeDayDetail.add(osceDayDetail);
+	        	
+		       /* Row osceHeader = sheet.createRow(row++);
+		        Cell osceHeaderCell=osceHeader.createCell(0);
+		        osceHeaderCell.setCellValue(osceLable);*/
+		        
+		       List<OsceSequence> osceSeqs=osceDay.getOsceSequences();
+		       List<OsceSequenceDetail> osceSeqDetailList=new ArrayList<OsceSequenceDetail>();
+		       
+		       SequenceRow sequenceRow=new SequenceRow();
+		       sequenceRow.setOsceSequenceDetails(osceSeqDetailList);
+		       
+		       excelWholeDayDetail.add(sequenceRow);
+		       //time slot list
+		       List<TimeSlotDetail> timeSlotDetails=new ArrayList<TimeSlotDetail>();
+		       
+		       SPTimeSlotRow spTimeSlotRow=new SPTimeSlotRow();
+		       spTimeSlotRow.setSpSlotsPerSeq(timeSlotDetails);
+		       excelWholeDayDetail.add(spTimeSlotRow);
+		       
+		       //column wise remaining detals
+		       ExcelDetail excelDetail=new ExcelDetail();
+		       List<Object> excelDetails=new ArrayList<Object>();
+		       excelDetail.setExcelDetail(excelDetails);
+		       excelWholeDayDetail.add(excelDetail);
+		        for(int i=0;i<osceSeqs.size();i++)
+		        {
+		        	OsceSequence osceSeq=osceSeqs.get(i);
+		        	
+		        	OsceSequenceDetail osceSeqDetail=new OsceSequenceDetail();
+		        	
+		        	List<OscePost> oscePosts=osceSeq.getOscePosts();
+		        	
+		        	//find distinct time sp slots per sequence
+		        	TimeSlotDetail timeSlotDetail=new TimeSlotDetail();
+		        	//timeSlotDetail.setTimeStarts( Assignment.findDistinctSPSlotPerSeq(osceSeq));
+		        	
+		        	List<Date> timeStartList=Assignment.findDistinctSPSlotPerSeq(osceSeq);
+		        	
+		        	timeSlotDetails.add(timeSlotDetail);
+		        	List<SPSlot> spSlotList=new ArrayList<SPSlot>();
+		        	timeSlotDetail.setSpSlotList(spSlotList);
+		        	//find spDetail per sp Slot. dont include break post but include logical break post.order by post
+		        	
+		        	for(int j=0;j<timeStartList.size();j++)
+		        	{
+		        		Date timeStart=timeStartList.get(j);
+		        		List<Assignment> assignments=Assignment.findAssignmentBySplot(osceDay, timeStart);
+		        		List<SPDetail> spDetailsList=new ArrayList<SPDetail>();
+		        		List<PostDetail> postDetailList=new ArrayList<PostDetail>();
+		        		
+		        		SPSlot spSlot=new SPSlot();
+		        		spSlot.setTimeStart(timeStart);
+		        		spSlot.setOsce(osce);
+		        		spSlotList.add(spSlot);
+		        		List<RoomDetail> roomDetailList=new ArrayList<RoomDetail>();
+		        		
+		        		
+		        		
+		        		for(Assignment a:assignments)
+		        		{
+		        			if(j==0)//include postdetail 
+		        			{
+		        				PostDetail postDetail=new PostDetail();
+		        				OscePostRoom oscePostRoom=a.getOscePostRoom();
+		        				postDetail.setPatientInRole(a.getPatientInRole());
+		        				//logical sp break
+		        				if(oscePostRoom==null)
+		        				{
+		        					postDetail.setRowSpan(1);
+		        					postDetail.setOscePostRoom(null);
+		        				}
+		        				else
+		        				{
+		        					postDetail.setRowSpan(osceSeq.getCourses().size());
+		        					postDetail.setOscePostRoom(oscePostRoom);
+		        				}
+		        				postDetailList.add(postDetail);
+		        				
+		        			}
+		        			spSlot.setTimeEnd(a.getTimeEnd());
+		        			
+		        			//sp detail
+		        			SPDetail spDetail=new SPDetail();
+		        			
+		        			OscePostRoom oscePostRoom=a.getOscePostRoom();
+		        			spDetail.setOscePostRoom(oscePostRoom);
+		        			spDetail.setPatientInRole(a.getPatientInRole());
+		        			spDetail.setSequenceNumber(a.getSequenceNumber());
+		        			spDetail.setOscePosts(oscePosts);
+		        			spDetail.setCourses(osceSeq.getCourses());
+		        			spDetailsList.add(spDetail);
+		        			
+		        			if(j==timeStartList.size()-1 && i==osceSeqs.size()-1)//append room details at end of last sequence
+		        			{
+		        				RoomDetail roomDetail=new RoomDetail();
+		        				if(a.getOscePostRoom()==null)//logical break
+		        				{
+		        					roomDetail.setRoomNumber("");
+		        				}
+		        				else if(a.getPatientInRole()==null)// material post type
+		        				{
+		        					roomDetail.setRoomNumber("");
+		        				}
+		        				else
+		        				{
+		        					roomDetail.setRoom(a.getOscePostRoom().getRoom());
+		        				}
+		        				roomDetail.setOscePosts(oscePosts);
+		        				roomDetail.setOscePostRoom(a.getOscePostRoom());
+		        				roomDetail.setCourses(osceSeq.getCourses());
+		        				roomDetailList.add(roomDetail);
+		        			}
+		        			
+		        		}
+		        		
+		        		/*merge sp column*/
+		        		/*for(int k=0;k<spDetailsList.size();k++)
+		        		{
+		        			SPDetail spDetail=spDetailsList.get(k);
+		        			if(k!=spDetailsList.size()-1)//not last
+		        			{
+		        				SPDetail spDetailNext=spDetailsList.get(k+1);
+		        				
+		        				if(spDetail.equals(spDetailNext))
+		        				{
+		        					spDetailsList.remove(k);
+		        					k=0;
+		        					
+		        				}
+		        			}
+		        		}*/
+		        		
+		        		if(j==0)//first column of seq-post column
+		        		{
+		        			PostColumn postColumn=new PostColumn();
+		        			postColumn.setPostDetailList(postDetailList);
+		        			excelDetails.add(postColumn);
+		        		}
+		        		SPColumn spColumn=new SPColumn();
+		        		spColumn.setSpDetailList(spDetailsList);
+		        		excelDetails.add(spColumn);
+		        		if(j==timeStartList.size()-1 && i==osceSeqs.size()-1)//append room details at end of last sequence-last column
+		        		{
+		        			RoomColumn roomColumn=new RoomColumn();
+		        			roomColumn.setRoomDetailList(roomDetailList);
+		        			excelDetails.add(roomColumn);
+		        		}
+		        		
+		        	}
+		        	
+		        	
+		        	
+		        	osceSeqDetail.setOsceSeq(osceSeq);
+		        	osceSeqDetail.setColSpan(timeSlotDetail.getSpSlotList().size()*2);
+		        	osceSeqDetailList.add(osceSeqDetail);
+		        }
+		        
+	        	
+	        }
+	        
+	        //write data to excel;
+	        int row=1;
+	        int col=0;
+	        for(int i=0;i<completeExcel.size();i++)//equals to number of oscedays
+	        {
+	        	List<Object> excelDetailPerDay=completeExcel.get(i);
+	        	
+	        	for(int j=0;j<excelDetailPerDay.size();j++)//all seq/day
+	        	{
+	        		Object obj=excelDetailPerDay.get(j);
+	        		
+	        		if(obj instanceof OsceDayDetail)
+	        		{
+	        			OsceDayDetail osceDayDetail=(OsceDayDetail)obj;
+	        			row++;
+	        			Row osceDayExcelRow=sheet.createRow(row++);
+	        			Cell cell =osceDayExcelRow.createCell(0);
+	        			cell.setCellValue(osceDayDetail.getHeaderLabel());
+	        			
+	        			CellStyle osceDayStyle;
+	        	        Font osceDayFont = wb.createFont();
+	        	        osceDayFont.setFontHeightInPoints((short)14);
+	        	        osceDayFont.setColor(IndexedColors.BLACK.getIndex());
+	        	        osceDayStyle = wb.createCellStyle();
+	        	        osceDayStyle.setAlignment(CellStyle.ALIGN_CENTER);
+	        	        osceDayStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+	        	        osceDayStyle.setFont(osceDayFont);
+	        	        cell.setCellStyle(osceDayStyle);
+	        			
+	        		}
+	        		
+	        		if(obj instanceof SequenceRow)
+	        		{
+	        			SequenceRow seqRow=(SequenceRow)obj;
+	        			
+	        			List<OsceSequenceDetail> osceSequenceDetailList=seqRow.getOsceSequenceDetails();
+	        			
+	        			//sequence Row
+	        			Row excelRow=sheet.createRow(row++);
+	        			int seqCol=0;
+	        			for(int k=0;k<osceSequenceDetailList.size();k++)
+	        			{
+	        				OsceSequenceDetail osceSequenceDetail=osceSequenceDetailList.get(k);
+	        				
+	        				
+	        				//seqCol=seqCol+2;
+	        				Cell cell=excelRow.createCell(seqCol);
+	        				String value="Version " +osceSequenceDetail.getOsceSeq().getLabel();
+	        				cell.setCellValue(value);
+	        				sheet.addMergedRegion(new CellRangeAddress(row-1,row-1,seqCol,seqCol+osceSequenceDetail.getColSpan()));
+	        				seqCol=seqCol+osceSequenceDetail.getColSpan()+1;
+	        				
+	        				CellStyle seqStyle;
+		        	        Font seqFont = wb.createFont();
+		        	        seqFont.setFontHeightInPoints((short)12);
+		        	        seqFont.setColor(IndexedColors.BLACK.getIndex());
+		        	        seqStyle = wb.createCellStyle();
+		        	        seqFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		        	        
+		        	        //seqStyle.setAlignment(CellStyle.ALIGN_CENTER);
+		        	        seqStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		        	        seqStyle.setFont(seqFont);
+		        	        seqStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());		      
+		        	        seqStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		        	        
+		        	        cell.setCellStyle(seqStyle);
+		        	        
+		        			
+	        			}
+	        		}
+	        		
+	        		else if(obj instanceof SPTimeSlotRow)
+	        		{
+	        			SPTimeSlotRow spTimeSlotRow=(SPTimeSlotRow)obj;
+	        			List<TimeSlotDetail> timeSlotDetailList=spTimeSlotRow.getSpSlotsPerSeq();
+	        			
+	        			int timeSlotCol=0;
+	        			Row timeSlotRow=sheet.createRow(row++);
+	        			
+	        			for(int k=0;k<timeSlotDetailList.size();k++)
+	        			{
+	        				TimeSlotDetail timeSlotDetail=timeSlotDetailList.get(k);
+	        				
+	        				List<SPSlot> spSlots=timeSlotDetail.getSpSlotList();
+	        				
+	        				//post
+	        				Cell postcell=timeSlotRow.createCell(timeSlotCol);
+	        				timeSlotCol=timeSlotCol+1;
+	        				postcell.setCellValue("Post");
+	        				
+	        				//timeslot
+	        				for(int l=0;l<spSlots.size();l++)
+	        				{
+	        					SPSlot spSlot=spSlots.get(l);
+	        					Cell timeSlotCell=timeSlotRow.createCell(timeSlotCol);
+	        					timeSlotCol=timeSlotCol+2;
+	        					 SimpleDateFormat ft = 
+	        						      new SimpleDateFormat ("HH:mm");
+	        					
+	        					timeSlotCell.setCellValue(ft.format(spSlot.getTimeStart()) +"-"+ft.format(spSlot.getTimeEnd()));
+	        					
+	        					CellStyle seqStyle;
+			        	        Font seqFont = wb.createFont();
+			        	        seqFont.setFontHeightInPoints((short)12);
+			        	        seqFont.setColor(IndexedColors.BLACK.getIndex());
+			        	        seqFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+			        	        seqStyle = wb.createCellStyle();
+			        	        //seqStyle.setAlignment(CellStyle.ALIGN_CENTER);
+			        	        seqStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+			        	        seqStyle.setFont(seqFont);
+			        	        seqStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());	
+			        	        seqStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+			        	        timeSlotCell.setCellStyle(seqStyle);
+			        	        
+			        	        /*if(l != spSlots.size()-1)
+			        	        {
+			        	        	long nextTime=spSlots.get(l+1).getTimeStart().getTime();
+			        	        	long currentSlotTime=spSlot.getTimeEnd().getTime();
+			        	        	
+			        	        	long middlebreak=spSlot.getOsce().getMiddleBreak()*60*1000;
+			        	        	long slotDiff=nextTime=currentSlotTime;
+			        	        	if((slotDiff) > middlebreak)
+			        	        	{
+			        	        		Cell cell=timeSlotRow.createCell(timeSlotCol+1);
+			        	        		slotDiff=slotDiff/1000;
+			        	        		slotDiff=slotDiff/60;
+			        	        		cell.setCellValue(slotDiff+"mt");
+			        	        	}
+			        	        	
+			        	        }*/
+
+	        				}
+	        				
+	        				if(k==timeSlotDetailList.size()-1)
+	        				{
+	        					Cell roomcell=timeSlotRow.createCell(timeSlotCol);
+		        				timeSlotCol=timeSlotCol+1;
+		        				roomcell.setCellValue("Room");
+	        				}
+	        				
+	        			}
+	        		}
+	        		else if(obj instanceof ExcelDetail)
+	        		{
+	        			ExcelDetail excelDetail=(ExcelDetail)obj;
+	        			
+	        			List<Row> excelRow=new ArrayList<Row>();
+	        			int startrow=0;
+    					int endRow=0;
+    					int rowSpan=0;
+	        			for(int k=0;k<excelDetail.getExcelDetail().size();k++)
+	        			{
+	        				Object column=excelDetail.getExcelDetail().get(k);
+	        				
+        					if(k==0)
+        					{
+        						startrow=row;
+        					}
+
+	        				if(column instanceof PostColumn)
+	        				{
+	        					PostColumn postColumn=(PostColumn)column;
+	        					
+	        					List<PostDetail> postDetailList=postColumn.getPostDetailList();
+	        					
+	        					if(k==0)
+	        					for(int l=0;l<postDetailList.size();l++)
+	        					{
+	        						PostDetail postDetail=postDetailList.get(l);
+	        						OscePostRoom oscePostRoom=postDetail.getOscePostRoom();
+	        						rowSpan=postDetail.getRowSpan();
+	        						
+	        						for(int m=0;m<rowSpan;m++)
+	        						 excelRow.add(sheet.createRow(row++));	        							        							        						
+	        					}
+	        					
+	        					endRow=excelRow.size();
+	        					//int index=0;
+	        					int index1=0;
+	        					int colorIndex=2;
+	        					
+	        					
+	        					
+	        					int postIndex=0;
+	        					
+	        					for(int index=0;index<postDetailList.size();index++)
+	        					{
+	        						
+	        						
+	        						
+	        						PostDetail postDetail=postDetailList.get(index1+postIndex);
+	        						rowSpan=postDetail.getRowSpan();
+	        						OscePostRoom oscePostRoom=postDetail.getOscePostRoom();
+	        						PatientInRole patientInRole=postDetail.getPatientInRole();
+	        						Row postRow=excelRow.get(index1);
+        							Cell postCell=postRow.createCell(col);
+        							sheet.autoSizeColumn(col, true);
+        							postCell.setCellStyle(spParcourStyle(wb, "color_"+colorIndex));
+	        						if(oscePostRoom==null)//logical break
+	        						{
+	        							
+	        							postCell.setCellValue("Reserve");
+	        							//postIndex++;
+	        							//colorIndex++;
+	        						}
+	        						else if(patientInRole==null) //material
+	        						{
+	        							postCell.setCellValue("Notfall");
+	        							Cell cell=excelRow.get(index1+1).createCell(col);
+	        							cell.setCellValue("Phantom");
+	        							sheet.autoSizeColumn(col, true);
+	        							cell.setCellStyle(spParcourStyle(wb, "color_"+colorIndex));
+	        							int temp=1;
+	        							for(int postRowIndex=2;postRowIndex<rowSpan;postRowIndex++)
+	        							{
+	        								Cell cell1=excelRow.get(index1+1+temp).createCell(col);
+	            							sheet.autoSizeColumn(col, true);
+	            							cell1.setCellStyle(spParcourStyle(wb, "color_"+colorIndex));
+	            							temp++;
+	        							}
+	        							postIndex++;
+	        							colorIndex++;
+	        						}
+	        						else
+	        						{
+	        							OscePost oscePost=oscePostRoom.getOscePost();
+	        							StandardizedRole role=oscePost.getStandardizedRole();
+	        							String roleLongName=role.getLongName();
+	        							
+	        							Cell cell=excelRow.get(index1+1).createCell(col);
+	        							
+	        							String postTypeLbl=role.getRoleType().toString();
+	        							
+	        							
+	        							sheet.autoSizeColumn(col, true);
+	        							cell.setCellStyle(spParcourStyle(wb, "color_"+colorIndex));
+	        							
+	        							if(oscePost.getStandardizedRole().getRoleType()==RoleTypes.Material)
+	        							{
+	        								postCell.setCellValue("Notfall");
+	        								cell.setCellValue("Phantom");
+	        							}
+	        							else
+	        							{
+	        								postCell.setCellValue(roleLongName);
+	        								
+	        								String advanceSearchCriteria=AdvancedSearchCriteria.findAdvancedSearchCriteriasByStandardizedRoleID(role);
+	        								
+	        								cell.setCellValue(postTypeLbl+" "+advanceSearchCriteria);
+	        							}
+	        							int temp=1;
+	        							for(int postRowIndex=2;postRowIndex<rowSpan;postRowIndex++)
+	        							{
+	        								Cell cell1=excelRow.get(index1+1+temp).createCell(col);
+	            							sheet.autoSizeColumn(col, true);
+	            							cell1.setCellStyle(spParcourStyle(wb, "color_"+colorIndex));
+	            							temp++;
+	        							}
+	        							postIndex++;
+	        							colorIndex++;
+		        						
+	        						}
+	        						//index++;
+	        						//if(rowSpan!=1)
+	        						//{
+	        						index1=index1+rowSpan;
+	        						index=index1;
+	        						/*}
+	        						else
+	        						{
+	        							//index1=index;
+	        							index1=index1+rowSpan;
+	        						}*/
+	        						
+	        						/*else
+	        						{
+	        							index1++;
+	        						}*/
+	        						
+	        						if(index != postDetailList.size()-1)
+	        						{
+	        							if(postDetailList.get(index+1).getOscePostRoom()==null)
+	        							{
+	        								postIndex=0;
+	        							}
+	        						}
+	        					}
+	        					
+	        					
+	        					col++;
+	        				
+	        				}
+	        				
+	        				
+	        				if(column instanceof SPColumn)
+	        				{
+	        					SPColumn spColumn=(SPColumn) column;
+	        					List<SPDetail> spDetailList=spColumn.getSpDetailList();
+	        					List<OscePost> oscePosts=null;
+	        					if(spDetailList.size()>0)
+	        					{
+	        						oscePosts=spDetailList.get(0).getOscePosts();
+	        					}
+	        					
+	        					if(oscePosts!=null)
+	        					for(int m=0;m<oscePosts.size();m++)
+	        					{
+	        						OscePost oscePost=oscePosts.get(m);
+	        						int spIndex=0;
+		        					for(int n=0;n<spDetailList.size();n++)
+		        					{
+		        						SPDetail spDetail=spDetailList.get(n);
+		        						
+		        						PatientInRole patientInRole=spDetail.getPatientInRole();
+		        						OscePostRoom oscePostRoom=spDetail.getOscePostRoom();
+		        						
+		        						if(patientInRole!=null && oscePostRoom != null && oscePostRoom.getOscePost().equals(oscePost))
+		        						{	
+		        							Cell spCell=excelRow.get(oscePosts.indexOf(oscePostRoom.getOscePost())*spDetail.getCourses().size()+spIndex).createCell(col);
+		        							StandardizedPatient sp=patientInRole.getPatientInSemester().getStandardizedPatient();
+		        							String name=sp.getPreName()+" "+sp.getName();
+		        							spCell.setCellValue(name);
+		        							sheet.autoSizeColumn(col, true);
+		        							
+		        							spCell.setCellStyle(spParcourStyle(wb, oscePostRoom.getCourse().getColor()));
+		        							spIndex++;
+			        						
+		        						}
+		        						else if(patientInRole==null && oscePostRoom != null && oscePostRoom.getOscePost().equals(oscePost))
+		        						{
+		        							Cell spCell=excelRow.get(oscePosts.indexOf(oscePostRoom.getOscePost())*spDetail.getCourses().size()+spIndex).createCell(col);
+		        							//StandardizedPatient sp=patientInRole.getPatientInSemester().getStandardizedPatient();
+		        							//String name=sp.getPreName()+" "+sp.getName();
+		        							spCell.setCellValue("NA");
+		        							sheet.autoSizeColumn(col, true);
+		        							
+		        							spCell.setCellStyle(spParcourStyle(wb, oscePostRoom.getCourse().getColor()));
+		        							spIndex++;
+		        						}
+		        						
+		        						/*else if(oscePostRoom==null && patientInRole!=null)
+		        						{
+		        							Cell spCell=excelRow.get(n).createCell(col);
+		        							StandardizedPatient sp=patientInRole.getPatientInSemester().getStandardizedPatient();
+		        							String name=sp.getPreName()+" "+sp.getName();
+		        							spCell.setCellValue(name);
+		        						}
+		        						else
+		        						{
+		        							Cell spCell=excelRow.get(n).createCell(col);
+		        							spCell.setCellValue("");
+		        						}*/
+		        						
+		        					}
+		        			/*		spIndex=-1;
+		        					 if(oscePost.getStandardizedRole().getRoleType()==RoleTypes.Material)
+		        					 {
+		        						 if(spDetailList.size()>0)
+		        						 {
+		        							 for(int temp=0;temp<spDetailList.get(0).getCourses().size();i++)
+		        							 {
+		        								 Course course=spDetailList.get(0).getCourses().get(temp);
+		        								 Cell spCell=excelRow.get(oscePosts.indexOf(oscePost)*spDetailList.get(0).getCourses().size()+spIndex).createCell(col);
+				        							//StandardizedPatient sp=patientInRole.getPatientInSemester().getStandardizedPatient();
+				        							//String name=sp.getPreName()+" "+sp.getName();
+				        							spCell.setCellValue("NA");
+				        							sheet.autoSizeColumn(col, true);
+				        							
+				        							spCell.setCellStyle(spParcourStyle(wb, course.getColor()));
+				        							spIndex++;
+					        					
+		        							 }
+		        						 }
+		        					 }*/
+		        					
+	        					}
+	        					
+	        					//logical break SP
+	        					int rowIndex=0;
+	        					for(int n=0;n<spDetailList.size();n++)
+	        					{
+	        						SPDetail spDetail=spDetailList.get(n);
+	        						
+	        						PatientInRole patientInRole=spDetail.getPatientInRole();
+	        						OscePostRoom oscePostRoom=spDetail.getOscePostRoom();
+	        						
+	        						if(oscePostRoom==null && patientInRole!=null)
+	        						{
+	        							Cell spCell=null;
+	 	        							 spCell=excelRow.get(n).createCell(col);
+	        							StandardizedPatient sp=patientInRole.getPatientInSemester().getStandardizedPatient();
+	        							String name=sp.getPreName()+" "+sp.getName();
+	        							spCell.setCellValue(name);
+	        							rowIndex++;
+	        							sheet.autoSizeColumn(col, true);
+	        						}
+	        						
+	        					}
+	        					
+	        					col=col+2;
+	        				}
+	        				
+	        				if(column instanceof RoomColumn)
+	        				{
+	        					RoomColumn roomColumn=(RoomColumn) column;
+	        					List<RoomDetail> roomDetailList=roomColumn.getRoomDetailList();
+	        					List<OscePost> oscePosts=null;
+	        					if(roomDetailList.size()>0)
+	        					{
+	        						oscePosts=roomDetailList.get(0).getOscePosts();
+	        					}
+	        					
+	        					if(oscePosts!=null)
+	        					for(int m=0;m<oscePosts.size();m++)
+	        					{
+	        						OscePost oscePost=oscePosts.get(m);
+	        						int roomIndex=0;
+		        					for(int n=0;n<roomDetailList.size();n++)
+		        					{
+		        						RoomDetail roomDetail=roomDetailList.get(n);
+		        						
+		        						Room room=roomDetail.getRoom();
+		        						OscePostRoom oscePostRoom=roomDetail.getOscePostRoom();
+		        						
+		        						if(room !=null && oscePostRoom != null && oscePostRoom.getOscePost().equals(oscePost))
+		        						{
+		        							Cell roomCell=excelRow.get(oscePosts.indexOf(oscePostRoom.getOscePost())*roomDetail.getCourses().size()+roomIndex).createCell(col);
+			        							roomCell.setCellValue(room.getRoomNumber());
+			        							sheet.autoSizeColumn(col, true);
+			        							roomIndex++;
+		        						}
+		        						
+		        						
+		        					}
+	        					}
+	        				}
+	        			}
+	        		}
+	        	}
+
+	        }
+	        //print data for all osceday
+	        
+	       
+	        for(int i=0;i<completeExcel.size();i++)//equals to number of oscedays
+	        {
+	        	List<Object> excelDetailPerDay=completeExcel.get(i);
+	        	
+	        	for(Object o:excelDetailPerDay)
+	        	{
+	        		if(o instanceof SequenceRow)
+	        		{
+	        			SequenceRow seqRow=(SequenceRow)o;
+	        			
+	        			List<OsceSequenceDetail> osceSequenceDetailList=seqRow.getOsceSequenceDetails();
+	        			for(OsceSequenceDetail osceSequenceDetail:osceSequenceDetailList)
+	        			{
+	        				Log.info("Version" +osceSequenceDetail.getOsceSeq().getId() +"column Span " + osceSequenceDetail.getColSpan());
+	        			}
+	        		}
+	        	}
+	        	
+	        }
+	        
+	         
+	         FileOutputStream out = new FileOutputStream(outputFileName);
+	         wb.write(out);
+	         out.close();
+	         return outputFileName;
+         }
+         catch(Exception e)
+         {
+        	 e.printStackTrace();
+        	 return outputFileName;
+         }
+		
+	}
 	public String saveXML(Document doc)
 	{
 		try{
@@ -705,6 +1423,7 @@ public class ExportAssignment  extends HttpServlet {
 			e.printStackTrace();
 			return null;
 		}
+	
 	}
 	
 	public String convertXmlToHtml(String fileName)
@@ -766,6 +1485,113 @@ public class ExportAssignment  extends HttpServlet {
 			e.printStackTrace();
 			return null;
 		}
+        
+	}
+	
+	public CellStyle spParcourStyle(Workbook wb,String color)
+	{
+		CellStyle seqStyle;
+        
+		Font seqFont = wb.createFont();
+        seqFont.setFontHeightInPoints((short)12);
+        seqFont.setColor(IndexedColors.BLACK.getIndex());
+        seqStyle = wb.createCellStyle();
+        seqFont.setBoldweight((short)2);
+        
+        //seqStyle.setAlignment(CellStyle.ALIGN_CENTER);
+        seqStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        seqStyle.setFont(seqFont);
+        seqStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());		        	        
+        seqStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        if(color.equalsIgnoreCase("color_1"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.BROWN.getIndex());
+        }
+        
+        if(color.equalsIgnoreCase("color_2"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_3"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.PINK.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_4"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_5"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_6"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.RED.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_7"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.ROSE.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_8"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.BLUE.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_9"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_10"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.ORANGE.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_11"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.PLUM.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_12"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.MAROON.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_13"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.OLIVE_GREEN.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_14"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.VIOLET.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_15"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.INDIGO.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_16"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.LIME.getIndex());
+        }
+        
+        
+        return seqStyle;
+        
+        /*
+         * #Color Names
+color_1=Brown
+color_2=Yellow.
+color_3=Pink
+color_4=Aqua
+color_5=Grey
+color_6=Red
+color_7=Beige
+color_8=Blue
+color_9=Green
+color_10=Orange
+color_11=Purpur
+color_12=Maroon
+color_13=Olive
+color_14=Violet
+color_15=Indigo
+color_16=Black
+         * 
+         * */
         
 	}
 

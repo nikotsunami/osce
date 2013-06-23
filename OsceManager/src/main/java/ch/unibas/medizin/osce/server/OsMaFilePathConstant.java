@@ -78,9 +78,9 @@ public class OsMaFilePathConstant {
 
 	// path of outside of webapps for parmanent storage of images
 	// linux
-	public static String localImageUploadDirectory = "/usr/oscemanager/sp/images/";
+	//public static String localImageUploadDirectory = "/usr/oscemanager/sp/images/";
 	// windows
-	// public static String localImageUploadDirectory = "c:\\oscemanager\\sp\\images\\";
+	 public static String localImageUploadDirectory = "c:\\oscemanager\\sp\\images\\";
 
 	public static String realImagePath = "";
 	// public static String imagesrcPath="/osMaEntry/gwt/unibas/sp/images/";

@@ -72,6 +72,9 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 	@UiField
 	Button exportButtonSP;
 	
+	@UiField
+	Button exportSPPlans;
+	
 	public Label getShortBreakSimPatChangeValue() {
 		return shortBreakSimPatChangeValue;
 	}
@@ -187,6 +190,8 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		moveLunchBreakRotation.setText(constants.moveRotLunchBreak());
 		moveLunchBreakRotation.setIcon("triangle-2-n-s");
 		//moveLunchBreakRotation.setIcon("triangle-1-s");
+		
+		exportSPPlans.setText(constants.exportSPPlans());
 	}
 	
 	@UiHandler("moveLunchBreakRotation")
@@ -472,6 +477,13 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 	{
 		Log.info("exportButton");
 		delegate.exportAssignment(osceProxy.getId(),1);
+	}
+	
+	@UiHandler("exportSPPlans")
+	public void exportSPPlansButtonClicked(ClickEvent evennt)
+	{
+		Log.info("exportSPPlans");
+		delegate.exportAssignment(osceProxy.getId(),2);
 	}
 
 }

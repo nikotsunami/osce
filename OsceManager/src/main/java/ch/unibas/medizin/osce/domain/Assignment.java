@@ -3070,5 +3070,37 @@ public class Assignment {
 			osceDay.persist();
 		}	
 	}
-     
+	
+	public static List<Date> findDistinctSPSlotPerSeq(OsceSequence seq)
+	{
+		 EntityManager em = entityManager();
+    	 String sql = "SELECT distinct a.timeStart FROM Assignment a WHERE a.type = 1  and a.oscePostRoom.oscePost.osceSequence = :seq   ORDER BY a.timeStart";
+    	 TypedQuery<Date> query = em.createQuery(sql, Date.class);
+    	 query.setParameter("seq", seq);
+    	 return query.getResultList();
+	}
+     /*order by post,exlude break post, include logical sp break post*/
+	public static List<Assignment> findAssignmentBySplot(OsceDay osceDay,Date timeStart)
+	{
+		 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE a.type = 1  and a.osceDay = :osceDay and a.timeStart = :timeStart   ";
+    	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    	 query.setParameter("osceDay", osceDay);
+    	 query.setParameter("timeStart", timeStart);
+    	 
+    	 List<Assignment> assignments=query.getResultList();
+    	 
+    	 for(Assignment a:assignments)
+    	 {
+    		 OscePostRoom oscePostRoom=a.getOscePostRoom();
+    		 if(oscePostRoom !=null)
+    		 {
+    			 if(oscePostRoom.getOscePost().getOscePostBlueprint().getPostType()==PostType.BREAK)
+    			 {
+    				 assignments.remove(a);
+    			 }
+    		 }
+    	 }
+    	 return query.getResultList();
+	}
 } 

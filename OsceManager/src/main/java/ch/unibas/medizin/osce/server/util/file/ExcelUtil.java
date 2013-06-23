@@ -17,6 +17,7 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
 
 import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
@@ -42,11 +43,11 @@ public class ExcelUtil
 		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 		cellStyle.setFont(font);
 		
-		Iterator<HSSFCell> cellItr = row.cellIterator();
+		Iterator<Cell> cellItr = row.cellIterator();
 		
 		while (cellItr.hasNext())
 		{
-			HSSFCell cell = cellItr.next();
+			Cell cell = cellItr.next();
 			cell.setCellStyle(cellStyle);
 		}		
 	}

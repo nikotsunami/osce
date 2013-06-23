@@ -44,6 +44,7 @@
 					<my:IconButton ui:field="exportButtonStudent" icon="extlink"/>
 					<my:IconButton ui:field="exportButtonSP" icon="extlink"/>
 					<my:IconButton ui:field="moveLunchBreakRotation"/>
+					<my:IconButton ui:field="exportSPPlans"/>
 				</g:HorizontalPanel>
 				
 			</g:VerticalPanel>

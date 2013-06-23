@@ -1363,5 +1363,7 @@ public interface OsceConstants extends Constants {
 	public String note();
 			
 	public String noteValue();
+
+	public String exportSPPlans();
 }
 
