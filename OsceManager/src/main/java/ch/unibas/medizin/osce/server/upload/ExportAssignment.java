@@ -1096,7 +1096,7 @@ public class ExportAssignment  extends HttpServlet {
 	        					
 	        					
 	        					int postIndex=0;
-	        					
+	        					boolean flag=true;
 	        					for(int index=0;index<postDetailList.size();index++)
 	        					{
 	        						
@@ -1192,11 +1192,20 @@ public class ExportAssignment  extends HttpServlet {
 	        							index1++;
 	        						}*/
 	        						
-	        						if((index+1) <= postDetailList.size()-1)
+	        						if((index) <= postDetailList.size()-1)
 	        						{
-	        							if(postDetailList.get(index+1).getOscePostRoom()==null)
+	        							if(postDetailList.get(index).getOscePostRoom()==null)
 	        							{
+	        								
 	        								postIndex=0;
+	        								if(flag)
+	        								{
+	        									index--;
+	        									flag=false;
+	        								}
+	        								//index1--;
+	        								//index--;
+	        								//index1--;
 	        							}
 	        						}
 	        					}
