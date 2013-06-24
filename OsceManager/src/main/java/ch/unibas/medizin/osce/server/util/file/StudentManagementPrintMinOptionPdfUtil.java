@@ -225,7 +225,8 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 		List<Integer> selectedAnswers=new ArrayList<Integer>();
 		for(Long ans:givenAnswer)
 		{
-			selectedAnswers.add(Integer.parseInt(ans.toString()));
+			if (ans != null)
+				selectedAnswers.add(Integer.parseInt(ans.toString()));			
 		}
 		
 		
