@@ -118,6 +118,7 @@
         </dependency>-->
    <!--GwtEvent Service Dependency (server Push event) { -->
    
+    
    <!-- Apache POI for excel export -->
 	    
 	          <dependency>
@@ -131,6 +132,7 @@
     <version>3.9</version>
 </dependency>
 <!-- Apache POI for excel export -->
+   
     <dependency>
 		<groupId>de.novanic.gwteventservice</groupId>
 		<artifactId>gwteventservice</artifactId>
@@ -192,7 +194,7 @@
         </dependency>
         
          <!-- Dependency for POI for Excel import -->
-       <!--  <dependency>
+         <!--  <dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
 			<version>3.2-FINAL</version>
@@ -649,12 +651,12 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <argLine>-Xmx4026m</argLine>
+                    <argLine>-Xmx8196m</argLine>
                     <source>1.6</source>
                     <target>1.6</target>
                     <encoding>UTF-8</encoding>
                     <meminitial>2048m</meminitial>
-                    <maxmem>4022m</maxmem>
+                    <maxmem>8192m</maxmem>
                 </configuration>
             </plugin>
             <plugin>
@@ -684,7 +686,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <argLine>-Xmx4196m</argLine>
+                    <argLine>-Xmx8196m</argLine>
                     <outxml>true</outxml>
                     <aspectLibraries>
                         <aspectLibrary>
@@ -695,7 +697,7 @@
                     <source>1.6</source>
                     <target>1.6</target>
                     <meminitial>2048m</meminitial>
-                    <maxmem>4192m</maxmem>
+                    <maxmem>8192m</maxmem>
                 </configuration>
             </plugin>
             <plugin>
@@ -703,10 +705,10 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.5</version>
                 <configuration>
-                    <argLine>-Xmx4196m</argLine>
+                    <argLine>-Xmx8196m</argLine>
                     <encoding>UTF-8</encoding>
                     <meminitial>2048m</meminitial>
-                    <maxmem>4192m</maxmem>
+                    <maxmem>8192m</maxmem>
                 </configuration>
             </plugin>
             <plugin>
@@ -714,14 +716,14 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.8</version>
                 <configuration>
-                    <argLine>-Xmx4196m</argLine>
+                    <argLine>-Xmx8196m</argLine>
                     <printSummary>false</printSummary>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <excludes>
                         <exclude>**/*_Roo_*</exclude>
                     </excludes>
                     <meminitial>2048m</meminitial>
-                    <maxmem>4192m</maxmem>
+                    <maxmem>8192m</maxmem>
                 </configuration>
             </plugin>
             <plugin>
@@ -729,12 +731,12 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.2.1</version>
                 <configuration>
-                    <argLine>-Xmx4196m</argLine>
+                    <argLine>-Xmx8196m</argLine>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <meminitial>2048m</meminitial>
-                    <maxmem>4192m</maxmem>
+                    <maxmem>8192m</maxmem>
                 </configuration>
             </plugin>
             <plugin>
@@ -749,9 +751,9 @@
                 <version>2.7</version>
                 <!-- Note 2.8 does not work with AspectJ aspect path -->
                 <configuration>
-                    <argLine>-Xmx4196m</argLine>
+                    <argLine>-Xmx8196m</argLine>
                     <meminitial>2048m</meminitial>
-                    <maxmem>4192m</maxmem>
+                    <maxmem>8192m</maxmem>
                     <downloadSources>true</downloadSources>
                     <downloadJavadocs>false</downloadJavadocs>
                     <wtpversion>2.0</wtpversion>
@@ -782,9 +784,9 @@
                 <artifactId>maven-idea-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <argLine>-Xmx4196m</argLine>
+                    <argLine>-Xmx8196m</argLine>
                     <meminitial>2048m</meminitial>
-                    <maxmem>4192m</maxmem>
+                    <maxmem>8192m</maxmem>
                     <downloadSources>true</downloadSources>
                     <dependenciesAsLibraries>true</dependenciesAsLibraries>
                 </configuration>
@@ -799,9 +801,9 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>7.4.2.v20110526</version>
                 <configuration>
-                    <argLine>-Xmx4196m</argLine>
+                    <argLine>-Xmx8196m</argLine>
                     <meminitial>2048m</meminitial>
-                    <maxmem>4192m</maxmem>
+                    <maxmem>8192m</maxmem>
                     <webAppSourceDirectory>${jetty.app.path}</webAppSourceDirectory>
                     <webAppConfig>
                         <contextPath>/${project.name}</contextPath>
@@ -816,15 +818,19 @@
                 <configuration>
                     <logLevel>INFO</logLevel>
                     <style>PRETTY</style>
-                    <runTarget>/ApplicationScaffold.html</runTarget>
+                    <runTarget>/OsMaEntry.html</runTarget>
                     <hostedWebapp>${project.build.directory}/${project.build.finalName}</hostedWebapp>
                     <modules>
-                        <module>${project.groupId}.ApplicationScaffold</module>
+                        <module>${project.groupId}.OsMaEntry</module>
                     </modules>
                     <copyWebapp>true</copyWebapp>
+			<extraJvmArgs>-Xms4g -Xmx16g</extraJvmArgs>
                 </configuration>
                 <executions>
                     <execution>
+                    	<configuration>
+							<extraJvmArgs>-Xmx10G</extraJvmArgs>
+						</configuration>                    	
                         <id>gwtcompile</id>
                         <phase>prepare-package</phase>
                         <goals>
