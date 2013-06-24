@@ -1178,6 +1178,7 @@ public class ExportAssignment  extends HttpServlet {
 	        						//if(rowSpan!=1)
 	        						//{
 	        						index1=index1+rowSpan;
+	        						if(rowSpan!=1)
 	        						index=index1;
 	        						/*}
 	        						else
@@ -1191,7 +1192,7 @@ public class ExportAssignment  extends HttpServlet {
 	        							index1++;
 	        						}*/
 	        						
-	        						if(index != postDetailList.size()-1)
+	        						if((index+1) <= postDetailList.size()-1)
 	        						{
 	        							if(postDetailList.get(index+1).getOscePostRoom()==null)
 	        							{
@@ -1340,6 +1341,7 @@ public class ExportAssignment  extends HttpServlet {
 		        						{
 		        							Cell roomCell=excelRow.get(oscePosts.indexOf(oscePostRoom.getOscePost())*roomDetail.getCourses().size()+roomIndex).createCell(col);
 			        							roomCell.setCellValue(room.getRoomNumber());
+			        							roomCell.setCellStyle(spParcourStyle(wb, roomDetail.getOscePostRoom().getCourse().getColor()));
 			        							sheet.autoSizeColumn(col, true);
 			        							roomIndex++;
 		        						}
