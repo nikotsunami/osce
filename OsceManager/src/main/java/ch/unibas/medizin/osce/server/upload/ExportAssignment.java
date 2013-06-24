@@ -1026,13 +1026,13 @@ public class ExportAssignment  extends HttpServlet {
 			        	        seqStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
 			        	        timeSlotCell.setCellStyle(seqStyle);
 			        	        
-			        	        /*if(l != spSlots.size()-1)
+			        	        if(l != spSlots.size()-1)
 			        	        {
 			        	        	long nextTime=spSlots.get(l+1).getTimeStart().getTime();
 			        	        	long currentSlotTime=spSlot.getTimeEnd().getTime();
 			        	        	
 			        	        	long middlebreak=spSlot.getOsce().getMiddleBreak()*60*1000;
-			        	        	long slotDiff=nextTime=currentSlotTime;
+			        	        	long slotDiff=nextTime-currentSlotTime;
 			        	        	if((slotDiff) > middlebreak)
 			        	        	{
 			        	        		Cell cell=timeSlotRow.createCell(timeSlotCol+1);
@@ -1041,7 +1041,7 @@ public class ExportAssignment  extends HttpServlet {
 			        	        		cell.setCellValue(slotDiff+"mt");
 			        	        	}
 			        	        	
-			        	        }*/
+			        	        }
 
 	        				}
 	        				
