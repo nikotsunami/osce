@@ -309,7 +309,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									/*if(assignmentStandardizedPatient.getOscePostRoom()!=null)
 									{	*/
 									String standardizedRole = checkNotNull(assignmentStandardizedPatient, "getOscePostRoom","getOscePost","getStandardizedRole")==true?assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole().getLongName().toString():"";
-									String room = checkNotNull(assignmentStandardizedPatient, "getOscePostRoom","getRoom","getRoomNumber")==true?assignmentStandardizedPatient.getOscePostRoom().getRoom().getRoomNumber():"Break";
+									String room = checkNotNull(assignmentStandardizedPatient, "getOscePostRoom","getRoom","getRoomNumber")==true?assignmentStandardizedPatient.getOscePostRoom().getRoom().getRoomNumber():"Reserver";
 									
 									if(standardizedRole!="")
 										tempScheduleContent=tempScheduleContent.replace("[ROLE]", standardizedRole);
@@ -931,7 +931,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								{
 									tempScheduleContentStud=tempScheduleContentStud.replace("[POST]", "");
 									tempScheduleContentStud=tempScheduleContentStud.replace("for", " ");
-									tempScheduleContentStud=tempScheduleContentStud.replace("[ROOM]", " Break");
+									tempScheduleContentStud=tempScheduleContentStud.replace("[ROOM]", " Reserver");
 								}
 								
 								scheduleContentStud=scheduleContentStud+tempScheduleContentStud;
@@ -1309,7 +1309,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 							if(assignmentExaminer.getOscePostRoom()!=null)
 							{*/
 							//String role=checkNotNull(assignmentExaminer,"getOscePostRoom","getOscePost","getStandardizedRole")==true?assignmentExaminer.getPatientInRole().getOscePost().getStandardizedRole().getLongName():"";
-							String room=checkNotNull(assignmentExaminer,"getOscePostRoom","getRoom","getRoomNumber")==true?assignmentExaminer.getOscePostRoom().getRoom().getRoomNumber():" BREAK";
+							String room=checkNotNull(assignmentExaminer,"getOscePostRoom","getRoom","getRoomNumber")==true?assignmentExaminer.getOscePostRoom().getRoom().getRoomNumber():" Reserver";
 							
 							if(standardizedRoleName!="")
 								tempScheduleContentExaminer=tempScheduleContentExaminer.replace("[ROLE]", standardizedRoleName);

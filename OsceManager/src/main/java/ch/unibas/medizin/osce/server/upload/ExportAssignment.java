@@ -541,7 +541,7 @@ public class ExportAssignment  extends HttpServlet {
 						{
 						//post count to set column span of sp break
 						createChildNode("postCount", String.valueOf(osceSeq.getOscePosts().size() + 1), doc, parcourElement);
-						createChildNode("spBreak", "SP Break", doc, parcourElement);
+						createChildNode("spBreak", "Reserve", doc, parcourElement);
 						
 						Element spBreakRotationsElement=createEmptyChildNode("spBreakrotations",doc,parcourElement);
 						
@@ -711,7 +711,7 @@ public class ExportAssignment  extends HttpServlet {
         	 //create xls file
 	         Workbook wb = new XSSFWorkbook();
 	         Sheet sheet=wb.createSheet("Einsatzplan Simulationspatienten");
-	         
+	         sheet.setFitToPage(true);
 	         // create header inside sheet
 	         //the header row: centered text in 48pt font
 	        Row headerRow = sheet.createRow(0);
@@ -1007,6 +1007,7 @@ public class ExportAssignment  extends HttpServlet {
 	        				{
 	        					SPSlot spSlot=spSlots.get(l);
 	        					Cell timeSlotCell=timeSlotRow.createCell(timeSlotCol);
+	        					sheet.setColumnWidth(timeSlotCol+1, 5*256);
 	        					timeSlotCol=timeSlotCol+2;
 	        					 SimpleDateFormat ft = 
 	        						      new SimpleDateFormat ("HH:mm");
@@ -1036,6 +1037,7 @@ public class ExportAssignment  extends HttpServlet {
 			        	        	if((slotDiff) > middlebreak)
 			        	        	{
 			        	        		Cell cell=timeSlotRow.createCell(timeSlotCol+1);
+			        	        		
 			        	        		slotDiff=slotDiff/1000;
 			        	        		slotDiff=slotDiff/60;
 			        	        		cell.setCellValue(slotDiff+"mt");
@@ -1109,7 +1111,7 @@ public class ExportAssignment  extends HttpServlet {
 	        						Row postRow=excelRow.get(index1);
         							Cell postCell=postRow.createCell(col);
         							sheet.autoSizeColumn(col, true);
-        							postCell.setCellStyle(spParcourStyle(wb, "color_"+colorIndex));
+        							postCell.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
 	        						if(oscePostRoom==null)//logical break
 	        						{
 	        							
@@ -1123,13 +1125,13 @@ public class ExportAssignment  extends HttpServlet {
 	        							Cell cell=excelRow.get(index1+1).createCell(col);
 	        							cell.setCellValue("Phantom");
 	        							sheet.autoSizeColumn(col, true);
-	        							cell.setCellStyle(spParcourStyle(wb, "color_"+colorIndex));
+	        							cell.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
 	        							int temp=1;
 	        							for(int postRowIndex=2;postRowIndex<rowSpan;postRowIndex++)
 	        							{
 	        								Cell cell1=excelRow.get(index1+1+temp).createCell(col);
 	            							sheet.autoSizeColumn(col, true);
-	            							cell1.setCellStyle(spParcourStyle(wb, "color_"+colorIndex));
+	            							cell1.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
 	            							temp++;
 	        							}
 	        							postIndex++;
@@ -1147,7 +1149,7 @@ public class ExportAssignment  extends HttpServlet {
 	        							
 	        							
 	        							sheet.autoSizeColumn(col, true);
-	        							cell.setCellStyle(spParcourStyle(wb, "color_"+colorIndex));
+	        							cell.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
 	        							
 	        							if(oscePost.getStandardizedRole().getRoleType()==RoleTypes.Material)
 	        							{
@@ -1167,7 +1169,7 @@ public class ExportAssignment  extends HttpServlet {
 	        							{
 	        								Cell cell1=excelRow.get(index1+1+temp).createCell(col);
 	            							sheet.autoSizeColumn(col, true);
-	            							cell1.setCellStyle(spParcourStyle(wb, "color_"+colorIndex));
+	            							cell1.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
 	            							temp++;
 	        							}
 	        							postIndex++;
@@ -1242,7 +1244,7 @@ public class ExportAssignment  extends HttpServlet {
 		        						{	
 		        							Cell spCell=excelRow.get(oscePosts.indexOf(oscePostRoom.getOscePost())*spDetail.getCourses().size()+spIndex).createCell(col);
 		        							StandardizedPatient sp=patientInRole.getPatientInSemester().getStandardizedPatient();
-		        							String name=sp.getPreName()+" "+sp.getName();
+		        							String name=sp.getPreName()+" "+sp.getName().charAt(0)+".";
 		        							spCell.setCellValue(name);
 		        							sheet.autoSizeColumn(col, true);
 		        							
@@ -1313,7 +1315,7 @@ public class ExportAssignment  extends HttpServlet {
 	        							Cell spCell=null;
 	 	        							 spCell=excelRow.get(n).createCell(col);
 	        							StandardizedPatient sp=patientInRole.getPatientInSemester().getStandardizedPatient();
-	        							String name=sp.getPreName()+" "+sp.getName();
+	        							String name=sp.getPreName()+" "+sp.getName().charAt(0) +".";
 	        							spCell.setCellValue(name);
 	        							rowIndex++;
 	        							sheet.autoSizeColumn(col, true);
@@ -1605,5 +1607,95 @@ color_16=Black
          * */
         
 	}
+	
+	
+	public CellStyle spPostStyle(Workbook wb,String color)
+	{
+		CellStyle seqStyle;
+        
+		Font seqFont = wb.createFont();
+        seqFont.setFontHeightInPoints((short)12);
+        seqFont.setColor(IndexedColors.BLACK.getIndex());
+        seqStyle = wb.createCellStyle();
+        seqFont.setBoldweight((short)2);
+        
+        //seqStyle.setAlignment(CellStyle.ALIGN_CENTER);
+        seqStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        seqStyle.setFont(seqFont);
+        seqStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());		        	        
+        seqStyle.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        if(color.equalsIgnoreCase("color_1"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.CORAL.getIndex());
+        }
+        
+        if(color.equalsIgnoreCase("color_2"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_3"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.GOLD.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_4"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.SKY_BLUE.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_5"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.CORNFLOWER_BLUE.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_6"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.LIME.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_7"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.PLUM.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_8"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.TAN.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_9"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.TEAL.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_10"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.ORANGE.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_11"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.ORCHID.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_12"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.MAROON.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_13"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.OLIVE_GREEN.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_14"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.VIOLET.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_15"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.INDIGO.getIndex());
+        }
+        if(color.equalsIgnoreCase("color_16"))
+        {
+        	seqStyle.setFillForegroundColor(IndexedColors.LAVENDER.getIndex());
+        }
+        
+        
+        return seqStyle;
+        
+        
+        
+	}
+
 
 }
