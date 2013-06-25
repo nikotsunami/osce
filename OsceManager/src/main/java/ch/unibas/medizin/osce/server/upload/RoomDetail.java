@@ -11,6 +11,16 @@ public class RoomDetail {
 
 	private Room room;
 	
+	private int numOfBreakPost;
+	
+	public int getNumOfBreakPost() {
+		return numOfBreakPost;
+	}
+
+	public void setNumOfBreakPost(int numOfBreakPost) {
+		this.numOfBreakPost = numOfBreakPost;
+	}
+
 	private OscePostRoom oscePostRoom;
 	
 	private List<Course> courses;

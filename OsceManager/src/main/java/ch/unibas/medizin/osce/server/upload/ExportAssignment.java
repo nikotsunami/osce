@@ -738,6 +738,7 @@ public class ExportAssignment  extends HttpServlet {
 	        List<OsceDay> osceDays=osce.getOsce_days();
 	        
 	        List<List<Object>> completeExcel=new ArrayList<List<Object>>();
+	        
 	        for(OsceDay osceDay:osceDays)
 	        {
 	        	//osce day
@@ -784,6 +785,16 @@ public class ExportAssignment  extends HttpServlet {
 		        	
 		        	List<OscePost> oscePosts=osceSeq.getOscePosts();
 		        	
+		        	
+		        	int numOfBreakPost=0;
+		        	for(int postIndex=0;postIndex<oscePosts.size();postIndex++)
+		        	{
+		        		if(oscePosts.get(postIndex).getOscePostBlueprint().getPostType()==PostType.BREAK)
+		        		{
+		        			numOfBreakPost++;
+		        		}
+		        	}
+		        	
 		        	//find distinct time sp slots per sequence
 		        	TimeSlotDetail timeSlotDetail=new TimeSlotDetail();
 		        	//timeSlotDetail.setTimeStarts( Assignment.findDistinctSPSlotPerSeq(osceSeq));
@@ -795,24 +806,62 @@ public class ExportAssignment  extends HttpServlet {
 		        	timeSlotDetail.setSpSlotList(spSlotList);
 		        	//find spDetail per sp Slot. dont include break post but include logical break post.order by post
 		        	
+		        	List<SPColumn> spColumnList=new ArrayList<SPColumn>();
 		        	for(int j=0;j<timeStartList.size();j++)
 		        	{
 		        		Date timeStart=timeStartList.get(j);
 		        		List<Assignment> assignments=Assignment.findAssignmentBySplot(osceDay, timeStart);
 		        		List<SPDetail> spDetailsList=new ArrayList<SPDetail>();
+		        		
 		        		List<PostDetail> postDetailList=new ArrayList<PostDetail>();
 		        		
 		        		SPSlot spSlot=new SPSlot();
 		        		spSlot.setTimeStart(timeStart);
 		        		spSlot.setOsce(osce);
+		        		
+		        		
+		        		
 		        		spSlotList.add(spSlot);
 		        		List<RoomDetail> roomDetailList=new ArrayList<RoomDetail>();
 		        		
 		        		
+		        		if(j==0)//include postdetail 
+	        			{
+		        			
+		        			for(int postIndex=0;postIndex<oscePosts.size();postIndex++)
+		        			{
+		        				for(int courseIndex=0;courseIndex<osceSeq.getCourses().size();courseIndex++)
+		        				{
+		        					if(oscePosts.get(postIndex).getOscePostBlueprint().getPostType()!= PostType.BREAK)
+		        					{
+		        					PostDetail postDetail=new PostDetail();
+			        				//OscePostRoom oscePostRoom=a.getOscePostRoom();
+			        				//postDetail.setPatientInRole(a.getPatientInRole());
+			        				//logical sp break
+			        				//if(oscePostRoom==null)
+			        				//{
+			        				//	postDetail.setRowSpan(1);
+			        				//	postDetail.setOscePostRoom(null);
+			        				//}
+			        				//else
+			        				//{
+			        					postDetail.setRowSpan(osceSeq.getCourses().size());
+			        					postDetail.setOscePost(oscePosts.get(postIndex));
+			        				//	postDetail.setOscePostRoom(oscePostRoom);
+			        				//}
+			        				postDetailList.add(postDetail);
+		        					}
+		        				}
+		        			}
+	        				
+	        				
+	        			}
+		        		
 		        		
 		        		for(Assignment a:assignments)
 		        		{
-		        			if(j==0)//include postdetail 
+		        			
+		        			if(j==0)
 		        			{
 		        				PostDetail postDetail=new PostDetail();
 		        				OscePostRoom oscePostRoom=a.getOscePostRoom();
@@ -822,15 +871,12 @@ public class ExportAssignment  extends HttpServlet {
 		        				{
 		        					postDetail.setRowSpan(1);
 		        					postDetail.setOscePostRoom(null);
+		        					postDetail.setReserve(true);
+		        					postDetailList.add(postDetail);
 		        				}
-		        				else
-		        				{
-		        					postDetail.setRowSpan(osceSeq.getCourses().size());
-		        					postDetail.setOscePostRoom(oscePostRoom);
-		        				}
-		        				postDetailList.add(postDetail);
-		        				
+
 		        			}
+		        			
 		        			spSlot.setTimeEnd(a.getTimeEnd());
 		        			
 		        			//sp detail
@@ -840,6 +886,7 @@ public class ExportAssignment  extends HttpServlet {
 		        			spDetail.setOscePostRoom(oscePostRoom);
 		        			spDetail.setPatientInRole(a.getPatientInRole());
 		        			spDetail.setSequenceNumber(a.getSequenceNumber());
+		        			spDetail.setNumOfBreakPost(numOfBreakPost);
 		        			spDetail.setOscePosts(oscePosts);
 		        			spDetail.setCourses(osceSeq.getCourses());
 		        			spDetailsList.add(spDetail);
@@ -860,12 +907,15 @@ public class ExportAssignment  extends HttpServlet {
 		        					roomDetail.setRoom(a.getOscePostRoom().getRoom());
 		        				}
 		        				roomDetail.setOscePosts(oscePosts);
+		        				roomDetail.setNumOfBreakPost(numOfBreakPost);
 		        				roomDetail.setOscePostRoom(a.getOscePostRoom());
 		        				roomDetail.setCourses(osceSeq.getCourses());
 		        				roomDetailList.add(roomDetail);
 		        			}
 		        			
 		        		}
+		        		
+		        		spSlot.setRotation(Assignment.findRotationNumberFromSPSlot(osceDay, timeStart, spSlot.getTimeEnd()));
 		        		
 		        		/*merge sp column*/
 		        		/*for(int k=0;k<spDetailsList.size();k++)
@@ -893,6 +943,7 @@ public class ExportAssignment  extends HttpServlet {
 		        		SPColumn spColumn=new SPColumn();
 		        		spColumn.setSpDetailList(spDetailsList);
 		        		excelDetails.add(spColumn);
+		        		spColumnList.add(spColumn);
 		        		if(j==timeStartList.size()-1 && i==osceSeqs.size()-1)//append room details at end of last sequence-last column
 		        		{
 		        			RoomColumn roomColumn=new RoomColumn();
@@ -902,6 +953,50 @@ public class ExportAssignment  extends HttpServlet {
 		        		
 		        	}
 		        	
+		        	//merge SP Column
+		        	
+		        	for(int index=0;index<spColumnList.size();index++)
+		        	{
+		        			
+		        			List<SPDetail> spDetailList=spColumnList.get(index).getSpDetailList();
+		        			
+		        			
+		        				
+		        		List<SPDetail> nextspDetailList=null;
+		        		if((index+1) <= spColumnList.size()-1)
+		        		{
+		        			nextspDetailList=spColumnList.get(index+1).getSpDetailList();
+		        			
+		        			int spSlotRotation=spSlotList.get(index).getRotation();
+		        			int nextspSlotRotation=spSlotList.get(index+1).getRotation();
+		        			if(spSlotRotation==nextspSlotRotation && nextspDetailList != null )
+			        		{
+		        				boolean flag=true;
+		        				for(int spIndex=0;spIndex<spDetailList.size();spIndex++)
+		        				{
+		        					SPDetail spDetail=spDetailList.get(spIndex);
+		        					SPDetail nextSlotSP=nextspDetailList.get(spIndex);
+		        					
+		        					if(!spDetail.equals(nextSlotSP))
+		        					{
+		        						flag=false;
+		        					}
+		        				}
+		        				if(flag)
+		        				{
+			        				spSlotList.get(index).setTimeEnd(spSlotList.get(index+1).getTimeEnd());
+				        			spSlotList.remove(index+1);
+				        			excelDetails.remove(spColumnList.get(index+1));
+				        			spColumnList.remove(index+1);
+				        			index=-1;
+		        				}
+		        				
+			        			
+			        		}
+		        		}
+		        		
+		        		
+		        	}
 		        	
 		        	
 		        	osceSeqDetail.setOsceSeq(osceSeq);
@@ -1008,7 +1103,7 @@ public class ExportAssignment  extends HttpServlet {
 	        					SPSlot spSlot=spSlots.get(l);
 	        					Cell timeSlotCell=timeSlotRow.createCell(timeSlotCol);
 	        					sheet.setColumnWidth(timeSlotCol+1, 5*256);
-	        					timeSlotCol=timeSlotCol+2;
+	        					
 	        					 SimpleDateFormat ft = 
 	        						      new SimpleDateFormat ("HH:mm");
 	        					
@@ -1044,6 +1139,8 @@ public class ExportAssignment  extends HttpServlet {
 			        	        	}
 			        	        	
 			        	        }
+			        	        
+			        	        timeSlotCol=timeSlotCol+2;
 
 	        				}
 	        				
@@ -1112,14 +1209,14 @@ public class ExportAssignment  extends HttpServlet {
         							Cell postCell=postRow.createCell(col);
         							sheet.autoSizeColumn(col, true);
         							postCell.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
-	        						if(oscePostRoom==null)//logical break
+	        						if(postDetail.isReserve())//logical break
 	        						{
 	        							
 	        							postCell.setCellValue("Reserve");
 	        							//postIndex++;
 	        							//colorIndex++;
 	        						}
-	        						else if(patientInRole==null) //material
+	        						else if(postDetail.getOscePost().getStandardizedRole().getRoleType()==RoleTypes.Material) //material
 	        						{
 	        							postCell.setCellValue("Notfall");
 	        							Cell cell=excelRow.get(index1+1).createCell(col);
@@ -1139,7 +1236,7 @@ public class ExportAssignment  extends HttpServlet {
 	        						}
 	        						else
 	        						{
-	        							OscePost oscePost=oscePostRoom.getOscePost();
+	        							OscePost oscePost=postDetail.getOscePost();
 	        							StandardizedRole role=oscePost.getStandardizedRole();
 	        							String roleLongName=role.getLongName();
 	        							
@@ -1196,7 +1293,7 @@ public class ExportAssignment  extends HttpServlet {
 	        						
 	        						if((index) <= postDetailList.size()-1)
 	        						{
-	        							if(postDetailList.get(index).getOscePostRoom()==null)
+	        							if(postDetailList.get(index).isReserve())
 	        							{
 	        								
 	        								postIndex=0;
@@ -1313,7 +1410,7 @@ public class ExportAssignment  extends HttpServlet {
 	        						if(oscePostRoom==null && patientInRole!=null)
 	        						{
 	        							Cell spCell=null;
-	 	        							 spCell=excelRow.get(n).createCell(col);
+	 	        							 spCell=excelRow.get((oscePosts.size()-spDetail.getNumOfBreakPost())*spDetail.getCourses().size()+rowIndex).createCell(col);
 	        							StandardizedPatient sp=patientInRole.getPatientInSemester().getStandardizedPatient();
 	        							String name=sp.getPreName()+" "+sp.getName().charAt(0) +".";
 	        							spCell.setCellValue(name);

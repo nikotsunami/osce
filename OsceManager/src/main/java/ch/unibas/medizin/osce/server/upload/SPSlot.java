@@ -9,6 +9,16 @@ public class SPSlot {
 
 	private Date timeStart;
 	
+	private int rotation;
+	
+	public int getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(int rotation) {
+		this.rotation = rotation;
+	}
+
 	public Date getTimeStart() {
 		return timeStart;
 	}

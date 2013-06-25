@@ -1,5 +1,8 @@
 package ch.unibas.medizin.osce.server.upload;
 
+import java.util.List;
+
+import ch.unibas.medizin.osce.domain.OscePost;
 import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.domain.PatientInRole;
 
@@ -9,6 +12,36 @@ public class PostDetail {
 	
 	private PatientInRole patientInRole;
 	
+	private List<OscePost> oscePosts;
+	
+	private OscePost oscePost;
+	
+	private boolean isReserve=false;
+	
+	public boolean isReserve() {
+		return isReserve;
+	}
+
+	public void setReserve(boolean isReserve) {
+		this.isReserve = isReserve;
+	}
+
+	public OscePost getOscePost() {
+		return oscePost;
+	}
+
+	public void setOscePost(OscePost oscePost) {
+		this.oscePost = oscePost;
+	}
+
+	public List<OscePost> getOscePosts() {
+		return oscePosts;
+	}
+
+	public void setOscePosts(List<OscePost> oscePosts) {
+		this.oscePosts = oscePosts;
+	}
+
 	public PatientInRole getPatientInRole() {
 		return patientInRole;
 	}

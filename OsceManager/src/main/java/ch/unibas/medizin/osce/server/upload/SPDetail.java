@@ -18,6 +18,16 @@ public class SPDetail {
 	
 	private List<Course> courses;
 	
+	private int numOfBreakPost;
+	
+	public int getNumOfBreakPost() {
+		return numOfBreakPost;
+	}
+
+	public void setNumOfBreakPost(int numOfBreakPost) {
+		this.numOfBreakPost = numOfBreakPost;
+	}
+
 	public List<Course> getCourses() {
 		return courses;
 	}
@@ -120,8 +130,6 @@ public class SPDetail {
         if(this.patientInRole==null)
         	return false;
         
-        if(this.patientInRole == null && spDetail.getPatientInRole()==null)
-        	return true;
         
         if(this.patientInRole.equals(spDetail.getPatientInRole()))
         	return true;

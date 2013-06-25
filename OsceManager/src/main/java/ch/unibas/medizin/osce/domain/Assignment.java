@@ -3103,4 +3103,19 @@ public class Assignment {
     	 }
     	 return query.getResultList();
 	}
+	
+	public static int findRotationNumberFromSPSlot(OsceDay osceDay,Date timeStart,Date timeEnd)
+	{
+		EntityManager em = entityManager();
+   	 String sql = "select distinct(rotationNumber) from Assignment where osceDay=:osceDay and type=0 and timeStart>=:timeStart and timeEnd<=:timeEnd";
+   	 TypedQuery<Integer> query = em.createQuery(sql, Integer.class);
+   	 query.setParameter("osceDay", osceDay);
+   	query.setParameter("timeStart", timeStart);
+   	query.setParameter("timeEnd", timeEnd);
+   	
+   	if(query.getResultList().size()>0)   	
+   	 return query.getResultList().get(0);
+   	else
+   		return 0;
+	}
 } 

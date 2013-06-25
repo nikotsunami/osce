@@ -49,11 +49,7 @@
 				
 			</g:VerticalPanel>
 		</g:HorizontalPanel>
-		
-		
-		
-		
-		
+
 		<g:VerticalPanel ui:field="sequenceVP" spacing="10"></g:VerticalPanel>
 				<!-- Insert Osce Sequence Here -->
 		</g:VerticalPanel>
