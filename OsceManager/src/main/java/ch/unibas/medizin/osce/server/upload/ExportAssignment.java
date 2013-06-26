@@ -1009,11 +1009,11 @@ public class ExportAssignment  extends HttpServlet {
 	        
 	        //write data to excel;
 	        int row=1;
-	        int col=0;
+	        
 	        for(int i=0;i<completeExcel.size();i++)//equals to number of oscedays
 	        {
 	        	List<Object> excelDetailPerDay=completeExcel.get(i);
-	        	
+	        	int col=0;
 	        	for(int j=0;j<excelDetailPerDay.size();j++)//all seq/day
 	        	{
 	        		Object obj=excelDetailPerDay.get(j);
@@ -1183,7 +1183,7 @@ public class ExportAssignment  extends HttpServlet {
 	        						OscePostRoom oscePostRoom=postDetail.getOscePostRoom();
 	        						rowSpan=postDetail.getRowSpan();
 	        						
-	        						for(int m=0;m<rowSpan;m++)
+	        						//for(int m=0;m<rowSpan;m++)
 	        						 excelRow.add(sheet.createRow(row++));	        							        							        						
 	        					}
 	        					
@@ -1201,7 +1201,7 @@ public class ExportAssignment  extends HttpServlet {
 	        						
 	        						
 	        						
-	        						PostDetail postDetail=postDetailList.get(index1+postIndex);
+	        						PostDetail postDetail=postDetailList.get(index1);
 	        						rowSpan=postDetail.getRowSpan();
 	        						OscePostRoom oscePostRoom=postDetail.getOscePostRoom();
 	        						PatientInRole patientInRole=postDetail.getPatientInRole();
