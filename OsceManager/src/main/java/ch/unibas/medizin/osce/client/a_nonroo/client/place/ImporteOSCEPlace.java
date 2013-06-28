@@ -1,12 +1,17 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.place;
 
+import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.place.shared.PlaceTokenizer;
 import com.google.gwt.requestfactory.shared.RequestFactory;
 
 public class ImporteOSCEPlace extends OsMaPlace {
 
 	private String token;
+	public SemesterProxy semesterProxy;
+	public HandlerManager handlerManager;
 
 	public ImporteOSCEPlace(){
 		Log.debug("ImporteOSCEPlace");
@@ -16,6 +21,13 @@ public class ImporteOSCEPlace extends OsMaPlace {
 	public ImporteOSCEPlace(String token){
 		this.token = token;
 	}
+	
+	public ImporteOSCEPlace(String token, HandlerManager handler, SemesterProxy proxy){
+		this.token = token;
+		this.semesterProxy = proxy;
+		this.handlerManager = handler;
+	}
+
 
 	public String getToken() {
 		return token;

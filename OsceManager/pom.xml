@@ -200,6 +200,27 @@
 			<version>3.2-FINAL</version>
 		</dependency> -->
 		
+		<!--  Dependency for PList -->
+  		<dependency>
+    		<groupId>com.googlecode.plist</groupId>
+     		<artifactId>dd-plist</artifactId>
+     		<version>1.0</version>
+  		</dependency>
+		
+		<!--  Dependency for S3 Decryption -->
+	 	<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.7</version>
+		</dependency>
+  	
+		  <!--  Dependency for Bouncy Castle -->
+		<dependency>
+		   	<groupId>org.bouncycastle</groupId>
+		   	<artifactId>bcmail-jdk15</artifactId>
+		   	<version>1.44</version>
+		</dependency>
+		
 		<!--  Dependency for Amazon S3 -->
     	  
         <dependency>
@@ -824,13 +845,12 @@
                         <module>${project.groupId}.OsMaEntry</module>
                     </modules>
                     <copyWebapp>true</copyWebapp>
-			<extraJvmArgs>-Xms4g -Xmx16g</extraJvmArgs>
                 </configuration>
                 <executions>
                     <execution>
                     	<configuration>
 							<extraJvmArgs>-Xmx10G</extraJvmArgs>
-						</configuration>                    	
+						</configuration>   
                         <id>gwtcompile</id>
                         <phase>prepare-package</phase>
                         <goals>

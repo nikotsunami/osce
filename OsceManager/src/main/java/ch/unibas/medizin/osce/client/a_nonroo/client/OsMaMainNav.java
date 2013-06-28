@@ -870,7 +870,7 @@ public class OsMaMainNav extends Composite {
 	@UiHandler("importeOSCE")
 	void importeOSCEClicked(ClickEvent event)
 	{
-		placeController.goTo(new ImporteOSCEPlace("ImporteOSCEPlace"));
+		placeController.goTo(new ImporteOSCEPlace("ImporteOSCEPlace", handlerManager, lstSemester.getValue()));
 	}
 	
 	//learning objective

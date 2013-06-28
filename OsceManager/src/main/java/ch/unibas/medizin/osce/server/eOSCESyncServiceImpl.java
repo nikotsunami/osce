@@ -1,11 +1,11 @@
 package ch.unibas.medizin.osce.server;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -24,6 +24,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -54,7 +55,6 @@ import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.PropertiesCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.GetObjectRequest;
@@ -73,24 +73,44 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	private static String appUploadDirectory= OsMaFilePathConstant.DEFAULT_IMPORT_EOSCE_PATH;
 	
 	
-	public List<String> processedFileList() throws eOSCESyncException
+	public List<String> processedFileList(Long semesterID) throws eOSCESyncException
 	{
 		List<String> fileList = new ArrayList<String>();
 		try
 		{
-			//write access and secret key
-			//AWSCredentials credentials = new BasicAWSCredentials("", "");
-			AmazonS3Client client = new AmazonS3Client(new PropertiesCredentials(eOSCESyncServiceImpl.class.getResourceAsStream("AwsCredentials.properties")));
-			//write bucket name in ""
-			ObjectListing objectListing = client.listObjects("");
+			String accessKey = "";
+			String secretKey = "";
+			String bucketName = "";
+			
+			BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
+			
+			if (bucketInformation != null)
+			{
+				accessKey = bucketInformation.getAccessKey() == null ? "" : bucketInformation.getAccessKey();
+				secretKey = bucketInformation.getSecretKey() == null ? "" : bucketInformation.getSecretKey();
+				bucketName = bucketInformation.getBucketName() == null ? "" : bucketInformation.getBucketName();
+			}
+			
+			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+			AmazonS3Client client = new AmazonS3Client(credentials);			
+			ObjectListing objectListing = client.listObjects(bucketName.toLowerCase());
 			
 			for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries())
 			{
-				if (fileExist(objectSummary.getKey()))
+				String fileName = objectSummary.getKey();
+				 
+				if (fileName.substring(0, 1).matches("[0-9]"))
 				{
-					fileList.add(objectSummary.getKey());
-					
+					if (StringUtils.startsWith(fileName, "00") == false)
+					{
+						fileName = fileName.replaceAll(" ", "_");
+						if (fileExist(fileName))
+						{
+							fileList.add(objectSummary.getKey());					
+						}
+					}
 				}
+				
 			}
 		}
 		catch(AmazonServiceException ase)
@@ -113,23 +133,41 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		return fileList;
 	}
 	
-	public List<String> unprocessedFileList() throws eOSCESyncException
+	public List<String> unprocessedFileList(Long semesterID) throws eOSCESyncException
 	{
 		List<String> fileList = new ArrayList<String>();
 		try
 		{
-			//write access and secret key.
-			//AWSCredentials credentials = new BasicAWSCredentials("", "");
-			AmazonS3Client client = new AmazonS3Client(new PropertiesCredentials(eOSCESyncServiceImpl.class.getResourceAsStream("AwsCredentials.properties")));
-			S3Object object = null;
-			//write bucket name
-			ObjectListing objectListing = client.listObjects("");
+			String accessKey = "";
+			String secretKey = "";
+			String bucketName = "";
+			
+			BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
+			
+			if (bucketInformation != null)
+			{
+				accessKey = bucketInformation.getAccessKey() == null ? "" : bucketInformation.getAccessKey();
+				secretKey = bucketInformation.getSecretKey() == null ? "" : bucketInformation.getSecretKey();
+				bucketName = bucketInformation.getBucketName() == null ? "" : bucketInformation.getBucketName();
+			}
+			
+			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+			AmazonS3Client client = new AmazonS3Client(credentials);			
+			ObjectListing objectListing = client.listObjects(bucketName.toLowerCase());
 			
 			for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries())
 			{
-				if (!fileExist(objectSummary.getKey()))
+				String fileName = objectSummary.getKey();
+				if (fileName.substring(0, 1).matches("[0-9]"))
 				{
-					fileList.add(objectSummary.getKey());					
+					if (StringUtils.startsWith(fileName, "00") == false)
+					{
+						fileName = fileName.replaceAll(" ", "_");
+						if (!fileExist(fileName))
+						{
+							fileList.add(objectSummary.getKey());					
+						}
+					}
 				}
 			}
 		}
@@ -154,19 +192,27 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	}
 
 	@Override
-	public void deleteAmzonS3Object(List<String> fileList)
+	public void deleteAmzonS3Object(List<String> fileList, String bucketName, String accessKey, String secretKey)
 			throws eOSCESyncException {
 		try
 		{
 			//write access and secret key
-			//AWSCredentials credentials = new BasicAWSCredentials("", "");
-			AmazonS3Client client = new AmazonS3Client(new PropertiesCredentials(eOSCESyncServiceImpl.class.getResourceAsStream("AwsCredentials.properties")));
+			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+			AmazonS3Client client = new AmazonS3Client(credentials);	
 			
 			for (int i=0; i<fileList.size(); i++)
 			{
-				//System.out.println("KEY NAME : " + fileList.get(i));
+				String fileName = fileList.get(i);
+				fileName = fileName.replaceAll(" ", "_");
+				fileName = OsMaFilePathConstant.DEFAULT_IMPORT_EOSCE_PATH + fileName;
+				
+				if (new File(fileName).exists() == true)
+				{
+					new File(fileName).delete();
+				}
+				//System.out.println("DELETED : " + fileName);
 				//write bucket name
-				client.deleteObject("", fileList.get(i));
+				client.deleteObject(bucketName, fileList.get(i));
 			}
 		}
 		catch(AmazonServiceException ase)
@@ -186,48 +232,43 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 	}
 	
-	public void addFile(String filename, InputStream input)
+	public boolean addFile(String filename, InputStream input, String secretKey)
 	{
-		//String cntxtPath = getServletContext().getRealPath(".");
+		
+		String file_name = filename.replaceAll(" ", "_");
 		
 		String path = appUploadDirectory;
 		
-		filename = path + filename;
-				
-		Boolean success = false;
-		
-	/*	if (!(new File(path).exists()))
-			success = new File(path).mkdir(); */
-		
-		if (success)
-		{
-			//System.out.println("##Success##");
-		}
+		filename = path + file_name;
 		
 		try
 		{
 			File file = new File(filename);
 			FileUtils.touch(file);
 			
-			BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-		
-			while(true)
-			{
-				String line = reader.readLine();
-				if (line == null) break;
+			byte[] buffer = new byte[1024];
+			BufferedInputStream bis = new BufferedInputStream(input);					   
+			OutputStream os = new FileOutputStream(file);
+			BufferedOutputStream bos = new BufferedOutputStream(os);
+			int readCount;
 			
-				writer.write(line);
+			while( (readCount = bis.read(buffer)) > 0) {				
+				bos.write(buffer, 0, readCount);
 			}
-					
-			writer.close();
-			reader.close();
 			
-			//importEOSCE(filename);
+			bis.close();
+			bos.close();
+		
+			String symmetricKey = secretKey.substring(0, 16);
+			String decFileName = S3Decryptor.decrypt(symmetricKey, file_name);
+			
+			return importEOSCE(decFileName);
+			
 		}
 		catch(Exception e)
 		{
 			Log.error(e.getMessage());
+			return false;
 		} 
 		
 	}
@@ -235,53 +276,34 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	public Boolean fileExist(String fileName)
 	{
 		String cntxt = appUploadDirectory;
-		//System.out.println("CONTEXT : " + cntxt);
 		cntxt = cntxt + fileName;
-		//System.out.println("FILENAME : " + cntxt);
-	
+		
 		File folder = new File(cntxt);
-		//System.out.println("EXIST : " + folder.exists());
 		
 		return folder.exists();
 	}
 	
-	public void importFileList(List<String> fileList, Boolean flag) throws eOSCESyncException
+	public void importFileList(List<String> fileList, Boolean flag, String bucketName, String accessKey, String secretKey) throws eOSCESyncException
 	{
 		try
 		{
-			//System.out.println("in server side");
-			/*File folder = new File(OsMaConstant.IMPORT_EOSCE_FILEPATH);
-			File[] listOfFiles = folder.listFiles();
-			//System.out.println("Lenght : " + listOfFiles.length);
-			for (int i=0; i<listOfFiles.length; i++)
-			{
-				fileList.add(OsMaConstant.IMPORT_EOSCE_FILEPATH + listOfFiles[i].getName());
-			}
+			bucketName = bucketName.toLowerCase();
 			
-			//System.out.println("in server side1");
-			//System.out.println("FILE LIST SIZE : " + fileList.size());
-			for (int i=0; i<fileList.size(); i++)
-			{
-				System.out.println("FILE NAME : " + fileList.get(i));
-				//importEOSCE(fileList.get(i));
-			}*/
-			//write access and secret key
-			//AWSCredentials credentials = new BasicAWSCredentials("", "");
-			AmazonS3Client client = new AmazonS3Client(new PropertiesCredentials(eOSCESyncServiceImpl.class.getResourceAsStream("AwsCredentials.properties")));
-			S3Object object = null;
+			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+			AmazonS3Client client = new AmazonS3Client(credentials);
+			S3Object object = null;			
+			boolean deleteFlag = true;
 			
 			for (int i=0; i<fileList.size(); i++)
 			{
-				//System.out.println("FILENAME : " + fileList.get(i));
-				//write bucket name
-				object = client.getObject(new GetObjectRequest("", fileList.get(i)));
-				addFile(object.getKey(), object.getObjectContent());	
-				//import is done from add file
+				object = client.getObject(new GetObjectRequest(bucketName, fileList.get(i)));
+				//import in answer table is dont from add file
+				deleteFlag = deleteFlag & addFile(object.getKey(), object.getObjectContent(), secretKey);				
 			}
 		
-			if (flag == true)
+			if (flag == true && deleteFlag == true)
 			{
-				deleteAmzonS3Object(fileList);
+				deleteAmzonS3Object(fileList, bucketName, accessKey, secretKey);
 			}
 		}
 		catch(AmazonServiceException ase)
@@ -296,7 +318,6 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		catch(Exception e)
 		{
-			
 			Log.error(e.getMessage(),e);
 			throw new eOSCESyncException("",e.getMessage());
 		}
@@ -405,7 +426,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		
 	}*/
 	
-	public void importEOSCE(String filename)
+	public boolean importEOSCE(String filename)
 	{
 		//System.out.println("~~~!!!Import EOSCE");
 		try
@@ -415,8 +436,6 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			Class.forName("org.sqlite.JDBC");
 			Connection connection = DriverManager.getConnection(filename);  
 			Statement statement = connection.createStatement();
-			
-			Statement st = connection.createStatement();
 			
 			/*String sql = "SELECT  cand.zcandidateid, ex.zexaminerid, que.zquestionid, opt.zvalue, st.zstationid, ans.zanswerquestion, ans.ztimestamp, ans.zanswerassessment FROM zanswer ans , zassessment ass, zschedule sch, z_1answeroptions ansopt, zoption opt, zcandidate cand, zquestion que, zstation st, zexaminer ex"
 					+ " WHERE ans.zanswerassessment = ass.z_pk"
@@ -473,10 +492,19 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				
 				//System.out.println("RECORD INSERTED SUCCESSFULLY");		
 			}
+			
+			resultset.close();
+			statement.close();
+			connection.close();
+			
+			new File(filename).delete();
+			
+			return true;
 		}
 		catch(Exception e)
 		{
 			Log.error(e.getMessage());
+			return false;
 		}
 		
 	}
@@ -512,7 +540,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				examElement.setAttribute("id", osceList.get(i).getId().toString());
 				examElement.setAttribute("name", osceList.get(i).getName() == null ? "" : osceList.get(i).getName());
 				
-				BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemester(osceList.get(i).getSemester().getId());
+				BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForExport(osceList.get(i).getSemester().getId());
 				
 				Element cloudElement = doc.createElement("cloud");
 				examElement.appendChild(cloudElement);

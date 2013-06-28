@@ -305,7 +305,18 @@ public class ApplicationMainActivitiesMapper implements ActivityMapper {
 		// by eosce
 		if (place instanceof ImporteOSCEPlace) {
 			Log.info("is ImporteOSCEPlace");
-			return new ImporteOSCEActivity(requests, placeController);
+			
+			ImporteOSCEPlace importeOSCEPlace = (ImporteOSCEPlace) place;
+			if (importeOSCEPlace.handlerManager == null) {
+				importeOSCEPlace.handlerManager = handler;
+			}
+
+			if (importeOSCEPlace.semesterProxy == null) {
+				importeOSCEPlace.semesterProxy = semesterProxy;
+			}
+			return new ImporteOSCEActivity(requests, placeController, (ImporteOSCEPlace) place);
+			
+			//return new ImporteOSCEActivity(requests, placeController);
 		}
 		// by eosce
 

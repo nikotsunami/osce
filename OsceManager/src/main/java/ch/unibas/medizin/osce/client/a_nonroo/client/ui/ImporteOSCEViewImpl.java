@@ -1,9 +1,12 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.managed.request.BucketInformationProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -15,6 +18,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -49,17 +53,43 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	RadioButton processed;
 	
 	@UiField
-	RadioButton unprocessed;	
+	RadioButton unprocessed;
+	
+	@UiField
+	SpanElement bucketNameLbl;
+	
+	@UiField
+	SpanElement accessKeyLbl;
+	
+	@UiField
+	SpanElement secretKeyLbl;
+	
+	@UiField
+	TextBox bucketName;
+	
+	@UiField
+	TextBox accessKey;
+	
+	@UiField
+	TextBox secretKey;
+	
+	@UiField
+	IconButton saveEditButton;
+	
+	@UiField
+	IconButton cancelButton;
+	
+	BucketInformationProxy bucketInformationProxy;
 		
 	public ImporteOSCEViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
-		disclouserPanelFlie.addStyleName("schedulePanelStyle");
+		disclouserPanelFlie.addStyleName("eOsceSchedulePanelStyle");
 		processed.setText(constants.importProcessed());
 		unprocessed.setText(constants.importUnprocessed());
 		importButton.setText(constants.importBtn());
 		delButton.setText(constants.delete());
 		delButton.setEnabled(true);
-		importButton.setEnabled(false);
+		//importButton.setEnabled(false);
 		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.importProcessed());
 		disclouserPanelFlie.addCloseHandler(new CloseHandler<DisclosurePanel>() {
 			@Override
@@ -67,6 +97,11 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 				disclouserPanelFlie.setOpen(true);
 			}
 		});
+		
+		bucketNameLbl.setInnerText(constants.bucketName());
+		accessKeyLbl.setInnerText(constants.accessKey());
+		secretKeyLbl.setInnerText(constants.secretKey());
+		cancelButton.setText(constants.cancel());
 	}	
 	
 	@UiHandler("unprocessed")
@@ -74,7 +109,7 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	{
 		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.importUnprocessed());
 		delButton.setEnabled(false);
-		importButton.setEnabled(true);
+		//importButton.setEnabled(true);
 		delegate.unprocessedClicked();
 	}
 	
@@ -83,13 +118,14 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	{
 		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.importProcessed());
 		delButton.setEnabled(true);
-		importButton.setEnabled(false);
+		//importButton.setEnabled(false);
 		delegate.processedClicked();
 	}
 	
 	@UiHandler("importButton")
 	public void importButtonClicked(ClickEvent event)
 	{
+		//delegate.importButtonClicked(true);
 		Boolean test = delegate.checkSelectedValue();
 		
 		if (test)
@@ -152,5 +188,102 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	public void setPresenter(Presenter systemStartActivity) {
 		this.presenter = systemStartActivity;
 	}
+	
+	public TextBox getBucketName() {
+		return bucketName;
+	}
+
+	public void setBucketName(TextBox bucketName) {
+		this.bucketName = bucketName;
+	}
+
+	public TextBox getAccessKey() {
+		return accessKey;
+	}
+
+	public void setAccessKey(TextBox accessKey) {
+		this.accessKey = accessKey;
+	}
+
+	public TextBox getSecretKey() {
+		return secretKey;
+	}
+
+	public void setSecretKey(TextBox secretKey) {
+		this.secretKey = secretKey;
+	}
+
+	public IconButton getSaveEditButton() {
+		return saveEditButton;
+	}
+
+	public void setSaveEditButton(IconButton saveEditButton) {
+		this.saveEditButton = saveEditButton;
+	}
+
+	public IconButton getCancelButton() {
+		return cancelButton;
+	}
+
+	public void setCancelButton(IconButton cancelButton) {
+		this.cancelButton = cancelButton;
+	}
+
+	public BucketInformationProxy getBucketInformationProxy() {
+		return bucketInformationProxy;
+	}
+
+	public void setBucketInformationProxy(
+			BucketInformationProxy bucketInformationProxy) {
+		this.bucketInformationProxy = bucketInformationProxy;
+	}
+	
+	@UiHandler("saveEditButton")
+	public void saveEditButtonClicked(ClickEvent event)
+	{
+		if (saveEditButton.getText().equals(constants.save()))
+		{
+			cancelButton.setVisible(false);
+			delegate.bucketSaveButtonClicked(bucketInformationProxy, bucketName.getText(), accessKey.getText(), secretKey.getText());
+		}
+		else if (saveEditButton.getText().equals(constants.edit()))
+		{
+			bucketName.setEnabled(true);
+			accessKey.setEnabled(true);
+			secretKey.setEnabled(true);
+			
+			saveEditButton.setText(constants.save());
+			
+			cancelButton.setVisible(true);
+		}
+	}
+	
+	@UiHandler("cancelButton")
+	public void cancelButtonClicked(ClickEvent event)
+	{
+		bucketName.setEnabled(false);
+		accessKey.setEnabled(false);
+		secretKey.setEnabled(false);
+		
+		saveEditButton.setText(constants.edit());
+		cancelButton.setVisible(false);
+	}
+
+	public RadioButton getProcessed() {
+		return processed;
+	}
+
+	public void setProcessed(RadioButton processed) {
+		this.processed = processed;
+	}
+
+	public RadioButton getUnprocessed() {
+		return unprocessed;
+	}
+
+	public void setUnprocessed(RadioButton unprocessed) {
+		this.unprocessed = unprocessed;
+	}
+	
 	
 }

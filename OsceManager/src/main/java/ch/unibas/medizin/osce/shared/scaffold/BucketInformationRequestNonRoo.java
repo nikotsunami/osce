@@ -11,5 +11,7 @@ import com.google.gwt.requestfactory.shared.Service;
 @Service(BucketInformation.class)
 public interface BucketInformationRequestNonRoo extends RequestContext {
 
-	abstract Request<BucketInformationProxy> findBucketInformationBySemester(Long semesterId);
+	abstract Request<BucketInformationProxy> findBucketInformationBySemesterForExport(Long semesterId);
+	
+	abstract Request<BucketInformationProxy> findBucketInformationBySemesterForImport(Long semesterId);
 }

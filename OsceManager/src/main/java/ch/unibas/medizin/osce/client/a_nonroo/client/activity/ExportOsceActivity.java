@@ -18,6 +18,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationProxy;
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationRequest;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.shared.EosceStatus;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -103,7 +104,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 	
 	public void loadBucketInformation(SemesterProxy semesterProxy)
 	{
-		requests.bucketInformationRequestNonRoo().findBucketInformationBySemester(semesterProxy.getId()).fire(new OSCEReceiver<BucketInformationProxy>() {
+		requests.bucketInformationRequestNonRoo().findBucketInformationBySemesterForExport(semesterProxy.getId()).fire(new OSCEReceiver<BucketInformationProxy>() {
 
 			@Override
 			public void onSuccess(BucketInformationProxy response) {
@@ -122,9 +123,15 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 					view.setBucketInformationProxy(response);
 					
 					view.getCancelButton().setVisible(false);
+					
+					view.setBucketInformationProxy(response);
 				}
 				else
 				{
+					view.getBucketName().setEnabled(true);
+					view.getAccessKey().setEnabled(true);
+					view.getSecretKey().setEnabled(true);
+					
 					view.getBucketName().setText("");
 					view.getAccessKey().setText("");
 					view.getSecretKey().setText("");
@@ -132,6 +139,8 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 					view.getSaveEditButton().setText(constants.save());
 					
 					view.getCancelButton().setVisible(true);
+					
+					view.setBucketInformationProxy(response);
 				}
 			}
 		});
@@ -420,7 +429,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 			bucketInformationProxy.setSemester(proxy.getSemester());
 		}
 		
-			
+		bucketInformationProxy.setEosceStatusType(EosceStatus.Export);	
 		bucketInformationProxy.setBucketName(bucketName);
 		bucketInformationProxy.setAccessKey(accessKey);
 		bucketInformationProxy.setSecretKey(secretKey);

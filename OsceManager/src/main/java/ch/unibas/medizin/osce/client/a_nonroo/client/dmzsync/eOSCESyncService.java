@@ -9,13 +9,13 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("eoscesync")
 public interface eOSCESyncService extends RemoteService {
 	
-	void deleteAmzonS3Object(List<String> fileList) throws eOSCESyncException;
+	void deleteAmzonS3Object(List<String> fileList, String bucketName, String accessKey, String secretKey) throws eOSCESyncException;
 	
-	List<String> processedFileList() throws eOSCESyncException;
+	List<String> processedFileList(Long semesterID) throws eOSCESyncException;
 	
-	List<String> unprocessedFileList() throws eOSCESyncException;
+	List<String> unprocessedFileList(Long semesterID) throws eOSCESyncException;
 	
-	void importFileList(List<String> fileList, Boolean flag) throws eOSCESyncException;
+	void importFileList(List<String> fileList, Boolean flag, String bucketName, String accessKey, String secretKey) throws eOSCESyncException;
 	
 	//export
 	void exportOsceFile(Long semesterID) throws eOSCESyncException;
