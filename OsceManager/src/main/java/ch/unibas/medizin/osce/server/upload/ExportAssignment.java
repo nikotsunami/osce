@@ -1257,7 +1257,7 @@ public class ExportAssignment  extends HttpServlet {
 	        							{
 	        								postCell.setCellValue(roleLongName);
 	        								
-	        								String advanceSearchCriteria=AdvancedSearchCriteria.findAdvancedSearchCriteriasByStandardizedRoleID(role);
+	        								String advanceSearchCriteria=AdvancedSearchCriteria.findAdvancedSearchCriteriasByStandardizedRoleIDValue(role);
 	        								
 	        								cell.setCellValue(postTypeLbl+" "+advanceSearchCriteria);
 	        							}

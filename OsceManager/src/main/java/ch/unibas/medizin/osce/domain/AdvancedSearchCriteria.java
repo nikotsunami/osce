@@ -61,7 +61,7 @@ public class AdvancedSearchCriteria {
 		EntityManager em = entityManager();
 		TypedQuery<AdvancedSearchCriteria> q = em
 				.createQuery(
-						"SELECT o. FROM AdvancedSearchCriteria AS o WHERE o.standardizedRole.id = :standardizedRoleID",
+						"SELECT o FROM AdvancedSearchCriteria AS o WHERE o.standardizedRole.id = :standardizedRoleID",
 						AdvancedSearchCriteria.class);
 		q.setParameter("standardizedRoleID", standardizedRoleID);
 		// System.out.println("^standardizedRoleID: " + standardizedRoleID);
@@ -73,7 +73,7 @@ public class AdvancedSearchCriteria {
 		return q.getResultList();
 	}
 	
-	public static String findAdvancedSearchCriteriasByStandardizedRoleID(
+	public static String findAdvancedSearchCriteriasByStandardizedRoleIDValue(
 			StandardizedRole standardizedRoleID) {
 		if (standardizedRoleID == null)
 			throw new IllegalArgumentException("The name argument is required");
