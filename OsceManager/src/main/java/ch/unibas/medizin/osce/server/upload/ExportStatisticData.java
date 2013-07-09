@@ -443,7 +443,10 @@ public class ExportStatisticData extends HttpServlet{
 								    				
 								    				
 								    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
+								    				if(impressionItem1.getChecklistOption()!=null)
 								    				writer.append(impressionItem1.getChecklistOption().getValue());
+								    				else
+								    					writer.append("0");
 								    				writer.append('|');
 								    			}
 									    		/*else
@@ -476,8 +479,11 @@ public class ExportStatisticData extends HttpServlet{
 								    		
 								    		lastCandidateId = answer.getStudent().getId();
 								    	}
-								    	
+								    	if(answer.getChecklistOption()!=null)
 								    	writer.append(answer.getChecklistOption().getValue());
+								    	else
+								    		writer.append("0");
+								    		
 								    	//writer.append(answer.getChecklistQuestion().getId().toString());
 							    		writer.append('|');
 								    }
@@ -491,7 +497,11 @@ public class ExportStatisticData extends HttpServlet{
 						    				
 						    				
 						    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
+						    				if(impressionItem1.getChecklistOption() !=null)
 						    				writer.append(impressionItem1.getChecklistOption().getValue());
+						    				else
+						    					writer.append("0");
+						    				
 						    				writer.append('|');
 						    			}
 							    		/*else
