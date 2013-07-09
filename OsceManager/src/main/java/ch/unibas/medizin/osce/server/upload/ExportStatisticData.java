@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.math.stat.StatUtils;
 import org.apache.log4j.Logger;
 
@@ -677,7 +678,11 @@ public class ExportStatisticData extends HttpServlet{
 										double maxPoint=StatUtils.max(pointList);
 										double average=StatUtils.mean(pointList);
 										
-										double weight=Answer.roundTwoDecimals(Answer.percentage(average, maxPoint));
+										double weight = 0.0;
+										if (NumberUtils.isNumber(String.valueOf(maxPoint)) && NumberUtils.isNumber(String.valueOf(average)))
+										{
+											weight=Answer.roundTwoDecimals(Answer.percentage(average, maxPoint));
+										}
 										
 										writer.append(points);
 										writer.append('|');
