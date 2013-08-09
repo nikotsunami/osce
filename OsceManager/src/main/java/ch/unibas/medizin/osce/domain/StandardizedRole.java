@@ -157,7 +157,11 @@ public class StandardizedRole {
 		   newStandardizedRole.setActive(true);
 		   
 		   newStandardizedRole.setRoleScript(oldStandardizedRole.getRoleScript());
-		   newStandardizedRole.setCheckList(oldStandardizedRole.getCheckList());//spec
+		   
+		   CheckList newChecklist = copyChecklistFromOldRole(oldStandardizedRole.getCheckList());
+		   newStandardizedRole.setCheckList(newChecklist);		   
+		   //newStandardizedRole.setCheckList(oldStandardizedRole.getCheckList());//spec
+		   
 		   newStandardizedRole.setRoleTopic(oldStandardizedRole.getRoleTopic());
 		   newStandardizedRole.setRoleTemplate(oldStandardizedRole.getRoleTemplate());
 		   newStandardizedRole.setCaseDescription(oldStandardizedRole.getCaseDescription());
@@ -200,15 +204,65 @@ public class StandardizedRole {
 		   Set<OscePost>  oscePost= insertForOscePost(oldStandardizedRole,newStandardizedRole);
 		   newStandardizedRole.setOscePosts(oscePost);*/
 		   
-		   
-		  
 		   Log.info("new StandardizedRole---"+newStandardizedRole);
 		   newStandardizedRole.persist();
-
 		   Log.info("New StandardizedRole create");
 		   
-		   return true;
-	   }
+		   boolean flag = RoleBaseItem.createRoleBaseItemValueForStandardizedRole(newStandardizedRole.getId(), oldStandardizedRole.getRoleTemplate().getId());
+		   
+		   return flag;
+	}
+	
+	private static CheckList copyChecklistFromOldRole(CheckList checkList) {
+		CheckList newCheckList = new CheckList();
+		newCheckList.setTitle(checkList.getTitle());
+		newCheckList.persist();
+		
+		for (ChecklistTopic checklistTopic : checkList.getCheckListTopics())
+		{
+			ChecklistTopic newChecklistTopic = new ChecklistTopic();
+			newChecklistTopic.setTitle(checklistTopic.getTitle());
+			newChecklistTopic.setDescription(checklistTopic.getDescription());
+			newChecklistTopic.setSort_order(checklistTopic.getSort_order());
+			newChecklistTopic.setCheckList(newCheckList);
+			newChecklistTopic.persist();
+			
+			for (ChecklistQuestion question : checklistTopic.getCheckListQuestions())
+			{
+				ChecklistQuestion newQuestion = new ChecklistQuestion();
+				newQuestion.setQuestion(question.getQuestion());
+				newQuestion.setInstruction(question.getInstruction());
+				newQuestion.setIsOveralQuestion(question.getIsOveralQuestion());
+				newQuestion.setSequenceNumber(question.getSequenceNumber());
+				newQuestion.setCheckListTopic(newChecklistTopic);
+				newQuestion.persist();
+				
+				for (ChecklistCriteria criteria : question.getCheckListCriterias())
+				{
+					ChecklistCriteria newCriteria = new ChecklistCriteria();
+					newCriteria.setCriteria(criteria.getCriteria());
+					newCriteria.setSequenceNumber(criteria.getSequenceNumber());
+					newCriteria.setChecklistQuestion(newQuestion);
+					newCriteria.persist();
+				}
+				
+				for (ChecklistOption option : question.getCheckListOptions())
+				{
+					ChecklistOption newOption = new ChecklistOption();
+					newOption.setName(option.getName());
+					newOption.setOptionName(option.getOptionName());
+					newOption.setInstruction(option.getInstruction());
+					newOption.setSequenceNumber(option.getSequenceNumber());
+					newOption.setValue(option.getValue());
+					newOption.setCriteriaCount(option.getCriteriaCount());
+					newOption.setChecklistQuestion(newQuestion);
+					newOption.persist();
+				}
+			}
+		}
+		
+		return newCheckList;
+	}
 	   
 	   
 	   public static StandardizedRole createStandardizedRoleMajorVersion(Long standardizedRoleId,Integer roleSubItemValueId,String value) {
