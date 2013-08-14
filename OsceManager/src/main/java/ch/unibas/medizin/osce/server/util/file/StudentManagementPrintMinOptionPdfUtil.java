@@ -13,15 +13,18 @@ import ch.unibas.medizin.osce.domain.ChecklistCriteria;
 import ch.unibas.medizin.osce.domain.ChecklistOption;
 import ch.unibas.medizin.osce.domain.ChecklistQuestion;
 import ch.unibas.medizin.osce.domain.ChecklistTopic;
+import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.domain.File;
+import ch.unibas.medizin.osce.domain.Signature;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
-import ch.unibas.medizin.osce.server.util.file.PdfUtil.CheckBoxCellEvent;
+import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.shared.util;
 
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -57,7 +60,7 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 	}
 
 	
-	public void writeStudentChecklistFile(List<StandardizedRole> standardizedRoleList,Long studId,OutputStream out)
+	public void writeStudentChecklistFile(List<StandardizedRole> standardizedRoleList,Long studId,Long osceId, OutputStream out)
 	{
 		try 
 		{
@@ -74,8 +77,10 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 				StandardizedRole standardizedRole=standardizedRoleIterator.next();
 				log.info("Standardized Role: " + standardizedRole.getId());
 				this.standardizedRole = standardizedRole;			
-				//document.add(new Chunk("Hello World"));			
+				//document.add(new Chunk("Hello World"));	
+				addStudentName(studId);
 				addCheckListDetails(studId);
+				addSignature(standardizedRole, osceId, studId);
 				document.newPage();
 			}
 			document.close();
@@ -85,6 +90,53 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 			log.error(e.getMessage(), e);
 		}		
 	}
+	
+	private void addStudentName(Long studId) {
+		
+		Student student = Student.findStudent(studId);
+		
+		Paragraph titleDetails = new Paragraph();
+		Font roleTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 15,Font.BOLD);
+		if (student != null && student.getName() != null && student.getPreName() != null)
+			titleDetails.add(new Chunk(student.getName() + " " + student.getPreName() , roleTitleFont));
+		
+		addEmptyLine(titleDetails, 1);		
+		try {
+			document.add(titleDetails);
+		} catch (DocumentException e) {
+			log.error(e.getMessage(),e);
+		}
+	}
+	
+	private void addSignature(StandardizedRole standardizedRole, Long osceId, Long studId) {
+		try
+		{
+			Doctor examiner = Answer.findExaminerByStandardizedRoleOsceAndStudent(standardizedRole.getId(), osceId, studId);
+			
+			if (examiner != null)
+			{
+				Signature signature = Signature.findSignaureByDoctorOsceAndStandardizedRole(examiner.getId(), osceId, standardizedRole.getId());
+				
+				if (signature != null)
+				{
+					Image image = Image.getInstance(signature.getSignatureImage());
+					image.setAlignment(2);
+					float height = 100f;
+					float width = (height * image.getWidth()) / image.getHeight();
+					image.scaleToFit(width,height);
+					writer.addDirectImageSimple(image);
+					document.add(image);
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		
+	}
+
 	public void noDataFound(OutputStream os)
 	{
 		title = "";

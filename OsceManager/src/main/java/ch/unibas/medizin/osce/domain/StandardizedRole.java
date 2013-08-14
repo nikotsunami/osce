@@ -610,7 +610,7 @@ public class StandardizedRole {
 			{			
 				System.out.println("Standardized_Role Id : " + standardizedRoleIterator.next().getId());				
 			}*/	
-			studentRolePrintPdfUtil.writeStudentChecklistFile(standardizedRoleList,studentId,os);
+			studentRolePrintPdfUtil.writeStudentChecklistFile(standardizedRoleList, studentId, osceId, os);
 		}
 		else
 		{
@@ -636,7 +636,7 @@ public class StandardizedRole {
 			{			
 				System.out.println("Standardized_Role Id : " + standardizedRoleIterator.next().getId());				
 			}*/	
-			studentRolePrintPdfUtil.writeStudentChecklistFile(standardizedRoleList,studentId,os);
+			studentRolePrintPdfUtil.writeStudentChecklistFile(standardizedRoleList, studentId, osceId, os);
 		}
 		else
 		{

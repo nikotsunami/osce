@@ -1572,4 +1572,16 @@ public class Answer {
 		TypedQuery<Student> query = em.createQuery(sql, Student.class);
 		return query.getResultList();
 	}
+	
+	public static Doctor findExaminerByStandardizedRoleOsceAndStudent(Long standardizedRoleId, Long osceId, Long studentId)
+	{
+		EntityManager em = entityManager();
+		String sql = "SELECT DISTINCT a.doctor FROM Answer a WHERE a.student.id = " + studentId + " AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.oscePost.standardizedRole.id = " + standardizedRoleId + " AND a.oscePostRoom.oscePost.osceSequence.osceDay.osce.id = " + osceId;
+		TypedQuery<Doctor> query = em.createQuery(sql, Doctor.class);
+		
+		if (query.getResultList().size() > 0)
+			return query.getResultList().get(0);
+		else
+			return null;
+	}
 }

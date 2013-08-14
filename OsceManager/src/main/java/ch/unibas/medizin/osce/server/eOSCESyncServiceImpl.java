@@ -46,6 +46,7 @@ import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.OscePost;
 import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.domain.OsceSequence;
+import ch.unibas.medizin.osce.domain.Signature;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
@@ -493,6 +494,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				//System.out.println("RECORD INSERTED SUCCESSFULLY");		
 			}
 			
+			importSignature(statement);
+			
 			resultset.close();
 			statement.close();
 			connection.close();
@@ -509,6 +512,43 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		
 	}
 	
+	private void importSignature(Statement statement) {
+		try
+		{
+			String sql = "select ex.zexaminerid, sig.zimage, st.zstationid from zsignature sig, zstation st, zexaminer ex" 
+					+ " where sig.zexaminer = st.zexaminer"
+					+ " and ex.z_pk = sig.zexaminer";
+
+			ResultSet resultSet = statement.executeQuery(sql);
+			
+			Long examinerId, oscePostRoomId;
+			
+			while(resultSet.next())
+			{
+				examinerId = Long.parseLong(resultSet.getString(1));
+				oscePostRoomId = Long.parseLong(resultSet.getString(3));
+				
+				OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoom(oscePostRoomId);
+				Doctor examiner = Doctor.findDoctor(examinerId);
+				
+				Signature signature = new Signature();
+				signature.setDoctor(examiner);
+				signature.setOscePost(oscePostRoom.getOscePost());
+				
+				if (oscePostRoom.getOscePost() != null && oscePostRoom.getOscePost().getOsceSequence() != null)
+					signature.setOsceDay(oscePostRoom.getOscePost().getOsceSequence().getOsceDay());
+				
+				signature.setSignatureImage(resultSet.getBytes(2));
+				signature.persist();
+			}
+		}
+		catch(Exception e)
+		{
+			Log.error(e.getMessage());
+		}
+		
+	}
+
 	//export
 	
 	public void exportOsceFile(Long semesterID)
