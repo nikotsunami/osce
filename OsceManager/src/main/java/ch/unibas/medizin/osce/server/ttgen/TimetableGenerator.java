@@ -2526,7 +2526,7 @@ public class TimetableGenerator {
 										
 										//if(post != null && post.getStandardizedRole() != null && post.requiresSimpat()) {
 										
-										if (post != null &&  post.requiresSimpat())
+										if (post != null && post.getStandardizedRole() != null && post.requiresSimpat())
 										{
 											if (simAssLastId.length > i)
 												changeSP(i, osceDay, endTime, endTimeNew, oscePR);
@@ -2548,7 +2548,7 @@ public class TimetableGenerator {
 											endTime = dateAddMin(endTime, osce.getLongBreak());
 											//by spec issue change[
 											
-											if (post != null && post.requiresSimpat())
+											if (post != null && post.getStandardizedRole() != null && post.requiresSimpat())
 											{
 												if (simAssLastId.length > i)
 													changeSP(i, osceDay, oldEndTime, endTime, oscePR);
