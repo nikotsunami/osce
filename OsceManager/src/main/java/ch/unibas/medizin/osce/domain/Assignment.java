@@ -3052,6 +3052,15 @@ public class Assignment {
 				ass.setPatientInRole(null);
 				ass.persist();				
 			}
+			
+			String breakSpSql = "SELECT a FROM Assignment a WHERE a.type = 1 AND a.oscePostRoom IS NULL AND a.patientInRole IS NULL AND a.osceDay.id = " + osceDayId;
+			TypedQuery<Assignment> breakSpQuery = em.createQuery(breakSpSql, Assignment.class);
+			
+			for (Assignment ass : breakSpQuery.getResultList())
+			{
+				ass.remove();
+			}
+			
 			return true;
 		}
 		catch(Exception e)
