@@ -130,10 +130,6 @@ public class StandardizedRole {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
 	private Set<UsedMaterial> usedMaterials = new HashSet<UsedMaterial>();
 	
-	
-	
-	
-	
 	@OneToOne
 	private RoleTemplate roleTemplate;
 
@@ -208,7 +204,11 @@ public class StandardizedRole {
 		   newStandardizedRole.persist();
 		   Log.info("New StandardizedRole create");
 		   
-		   boolean flag = RoleBaseItem.createRoleBaseItemValueForStandardizedRole(newStandardizedRole.getId(), oldStandardizedRole.getRoleTemplate().getId());
+		   boolean flag = true;
+		   if (oldStandardizedRole.getRoleTemplate() != null)
+		   {
+			   flag = RoleBaseItem.createRoleBaseItemValueForStandardizedRole(newStandardizedRole.getId(), oldStandardizedRole.getRoleTemplate().getId());
+		   }
 		   
 		   return flag;
 	}
