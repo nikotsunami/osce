@@ -48,8 +48,8 @@ public class OscePost {
      * NOTE: this does not consider information given by role_topic of this post
      * @return
      */
-    public boolean requiresSimpat() {
-    	if(!this.getStandardizedRole().getRoleType().equals(RoleTypes.Material)) {
+    public boolean requiresSimpat() {    	
+    	if(this.getStandardizedRole() != null && !this.getStandardizedRole().getRoleType().equals(RoleTypes.Material)) {
 	    	switch(this.getOscePostBlueprint().getPostType()) {
 	    		case NORMAL: return true;
 	    		case BREAK: return false;

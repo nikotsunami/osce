@@ -10,10 +10,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -72,7 +77,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	private static final long serialVersionUID = 1L;
 	private static Logger Log = Logger.getLogger(eOSCESyncServiceImpl.class);
 	private static String appUploadDirectory= OsMaFilePathConstant.DEFAULT_IMPORT_EOSCE_PATH;
-	
+	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	public List<String> processedFileList(Long semesterID) throws eOSCESyncException
 	{
@@ -437,6 +442,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			Class.forName("org.sqlite.JDBC");
 			Connection connection = DriverManager.getConnection(filename);  
 			Statement statement = connection.createStatement();
+			//Statement statement2 = connection.createStatement();
 			
 			/*String sql = "SELECT  cand.zcandidateid, ex.zexaminerid, que.zquestionid, opt.zvalue, st.zstationid, ans.zanswerquestion, ans.ztimestamp, ans.zanswerassessment FROM zanswer ans , zassessment ass, zschedule sch, z_1answeroptions ansopt, zoption opt, zcandidate cand, zquestion que, zstation st, zexaminer ex"
 					+ " WHERE ans.zanswerassessment = ass.z_pk"
@@ -449,7 +455,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					+ " and ans.zanswerquestion = que.z_pk"
 					+ " order by sch.zcandidate asc";*/
 			
-			String sql = "SELECT  cand.zcandidateid, ex.zexaminerid, que.zquestionid, opt.zvalue, st.zstationid, ans.zanswerquestion, ans.ztimestamp, ans.zanswerassessment FROM zanswer ans , zassessment ass, zschedule sch, zoption opt, zcandidate cand, zquestion que, zstation st, zexaminer ex"
+			/*String sql = "SELECT cand.zcandidateid, ex.zexaminerid, que.zquestionid, opt.zvalue, st.zstationid, ans.zanswerquestion, ans.ztimestamp, ans.zanswerassessment FROM zanswer ans , zassessment ass, zschedule sch, zoption opt, zcandidate cand, zquestion que, zstation st, zexaminer ex"
 					+ " WHERE ans.zanswerassessment = ass.z_pk"
 					+ " and  ass.zschedule = sch.z_pk"
 					+ " and opt.z_pk = ans.zansweroption"
@@ -457,21 +463,35 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					+ " and sch.zstation = st.z_pk"
 					+ " and st.zexaminer = ex.z_pk"
 					+ " and ans.zanswerquestion = que.z_pk"
-					+ " order by sch.zcandidate asc";
+					+ " order by sch.zcandidate asc";*/
 			
+			Map<Long, Set<Long>> answerCriteriaMap = fetchAnswerCriteria(statement);
+			
+			String sql = "SELECT ans.z_pk, cand.zcandidateid, ex.zexaminerid, que.zquestionid, opt.zvalue, st.zstationid, ans.zanswerquestion, datetime(ztimestamp+978307200.0, 'unixepoch', 'localtime') as d, ans.zanswerassessment FROM zanswer ans, zassessment ass, zschedule sch, zoption opt, zcandidate cand, zquestion que, zstation st, zexaminer ex"
+					+ " WHERE ans.zanswerassessment = ass.z_pk"
+					+ " and ass.zschedule = sch.z_pk"
+					+ " and opt.z_pk = ans.zansweroption"
+					+ " and sch.zcandidate = cand.z_pk"
+					+ " and sch.zstation = st.z_pk"
+					+ " and st.zexaminer = ex.z_pk"
+					+ " and ans.zanswerquestion = que.z_pk"
+					+ " order by sch.zcandidate asc";
+					
 			ResultSet resultset = statement.executeQuery(sql);
 			
 			long candidateId, questionId, roomid = 0, examinerid = 0;
 			String optionvalue;
-			Answer answerTable;
-			
+			Answer answerTable = null;
+			 
 			while (resultset.next())
-			{				
-				candidateId = Long.parseLong(resultset.getString(1));
-				examinerid = Long.parseLong(resultset.getString(2));
-				questionId = Long.parseLong(resultset.getString(3));
-				optionvalue = String.valueOf((int)resultset.getFloat(4));
-				roomid = Long.parseLong(resultset.getString(5));
+			{		
+				long ansId = Long.parseLong(resultset.getString(1));
+				
+				candidateId = Long.parseLong(resultset.getString(2));
+				examinerid = Long.parseLong(resultset.getString(3));
+				questionId = Long.parseLong(resultset.getString(4));
+				optionvalue = String.valueOf((int)resultset.getFloat(5));
+				roomid = Long.parseLong(resultset.getString(6));
 				
 				Student stud = Student.findStudent(candidateId);
 				ChecklistQuestion checklistQuestion = ChecklistQuestion.findChecklistQuestion(questionId);
@@ -488,10 +508,24 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				answerTable.setChecklistOption(checklistOption);							
 				answerTable.setOscePostRoom(oscePostRoom);
 				answerTable.setDoctor(doctor);
-				answerTable.setAnswerTimestamp(resultset.getTimestamp(6));
-				answerTable.persist();
+				answerTable.setAnswerTimestamp(sdf.parse(resultset.getString("d")));
 				
-				//System.out.println("RECORD INSERTED SUCCESSFULLY");		
+				if (answerCriteriaMap.containsKey(ansId) == true)
+				{
+					Set<Long> criteriaIdList = answerCriteriaMap.get(ansId);
+					Set<ChecklistCriteria> criteriaSet = new HashSet<ChecklistCriteria>();
+					
+					for (Long criteriaId : criteriaIdList)
+					{
+						ChecklistCriteria checklistCriteria = ChecklistCriteria.findChecklistCriteria(criteriaId);
+						if (checklistCriteria != null)
+							criteriaSet.add(checklistCriteria);
+					}
+					
+					answerTable.setChecklistCriteria(criteriaSet);
+				}
+				
+				answerTable.persist();
 			}
 			
 			importSignature(statement);
@@ -511,7 +545,45 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		
 	}
-	
+
+	private Map<Long, Set<Long>> fetchAnswerCriteria(Statement statement) {
+		Map<Long, Set<Long>> ansCriteriaMap = new HashMap<Long, Set<Long>>();
+		
+		try
+		{
+			String sql = "select ac.z_1criteriaanswers,c.zcriteriaid from z_1answercriterias ac, zcriteria c where ac.z_6answercriterias = c.z_pk";
+			ResultSet resultSet = statement.executeQuery(sql);
+			
+			while (resultSet.next())
+			{
+				long key = Long.parseLong(resultSet.getString(1));
+				long value = Long.parseLong(resultSet.getString(2));
+				putToMap(key, value, ansCriteriaMap);				
+			}
+			
+			return ansCriteriaMap;
+		}
+		catch(Exception e)
+		{
+			Log.error(e.getMessage(),e);
+			return ansCriteriaMap;
+		}
+		
+	}
+
+	private void putToMap(long key, long value, Map<Long, Set<Long>> map) {
+		if (map.containsKey(key) == true)
+		{
+			map.get(key).add(value);
+		}
+		else
+		{
+			Set<Long> valueSet = new HashSet<Long>();
+			valueSet.add(value);
+			map.put(key, valueSet);
+		}
+	}
+
 	private void importSignature(Statement statement) {
 		try
 		{

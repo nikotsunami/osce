@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -45,8 +47,8 @@ public class Answer {
 	@ManyToOne
 	ChecklistOption checklistOption;
 
-	@ManyToOne
-	ChecklistCriteria checklistCriteria;
+	/*@ManyToOne
+	ChecklistCriteria checklistCriteria;*/
 
 	@ManyToOne
 	Doctor doctor;
@@ -57,6 +59,9 @@ public class Answer {
 	@Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "M-")
     private Date answerTimestamp;
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	private Set<ChecklistCriteria> checklistCriteria = new HashSet<ChecklistCriteria>();
 	
 	private static Logger log = Logger.getLogger(Answer.class);
 
