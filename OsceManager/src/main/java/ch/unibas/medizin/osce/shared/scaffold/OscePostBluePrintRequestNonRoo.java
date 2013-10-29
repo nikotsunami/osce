@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.shared.scaffold;
 
 import ch.unibas.medizin.osce.domain.OscePostBlueprint;
 
+import com.google.gwt.requestfactory.shared.InstanceRequest;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.RequestContext;
 import com.google.gwt.requestfactory.shared.Service;
@@ -12,4 +13,6 @@ public interface OscePostBluePrintRequestNonRoo extends RequestContext{
 
 	//public abstract Request<Boolean> isBluePrintHasBreakAsLast(Long osceId);
 	public abstract Request<Long> countOscebluePrintValue(Long osceid);
+	
+	abstract InstanceRequest<ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy,Boolean> removeOscePostBlueprint(Long oscePostBluePrintId, Long nextOscePostBlueprintId);
 }

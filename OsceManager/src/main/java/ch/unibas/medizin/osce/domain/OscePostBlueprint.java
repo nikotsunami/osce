@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.transaction.annotation.Transactional;
 
 import ch.unibas.medizin.osce.shared.PostType;
 
@@ -62,4 +64,65 @@ public class OscePostBlueprint {
 		Long result = q.getSingleResult();
 		return result;
 	}
+    
+    @Transactional
+    public Boolean removeOscePostBlueprint(Long oscePostBluePrintId, Long nextOscePostBlueprintId)
+    {
+    	OscePostBlueprint oscePostBlueprint = OscePostBlueprint.findOscePostBlueprint(oscePostBluePrintId);
+    	if (oscePostBlueprint == null)
+    		return false;
+    	    	
+    	EntityManager em = entityManager();
+    	String oscePostBlueprintIdIN = "";
+    	if (nextOscePostBlueprintId != null)
+    	{
+    		OscePostBlueprint nextOscePostBlueprint = OscePostBlueprint.findOscePostBlueprint(nextOscePostBlueprintId);
+    		if (nextOscePostBlueprint == null)
+    			return false;
+    		
+    		oscePostBlueprintIdIN = oscePostBluePrintId + "," + nextOscePostBlueprintId;
+    	}
+    	else
+    	{
+    		oscePostBlueprintIdIN = oscePostBluePrintId.toString();
+    	}
+    	
+    	String itemAnalysisSql = "SELECT i FROM ItemAnalysis i WHERE i.oscePost.oscePostBlueprint.id IN ("+ oscePostBlueprintIdIN +")";
+		TypedQuery<ItemAnalysis> query = em.createQuery(itemAnalysisSql, ItemAnalysis.class);
+		List<ItemAnalysis> itemAnalysisList = query.getResultList();
+		for (ItemAnalysis itemAnalysis : itemAnalysisList)
+		{
+			itemAnalysis.remove();
+		}
+		
+		String postAnalysisSql = "SELECT pa FROM PostAnalysis pa WHERE pa.oscePost.oscePostBlueprint.id IN ("+ oscePostBlueprintIdIN +")";
+		TypedQuery<PostAnalysis> postAnaQuery = em.createQuery(postAnalysisSql, PostAnalysis.class);
+		List<PostAnalysis> postAnalysisList = postAnaQuery.getResultList();
+		for (PostAnalysis postAnalysis : postAnalysisList) {
+			postAnalysis.remove();			
+		}
+		
+		String oscePostRoomSql = "SELECT opr FROM OscePostRoom opr WHERE opr.oscePost.oscePostBlueprint.id IN ("+ oscePostBlueprintIdIN +")";
+		TypedQuery<OscePostRoom> oprQuery = em.createQuery(oscePostRoomSql, OscePostRoom.class);
+		List<OscePostRoom> oprList = oprQuery.getResultList();
+		for (OscePostRoom oscePostRoom : oprList) {
+			oscePostRoom.remove();
+		}
+		
+		String oscePostSql = "SELECT op FROM OscePost op WHERE op.oscePostBlueprint.id IN ("+ oscePostBlueprintIdIN +")";
+		TypedQuery<OscePost> opQuery = em.createQuery(oscePostSql, OscePost.class);
+		List<OscePost> opList = opQuery.getResultList();
+		for (OscePost oscePost : opList) {
+			oscePost.remove();
+		}
+		
+		String oscePostBlueprintSql = "SELECT opb FROM OscePostBlueprint opb WHERE opb.id IN ("+ oscePostBlueprintIdIN +")";
+		TypedQuery<OscePostBlueprint> opbQuery = em.createQuery(oscePostBlueprintSql, OscePostBlueprint.class);
+		List<OscePostBlueprint> opbList = opbQuery.getResultList();
+		for (OscePostBlueprint opb : opbList) {
+			opb.remove();
+		}
+		
+		return true;
+    }
 }

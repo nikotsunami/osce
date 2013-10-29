@@ -2980,8 +2980,52 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					Log.info("Osce Proxy: " +osceProxy.getId());
 					Log.info("Total Widget Before Delete: " + hp.getWidgetCount());
 					// E Module 5 bug Report Change
+					Long nextOscePostBluePrintId = null;
 					
-					requests.oscePostBlueprintRequest().remove().using(oscePostViewImpl.oscePostBlueprintProxy).fire(new OSCEReceiver<Void>() 
+					if (oscePostViewImpl.oscePostBlueprintProxyNext != null)
+					{
+						nextOscePostBluePrintId = oscePostViewImpl.oscePostBlueprintProxyNext.getId();
+					}
+						
+					
+					requests.oscePostBluePrintRequestNonRoo().removeOscePostBlueprint(oscePostViewImpl.oscePostBlueprintProxy.getId(), nextOscePostBluePrintId).using(oscePostViewImpl.oscePostBlueprintProxy).fire(new OSCEReceiver<Boolean>() {
+
+						@Override
+						public void onSuccess(Boolean response) {
+							if (response == true)
+							{
+								oscePostViewImpl.removeFromParent();
+								updateOscePostsSequence(hp);
+							
+								Log.info("Total Widget After Delete: " + hp.getWidgetCount());
+								if(hp.getWidgetCount()<=0)
+								{
+									OsceRequest osceRequest=requests.osceRequest();
+									osceProxy=osceRequest.edit(osceProxy);
+									osceProxy.setOsceStatus(OsceStatus.OSCE_NEW);
+									
+									osceRequest.persist().using(osceProxy).fire(new OSCEReceiver<Void>() 
+									{
+
+										@Override
+										public void onSuccess(Void response) 
+										{											
+											goTo(new CircuitDetailsPlace(osceProxy.stableId(),Operation.DETAILS));
+										}
+										@Override
+										public void onFailure(ServerFailure error)
+										{
+											Log.info("Failure");
+											MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+											dialog.showConfirmationDialog(constants.warningStatusNotChanged());
+										}
+									});													
+								}								
+							}							
+						}
+					});
+					
+					/*requests.oscePostBlueprintRequest().remove().using(oscePostViewImpl.oscePostBlueprintProxy).fire(new OSCEReceiver<Void>() 
 					{
 						public void onSuccess(Void ignore) 
 						{
@@ -2990,11 +3034,11 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							if(oscePostViewImpl.oscePostBlueprintProxy.getPostType()!=null && (oscePostViewImpl.oscePostBlueprintProxy.getPostType()==PostType.ANAMNESIS_THERAPY || oscePostViewImpl.oscePostBlueprintProxy.getPostType()==PostType.PREPARATION))				
 							{
 								Log.info("Delete Two Records.");
-								/*requests.oscePostBlueprintRequest().findOscePostBlueprint((oscePostViewImpl.oscePostBlueprintProxyNext.getId())).fire(new OSCEReceiver<OscePostBlueprintProxy>() {
+								requests.oscePostBlueprintRequest().findOscePostBlueprint((oscePostViewImpl.oscePostBlueprintProxyNext.getId())).fire(new OSCEReceiver<OscePostBlueprintProxy>() {
 
 									@Override
 									public void onSuccess(OscePostBlueprintProxy response) 
-									{*/
+									{
 										requests.oscePostBlueprintRequest().remove().using(oscePostViewImpl.oscePostBlueprintProxyNext).fire(new OSCEReceiver<Void>() 
 										{
 											public void onSuccess(Void ignore) 
@@ -3039,9 +3083,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 													//updateBluePrintSequences();
 											}
 										});		
-									/*}
+									}
 								
-								});*/
+								});
 							}
 							else
 							{
@@ -3086,7 +3130,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							
 						}
 						
-					});	
+					});	*/
 					
 				}
 				
