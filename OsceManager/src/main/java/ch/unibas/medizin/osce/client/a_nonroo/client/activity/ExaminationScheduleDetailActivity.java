@@ -2198,6 +2198,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		});
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void createExaminerAssignmnet(final ExaminationViewImpl view)
 	{
 		
@@ -2351,8 +2352,11 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					mt=mt+lunchBreak;
 					if(mt>59)
 					{
-						hr++;
-						mt=mt-60;
+						/*hr++;
+						mt=mt-60;*/
+						int val = mt / 60;
+						mt = mt % 60;						
+						hr = hr + val;
 					}
 					endDate.setMinutes(mt);
 					endDate.setHours(hr);

@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,6 +65,9 @@ public class Doctor {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
     private Set<RoleParticipant> roleParticipants = new HashSet<RoleParticipant>();
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "examiner")
+    private List<PostAnalysis> postAnalysis = new ArrayList<PostAnalysis>();
 
  /*   public static Long countDoctorsBySearch(String q) {
         EntityManager em = entityManager();

@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,6 +44,11 @@ public class OscePost {
     
     private Integer value=0;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "oscePost")
+	private List<ItemAnalysis> itemAnalysis = new ArrayList<ItemAnalysis>();
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "oscePost")
+    private List<PostAnalysis> postAnalysis = new ArrayList<PostAnalysis>();
     /**
      * Check whether post requires SP (based on post_type).
      * NOTE: this does not consider information given by role_topic of this post

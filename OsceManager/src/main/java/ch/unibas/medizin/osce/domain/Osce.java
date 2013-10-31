@@ -119,7 +119,12 @@ public class Osce {
     
     @ManyToOne(cascade = CascadeType.ALL)
 	private Osce copiedOsce;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
+    private List<ItemAnalysis> itemAnalysis = new ArrayList<ItemAnalysis>();
    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
+    private List<PostAnalysis> postAnalysis = new ArrayList<PostAnalysis>();
     /**
 	 * Get number of slots until a SP change is necessary (lowest number of consecutive slots
 	 * is defined by the most difficult role)

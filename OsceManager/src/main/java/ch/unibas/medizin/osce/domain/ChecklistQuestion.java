@@ -42,11 +42,16 @@ public class ChecklistQuestion {
     private List<ChecklistCriteria> checkListCriterias = new ArrayList<ChecklistCriteria>();
 	
 	@Size(max=5000)
-	private String instruction;
+	private String instruction;	
 	
+	@NotNull
+	private Boolean isOveralQuestion;
+	 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
+	private List<ItemAnalysis> itemAnalysis = new ArrayList<ItemAnalysis>();
 	
-	 @NotNull
-	 private Boolean isOveralQuestion;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "checklistQuestion")
+	private List<PostAnalysis> postAnalysis = new ArrayList<PostAnalysis>();
 	
 	public void questionMoveUp(long checklisTopictID) {
 		if (this.entityManager == null) {

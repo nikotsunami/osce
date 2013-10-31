@@ -40,7 +40,8 @@ public class OsceSequence {
 	 @OrderBy("sequenceNumber")
 	 private List<OscePost> oscePosts = new ArrayList<OscePost>();
 	 
-	
+	 @OneToMany(cascade = CascadeType.ALL, mappedBy = "osceSequence")
+	 private List<ItemAnalysis> itemAnalysis = new ArrayList<ItemAnalysis>();
 	 
 	 public static OsceSequence splitSequence(Long osceSeqId)
 		{
