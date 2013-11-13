@@ -261,7 +261,7 @@ public abstract class PdfUtil {
 				event = new CheckBoxCellEvent(writer, group,
 						possibleAnswers[i], isSelected);
 			} else {
-				event = new CheckBoxCellEvent(writer, possibleAnswers[i],
+				event = new CheckBoxCellEvent(writer, question+"_"+possibleAnswers[i],
 						isSelected);
 			}
 			subCell.setCellEvent(event);
