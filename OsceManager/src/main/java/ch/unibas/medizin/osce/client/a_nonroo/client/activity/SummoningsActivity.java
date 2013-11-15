@@ -520,30 +520,59 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 			public void onClick(ClickEvent arg0) {
 				
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-				summoningsServiceAsync.sendSPMail(semesterProxy.getId(),spIds, new AsyncCallback<Boolean>() {
-					
+				summoningsServiceAsync.saveTemplate(semesterProxy.getId().toString(),false,true, popupView.getMessageContent(), new AsyncCallback<Boolean>() {
 					@Override
 					public void onSuccess(Boolean result) {
-						
-						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 						if(result){
-							popupView.hide();
-							Log.info("Mail Sent Successfully");
+							Log.info("Template saved successfully.");
 							
-							confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-							confirmationDialogBox.showConfirmationDialog(constants.confirmationMailSent());
+							summoningsServiceAsync.sendSPMail(semesterProxy.getId(),spIds, new AsyncCallback<Boolean>() {
+								
+								@Override
+								public void onSuccess(Boolean result) {
+									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+									if(result){
+										popupView.hide();
+										Log.info("Mail Sent Successfully");
+										
+										confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
+										confirmationDialogBox.showConfirmationDialog(constants.confirmationMailSent());
+									}else{
+										Log.info("Error sending email");
+										
+										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+										confirmationDialogBox.showConfirmationDialog(constants.errorMailSend());
+									}
+								}
+								
+								@Override
+								public void onFailure(Throwable caught) {
+									Log.error("ERROR : "+caught.getMessage());
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+								}
+							});
+						
+						}else if(!result){
+							
+							Log.info("Error saving template : Default template path is not set.");
+							confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+							confirmationDialogBox.showConfirmationDialog(constants.errorInvalidTplPath());
+							
 						}else{
-							Log.info("Error sending email");
+							Log.info("Error saving template");
 							
 							confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-							confirmationDialogBox.showConfirmationDialog(constants.errorMailSend());
+							confirmationDialogBox.showConfirmationDialog(constants.errorTplSave());
 						}
+							
+						
 					}
 					
 					@Override
-					public void onFailure(Throwable caught) {
-						Log.error("ERROR : "+caught.getMessage());
+					public void onFailure(Throwable throwable) {
 						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						Log.error("ERROR : "+throwable.getMessage());
 					}
 				});
 			}
@@ -781,34 +810,66 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			public void onClick(ClickEvent arg0) {
 				
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-				summoningsServiceAsync.sendExaminerMail(semesterProxy.getId(),examinerIds, new AsyncCallback<Boolean>() {
-					
-					@Override
-					public void onSuccess(Boolean result) {
-						
-						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-						if(result){
-						
-							popupView.hide();
-							Log.info("Mail sent successfully.");
+				summoningsServiceAsync.saveTemplate(semesterProxy.getId().toString(),true,true, popupView.getMessageContent(), 
+						new AsyncCallback<Boolean>() {
 							
-							confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-							confirmationDialogBox.showConfirmationDialog(constants.confirmationMailSent());
-						}else{
-							Log.error("Error sending mail.");
+							@Override
+							public void onSuccess(Boolean result) {
+								
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+								if(result){
+									Log.error("Template saved successfully.");
+									
+									summoningsServiceAsync.sendExaminerMail(semesterProxy.getId(),examinerIds, new AsyncCallback<Boolean>() {
+										
+										@Override
+										public void onSuccess(Boolean result) {
+											
+											requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+											if(result){
+											
+												popupView.hide();
+												Log.info("Mail sent successfully.");
+												
+												confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
+												confirmationDialogBox.showConfirmationDialog(constants.confirmationMailSent());
+											}else{
+												Log.error("Error sending mail.");
+												
+												confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+												confirmationDialogBox.showConfirmationDialog(constants.errorMailSend());
+											}
+										}
+										
+										@Override
+										public void onFailure(Throwable caught) {
+											
+											requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+											Log.error("ERROR : "+caught.getMessage());
+										}
+									});
+								}else if(!result){
+									
+									Log.info("Error saving template : Default template path is not set.");
+									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+									confirmationDialogBox.showConfirmationDialog(constants.errorInvalidTplPath());
+									
+								}else{
+									Log.error("Error saving template.");
+									
+									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+									confirmationDialogBox.showConfirmationDialog(constants.errorTplSave());
+								}
+									
+							}
 							
-							confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-							confirmationDialogBox.showConfirmationDialog(constants.errorMailSend());
-						}
-					}
-					
-					@Override
-					public void onFailure(Throwable caught) {
-						
-						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-						Log.error("ERROR : "+caught.getMessage());
-					}
-				});
+							@Override
+							public void onFailure(Throwable caught) {
+								
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+								Log.error("ERROR : "+caught.getMessage());
+							}
+						});
 			}
 		});
 		
@@ -1016,26 +1077,59 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 				public void onClick(ClickEvent arg0) {
 					
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-					summoningsServiceAsync.generateSPMailPDF(semesterProxy.getId(),spIds, new AsyncCallback<String>() {
-						
-						@Override
-						public void onSuccess(String response) {
-							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-							popupView.hide();
-							String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.SUMMONINGS.ordinal()));          
-							String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
-									.concat("&").concat(ResourceDownloadProps.SUMMONING_KEY).concat("=").concat(URL.encodeQueryString(response));
-							Log.info("--> url is : " +url);
-							Window.open(url, "", "");
-							//Window.open(response, "_blank", "enabled");
-						}
-						
-						@Override
-						public void onFailure(Throwable caught) {
-							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-							Log.error("ERROR : "+caught.getMessage());
-						}
-					});
+					summoningsServiceAsync.saveTemplate(semesterProxy.getId().toString(),false,false, popupView.getMessageContent(), 
+							new AsyncCallback<Boolean>() {
+								
+								@Override
+								public void onSuccess(Boolean result) {
+									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+									if(result){
+										Log.info("Template saved successfully.");
+										
+										summoningsServiceAsync.generateSPMailPDF(semesterProxy.getId(),spIds, new AsyncCallback<String>() {
+											
+											@Override
+											public void onSuccess(String response) {
+												requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+												popupView.hide();
+												String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.SUMMONINGS.ordinal()));          
+												String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+														.concat("&").concat(ResourceDownloadProps.SUMMONING_KEY).concat("=").concat(URL.encodeQueryString(response));
+												Log.info("--> url is : " +url);
+												Window.open(url, "", "");
+												//Window.open(response, "_blank", "enabled");
+											}
+											
+											@Override
+											public void onFailure(Throwable caught) {
+												requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+												Log.error("ERROR : "+caught.getMessage());
+											}
+										});
+									}else if(!result){
+										
+										Log.info("Error saving template : Default template path is not set.");
+										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+										confirmationDialogBox.showConfirmationDialog(constants.errorInvalidTplPath());
+										
+									}else{
+										Log.info("Error saving template.");
+										
+										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+										confirmationDialogBox.showConfirmationDialog(constants.errorTplSave());
+									}
+										
+								}
+								
+								@Override
+								public void onFailure(Throwable caught) {
+									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+									Log.error("ERROR : "+caught.getMessage());
+								}
+							});
+					
 					
 				}
 			});
@@ -1248,26 +1342,59 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 				public void onClick(ClickEvent arg0) {
 					
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-					summoningsServiceAsync.generateExaminerMailPDF(semesterProxy.getId(),examinerIds, new AsyncCallback<String>() {
-						
-						@Override
-						public void onSuccess(String response) {
-							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-							popupView.hide();
-							String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.SUMMONINGS.ordinal()));          
-							String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
-									.concat("&").concat(ResourceDownloadProps.SUMMONING_KEY).concat("=").concat(URL.encodeQueryString(response));
-							Log.info("--> url is : " +url);
-							Window.open(url, "", "");
-							//Window.open(response, "_blank", "enabled");
-						}
-						
-						@Override
-						public void onFailure(Throwable caught) {
-							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-							Log.error("ERROR : "+caught.getMessage());
-						}
-					});
+					summoningsServiceAsync.saveTemplate(semesterProxy.getId().toString(),true,false, popupView.getMessageContent(), 
+							new AsyncCallback<Boolean>() {
+								
+								@Override
+								public void onSuccess(Boolean result) {
+									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+									if(result){
+										Log.info("Template saved successfully.");
+										
+										summoningsServiceAsync.generateExaminerMailPDF(semesterProxy.getId(),examinerIds, new AsyncCallback<String>() {
+											
+											@Override
+											public void onSuccess(String response) {
+												requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+												popupView.hide();
+												String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.SUMMONINGS.ordinal()));          
+												String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+														.concat("&").concat(ResourceDownloadProps.SUMMONING_KEY).concat("=").concat(URL.encodeQueryString(response));
+												Log.info("--> url is : " +url);
+												Window.open(url, "", "");
+												//Window.open(response, "_blank", "enabled");
+											}
+											
+											@Override
+											public void onFailure(Throwable caught) {
+												requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+												Log.error("ERROR : "+caught.getMessage());
+											}
+										});
+									}else if(!result){
+										
+										Log.info("Error saving template : Default template path is not set.");
+										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+										confirmationDialogBox.showConfirmationDialog(constants.errorInvalidTplPath());
+										
+									}else{
+										Log.info("Error saving template.");
+										
+										confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+										confirmationDialogBox.showConfirmationDialog(constants.errorTplSave());
+									}
+										
+								}
+								
+								@Override
+								public void onFailure(Throwable caught) {
+									
+									requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+									Log.error("ERROR : "+caught.getMessage());
+								}
+							});
+					
 					
 				}
 			});

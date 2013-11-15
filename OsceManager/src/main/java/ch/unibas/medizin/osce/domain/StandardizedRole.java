@@ -686,7 +686,7 @@ public class StandardizedRole {
 		EntityManager em = entityManager();
 		Log.info("~QUERY findRoleByRoleTopic()");
 		//String queryString="select distinct sr from StandardizedRole as sr,Answer as ans,OscePostRoom as opr,OscePost as op where sr.id=op.standardizedRole and op.id=opr.oscePost and opr.id=ans.oscePostRoom and ans.student="+studentId;
-		String queryString="select distinct sr from StandardizedRole as sr where sr.roleTopic=" +topicId +" AND sr.active=true";
+		String queryString="select distinct sr from StandardizedRole as sr where sr.roleTopic=" +topicId +" AND sr.active=true ORDER BY sr.longName";
 				
 		//String queryString = "Select d from OsceDay d";
 		Log.info("~QUERY String: " + queryString);

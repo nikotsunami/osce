@@ -61,4 +61,8 @@ public class Room {
     	Integer result=q.getSingleResult()!=null && q.getSingleResult() != 0 ?(Integer)q.getSingleResult().intValue(): 0;
     	return result;
     }
+    
+    public static List<Room> findAllRoomsOrderByRoomNumber() {
+    	return entityManager().createQuery("SELECT o FROM Room o ORDER BY o.roomNumber", Room.class).getResultList();
+    }
 }

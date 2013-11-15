@@ -5000,7 +5000,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				public void roomEditClicked(final OscePostSubView oscePostSubView,final int left,final int top) 
 				{					
 					Log.info("Room Edit");
-					requests.roomRequest().findAllRooms().fire(new OSCEReceiver<List<RoomProxy>>() 
+					requests.roomRequestNonRoo().findAllRoomsOrderByRoomNumber().fire(new OSCEReceiver<List<RoomProxy>>() 
 					{
 							@Override
 							public void onSuccess(List<RoomProxy> response) 

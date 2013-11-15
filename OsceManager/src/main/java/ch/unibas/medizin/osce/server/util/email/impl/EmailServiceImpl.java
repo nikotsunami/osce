@@ -50,6 +50,7 @@ public class EmailServiceImpl extends RemoteServiceServlet implements EmailServi
 
 					helper.setTo(toAddress);
 					helper.setFrom(fromAddress);
+					helper.setBcc(fromAddress);
 					helper.setSubject(subject);
 					helper.setText(message,true);
 					
