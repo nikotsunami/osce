@@ -13,7 +13,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SummoningsPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SummoningsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.SummoningsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
@@ -23,7 +22,6 @@ import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
-import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -47,6 +45,7 @@ import com.google.gwt.user.client.ui.CheckBox;
  * @author dk
  *
  */
+@SuppressWarnings("deprecation")
 public class SummoningsActivity extends AbstractActivity implements SummoningsView.Presenter, SummoningsView.Delegate {
 	
     private OsMaRequestFactory requests;
@@ -451,9 +450,27 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 					
 				}
 			}
+			
+			popupView = new SummoningsPopupViewImpl();
+
+			Boolean isExaminer = false;
+			Boolean isEmail = true;
+			loadDefaultTemplate();
+			loadTemplateFileNameList(isExaminer,isEmail);
+			handleLoadTempateEvent(isExaminer,isEmail);
 		
-			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-		popupView = new SummoningsPopupViewImpl();
+			sendMailButton = popupView.getSendMailButton();
+			sendMailButton.setText(constants.summoningsSend());
+			handleSendButtonEventForSPMail(isExaminer,isEmail, spIds);
+			saveTemplateButton = popupView.getSaveTemplateButton();
+			saveTemplateEventHandler(isExaminer, isEmail);
+			restoreTemplateButton = popupView.getRestoreTemplateButton();
+			restoreTemplateEventHandler(isExaminer, isEmail);
+	//		popupView.setAnimationEnabled(true);
+			popupView.center();
+			
+			/*requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+			popupView = new SummoningsPopupViewImpl();
 			summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),false,true, 
 				new AsyncCallback<String[]>() {
 					
@@ -683,7 +700,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 		});
 		
 //		popupView.setAnimationEnabled(true);
-		popupView.center();
+		popupView.center();*/
 		
 		}else{
 			Log.info("No checkbox selected.");
@@ -693,7 +710,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 		}
 	}
 
-	@SuppressWarnings("deprecation")
+	/*@SuppressWarnings("deprecation")
 	private void loadSemesterList() {
 		popupView.getSemesterList().clear();
 		popupView.getSemesterList().addItem(constants.select(), "0");
@@ -709,7 +726,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 				}
 			}
 		});
-	}
+	}*/
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -734,8 +751,24 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 				}
 			}
 		
-		  
-		popupView = new SummoningsPopupViewImpl();
+			popupView = new SummoningsPopupViewImpl();
+			Boolean isExaminer = true;
+			Boolean isEmail = true;
+			loadDefaultTemplate();
+			loadTemplateFileNameList(isExaminer,isEmail);
+			handleLoadTempateEvent(isExaminer,isEmail);
+		
+			sendMailButton = popupView.getSendMailButton();
+			sendMailButton.setText(constants.summoningsSend());
+			handleSendButtonEventForExaminorMail(isExaminer,isEmail, examinerIds);
+			saveTemplateButton = popupView.getSaveTemplateButton();
+			saveTemplateEventHandler(isExaminer, isEmail);
+			restoreTemplateButton = popupView.getRestoreTemplateButton();
+			restoreTemplateEventHandler(isExaminer, isEmail);
+	//		popupView.setAnimationEnabled(true);
+			popupView.center();
+			
+		/*popupView = new SummoningsPopupViewImpl();
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			//Feature : 154
 //		summoningsServiceAsync.getTemplateContent("email\\emailTemplate_Ex"+semesterProxy.getId().toString()+".txt", 
@@ -862,6 +895,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 								}
 									
 							}
+
 							
 							@Override
 							public void onFailure(Throwable caught) {
@@ -975,7 +1009,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 		});
 		
 //		popupView.setAnimationEnabled(true);
-		popupView.center();
+		popupView.center();*/
 		}else{
 			Log.info("No checkbox selected.");
 			
@@ -1005,8 +1039,28 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 				}
 			}
 			
-			  
+
 			popupView = new SummoningsPopupViewImpl();
+			
+			/*loadSemesterList();*/
+			Boolean isExaminer = false;
+			Boolean isEmail = false;
+			loadDefaultTemplate();
+			loadTemplateFileNameList(isExaminer,isEmail);
+			handleLoadTempateEvent(isExaminer,isEmail);
+			popupView.getSubject().removeFromParent();
+			popupView.getSubjectLbl().removeFromParent();
+			sendMailButton = popupView.getSendMailButton();
+			sendMailButton.setText(constants.summoningsGeneratePdf());
+			handleSendButtonEventForSPPDF(isExaminer,isEmail, spIds);
+			saveTemplateButton = popupView.getSaveTemplateButton();
+			saveTemplateEventHandler(isExaminer, isEmail);
+			restoreTemplateButton = popupView.getRestoreTemplateButton();
+			restoreTemplateEventHandler(isExaminer, isEmail);
+	//		popupView.setAnimationEnabled(true);
+			popupView.center();
+			
+			/*popupView = new SummoningsPopupViewImpl();
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			//Feature : 154
 			summoningsServiceAsync.getTemplateContent(semesterProxy.getId().toString(),false,false, 
@@ -1121,7 +1175,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 									}
 										
 								}
-								
+
 								@Override
 								public void onFailure(Throwable caught) {
 									
@@ -1237,7 +1291,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			});
 			
 //			popupView.setAnimationEnabled(true);
-			popupView.center();	
+			popupView.center();	*/
 		
 		
 		}else{
@@ -1270,8 +1324,25 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 				}
 			}
 			
-			  
 			popupView = new SummoningsPopupViewImpl();
+			Boolean isExaminer = true;
+			Boolean isEmail = false;
+			loadDefaultTemplate();
+			loadTemplateFileNameList(isExaminer,isEmail);
+			handleLoadTempateEvent(isExaminer,isEmail);
+			popupView.getSubject().removeFromParent();
+			popupView.getSubjectLbl().removeFromParent();
+			sendMailButton = popupView.getSendMailButton();
+			sendMailButton.setText(constants.summoningsGeneratePdf());
+			handleSendButtonEventForExaminorPDF(isExaminer,isEmail, examinerIds);
+			saveTemplateButton = popupView.getSaveTemplateButton();
+			saveTemplateEventHandler(isExaminer, isEmail);
+			restoreTemplateButton = popupView.getRestoreTemplateButton();
+			restoreTemplateEventHandler(isExaminer, isEmail);
+	//		popupView.setAnimationEnabled(true);
+			popupView.center();
+			
+			/*popupView = new SummoningsPopupViewImpl();
 			
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			//Feature : 154
@@ -1498,7 +1569,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			});
 			
 //			popupView.setAnimationEnabled(true);
-			popupView.center();	
+			popupView.center();	*/
 		
 		
 		}else{
@@ -1509,5 +1580,461 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 		}
 		
 	}
+
+	private void loadDefaultTemplate() {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		summoningsServiceAsync.getDefaultTemplateContent(new AsyncCallback<String>() {
+					
+			@Override
+			public void onSuccess(String response) {
+				
+				popupView.setMessageContent(response);
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+			}
+			
+			@Override
+			public void onFailure(Throwable throwable) {
+				Log.error("ERROR : "+throwable.getMessage());
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+			}
+		});
+	}
 	
+	private String getTemplateFileName() {
+		String templateFilePath = popupView.getSelectedTemplateFile();
+		
+		String newFileName= "";
+		if(popupView.getSubject().getValue().isEmpty()) {
+			newFileName = semesterProxy.getSemester().toString() + " " +semesterProxy.getCalYear() ;
+		}else {
+			newFileName = semesterProxy.getSemester().toString() + " " +semesterProxy.getCalYear() + " - " + popupView.getSubject().getValue();
+		}
+		 
+		if(newFileName.equals(templateFilePath)) {
+			return templateFilePath;
+		} else {
+			return newFileName;
+		}		
+	}
+	
+	private void loadTemplateFileNameList(final Boolean isExaminer, final Boolean isEmail) {
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		summoningsServiceAsync.getAllTemplateFileNames(isExaminer,isEmail,new AsyncCallback<List<String>>(){
+
+			@Override
+			public void onFailure(Throwable throwable) {
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				Log.error("ERROR : "+throwable.getMessage());
+			}
+
+			@Override
+			public void onSuccess(List<String> templateFileNameList) {
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				popupView.setFileListValues(templateFileNameList);
+			}});
+	}
+	
+	private void handleLoadTempateEvent(final Boolean isExaminer, final Boolean isEmail) {
+		
+		popupView.getLoadTemplateButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				final String selectedTemplateFile = popupView.getSelectedTemplateFile();
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+				
+				summoningsServiceAsync.getTemplateContent(selectedTemplateFile,isExaminer,isEmail, 
+						new AsyncCallback<String[]>() {
+							
+							@Override
+							public void onSuccess(String[] response) {
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+								if(response[2].equals("found")){
+									popupView.setMessageContent(response[1]);
+									popupView.getSubject().setText(getSubjectFrom(selectedTemplateFile));
+									
+								}else{
+									Log.info("Error loading template");
+									confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+									confirmationDialogBox.showConfirmationDialog(constants.errorTplNotFound());
+								}
+							}
+							
+							@Override
+							public void onFailure(Throwable throwable) {
+								Log.error("ERROR : "+throwable.getMessage());
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+							}
+						});
+				
+			}
+		});		
+	}
+
+	private void handleSendButtonEventForSPMail(final Boolean isExaminer, final Boolean isEmail, final List<Long> spIds) {
+		sendMailButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+				final String templateFilePath = getTemplateFileName();
+				confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+				confirmationDialogBox.showYesNoDialog(constants.saveChangesOrNot());
+				confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						confirmationDialogBox.hide();
+						saveTemplate(templateFilePath,isExaminer,isEmail,sendSPMail(spIds,templateFilePath));		
+					}
+				});
+				confirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						confirmationDialogBox.hide();
+						sendSPMail(spIds,templateFilePath).call();
+					}
+				});
+			}
+		});
+	}
+	
+	private void handleSendButtonEventForExaminorMail(final Boolean isExaminer, final Boolean isEmail, final List<Long> examinerIds) {
+		sendMailButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+				final String templateFilePath = getTemplateFileName();
+				
+				confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+				confirmationDialogBox.showYesNoDialog(constants.saveChangesOrNot());
+				confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						confirmationDialogBox.hide();
+						saveTemplate(templateFilePath,isExaminer,isEmail,sendMailExaminor(examinerIds, templateFilePath));
+					}
+				});
+				confirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						confirmationDialogBox.hide();
+						sendMailExaminor(examinerIds, templateFilePath).call();
+					}
+				});
+			}
+		});
+	}
+	private void handleSendButtonEventForSPPDF(final Boolean isExaminer,final Boolean isEmail, final List<Long> spIds) {
+		sendMailButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+				final String templateFilePath = getTemplateFileName();
+				confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+				confirmationDialogBox.showYesNoDialog(constants.saveChangesOrNot());
+				confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						confirmationDialogBox.hide();
+						saveTemplate(templateFilePath,isExaminer,isEmail,generateSPPDF(spIds,templateFilePath));	
+					}
+				});
+				confirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						confirmationDialogBox.hide();
+						generateSPPDF(spIds,templateFilePath).call();
+					}
+				});
+			}
+		});
+		
+	}
+	private void handleSendButtonEventForExaminorPDF(final Boolean isExaminer, final Boolean isEmail, final List<Long> examinerIds) {
+		sendMailButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+				final String templateFilePath = getTemplateFileName();
+				confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+				confirmationDialogBox.showYesNoDialog(constants.saveChangesOrNot());
+				confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						confirmationDialogBox.hide();
+						saveTemplate(templateFilePath,isExaminer,isEmail,generateExaminorPDF(examinerIds, templateFilePath));
+					}
+				});
+				confirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						confirmationDialogBox.hide();
+						generateExaminorPDF(examinerIds, templateFilePath).call();
+					}
+				});
+			}
+		});
+	}
+
+	private void saveTemplateEventHandler(final Boolean isExaminer, final Boolean isEmail) {
+		saveTemplateButton.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+						
+				String templateFilePath = getTemplateFileName();
+				saveTemplate(templateFilePath, isExaminer, isEmail, null);
+			}
+		});
+	}
+	
+	private void restoreTemplateEventHandler(final Boolean isExaminer, final Boolean isEmail) {
+		restoreTemplateButton.addClickHandler(new ClickHandler() {
+					
+			@Override
+			public void onClick(ClickEvent arg0) {
+				String templateFilePath = getTemplateFileName();
+				deleteTemplateAndLoadDefault(templateFilePath,isExaminer,isEmail);
+			}
+		});
+				
+	}
+	
+	private Function sendSPMail(final List<Long> spIds, final String templateFilePath) {
+		return new Function() {
+			
+			@Override
+			public void call() {
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+				summoningsServiceAsync.sendSPMail(semesterProxy.getId(),spIds,templateFilePath,popupView.getSubject().getValue(), new AsyncCallback<Boolean>() {
+					
+					@Override
+					public void onSuccess(Boolean result) {
+						
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						
+						if(result){
+							popupView.hide();
+							Log.info("Mail Sent Successfully");
+							
+							confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
+							confirmationDialogBox.showConfirmationDialog(constants.confirmationMailSent());
+						}else{
+							Log.info("Error sending email");
+							
+							confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+							confirmationDialogBox.showConfirmationDialog(constants.errorMailSend());
+						}
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						Log.error("ERROR : "+caught.getMessage());
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+					}
+				});
+			}
+		};
+		
+
+	}
+	private Function sendMailExaminor(final List<Long> examinerIds,final String templateFilePath) {
+		return new Function() {
+			
+			@Override
+			public void call() {
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+				summoningsServiceAsync.sendExaminerMail(semesterProxy.getId(),examinerIds,templateFilePath,popupView.getSubject().getValue(), new AsyncCallback<Boolean>() {
+					
+					@Override
+					public void onSuccess(Boolean result) {
+						
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						if(result){
+						
+							popupView.hide();
+							Log.info("Mail sent successfully.");
+							
+							confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
+							confirmationDialogBox.showConfirmationDialog(constants.confirmationMailSent());
+						}else{
+							Log.error("Error sending mail.");
+							
+							confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+							confirmationDialogBox.showConfirmationDialog(constants.errorMailSend());
+						}
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						Log.error("ERROR : "+caught.getMessage());
+					}
+				});
+			}
+		};
+		
+	}
+	
+	private Function generateSPPDF(final List<Long> spIds, final String templateFilePath) {
+		return new Function() {
+			
+			@Override
+			public void call() {
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+				summoningsServiceAsync.generateSPMailPDF(semesterProxy.getId(),spIds, templateFilePath, new AsyncCallback<String>() {
+					
+					@Override
+					public void onSuccess(String response) {
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						popupView.hide();
+						String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.SUMMONINGS.ordinal()));          
+						String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+								.concat("&").concat(ResourceDownloadProps.SUMMONING_KEY).concat("=").concat(URL.encodeQueryString(response));
+						Log.info("--> url is : " +url);
+						Window.open(url, "", "");
+						//Window.open(response, "_blank", "enabled");
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						Log.error("ERROR : "+caught.getMessage());
+					}
+				});
+			}
+		};
+	}
+
+	private Function generateExaminorPDF(final List<Long> examinerIds,final String templateFilePath) {
+		return new Function() {
+			
+			@Override
+			public void call() {
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+				summoningsServiceAsync.generateExaminerMailPDF(semesterProxy.getId(),examinerIds, templateFilePath, new AsyncCallback<String>() {
+					
+					@Override
+					public void onSuccess(String response) {
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						popupView.hide();
+						String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.SUMMONINGS.ordinal()));          
+						String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+								.concat("&").concat(ResourceDownloadProps.SUMMONING_KEY).concat("=").concat(URL.encodeQueryString(response));
+						Log.info("--> url is : " +url);
+						Window.open(url, "", "");
+						//Window.open(response, "_blank", "enabled");
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						Log.error("ERROR : "+caught.getMessage());
+					}
+				});
+			}
+		};
+	}
+	
+	private void saveTemplate(String templateFilePath,Boolean isExaminer, Boolean isEmail,final Function backFunction) {
+		
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		summoningsServiceAsync.saveTemplate(templateFilePath,isExaminer,isEmail, popupView.getMessageContent(), new AsyncCallback<Boolean>() {
+			@Override
+			public void onSuccess(Boolean result) {
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				if(result){
+					Log.info("Template saved successfully.");
+					
+					if(backFunction == null) {
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
+						confirmationDialogBox.showConfirmationDialog(constants.confirmationTplSaved());
+					} else {
+						backFunction.call();
+					}
+				
+				}else if(!result){
+					
+					Log.info("Error saving template : Default template path is not set.");
+					confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+					confirmationDialogBox.showConfirmationDialog(constants.errorInvalidTplPath());
+					
+				}else{
+					Log.info("Error saving template");
+					
+					confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+					confirmationDialogBox.showConfirmationDialog(constants.errorTplSave());
+				}
+				
+			}
+			
+			@Override
+			public void onFailure(Throwable throwable) {
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				Log.error("ERROR : "+throwable.getMessage());
+			}
+		});				
+	}
+	
+	private void deleteTemplateAndLoadDefault(String templateFilePath, final Boolean isExaminer, final Boolean isEmail) {
+		
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		
+		summoningsServiceAsync.deleteTemplate(templateFilePath,isExaminer,isEmail,
+				new AsyncCallback<Boolean>() {
+							
+						@Override
+						public void onSuccess(Boolean result) {
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+							if(result){
+								Log.info("Template restored successfully.");
+								confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
+								confirmationDialogBox.showConfirmationDialog(constants.confirmationTplRestore());
+								loadDefaultTemplate();
+							} else{
+								Log.info("Error restoring template");
+								
+								confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+								confirmationDialogBox.showConfirmationDialog(constants.errorTplRestore());
+							}
+						}
+						
+						@Override
+						public void onFailure(Throwable throwable) {
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+							Log.error("ERROR : "+throwable.getMessage());
+						}
+					
+		});
+		
+	}
+	
+	private String getSubjectFrom(String selectedTemplateFile) {
+		String subject = "";
+		
+		if(selectedTemplateFile == null || selectedTemplateFile.isEmpty() == true || selectedTemplateFile.contains("-") == false) {
+			return subject;
+		}else {
+			int index = selectedTemplateFile.indexOf("-");
+			
+			if(index > 0 && index + 2 < selectedTemplateFile.length()) {
+				return selectedTemplateFile.substring(index+2, selectedTemplateFile.length());
+			}
+		}
+		
+		return subject;
+	}
+	
+	interface Function {
+		void call();
+	}
 }

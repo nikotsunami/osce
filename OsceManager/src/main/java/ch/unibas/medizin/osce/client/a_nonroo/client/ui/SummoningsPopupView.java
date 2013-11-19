@@ -1,9 +1,13 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.List;
+
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextBox;
 
 /**
  * @author dk
@@ -37,7 +41,15 @@ public interface SummoningsPopupView extends IsWidget{
 
 	Button getRestoreTemplateButton();
 
-	ListBox getSemesterList();
+	/*ListBox getSemesterList();*/
 
 	Button getLoadTemplateButton();
+
+	void setFileListValues(List<String> fileList);
+
+	TextBox getSubject();
+
+	String getSelectedTemplateFile();
+
+	Label getSubjectLbl();
 }

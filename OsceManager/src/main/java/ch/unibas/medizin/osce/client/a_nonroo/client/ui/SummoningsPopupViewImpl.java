@@ -3,24 +3,35 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.richtext.RichTextToolbar;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RichTextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -106,11 +117,20 @@ public class SummoningsPopupViewImpl extends PopupPanel implements SummoningsPop
 	@UiField
 	public IconButton closeButton;
 	
-	@UiField
-	public ListBox semesterList;
+	/*@UiField
+	public ListBox semesterList;*/
 	
 	@UiField
+	public DefaultSuggestBox<String, EventHandlingValueHolderItem<String>> fileList;
+	
+	@UiField
+	public Label subjectLbl;
+
+	@UiField
 	public Button loadTemplateButton;
+	
+	@UiField
+	TextBox subject;
 	
 	@UiHandler("sendMailButton")
 	public void sendMailButtonClicked(ClickEvent event) {
@@ -166,6 +186,7 @@ public class SummoningsPopupViewImpl extends PopupPanel implements SummoningsPop
 		onlyIfExaminer.setInnerText(constants.summoningsOnlyIfExaminer());
 		assignmentFormatHead.setInnerText(constants.summoningsAssignmentFormatHead());
 		assignmentFormat.setInnerText(constants.summoningsAssignmentFormat());
+		subjectLbl.setText(constants.subject());
 	}
 
 	public String[] getPaths() {
@@ -201,10 +222,10 @@ public class SummoningsPopupViewImpl extends PopupPanel implements SummoningsPop
 		return restoreTemplateButton;
 	}
 	
-	@Override
+	/*@Override
 	public ListBox getSemesterList() {
 		return semesterList;
-	}
+	}*/
 
 	@Override
 	public Button getLoadTemplateButton() {
@@ -220,5 +241,40 @@ public class SummoningsPopupViewImpl extends PopupPanel implements SummoningsPop
 	public void setMessageContent(String html){
 		message.setHTML(html);
 	}
+
+	@Override
+	public TextBox getSubject() {
+		return subject;
+	}
+
+	@Override
+	public void setFileListValues(List<String> files) {
+		DefaultSuggestOracle<String> suggestOracle = (DefaultSuggestOracle<String>) this.fileList.getSuggestOracle();
+		suggestOracle.setPossiblilities(files);
+		fileList.setSuggestOracle(suggestOracle);
+		fileList.setRenderer(new AbstractRenderer<String>() {
+
+			@Override
+			public String render(String object) {
+				if(object!=null)
+				{
+					return object;
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
+	}
+
+	@Override
+	public String getSelectedTemplateFile() {
+		return fileList.getSelected();
+	}
 	
+	@Override
+	public Label getSubjectLbl() {
+		return subjectLbl;
+	}
 }

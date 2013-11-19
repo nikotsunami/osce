@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,6 +25,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -103,7 +105,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public String generateSPMailPDF(Long semesterId,List<Long> spIds){
+	public String generateSPMailPDF(Long semesterId,List<Long> spIds,String templateFileName){
 		
 		StandardizedPatient patient = null;
 		PatientInSemester patientInSemester = null;
@@ -205,7 +207,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			templateVariables.put("fromNames",fromNames);
 			templateVariables.put("assignments",assignmentList);
 			//Feature : 154 
-			return this.generateMailPDFUsingTemplate(semesterId.toString(),false, templateVariables);
+			return this.generateMailPDFUsingTemplate(templateFileName/*,semesterId.toString()*/,false, templateVariables);
 			
 		} catch (Exception e) {
 			log.error("ERROR : "+e.getMessage(),e);
@@ -230,7 +232,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public String generateExaminerMailPDF(Long semesterId,List<Long> examinerIds){
+	public String generateExaminerMailPDF(Long semesterId,List<Long> examinerIds,String teamplateFile){
 		
 		Doctor examiner = null;
 		
@@ -339,7 +341,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			templateVariables.put("fromNames",fromNames);
 			templateVariables.put("assignments",assignmentList);
 			
-			return this.generateMailPDFUsingTemplate(semesterId.toString(),true, templateVariables);
+			return this.generateMailPDFUsingTemplate(teamplateFile/*,semesterId.toString()*/,true, templateVariables);
 			
 		} catch (Exception e) {
 			log.error("ERROR : "+e.getMessage());
@@ -377,9 +379,9 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		return assignmentList;
 	}
 	
-	@Override
+	/*@Override*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public String generateMailPDFUsingTemplate(String semesterId,Boolean isExaminer, Map templateVariables){
+	public String generateMailPDFUsingTemplate(String templateFile/*semesterId*/,Boolean isExaminer, Map templateVariables){
 //Feature : 154 
 		Document document = null;
 		File file = null;
@@ -412,13 +414,12 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			
 			htmlWorker = new HTMLWorker(document);
 			//Feature : 154 
-			fileContents = this.getTemplateContent(semesterId, isExaminer, false)[1];
+			fileContents = this.getTemplateContent(templateFile/*semesterId*/, isExaminer, false)[1];
 			
 			for(index=0; index < toNames.size(); index++){
 				
 				mailMessage = fileContents;
 				
-				mailMessage = removeSubjectFromMessage(mailMessage);
 				mailMessage = mailMessage.replace("[toName]", toNames.get(index));
 				
 				assignmentString = "";
@@ -460,46 +461,13 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		
 	}
 	
-	
-	private String removeSubjectFromMessage(String mailMessage) {
-		String newMessage = mailMessage;
-		
-		if(mailMessage.contains("[subject]") && mailMessage.contains("[endsubject]")) {
-			int start = mailMessage.indexOf("[subject]");
-			int end = mailMessage.indexOf("[endsubject]");
-			if(start >= 0 && end > 0 && start < end) {
-				newMessage = mailMessage.substring(end+12, mailMessage.length());
-			}
-			if(newMessage.startsWith("<br>")) {
-				newMessage = newMessage.replaceFirst("<br>", "");
-			}
-		}
-		
-		return newMessage;
-	}
-
-	private String getSubjectFromMessage(String mailMessage) {
-		String newMessage = mailMessage;
-		
-		if(mailMessage.contains("[subject]") && mailMessage.contains("[endsubject]")) {
-			int start = mailMessage.indexOf("[subject]");
-			int end = mailMessage.indexOf("[endsubject]");
-			if(start >= 0 && end > 0 && start < end) {
-				newMessage = mailMessage.substring(start+9, end);
-			}
-			return newMessage;
-		}
-		
-		return defaultSubject;
-	}
-	
 	private void saveFileToSession(String key, OutputStream os) {
 		this.getThreadLocalRequest().getSession().setAttribute(key, os);
 	}
 
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Boolean sendSPMail(Long semesterId,List<Long> spIds){
+	public Boolean sendSPMail(Long semesterId,List<Long> spIds,String templateFile,String subject){
 		
 		StandardizedPatient patient = null;
 		
@@ -515,7 +483,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		
 		List<String> toMailIds = null;
 		String fromMailId = null;
-		String subject = null;
+//		String subject = null;
 		
 		DateFormat dateFormat;
 		DateFormat timeFormat;
@@ -532,7 +500,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			
 			toMailIds = new ArrayList<String>(0);
 			fromMailId = mailId;//OsMaFilePathConstant.FROM_MAIL_ID;
-			subject = OsMaFilePathConstant.MAIL_SUBJECT;
+//			subject = OsMaFilePathConstant.MAIL_SUBJECT;
 			
 			for(Long id : spIds){
 				
@@ -630,7 +598,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			templateVariables.put("subject",subject);
 			
 //Feature : 154 
-			return this.sendMailUsingTemplate(semesterId.toString(),false, templateVariables);
+			return this.sendMailUsingTemplate(templateFile/*semesterId.toString()*/,false, templateVariables);
 			
 		} catch (Exception e) {
 			log.error("ERROR : "+e.getMessage());
@@ -657,7 +625,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 	
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Boolean sendExaminerMail(Long semesterId, List<Long> examinerIds){
+	public Boolean sendExaminerMail(Long semesterId, List<Long> examinerIds,String templateFile,String subject){
 		
 		Doctor examiner = null;
 		
@@ -674,7 +642,6 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		
 		List<String> toMailIds = null;
 		String fromMailId = null;
-		String subject = null;
 		
 		try {
 			
@@ -689,7 +656,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			
 			toMailIds = new ArrayList<String>(0);
 			fromMailId = mailId;//OsMaFilePathConstant.FROM_MAIL_ID;
-			subject = OsMaFilePathConstant.MAIL_SUBJECT;
+			//subject = OsMaFilePathConstant.MAIL_SUBJECT;
 			
 			for(Long id : examinerIds){
 				
@@ -784,7 +751,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			templateVariables.put("subject",subject);
 			
 //Feature : 154 
-			return this.sendMailUsingTemplate(semesterId.toString(),true, templateVariables);
+			return this.sendMailUsingTemplate(templateFile,/*semesterId.toString(),*/true, templateVariables);
 			
 		} catch (Exception e) {
 			log.error("ERROR : "+e.getMessage());
@@ -876,8 +843,8 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 
 //Feature : 154 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public Boolean sendMailUsingTemplate(String semesterId, Boolean isExaminer,Map templateVariables){
+	/*@Override*/
+	public Boolean sendMailUsingTemplate(String templateFile/*semesterId*/, Boolean isExaminer,Map templateVariables){
 		
 		String fileContents = null;
 		String mailMessage = null;
@@ -904,9 +871,13 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			fromMailId = (String) templateVariables.get("fromMailId");
 			subject = (String) templateVariables.get("subject");
 			
+			if(subject.isEmpty()) {
+				subject = defaultSubject;
+			}
+			
 			assignments = (List<List<String>>) templateVariables.get("assignments");
 			//Feature : 154 
-			fileContents = this.getTemplateContent(semesterId, isExaminer, true)[1];
+			fileContents = this.getTemplateContent(templateFile/*semesterId*/, isExaminer, true)[1];
 			
 			// SPEC Change
 			success = true;
@@ -914,8 +885,6 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			for(index=0; index < toNames.size(); index++){
 				
 				mailMessage = fileContents;
-				subject = getSubjectFromMessage(mailMessage);
-				mailMessage = removeSubjectFromMessage(mailMessage);
 				
 				mailMessage = mailMessage.replace("[toName]", toNames.get(index));
 				
@@ -955,14 +924,15 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 	}
 	
 	@Override
-	public String[] getTemplateContent(String semesterId, Boolean isExaminer, Boolean isEmail){
+	public String[] getTemplateContent(String templateFile/*semesterId*/, Boolean isExaminer, Boolean isEmail){
 		//Feature : 154 
 		File file = null;
 		String filePath = null;
 		try {						
-			filePath = getPathName(semesterId, isExaminer, isEmail);
+			filePath = getPathName(templateFile, isExaminer, isEmail);
 			
 			file = new File(filePath);
+			log.info("FILE PATH ==== " + file.getAbsolutePath());
 			
 			if(file.isFile()){
 				
@@ -992,7 +962,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 	}
 	
 //Feature : 154 
-	public String getPathName(String semesterId, Boolean isExaminer, Boolean isEmail) 
+	public String getPathName(String templateFile, Boolean isExaminer, Boolean isEmail) 
 	{
 		StringBuffer filePath = new StringBuffer(OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE_PATH);
 
@@ -1010,7 +980,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 				filePath.append(OsMaFilePathConstant.DEFAULT_SP_MAIL_TEMPLATE_PATH);
 		}
 
-		filePath.append(semesterId + OsMaFilePathConstant.TXT_EXTENTION);
+		filePath.append(templateFile + OsMaFilePathConstant.TXT_EXTENTION);
 
 		return filePath.toString();
 	}
@@ -1059,8 +1029,11 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			file = new File(getPathName(semesterId, isExaminer, isEmail));
 			//Feature : 154 
 
-			if(file.isFile())
-				FileUtils.deleteQuietly(file);
+			if(file.isFile()) {
+				String defaultTemplate = getDefaultTemplateContent();
+				FileUtils.writeStringToFile(file, defaultTemplate);
+			}
+				//FileUtils.deleteQuietly(file);
 			else
 				log.error("Template file does not exist.");
 			
@@ -1095,5 +1068,50 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		}
 		return true;
 	}
+
+	public List<String> getAllTemplateFileNames(Boolean isExaminer, Boolean isEmail) {
+		File folder = new File(getCurrentFolderPath(isExaminer,isEmail));
+		
+		if(folder.isDirectory()) {
+			File[] listFiles = folder.listFiles();
+			List<String> fileNameList = new ArrayList<String>();
+			for (File file : listFiles) {
+				fileNameList.add(FilenameUtils.getBaseName(file.getName()));
+			}
+			return fileNameList;
+		}
+		
+		return new ArrayList<String>();
+	}
 	
+	private String getCurrentFolderPath(Boolean isExaminer, Boolean isEmail) {
+		StringBuffer filePath = new StringBuffer(OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE_PATH);
+
+		if (isEmail) {
+
+			if (isExaminer)
+				filePath.append(OsMaFilePathConstant.DEFAULT_EXAMINER_EMAIL_TEMPLATE_PATH);
+			else
+				filePath.append(OsMaFilePathConstant.DEFAULT_SP_EMAIL_TEMPLATE_PATH);
+		} else {
+
+			if (isExaminer)
+				filePath.append(OsMaFilePathConstant.DEFAULT_EXAMINER_MAIL_TEMPLATE_PATH);
+			else
+				filePath.append(OsMaFilePathConstant.DEFAULT_SP_MAIL_TEMPLATE_PATH);
+		}
+		return filePath.toString();
+	}
+	
+	public String getDefaultTemplateContent() {
+		try {
+			File file = new File( fetchRealPath(false) +OsMaFilePathConstant.DEFAULT_MAIL_TEMPLATE);
+			
+			if(file.isFile())
+				return FileUtils.readFileToString(file);	
+		}catch (Exception e) {
+			log.error("error in getting default template", e);
+		}
+		return "";
+	}
 }

@@ -1372,6 +1372,10 @@ public interface OsceConstants extends Constants {
 
 	public String endTime();
 
+	public String subject();
+
+	public String saveChangesOrNot();
+
 	
 }
 
