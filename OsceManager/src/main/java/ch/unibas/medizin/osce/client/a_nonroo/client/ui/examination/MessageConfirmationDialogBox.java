@@ -18,6 +18,7 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 	HorizontalPanel hp;
 	IconButton yesBtn;
 	IconButton noBtnl;
+	IconButton mayBeBtn;
 	VerticalPanel vp;
 	Label msgLbl;
 	
@@ -33,23 +34,30 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		return this.noBtnl;
 	}
 	
+	public Button getMayBeBtn() {
+		return mayBeBtn;
+	}
+	
 	public MessageConfirmationDialogBox(String caption) {
-		// TODO Auto-generated constructor stub
 		
 		vp=new VerticalPanel();
 		hp=new HorizontalPanel();
 		//vp.add(new HTML(msg));
 		yesBtn=new IconButton();
 		noBtnl=new IconButton();
+		mayBeBtn = new IconButton();
 		yesBtn.setIcon("check");
 		noBtnl.setIcon("closethick");
+		mayBeBtn.setIcon("cancel");
 		yesBtn.setText(constants.yes());
 		noBtnl.setText(constants.no());
+		mayBeBtn.setVisible(false);
 		
 		msgLbl=new Label();
 		vp.add(msgLbl);
 		hp.add(yesBtn);
 		hp.add(noBtnl);
+		hp.add(mayBeBtn);
 		hp.setSpacing(10);
 		vp.add(hp);
 		super.getCaption().asWidget().addStyleName("confirmbox");
@@ -137,5 +145,21 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 				dialogBox.hide();	
 			}
 		});
+	}
+	
+	public void showYesNoMayBeDialog(String str)
+	{
+		msgLbl.setText(str);
+		mayBeBtn.setVisible(true);
+		this.getNoBtnl().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent arg0) {
+				dialogBox.hide();
+			}
+		});
+		
+		super.center();
+		this.getElement().getStyle().setZIndex(3);
+		super.show();
 	}
 }

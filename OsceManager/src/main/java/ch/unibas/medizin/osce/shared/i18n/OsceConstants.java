@@ -1376,6 +1376,12 @@ public interface OsceConstants extends Constants {
 
 	public String saveChangesOrNot();
 
+	public String alreadyATemplateMsg();
+
+	public String overrideOriginal();
+
+	public String storeNew();
+
 	
 }
 

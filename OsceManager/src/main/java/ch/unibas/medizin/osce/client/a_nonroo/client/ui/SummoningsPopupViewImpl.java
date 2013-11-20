@@ -132,28 +132,26 @@ public class SummoningsPopupViewImpl extends PopupPanel implements SummoningsPop
 	@UiField
 	TextBox subject;
 	
+	boolean textChanged = false;
+	
 	@UiHandler("sendMailButton")
 	public void sendMailButtonClicked(ClickEvent event) {
-		// TODO export action
-		
 	}
 	
 	@UiHandler("saveTemplateButton")
 	public void saveTemplateButtonClicked(ClickEvent event) {
-		// TODO export action
-		
+		textChanged = false;
 	}
 	
 	@UiHandler("restoreTemplateButton")
 	public void restoreTemplateButtonClicked(ClickEvent event) {
-		// TODO export action
-		
+		textChanged = false;
 	}
 	
 	@UiHandler("closeButton")
 	public void closeButtonClicked(ClickEvent event) {
-		// TODO export action
 		this.hide();
+		textChanged = false;
 	}
 	
 	public SummoningsPopupViewImpl() {
@@ -187,6 +185,15 @@ public class SummoningsPopupViewImpl extends PopupPanel implements SummoningsPop
 		assignmentFormatHead.setInnerText(constants.summoningsAssignmentFormatHead());
 		assignmentFormat.setInnerText(constants.summoningsAssignmentFormat());
 		subjectLbl.setText(constants.subject());
+		
+		
+		message.addKeyPressHandler(new KeyPressHandler() {
+			
+			@Override
+			public void onKeyPress(KeyPressEvent event) {
+				textChanged = true;
+			}
+		});
 	}
 
 	public String[] getPaths() {
@@ -276,5 +283,13 @@ public class SummoningsPopupViewImpl extends PopupPanel implements SummoningsPop
 	@Override
 	public Label getSubjectLbl() {
 		return subjectLbl;
+	}
+	
+	public boolean hasTextChanged() {
+		return textChanged;
+	}
+
+	public void selectFileName(String templateFilePath) {
+		fileList.setSelected(templateFilePath);
 	}
 }

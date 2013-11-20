@@ -46,7 +46,7 @@ public class EmailServiceImpl extends RemoteServiceServlet implements EmailServi
 				@Override
 				public void prepare(MimeMessage mimeMessage) throws Exception {
 					
-					MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+					MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,"UTF-8");
 
 					helper.setTo(toAddress);
 					helper.setFrom(fromAddress);

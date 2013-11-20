@@ -35,4 +35,6 @@ public interface SummoningsServiceAsync  {
 	void getAllTemplateFileNames(Boolean isExaminer, Boolean isEmail, AsyncCallback<List<String>> asyncCallback);
 
 	void getDefaultTemplateContent(AsyncCallback<String> asyncCallback);
+
+	void checkIfFileExists(String templateFilePath, Boolean isExaminer, Boolean isEmail, AsyncCallback<Boolean> asyncCallback);
 }

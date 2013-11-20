@@ -456,7 +456,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 			Boolean isExaminer = false;
 			Boolean isEmail = true;
 			loadDefaultTemplate();
-			loadTemplateFileNameList(isExaminer,isEmail);
+			loadTemplateFileNameList(isExaminer,isEmail,null);
 			handleLoadTempateEvent(isExaminer,isEmail);
 		
 			sendMailButton = popupView.getSendMailButton();
@@ -755,7 +755,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			Boolean isExaminer = true;
 			Boolean isEmail = true;
 			loadDefaultTemplate();
-			loadTemplateFileNameList(isExaminer,isEmail);
+			loadTemplateFileNameList(isExaminer,isEmail,null);
 			handleLoadTempateEvent(isExaminer,isEmail);
 		
 			sendMailButton = popupView.getSendMailButton();
@@ -1046,7 +1046,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			Boolean isExaminer = false;
 			Boolean isEmail = false;
 			loadDefaultTemplate();
-			loadTemplateFileNameList(isExaminer,isEmail);
+			loadTemplateFileNameList(isExaminer,isEmail,null);
 			handleLoadTempateEvent(isExaminer,isEmail);
 			popupView.getSubject().removeFromParent();
 			popupView.getSubjectLbl().removeFromParent();
@@ -1328,7 +1328,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			Boolean isExaminer = true;
 			Boolean isEmail = false;
 			loadDefaultTemplate();
-			loadTemplateFileNameList(isExaminer,isEmail);
+			loadTemplateFileNameList(isExaminer,isEmail,null);
 			handleLoadTempateEvent(isExaminer,isEmail);
 			popupView.getSubject().removeFromParent();
 			popupView.getSubjectLbl().removeFromParent();
@@ -1600,7 +1600,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 		});
 	}
 	
-	private String getTemplateFileName() {
+	private String getTemplateFileNameForEmail() {
 		String templateFilePath = popupView.getSelectedTemplateFile();
 		
 		String newFileName= "";
@@ -1617,7 +1617,17 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 		}		
 	}
 	
-	private void loadTemplateFileNameList(final Boolean isExaminer, final Boolean isEmail) {
+	private String getTemplateFileNameForPDF() {
+		String templateFilePath = popupView.getSelectedTemplateFile();
+		String newFileName= "";
+		if(templateFilePath == null || templateFilePath.trim().isEmpty() == true ) {
+			newFileName = semesterProxy.getSemester().toString() + " " +semesterProxy.getCalYear() ;
+		}else {
+			newFileName = templateFilePath;
+		}
+		return newFileName;		
+	}
+	private void loadTemplateFileNameList(final Boolean isExaminer, final Boolean isEmail,final String templateFilePath) {
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		summoningsServiceAsync.getAllTemplateFileNames(isExaminer,isEmail,new AsyncCallback<List<String>>(){
 
@@ -1631,6 +1641,9 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			public void onSuccess(List<String> templateFileNameList) {
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 				popupView.setFileListValues(templateFileNameList);
+				if(templateFilePath != null && templateFilePath.trim().isEmpty() == false) {
+					popupView.selectFileName(templateFilePath);
+				}
 			}});
 	}
 	
@@ -1677,25 +1690,30 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			
 			@Override
 			public void onClick(ClickEvent arg0) {
-				final String templateFilePath = getTemplateFileName();
-				confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-				confirmationDialogBox.showYesNoDialog(constants.saveChangesOrNot());
-				confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
-					
-					@Override
-					public void onClick(ClickEvent event) {
-						confirmationDialogBox.hide();
-						saveTemplate(templateFilePath,isExaminer,isEmail,sendSPMail(spIds,templateFilePath));		
-					}
-				});
-				confirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
-					
-					@Override
-					public void onClick(ClickEvent event) {
-						confirmationDialogBox.hide();
-						sendSPMail(spIds,templateFilePath).call();
-					}
-				});
+				Log.info("has Text changed : " + popupView.hasTextChanged());
+				final String templateFilePath = getTemplateFileNameForEmail();
+				if(popupView.hasTextChanged()) {
+					confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+					confirmationDialogBox.showYesNoDialog(constants.saveChangesOrNot());
+					confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							confirmationDialogBox.hide();
+							saveTemplate(templateFilePath,isExaminer,isEmail,sendSPMail(spIds,templateFilePath));		
+						}
+					});
+					confirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							confirmationDialogBox.hide();
+							sendSPMail(spIds,templateFilePath).call();
+						}
+					});
+				} else {
+					sendSPMail(spIds,templateFilePath).call();
+				}
 			}
 		});
 	}
@@ -1705,26 +1723,30 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			
 			@Override
 			public void onClick(ClickEvent arg0) {
-				final String templateFilePath = getTemplateFileName();
-				
-				confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-				confirmationDialogBox.showYesNoDialog(constants.saveChangesOrNot());
-				confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
-					
-					@Override
-					public void onClick(ClickEvent event) {
-						confirmationDialogBox.hide();
-						saveTemplate(templateFilePath,isExaminer,isEmail,sendMailExaminor(examinerIds, templateFilePath));
-					}
-				});
-				confirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
-					
-					@Override
-					public void onClick(ClickEvent event) {
-						confirmationDialogBox.hide();
-						sendMailExaminor(examinerIds, templateFilePath).call();
-					}
-				});
+				Log.info("has Text changed : " + popupView.hasTextChanged());
+				final String templateFilePath = getTemplateFileNameForEmail();
+				if(popupView.hasTextChanged()) {
+					confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+					confirmationDialogBox.showYesNoDialog(constants.saveChangesOrNot());
+					confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							confirmationDialogBox.hide();
+							saveTemplate(templateFilePath,isExaminer,isEmail,sendMailExaminor(examinerIds, templateFilePath));
+						}
+					});
+					confirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							confirmationDialogBox.hide();
+							sendMailExaminor(examinerIds, templateFilePath).call();
+						}
+					});
+				}else {
+					sendMailExaminor(examinerIds, templateFilePath).call();
+				}
 			}
 		});
 	}
@@ -1733,25 +1755,31 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			
 			@Override
 			public void onClick(ClickEvent arg0) {
-				final String templateFilePath = getTemplateFileName();
-				confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-				confirmationDialogBox.showYesNoDialog(constants.saveChangesOrNot());
-				confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
-					
-					@Override
-					public void onClick(ClickEvent event) {
-						confirmationDialogBox.hide();
-						saveTemplate(templateFilePath,isExaminer,isEmail,generateSPPDF(spIds,templateFilePath));	
-					}
-				});
-				confirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
-					
-					@Override
-					public void onClick(ClickEvent event) {
-						confirmationDialogBox.hide();
-						generateSPPDF(spIds,templateFilePath).call();
-					}
-				});
+				Log.info("has Text changed : " + popupView.hasTextChanged());
+				final String templateFilePath = getTemplateFileNameForPDF();
+				
+				if(popupView.hasTextChanged()) {
+					confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+					confirmationDialogBox.showYesNoDialog(constants.saveChangesOrNot());
+					confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							confirmationDialogBox.hide();
+							saveTemplate(templateFilePath,isExaminer,isEmail,generateSPPDF(spIds,templateFilePath));	
+						}
+					});
+					confirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							confirmationDialogBox.hide();
+							generateSPPDF(spIds,templateFilePath).call();
+						}
+					});
+				}else {
+					generateSPPDF(spIds,templateFilePath).call();
+				}
 			}
 		});
 		
@@ -1761,25 +1789,33 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			
 			@Override
 			public void onClick(ClickEvent arg0) {
-				final String templateFilePath = getTemplateFileName();
-				confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
-				confirmationDialogBox.showYesNoDialog(constants.saveChangesOrNot());
-				confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
-					
-					@Override
-					public void onClick(ClickEvent event) {
-						confirmationDialogBox.hide();
-						saveTemplate(templateFilePath,isExaminer,isEmail,generateExaminorPDF(examinerIds, templateFilePath));
-					}
-				});
-				confirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
-					
-					@Override
-					public void onClick(ClickEvent event) {
-						confirmationDialogBox.hide();
-						generateExaminorPDF(examinerIds, templateFilePath).call();
-					}
-				});
+				Log.info("has Text changed : " + popupView.hasTextChanged());
+				
+				final String templateFilePath = getTemplateFileNameForPDF();
+				
+				if(popupView.hasTextChanged()) {
+					confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+					confirmationDialogBox.showYesNoDialog(constants.saveChangesOrNot());
+					confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							confirmationDialogBox.hide();
+							saveTemplate(templateFilePath,isExaminer,isEmail,generateExaminorPDF(examinerIds, templateFilePath));
+						}
+					});
+					confirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							confirmationDialogBox.hide();
+							generateExaminorPDF(examinerIds, templateFilePath).call();
+						}
+					});
+				}else {
+					generateExaminorPDF(examinerIds, templateFilePath).call();
+				}
+				
 			}
 		});
 	}
@@ -1789,9 +1825,66 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			
 			@Override
 			public void onClick(ClickEvent arg0) {
+				final String templateFilePath;
+				if(isEmail) {
+					templateFilePath = getTemplateFileNameForEmail();	
+				}else {
+					templateFilePath = getTemplateFileNameForPDF();
+				}
+				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+				summoningsServiceAsync.checkIfFileExists(templateFilePath,isExaminer,isEmail, new AsyncCallback<Boolean>() {
+					
+					@Override
+					public void onSuccess(Boolean result) {
 						
-				String templateFilePath = getTemplateFileName();
-				saveTemplate(templateFilePath, isExaminer, isEmail, null);
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						
+						if(result == true) {
+							confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+							confirmationDialogBox.showYesNoMayBeDialog(constants.alreadyATemplateMsg());
+							confirmationDialogBox.getYesBtn().setText(constants.overrideOriginal());
+							confirmationDialogBox.getNoBtnl().setText(constants.storeNew());
+							confirmationDialogBox.getMayBeBtn().setText(constants.cancel());
+							
+							confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									confirmationDialogBox.hide();
+									saveTemplate(templateFilePath, isExaminer, isEmail, null);
+								}
+							});
+							confirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									confirmationDialogBox.hide();
+									String newTemplateFilePath = getNewTemplateName(templateFilePath);
+									saveTemplate(newTemplateFilePath, isExaminer, isEmail, null);
+								}
+
+							});
+							
+							confirmationDialogBox.getMayBeBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									confirmationDialogBox.hide();
+								}
+							});
+							
+						} else {
+							saveTemplate(templateFilePath, isExaminer, isEmail, null);
+						}
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						Log.error("ERROR : "+caught.getMessage());
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+					}
+				});
 			}
 		});
 	}
@@ -1801,7 +1894,12 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 					
 			@Override
 			public void onClick(ClickEvent arg0) {
-				String templateFilePath = getTemplateFileName();
+				final String templateFilePath;
+				if(isEmail) {
+					templateFilePath = getTemplateFileNameForEmail();	
+				}else {
+					templateFilePath = getTemplateFileNameForPDF();
+				}
 				deleteTemplateAndLoadDefault(templateFilePath,isExaminer,isEmail);
 			}
 		});
@@ -1945,7 +2043,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 		};
 	}
 	
-	private void saveTemplate(String templateFilePath,Boolean isExaminer, Boolean isEmail,final Function backFunction) {
+	private void saveTemplate(final String templateFilePath, final Boolean isExaminer, final Boolean isEmail,final Function backFunction) {
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		summoningsServiceAsync.saveTemplate(templateFilePath,isExaminer,isEmail, popupView.getMessageContent(), new AsyncCallback<Boolean>() {
@@ -1958,6 +2056,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 					if(backFunction == null) {
 						confirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
 						confirmationDialogBox.showConfirmationDialog(constants.confirmationTplSaved());
+						loadTemplateFileNameList(isExaminer, isEmail,templateFilePath);
 					} else {
 						backFunction.call();
 					}
@@ -2034,6 +2133,25 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 		return subject;
 	}
 	
+	private String getNewTemplateName(String templateFilePath) {
+		
+		if(templateFilePath.contains("(") && templateFilePath.contains(")")) {
+			if((templateFilePath.indexOf("(") + 2) == templateFilePath.indexOf(")")) {
+				try {
+					String value = templateFilePath.substring(templateFilePath.indexOf("(")+1,templateFilePath.indexOf(")"));
+					return templateFilePath.substring(0,templateFilePath.indexOf("(") + 1)+ (Integer.parseInt(value) + 1) + ")";	
+				}catch (Exception e) {
+					Log.error(e.getMessage());
+					return templateFilePath + " (1)";
+				}
+			}else {
+				return templateFilePath + " (1)";	
+			}
+		}else {
+			return templateFilePath + " (1)";
+		}
+		
+	}
 	interface Function {
 		void call();
 	}

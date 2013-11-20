@@ -37,4 +37,6 @@ public interface SummoningsService extends RemoteService {
 	List<String> getAllTemplateFileNames(Boolean isExaminer, Boolean isEmail);
 	
 	String getDefaultTemplateContent();
+	
+	Boolean checkIfFileExists(String templateFilePath, Boolean isExaminer, Boolean isEmail);
 }

@@ -1114,4 +1114,10 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		}
 		return "";
 	}
+
+	@Override
+	public Boolean checkIfFileExists(String templateFilePath,Boolean isExaminer, Boolean isEmail) {
+		File file = new File(getPathName(templateFilePath, isExaminer, isEmail));
+		return file.exists();
+	}
 }
