@@ -1202,20 +1202,26 @@ public class StandardizedPatient {
     				
     			}
     			
-    			criteriaQuery.where(advPredicate);
+    			Predicate removeAnonymizedPredicate = criteriaBuilder.notEqual(from.get("status"), StandardizedPatientStatus.ANONYMIZED);
+    			criteriaQuery.where(criteriaBuilder.and(removeAnonymizedPredicate,advPredicate));
         	}
         	else if (searchCriteria.size() == 0)
         	{
-        		
+        		Predicate removeAnonymizedPredicate = criteriaBuilder.notEqual(from.get("status"), StandardizedPatientStatus.ANONYMIZED);
         		if(simplePredicate != null)
-        			criteriaQuery.where(simplePredicate);
+        			criteriaQuery.where(criteriaBuilder.and(removeAnonymizedPredicate,simplePredicate));
+        		else 
+        			criteriaQuery.where(removeAnonymizedPredicate);
         	}
         	//Advance Search
         	else
         	{
-        		
+        		Predicate removeAnonymizedPredicate = criteriaBuilder.notEqual(from.get("status"), StandardizedPatientStatus.ANONYMIZED);
         		if (simplePredicate != null)
-        			criteriaQuery.where(simplePredicate);
+        			criteriaQuery.where(criteriaBuilder.and(removeAnonymizedPredicate,simplePredicate));
+        		else {
+        			criteriaQuery.where(removeAnonymizedPredicate);
+        		}
         	}
     		
     	
