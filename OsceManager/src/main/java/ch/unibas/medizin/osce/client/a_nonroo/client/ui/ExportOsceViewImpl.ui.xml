@@ -22,24 +22,40 @@
 		{
 			margin-left: 20px;
 		}
+		.exportLbl {
+		font-weight :bold
+		}
 </ui:style>
 	<g:HTMLPanel addStyleNames="{style.dockhtml}">
-	
+		<g:VerticalPanel>
 		<g:HorizontalPanel>
 			<g:HTMLPanel>
-			<span class="{style.label}" ui:field="bucketNameLbl" />			
-			<g:TextBox ui:field="bucketName"></g:TextBox>
+			<g:RadioButton ui:field="s3" name="type" checked="true"></g:RadioButton>
+			<g:RadioButton ui:field="ftp" name="type"></g:RadioButton>
+		</g:HTMLPanel>
+		</g:HorizontalPanel>
+		<g:HorizontalPanel spacing="5" verticalAlignment="middle">
 			
-			<span class="{style.label}" ui:field="accessKeyLbl" />
+			<g:Label styleName="{style.exportLbl}" ui:field="bucketNameLbl"></g:Label>
+			<g:TextBox ui:field="bucketName"></g:TextBox>
+
+			<g:Label styleName="{style.exportLbl}" ui:field="basePathLbl"></g:Label>
+			<g:TextBox ui:field="basePath"></g:TextBox>
+						
+			<g:Label styleName="{style.exportLbl}" ui:field="accessKeyLbl"></g:Label>
 			<g:TextBox ui:field="accessKey"></g:TextBox>
 			
-			<span class="{style.label}" ui:field="secretKeyLbl" />
+			<g:Label styleName="{style.exportLbl}" ui:field="secretKeyLbl"></g:Label>
 			<g:TextBox ui:field="secretKey"></g:TextBox>
+			
+			<g:Label styleName="{style.exportLbl}" ui:field="encryptionKeyLbl"></g:Label>
+			<g:TextBox ui:field="encryptionKey"></g:TextBox>
 			
 			<my:IconButton icon="pencil" ui:field="saveEditButton"></my:IconButton>
 			<my:IconButton icon="closethick" ui:field="cancelButton"></my:IconButton>
-			</g:HTMLPanel>
+			
 		</g:HorizontalPanel>
+		</g:VerticalPanel>
 	
 		<g:HorizontalPanel>
 			<g:RadioButton ui:field="unprocessed" name="status" checked="true"></g:RadioButton>

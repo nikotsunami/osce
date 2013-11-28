@@ -16,4 +16,5 @@ public interface eOSCESyncServiceAsync {
 	void exportProcessedFileList(AsyncCallback<List<String>> cb);
 	void exportUnprocessedFileList(AsyncCallback<List<String>> cb);
 	void putAmazonS3Object(String bucketName, String accessKey, String secretKey, List<String> fileList, Boolean flag, AsyncCallback<Void> cb);
+	void putFTP(String bucketName, String accessKey, String secretKey, String basePath, List<String> fileList, Boolean flag, AsyncCallback<Void> submitCallback);
 }

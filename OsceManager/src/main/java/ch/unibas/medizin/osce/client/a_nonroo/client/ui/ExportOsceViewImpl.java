@@ -3,20 +3,24 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.BucketInfoType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -53,13 +57,19 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	RadioButton unprocessed;
 	
 	@UiField
-	SpanElement bucketNameLbl;
+	Label bucketNameLbl;
 	
 	@UiField
-	SpanElement accessKeyLbl;
+	Label accessKeyLbl;
 	
 	@UiField
-	SpanElement secretKeyLbl;
+	Label secretKeyLbl;
+	
+	@UiField
+	Label basePathLbl;
+	
+	@UiField
+	Label encryptionKeyLbl;
 	
 	@UiField
 	TextBox bucketName;
@@ -71,10 +81,22 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	TextBox secretKey;
 	
 	@UiField
+	TextBox basePath;
+	
+	@UiField
+	TextBox encryptionKey;
+	
+	@UiField
 	IconButton saveEditButton;
 	
 	@UiField
 	IconButton cancelButton;
+	
+	@UiField
+	RadioButton s3;
+	
+	@UiField
+	RadioButton ftp;
 	
 	BucketInformationProxy bucketInformationProxy;
 	
@@ -93,12 +115,18 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 			}
 		});
 		
-		bucketNameLbl.setInnerText(constants.bucketName());
-		accessKeyLbl.setInnerText(constants.accessKey());
-		secretKeyLbl.setInnerText(constants.secretKey());
+		basePathLbl.setText(constants.basePath());
+		encryptionKeyLbl.setText(constants.encryptionKey());
+		bucketNameLbl.setText(constants.bucketName());
+		accessKeyLbl.setText(constants.accessKey());
+		secretKeyLbl.setText(constants.secretKey());
 		cancelButton.setText(constants.cancel());
 		
+		s3.setText(constants.s3());
+		ftp.setText(constants.ftp());
 		
+		basePath.setVisible(false);
+		basePathLbl.setVisible(false);
 	}
 	
 	@UiHandler("unprocessed")
@@ -115,6 +143,72 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 		delegate.processedClicked();
 	}
 	
+	@UiHandler("s3")
+	public void s3Selected(ClickEvent event)
+	{
+		if(s3.getValue() == true) {
+			encryptionKeyLbl.setText(constants.encryptionKey());
+			bucketNameLbl.setText(constants.bucketName());
+			accessKeyLbl.setText(constants.accessKey());
+			secretKeyLbl.setText(constants.secretKey());
+			basePath.setVisible(false);
+			basePathLbl.setVisible(false);
+			
+			boolean isFTP;
+			boolean empty;
+			boolean enabled;
+			
+			if(bucketInformationProxy != null && BucketInfoType.S3.equals(bucketInformationProxy.getType())) {
+				isFTP = false;
+				empty = false;
+				enabled = false;
+			} else {
+				isFTP = false;
+				empty = true;
+				enabled = true;
+			}
+			setValuesToTextBoxs(isFTP,empty);
+			enableTextBoxs(enabled,isFTP);	
+		}else {
+			Log.info("changes of ftp");
+		}
+		
+	}
+
+	@UiHandler("ftp")
+	public void ftpSelected(ClickEvent event)
+	{
+		if(ftp.getValue() == true) {
+			basePathLbl.setText(constants.basePath());
+			encryptionKeyLbl.setText(constants.encryptionKey());
+			bucketNameLbl.setText(constants.host());
+			accessKeyLbl.setText(constants.userName());
+			secretKeyLbl.setText(constants.password());
+			basePath.setVisible(true);
+			basePathLbl.setVisible(true);
+			
+			boolean isFTP;
+			boolean empty;
+			boolean enabled;
+			
+			if(bucketInformationProxy != null && BucketInfoType.FTP.equals(bucketInformationProxy.getType())) {
+				isFTP = true;
+				empty = false;
+				enabled = false;
+			} else {
+				isFTP = true;
+				empty = true;
+				enabled = true;
+			}
+			
+			setValuesToTextBoxs(isFTP,empty);
+			enableTextBoxs(enabled,isFTP);
+		}else {
+			Log.info("changes of s3");
+		}
+		
+	}
+	
 	public boolean checkRadio()
 	{ 
 		if(processed.getValue().booleanValue() == true)
@@ -128,7 +222,7 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	@UiHandler("exportButton")
 	public void exportButtonClicked(ClickEvent event)
 	{
-		if (bucketName.getText().equals("") || accessKey.getText().equals("") || secretKey.getText().equals(""))
+		if (bucketName.getText().equals("") || accessKey.getText().equals("") || secretKey.getText().equals("") || encryptionKey.getText().equals("") || (ftp.getValue() == true && basePath.getText().equals("")))
 		{
 			final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
 			messageConfirmationDialogBox.showConfirmationDialog(constants.bucketInfoError());
@@ -254,19 +348,41 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 		this.bucketInformationProxy = bucketInformationProxy;
 	}
 	
+	@Override
+	public TextBox getBasePath() {
+		return basePath;
+	}
+	
+	@Override
+	public TextBox getEncryptionKey() {
+		return encryptionKey;
+	}
+	
+	@Override
+	public RadioButton getS3() {
+		return s3;
+	}
+	
+	@Override
+	public RadioButton getFtp() {
+		return ftp;
+	}
+	
 	@UiHandler("saveEditButton")
 	public void saveEditButtonClicked(ClickEvent event)
 	{
 		if (saveEditButton.getText().equals(constants.save()))
 		{
 			cancelButton.setVisible(false);
-			delegate.bucketSaveButtonClicked(bucketInformationProxy, bucketName.getText(), accessKey.getText(), secretKey.getText());
+			delegate.bucketSaveButtonClicked(bucketInformationProxy, bucketName.getText(), accessKey.getText(), secretKey.getText(),encryptionKey.getText(),basePath.getText(),ftp.getValue());
 		}
 		else if (saveEditButton.getText().equals(constants.edit()))
 		{
 			bucketName.setEnabled(true);
 			accessKey.setEnabled(true);
 			secretKey.setEnabled(true);
+			encryptionKey.setEnabled(true);
+			basePath.setEnabled(true);
 			
 			saveEditButton.setText(constants.save());
 			
@@ -280,8 +396,63 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 		bucketName.setEnabled(false);
 		accessKey.setEnabled(false);
 		secretKey.setEnabled(false);
+		encryptionKey.setEnabled(false);
+		basePath.setEnabled(false);
 		
 		saveEditButton.setText(constants.edit());
 		cancelButton.setVisible(false);
 	}
+	
+	private void setValuesToTextBoxs(boolean isFTP,boolean empty) {
+		if(empty == false) {
+			bucketName.setText(bucketInformationProxy.getBucketName());
+			accessKey.setText(bucketInformationProxy.getAccessKey());
+			secretKey.setText(bucketInformationProxy.getSecretKey());
+			encryptionKey.setText(bucketInformationProxy.getEncryptionKey());
+			
+			if(isFTP) {
+				basePath.setText(bucketInformationProxy.getBasePath());
+			}	
+		} else {
+			bucketName.setText("");
+			accessKey.setText("");
+			secretKey.setText("");
+			encryptionKey.setText("");
+			if(isFTP) {
+				basePath.setText("");
+			}	
+		}
+		
+	}
+
+	private void enableTextBoxs(boolean enabled,boolean isFTP) {
+		bucketName.setEnabled(enabled);
+		accessKey.setEnabled(enabled);
+		secretKey.setEnabled(enabled);
+		encryptionKey.setEnabled(enabled);
+		
+		if(isFTP == true) {
+			basePath.setEnabled(enabled);	
+		} else {
+			basePath.setVisible(false);
+		}
+		
+		if(enabled == false) {
+			saveEditButton.setText(constants.edit());
+			cancelButton.setVisible(false);	
+		} else {
+			saveEditButton.setText(constants.save());
+			cancelButton.setVisible(true);
+		}
+		
+	}
+	
+	@Override
+	public void typeValueChanged(boolean isFTP) {
+		if(isFTP) {
+			ftpSelected(null);
+		}else {
+			s3Selected(null);
+		}
+	} 
 }

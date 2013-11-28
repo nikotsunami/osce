@@ -111,6 +111,13 @@
     </pluginRepositories>
     
     <dependencies>
+    
+    	<!-- ftp  -->
+	    <dependency>
+		    <groupId>commons-net</groupId>
+		    <artifactId>commons-net</artifactId>
+		    <version>3.1</version>
+		</dependency>
       <!--   <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>

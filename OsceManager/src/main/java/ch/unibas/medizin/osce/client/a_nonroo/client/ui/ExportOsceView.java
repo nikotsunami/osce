@@ -5,6 +5,7 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -20,7 +21,7 @@ public interface ExportOsceView extends IsWidget {
 		public void unprocessedClicked();
 		public Boolean checkSelectedValue();
 		
-		public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey);
+		public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey, String encryptionKey, String basePath, Boolean isFTP);
 	}
 
 	public VerticalPanel getFileListPanel();
@@ -44,4 +45,14 @@ public interface ExportOsceView extends IsWidget {
 	public BucketInformationProxy getBucketInformationProxy();
 	
 	public void setBucketInformationProxy(BucketInformationProxy bucketInformationProxy);
+
+	TextBox getBasePath();
+
+	TextBox getEncryptionKey();
+
+	RadioButton getS3();
+
+	RadioButton getFtp();
+
+	void typeValueChanged(boolean isFTP);
 }

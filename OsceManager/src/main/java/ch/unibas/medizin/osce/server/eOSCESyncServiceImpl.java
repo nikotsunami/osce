@@ -3,7 +3,9 @@ package ch.unibas.medizin.osce.server;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
@@ -30,6 +32,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -55,6 +58,7 @@ import ch.unibas.medizin.osce.domain.Signature;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
+import ch.unibas.medizin.osce.shared.BucketInfoType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.amazonaws.AmazonClientException;
@@ -654,20 +658,37 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				
 				BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForExport(osceList.get(i).getSemester().getId());
 				
-				Element cloudElement = doc.createElement("cloud");
+				Element cloudElement = doc.createElement("credentials");
 				examElement.appendChild(cloudElement);
+				if(bucketInformation == null || bucketInformation.getType() == null) {
+					cloudElement.setAttribute("type", BucketInfoType.S3.getStringValue());
+				}else {
+					cloudElement.setAttribute("type", bucketInformation.getType().getStringValue());	
+				}
 				
-				Element bucketElement = doc.createElement("bucket");
+				if(bucketInformation != null && BucketInfoType.FTP.equals(bucketInformation.getType())) {
+					cloudElement.setAttribute("basePath", bucketInformation.getBasePath());
+				}
+				
+				Element bucketElement = doc.createElement("host");
 				bucketElement.appendChild(doc.createTextNode(bucketInformation == null ? "" : (bucketInformation.getBucketName() == null ? "" : bucketInformation.getBucketName().toString())));
 				cloudElement.appendChild(bucketElement);
 				
-				Element accKeyElement = doc.createElement("key");
+				Element accKeyElement = doc.createElement("user");
 				accKeyElement.appendChild(doc.createTextNode(bucketInformation == null ? "" : (bucketInformation.getAccessKey() == null ? "" : bucketInformation.getAccessKey().toString())));
 				cloudElement.appendChild(accKeyElement);
 				
-				Element secretKeyElement = doc.createElement("secret");
+				Element secretKeyElement = doc.createElement("password");
 				secretKeyElement.appendChild(doc.createTextNode(bucketInformation == null ? "" : (bucketInformation.getSecretKey() == null ? "" : bucketInformation.getSecretKey().toString())));
 				cloudElement.appendChild(secretKeyElement);
+				
+				Element encryptionKeyElement = doc.createElement("encryptionKey");
+				encryptionKeyElement.appendChild(doc.createTextNode(bucketInformation == null ? "" : (bucketInformation.getEncryptionKey() == null ? "" : bucketInformation.getEncryptionKey().toString())));
+				cloudElement.appendChild(encryptionKeyElement);
+				
+				checkList(osceList.get(i).getId(),doc,examElement);
+				examinors(osceList.get(i).getId(),doc,examElement);
+				students(osceList.get(i).getId(),doc,examElement);
 				
 				timeslot = osceList.get(i).getOscePostBlueprints().size();
 				
@@ -677,17 +698,17 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				
 				//System.out.println("OSCEDAY LIST : " + osceDayList.size());
 				
-				Element daysElement = doc.createElement("days");
-				examElement.appendChild(daysElement);
+				/*Element daysElement = doc.createElement("days");
+				examElement.appendChild(daysElement);*/
 				
 				for (int j=0; j<osceDayList.size(); j++)
 				{
-					Element dayElement = doc.createElement("day");
+					/*Element dayElement = doc.createElement("day");
 					daysElement.appendChild(dayElement);
 					dayElement.setAttribute("id", osceDayList.get(j).getId().toString());
 					
 					Element parcoursElement = doc.createElement("parcours");
-					dayElement.appendChild(parcoursElement);
+					dayElement.appendChild(parcoursElement);*/
 					
 					//System.out.println("DAY ID : " + osceDayList.get(i));
 					List<OsceSequence> sequenceList = OsceSequence.findOsceSequenceByOsceDay(osceDayList.get(j).getId());
@@ -709,17 +730,18 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 						
 						for (Course course : courseList)
 						{
-							Element parcourElement = doc.createElement("parcour");
+							/*Element parcourElement = doc.createElement("parcour");
 							parcoursElement.appendChild(parcourElement);
 							
 							parcourElement.setAttribute("id", course.getId().toString());
 							parcourElement.setAttribute("color", constants.getString(course.getColor()));
-							parcourElement.setAttribute("sequence", String.format("%02d", parcourCount));
+							parcourElement.setAttribute("sequence", String.format("%02d", parcourCount));*/
 							
 							parcourCount += 1;
 							
 							Element rotationsElement = doc.createElement("rotations");
-							parcourElement.appendChild(rotationsElement);
+							//parcourElement.appendChild(rotationsElement);
+							examElement.appendChild(rotationsElement);
 							
 							for (int l=startrotation; l<totalrotation; l++)
 							{	
@@ -781,7 +803,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 											examinerIdElement.appendChild(doc.createTextNode(examinerAss.getExaminer().getId().toString()));
 											examinerEle.appendChild(examinerIdElement);
 											
-											Element examinerFirstnameElement = doc.createElement("firstname");
+											/*Element examinerFirstnameElement = doc.createElement("firstname");
 											examinerFirstnameElement.appendChild(doc.createCDATASection(examinerAss.getExaminer().getPreName() == null ? "" : examinerAss.getExaminer().getPreName()));
 											examinerEle.appendChild(examinerFirstnameElement);
 											
@@ -791,7 +813,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 											
 											Element examinerPhoneElement = doc.createElement("phone");
 											examinerPhoneElement.appendChild(doc.createCDATASection(examinerAss.getExaminer().getTelephone() == null ? "" : examinerAss.getExaminer().getTelephone()));
-											examinerEle.appendChild(examinerPhoneElement);
+											examinerEle.appendChild(examinerPhoneElement);*/
 											
 										}
 									}
@@ -810,7 +832,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 										checkListIdElement.appendChild(doc.createTextNode(checklist.getId().toString()));
 										checkListEle.appendChild(checkListIdElement);
 										
-										Element checkListTitleEle = doc.createElement("title");
+										/*Element checkListTitleEle = doc.createElement("title");
 										checkListTitleEle.appendChild(doc.createCDATASection(checklist.getTitle() == null ? "" : checklist.getTitle()));
 										checkListEle.appendChild(checkListTitleEle);
 										
@@ -934,7 +956,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 													optionElement.appendChild(optionCriteriaCountElement);
 												}
 											}
-										}
+										}*/
 									}
 									
 									Element studentElement = doc.createElement("students");
@@ -964,7 +986,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 										studIdElement.appendChild(doc.createTextNode(studId));
 										studElement.appendChild(studIdElement);
 										
-										Element studFirstNameEle = doc.createElement("firstname");
+										/*Element studFirstNameEle = doc.createElement("firstname");
 										String firstName = studAss.getStudent() == null ? ("S" + String.format("%03d", studAss.getSequenceNumber())) : (studAss.getStudent().getPreName() == null ? "" : studAss.getStudent().getPreName()); 
 										studFirstNameEle.appendChild(doc.createCDATASection(firstName));
 										studElement.appendChild(studFirstNameEle);
@@ -985,7 +1007,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 										
 										Element studEndTimeElement = doc.createElement("endtime");
 										studEndTimeElement.appendChild(doc.createTextNode(studAss.getTimeEnd() == null ? "" : studAss.getTimeEnd().toString()));
-										studElement.appendChild(studEndTimeElement);
+										studElement.appendChild(studEndTimeElement);*/
 										//}
 									}
 								}
@@ -1015,7 +1037,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 										studIdElement.appendChild(doc.createTextNode(id));
 										studElement.appendChild(studIdElement);
 										
-										Element studFirstNameEle = doc.createElement("firstname");
+										/*Element studFirstNameEle = doc.createElement("firstname");
 										String firstName = assignment.getStudent() == null ? ("S" + String.format("%03d", assignment.getSequenceNumber())) : assignment.getStudent().getPreName() == null ? "" : assignment.getStudent().getPreName();
 										studFirstNameEle.appendChild(doc.createCDATASection(firstName));
 										studElement.appendChild(studFirstNameEle);
@@ -1036,7 +1058,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 										
 										Element studEndTimeElement = doc.createElement("endtime");
 										studEndTimeElement.appendChild(doc.createTextNode(assignment.getTimeEnd() == null ? "" : assignment.getTimeEnd().toString()));
-										studElement.appendChild(studEndTimeElement);
+										studElement.appendChild(studEndTimeElement);*/
 										//}
 									}
 								}
@@ -1092,6 +1114,246 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	
 	}
 	
+	private void students(Long osceId, Document doc, Element parcourElement) {
+		Element studentElement = doc.createElement("students");
+		parcourElement.appendChild(studentElement);
+		Set<String> done = new HashSet<String>();
+		Set<Assignment> assignmentlist = new HashSet<Assignment>();
+		assignmentlist.addAll(Assignment.findAssignmentStudentsByOsce(osceId));
+		assignmentlist.addAll(Assignment.findAssignmentOfLogicalBreakPost(osceId));
+		
+		for (Assignment studAss : assignmentlist)
+		{	
+			String studIdComp = studAss.getStudent() == null ? "" : studAss.getStudent().getId().toString();
+			
+			if(done.contains(studIdComp) == false) {
+				done.add(studIdComp);
+				/*if (studAss.getStudent() != null)
+				{*/
+				Element studElement = doc.createElement("student");
+				studentElement.appendChild(studElement);
+				
+				Element studIdElement = doc.createElement("id");
+				String studId = studAss.getStudent() == null ? "" : studAss.getStudent().getId().toString();
+				studIdElement.appendChild(doc.createTextNode(studId));
+				studElement.appendChild(studIdElement);
+				
+				Element studFirstNameEle = doc.createElement("firstname");
+				String firstName = studAss.getStudent() == null ? ("S" + String.format("%03d", studAss.getSequenceNumber())) : (studAss.getStudent().getPreName() == null ? "" : studAss.getStudent().getPreName()); 
+				studFirstNameEle.appendChild(doc.createCDATASection(firstName));
+				studElement.appendChild(studFirstNameEle);
+				
+				Element studlastNameEle = doc.createElement("lastname");
+				String lastName = studAss.getStudent() == null ? ("S" + String.format("%03d", studAss.getSequenceNumber())) : (studAss.getStudent().getName() == null ? "" : studAss.getStudent().getName());
+				studlastNameEle.appendChild(doc.createCDATASection(lastName));
+				studElement.appendChild(studlastNameEle);
+				
+				Element studEmailEle = doc.createElement("email");
+				String email = studAss.getStudent() == null ? "" : (studAss.getStudent().getEmail() == null ? "" : studAss.getStudent().getEmail());
+				studEmailEle.appendChild(doc.createCDATASection(email));
+				studElement.appendChild(studEmailEle);
+				
+				Element studStTimeElement = doc.createElement("starttime");
+				studStTimeElement.appendChild(doc.createTextNode(studAss.getTimeStart() == null ? "" :studAss.getTimeStart().toString()));
+				studElement.appendChild(studStTimeElement);
+				
+				Element studEndTimeElement = doc.createElement("endtime");
+				studEndTimeElement.appendChild(doc.createTextNode(studAss.getTimeEnd() == null ? "" : studAss.getTimeEnd().toString()));
+				studElement.appendChild(studEndTimeElement);
+				//}
+			}
+		}
+	}
+
+	private void examinors(Long osceId, Document doc, Element parcourElement) {
+		Element examinersElement = doc.createElement("examiners");
+		parcourElement.appendChild(examinersElement);
+		
+		Set<Doctor> examinerAssList = new HashSet<Doctor>(Assignment.findAssignmentExamnierByOsce(osceId));
+		
+		for (Doctor examinerAss : examinerAssList)
+		{
+			
+			Element examinerEle = doc.createElement("examiner");
+			examinersElement.appendChild(examinerEle);
+			
+			Element examinerIdElement = doc.createElement("id");
+			examinerIdElement.appendChild(doc.createTextNode(examinerAss.getId().toString()));
+			examinerEle.appendChild(examinerIdElement);
+			
+			Element examinerFirstnameElement = doc.createElement("firstname");
+			examinerFirstnameElement.appendChild(doc.createCDATASection(examinerAss.getPreName() == null ? "" : examinerAss.getPreName()));
+			examinerEle.appendChild(examinerFirstnameElement);
+			
+			Element examinerlastnameElement = doc.createElement("lastname");
+			examinerlastnameElement.appendChild(doc.createCDATASection(examinerAss.getName() == null ? "" : examinerAss.getName()));
+			examinerEle.appendChild(examinerlastnameElement);
+			
+			Element examinerPhoneElement = doc.createElement("phone");
+			examinerPhoneElement.appendChild(doc.createCDATASection(examinerAss.getTelephone() == null ? "" : examinerAss.getTelephone()));
+			examinerEle.appendChild(examinerPhoneElement);
+				
+			
+		}		
+	}
+
+	private void checkList(Long osceId, Document doc, Element examElement) {
+		List<Course> courses = Course.findCourseByOsce(osceId);
+		Element checkListsEle = doc.createElement("checklists");
+		examElement.appendChild(checkListsEle);
+		Set<CheckList> checkLists= new HashSet<CheckList>();
+		
+		for (Course course : courses) {
+			List<OscePostRoom> oscePostRoomList = OscePostRoom.findOscePostRoomByCourseID(course.getId());
+			
+			for (OscePostRoom oscePostRoom : oscePostRoomList) {
+				OscePost oscepost = OscePost.findOscePost(oscePostRoom.getOscePost().getId());
+				if (oscepost.getStandardizedRole() != null)
+				{
+					StandardizedRole standardizedRole = StandardizedRole.findStandardizedRole(oscepost.getStandardizedRole().getId());
+					CheckList checklist = CheckList.findCheckList(standardizedRole.getCheckList().getId());
+					checkLists.add(checklist);
+				}
+			}
+		}
+		
+		for (CheckList checklist : checkLists) {
+			
+				Element checkListEle = doc.createElement("checklist");
+				checkListsEle.appendChild(checkListEle);
+				
+				Element checkListIdElement = doc.createElement("id");
+				checkListIdElement.appendChild(doc.createTextNode(checklist.getId().toString()));
+				checkListEle.appendChild(checkListIdElement);
+				
+				Element checkListTitleEle = doc.createElement("title");
+				checkListTitleEle.appendChild(doc.createCDATASection(checklist.getTitle() == null ? "" : checklist.getTitle()));
+				checkListEle.appendChild(checkListTitleEle);
+				
+				Element checkListTopicsEle = doc.createElement("checklisttopics");
+				checkListEle.appendChild(checkListTopicsEle);
+				
+				List<ChecklistTopic> checklistTopicList = checklist.getCheckListTopics();
+				
+				int ctr = 1;
+				
+				for (ChecklistTopic checklistTopic : checklistTopicList)
+				{
+					Element checkListTopicElement = doc.createElement("checklisttopic");
+					checkListTopicsEle.appendChild(checkListTopicElement);
+					
+					Element checkListTopicIdElement = doc.createElement("id");
+					checkListTopicIdElement.appendChild(doc.createTextNode(checklistTopic.getId().toString()));
+					checkListTopicElement.appendChild(checkListTopicIdElement);
+					
+					Element checkListTopicTitleEle = doc.createElement("title");
+					checkListTopicTitleEle.appendChild(doc.createCDATASection(checklistTopic.getTitle() == null ? "" : checklistTopic.getTitle()));
+					checkListTopicElement.appendChild(checkListTopicTitleEle);
+					
+					Element checkListTopicDescEle = doc.createElement("description");
+					checkListTopicDescEle.appendChild(doc.createCDATASection(checklistTopic.getDescription() == null ? "" : checklistTopic.getDescription()));
+					checkListTopicElement.appendChild(checkListTopicDescEle);
+					
+					Element checkListQuestionElement = doc.createElement("checklistquestions");
+					checkListTopicElement.appendChild(checkListQuestionElement);
+					
+					List<ChecklistQuestion> checklistQuestionsList = checklistTopic.getCheckListQuestions();
+					
+					for (ChecklistQuestion checklistQuestion : checklistQuestionsList)
+					{
+						Element checkListQueElement = doc.createElement("checklistquestion");
+						checkListQuestionElement.appendChild(checkListQueElement);
+						
+						Element checkListQueIdElement = doc.createElement("id");
+						checkListQueIdElement.appendChild(doc.createTextNode(checklistQuestion.getId().toString()));
+						checkListQueElement.appendChild(checkListQueIdElement);
+						
+						Element checkListQuestEle = doc.createElement("question");
+						checkListQuestEle.appendChild(doc.createCDATASection(checklistQuestion.getQuestion() == null ? "" : checklistQuestion.getQuestion()));
+						checkListQueElement.appendChild(checkListQuestEle);
+						
+						Element checkListQueInstEle = doc.createElement("instruction");
+						checkListQueInstEle.appendChild(doc.createCDATASection(checklistQuestion.getInstruction() == null ? "" : checklistQuestion.getInstruction()));
+						checkListQueElement.appendChild(checkListQueInstEle);
+						
+						Element checkListQueIsOverall = doc.createElement("key");
+						checkListQueIsOverall.appendChild(doc.createTextNode("isOverallQuestion"));
+						checkListQueElement.appendChild(checkListQueIsOverall);
+						Element checkListQueIsOverallVal = doc.createElement((checklistQuestion.getIsOveralQuestion() == null ? "false" : checklistQuestion.getIsOveralQuestion().toString()));					
+						checkListQueElement.appendChild(checkListQueIsOverallVal);
+						
+						Element checkListQueSeqNoElement = doc.createElement("sequencenumber");
+						checkListQueSeqNoElement.appendChild(doc.createTextNode(String.valueOf(ctr)));
+						checkListQueElement.appendChild(checkListQueSeqNoElement);
+						
+						ctr++;
+						
+						Element checkListCriteriaElement = doc.createElement("checklistcriterias");
+						checkListQueElement.appendChild(checkListCriteriaElement);
+						
+						Iterator<ChecklistCriteria> criiterator = checklistQuestion.getCheckListCriterias().iterator();
+						
+						while (criiterator.hasNext())
+						{
+							ChecklistCriteria criteria = criiterator.next();
+						
+							Element criteriaElement = doc.createElement("checklistcriteria");
+							checkListCriteriaElement.appendChild(criteriaElement);
+							
+							Element criteriaIdElement = doc.createElement("id");
+							criteriaIdElement.appendChild(doc.createTextNode(criteria.getId().toString()));
+							criteriaElement.appendChild(criteriaIdElement);
+							
+							Element criteriaTitleEle = doc.createElement("title");
+							criteriaTitleEle.appendChild(doc.createCDATASection(criteria.getCriteria() == null ? "" : criteria.getCriteria()));
+							criteriaElement.appendChild(criteriaTitleEle);
+							
+							Element criteriaSeqNoEle = doc.createElement("sequencenumber");
+							criteriaSeqNoEle.appendChild(doc.createTextNode(criteria.getSequenceNumber() == null ? "" : criteria.getSequenceNumber().toString()));
+							criteriaElement.appendChild(criteriaSeqNoEle);
+						}
+						
+						Element checkListOptionElement = doc.createElement("checklistoptions");
+						checkListQueElement.appendChild(checkListOptionElement);
+						
+						Iterator<ChecklistOption> opitr = checklistQuestion.getCheckListOptions().iterator();
+						
+						while (opitr.hasNext())
+						{
+							ChecklistOption option = opitr.next();
+							
+							Element optionElement = doc.createElement("checklistoption");
+							checkListOptionElement.appendChild(optionElement);
+							
+							Element optionIdElement = doc.createElement("id");
+							optionIdElement.appendChild(doc.createTextNode(option.getId().toString()));
+							optionElement.appendChild(optionIdElement);
+							
+							Element optionTitleEle = doc.createElement("title");
+							optionTitleEle.appendChild(doc.createCDATASection(option.getOptionName() == null ? "" : option.getOptionName()));
+							optionElement.appendChild(optionTitleEle);
+							
+							Element optionValElement = doc.createElement("value");
+							optionValElement.appendChild(doc.createTextNode(option.getValue() == null ? "" : option.getValue().toString()));
+							optionElement.appendChild(optionValElement);
+							
+							Element instructionElement = doc.createElement("instruction");
+							instructionElement.appendChild(doc.createCDATASection(option.getInstruction() == null ? "" : option.getInstruction()));
+							optionElement.appendChild(instructionElement);
+							
+							Element optionSeqNoElement = doc.createElement("sequencenumber");
+							optionSeqNoElement.appendChild(doc.createTextNode(option.getSequenceNumber() == null ? "" : option.getSequenceNumber().toString()));
+							optionElement.appendChild(optionSeqNoElement);
+							
+							Element optionCriteriaCountElement = doc.createElement("criteriacount");
+							optionCriteriaCountElement.appendChild(doc.createTextNode((option.getCriteriaCount() == null ? "0" : option.getCriteriaCount().toString())));
+							optionElement.appendChild(optionCriteriaCountElement);
+						}
+					}
+				}
+		}
+	}
+
 	/*public void exportOsceFile(Long semesterID)
 	{
 		//System.out.println("~~SEMESTER ID : " + semesterID);
@@ -1597,5 +1859,110 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 		
 		//System.out.println("File is Put Successfully");
+	}
+	
+	public void putFTP(String bucketName, String accessKey, String secretKey, String basePath, List<String> fileList, Boolean flag) throws eOSCESyncException {
+		FTPClient client = new FTPClient();
+        FileInputStream fis = null;
+ 
+        try {
+            client.connect(bucketName);
+            client.login(accessKey, secretKey);
+            ftpCreateDirectoryTree(client, basePath);
+            //client.cwd(basePath);
+            //
+            // Create an InputStream of the file to be uploaded
+            //
+            if (flag)
+			{
+				for (int i=0; i<fileList.size(); i++)
+				{
+					String path = OsMaFilePathConstant.EXPORT_OSCE_UNPROCESSED_FILEPATH + fileList.get(i);
+					
+					File file = new File(path);
+					String filename = fileList.get(i);
+					fis = new FileInputStream(file);
+					client.storeFile(basePath + filename, fis);
+				
+					//move file to processed				
+					File dir = new File(OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH);
+					if (dir.exists())
+					{
+						file.renameTo(new File(dir, file.getName()));
+					}
+					else
+					{	
+						dir.mkdirs();
+						file.renameTo(new File(dir, file.getName()));
+					}
+				}	
+			}			
+			else
+			{
+				for (int i=0; i<fileList.size(); i++)
+				{
+					String path = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + fileList.get(i);
+					
+					File file = new File(path);
+					String filename = fileList.get(i);
+					fis = new FileInputStream(file);
+					client.storeFile(basePath + filename, fis);
+				}
+			}
+            
+           
+ 
+            //
+            // Store file to server
+            //
+           
+            client.logout();
+        } catch (IOException e) {
+        	Log.error(e.getMessage());
+        	throw new eOSCESyncException("",e.getMessage());
+        }catch(Exception e)
+		{
+			Log.error(e.getMessage());
+			throw new eOSCESyncException("",e.getMessage());
+		}finally {
+            try {
+                if (fis != null) {
+                    fis.close();
+                }
+                client.disconnect();
+            } catch (IOException e) {
+            	Log.error(e.getMessage());
+    			throw new eOSCESyncException("",e.getMessage());
+            }
+        }
+	}
+	
+	/**
+	* utility to create an arbitrary directory hierarchy on the remote ftp server 
+	* @param client
+	* @param dirTree  the directory tree only delimited with / chars.  No file name!
+	* @throws Exception
+	*/
+	private static void ftpCreateDirectoryTree( FTPClient client, String dirTree ) throws IOException {
+
+	  boolean dirExists = true;
+
+	  //tokenize the string and attempt to change into each directory level.  If you cannot, then start creating.
+	  String[] directories = dirTree.split("/");
+	  for (String dir : directories ) {
+	    if (!dir.isEmpty() ) {
+	      if (dirExists) {
+	        dirExists = client.changeWorkingDirectory(dir);
+	      }
+	      if (!dirExists) {
+	        if (!client.makeDirectory(dir)) {
+	          throw new IOException("Unable to create remote directory '" + dir + "'.  error='" + client.getReplyString()+"'");
+	        }
+	        if (!client.changeWorkingDirectory(dir)) {
+	          throw new IOException("Unable to change into newly created remote directory '" + dir + "'.  error='" + client.getReplyString()+"'");
+	        }
+	      }
+	    }
+	  }     
 	}
 }

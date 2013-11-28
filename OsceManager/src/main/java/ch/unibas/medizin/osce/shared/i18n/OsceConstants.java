@@ -1382,6 +1382,20 @@ public interface OsceConstants extends Constants {
 
 	public String storeNew();
 
+	public String encryptionKey();
+
+	public String basePath();
+
+	public String host();
+
+	public String userName();
+
+	public String password();
+
+	public String s3();
+
+	public String ftp();
+
 	
 }
 

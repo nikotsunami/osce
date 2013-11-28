@@ -26,6 +26,8 @@ public interface eOSCESyncService extends RemoteService {
 	
 	void putAmazonS3Object(String bucketName, String accessKey, String secretKey, List<String> fileList, Boolean flag) throws eOSCESyncException;
 	
+	void putFTP(String bucketName, String accessKey, String secretKey, String basePath, List<String> fileList, Boolean flag) throws eOSCESyncException;
+	
 	public static class ServiceFactory {
 		private static eOSCESyncServiceAsync instance = null; 
 		

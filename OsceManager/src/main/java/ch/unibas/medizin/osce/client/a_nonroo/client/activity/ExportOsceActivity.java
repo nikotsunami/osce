@@ -18,6 +18,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationProxy;
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationRequest;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.shared.BucketInfoType;
 import ch.unibas.medizin.osce.shared.EosceStatus;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -102,6 +103,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 		view.setDelegate(this);		
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void loadBucketInformation(SemesterProxy semesterProxy)
 	{
 		requests.bucketInformationRequestNonRoo().findBucketInformationBySemesterForExport(semesterProxy.getId()).fire(new OSCEReceiver<BucketInformationProxy>() {
@@ -110,37 +112,63 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 			public void onSuccess(BucketInformationProxy response) {
 				if (response != null)
 				{
+					view.setBucketInformationProxy(response);
 					//System.out.println("RESPONSE FOUND");
-					view.getBucketName().setText(response.getBucketName());
+					if(BucketInfoType.FTP.equals(response.getType())) {
+						/*view.getBasePath().setText(response.getBasePath());
+						view.getBasePath().setEnabled(false);*/
+						view.getFtp().setValue(true, true);
+						view.typeValueChanged(true);
+					} else {
+						view.getS3().setValue(true,true);
+						view.typeValueChanged(false);
+					}
+					
+					/*view.getBucketName().setText(response.getBucketName());
 					view.getAccessKey().setText(response.getAccessKey());
 					view.getSecretKey().setText(response.getSecretKey());
+					view.getEncryptionKey().setText(response.getEncryptionKey());
 					
 					view.getBucketName().setEnabled(false);
 					view.getAccessKey().setEnabled(false);
 					view.getSecretKey().setEnabled(false);
+					view.getEncryptionKey().setEnabled(false);
 					
 					view.getSaveEditButton().setText(constants.edit());
-					view.setBucketInformationProxy(response);
+					//view.setBucketInformationProxy(response);
 					
-					view.getCancelButton().setVisible(false);
+					view.getCancelButton().setVisible(false);*/
 					
-					view.setBucketInformationProxy(response);
+					
 				}
 				else
 				{
+					view.setBucketInformationProxy(response);
+					view.getFtp().setValue(view.getFtp().getValue(),true);
+					view.getS3().setValue(view.getS3().getValue(),true);
+					
 					view.getBucketName().setEnabled(true);
 					view.getAccessKey().setEnabled(true);
 					view.getSecretKey().setEnabled(true);
+					view.getEncryptionKey().setEnabled(true);
+					
+					if(view.getFtp().getValue()) {
+						view.getBasePath().setEnabled(true);	
+					} else {
+						view.getBasePath().setVisible(false);
+					}
 					
 					view.getBucketName().setText("");
 					view.getAccessKey().setText("");
 					view.getSecretKey().setText("");
+					view.getEncryptionKey().setText("");
+					view.getBasePath().setText("");
 					//System.out.println("RESPONSE NOT FOUND");
 					view.getSaveEditButton().setText(constants.save());
 					
 					view.getCancelButton().setVisible(true);
 					
-					view.setBucketInformationProxy(response);
+					
 				}
 			}
 		});
@@ -365,7 +393,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 				}
 			}
 			
-			eOsceServiceAsync.putAmazonS3Object(view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(), fileList, flag, new AsyncCallback<Void>() {
+			AsyncCallback<Void> submitCallback = new AsyncCallback<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					
@@ -386,7 +414,17 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 					else 
 						processedClicked();
 				}
-			});
+			};
+			
+			if(view.getFtp().getValue()) {
+				eOsceServiceAsync.putFTP(view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(),view.getBasePath().getText(), fileList, flag, submitCallback);	
+			} else if(view.getS3().getValue()) {
+				eOsceServiceAsync.putAmazonS3Object(view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(), fileList, flag, submitCallback);	
+			} else {
+				Log.error("Error in Export");
+			}
+			
+			
 		}		
 	}
 	
@@ -414,7 +452,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 	}
 
 	@Override
-	public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey) {
+	public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey,  String encryptionKey, String basePath, Boolean isFTP) {
 		BucketInformationRequest request = requests.bucketInformationRequest();
 		final BucketInformationProxy bucketInformationProxy;
 		
@@ -433,6 +471,14 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 		bucketInformationProxy.setBucketName(bucketName);
 		bucketInformationProxy.setAccessKey(accessKey);
 		bucketInformationProxy.setSecretKey(secretKey);
+		bucketInformationProxy.setEncryptionKey(encryptionKey);
+		if(isFTP == true) {
+			bucketInformationProxy.setBasePath(basePath);
+			bucketInformationProxy.setType(BucketInfoType.FTP);
+		} else {
+			bucketInformationProxy.setType(BucketInfoType.S3);
+		}
+		
 		
 		
 		request.persist().using(bucketInformationProxy).fire(new OSCEReceiver<Void>() {
@@ -442,6 +488,8 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 				view.getBucketName().setEnabled(false);
 				view.getAccessKey().setEnabled(false);
 				view.getSecretKey().setEnabled(false);
+				view.getEncryptionKey().setEnabled(false);
+				view.getBasePath().setEnabled(false);
 				
 				view.getSaveEditButton().setText(constants.edit());
 				view.setBucketInformationProxy(bucketInformationProxy);

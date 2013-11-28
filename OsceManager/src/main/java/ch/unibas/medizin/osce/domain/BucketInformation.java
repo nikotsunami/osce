@@ -8,6 +8,7 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import ch.unibas.medizin.osce.shared.BucketInfoType;
 import ch.unibas.medizin.osce.shared.EosceStatus;
 
 @RooJavaBean
@@ -26,6 +27,12 @@ public class BucketInformation {
 	
 	private EosceStatus eosceStatusType;
 	
+	private BucketInfoType type;
+	
+	private String basePath;
+	
+	private String encryptionKey;
+		
 	public static BucketInformation findBucketInformationBySemesterForExport(Long semesterId)
 	{
 		EntityManager em = entityManager();
