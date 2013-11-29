@@ -3127,4 +3127,29 @@ public class Assignment {
    	else
    		return 0;
 	}
+
+	public static List<Doctor> findAssignmentExamnierByOsce(Long osceId) {
+		EntityManager em = entityManager();
+    	String query = "SELECT distinct a.examiner FROM Assignment a WHERE a.type = 2 AND a.osceDay.osce.id = " + osceId + " ORDER BY a.timeStart";
+    	TypedQuery<Doctor> q = em.createQuery(query, Doctor.class);
+    	return q.getResultList();
+	}
+
+	public static List<Assignment> findAssignmentStudentsByOsce(Long osceId) {
+		EntityManager em = entityManager();
+    	String query = "SELECT distinct a FROM Assignment a WHERE a.type = 0 AND a.osceDay.osce.id = " + osceId + " ORDER BY a.timeStart";
+    	TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
+    	return q.getResultList();
+	}
+	
+	public static List<Assignment> findAssignmentOfLogicalBreakPost(Long osceId)
+    {
+   	 EntityManager em = entityManager();
+   	String query="SELECT distinct a FROM Assignment as a where a.osceDay.osce.id="+osceId+"  and type=0 and oscePostRoom is null and sequenceNumber in (select distinct (sequenceNumber) from Assignment where type=0 and osceDay.osce.id="+osceId+" and oscePostRoom in (select id from OscePostRoom where course.osce.id="+osceId+")) order by a.timeStart asc";
+   	 TypedQuery<Assignment> typedQuery = em.createQuery(query, Assignment.class);
+   	 List<Assignment> assignments=typedQuery.getResultList();
+   	 Log.info("retrieveLogicalStudentInBreak query :" +query);
+   	 
+   	 return assignments;
+    }
 } 
