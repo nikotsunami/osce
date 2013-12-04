@@ -20,13 +20,13 @@ public interface eOSCESyncService extends RemoteService {
 	//export
 	void exportOsceFile(Long semesterID) throws eOSCESyncException;
 	
-	List<String> exportProcessedFileList() throws eOSCESyncException;
+	List<String> exportProcessedFileList(Long semesterId) throws eOSCESyncException;
 	
-	List<String> exportUnprocessedFileList() throws eOSCESyncException;
+	List<String> exportUnprocessedFileList(Long semesterId) throws eOSCESyncException;
 	
-	void putAmazonS3Object(String bucketName, String accessKey, String secretKey, List<String> fileList, Boolean flag) throws eOSCESyncException;
+	void putAmazonS3Object(Long semesterId,String bucketName, String accessKey, String secretKey, List<String> fileList, Boolean flag) throws eOSCESyncException;
 	
-	void putFTP(String bucketName, String accessKey, String secretKey, String basePath, List<String> fileList, Boolean flag) throws eOSCESyncException;
+	void putFTP(Long semesterId,String bucketName, String accessKey, String secretKey, String basePath, List<String> fileList, Boolean flag) throws eOSCESyncException;
 	
 	public static class ServiceFactory {
 		private static eOSCESyncServiceAsync instance = null; 

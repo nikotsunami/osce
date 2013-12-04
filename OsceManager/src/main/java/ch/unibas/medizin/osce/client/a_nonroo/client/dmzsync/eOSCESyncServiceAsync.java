@@ -13,8 +13,8 @@ public interface eOSCESyncServiceAsync {
 	
 	//export
 	void exportOsceFile(Long semesterID, AsyncCallback<Void> cb);
-	void exportProcessedFileList(AsyncCallback<List<String>> cb);
-	void exportUnprocessedFileList(AsyncCallback<List<String>> cb);
-	void putAmazonS3Object(String bucketName, String accessKey, String secretKey, List<String> fileList, Boolean flag, AsyncCallback<Void> cb);
-	void putFTP(String bucketName, String accessKey, String secretKey, String basePath, List<String> fileList, Boolean flag, AsyncCallback<Void> submitCallback);
+	void exportProcessedFileList(Long semesterID,AsyncCallback<List<String>> cb);
+	void exportUnprocessedFileList(Long semesterID,AsyncCallback<List<String>> cb);
+	void putAmazonS3Object(Long semesterId,String bucketName, String accessKey, String secretKey, List<String> fileList, Boolean flag, AsyncCallback<Void> cb);
+	void putFTP(Long semesterId,String bucketName, String accessKey, String secretKey, String basePath, List<String> fileList, Boolean flag, AsyncCallback<Void> submitCallback);
 }

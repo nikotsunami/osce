@@ -223,7 +223,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 			checkBoxList.clear();
 			view.getFileListPanel().clear();
 		
-			eOsceServiceAsync.exportUnprocessedFileList(new AsyncCallback<List<String>>() {
+			eOsceServiceAsync.exportUnprocessedFileList(semesterProxy.getId(),new AsyncCallback<List<String>>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
@@ -293,7 +293,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 			checkBoxList.clear();
 			view.getFileListPanel().clear();
 			
-			eOsceServiceAsync.exportProcessedFileList(new AsyncCallback<List<String>>() {
+			eOsceServiceAsync.exportProcessedFileList(semesterProxy.getId(),new AsyncCallback<List<String>>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
@@ -417,9 +417,9 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 			};
 			
 			if(view.getFtp().getValue()) {
-				eOsceServiceAsync.putFTP(view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(),view.getBasePath().getText(), fileList, flag, submitCallback);	
+				eOsceServiceAsync.putFTP(semesterProxy.getId(),view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(),view.getBasePath().getText(), fileList, flag, submitCallback);	
 			} else if(view.getS3().getValue()) {
-				eOsceServiceAsync.putAmazonS3Object(view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(), fileList, flag, submitCallback);	
+				eOsceServiceAsync.putAmazonS3Object(semesterProxy.getId(),view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(), fileList, flag, submitCallback);	
 			} else {
 				Log.error("Error in Export");
 			}
@@ -447,7 +447,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 	//issue change
 	public void downloadFile(String filename, Boolean flag)
 	{
-		final String url=GWT.getHostPageBaseURL() + "downloadExportOsceFile?path="+filename+"&flag="+flag;
+		final String url=GWT.getHostPageBaseURL() + "downloadExportOsceFile?path="+filename+"&flag="+flag+"&semester=" + semesterProxy.getId();
 		Window.open(url, filename, "enabled");
 	}
 

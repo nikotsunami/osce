@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 
 
@@ -26,7 +27,12 @@ public class DownloadExportOsceFileServlet extends HttpServlet {
 		try{
 			 String path = request.getParameter("path");
 			 String flag = request.getParameter("flag");
-			 
+			 String semesterId = request.getParameter("semester");
+			 Semester semester = Semester.findSemester(Long.parseLong(semesterId));
+			 String folderSeparatorLocal="\\";
+			 String folderSeparatorProduction="/";
+			 boolean isLocal=false; // To put folder separator for local test set true during development otherwise false
+				
 			 response.setContentType("application/x-download");
 			 
 			 response.setHeader("Content-Disposition", "attachment; filename=\"" + path +"\"");
@@ -36,9 +42,9 @@ public class DownloadExportOsceFileServlet extends HttpServlet {
 			 String file = "";
 			 
 			 if (flag.equals("true"))
-				 file=OsMaFilePathConstant.EXPORT_OSCE_UNPROCESSED_FILEPATH+path;
+				 file=OsMaFilePathConstant.EXPORT_OSCE_UNPROCESSED_FILEPATH + semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction) + path;
 			 else
-				 file=OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH+path;
+				 file=OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH+semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction) + path;
 			 
 			 Log.info(" file :" + file);
 				

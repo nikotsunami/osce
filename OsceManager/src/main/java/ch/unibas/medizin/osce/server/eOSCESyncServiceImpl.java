@@ -54,11 +54,13 @@ import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.OscePost;
 import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.domain.OsceSequence;
+import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.Signature;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
 import ch.unibas.medizin.osce.shared.BucketInfoType;
+import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.amazonaws.AmazonClientException;
@@ -82,6 +84,9 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	private static Logger Log = Logger.getLogger(eOSCESyncServiceImpl.class);
 	private static String appUploadDirectory= OsMaFilePathConstant.DEFAULT_IMPORT_EOSCE_PATH;
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private String folderSeparatorLocal="\\";
+	private String folderSeparatorProduction="/";
+	private boolean isLocal=false; // To put folder separator for local test set true during development otherwise false
 	
 	public List<String> processedFileList(Long semesterID) throws eOSCESyncException
 	{
@@ -1071,15 +1076,17 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 						+ "-" + (constants.getString(osceList.get(i).getStudyYear().toString()).replace(".", "")); 
 										
 				fileName = fileName + ".osceexchange";
-				
-				String processedFileName = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + fileName;
+				Semester semester = Semester.findSemester(semesterID);
+				String processedFileName = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + semester.getSemester() + semester.getCalYear() + 
+																													(isLocal==true ? folderSeparatorLocal : folderSeparatorProduction) + fileName;
 				File processfile = new File(processedFileName);
 				Boolean processCheck = processfile.exists();	
 				
 				if (!processCheck)
 				{
 					fileName = fileName.replaceAll(" ", "_");
-					fileName = OsMaFilePathConstant.EXPORT_OSCE_UNPROCESSED_FILEPATH + fileName;
+					fileName = OsMaFilePathConstant.EXPORT_OSCE_UNPROCESSED_FILEPATH + semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction)
+								+ fileName;
 					File file = new File(fileName);
 					Boolean check = file.exists();
 					
@@ -1726,11 +1733,12 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	
 	}*/
 	
-	public List<String> exportProcessedFileList()
+	public List<String> exportProcessedFileList(Long semesterId)
 	{
 		List<String> processedList = new ArrayList<String>();
+		Semester semester = Semester.findSemester(semesterId);
 		
-		File folder = new File(OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH);
+		File folder = new File(OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction));
 		
 		if (folder.exists())
 		{
@@ -1745,11 +1753,12 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		return processedList;
 	}
 	
-	public List<String> exportUnprocessedFileList()
+	public List<String> exportUnprocessedFileList(Long semesterId)
 	{
 		List<String> unprocessedList = new ArrayList<String>();
+		Semester semester = Semester.findSemester(semesterId);
 		
-		File folder = new File(OsMaFilePathConstant.EXPORT_OSCE_UNPROCESSED_FILEPATH);		
+		File folder = new File(OsMaFilePathConstant.EXPORT_OSCE_UNPROCESSED_FILEPATH + semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction));		
 		
 		if (folder.exists())
 		{
@@ -1763,12 +1772,13 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		return unprocessedList;
 	}
 	
-	public void putAmazonS3Object(String bucketName, String accessKey, String secretKey, List<String> fileList, Boolean flag) throws eOSCESyncException
+	public void putAmazonS3Object(Long semesterId,String bucketName, String accessKey, String secretKey, List<String> fileList, Boolean flag) throws eOSCESyncException
 	{	
 		//file is put in bucketname as key.
 		
 		try
 		{
+			Semester semester = Semester.findSemester(semesterId);
 			bucketName = bucketName.toLowerCase();
 			
 			//System.out.println("BUCKET NAME : " + bucketName);
@@ -1801,22 +1811,27 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			{
 				for (int i=0; i<fileList.size(); i++)
 				{
-					String path = OsMaFilePathConstant.EXPORT_OSCE_UNPROCESSED_FILEPATH + fileList.get(i);
+					String path = OsMaFilePathConstant.EXPORT_OSCE_UNPROCESSED_FILEPATH + semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction) + fileList.get(i);
 					
 					File file = new File(path);
 					
 					client.putObject(bucketName, fileList.get(i), file);
 				
 					//move file to processed				
-					File dir = new File(OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH);
+					File dir = new File(OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction));
 					if (dir.exists())
 					{
-						file.renameTo(new File(dir, file.getName()));
+						//file.renameTo(new File(dir, file.getName()));
+						util.copyFile(file, new File(dir, file.getName()));
+						file.delete();
 					}
 					else
 					{	
 						dir.mkdirs();
-						file.renameTo(new File(dir, file.getName()));
+						//file.renameTo(new File(dir, file.getName()));
+						
+						util.copyFile(file, new File(dir, file.getName()));
+						file.delete();
 					}
 				}	
 			}			
@@ -1824,7 +1839,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			{
 				for (int i=0; i<fileList.size(); i++)
 				{
-					String path = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + fileList.get(i);
+					String path = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction) + fileList.get(i);
 					
 					File file = new File(path);
 					
@@ -1861,11 +1876,12 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		//System.out.println("File is Put Successfully");
 	}
 	
-	public void putFTP(String bucketName, String accessKey, String secretKey, String basePath, List<String> fileList, Boolean flag) throws eOSCESyncException {
+	public void putFTP(Long semesterId,String bucketName, String accessKey, String secretKey, String basePath, List<String> fileList, Boolean flag) throws eOSCESyncException {
 		FTPClient client = new FTPClient();
         FileInputStream fis = null;
  
         try {
+        	Semester semester = Semester.findSemester(semesterId);
             client.connect(bucketName);
             client.login(accessKey, secretKey);
             ftpCreateDirectoryTree(client, basePath);
@@ -1873,11 +1889,13 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
             //
             // Create an InputStream of the file to be uploaded
             //
+            try {
             if (flag)
 			{
+            
 				for (int i=0; i<fileList.size(); i++)
 				{
-					String path = OsMaFilePathConstant.EXPORT_OSCE_UNPROCESSED_FILEPATH + fileList.get(i);
+					String path = OsMaFilePathConstant.EXPORT_OSCE_UNPROCESSED_FILEPATH + semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction) + fileList.get(i);
 					
 					File file = new File(path);
 					String filename = fileList.get(i);
@@ -1885,15 +1903,21 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					client.storeFile(basePath + filename, fis);
 				
 					//move file to processed				
-					File dir = new File(OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH);
+					File dir = new File(OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction));
 					if (dir.exists())
 					{
-						file.renameTo(new File(dir, file.getName()));
+						//file.renameTo(new File(dir, file.getName()));
+						util.copyFile(file, new File(dir, file.getName()));
+						fis.close();
+						file.delete();
 					}
 					else
 					{	
 						dir.mkdirs();
-						file.renameTo(new File(dir, file.getName()));
+						//file.renameTo(new File(dir, file.getName()));
+						util.copyFile(file, new File(dir, file.getName()));
+						fis.close();
+						file.delete();
 					}
 				}	
 			}			
@@ -1901,7 +1925,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			{
 				for (int i=0; i<fileList.size(); i++)
 				{
-					String path = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + fileList.get(i);
+					String path = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction) + fileList.get(i);
 					
 					File file = new File(path);
 					String filename = fileList.get(i);
@@ -1910,7 +1934,15 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				}
 			}
             
-           
+            }catch (IOException e) {
+				e.printStackTrace();
+				throw new eOSCESyncException("",e.getMessage());
+			}finally{
+				if(fis !=null){
+					fis.close();
+					fis=null;
+				}
+			}
  
             //
             // Store file to server
@@ -1929,6 +1961,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
                 if (fis != null) {
                     fis.close();
                 }
+               
                 client.disconnect();
             } catch (IOException e) {
             	Log.error(e.getMessage());
