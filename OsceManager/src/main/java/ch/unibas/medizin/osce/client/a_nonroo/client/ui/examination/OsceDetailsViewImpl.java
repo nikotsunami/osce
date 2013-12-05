@@ -910,7 +910,7 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 	void handleClick(ClickEvent e) {
 		if (osceDisclosurePanel.isOpen()) {
 			osceDisclosurePanel.setOpen(false);
-			arrow.setUrl("/osMaEntry/gwt/unibas/images/arrowdownselect.png");// set
+			arrow.setUrl("osMaEntry/gwt/unibas/images/right.png");// set
 																				// url
 																				// of
 																				// up
@@ -918,7 +918,7 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 
 		} else {
 			osceDisclosurePanel.setOpen(true);
-			arrow.setUrl("/osMaEntry/gwt/unibas/images/arrowdownselect.png");// set
+			arrow.setUrl("osMaEntry/gwt/unibas/images/arrowdownselect.png");// set
 																				// url
 																				// of
 																				// down

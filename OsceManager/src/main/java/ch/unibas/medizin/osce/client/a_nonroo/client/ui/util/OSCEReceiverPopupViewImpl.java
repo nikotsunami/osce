@@ -64,6 +64,15 @@ public class OSCEReceiverPopupViewImpl extends DialogBox
 		display();
 	}
 
+	public void showHTMLMessage(HTML message) {
+		Log.info("Call showMessage" + message);		
+		
+		panel.setWidth("500px");
+		panel.add(message);		
+		panel.add(HPbtn);
+		
+		display();
+	}
 	private void display() {		
 		Log.info("display() call....." + panel.getWidgetCount());				
 		//dialogBox.setVisible(true);		
@@ -75,4 +84,9 @@ public class OSCEReceiverPopupViewImpl extends DialogBox
 	 * public void setDelegate(Delegate delegate) { this.delegate = delegate; }
 	 */
 
+	public Button getBtnOk() {
+		return btnOk;
+	}
+
+	
 }

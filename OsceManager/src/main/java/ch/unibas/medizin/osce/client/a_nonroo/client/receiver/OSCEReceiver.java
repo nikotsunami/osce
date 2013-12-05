@@ -13,10 +13,15 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.Window.Location;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
 @SuppressWarnings("deprecation")
@@ -84,27 +89,65 @@ public void onFailure(ServerFailure error)
 public void showMessage(String error)
 {
 	
-	final String errorMsg=error;
-	Log.info("Error Message" + errorMsg);	
-	
-	String[] errorMsgLst;
-	osceReceiverPopupView=new OSCEReceiverPopupViewImpl();
-	osceReceiverPopupView.showMessage(error);
-	
-	Timer t = new Timer() 
-	{		
-		@Override
-		public void run() 
-		{				
-			osceReceiverPopupView.hide();
-			osceReceiverPopupView=null;
-		}
+	if(error.startsWith("Server Error")){
+		
+		HTML errorHTML = new HTML(error + "<br/>" + mConstants.sessionTimeoutError());
+		
+		osceReceiverPopupView=new OSCEReceiverPopupViewImpl();
+		osceReceiverPopupView.showHTMLMessage(errorHTML);
+		
+		osceReceiverPopupView.getBtnOk().addClickHandler(new ClickHandler() {
 			
-	};
-	t.schedule(10000);
-
+			@Override
+			public void onClick(ClickEvent event) {
+				reloadWindow();
+				
+			}
+		});
+		
+		Timer t = new Timer() 
+		{		
+			@Override
+			public void run() 
+			{				
+				osceReceiverPopupView.hide();
+				osceReceiverPopupView=null;
+			}
+				
+		};
+		t.schedule(10000);
+	}
+	else{
+		
+		final String errorMsg=error;
+		Log.info("Error Message" + errorMsg);	
+		
+		String[] errorMsgLst;
+		osceReceiverPopupView=new OSCEReceiverPopupViewImpl();
+		osceReceiverPopupView.showMessage(error);
+		
+		Timer t = new Timer() 
+		{		
+			@Override
+			public void run() 
+			{				
+				osceReceiverPopupView.hide();
+				osceReceiverPopupView=null;
+			}
+				
+		};
+		t.schedule(10000);
+	}
 }
 
+	public void reloadWindow(){
+		int indexOfHash;
+		String url = Location.getHref();
+		if ((indexOfHash = url.indexOf("#")) > -1) {
+			url = url.substring(0, indexOfHash);
+		} 
+		Window.open(url, "_self", "");
+	}
 @Override
 public abstract void onSuccess(T response);
 
