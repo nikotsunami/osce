@@ -1822,15 +1822,14 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					if (dir.exists())
 					{
 						//file.renameTo(new File(dir, file.getName()));
-						util.copyFile(file, new File(dir, file.getName()));
+						FileUtils.copyFile(file, new File(dir, file.getName()));
 						file.delete();
 					}
 					else
 					{	
 						dir.mkdirs();
 						//file.renameTo(new File(dir, file.getName()));
-						
-						util.copyFile(file, new File(dir, file.getName()));
+						FileUtils.copyFile(file, new File(dir, file.getName()));
 						file.delete();
 					}
 				}	
@@ -1907,7 +1906,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					if (dir.exists())
 					{
 						//file.renameTo(new File(dir, file.getName()));
-						util.copyFile(file, new File(dir, file.getName()));
+						FileUtils.copyFile(file, new File(dir, file.getName()));
 						fis.close();
 						file.delete();
 					}
@@ -1915,7 +1914,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					{	
 						dir.mkdirs();
 						//file.renameTo(new File(dir, file.getName()));
-						util.copyFile(file, new File(dir, file.getName()));
+						FileUtils.copyFile(file, new File(dir, file.getName()));
 						fis.close();
 						file.delete();
 					}
@@ -1935,7 +1934,6 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			}
             
             }catch (IOException e) {
-				e.printStackTrace();
 				throw new eOSCESyncException("",e.getMessage());
 			}finally{
 				if(fis !=null){

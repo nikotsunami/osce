@@ -1,12 +1,5 @@
 package ch.unibas.medizin.osce.shared;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
-
 import com.allen_sauer.gwt.log.client.Log;
 
 public class util {
@@ -130,44 +123,5 @@ public class util {
 			return text;
 			
 		}
-		 
-		public static void copyFile(File from, File to) 
-		{
-			FileInputStream fin = null;		
-			FileOutputStream fout = null;
-			
-			try{
-				fin = new FileInputStream(from);		
-				fout = new FileOutputStream(to);
-				
-				int nRead = 0;
-				byte[] data = new byte[1024];
-				while ((nRead = fin.read(data, 0, data.length)) != -1) {		
-					fout.write(data,0,nRead);
-				}
-			}
-			catch(IOException io)
-			{
-				io.printStackTrace();
-			}
-			finally{
-				try{
-					if(fin!=null)
-					{
-						fin.close();
-						fin = null;
-					}
-					if(fout!=null)
-					{
-						fout.flush();
-						fout.close();
-						fout = null;
-					}
-				}catch(IOException i){}
-			}
-
-						
-		}
-
 
 }
