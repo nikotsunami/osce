@@ -2,6 +2,7 @@
 			$(document).ready(function() {
 				var $content = $('#content');
 				var $htmlBody = $("html, body");
+				var $blockquotes = $content.find("blockquote");
 				var isAnimating = false;
 				
 				/* append backlinks to top to headers*/
@@ -12,15 +13,25 @@
 					}
 				});
 				
-				$content.find("blockquote").children("p").children("strong").each(function() {
+				$blockquotes.children("p").children("strong").each(function() {
 					var $s = $(this);
 					$s.css({'font-size': '1.2em'});
 					var idString = $s.html();
 					if (idString.search("Example") >= 0) {
-						idString = idString.replace("Example: ", "example").toLowerCase();
+						idString = idString.replace("Example: ", "example-").toLowerCase();
 						idString = idString.replace(/ /g, "-");
+						idString = idString.replace("/", "");
 						console.log(idString);
 						$s.attr("id", idString);
+					}
+				});
+				
+				$blockquotes.children("ol").children("li").children("img").each(function() {
+					var $img = $(this);
+					var alt = $img.attr('alt');
+					console.log(alt);
+					if (typeof(alt) === 'object' && alt.indexOf("icon") < 0) {
+						$img.addClass("example-img");
 					}
 				});
 				
@@ -40,7 +51,7 @@
 					}
 					$htmlBody.stop();
 					var hash = this.hash;
-					$htmlBody.animate({scrollTop: targetOffset}, 1000, 'easeInOutQuad', function() {
+					$htmlBody.animate({scrollTop: targetOffset}, 1000, 'easeInOutSine', function() {
 						location.hash = hash;
 					});
 				});

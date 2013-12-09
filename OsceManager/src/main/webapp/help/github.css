@@ -398,13 +398,15 @@ a.toplink:hover {
 
 #TOC {
 	position: fixed;
-	top: 36px;
+	top: 12px;
+	bottom: 12px;
+	overflow-y: scroll;
 		
 	width: inherit;
 	border: 1px solid #aaa;
 	border-radius: 4px;
-	padding: 10px 0;
-	box-shadow: 10px 10px 10px #ddd;
+	padding: 4px 0;
+	box-shadow: 6px 6px 8px #ddd;
 	
 	font-size: 0.9em;
 	line-height: 1.2;
@@ -456,4 +458,9 @@ blockquote {
 
 blockquote + blockquote {
 	margin-top: 40px;
+}
+
+.example-img {
+	display: block;
+	margin: auto;
 }
