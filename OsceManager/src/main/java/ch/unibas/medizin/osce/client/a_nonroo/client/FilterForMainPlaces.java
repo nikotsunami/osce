@@ -52,15 +52,15 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
-
 import com.google.gwt.activity.shared.FilteredActivityMapper;
+import ch.unibas.medizin.osce.client.a_nonroo.client.activity.AsyncFilteredActivityMapper;
 import com.google.gwt.place.shared.Place;
 
 /**
  * @author niko2
  * 
  */
-public class FilterForMainPlaces implements FilteredActivityMapper.Filter {
+public class FilterForMainPlaces implements AsyncFilteredActivityMapper.Filter {
 
 	@Override
 	public Place filter(Place place) {

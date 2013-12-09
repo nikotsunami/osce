@@ -4,15 +4,21 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.activity.ActivityCallbackHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.activity.ApplicationMainActivitiesMapper;
+import ch.unibas.medizin.osce.client.a_nonroo.client.activity.AsyncActivityMapper;
+import ch.unibas.medizin.osce.client.a_nonroo.client.activity.AsyncCachingActivityMapper;
+import ch.unibas.medizin.osce.client.a_nonroo.client.activity.AsyncFilteredActivityMapper;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlaceHistoryFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlaceHistoryMapper;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.AsyncActivityManager;
 import ch.unibas.medizin.osce.client.managed.activity.ApplicationDetailsActivities;
 import ch.unibas.medizin.osce.client.scaffold.request.RequestEvent;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.activity.shared.CachingActivityMapper;
@@ -110,11 +116,19 @@ public class OsMaApp {
 		});
 
 		
-		CachingActivityMapper cached = new CachingActivityMapper(applicationMainActivitiesMapper);
-		FilterForMainPlaces filterForMainPlaces = new FilterForMainPlaces();
-		ActivityMapper masterActivityMap = new FilteredActivityMapper(filterForMainPlaces, cached);
-		final ActivityManager masterActivityManager = new ActivityManager(masterActivityMap, eventBus);
-
+		// Manish CachingActivityMapper cached = new CachingActivityMapper(applicationMainActivitiesMapper);
+		
+			FilterForMainPlaces filterForMainPlaces = new FilterForMainPlaces();
+		
+		// Manish ActivityMapper masterActivityMap = new FilteredActivityMapper(filterForMainPlaces, cached);
+		// Manish final ActivityManager masterActivityManager = new ActivityManager(masterActivityMap, eventBus);
+		
+		AsyncCachingActivityMapper cached = new AsyncCachingActivityMapper(applicationMainActivitiesMapper);
+		
+		AsyncActivityMapper masterActivityMap = new AsyncFilteredActivityMapper(filterForMainPlaces,cached);
+		
+		AsyncActivityManager masterActivityManager = new AsyncActivityManager(masterActivityMap, eventBus);
+		
 		masterActivityManager.setDisplay(shell.getMainPanel());
 
 //		ProxyListPlacePicker proxyListPlacePicker = new ProxyListPlacePicker(placeController, proxyPlaceToListPlace);
