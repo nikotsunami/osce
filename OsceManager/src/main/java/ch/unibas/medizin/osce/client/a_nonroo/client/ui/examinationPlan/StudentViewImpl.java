@@ -393,7 +393,9 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 			else
 			{
 				popupView.getWarningLbl().setText(constants.longBreakWarningMsg());
-				popupView.getWarningLbl().getElement().getStyle().setColor("#6E6E6E");				
+				popupView.getWarningLbl().getElement().getStyle().setColor("#6E6E6E");
+				popupView.getWarningLbl().getElement().getStyle().setFontWeight(FontWeight.NORMAL);
+				popupView.getWarningLbl().getElement().getStyle().setFontStyle(FontStyle.ITALIC);
 			}			
 			
 			/*if (osceProxy != null)
@@ -498,7 +500,7 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 		if (checkForLunchBreak(previousAssignment))
 			((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-150);
 		else
-			((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-195);
+			((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-210);
 		
 		((PopupViewImpl)popupView).getExaminerNameValue().setText(breakDuration+"");
 		((PopupViewImpl)popupView).show();
