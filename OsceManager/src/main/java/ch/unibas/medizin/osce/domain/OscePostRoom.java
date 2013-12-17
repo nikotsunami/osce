@@ -450,6 +450,13 @@ public class OscePostRoom {
     	else
     		return null;
     }
+
+	public static List<OscePostRoom> findOscePostRoomByOsce(Long osceId) {
+		EntityManager em = entityManager();
+    	String sql = "SELECT distinct o FROM OscePostRoom o WHERE o.course.osce.id = " + osceId + " ORDER BY o.id ";
+    	TypedQuery<OscePostRoom> q = em.createQuery(sql, OscePostRoom.class);
+    	return q.getResultList();
+	}
     
     
 }

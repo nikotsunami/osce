@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.EntityManager;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.roo.addon.entity.RooEntity;
@@ -24,5 +26,13 @@ public class CheckList {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "checkList")
     @OrderBy("sort_order")
     private List<ChecklistTopic> checkListTopics = new ArrayList<ChecklistTopic>();
+
+
+	public static List<CheckList> findAllCheckListforOsce(Long osceId) {
+		EntityManager em = entityManager();
+    	String query = "SELECT distinct o.oscePost.standardizedRole.checkList FROM OscePostRoom o WHERE o.course.osce.id = " +osceId+ " ORDER BY o.oscePost.standardizedRole.checkList";
+    	TypedQuery<CheckList> q = em.createQuery(query, CheckList.class);
+    	return q.getResultList();
+	}
   
 }

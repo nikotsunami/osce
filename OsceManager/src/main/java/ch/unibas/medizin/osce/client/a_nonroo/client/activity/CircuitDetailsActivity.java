@@ -1037,20 +1037,20 @@ AccordianPanelView.ParcourDelegate
 	
 	public void setProxy(OscePostSubViewImpl oscePostSubViewImpl,Object object)
 	{
-		//System.out.println("Set Proxy.");
+		//Log.info("Set Proxy.");
 		if(object instanceof SpecialisationProxy)
 		{
-			//System.out.println("Set Specialization Proxy");
+			//Log.info("Set Specialization Proxy");
 			oscePostSubViewImpl.setSpecialisationProxy((SpecialisationProxy)object);
 		}
 		else if(object instanceof RoleTopicProxy)
 		{
-			//System.out.println("Set Role Topic Proxy");
+			//Log.info("Set Role Topic Proxy");
 			oscePostSubViewImpl.setRoleTopicProxy((RoleTopicProxy)object);
 		}
 		else if(object == null)
 		{
-			//System.out.println("Set Null Proxy");
+			//Log.info("Set Null Proxy");
 			oscePostSubViewImpl.setRoleTopicProxy(null);
 		}
 	}
@@ -2094,7 +2094,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						while(osceDayIterator.hasNext())
 						{
 							OsceDayProxy osceDay=osceDayIterator.next();
-							System.out.println("OsceDay Set Flag False: " + osceDay.getId());
+							Log.info("OsceDay Set Flag False: " + osceDay.getId());
 							
 							OsceDayRequest osceDayRequest=requests.osceDayRequest();
 							osceDay=osceDayRequest.edit(osceDay);
@@ -2104,7 +2104,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								@Override
 								public void onSuccess(Object response) 
 								{
-									//System.out.println("Successfully Updated, Flag set to false");
+									//Log.info("Successfully Updated, Flag set to false");
 								}
 							});
 						}
@@ -2347,10 +2347,11 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 
 																			@Override
 																			public void onSuccess(
-																					Object response) {
-																				Log.info("~Success Call...." + ((OscePostBlueprintProxy)response).getId());	
+																					Object response1) {
+																				Log.info("~Success Call...." + ((OscePostBlueprintProxy)response1).getId());	
 																				//Module 5 bug Report Change	
-																				newPostAddHP.insert(setAnemniesOsceBluePrintHP(oscePostBlueprintProxy, (((OscePostBlueprintProxy)response)),""+osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().getValue()),newPostAddHP.getWidgetCount());
+																				OscePostBlueprintProxy demoOscePostBlueprintProxy = (OscePostBlueprintProxy)response1;
+																				newPostAddHP.insert(setAnemniesOsceBluePrintHP(oscePostBlueprintProxy, demoOscePostBlueprintProxy,""+osceCreatePostBluePrintSubViewImpl.getPostTypeListBox().getValue()),newPostAddHP.getWidgetCount());
 																				//E Module 5 bug Report Change	
 																			}
 																	
@@ -2489,9 +2490,9 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						}
 						// E Module 5 bug Report Change
 						oscePostSubViewImpl.add(tempOscePostSubViewImpl);					
-						oscePostSubViewImpl.get(innerindex).setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW						
+						//oscePostSubViewImpl.get(innerindex).setDelegate(circuitDetailsActivity); // SET DELEGATE FOR SUBVIEW						
 						oscePostViewImpl.getOscePostSubViewHP().add(tempOscePostSubViewImpl);	// ADD SUBVIEW IN POSTVIEW
-						oscePostSubViewImpl.get(innerindex).oscePostBlueprintProxy=oscePostBlueprintProxy;	
+						//oscePostSubViewImpl.get(innerindex).oscePostBlueprintProxy=oscePostBlueprintProxy;	
 						oscePostViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;
 						
 						
@@ -2514,6 +2515,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					
 					// Module 5 Bug Test Change
 					tempOscePostSubViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;
+					tempOscePostSubViewImpl.oscePostBlueprintProxyNext = oscePostBlueprintProxyNext;
 					// E Module 5 Bug Test Change
 					
 					tempOscePostSubViewImpl.getPostNameLbl().setText(getLabelString(constants.circuitStation() + " " + oscePostBlueprintProxy.getSequenceNumber()));
@@ -2548,13 +2550,17 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					oscePostViewImpl.getOscePostSubViewHP().add(tempOscePostSubViewImpl);	// ADD SUBVIEW IN POSTVIEW
 					/*oscePostSubViewImpl.get(innerindex).oscePostBlueprintProxy=oscePostBlueprintProxy;	*/
 					oscePostViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;
+					//oscePostViewImpl.oscePostBlueprintProxyNext = oscePostBlueprintProxyNext;
 					
 					if(oscePostBlueprintProxy.getPostType()==PostType.ANAMNESIS_THERAPY || oscePostBlueprintProxy.getPostType()==PostType.PREPARATION)
 					{
 						Log.info("~Anemnis");				
 							
-						OscePostSubViewImpl tempOscePostSubViewImplNext=new OscePostSubViewImpl();
-							tempOscePostSubViewImplNext.oscePostBlueprintProxy=oscePostBlueprintProxyNext;
+							OscePostSubViewImpl tempOscePostSubViewImplNext=new OscePostSubViewImpl();
+							oscePostViewImpl.oscePostBlueprintProxyNext = oscePostBlueprintProxyNext;
+							tempOscePostSubViewImplNext.oscePostBlueprintProxy = oscePostBlueprintProxy;
+							tempOscePostSubViewImplNext.oscePostBlueprintProxyNext=oscePostBlueprintProxyNext;
+							//tempOscePostSubViewImplNext.oscePostBlueprintProxy=oscePostBlueprintProxyNext;
 							tempOscePostSubViewImplNext.setDelegate(circuitDetailsActivity);
 							
 							tempOscePostSubViewImplNext.enableDisableforBluePrintStatus();	
@@ -2595,6 +2601,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							}											
 							Log.info("Total Widget Before Adding: " + oscePostViewImpl.getOscePostSubViewHP().getWidgetCount());
 							//E Module 5 bug Report Change
+							
 							oscePostViewImpl.getOscePostSubViewHP().add(tempOscePostSubViewImplNext);	// ADD SUBVIEW IN POSTVIEW	
 							/*/////oscePostViewImpl.oscePostBlueprintProxy=oscePostBlueprintProxy;
 							/////oscePostViewImpl.oscePostBlueprintProxyNext=oscePostBlueprintProxyNext;*/
@@ -2936,11 +2943,14 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							Log.info("~~Set Label");
 							Log.info("Lable Text: " + ((OscePostSubView)((OscePostView)hp.getWidget(i)).getOscePostSubViewHP().getWidget(0)).getPostNameLbl().getText());
 						
-							updateBluePrintSequence(((OscePostView)hp.getWidget(i)).getOscePostBlueprintProxy(),i+j+1);
+							OscePostBlueprintProxy oscePostBlueprintProxy1 = ((OscePostView)hp.getWidget(i)).getOscePostBlueprintProxy();
+							updateBluePrintSequence(oscePostBlueprintProxy1,i+j+1);
 							((OscePostSubView)((OscePostView)hp.getWidget(i)).getOscePostSubViewHP().getWidget(0)).getPostNameLbl().setText(getLabelString(constants.circuitStation() + " " + (i+j+1)));
 							((OscePostSubView)((OscePostView)hp.getWidget(i)).getOscePostSubViewHP().getWidget(0)).getPostNameLbl().setTitle(constants.circuitStation() + " " + (i+j+1));
 							j++;
-							updateBluePrintSequence(((OscePostView)hp.getWidget(i)).getOscePostBlueprintProxyNext(),i+j+1);
+							
+							OscePostBlueprintProxy oscePostBlueprintProxy2 =((OscePostView)hp.getWidget(i)).getOscePostBlueprintProxyNext(); 
+							updateBluePrintSequence(oscePostBlueprintProxy2,i+j+1);
 							((OscePostSubView)((OscePostView)hp.getWidget(i)).getOscePostSubViewHP().getWidget(1)).getPostNameLbl().setText(getLabelString(constants.circuitStation() + " " + (i+j+1)));
 							((OscePostSubView)((OscePostView)hp.getWidget(i)).getOscePostSubViewHP().getWidget(1)).getPostNameLbl().setTitle(constants.circuitStation() + " " + (i+j+1));
 							
@@ -3224,7 +3234,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							long diff=Math.abs((startDate.getTime())-endDate.getTime());
 							
 
-							System.out.println("diff--"+diff);
+							Log.info("diff--"+diff);
 							
 							
 							//DateFormat dateformat = new SimpleDateFormat("HH:mm");
@@ -3660,7 +3670,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							sequenceOsceSubViewImpl.ok.setVisible(false);
 							sequenceOsceSubViewImpl.nameOfSequence.setText(sequenceOsceSubViewImpl.chaneNameOfSequence.getValue());
 						//	sequenceOsceSubViewImpl.osceSequenceProxy.setLabel(sequenceOsceSubViewImpl[i].nameOfSequence.getText());
-							System.out.println(sequenceOsceSubViewImpl.osceSequenceProxy.getLabel());
+							Log.info(sequenceOsceSubViewImpl.osceSequenceProxy.getLabel());
 							sequenceOsceSubViewImpl.ok.setVisible(false);
 							sequenceOsceSubViewImpl.chaneNameOfSequence.setVisible(false);
 							
@@ -3673,7 +3683,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								@Override
 								public void onSuccess(Void response) {	
 									// TODO Auto-generated method stub
-							//		System.out.println("INside success");
+							//		Log.info("INside success");
 									Log.info("osce sequence updated  successfully with label--"+sequenceOsceSubViewImpl.osceSequenceProxy.getLabel());
 								//	init2();
 								
@@ -3700,7 +3710,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				//	sequenceOsceSubViewImpl.osceSequenceProxy.setLabel(sequenceOsceSubViewImpl[i].nameOfSequence.getText());
 
 					Log.info("Osce Sqquence Proxy: "+ sequenceOsceSubViewImpl.osceSequenceProxy.getId());
-					System.out.println(sequenceOsceSubViewImpl.osceSequenceProxy.getLabel());
+					Log.info(sequenceOsceSubViewImpl.osceSequenceProxy.getLabel());
 					// Module 5 bug Report Change					
 					//sequenceOsceSubViewImpl.nameOfSequence.setText(chaneNameOfSequence.getListBox().getItemText(chaneNameOfSequence.getListBox().getSelectedIndex()));
 					OsceSequenceRequest osceSequenceRequest=requests.osceSequenceRequest();
@@ -3716,7 +3726,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						@Override
 						public void onSuccess(Void response) {	
 							// TODO Auto-generated method stub
-					//		System.out.println("INside success");
+					//		Log.info("INside success");
 							Log.info("osce sequence updated  successfully with label--"+sequenceOsceSubViewImpl.osceSequenceProxy.getLabel());
 							// Highlight onViolation
 							sequenceOsceSubViewImpl.nameOfSequence.setText(getLabelString(chaneNameOfSequence.getListBox().getItemText(chaneNameOfSequence.getListBox().getSelectedIndex())));
@@ -3819,7 +3829,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								public void onSuccess(OsceSequenceProxy response) {
 									// TODO Auto-generated method stub
 									final OsceSequenceProxy globalResponse=response;
-									System.out.println("success fetch--"+response.getCourses().size()+"-"+response.getOscePosts().size());
+									Log.info("success fetch--"+response.getCourses().size()+"-"+response.getOscePosts().size());
 								
 							
 							//,"osceSequences.osceDay","osceSequences.oscePosts","osceSequences.courses"
@@ -3831,14 +3841,14 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							sequenceProxy.setNumberRotation(response.getNumberRotation());
 					//		
 							sequenceProxy.setOsceDay(response.getOsceDay());
-							System.out.println("before set course");
+							Log.info("before set course");
 
 							sequenceRequest.persist().using(sequenceProxy).fire(new Receiver<Void>() {
 
 								@Override
 								public void onSuccess(Void response) {
 									// TODO Auto-generated method stub
-									System.out.println("new sequence save successfully");
+									Log.info("new sequence save successfully");
 									
 									//requests.osceSequenceRequestNonRoo().findMaxOsceSequence().fire(new Receiver<OsceSequenceProxy>() {
 									requests.find(sequenceProxy.stableId()).fire(new Receiver<Object>() {
@@ -3847,7 +3857,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 										public void onSuccess(Object response) {
 											// TODO Auto-generated method stub
 											
-											System.out.println("new size--"+globalResponse.getOscePosts().size());
+											Log.info("new size--"+globalResponse.getOscePosts().size());
 											Iterator<OscePostProxy> postIterator=globalResponse.getOscePosts().iterator();
 											while(postIterator.hasNext())
 											{
@@ -4260,7 +4270,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 											while(osceDayIterator.hasNext())
 											{
 												OsceDayProxy osceDay=osceDayIterator.next();
-												System.out.println("OsceDay Set Flag False: " + osceDay.getId());
+												Log.info("OsceDay Set Flag False: " + osceDay.getId());
 												
 												OsceDayRequest osceDayRequest=requests.osceDayRequest();
 												osceDay=osceDayRequest.edit(osceDay);
@@ -4271,7 +4281,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 													@Override
 													public void onSuccess(Object response) 
 													{
-														System.out.println("Successfully Updated, Flag set to false");
+														Log.info("Successfully Updated, Flag set to false");
 													}
 												});
 											}
@@ -4729,7 +4739,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							else if(response.compareToIgnoreCase("CreateSuccessful")==0)
 							{
 								// Module 5 Bug Test Change
-								System.out.println("Event Stop.");
+								Log.info("Event Stop.");
 								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 								// E Module 5 Bug Test Change
 								
@@ -5058,11 +5068,11 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					Log.info("Course Proxy: " + oscePostSubViewImpl.getCourseProxy().getId());			
 				
 					final RoomProxy roomProxy=(RoomProxy)view.getNewListBox().getSelected();
-					System.out.println("Room Proxy: " + roomProxy.getId());
+					Log.info("Room Proxy: " + roomProxy.getId());
 					
 					((ListBoxPopupViewImpl)view).hide();
 					
-					System.out.println("SEQUENCE : " + oscePostSubViewImpl.getOscePostProxy().getOsceSequence());
+					Log.info("SEQUENCE : " + oscePostSubViewImpl.getOscePostProxy().getOsceSequence());
 					
 					requests.oscePostRequest().findOscePost(oscePostSubViewImpl.getOscePostProxy().getId()).with("osceSequence").fire(new OSCEReceiver<OscePostProxy>() {
 
@@ -5192,13 +5202,13 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				//private void exchangeRooms(final OscePostSubViewImpl oscePostSubViewImpl, final ListBoxPopupView view, final RoomProxy roomProxy, List<OscePostRoomProxy> oscePostRoom)
 				private void exchangeRooms(CourseProxy courseProxy,OscePostProxy oscePostProxy,ListBoxPopupView view,RoomProxy roomProxy,List<OscePostRoomProxy> oscePostRoom, final OscePostSubViewImpl oscePostSubViewImpl, final ListBoxPopupView listBoxPopupView) 				
 				{
-					System.out.println("Exchanging Rooms");
+					Log.info("Exchanging Rooms");
 					Iterator<OscePostRoomProxy> oscePostRoomIterator=oscePostRoom.iterator();
 					OscePostRoomProxy tempnewOscePostRoomProxy=null;
 					while(oscePostRoomIterator.hasNext())
 					{
 						OscePostRoomProxy newOscePostRoom= oscePostRoomIterator.next();
-						//System.out.println("List of New Id of Osce_Post_Room which is Replaced by Selected Room" +newOscePostRoom.getId());
+						//Log.info("List of New Id of Osce_Post_Room which is Replaced by Selected Room" +newOscePostRoom.getId());
 						tempnewOscePostRoomProxy=newOscePostRoom;
 					}
 					final OscePostRoomProxy newOscePostRoomProxy=tempnewOscePostRoomProxy;
@@ -5210,7 +5220,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								{
 									if (response != null)
 									{
-										//System.out.println("Old Osce_Post_Room Id which is Updated: " + response.getId());										
+										//Log.info("Old Osce_Post_Room Id which is Updated: " + response.getId());										
 										replaceRooms(response,newOscePostRoomProxy,osceProxy.getId(),oscePostSubViewImpl,listBoxPopupView);
 									}																											
 								}
@@ -5218,8 +5228,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				}
 				protected void replaceRooms(final OscePostRoomProxy selectedRoom,OscePostRoomProxy newOscePostRoomProxy,final long osceId, final OscePostSubViewImpl oscePostSubViewImpl, final ListBoxPopupView view) 
 				{
-					System.out.println("replaceRoomsCall");
-					//System.out.println("Replace " + selectedRoom.getId() + "With " + newOscePostRoomProxy.getId());
+					Log.info("replaceRoomsCall");
+					//Log.info("Replace " + selectedRoom.getId() + "With " + newOscePostRoomProxy.getId());
 					
 					requests.oscePostRoomRequest().findOscePostRoom(newOscePostRoomProxy.getId()).with("room","oscePost","course").fire(new OSCEReceiver<OscePostRoomProxy>() {
 
@@ -5585,8 +5595,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					}
 					catch(Exception e)
 					{
-						System.out.println(e.getMessage());
-						System.out.println(e.getStackTrace());
+						Log.info(e.getMessage());
+						Log.info(e.getStackTrace());
 					}*/
 										
 				}

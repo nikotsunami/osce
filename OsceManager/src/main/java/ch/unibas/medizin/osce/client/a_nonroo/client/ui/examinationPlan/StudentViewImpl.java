@@ -383,6 +383,19 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 			
 			((PopupViewImpl)popupView).setAnimationEnabled(true);
 			
+			//checkForLunchBreak(previousAssignment);
+			
+			//if (previousAssignment != null && previousAssignment.getOsceDay() != null && previousAssignment.getTimeEnd().equals(previousAssignment.getOsceDay().getLunchBreakStart()))
+			if (checkForLunchBreak(previousAssignment))
+			{
+				popupView.getWarningLbl().setVisible(false);				
+			}
+			else
+			{
+				popupView.getWarningLbl().setText(constants.longBreakWarningMsg());
+				popupView.getWarningLbl().getElement().getStyle().setColor("#6E6E6E");				
+			}			
+			
 			/*if (osceProxy != null)
 			{	
 				
@@ -482,10 +495,47 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 			
 			
 		}
-		((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-135);
+		if (checkForLunchBreak(previousAssignment))
+			((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-150);
+		else
+			((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-195);
+		
 		((PopupViewImpl)popupView).getExaminerNameValue().setText(breakDuration+"");
 		((PopupViewImpl)popupView).show();
 	}
+	
+	public boolean checkForLunchBreak(AssignmentProxy assignmentProxy)
+	{
+		boolean flag = false;
+		if (assignmentProxy != null && assignmentProxy.getOsceDay() != null)
+		{
+			if (assignmentProxy.getTimeEnd().equals(assignmentProxy.getOsceDay().getLunchBreakStart()))
+			{
+				flag = true;
+			}
+			else
+			{
+				String breakByRotStr = assignmentProxy.getOsceDay().getBreakByRotation();
+				String[] rotationStr = breakByRotStr.split("-");
+				
+				for (String str : rotationStr)
+				{
+					String[] rotString = str.split(":");
+					if (osceProxy != null)
+					{
+						if (rotString[0].equals(assignmentProxy.getRotationNumber().toString()) && rotString[1].equals(osceProxy.getLunchBreak().toString()))
+						{
+							flag = true;
+							break;	
+						}
+					}				
+				}
+			}
+		}
+		
+		return flag;
+	}
+	
 	public void showStudentPopupView()
 	{
 		if(popupView==null)

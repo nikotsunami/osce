@@ -1693,6 +1693,7 @@ public class Assignment {
     			 osceDay.setTimeEnd(dateAddMin(osceDay.getTimeEnd(), newLunchDiffTime));
     			 osceDay.setIsTimeSlotShifted(false);
     			 osceDay.setLunchBreakAdjustedTime(oldAdjustedTime + newLunchDiffTime);
+    			 osceDay.setLunchBreakStart(lunchBreakTime);
         		 osceDay.persist();    			 
     		 }
     	 }
@@ -3130,7 +3131,7 @@ public class Assignment {
 
 	public static List<Doctor> findAssignmentExamnierByOsce(Long osceId) {
 		EntityManager em = entityManager();
-    	String query = "SELECT distinct a.examiner FROM Assignment a WHERE a.type = 2 AND a.osceDay.osce.id = " + osceId + " ORDER BY a.timeStart";
+    	String query = "SELECT distinct a.examiner FROM Assignment a WHERE a.type = 2 AND a.osceDay.osce.id = " + osceId + " ORDER BY a.timeStart,a.examiner";
     	TypedQuery<Doctor> q = em.createQuery(query, Doctor.class);
     	return q.getResultList();
 	}
@@ -3144,12 +3145,19 @@ public class Assignment {
 	
 	public static List<Assignment> findAssignmentOfLogicalBreakPost(Long osceId)
     {
-   	 EntityManager em = entityManager();
-   	String query="SELECT distinct a FROM Assignment as a where a.osceDay.osce.id="+osceId+"  and type=0 and oscePostRoom is null and sequenceNumber in (select distinct (sequenceNumber) from Assignment where type=0 and osceDay.osce.id="+osceId+" and oscePostRoom in (select id from OscePostRoom where course.osce.id="+osceId+")) order by a.timeStart asc";
-   	 TypedQuery<Assignment> typedQuery = em.createQuery(query, Assignment.class);
-   	 List<Assignment> assignments=typedQuery.getResultList();
-   	 Log.info("retrieveLogicalStudentInBreak query :" +query);
-   	 
-   	 return assignments;
+		EntityManager em = entityManager();
+		String query="SELECT distinct a FROM Assignment as a where a.osceDay.osce.id="+osceId+"  and type=0 and oscePostRoom is null and sequenceNumber in (select distinct (sequenceNumber) from Assignment where type=0 and osceDay.osce.id="+osceId+" and oscePostRoom in (select id from OscePostRoom where course.osce.id="+osceId+")) order by a.timeStart asc";
+		TypedQuery<Assignment> typedQuery = em.createQuery(query, Assignment.class);
+		List<Assignment> assignments=typedQuery.getResultList();
+		Log.info("retrieveLogicalStudentInBreak query :" +query);
+		 
+		return assignments;
     }
+
+	public static Long countAssignmentOfLogicalBreakPostPerOsce(Long osceId) {
+		EntityManager em = entityManager();
+    	String query = "SELECT count(a) FROM Assignment a WHERE a.type = 0 AND a.osceDay.osce.id = " + osceId + " ORDER BY a.timeStart";
+    	TypedQuery<Long> q = em.createQuery(query, Long.class);
+    	return q.getSingleResult();
+	}
 } 

@@ -62,6 +62,9 @@ width:57px;
 	</g:HorizontalPanel>
 	
 	<!-- by spec change -->
+	<g:HorizontalPanel spacing="10" width="100%">
+		<g:Label ui:field="warningLbl" visible="false" addStyleNames="{style.label}"></g:Label>		
+	</g:HorizontalPanel>
 	
 	<g:HorizontalPanel spacing="10" horizontalAlignment="center" width="100%">
 		<my:IconButton ui:field="clearButton"  icon="arrowrefresh-1-w" visible="false"></my:IconButton>

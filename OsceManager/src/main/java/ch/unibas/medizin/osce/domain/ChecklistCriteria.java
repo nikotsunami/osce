@@ -2,7 +2,9 @@ package ch.unibas.medizin.osce.domain;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
+import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
 import org.springframework.roo.addon.entity.RooEntity;
@@ -53,6 +55,16 @@ public class ChecklistCriteria implements Comparable<ChecklistCriteria> {
 			return 1;
 		}
 	}
-	
+
+	public static ChecklistCriteria findChecklistCriteriaByQueAndSeqNum(Long queId, int seqNumber)
+	{
+		EntityManager em = entityManager();
+		String sql = "SELECT c FROM ChecklistCriteria c WHERE c.checklistQuestion.id = " + queId + " AND c.sequenceNumber = " + seqNumber;
+		TypedQuery<ChecklistCriteria> query = em.createQuery(sql, ChecklistCriteria.class);
+		if (query.getResultList() != null && query.getResultList().size() > 0)
+			return query.getResultList().get(0);
+					
+		return null;	
+	}
 	
 }

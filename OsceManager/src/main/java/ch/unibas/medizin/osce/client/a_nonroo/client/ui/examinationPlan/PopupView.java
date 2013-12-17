@@ -69,4 +69,6 @@ public interface PopupView extends IsWidget {
 	public void createExchangeSPPopupView();
 	public IconButton getClearButton();
 	//by spec change]
+	
+	public Label getWarningLbl();
 }

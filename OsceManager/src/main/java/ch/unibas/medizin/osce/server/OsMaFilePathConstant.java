@@ -18,11 +18,11 @@ public class OsMaFilePathConstant {
 
 	public static String TXT_EXTENTION = ".txt";
 
-	public static String DEFAULT_SP_MAIL_TEMPLATE_PATH = "mail\\mailTemplate_SP\\";
-	public static String DEFAULT_EXAMINER_MAIL_TEMPLATE_PATH = "mail\\mailTemplate_Ex\\";
+	public static String DEFAULT_SP_MAIL_TEMPLATE_PATH = "mail/mailTemplate_SP/";
+	public static String DEFAULT_EXAMINER_MAIL_TEMPLATE_PATH = "mail/mailTemplate_Ex/";
 
-	public static String DEFAULT_SP_EMAIL_TEMPLATE_PATH = "email\\emailTemplate_SP\\";
-	public static String DEFAULT_EXAMINER_EMAIL_TEMPLATE_PATH = "email\\emailTemplate_Ex\\";
+	public static String DEFAULT_SP_EMAIL_TEMPLATE_PATH = "email/emailTemplate_SP/";
+	public static String DEFAULT_EXAMINER_EMAIL_TEMPLATE_PATH = "email/emailTemplate_Ex/";
 
 	public static String DEFAULT_MAIL_TEMPLATE = "osMaEntry/gwt/unibas/templates/defaultTemplate.txt";
 

@@ -180,7 +180,10 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 	@UiField
 	DefaultSuggestBox<PatientInRoleProxy, EventHandlingValueHolderItem<PatientInRoleProxy>> exchangeSpListBox;
 	
-	//by spec change]	
+	//by spec change]
+	
+	@UiField
+	Label warningLbl;
 	
 	public IntegerBox getBreakDuration() {
 		return breakDuration;
@@ -200,6 +203,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		examinerSuggestionBox.removeFromParent();
 		edit.removeFromParent();
 		
+		warningLbl.setVisible(true);
 		
 		nameLbl.setVisible(true);
 		nameValue.removeFromParent();
@@ -272,11 +276,13 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		exchangeSpListBox.setVisible(false);
 		exchangeStudLbl.setVisible(false);
 		exchangeStudentListBox.setVisible(false);
+		warningLbl.setVisible(false);
 		
 		exchangeSPLbl.removeFromParent();
 		exchangeSpListBox.removeFromParent();
 		exchangeStudLbl.removeFromParent();
 		exchangeStudentListBox.removeFromParent();
+		warningLbl.removeFromParent();
 		//by spec change]
 		clearButton.removeFromParent();
 	}
@@ -308,11 +314,13 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		exchangeSpListBox.setVisible(false);
 		exchangeStudLbl.setVisible(false);
 		exchangeStudentListBox.setVisible(false);
+		warningLbl.setVisible(false);
 		
 		exchangeSPLbl.removeFromParent();
 		exchangeSpListBox.removeFromParent();
 		exchangeStudLbl.removeFromParent();
 		exchangeStudentListBox.removeFromParent();
+		warningLbl.removeFromParent();
 		//by spec change]
 		clearButton.removeFromParent();
 	}
@@ -352,11 +360,13 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		exchangeSpListBox.setVisible(false);
 		exchangeStudLbl.setVisible(false);
 		exchangeStudentListBox.setVisible(false);
+		warningLbl.setVisible(false);
 		
 		exchangeSPLbl.removeFromParent();
 		exchangeSpListBox.removeFromParent();
 		exchangeStudLbl.removeFromParent();
 		exchangeStudentListBox.removeFromParent();
+		warningLbl.removeFromParent();
 		//by spec change]
 		
 		clearButton.setText(constants.clear());
@@ -401,11 +411,13 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		exchangeSpListBox.setVisible(false);
 		exchangeStudLbl.setVisible(false);
 		exchangeStudentListBox.setVisible(false);
+		warningLbl.setVisible(false);
 		
 		exchangeSPLbl.removeFromParent();
 		exchangeSpListBox.removeFromParent();
 		exchangeStudLbl.removeFromParent();
 		exchangeStudentListBox.removeFromParent();
+		warningLbl.removeFromParent();
 		//by spec change]
 		clearButton.removeFromParent();
 	}	
@@ -476,6 +488,9 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		saveBtn.removeFromParent();
 		breakDuration.removeFromParent();
 		
+		warningLbl.setVisible(false);
+		warningLbl.removeFromParent();
+		
 		disableContextMenu();
 		clearButton.removeFromParent();
 	}
@@ -521,6 +536,9 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		//by spec change]
 		clearButton.removeFromParent();
 		
+		warningLbl.setVisible(false);
+		warningLbl.removeFromParent();
+		
 		disableContextMenu();
 	}
 	
@@ -536,4 +554,8 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 		}, ContextMenuEvent.getType());
 	}
 	//by spec change]
+	
+	public Label getWarningLbl() {
+		return warningLbl;
+	}
 }
