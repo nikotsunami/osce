@@ -36,6 +36,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
@@ -2150,7 +2151,13 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					// output pretty printed
 					jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			 
-					jaxbMarshaller.marshal(oscedata, file);
+					ByteArrayOutputStream stream = new ByteArrayOutputStream();
+					jaxbMarshaller.marshal(oscedata, stream);
+					
+					String data = new String(stream.toByteArray());
+					
+					data = data.replaceAll("xsi:oscedata", "oscedata");
+					FileUtils.writeStringToFile(file, data);
 					  // get an Apache XMLSerializer configured to generate CDATA
 			        /*XMLSerializer serializer = getXMLSerializer(file);
 
