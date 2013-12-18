@@ -2150,16 +2150,17 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			 
 					// output pretty printed
 					jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-					jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
+					jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			 
 					ByteArrayOutputStream stream = new ByteArrayOutputStream();
 					jaxbMarshaller.marshal(oscedata, stream);
 					
-					String data = new String(stream.toByteArray());
+					String data = new String(stream.toByteArray(),"UTF-8");
 					
 					data = data.replaceAll("xsi:oscedata", "oscedata");
 					FileUtils.writeStringToFile(file, data);
-					  // get an Apache XMLSerializer configured to generate CDATA
+					
+					// get an Apache XMLSerializer configured to generate CDATA
 			        /*XMLSerializer serializer = getXMLSerializer(file);
 
 			        // marshal using the Apache XMLSerializer
