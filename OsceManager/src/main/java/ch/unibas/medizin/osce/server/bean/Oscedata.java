@@ -184,7 +184,7 @@ import javax.xml.bind.annotation.XmlValue;
  *                             &lt;element name="salutation" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                             &lt;element name="firstname" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                             &lt;element name="lastname" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *                             &lt;element name="phone" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+ *                             &lt;element name="phone" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *                           &lt;/sequence>
  *                           &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
  *                         &lt;/restriction>
@@ -2674,7 +2674,7 @@ public class Oscedata {
      *                   &lt;element name="salutation" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *                   &lt;element name="firstname" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *                   &lt;element name="lastname" type="{http://www.w3.org/2001/XMLSchema}string"/>
-     *                   &lt;element name="phone" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+     *                   &lt;element name="phone" type="{http://www.w3.org/2001/XMLSchema}long"/>
      *                 &lt;/sequence>
      *                 &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
      *               &lt;/restriction>
@@ -2740,7 +2740,7 @@ public class Oscedata {
          *         &lt;element name="salutation" type="{http://www.w3.org/2001/XMLSchema}string"/>
          *         &lt;element name="firstname" type="{http://www.w3.org/2001/XMLSchema}string"/>
          *         &lt;element name="lastname" type="{http://www.w3.org/2001/XMLSchema}string"/>
-         *         &lt;element name="phone" type="{http://www.w3.org/2001/XMLSchema}long" minOccurs="0"/>
+         *         &lt;element name="phone" type="{http://www.w3.org/2001/XMLSchema}long"/>
          *       &lt;/sequence>
          *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}long" />
          *     &lt;/restriction>
@@ -2765,7 +2765,7 @@ public class Oscedata {
             protected String firstname;
             @XmlElement(required = true)
             protected String lastname;
-            protected Long phone;
+            protected long phone;
             @XmlAttribute(required = true)
             protected long id;
 
@@ -2844,24 +2844,16 @@ public class Oscedata {
             /**
              * Gets the value of the phone property.
              * 
-             * @return
-             *     possible object is
-             *     {@link Long }
-             *     
              */
-            public Long getPhone() {
+            public long getPhone() {
                 return phone;
             }
 
             /**
              * Sets the value of the phone property.
              * 
-             * @param value
-             *     allowed object is
-             *     {@link Long }
-             *     
              */
-            public void setPhone(Long value) {
+            public void setPhone(long value) {
                 this.phone = value;
             }
 

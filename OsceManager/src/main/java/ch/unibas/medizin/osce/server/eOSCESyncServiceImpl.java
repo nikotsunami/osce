@@ -2150,6 +2150,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			 
 					// output pretty printed
 					jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+					jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "ISO-8859-1");
 			 
 					ByteArrayOutputStream stream = new ByteArrayOutputStream();
 					jaxbMarshaller.marshal(oscedata, stream);
