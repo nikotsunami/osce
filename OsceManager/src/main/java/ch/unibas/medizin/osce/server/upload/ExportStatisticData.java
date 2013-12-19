@@ -389,10 +389,15 @@ public class ExportStatisticData extends HttpServlet{
 												impressionQuestion.add(question.getId());
 											}
 											
-											if (flag)
-												writer.append(question.getId().toString());
-											else
-												writer.append("Q" + String.valueOf(question.getId()));
+											if (postMissingQueList.contains(question.getId()) == false)
+											{
+												if (flag)
+													writer.append(question.getId().toString());
+												else
+													writer.append("Q" + String.valueOf(question.getId()));
+												
+												writer.append('|');
+											}
 											
 											if (flag == true && postMissingQueList.contains(question.getId()))
 											{
@@ -404,7 +409,9 @@ public class ExportStatisticData extends HttpServlet{
 											
 											count += 1;
 											//writer.append(question.getId().toString());
-											writer.append('|');
+											
+											
+											
 										}
 										alphaSeq++;
 									}
@@ -433,16 +440,14 @@ public class ExportStatisticData extends HttpServlet{
 								    for (int j=0; j<answerList.size(); j++)
 								    {
 								    	answer = answerList.get(j);
-								    	if (lastCandidateId == null || (!lastCandidateId.equals(answer.getStudent().getId())))
+								    	
+
+							    		if (lastCandidateId == null || (!lastCandidateId.equals(answer.getStudent().getId())))
 								    	{
 								    		if (lastCandidateId != null)
 								    		{
-								    			
-								    			
 								    			for(int l=0;l<impressionQuestion.size();l++)
 								    			{
-								    				
-								    				
 								    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
 								    				if(impressionItem1.getChecklistOption()!=null)
 								    				writer.append(impressionItem1.getChecklistOption().getValue());
@@ -480,13 +485,18 @@ public class ExportStatisticData extends HttpServlet{
 								    		
 								    		lastCandidateId = answer.getStudent().getId();
 								    	}
-								    	if(answer.getChecklistOption()!=null)
-								    	writer.append(answer.getChecklistOption().getValue());
-								    	else
-								    		writer.append("0");
-								    		
+							    		
+							    		if (postMissingQueList.contains(answer.getChecklistQuestion().getId()) == false)
+								    	{
+							    			if(answer.getChecklistOption()!=null)
+									    		writer.append(answer.getChecklistOption().getValue());
+									    	else
+									    		writer.append("0");
+							    			
+							    			writer.append('|');
+								    	}	
+							    		
 								    	//writer.append(answer.getChecklistQuestion().getId().toString());
-							    		writer.append('|');
 								    }
 								    
 								    if (answerList.size() > 0)
@@ -499,7 +509,7 @@ public class ExportStatisticData extends HttpServlet{
 						    				
 						    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
 						    				if(impressionItem1.getChecklistOption() !=null)
-						    				writer.append(impressionItem1.getChecklistOption().getValue());
+						    					writer.append(impressionItem1.getChecklistOption().getValue());
 						    				else
 						    					writer.append("0");
 						    				
@@ -647,50 +657,55 @@ public class ExportStatisticData extends HttpServlet{
 									writer.append('|');
 									writer.append("\n");
 									
+									List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
+									
 									List<ChecklistQuestion> items=Answer.retrieveDistinctQuestion(oscePost.getId());
 									for(ChecklistQuestion d:items)
 									{
-										writer.append(d.getId().toString());
-										writer.append('|');
-										writer.append(d.getCheckListTopic().getId().toString());
-										writer.append('|');
-										writer.append(d.getQuestion());
-										writer.append('|');
-										
-										List<ChecklistOption> options=d.getCheckListOptions();
-										String points="";
-										double pointList[] = new double[options.size()];
-										
-										for(int m=0;m<options.size();m++)
+										if (postMissingQueList.contains(d.getId()) == false)
 										{
+											writer.append(d.getId().toString());
+											writer.append('|');
+											writer.append(d.getCheckListTopic().getId().toString());
+											writer.append('|');
+											writer.append(d.getQuestion());
+											writer.append('|');
 											
-											pointList[m]=new Double(options.get(m).getValue());
-											if(m==0)
+											List<ChecklistOption> options=d.getCheckListOptions();
+											String points="";
+											double pointList[] = new double[options.size()];
+											
+											for(int m=0;m<options.size();m++)
 											{
-												points=options.get(m).getValue();
+												
+												pointList[m]=new Double(options.get(m).getValue());
+												if(m==0)
+												{
+													points=options.get(m).getValue();
+												}
+												else
+												{
+													points=points+"/"+options.get(m).getValue();
+												}
 											}
-											else
+											
+											double maxPoint=StatUtils.max(pointList);
+											double average=StatUtils.mean(pointList);
+											
+											double weight = 0.0;
+											if (NumberUtils.isNumber(String.valueOf(maxPoint)) && NumberUtils.isNumber(String.valueOf(average)))
 											{
-												points=points+"/"+options.get(m).getValue();
+												weight=Answer.roundTwoDecimals(Answer.percentage(average, maxPoint));
 											}
-										}
-										
-										double maxPoint=StatUtils.max(pointList);
-										double average=StatUtils.mean(pointList);
-										
-										double weight = 0.0;
-										if (NumberUtils.isNumber(String.valueOf(maxPoint)) && NumberUtils.isNumber(String.valueOf(average)))
-										{
-											weight=Answer.roundTwoDecimals(Answer.percentage(average, maxPoint));
-										}
-										
-										writer.append(points);
-										writer.append('|');
-										writer.append(d.getIsOveralQuestion().toString());
-										writer.append('|');
-										writer.append(""+weight);
-										writer.append('|');
-										writer.append("\n");
+											
+											writer.append(points);
+											writer.append('|');
+											writer.append(d.getIsOveralQuestion().toString());
+											writer.append('|');
+											writer.append(""+weight);
+											writer.append('|');
+											writer.append("\n");
+										}										
 									}
 									
 									writer.flush();
