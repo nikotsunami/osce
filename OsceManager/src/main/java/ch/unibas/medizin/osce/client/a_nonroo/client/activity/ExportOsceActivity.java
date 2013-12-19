@@ -168,7 +168,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 					
 					view.getCancelButton().setVisible(true);
 					
-					
+					view.getBucketName().setFocus(true);
 				}
 			}
 		});

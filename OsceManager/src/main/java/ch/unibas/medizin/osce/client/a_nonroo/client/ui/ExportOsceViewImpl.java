@@ -147,6 +147,8 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	public void s3Selected(ClickEvent event)
 	{
 		if(s3.getValue() == true) {
+			
+			
 			encryptionKeyLbl.setText(constants.encryptionKey());
 			bucketNameLbl.setText(constants.bucketName());
 			accessKeyLbl.setText(constants.accessKey());
@@ -158,7 +160,7 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 			boolean empty;
 			boolean enabled;
 			
-			if(bucketInformationProxy != null && BucketInfoType.S3.equals(bucketInformationProxy.getType())) {
+			if(bucketInformationProxy != null) {
 				isFTP = false;
 				empty = false;
 				enabled = false;
@@ -169,6 +171,8 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 			}
 			setValuesToTextBoxs(isFTP,empty);
 			enableTextBoxs(enabled,isFTP);	
+			
+			bucketName.setFocus(true);
 		}else {
 			Log.info("changes of ftp");
 		}
@@ -179,6 +183,8 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	public void ftpSelected(ClickEvent event)
 	{
 		if(ftp.getValue() == true) {
+			
+			
 			basePathLbl.setText(constants.basePath());
 			encryptionKeyLbl.setText(constants.encryptionKey());
 			bucketNameLbl.setText(constants.host());
@@ -203,6 +209,8 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 			
 			setValuesToTextBoxs(isFTP,empty);
 			enableTextBoxs(enabled,isFTP);
+			
+			bucketName.setFocus(true);
 		}else {
 			Log.info("changes of s3");
 		}

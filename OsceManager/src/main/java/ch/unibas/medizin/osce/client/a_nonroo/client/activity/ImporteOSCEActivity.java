@@ -115,6 +115,8 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					
 					view.getCancelButton().setVisible(false);
 					view.setBucketInformationProxy(response);
+					
+					view.getBucketName().setFocus(true);
 				}
 				else
 				{
@@ -130,6 +132,8 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					
 					view.getCancelButton().setVisible(true);
 					view.setBucketInformationProxy(response);
+					
+					view.getBucketName().setFocus(true);
 				}
 			}
 		});
