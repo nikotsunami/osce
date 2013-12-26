@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan;
 
+import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -13,7 +15,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -63,6 +64,10 @@ public class OscePostViewImpl  extends Composite implements OscePostView{
 	
 	private OscePostProxy oscePostProxy;
 	
+	private CourseProxy courseProxy;
+	
+	private OscePostRoomProxy oscePostRoomProxy;
+	
 	public OscePostProxy getOscePostProxy() {
 		return oscePostProxy;
 	}
@@ -89,8 +94,10 @@ public class OscePostViewImpl  extends Composite implements OscePostView{
 	public void oscePostPanelClicked(ClickEvent event)
 	{
 		Log.info("oscePostPanel Clicked");
-		if(oscePostProxy != null)
+		if(oscePostProxy != null){
 			showOscePostPopupView();
+			delegate.retrieveRoomNo(oscePostProxy,courseProxy,popupView);
+		}
 		
 	}
 	public void showOscePostPopupView()
@@ -101,17 +108,10 @@ public class OscePostViewImpl  extends Composite implements OscePostView{
 			popupView.createOscePostPopupView();
 			
 			((PopupViewImpl)popupView).setAnimationEnabled(true);
-		
-			
-			
 			
 			//((PopupViewImpl)popupView).setWidth("150px");
-
 		
-			RootPanel.get().add(((PopupViewImpl)popupView));
-			
-			
-			
+			//RootPanel.get().add(((PopupViewImpl)popupView));
 			
 			popupView.getOkButton().addClickHandler(new ClickHandler() {
 				
@@ -119,8 +119,6 @@ public class OscePostViewImpl  extends Composite implements OscePostView{
 				public void onClick(ClickEvent event) {
 					//validate Entered Data
 					((PopupViewImpl)popupView).hide();
-					
-					
 				}
 			});
 			OsceConstantsWithLookup enumConstants = GWT.create(OsceConstantsWithLookup.class);
@@ -130,9 +128,28 @@ public class OscePostViewImpl  extends Composite implements OscePostView{
 			
 			if(oscePostProxy.getStandardizedRole() !=null)
 			popupView.getStartTimeValue().setText(oscePostProxy.getStandardizedRole().getRoleTopic().getName());
+			
 		}
-		((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft(), this.getAbsoluteTop()-157);
-		((PopupViewImpl)popupView).show();
+		((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft(), this.getAbsoluteTop()-195);
+	
 		
 	}
+
+	public CourseProxy getCourseProxy() {
+		return courseProxy;
+	}
+
+	public void setCourseProxy(CourseProxy courseProxy) {
+		this.courseProxy = courseProxy;
+	}
+
+	public OscePostRoomProxy getOscePostRoomProxy() {
+		return oscePostRoomProxy;
+	}
+		
+	public void setOscePostRoomProxy(OscePostRoomProxy oscePostRoomProxy) {
+		this.oscePostRoomProxy = oscePostRoomProxy;
+	}
+
+	
 }

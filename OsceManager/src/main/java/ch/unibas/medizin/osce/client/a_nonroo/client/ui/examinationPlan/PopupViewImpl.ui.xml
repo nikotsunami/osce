@@ -44,7 +44,7 @@ width:57px;
 		
 	</g:HorizontalPanel>
 	<g:HorizontalPanel spacing="10" width="100%">
-		<g:Label ui:field="endTimeLbl" visible="false" addStyleNames="{style.label} {style.endtime-width}"></g:Label>
+		<g:Label ui:field="endTimeLbl" visible="false" addStyleNames="{style.label}"></g:Label>
 		<g:Label ui:field="endTimeValue" visible="false" addStyleNames="{style.label}"></g:Label>
 		<g:ValueListBox ui:field="endTimeListBox" visible="false"></g:ValueListBox>
 	</g:HorizontalPanel>

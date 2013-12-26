@@ -41,6 +41,7 @@ import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
+import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
@@ -58,8 +59,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
@@ -74,7 +73,7 @@ import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class ExaminationScheduleDetailActivity extends AbstractActivity implements ExaminationScheduleDetailView.Presenter,ExaminationScheduleDetailView.Delegate,AccordianPanelView.Delegate
-,StudentView.Delegate,SPView.Delegate,ExaminationView.Delegate,ContentView.Delegate{
+,StudentView.Delegate,SPView.Delegate,ExaminationView.Delegate,ContentView.Delegate,OscePostView.Delegate{
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -451,7 +450,11 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		for(int i=0;i<oscePostProxies.size();i++)
 		{	
 			final OscePostProxy oscePostProxy=oscePostProxies.get(i);
-			Log.info("Osce Post ID :" + oscePostProxy.getId());
+			Log.info("Osce Post ID :" + oscePostProxy.getId()+" and OSCE course "+contentView.getCourseProxy().getId());
+			
+			CourseProxy courseProxy=contentView.getCourseProxy();
+			
+
 			
 			 boolean isLastPost=false;
 			
@@ -464,6 +467,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			final OscePostView oscePostView=new OscePostViewImpl();
 			oscePostView.getOscePostLbl().setText(constants.circuitStation() + " " +oscePostProxy.getSequenceNumber());
 			oscePostView.setOscePostProxy(oscePostProxy);
+			oscePostView.setDelegate(activity);
+			oscePostView.setCourseProxy(contentView.getCourseProxy());
 			oscePostView.getOscePostPanel().addStyleName("oscePost-bg");
 			if(i==0)
 			{
@@ -3083,5 +3088,30 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		
 		if(examinationView.getAssignmentProxy() != null)
 		examinationView.getExamInfoPopupView().getEndTimeListBox().setValue(examinationView.getAssignmentProxy().getTimeEnd());
+	}
+
+	@Override
+	public void retrieveRoomNo(OscePostProxy oscePostProxy,CourseProxy courseProxy,final PopupView popupView) {
+		
+		requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(courseProxy,oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+		{
+			@Override
+			public void onSuccess(OscePostRoomProxy response) 
+			{
+				if (response != null)
+				{
+					showOscePostPopupView(popupView,response);
+				}																											
+			}
+		});
+		
+	}
+	
+	public void showOscePostPopupView(PopupView popupView,OscePostRoomProxy oscePostRoomProxy)
+	{
+				
+			popupView.getEndTimeValue().setText(oscePostRoomProxy.getRoom().getRoomNumber());			
+			((PopupViewImpl)popupView).show();
+		
 	}
 }

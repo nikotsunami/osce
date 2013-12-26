@@ -238,6 +238,7 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 					
 					RecordChangeEvent.register(requests.getEventBus(), studentSubDetailsViewImpl);
 					
+					osceLable=osceLable+((tempOsceProxy.getIsRepeOsce()==true)?" ("+constants.repe()+")":"");
 					view.getStudentTabPanel1().insert(studentSubDetailsViewImpl, osceLable,tabIndex);
 				//view.getStudentTabPanel1().selectTab(0);
 			//	view.getStudentTabPanel1().insert(studentSubDetailsView1, "test", 0);

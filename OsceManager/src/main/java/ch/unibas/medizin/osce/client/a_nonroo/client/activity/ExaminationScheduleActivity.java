@@ -19,10 +19,12 @@ import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.StudyYears;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.EventBus;
@@ -51,6 +53,7 @@ public class ExaminationScheduleActivity extends AbstractActivity implements Exa
 	private List<OsceProxy> osceProxyList = new ArrayList<OsceProxy>();
 	private int tabIndex=0; 
 	SelectChangeHandler removeHandler;
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	public ExaminationScheduleActivity(OsMaRequestFactory requests,PlaceController placeController, ExaminationSchedulePlace examinationSchedulePlace) 
 	{			
@@ -147,6 +150,7 @@ public class ExaminationScheduleActivity extends AbstractActivity implements Exa
 				OsceProxy osceProxy = osceList.next();
 				String osceLable = new EnumRenderer<StudyYears>().render(osceProxy.getStudyYear()) + "." 
 						+ new EnumRenderer<Semesters>().render(osceProxy.getSemester().getSemester());
+				osceLable=osceLable+((osceProxy.getIsRepeOsce()==true)?" ("+constants.repe()+")":"");
 				view.getOsceTabPanel().insert(new SimplePanel(), osceLable,tabIndex);
 				tabIndex++;
 				
