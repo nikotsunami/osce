@@ -7915,6 +7915,27 @@ public void onDragStart(DragStartEvent event) {
 			
 		}
 		//checklist change
+
+		// This method exports osce data for checklist
+		@Override
+		public void exportOsceClicked(StandardizedRoleProxy standardizedRoleProxy) {
+			Log.info("exporting checklist");
+			
+
+			String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.ROLE_CHECKLIST_EOSCE.ordinal()));          
+			String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+					.concat("&").concat(ResourceDownloadProps.ID).concat("=").concat(URL.encodeQueryString(standardizedRoleProxy.getId().toString()));
+			Log.info("--> url is : " +url);
+			Window.open(url, "", "");
+			/*requests.standardizedRoleRequestNonRoo().exportOsce(standardizedRoleProxy.getId()).fire(new OSCEReceiver<String>() {
+
+				@Override
+				public void onSuccess(String response) {
+					Log.info("ExportOsce success");
+					showApplicationLoading(false);
+				}
+			});*/
+		}
 }
 
 	

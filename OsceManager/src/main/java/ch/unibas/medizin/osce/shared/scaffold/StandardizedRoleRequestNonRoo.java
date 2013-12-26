@@ -27,6 +27,7 @@ public interface StandardizedRoleRequestNonRoo extends RequestContext
 	abstract Request<String> exportChecklistByStandardizedRole(Long standardizedRoleId);
 	abstract Request<List<StandardizedRoleProxy>> findRoleByRoleTopic(Long roleTopicId);
 	//export checklist
+	abstract Request<String> exportOsce(Long id);
 }
 
 

@@ -1,7 +1,11 @@
 package ch.unibas.medizin.osce.domain;
 
+import static org.apache.commons.lang.StringUtils.defaultString;
+
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -23,15 +27,37 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
+import ch.unibas.medizin.osce.server.bean.ObjectFactory;
+import ch.unibas.medizin.osce.server.bean.Oscedata;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Candidates;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Candidates.Candidate;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Checklists;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Checklists.Checklist;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Checklists.Checklist.Checklisttopics;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Checklists.Checklist.Checklisttopics.Checklisttopic;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Checklists.Checklist.Checklisttopics.Checklisttopic.Checklistitems;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Checklists.Checklist.Checklisttopics.Checklisttopic.Checklistitems.Checklistitem;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Checklists.Checklist.Checklisttopics.Checklisttopic.Checklistitems.Checklistitem.Checklistcriteria;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Checklists.Checklist.Checklisttopics.Checklisttopic.Checklistitems.Checklistitem.Checklistcriteria.Checklistcriterion;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Checklists.Checklist.Checklisttopics.Checklisttopic.Checklistitems.Checklistitem.Checklistoptions;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Checklists.Checklist.Checklisttopics.Checklisttopic.Checklistitems.Checklistitem.Checklistoptions.Checklistoption;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Courses;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Examiners;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Examiners.Examiner;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Rotations;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Rotations.Rotation;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Stations;
+import ch.unibas.medizin.osce.server.bean.Oscedata.Stations.Station;
+import ch.unibas.medizin.osce.server.i18n.GWTI18N;
 import ch.unibas.medizin.osce.server.util.file.RolePrintPdfUtil;
 import ch.unibas.medizin.osce.server.util.file.StudentManagementPrintMinOptionPdfUtil;
 import ch.unibas.medizin.osce.server.util.file.StudentManagementPrintPdfUtil;
 import ch.unibas.medizin.osce.server.util.file.XmlUtil;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.google.gwt.requestfactory.server.RequestFactoryServlet;
-
 
 @RooJavaBean
 @RooToString
@@ -695,5 +721,238 @@ public class StandardizedRole {
 		Log.info("~QUERY Result : " + result);
 		return result;
 	}
+	
+	// This method is used to export checklist of role when export osce is clicked.
+	public static String exportOsce(Long standardizedRoleId, ByteArrayOutputStream os){
+		
+		Log.info("export Osce called at : StandardizedRole");
+		
+		String fileName = "";
+		
+		try {
+				OsceConstantsWithLookup	constants = GWTI18N.create(OsceConstantsWithLookup.class);
+			
+				ObjectFactory factory = new ObjectFactory();
+		
+				Oscedata oscedata = factory.createOscedata();
+				oscedata.setVersion(1.1f);
+				
+				CheckList checklist = StandardizedRole.findStandardizedRole(standardizedRoleId).getCheckList();
+		
+				exportChecklist(checklist,factory,oscedata);
+				exportExaminers(factory,oscedata,constants);	
+				exportCandidates(factory,oscedata,constants);
+				exportStations(checklist.getId(),factory,oscedata,constants);
+				exportCourses(factory,oscedata,constants);
+				exportRotations(factory,oscedata,constants);
+				
+				String roleTopicName=StandardizedRole.findStandardizedRole(standardizedRoleId).getRoleTopic().getName();
+				
+				fileName ="Checklist-" +toCamelCase(roleTopicName.replaceAll("[^A-Za-z0-9]"," ")); 
+										
+				fileName = fileName + ".osceexchange";
+				Log.info("File name this is exported is " + fileName);
+				
+				XmlUtil.getnerateXMLFile(fileName,oscedata,os);
+			
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		return fileName;
+	}
+	
+	private static void exportChecklist(CheckList checklist,ObjectFactory factory,Oscedata oscedata){
+		
+		Log.info("export exportChecklist at : StandardizedRole");
+		
+		Checklists checklistsBean = factory.createOscedataChecklists();
+		
+		oscedata.setChecklists(checklistsBean);
+
+		Checklist checklistBean = factory.createOscedataChecklistsChecklist();
+		
+		checklistsBean.getChecklist().add(checklistBean);
+		
+		checklistBean.setId(checklist.getId());
+		checklistBean.setTitle(defaultString(checklist.getTitle()));
+		
+		Checklisttopics checklisttopicsBean = factory.createOscedataChecklistsChecklistChecklisttopics();
+		checklistBean.setChecklisttopics(checklisttopicsBean);
+		
+		List<ChecklistTopic> checklistTopicList = checklist.getCheckListTopics();
+		
+		for (ChecklistTopic checklistTopic : checklistTopicList)
+		{
+			Checklisttopic checklisttopicBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopic();
+			checklisttopicsBean.getChecklisttopic().add(checklisttopicBean);
+			
+			checklisttopicBean.setId(checklistTopic.getId());
+			checklisttopicBean.setTitle(defaultString(checklistTopic.getTitle()));
+			checklisttopicBean.setInstruction(defaultString(checklistTopic.getDescription()));
+			
+			Checklistitems checklistitemsBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitems();
+			checklisttopicBean.setChecklistitems(checklistitemsBean);
+			
+			List<ChecklistQuestion> checklistQuestionsList = checklistTopic.getCheckListQuestions();
+			
+			for (ChecklistQuestion checklistQuestion : checklistQuestionsList)
+			{
+				Checklistitem checklistitemBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitemsChecklistitem();
+				checklistitemsBean.getChecklistitem().add(checklistitemBean);
+				
+				checklistitemBean.setId(checklistQuestion.getId());
+				checklistitemBean.setAffectsOverallRating((checklistQuestion.getIsOveralQuestion() == null ? "no" : checklistQuestion.getIsOveralQuestion() == true ? "yes" : "no"));
+				checklistitemBean.setTitle(defaultString(checklistQuestion.getQuestion()));
+				checklistitemBean.setInstruction(defaultString(checklistQuestion.getInstruction()));
+				
+				Checklistcriteria checklistcriteriaBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitemsChecklistitemChecklistcriteria();
+				checklistitemBean.setChecklistcriteria(checklistcriteriaBean);
+				
+				Iterator<ChecklistCriteria> criiterator = checklistQuestion.getCheckListCriterias().iterator();
+				
+				while (criiterator.hasNext())
+				{
+					ChecklistCriteria criteria = criiterator.next();
+				
+					Checklistcriterion checklistcriterionBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitemsChecklistitemChecklistcriteriaChecklistcriterion();
+					checklistcriteriaBean.getChecklistcriterion().add(checklistcriterionBean);
+					checklistcriterionBean.setId(criteria.getId());
+					checklistcriterionBean.setTitle(defaultString(criteria.getCriteria()));
+				}
+				
+				Checklistoptions checklistoptionsBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitemsChecklistitemChecklistoptions();
+				checklistitemBean.setChecklistoptions(checklistoptionsBean);
+				
+				Iterator<ChecklistOption> opitr = checklistQuestion.getCheckListOptions().iterator();
+				
+				while (opitr.hasNext())
+				{
+					ChecklistOption option = opitr.next();
+					
+					Checklistoption checklistoptionBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitemsChecklistitemChecklistoptionsChecklistoption();
+					checklistoptionsBean.getChecklistoption().add(checklistoptionBean);
+					
+					checklistoptionBean.setId(option.getId());
+					checklistoptionBean.setTitle(defaultString(option.getOptionName()));
+					checklistoptionBean.setSubtitle(defaultString(option.getInstruction()));
+					checklistoptionBean.setVal(defaultString(option.getValue()));
+					
+					if(option.getCriteriaCount() != null) {
+						checklistoptionBean.setCriteriacount(option.getCriteriaCount());	
+					} else {
+						checklistoptionBean.setCriteriacount(0);
+					}
+				}
+			}
+		}
+	}
+	
+	private static void exportExaminers(ObjectFactory factory, Oscedata oscedata,OsceConstantsWithLookup constants) {
+
+		Log.info("export exportExaminers at : StandardizedRole");
+		
+		Examiners examinersBean = factory.createOscedataExaminers();
+		oscedata.setExaminers(examinersBean);
+		
+		Examiner examinerBean = factory.createOscedataExaminersExaminer();
+		examinersBean.getExaminer().add(examinerBean);
+			
+		examinerBean.setId(Long.parseLong(constants.EXAMINER_ID()));
+		examinerBean.setSalutation(defaultString(constants.EXAMINER_SALUTATION()));
+		examinerBean.setFirstname(defaultString(constants.EXAMINER_FIRSTNAME()));
+		examinerBean.setLastname(defaultString(constants.EXAMINER_LASTTNAME()));
+		examinerBean.setPhone(Long.parseLong(constants.EXAMINER_PHONE()));
+	}
+	
+	private static void exportCandidates(ObjectFactory factory, Oscedata oscedata,OsceConstantsWithLookup constants) {
+
+		Log.info("export exportCandidates at : StandardizedRole");
+		
+		Candidates candidatesBean = factory.createOscedataCandidates();
+		oscedata.setCandidates(candidatesBean);
+
+		Candidate candidateBean = factory.createOscedataCandidatesCandidate();
+		candidatesBean.getCandidate().add(candidateBean);
+		
+		candidateBean.setId(Long.parseLong(constants.CANDIDATE_ID()));	
+		candidateBean.setFirstname(constants.CANDIDATE_FIRSTNAME());
+		candidateBean.setLastname(constants.CANDIDATE_LASTTNAME());
+		candidateBean.setEmail(constants.CANDIDATE_EMAIL());
+			
+	}
+	
+	private static void exportStations(Long checklistId,ObjectFactory factory, Oscedata oscedata,OsceConstantsWithLookup constants) {
+
+		Log.info("export exportStations at : StandardizedRole");
+		
+		Stations stationsBean = factory.createOscedataStations();
+		oscedata.setStations(stationsBean);
+		
+		Station stationBean = factory.createOscedataStationsStation();
+		stationsBean.getStation().add(stationBean);
+			
+		stationBean.setId(Long.parseLong(constants.STATION_ID()));
+		stationBean.setTitle(constants.STATION_TITLE());
+		stationBean.setIsBreakStation(constants.ISBREAKSTATION());
+		stationBean.setChecklistId(checklistId);
+		
+		}
+	
+	private static void exportCourses(ObjectFactory factory, Oscedata oscedata,OsceConstantsWithLookup constants) {
+
+		Log.info("export exportCourses at : StandardizedRole");
+		
+		Courses coursesBean = factory.createOscedataCourses();
+		oscedata.setCourses(coursesBean);
+		
+		ch.unibas.medizin.osce.server.bean.Oscedata.Courses.Course courseBean = factory.createOscedataCoursesCourse();
+		coursesBean.getCourse().add(courseBean);
+
+		courseBean.setId(Long.parseLong(constants.COURSE_ID()));
+		courseBean.setTitle(constants.COURSE_TITLE());
+		
+		}
+	
+	private static void exportRotations(ObjectFactory factory, Oscedata oscedata,OsceConstantsWithLookup constants) {
+
+		Log.info("export exportRotations at : StandardizedRole");
+		
+		Rotations rotationsBean = factory.createOscedataRotations();
+		oscedata.setRotations(rotationsBean);
+		
+		Rotation rotationBean = factory.createOscedataRotationsRotation();
+		rotationsBean.getRotation().add(rotationBean);
+		
+		rotationBean.setId(Long.parseLong(constants.ROTATION_ID()));
+		rotationBean.setTitle(constants.ROTATION_COURSE_TITLE());
+		rotationBean.setCourseId(Long.parseLong(constants.ROTATION_COURSE_ID()));
+		
+		ch.unibas.medizin.osce.server.bean.Oscedata.Rotations.Rotation.Stations stationsBean = factory.createOscedataRotationsRotationStations();
+		rotationBean.setStations(stationsBean);
+		
+		ch.unibas.medizin.osce.server.bean.Oscedata.Rotations.Rotation.Stations.Station stationBean = factory.createOscedataRotationsRotationStationsStation();
+		stationsBean.getStation().add(stationBean);
+		
+		stationBean.setId(Long.parseLong(constants.ROTATION_STATION_ID()));
+		stationBean.setExaminerId(Long.parseLong(constants.STATION_EXAMINER_ID()));
+		stationBean.setFirstCandidateId(Long.parseLong(constants.STATION_FIRST_CANDIDATE_ID()));
+		
+		}
+	
+	static String toCamelCase(String s) {
+	    String[] parts = s.split(" ");
+	    String camelCaseString = "";
+	    for (String part : parts) {
+	        camelCaseString = camelCaseString + toProperCase(part);
+	    }
+	    return camelCaseString;
+	}
+
+	static String toProperCase(String s) {
+	    return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+	}
+	
 }
 

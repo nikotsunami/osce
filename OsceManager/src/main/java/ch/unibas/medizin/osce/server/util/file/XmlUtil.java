@@ -1,8 +1,12 @@
 package ch.unibas.medizin.osce.server.util.file;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.OutputStream;
 import java.util.Iterator;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -11,6 +15,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -21,6 +26,8 @@ import ch.unibas.medizin.osce.domain.ChecklistOption;
 import ch.unibas.medizin.osce.domain.ChecklistQuestion;
 import ch.unibas.medizin.osce.domain.ChecklistTopic;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
+import ch.unibas.medizin.osce.server.bean.Oscedata;
 
 public class XmlUtil {
 	
@@ -285,4 +292,29 @@ public class XmlUtil {
 		}
 	}
 	
+	public static void getnerateXMLFile(String fileName,Oscedata oscedata, org.apache.commons.io.output.ByteArrayOutputStream os){
+		log.info("getnerateXMLFile called at XmlUtil");
+		
+		try {
+				
+				JAXBContext jaxbContext = JAXBContext.newInstance(Oscedata.class);
+				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+		 
+				// output pretty printed
+				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+				jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+		 
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				jaxbMarshaller.marshal(oscedata, stream);
+				
+				String data = new String(stream.toByteArray(),"UTF-8");
+				
+				data = data.replaceAll("xsi:oscedata", "oscedata");
+				os.write(data.getBytes("UTF-8"));
+				//FileUtils.writeStringToFile(file, data);
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+		}
+	}
 }

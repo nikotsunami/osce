@@ -312,5 +312,49 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String color_15();
 	
 	public String color_16();
+	
+	public String EXAMINER_ID();
+	
+	public String EXAMINER_SALUTATION();
+	
+	public String EXAMINER_FIRSTNAME();
+	
+	public String EXAMINER_LASTTNAME();
+	
+	public String EXAMINER_PHONE();
+	
+	
+	public String CANDIDATE_ID();
+	
+	public String CANDIDATE_FIRSTNAME();
+	
+	public String CANDIDATE_LASTTNAME();
+	
+	public String CANDIDATE_EMAIL();
+	
+	
+	public String STATION_ID();
+	
+	public String ISBREAKSTATION();
+	
+	public String STATION_TITLE();
+	
+	
+	public String COURSE_ID();
+	
+	public String COURSE_TITLE();
+	
+	public String ROTATION_ID();
+	
+	public String ROTATION_COURSE_TITLE();
+	
+	public String ROTATION_COURSE_ID();
+	
+	public String ROTATION_STATION_ID();
+	
+	public String STATION_EXAMINER_ID();
+	
+	public String STATION_FIRST_CANDIDATE_ID();
+	
 }
 

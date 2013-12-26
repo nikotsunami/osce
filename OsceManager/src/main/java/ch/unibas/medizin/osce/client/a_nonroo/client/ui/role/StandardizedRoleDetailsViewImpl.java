@@ -421,6 +421,11 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	public IconButton exportChecklist;
 	//export checklist change
 	
+	//export Osce change
+	@UiField
+	public IconButton exportOsce;
+	//export osce change
+	
 	public StandardizedRoleDetailsViewImpl() {
 
 		initWidget(uiBinder.createAndBindUi(this));
@@ -472,6 +477,9 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		exportChecklist.setText(constants.exportChecklist());
 		exportChecklist.addStyleName("expTopicButton");
 		//export checklist change
+		
+		exportOsce.setText(constants.exportOsce());
+		exportOsce.addStyleName("expTopicButton");
 		
 	}
 	
@@ -604,7 +612,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	void handleClick(ClickEvent e) {
 		if (roleDisclosurePanel.isOpen()) {
 			roleDisclosurePanel.setOpen(false);
-			arrow.setUrl("/osMaEntry/gwt/unibas/images/arrowdownselect.png");// set
+			arrow.setUrl("osMaEntry/gwt/unibas/images/right.png");// set
 																				// url
 																				// of
 																				// up
@@ -612,7 +620,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 
 		} else {
 			roleDisclosurePanel.setOpen(true);
-			arrow.setUrl("/osMaEntry/gwt/unibas/images/arrowdownselect.png");// set
+			arrow.setUrl("osMaEntry/gwt/unibas/images/arrowdownselect.png");// set
 																				// url
 																				// of
 																				// down
@@ -832,4 +840,12 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 			delegate.exportChecklistClicked(this.getValue());
 		}	
 	//export checklist change
+		
+		//export Osce Change
+		@UiHandler("exportOsce")
+		public void exportOsceClicked(ClickEvent event){
+			Log.info("Export Osce Clicked role id is ");
+			delegate.exportOsceClicked(this.getValue());
+			
+		}
 }

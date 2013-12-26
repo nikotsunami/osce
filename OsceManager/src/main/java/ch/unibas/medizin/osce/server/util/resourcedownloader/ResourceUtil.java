@@ -94,7 +94,10 @@ public class ResourceUtil {
 			fileName = setStudentManagementResouceMinValue(request,os);
 			break;
 		}
-		
+		case ROLE_CHECKLIST_EOSCE:{
+			fileName = setRoleChecklisteOSCE(request,os);
+			break;
+		}
 		default: {
 			Log.info("Error in entity : " + entity);
 			break;
@@ -103,6 +106,12 @@ public class ResourceUtil {
 
 		sendFile(response, os.toByteArray(), fileName);
 		os = null;
+	}
+
+	private static String setRoleChecklisteOSCE(HttpServletRequest request,ByteArrayOutputStream os) {
+		Long roleId = Long.parseLong(request.getParameter(ResourceDownloadProps.ID));		
+		
+		return StandardizedRole.exportOsce(roleId,os);
 	}
 
 	private static String setStudentManagementResouceMinValue(HttpServletRequest request, ByteArrayOutputStream os) {

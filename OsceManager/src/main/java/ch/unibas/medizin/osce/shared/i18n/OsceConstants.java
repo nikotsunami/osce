@@ -1399,5 +1399,7 @@ public interface OsceConstants extends Constants {
 	public String sessionTimeoutError();
 
 	public String longBreakWarningMsg();
+	
+	public String exportOsce();
 }
 
