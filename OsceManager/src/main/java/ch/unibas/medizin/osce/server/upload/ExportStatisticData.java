@@ -216,7 +216,7 @@ public class ExportStatisticData extends HttpServlet{
 			 
 			 writer.write("posts <- NULL");
 			 writer.write("\n");			 
-			 writer.write("datafolder <- \"Data\"");
+			 writer.write("datafolder <- \"NewOsceStatisticData\"");
 			 writer.write("\n\n");
 			 
 			 writer.write("posts$filenames <- c(\"" + StringUtils.join(postFileNameList, "\",\"") + "\")");
