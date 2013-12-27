@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.MapOsceRoleProxy;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -254,6 +255,9 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	//try 
 	int arrayIndx = 0;
 	public StandardizedRoleDetailsView[] standardizedRoleDetailsView_sample;
+	
+	
+	List<Long> standardizedRoleList;
 	
 	public StandardizedRoleDetailsViewImpl[] standardizedRoleDetailsView;
 	public RoleEditCheckListSubViewImpl[] roleEditCheckListSubView;
@@ -866,6 +870,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 				});
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void refreshSelectedTab(final StandardizedRoleDetailsViewImpl view,StandardizedRoleProxy standardizedRoleProxy)
 	{
 		
@@ -873,7 +878,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		requests.standardizedRoleRequest().findStandardizedRole(standardizedRoleProxy.getId()).with("oscePosts","roleTopic","simpleSearchCriteria","roleParticipants","advancedSearchCriteria","roleTemplate","keywords","previousVersion","checkList","checkList.checkListTopics","checkList.checkListTopics.checkListQuestions","checkList.checkListTopics.checkListQuestions.checkListCriterias","checkList.checkListTopics.checkListQuestions.checkListOptions").fire(new OSCEReceiver<StandardizedRoleProxy>() {
 
 			@Override
-			public void onSuccess(StandardizedRoleProxy proxy) {
+			public void onSuccess(final StandardizedRoleProxy proxy) {
 				// TODO Auto-generated method stub
 				
 				showApplicationLoading(true);
@@ -1096,11 +1101,23 @@ final int index2 = index;
 		
 		// SPEC START =
 		
-		requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(),roleOsceSemesterSubView.getStartDate().getValue() , roleOsceSemesterSubView.getEndDate().getValue()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
+		standardizedRoleList=new ArrayList<Long>();
+		
+		requests.standardizedRoleRequestNonRoo().findAllStandardizeRolesOfPreviousVersion(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
 
 			@Override
-			public void onSuccess(List<OsceProxy> response) {
-				// TODO Auto-generated method stub
+			public void onSuccess(List<StandardizedRoleProxy> response) {
+				
+				for(StandardizedRoleProxy standardizedRoleProxy:response){
+					 standardizedRoleList.add(standardizedRoleProxy.getId());
+		
+				}
+				
+				requests.osceRequestNonRoo().findAllOsceSemesterByRole(standardizedRoleList,roleOsceSemesterSubView.getStartDate().getValue() , roleOsceSemesterSubView.getEndDate().getValue()).fire(new OSCEReceiver<List<MapOsceRoleProxy>>() {
+
+			@Override
+					public void onSuccess(List<MapOsceRoleProxy> response) {
+				
 				if(response!=null)
 				{
 					
@@ -1115,6 +1132,9 @@ final int index2 = index;
 				
 			}
 		});
+			}
+		});
+		
 		
 		standardizedRoleDetailsView[index].getRoleRoleParticipantSubViewImpl().setDelegate(roleDetailActivity);
 		standardizedRoleDetailsView[index].getRoleKeywordSubViewImpl().setDelegate(roleDetailActivity);
@@ -5711,25 +5731,28 @@ final int index2 = index;
 		
 		// SPEC START =
 		
-		requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(), roleOsceSemesterSubView.getStartDate().getValue(),roleOsceSemesterSubView.getEndDate().getValue()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
+		//requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(), roleOsceSemesterSubView.getStartDate().getValue(),roleOsceSemesterSubView.getEndDate().getValue()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
 
-			@Override
-			public void onSuccess(List<OsceProxy> response) {
-				// TODO Auto-generated method stub
-				if(response!=null)
-				{
-					
-				
-				roleOsceSemesterSubView.getOsceSemesterTable().setRowCount(response.size());
-				roleOsceSemesterSubView.getOsceSemesterTable().setRowData(response);
-				}
-				else
-				{
-					Log.info("record not found");
-				}
-				
-			}
-		});
+//		requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(), roleOsceSemesterSubView.getStartDate().getValue(),roleOsceSemesterSubView.getEndDate().getValue()).with("semester").fire(new OSCEReceiver<List<MapOsceRoleProxy>>() {
+//
+//			@Override
+//			public void onSuccess(List<MapOsceRoleProxy> response) {
+//				// TODO Auto-generated method stub
+//				if(response!=null)
+//				{	
+//					
+//					    roleOsceSemesterSubView.setStandardizedRoleMap(standardizedRoleMap);
+//						roleOsceSemesterSubView.getOsceSemesterTable().setRowCount(response.size());
+//						roleOsceSemesterSubView.getOsceSemesterTable().setRowData(response);
+//			
+//				}
+//				else
+//				{
+//					Log.info("record not found");
+//				}
+//				
+//			}
+//		});
 
 		
 		standardizedRoleDetailsView[index].getRoleRoleParticipantSubViewImpl().setDelegate(roleDetailActivity);
@@ -7850,10 +7873,10 @@ public void onDragStart(DragStartEvent event) {
 		public void changeDasteValueForOsceSemesterCall() {
 			// TODO Auto-generated method stub
 			
-			requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(),roleOsceSemesterSubView.getStartDate().getValue() , roleOsceSemesterSubView.getEndDate().getValue()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
+			requests.osceRequestNonRoo().findAllOsceSemesterByRole(standardizedRoleList,roleOsceSemesterSubView.getStartDate().getValue() , roleOsceSemesterSubView.getEndDate().getValue()).fire(new OSCEReceiver<List<MapOsceRoleProxy>>() {
 
 				@Override
-				public void onSuccess(List<OsceProxy> response) {
+				public void onSuccess(List<MapOsceRoleProxy> response) {
 					// TODO Auto-generated method stub
 					if(response!=null)
 					{

@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.shared.scaffold;
 import java.util.Date;
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.MapOsceRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.domain.Osce;
 
@@ -52,4 +53,8 @@ public interface OsceRequestNonRoo extends RequestContext{
 		public abstract Request<Boolean> removeassignment(OsceProxy osceName);
 		
 		/*abstract Request<Boolean> removeassignment(OsceProxy osceName);*/
+		
+		public abstract Request<List<MapOsceRoleProxy>> findAllOsceSemesterByRole(List<Long>  StandardizedRoleId , Date startDate, Date endDate);
+
+		public abstract Request<List<MapOsceRoleProxy>> findAllOsceSemesterByStandardizedRole(Long id , Date startDate, Date endDate);
 }

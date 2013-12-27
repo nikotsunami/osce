@@ -16,10 +16,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -28,6 +30,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 import ch.unibas.medizin.osce.server.spalloc.SPAllocator;
 import ch.unibas.medizin.osce.server.spalloc.SPFederalAllocator;
 import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
+import ch.unibas.medizin.osce.shared.MapOsceRole;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.OsceStatus;
@@ -244,7 +247,7 @@ public class Osce {
     		if(test)
     		{
     			TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(Osce.findOsce(osceId));
-    	    	System.out.println(optGen.toString());
+    	    	//System.out.println(optGen.toString());
     	    	
     	    	Log.info("calling createAssignments()...");
     	    	
@@ -420,7 +423,7 @@ public class Osce {
 			 q.setParameter("enddate", endDate, TemporalType.TIMESTAMP);
 		}
 		//String query="select o from Osce o, OscePost op, OsceDay od, OscePostBlueprint opb where o.id=od.osce and od.osceDate>="+startDate +" and od.osceDate<="+ endDate +" o.id=opb.osce and opb.id=op.oscePostBlueprint and op.standardizedRole=" +roleId; 
-		System.out.println("Query: " +query);
+		//System.out.println("Query: " +query);
 		
 		return q.getResultList();
 				
@@ -437,7 +440,7 @@ public class Osce {
 
 		for (Iterator<Osce> iterator = osces.iterator(); iterator.hasNext();) {
 			Osce osce = (Osce) iterator.next();
-			System.out.println("osce.security" + osce.security);
+			//System.out.println("osce.security" + osce.security);
 
 			if (osce.security == null) {
 
@@ -1051,5 +1054,88 @@ public class Osce {
  			
 		}
 
+ 		 public static List<MapOsceRole> findAllOsceSemesterByStandardizedRole(Long roleId , Date startDate, Date endDate){
+ 			
+ 		 	Log.info("Inside Osce class To retrive all Osce  and semster Based On roleId");
+ 				EntityManager em = entityManager();
+ 				List<MapOsceRole> mapOsceRoleProxyList=new ArrayList<MapOsceRole>();
+ 				Log.info("start date--"+startDate);
+ 				Log.info("end date--"+endDate);
+ 				String query="";
+ 				TypedQuery<Osce> q;
+ 				if(startDate==null && endDate==null)
+ 				{
+ 					Log.info("start and end date null");
+ 					 query="select o from Osce o, OscePost op,  OscePostBlueprint opb where  o.id=opb.osce and opb.id=op.oscePostBlueprint and op.standardizedRole=" +roleId;
+ 					 q = em.createQuery(query  ,Osce.class);
+ 				}
+ 				else
+ 				{
+ 					Log.info("start and end date not null");
+ 					 query="select distinct o from Osce o, OscePost op, OsceDay od, OscePostBlueprint opb where o.id=od.osce and od.osceDate>= :startdate  and od.osceDate<=:enddate and  o.id=opb.osce and opb.id=op.oscePostBlueprint and op.standardizedRole=" +roleId;
+ 					 q = em.createQuery(query  ,Osce.class);
+ 					 q.setParameter("startdate", startDate, TemporalType.TIMESTAMP);
+ 					 q.setParameter("enddate", endDate, TemporalType.TIMESTAMP);
+ 				}
+ 				//String query="select o from Osce o, OscePost op, OsceDay od, OscePostBlueprint opb where o.id=od.osce and od.osceDate>="+startDate +" and od.osceDate<="+ endDate +" o.id=opb.osce and opb.id=op.oscePostBlueprint and op.standardizedRole=" +roleId; 
+ 				//System.out.println("Query: " +query);
+ 				
+ 				List lst = q.getResultList();
+ 		        
+
+ 		        for (int i = 0; i < lst.size(); i++) {
+ 		        	MapOsceRole mapOsceRoleProxy=new MapOsceRole();
+  		            mapOsceRoleProxyList.add(mapOsceRoleProxy);
+ 		           
+ 		        }
+ 		        
+ 				return mapOsceRoleProxyList;
+ 						
+ 			}
+ 		 
+ 		public static List<MapOsceRole> findAllOsceSemesterByRole(List<Long>  standardizedRoleId, Date startDate, Date endDate){
+ 			
+ 		 	Log.info("Inside Osce class To retrive all Osce  and semster Based On roleId");
+ 				EntityManager em = entityManager();
+ 				List<MapOsceRole> mapOsceRoleProxyList=new ArrayList<MapOsceRole>();
+ 				
+ 				String query="";
+ 				Query q;
+ 				if(startDate==null && endDate==null)
+ 				{	
+ 					
+ 					query="select distinct o, op.standardizedRole,o.semester from Osce o, OscePost op,  OscePostBlueprint opb where  o.id=opb.osce and opb.id=op.oscePostBlueprint and op.standardizedRole in(" + StringUtils.join(standardizedRoleId, ",") +")";
+ 					// q = em.createQuery(query  ,Osce.class);
+ 					 q = em.createQuery(query);
+ 				}
+ 				else
+ 				{
+ 					 query="select distinct o,op.standardizedRole,o.semester from Osce o, OscePost op, OsceDay od, OscePostBlueprint opb where o.id=od.osce and od.osceDate>= :startdate  and od.osceDate<=:enddate and  o.id=opb.osce and opb.id=op.oscePostBlueprint and op.standardizedRole in(" + StringUtils.join(standardizedRoleId, ",") +")";
+ 					 // q = em.createQuery(query  ,Osce.class);
+ 					 q = em.createQuery(query);
+ 					 q.setParameter("startdate", startDate, TemporalType.TIMESTAMP);
+ 					 q.setParameter("enddate", endDate, TemporalType.TIMESTAMP);
+ 				}
+ 				//String query="select o from Osce o, OscePost op, OsceDay od, OscePostBlueprint opb where o.id=od.osce and od.osceDate>="+startDate +" and od.osceDate<="+ endDate +" o.id=opb.osce and opb.id=op.oscePostBlueprint and op.standardizedRole=" +roleId; 
+ 			
+ 				
+ 				List lst = q.getResultList();
+ 		     
+ 		        for (int i = 0; i < lst.size(); i++) {
+ 		        	MapOsceRole mapOsceRoleProxy=new MapOsceRole();
+ 		        	     
+  		            mapOsceRoleProxy.setOsce((Osce)((Object[]) lst.get(i))[0]);
+  		            StandardizedRole standardizedRole=(StandardizedRole)(((Object[]) lst.get(i))[1]);
+  		            mapOsceRoleProxy.setStandandarizeRoleId(standardizedRole.getMainVersion()+"."+standardizedRole.getSubVersion());
+  		            mapOsceRoleProxy.setSemester((Semester)((Object[]) lst.get(i))[2]);
+  		     
+  		            mapOsceRoleProxyList.add(mapOsceRoleProxy);
+ 		           
+ 		        }
+ 		        
+ 				return mapOsceRoleProxyList;
+ 			}
+ 		
+ 		
 
 }

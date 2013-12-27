@@ -1,6 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
-import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.a_nonroo.client.MapOsceRoleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 
 import com.google.gwt.user.cellview.client.CellTable;
@@ -16,7 +16,7 @@ public interface RoleOsceSemesterSubView {
 	}
 	public void setDelegate(Delegate delegate);
 	
-	public CellTable<OsceProxy> getOsceSemesterTable();
+	public CellTable<MapOsceRoleProxy> getOsceSemesterTable();
 	
 	public DateBox getStartDate();
 	public DateBox getEndDate();

@@ -3,9 +3,11 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.MapOsceRoleProxy;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
@@ -48,7 +50,9 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	@UiField (provided = true)
-	public CellTable<OsceProxy> osceSemesterTable;
+	public CellTable<MapOsceRoleProxy> osceSemesterTable;
+	
+	
 			
 	@UiField
 	public DateBox startDate;
@@ -70,6 +74,8 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 	@UiField
 	IconButton searchButton;
 	
+	private String roleVerison;
+	
 	public void onSearchButtonClick()
 	{
 		if(startDate.getValue()==null ||  endDate.getValue()==null)
@@ -90,7 +96,7 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 		/*SimplePager.Resources pagerResources = GWT.create(MySimplePagerResources.class);*/
 		
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
-		osceSemesterTable = new CellTable<OsceProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
+		osceSemesterTable = new CellTable<MapOsceRoleProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
 		initWidget(uiBinder.createAndBindUi(this));	
 		
 		labelStartDate.setInnerText(constants.startDate() + ":");
@@ -109,7 +115,7 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 		
 		/*labelStartDate.setText(constants.startDate() + ":");
 		labelEndDate.setText(constants.endDate() + ":");*/
-		osceSemesterTable.addColumn(new TextColumn<OsceProxy>() {
+		osceSemesterTable.addColumn(new TextColumn<MapOsceRoleProxy>() {
 			{ this.setSortable(true); }
 
 			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
@@ -120,8 +126,9 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 			};
 
 			@Override
-			public String getValue(OsceProxy object) {
+			public String getValue(MapOsceRoleProxy osceRoleProxy) {
 				String value="";
+				OsceProxy object=(OsceProxy)osceRoleProxy.getOsce();
 				
 				if(object.getStudyYear()!=null) {
 					value=(new EnumRenderer<StudyYears>()).render(object.getStudyYear());
@@ -136,16 +143,42 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 			}
 		}, constants.osce());
 		
-		osceSemesterTable.addColumn(new TextColumn<OsceProxy>() {
+		osceSemesterTable.addColumn(new TextColumn<MapOsceRoleProxy>() {
 			{ this.setSortable(true); }
 
-			Renderer<Semesters> renderer = new EnumRenderer<Semesters>();
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+				public String render(java.lang.String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
 
 			@Override
-			public String getValue(OsceProxy object) {
-				return renderer.render( object.getSemester().getSemester());
+			public String getValue(MapOsceRoleProxy osceRoleProxy) {
+				String value="";
+				SemesterProxy object=(SemesterProxy)osceRoleProxy.getSemester();
+										
+				return renderer.render((object!=null)?object.getSemester()+" "+object.getCalYear():null);
 			}
 		}, constants.semester());		
+		
+		osceSemesterTable.addColumn(new TextColumn<MapOsceRoleProxy>() {
+			{ this.setSortable(true); }
+
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+				public String render(java.lang.String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(MapOsceRoleProxy osceRoleProxy) {
+				
+				String version =osceRoleProxy.getStandandarizeRoleId();				
+				return renderer.render(version);
+			}
+		},constants.role()+" "+ constants.version());	
 	}
 	
 	public void setDelegate(Delegate delegate) 
@@ -154,7 +187,7 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 	}
 
 	@Override
-	public CellTable<OsceProxy> getOsceSemesterTable() {
+	public CellTable<MapOsceRoleProxy> getOsceSemesterTable() {
 		// TODO Auto-generated method stub
 		return osceSemesterTable;
 	}
@@ -174,6 +207,12 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 	public IconButton getSearchButton() {
 		// TODO Auto-generated method stub
 		return searchButton;
+	}
+	public String getRoleVerison() {
+		return roleVerison;
+	}
+	public void setRoleVerison(String roleVerison) {
+		this.roleVerison = roleVerison;
 	}
 	
 	

@@ -21,9 +21,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.math.stat.StatUtils;
 import org.apache.log4j.Logger;
+
+import com.google.gwt.requestfactory.server.RequestFactoryServlet;
 
 import ch.unibas.medizin.osce.domain.Answer;
 import ch.unibas.medizin.osce.domain.ChecklistOption;
@@ -95,7 +98,8 @@ public class ExportStatisticData extends HttpServlet{
 		  {
 			  List<String> fileNameList = new ArrayList<String>();
 			  String fileName=createNewCSV(new Long(osceId),request, getServletConfig().getServletContext(), true,fileNameList);
-			  
+			  String configFileName = createConfigurationFile(new Long(osceId), request, getServletConfig().getServletContext());
+			  fileNameList.add(configFileName);
 			  ByteArrayOutputStream os = new ByteArrayOutputStream();
 			  createZipFile("NewOsceStatisticData.zip", fileNameList,os);
 			  try{
@@ -133,7 +137,113 @@ public class ExportStatisticData extends HttpServlet{
 	  }
 	  
 	  
-	  /*public String createCSV(Long osceId,HttpServletRequest request)
+	private String createConfigurationFile(Long osceId, HttpServletRequest request, ServletContext servletContext) {
+		String configFileName = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML + "configure.R");
+		try
+		{
+			Osce osce=Osce.findOsce(osceId);
+			
+			 List<OsceDay> osceDays=osce.getOsce_days();
+				
+			 CalculateCronbachValue calculateCronbachValue = new CalculateCronbachValue();		 
+			 
+			 FileWriter writer = new FileWriter(configFileName);
+			 
+			 List<String> postFileNameList = new ArrayList<String>();
+			 List<String> postShortNameList = new ArrayList<String>();
+			 List<String> postLongNameList = new ArrayList<String>();
+			 List<String> postPassMarkList = new ArrayList<String>();
+			 int noOfOscePost = 0;
+				
+			 for(int i=0;i<osceDays.size();i++)
+			 {
+				 OsceDay osceDay=osceDays.get(i);
+				 List<OsceSequence> osceSequences=osceDay.getOsceSequences();
+					
+				for(int a=0;a<osceSequences.size();a++)
+				{
+					OsceSequence osceSeq=osceSequences.get(a);
+					
+					List<OscePost> oscePostList = osceSeq.getOscePosts();
+					String fileName = "";
+					
+					for (OscePost oscePost : oscePostList)
+					{
+						noOfOscePost = noOfOscePost + 1;
+						String postFileName;
+						
+						if (oscePost.getStandardizedRole() != null)
+						{
+							postFileName = oscePost.getStandardizedRole().getShortName() + "_" + osceSeq.getLabel() +".csv";
+							fileName = "Day"+ (i+1) + "_" + oscePost.getStandardizedRole().getShortName() + "_" +osceSeq.getLabel();
+							postShortNameList.add(oscePost.getStandardizedRole().getShortName());
+							postLongNameList.add(oscePost.getStandardizedRole().getLongName());
+						}
+						else
+						{
+							postFileName = "post" + oscePost.getId() + "_" + osceSeq.getLabel() +".csv";
+							fileName = "Day"+ (i+1) + "_" + "post" + oscePost.getId() + "_" + osceSeq.getLabel();
+							postShortNameList.add("");
+							postLongNameList.add("");
+						}
+								
+						postFileNameList.add(fileName);
+						
+						PostAnalysis postAnalysis = PostAnalysis.findPostLevelData(osce, oscePost);
+						
+						if (postAnalysis != null)
+						{
+							postPassMarkList.add(postAnalysis.getBoundary().toString());
+						}
+						else
+						{
+							List<String> valueList = createOscePostCSV(request, servletContext, oscePost.getId(), postFileName, new ArrayList<String>(), new ArrayList<Integer>(), null);
+
+							if(valueList != null && valueList.size() == 2)
+							{
+								fileName = valueList.get(0); // return filename									
+							}
+							
+							Map<String, String> postResultMap = calculateCronbachValue.calculateOscePostResult(fileName, oscePost.getId());
+							
+							String postPassingStr = postResultMap.get("passMark") == null ? "0" : postResultMap.get("passMark");
+							postPassMarkList.add(postPassingStr);
+						}
+					}
+						
+				}
+			 }
+			 
+			 writer.write("posts <- NULL");
+			 writer.write("\n");			 
+			 writer.write("datafolder <- \"Data\"");
+			 writer.write("\n\n");
+			 
+			 writer.write("posts$filenames <- c(\"" + StringUtils.join(postFileNameList, "\",\"") + "\")");
+			 writer.write("\n");
+			 writer.write("posts$short.names <- c(\"" + StringUtils.join(postShortNameList, "\",\"") + "\")");
+			 writer.write("\n");
+			 writer.write("posts$long.names <- c(\"" + StringUtils.join(postLongNameList, "\",\"") + "\")");
+			 writer.write("\n");
+			 writer.write("posts$passmark <- c(\"" + StringUtils.join(postPassMarkList, "\",\"") + "\")");
+			 writer.write("\n");
+			 
+			 writer.write("paste(posts$filenames1, \"res\", sep = \"\")");
+			 
+			 writer.flush();
+			 writer.close();
+			 
+			 return configFileName;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		 
+		return configFileName;		 
+	}
+
+
+	/*public String createCSV(Long osceId,HttpServletRequest request)
 	  {
 		  String path=getServletConfig().getServletContext().getRealPath(OsMaFilePathConstant.assignmentHTML);
 	        String fileName=path+System.currentTimeMillis()+".csv";

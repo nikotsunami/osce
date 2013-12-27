@@ -4,6 +4,7 @@ import static org.apache.commons.lang.StringUtils.defaultString;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -952,6 +953,25 @@ public class StandardizedRole {
 
 	static String toProperCase(String s) {
 	    return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
+	}
+
+	public static List<StandardizedRole> findAllStandardizeRolesOfPreviousVersion(Long standardizedRoleId){
+		
+		StandardizedRole standardizedRole = StandardizedRole.findStandardizedRole(standardizedRoleId);
+		
+		List<StandardizedRole> standardizedRoleList=new ArrayList<StandardizedRole>();
+		standardizedRoleList.add(standardizedRole);			
+		StandardizedRole previousStandardizedRole=standardizedRole.previousVersion;
+		  while(previousStandardizedRole!=null){
+			  standardizedRoleList.add(previousStandardizedRole);			  
+			  Log.info("previousStandardizedRole " + previousStandardizedRole.getId());
+			  if(previousStandardizedRole.previousVersion==null)
+				  previousStandardizedRole=null;
+			  else
+				  previousStandardizedRole=StandardizedRole.findStandardizedRole(previousStandardizedRole.previousVersion.getId());
+		  }
+		  
+		  return standardizedRoleList;
 	}
 	
 }
