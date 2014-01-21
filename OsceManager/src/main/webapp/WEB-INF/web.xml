@@ -103,7 +103,7 @@
     </listener>
     
     <!-- Handles Spring requests -->
-    <servlet>
+    <!-- <servlet>
         <servlet-name>OsceManager</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
@@ -112,18 +112,16 @@
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    
+    <servlet-mapping>
+        <servlet-name>OsceManager</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping> -->
+     
     <servlet>
         <servlet-name>requestFactory</servlet-name>
         <servlet-class>com.google.gwt.requestfactory.server.RequestFactoryServlet</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>OsceManager</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
-    
-    
-    
+
     <servlet-mapping>
         <servlet-name>requestFactory</servlet-name>
         <url-pattern>/gwtRequest</url-pattern>
@@ -131,6 +129,7 @@
     <session-config>
         <session-timeout>480</session-timeout>
     </session-config>
+    
 <servlet>
 
   <servlet-name>gwt-log-remote-logger-servlet</servlet-name>
@@ -346,4 +345,12 @@
 		<url-pattern>/exportStatisticData</url-pattern>
 	</servlet-mapping>
  
+ 	<filter>
+		<filter-name>LoggingFilter</filter-name>
+		<filter-class>ch.unibas.medizin.osce.server.util.security.LoggingFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>LoggingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 </web-app>

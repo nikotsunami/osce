@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.Administrator;
+import ch.unibas.medizin.osce.server.util.security.LoggingFilter;
 
 
 public class AuthenticationFilter implements Filter {
@@ -84,7 +85,7 @@ public class AuthenticationFilter implements Filter {
 				Log.info("----> Authenticated using session");
 				flag = true;
 			}else {
-				flag = authenticationUsingDB(servletResponse, userId);
+				flag = authenticationUsingDB(request, servletResponse, userId);
 				if(flag == true) {
 					session.setAttribute("userId", userId);
 					Log.info("----> Authenticated using DB");
@@ -92,7 +93,7 @@ public class AuthenticationFilter implements Filter {
 			}
 		}else {
 			Log.info("----> Authenticated using New Session");
-			flag = authenticationUsingDB(servletResponse, userId);
+			flag = authenticationUsingDB(request, servletResponse, userId);
 			if(flag == true){
 				session = request.getSession();
 				session.setAttribute("userId", userId);
@@ -112,8 +113,7 @@ public class AuthenticationFilter implements Filter {
 			filterChain.doFilter(servletRequest, servletResponse);*/
 	}
 
-	private boolean authenticationUsingDB(ServletResponse servletResponse,
-			String userId) {
+	private boolean authenticationUsingDB(HttpServletRequest servletRequest, ServletResponse servletResponse, String userId) {
 		boolean flag = false;
 		
 		try{
@@ -121,10 +121,14 @@ public class AuthenticationFilter implements Filter {
 			if(userId !=null && userId.equals("210760@vho-switchaai.ch"))
 			{
 				Log.info("Login successfully by 210760@vho-switchaai.ch" );
+				HttpSession session = servletRequest.getSession();
+				session.setAttribute(LoggingFilter.USER_NAME, userId);
 				flag=true;
 			}
 			else if(userId !=null && userId.equals("myself")){
 				Log.info("Login successfully by myself" );
+				HttpSession session = servletRequest.getSession();
+				session.setAttribute(LoggingFilter.USER_NAME, userId);
 				flag=true;
 			}
 			else if(listAdministrator != null)
@@ -134,6 +138,8 @@ public class AuthenticationFilter implements Filter {
 				{
 					if(administrator.getEmail().equals(userId))
 					{
+						HttpSession session = servletRequest.getSession();
+						session.setAttribute(LoggingFilter.USER_NAME, administrator.getName());
 						Log.info("Login successfully" );
 						flag=true;
 						break;
