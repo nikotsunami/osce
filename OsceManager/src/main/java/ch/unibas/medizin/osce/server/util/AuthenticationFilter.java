@@ -139,7 +139,7 @@ public class AuthenticationFilter implements Filter {
 					if(administrator.getEmail().equals(userId))
 					{
 						HttpSession session = servletRequest.getSession();
-						session.setAttribute(LoggingFilter.USER_NAME, administrator.getName());
+						session.setAttribute(LoggingFilter.USER_NAME, getFullName(administrator));
 						Log.info("Login successfully" );
 						flag=true;
 						break;
@@ -157,6 +157,10 @@ public class AuthenticationFilter implements Filter {
 			flag=false;
 		}
 		return flag;
+	}
+
+	private Object getFullName(Administrator administrator) {
+		return (administrator.getPreName() + " " + administrator.getName()).trim();
 	}
 
 	@Override
