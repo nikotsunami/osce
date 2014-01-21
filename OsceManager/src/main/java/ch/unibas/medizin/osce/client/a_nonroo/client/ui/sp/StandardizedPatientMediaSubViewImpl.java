@@ -8,11 +8,14 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import fr.hd3d.html5.video.client.VideoSource;
@@ -37,8 +40,6 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 	
 	@UiField
 	Image uploadMessage;
-	
-	
 	
 	/*@UiField
 	public TextBox id;
@@ -68,6 +69,9 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 		this.videoFlg = videoFlg;
 	}
 
+	// Image viewer
+	private PopupPanel zoomImageViewer = new PopupPanel(true);
+	private Image zoomImage = new Image();
 	
 	//file upload
 		/*@UiField
@@ -100,6 +104,20 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 	 */
 	public StandardizedPatientMediaSubViewImpl() {
 		initWidget(BINDER.createAndBindUi(this));
+		
+		zoomImageViewer.setWidget(zoomImage);
+		zoomImageViewer.setGlassEnabled(true);
+		zoomImageViewer.setAnimationEnabled(true);
+		uploadMessage.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				Log.info("Image clicked");
+				showZoomedImage();
+				
+			}
+
+		});
 
 	/*	
 		//spec start
@@ -232,7 +250,8 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 		
 		Log.info("width, height, ratio: " + width + ", " + height + ", " + ratio);
 		
-		if(height==0)
+		//commented below code to set height of image as 150px fixed and width as actual width of image (for issue 101)
+		/*if(height==0)
 		{
 			uploadMessage.setHeight("100px");
 			uploadMessage.setWidth("93px");
@@ -248,7 +267,10 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 			width = 200;
 			uploadMessage.setHeight("" + Math.round(width/ratio) + "px");
 			uploadMessage.setWidth("" + width + "px");
-		}		
+		}*/
+		//setting fixed height 150px of image here.
+		uploadMessage.setHeight("150px");
+		zoomImage.setUrl(description + "?date=" + new Date().getTime());
 	}
 	
 	
@@ -280,4 +302,10 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 
 	//spec video upload
 
+	private void showZoomedImage() {
+		Log.info("Showing orignal Image in popup");
+		//zoomImage.setUrl(standardizedPatientProxy.getImmagePath());
+		zoomImageViewer.center();
+		zoomImageViewer.show();
+	}
 }

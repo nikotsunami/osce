@@ -19,7 +19,7 @@
 		-->
 		 <g:HorizontalPanel spacing="10">			
 	
-	 <g:Image ui:field="uploadMessage" width="60" height="80"></g:Image>
+	 <g:Image ui:field="uploadMessage"></g:Image>
 	
 	    <!--spec video upload -->
 	    <!--  
