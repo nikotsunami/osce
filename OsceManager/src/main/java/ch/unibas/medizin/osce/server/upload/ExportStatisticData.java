@@ -26,8 +26,6 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.math.stat.StatUtils;
 import org.apache.log4j.Logger;
 
-import com.google.gwt.requestfactory.server.RequestFactoryServlet;
-
 import ch.unibas.medizin.osce.domain.Answer;
 import ch.unibas.medizin.osce.domain.ChecklistOption;
 import ch.unibas.medizin.osce.domain.ChecklistQuestion;
@@ -229,6 +227,14 @@ public class ExportStatisticData extends HttpServlet{
 			 writer.write("\n");
 			 
 			 writer.write("paste(posts$filenames1, \"res\", sep = \"\")");
+			 writer.write("\n");
+			 
+			 writer.write("posts <- as.data.frame(posts)");
+			 writer.write("\n");
+			 writer.write("posts <- posts[order(posts$filenames),]");
+			 writer.write("\n");
+			 writer.write("posts$short.names <- gsub(\"_\",\"\",posts$short.names)");
+			 writer.write("\n");
 			 
 			 writer.flush();
 			 writer.close();
@@ -663,7 +669,7 @@ public class ExportStatisticData extends HttpServlet{
 									writer.append("name");
 									writer.append('|');
 									writer.append("prename");
-									writer.append('|');
+									//writer.append('|');
 									writer.append("\n");
 									
 									//data
@@ -678,7 +684,7 @@ public class ExportStatisticData extends HttpServlet{
 										writer.append(d.getName());
 										writer.append('|');
 										writer.append(d.getPreName());
-										writer.append('|');
+										//writer.append('|');
 										writer.append("\n");
 									}
 									
@@ -698,7 +704,7 @@ public class ExportStatisticData extends HttpServlet{
 									writer.append("prename");
 									writer.append('|');
 									writer.append("student_id");
-									writer.append('|');
+									//writer.append('|');
 									writer.append("\n");
 									//data
 									List<Student> examiner=Answer.retrieveDistinctStudent(oscePost.getId());
@@ -732,7 +738,7 @@ public class ExportStatisticData extends HttpServlet{
 									writer.append("short_name");
 									writer.append('|');
 									writer.append("long_name");
-									writer.append('|');
+									//writer.append('|');
 									writer.append("\n");
 									
 									writer.append(oscePost.getId().toString());
@@ -742,7 +748,7 @@ public class ExportStatisticData extends HttpServlet{
 									writer.append('|');
 									if(oscePost.getStandardizedRole() !=null)
 									writer.append(oscePost.getStandardizedRole().getLongName());
-									writer.append('|');
+									//writer.append('|');
 									writer.append("\n");
 									
 									writer.flush();
@@ -764,7 +770,7 @@ public class ExportStatisticData extends HttpServlet{
 									writer.append("is_eval_item");
 									writer.append('|');
 									writer.append("weight");
-									writer.append('|');
+									//writer.append('|');
 									writer.append("\n");
 									
 									List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
@@ -813,7 +819,7 @@ public class ExportStatisticData extends HttpServlet{
 											writer.append(d.getIsOveralQuestion().toString());
 											writer.append('|');
 											writer.append(""+weight);
-											writer.append('|');
+											//writer.append('|');
 											writer.append("\n");
 										}										
 									}
