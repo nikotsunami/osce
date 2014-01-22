@@ -225,10 +225,7 @@ public class ExportStatisticData extends HttpServlet{
 			 writer.write("\n");
 			 writer.write("posts$passmark <- c(\"" + StringUtils.join(postPassMarkList, "\",\"") + "\")");
 			 writer.write("\n");
-			 
-			 writer.write("paste(posts$filenames1, \"res\", sep = \"\")");
-			 writer.write("\n");
-			 
+			
 			 writer.write("posts <- as.data.frame(posts)");
 			 writer.write("\n");
 			 writer.write("posts <- posts[order(posts$filenames),]");
