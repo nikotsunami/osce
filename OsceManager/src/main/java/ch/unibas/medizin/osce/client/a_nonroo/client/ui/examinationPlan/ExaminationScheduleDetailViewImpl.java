@@ -197,11 +197,10 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 	@UiHandler("moveLunchBreakRotation")
 	public void moveLunchBreakRotationClicked(ClickEvent event)
 	{
-		showOsceDayPopup(event.getScreenX(), event.getScreenY());
-		//showOsceDayPopup(moveLunchBreakRotation.getAbsoluteLeft(),moveLunchBreakRotation.getAbsoluteTop());
+		showOsceDayPopup(moveLunchBreakRotation.getAbsoluteLeft(),moveLunchBreakRotation.getAbsoluteTop());
 	}
 	
-	private void showOsceDayPopup(int x, int y) {
+	private void showOsceDayPopup(int left, int top) {
 		
 		final PopupPanel panel = new PopupPanel();
 		panel.setAutoHideEnabled(true);
@@ -312,7 +311,7 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		panel.add(mainVp);
 		
 		//panel.setPopupPosition(x - 150, y - 175);
-		panel.setPopupPosition(moveLunchBreakRotation.getAbsoluteLeft()-125,moveLunchBreakRotation.getAbsoluteTop()+24);
+		panel.setPopupPosition(left - 125, top + 24);
 		panel.show();
 	}
 

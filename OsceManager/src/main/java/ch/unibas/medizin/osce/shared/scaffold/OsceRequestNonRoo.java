@@ -56,5 +56,5 @@ public interface OsceRequestNonRoo extends RequestContext{
 		
 		public abstract Request<List<MapOsceRoleProxy>> findAllOsceSemesterByRole(List<Long>  StandardizedRoleId , Date startDate, Date endDate);
 
-		public abstract Request<List<MapOsceRoleProxy>> findAllOsceSemesterByStandardizedRole(Long id , Date startDate, Date endDate);
+		//public abstract Request<List<MapOsceRoleProxy>> findAllOsceSemesterByStandardizedRole(Long id , Date startDate, Date endDate);
 }

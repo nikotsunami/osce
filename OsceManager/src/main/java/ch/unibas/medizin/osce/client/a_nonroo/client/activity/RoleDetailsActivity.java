@@ -1115,23 +1115,20 @@ final int index2 = index;
 				
 				requests.osceRequestNonRoo().findAllOsceSemesterByRole(standardizedRoleList,roleOsceSemesterSubView.getStartDate().getValue() , roleOsceSemesterSubView.getEndDate().getValue()).fire(new OSCEReceiver<List<MapOsceRoleProxy>>() {
 
-			@Override
+					@Override
 					public void onSuccess(List<MapOsceRoleProxy> response) {
 				
-				if(response!=null)
-				{
-					
-				
-				roleOsceSemesterSubView.getOsceSemesterTable().setRowCount(response.size());
-				roleOsceSemesterSubView.getOsceSemesterTable().setRowData(response);
-				}
-				else
-				{
-					Log.info("record not found");
-				}
-				
-			}
-		});
+						if(response!=null)
+						{
+							roleOsceSemesterSubView.getOsceSemesterTable().setRowCount(response.size());
+							roleOsceSemesterSubView.getOsceSemesterTable().setRowData(response);
+						}
+						else
+						{
+							Log.info("record not found");
+						}				
+					}
+				});
 			}
 		});
 		

@@ -1,45 +1,36 @@
 package ch.unibas.medizin.osce.shared;
 
-import java.util.List;
 
-import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
-import ch.unibas.medizin.osce.domain.Osce;
-import ch.unibas.medizin.osce.domain.Semester;
-
-public  class MapOsceRole {
-
-
-	Osce osce;
+public  class MapOsceRole {	
+	private String osce;
 	
-	Semester semester;
+	private String semester;
 	
-	String standandarizeRoleId;	
-	
+	private String standandarizeRoleVersion;
 
-	
-	public Semester getSemester() {
-		return semester;
-	}
-
-	public void setSemester(Semester semester) {
-		this.semester = semester;
-	}
-
-	public Osce getOsce() {
+	public String getOsce() {
 		return osce;
 	}
 
-	public void setOsce(Osce osce) {
+	public void setOsce(String osce) {
 		this.osce = osce;
 	}
 
-	public String getStandandarizeRoleId() {
-		return standandarizeRoleId;
+	public String getSemester() {
+		return semester;
 	}
 
-	public void setStandandarizeRoleId(String standandarizeRoleId) {
-		this.standandarizeRoleId = standandarizeRoleId;
+	public void setSemester(String semester) {
+		this.semester = semester;
 	}
+
+	public String getStandandarizeRoleVersion() {
+		return standandarizeRoleVersion;
+	}
+
+	public void setStandandarizeRoleVersion(String standandarizeRoleVersion) {
+		this.standandarizeRoleVersion = standandarizeRoleVersion;
+	}		
 	
 	
 }

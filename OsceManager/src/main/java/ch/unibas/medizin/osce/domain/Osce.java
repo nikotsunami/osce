@@ -27,6 +27,7 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import ch.unibas.medizin.osce.server.i18n.GWTI18N;
 import ch.unibas.medizin.osce.server.spalloc.SPAllocator;
 import ch.unibas.medizin.osce.server.spalloc.SPFederalAllocator;
 import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
@@ -37,6 +38,7 @@ import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
 import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.StudyYears;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 @RooJavaBean
 @RooToString
@@ -1054,7 +1056,7 @@ public class Osce {
  			
 		}
 
- 		 public static List<MapOsceRole> findAllOsceSemesterByStandardizedRole(Long roleId , Date startDate, Date endDate){
+ 		/* public static List<MapOsceRole> findAllOsceSemesterByStandardizedRole(Long roleId , Date startDate, Date endDate){
  			
  		 	Log.info("Inside Osce class To retrive all Osce  and semster Based On roleId");
  				EntityManager em = entityManager();
@@ -1091,13 +1093,16 @@ public class Osce {
  		        
  				return mapOsceRoleProxyList;
  						
- 			}
+ 			}*/
  		 
  		public static List<MapOsceRole> findAllOsceSemesterByRole(List<Long>  standardizedRoleId, Date startDate, Date endDate){
- 			
- 		 	Log.info("Inside Osce class To retrive all Osce  and semster Based On roleId");
+ 			List<MapOsceRole> mapOsceRoleProxyList=new ArrayList<MapOsceRole>();
+ 			try
+ 			{
+ 				OsceConstantsWithLookup enumConstants = enumConstants = GWTI18N.create(OsceConstantsWithLookup.class, "de");
+ 	 			
+ 	 		 	Log.info("Inside Osce class To retrive all Osce  and semster Based On roleId");
  				EntityManager em = entityManager();
- 				List<MapOsceRole> mapOsceRoleProxyList=new ArrayList<MapOsceRole>();
  				
  				String query="";
  				Query q;
@@ -1117,17 +1122,18 @@ public class Osce {
  					 q.setParameter("enddate", endDate, TemporalType.TIMESTAMP);
  				}
  				//String query="select o from Osce o, OscePost op, OsceDay od, OscePostBlueprint opb where o.id=od.osce and od.osceDate>="+startDate +" and od.osceDate<="+ endDate +" o.id=opb.osce and opb.id=op.oscePostBlueprint and op.standardizedRole=" +roleId; 
- 			
- 				
  				List lst = q.getResultList();
  		     
  		        for (int i = 0; i < lst.size(); i++) {
  		        	MapOsceRole mapOsceRoleProxy=new MapOsceRole();
- 		        	     
-  		            mapOsceRoleProxy.setOsce((Osce)((Object[]) lst.get(i))[0]);
-  		            StandardizedRole standardizedRole=(StandardizedRole)(((Object[]) lst.get(i))[1]);
-  		            mapOsceRoleProxy.setStandandarizeRoleId(standardizedRole.getMainVersion()+"."+standardizedRole.getSubVersion());
-  		            mapOsceRoleProxy.setSemester((Semester)((Object[]) lst.get(i))[2]);
+  		            
+  		            StandardizedRole standardizedRole=(StandardizedRole)(((Object[]) lst.get(i))[1]);  		            
+  		           
+  		            Osce osce = (Osce)((Object[]) lst.get(i))[0];
+  		            mapOsceRoleProxy.setOsce(osce.getStudyYear() == null ? "" : enumConstants.getString(osce.getStudyYear().toString()));
+  		            mapOsceRoleProxy.setStandandarizeRoleVersion(standardizedRole.getMainVersion()+"."+standardizedRole.getSubVersion());
+  		            Semester semester = (Semester)((Object[]) lst.get(i))[2];
+  		            mapOsceRoleProxy.setSemester(semester == null ? "" : (semester.getSemester() + " " + semester.getCalYear()));
   		     
   		            mapOsceRoleProxyList.add(mapOsceRoleProxy);
  		           
@@ -1135,7 +1141,10 @@ public class Osce {
  		        
  				return mapOsceRoleProxyList;
  			}
- 		
- 		
-
+ 			catch (Exception e)
+ 			{
+ 				Log.error(e.getMessage(), e);
+ 			}
+ 			return mapOsceRoleProxyList;
+ 		}
 }

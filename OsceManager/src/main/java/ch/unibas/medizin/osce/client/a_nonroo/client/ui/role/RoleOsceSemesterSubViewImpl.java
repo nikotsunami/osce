@@ -127,8 +127,8 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 
 			@Override
 			public String getValue(MapOsceRoleProxy osceRoleProxy) {
-				String value="";
-				OsceProxy object=(OsceProxy)osceRoleProxy.getOsce();
+				String value = osceRoleProxy.getOsce();
+				/*OsceProxy object=(OsceProxy)osceRoleProxy.getOsce();
 				
 				if(object.getStudyYear()!=null) {
 					value=(new EnumRenderer<StudyYears>()).render(object.getStudyYear());
@@ -138,7 +138,7 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 				
 				if(object.getSemester()!=null) {
 					value = value + " " + new EnumRenderer<Semesters>().render(object.getSemester().getSemester());
-				}
+				}*/
 				return renderer.render(value);
 			}
 		}, constants.osce());
@@ -156,9 +156,10 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 			@Override
 			public String getValue(MapOsceRoleProxy osceRoleProxy) {
 				String value="";
-				SemesterProxy object=(SemesterProxy)osceRoleProxy.getSemester();
+				/*SemesterProxy object=(SemesterProxy)osceRoleProxy.getSemester();
 										
-				return renderer.render((object!=null)?object.getSemester()+" "+object.getCalYear():null);
+				return renderer.render((object!=null)?object.getSemester()+" "+object.getCalYear():null);*/
+				return renderer.render(osceRoleProxy.getSemester());
 			}
 		}, constants.semester());		
 		
@@ -173,9 +174,8 @@ public class RoleOsceSemesterSubViewImpl extends Composite implements RoleOsceSe
 			};
 
 			@Override
-			public String getValue(MapOsceRoleProxy osceRoleProxy) {
-				
-				String version =osceRoleProxy.getStandandarizeRoleId();				
+			public String getValue(MapOsceRoleProxy osceRoleProxy) {				
+				String version =osceRoleProxy.getStandandarizeRoleVersion();				
 				return renderer.render(version);
 			}
 		},constants.role()+" "+ constants.version());	
