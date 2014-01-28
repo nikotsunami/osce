@@ -936,12 +936,23 @@ public class Assignment {
     }
     
     //by spec[
-    public static void updateAssignmentByDiff(Long osceDayId, int diff, Date endTimeSlot)
+    public static void updateAssignmentByDiff(Long osceDayId, int diff, Date endTimeSlot, boolean isChangeStartTime)
     {
     	EntityManager em = entityManager();
-    	String sql = "SELECT a FROM Assignment AS a WHERE a.osceDay = " + osceDayId +" AND a.timeEnd > :endTimeSlot";
-    	TypedQuery<Assignment> q = em.createQuery(sql, Assignment.class);
-    	q.setParameter("endTimeSlot", endTimeSlot);
+    	String sql = "";
+    	TypedQuery<Assignment> q;
+    	if (isChangeStartTime)
+    	{
+    		sql = "SELECT a FROM Assignment AS a WHERE a.osceDay = " + osceDayId +" ORDER BY a.timeStart";
+    		q = em.createQuery(sql, Assignment.class);
+    	}
+    	else
+    	{
+    		sql = "SELECT a FROM Assignment AS a WHERE a.osceDay = " + osceDayId +" AND a.timeEnd > :endTimeSlot";
+    		q = em.createQuery(sql, Assignment.class);
+        	q.setParameter("endTimeSlot", endTimeSlot);
+    	}    	
+    	
     	Iterator<Assignment> assList = q.getResultList().iterator();
     	
     	while (assList.hasNext())
@@ -1536,9 +1547,9 @@ public class Assignment {
     			if (preRotOsceDayEndTime != null)
     			{
     				int diff = currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue(); 
-        			updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, currOsceDayId.timeEnd);
+        			updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, currOsceDayId.timeEnd, false);
         			diff = currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue();
-        			updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, preRotOsceDayEndTime);
+        			updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, preRotOsceDayEndTime, false);
     			}
     		 }	
     		
@@ -1554,9 +1565,9 @@ public class Assignment {
     			if (nextRotOsceDayEndTime != null)
     			{
     				int  diff = currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue();
-              		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, nextRotOsceDayEndTime); 
+              		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, nextRotOsceDayEndTime, false); 
             		diff = currOsceDayId.getOsceDay().getOsce().getMiddleBreak().intValue() - currOsceDayId.getOsceDay().getOsce().getLongBreak().intValue(); 
-             		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, currOsceDayId.timeEnd);
+             		updateAssignmentByDiff(currOsceDayId.getOsceDay().getId(), diff, currOsceDayId.timeEnd, false);
     			}    		
     		}    		
     	 }
@@ -1672,7 +1683,7 @@ public class Assignment {
     	 
     	 if (newStartDiffTime != 0)
     	 {
-    		 updateAssignmentByDiff(osceDay.getId(), newStartDiffTime, osceDay.getTimeStart());
+    		 updateAssignmentByDiff(osceDay.getId(), newStartDiffTime, osceDay.getTimeStart(), true);
     		 osceDay.setTimeStart(dateAddMin(osceDay.getTimeStart(), newStartDiffTime));
     		 osceDay.setTimeEnd(dateAddMin(osceDay.getTimeEnd(), newStartDiffTime));
     		 osceDay.setLunchBreakStart(dateAddMin(osceDay.getLunchBreakStart(), newStartDiffTime));
@@ -1686,7 +1697,7 @@ public class Assignment {
     		 {
     			 int lunchTime = (osceDay.getOsce().getLunchBreak().intValue() + osceDay.getLunchBreakAdjustedTime()) / 2;
     			 Date lunchBreakTime = dateAddMin(osceDay.getLunchBreakStart(), lunchTime);
-    			 updateAssignmentByDiff(osceDay.getId(), newLunchDiffTime, lunchBreakTime);
+    			 updateAssignmentByDiff(osceDay.getId(), newLunchDiffTime, lunchBreakTime, false);
     			 
     			 int oldAdjustedTime = osceDay.getLunchBreakAdjustedTime();
     			 
@@ -1699,7 +1710,7 @@ public class Assignment {
     	 }
     	 
     	 return osceDay;
-     }
+     }       
      
      //flag has two value :
      //1 : For Move Rotation Up From Lunch Break

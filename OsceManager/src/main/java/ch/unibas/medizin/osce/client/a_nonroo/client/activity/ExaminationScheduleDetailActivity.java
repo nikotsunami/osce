@@ -2839,7 +2839,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	public void shiftBreak(final Long osceDayId, Date endDate, final int diff,final PopupView popupView) {
 		Log.info("shiftBreak");
 		showLoadingScreen(true);
-		requests.assignmentRequestNonRoo().updateAssignmentByDiff(osceDayId, diff, endDate).fire(new OSCEReceiver<Void>() {
+		requests.assignmentRequestNonRoo().updateAssignmentByDiff(osceDayId, diff, endDate, false).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {

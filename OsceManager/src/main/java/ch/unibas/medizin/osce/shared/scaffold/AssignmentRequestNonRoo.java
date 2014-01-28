@@ -65,7 +65,7 @@ public abstract Request<List<AssignmentProxy>> retrieveAssignmenstOfTypeStudent(
 	
 	public abstract Request<List<AssignmentProxy>> findAssignedDoctorBySpecialisation(Long specialisationId, Long clinicId);
 	
-	public abstract Request<Void> updateAssignmentByDiff(Long osceDayId, int diff, Date endTimeSlot);
+	public abstract Request<Void> updateAssignmentByDiff(Long osceDayId, int diff, Date endTimeSlot, boolean isChangeStartTime);
 	
 	public abstract Request<Date> minmumStartTime(Long osceDayId,Long osceSequenceId,Long courseId);
 	
