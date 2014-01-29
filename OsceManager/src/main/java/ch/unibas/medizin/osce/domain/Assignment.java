@@ -1695,6 +1695,7 @@ public class Assignment {
     	 {
     		 if(osceDay.getLunchBreakStart() != null)
     		 {
+    			 //this is done because to get timeslot after lunch break.
     			 int lunchTime = (osceDay.getOsce().getLunchBreak().intValue() + osceDay.getLunchBreakAdjustedTime()) / 2;
     			 Date lunchBreakTime = dateAddMin(osceDay.getLunchBreakStart(), lunchTime);
     			 updateAssignmentByDiff(osceDay.getId(), newLunchDiffTime, lunchBreakTime, false);
@@ -1704,7 +1705,7 @@ public class Assignment {
     			 osceDay.setTimeEnd(dateAddMin(osceDay.getTimeEnd(), newLunchDiffTime));
     			 osceDay.setIsTimeSlotShifted(false);
     			 osceDay.setLunchBreakAdjustedTime(oldAdjustedTime + newLunchDiffTime);
-    			 osceDay.setLunchBreakStart(lunchBreakTime);
+    			 //osceDay.setLunchBreakStart(lunchBreakTime);
         		 osceDay.persist();    			 
     		 }
     	 }
