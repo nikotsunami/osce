@@ -10,9 +10,9 @@ import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -30,7 +30,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -40,12 +39,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.domain.AdvancedSearchCriteria;
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.Course;
@@ -63,8 +60,6 @@ import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.RoleTypes;
-import ch.unibas.medizin.osce.shared.Semesters;
-import ch.unibas.medizin.osce.shared.StudyYears;
 
 public class ExportAssignment  extends HttpServlet {
 	
@@ -185,6 +180,8 @@ public class ExportAssignment  extends HttpServlet {
 					
 					List<OscePost> oscePosts=osceSeq.getOscePosts();
 					
+					Map<Long, Long> postWiseRoomMap = OscePostRoom.findRoomByOscePostAndCourse(oscePosts, course.getId());
+					
 					for(OscePost oscePost:oscePosts)
 					{
 						Element postElement=createEmptyChildNode("post",doc,postsElement);
@@ -228,8 +225,6 @@ public class ExportAssignment  extends HttpServlet {
 					for(int j=startRotation;j<(rotationOffSet);j++)
 					{
 						
-						
-		 				
 						Element rotationElement=createEmptyChildNode("rotation",doc,rotationsElement);
 						
 						createChildNode("type", new Integer(type).toString(), doc, rotationElement);
@@ -272,20 +267,24 @@ public class ExportAssignment  extends HttpServlet {
 						}
 						List<Date> timeStarts=null;
 						if(type==0)
-						 timeStarts=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,type);
+							timeStarts=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,type);
 						else
-							timeStarts=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,0);
+						{
+							//timeStarts=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,0);
+							timeStarts=Assignment.findDistinctSPTimeStartRotationWise(osceDay.getId(), j);
+						}
 						
 						List<Date> timeEnds=null;
 						if(type==1)
 						{
-							timeEnds=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,type);
+							//timeEnds=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,type);
+							timeEnds=Assignment.findDistinctSPTimeEndCourseAndRotationWise(course.getId(), osceDay.getId() , j);
 						}
 						
 						//retrieve startEndtimes and student for particular course and rotation
 						List<Assignment> assignments=Assignment.findAssignmentRotationAndCourseWise(osceDay.getId(), j, course.getId(),type);
 						Element startEndTimesElement=createEmptyChildNode("startEndTimes",doc,rotationElement);
-						List<PatientInRole> patientInRoleList=new ArrayList<PatientInRole>(); 
+						List<PatientInRole> patientInRoleList=new ArrayList<PatientInRole>();
 						
 						for(int d=0;d<timeStarts.size();d++)
 						{
@@ -296,7 +295,6 @@ public class ExportAssignment  extends HttpServlet {
 							if(type==1)
 								timeEnd=timeEnds.get(d);
 							
-		
 							Element startEndTimeElement=createEmptyChildNode("startEndTime",doc,startEndTimesElement);
 							//createChildNode("parcourColor", course.getColor(), doc, startEndTimeElement);
 							String timeStartValue=String.format("%tR", timeStart);
@@ -340,14 +338,9 @@ public class ExportAssignment  extends HttpServlet {
 									if((oscePosts.size()  != k  && type==0 && assignment.getOscePostRoom() != null) || type ==1)
 									  assignmentPost=assignment.getOscePostRoom().getOscePost();
 									
-								
-										
-										
-										
-											
-											
 											//for student
-											if(type ==0 && assignment.getOscePostRoom() !=null && assignmentPost != null && oscePost !=null && oscePost.getId() == assignmentPost.getId() && assignment.getTimeStart().equals(timeStart)  )
+											//if(type ==0 && assignment.getOscePostRoom() !=null && assignmentPost != null && oscePost !=null && oscePost.getId() == assignmentPost.getId() && assignment.getTimeStart().equals(timeStart)  )
+											if(type ==0 && assignment.getOscePostRoom() !=null && assignmentPost != null && oscePost !=null &&  ( assignment.getOscePostRoom().getRoom() == null ? (oscePost.getId().equals(assignmentPost.getId())) : (assignment.getOscePostRoom().getRoom().getId().equals(postWiseRoomMap.get(oscePost.getId()))) ) && assignment.getTimeStart().equals(timeStart)  )
 											{
 												Element studentElement=createEmptyChildNode("student",doc,studentsElement);
 												Student student=assignment.getStudent();
@@ -366,7 +359,8 @@ public class ExportAssignment  extends HttpServlet {
 											}
 											
 											//for SP
-											 if(type ==1 && timeEnd != null && assignmentPost != null && oscePost !=null &&  oscePost.getId() == assignmentPost.getId() && (assignment.getTimeEnd().equals(timeEnd) || assignment.getTimeEnd().after(timeEnd)) &&(assignment.getTimeStart().equals(timeStart) || assignment.getTimeStart().before(timeStart)))
+											 //if(type ==1 && timeEnd != null && assignmentPost != null && oscePost !=null &&  oscePost.getId() == assignmentPost.getId() && (assignment.getTimeEnd().equals(timeEnd) || assignment.getTimeEnd().after(timeEnd)) &&(assignment.getTimeStart().equals(timeStart) || assignment.getTimeStart().before(timeStart)))
+											if(type ==1 && timeEnd != null && assignmentPost != null && oscePost !=null && oscePost.getId().equals(assignmentPost.getId()) && (assignment.getTimeEnd().equals(timeEnd) || assignment.getTimeEnd().after(timeEnd)) &&(assignment.getTimeStart().equals(timeStart) || assignment.getTimeStart().before(timeStart)))
 											{
 												
 												 /*prevSPAssignment=assignment;
@@ -435,7 +429,7 @@ public class ExportAssignment  extends HttpServlet {
 												createChildNode("studentName", studentName, doc, studentElement);
 												
 												found=true;
-												break;
+												//break;
 											}
 											
 											//for student break
@@ -488,11 +482,13 @@ public class ExportAssignment  extends HttpServlet {
 								*/
 								if(!found && type==0)
 								{
+									
+									
 									Element studentElement=createEmptyChildNode("student",doc,studentsElement);
 									createChildNode("studentName", "NA", doc, studentElement);
 								}
 								else if(!found && type==1 )
-								{
+								{	
 									Element studentElement=createEmptyChildNode("student",doc,studentsElement);
 									createChildNode("studentName", "NA", doc, studentElement);
 								}
@@ -505,7 +501,7 @@ public class ExportAssignment  extends HttpServlet {
 								{
 									if(numOfRow.size()>0)
 									{
-									d=d+Collections.min(numOfRow);
+									//d=d+Collections.min(numOfRow);
 									timeEnd=timeEnds.get(d);
 									numOfRow.clear();
 									}
@@ -559,10 +555,12 @@ public class ExportAssignment  extends HttpServlet {
 							//	List<Assignment> spBreakAssignments=Assignment.retrieveAssignmentOfLogicalBreakPost(osceDay.getId(), osceSeq.getId());
 								
 								//rotation
-								List<Date> timeStarts=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,0);
+								//List<Date> timeStarts=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,0);
+								List<Date> timeStarts=Assignment.findDistinctSPTimeStartRotationWise(osceDay.getId(), j);
 								List<Date> timeEnds=null;
 								
-									timeEnds=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,1);
+								//timeEnds=Assignment.findDistinctTimeStartRotationWise(osceDay.getId(), j,1);
+								timeEnds=Assignment.findDistinctSPTimeEndCourseAndRotationWise(course.getId(), osceDay.getId() , j);
 							
 								
 								//time start and sp in break
@@ -665,7 +663,7 @@ public class ExportAssignment  extends HttpServlet {
 										{
 											if(rowNum.size()>0)
 											{
-											l=l+Collections.min(rowNum);
+											//l=l+Collections.min(rowNum);
 											timeEnd=timeEnds.get(l);
 											rowNum.clear();
 											}

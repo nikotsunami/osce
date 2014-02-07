@@ -1168,9 +1168,17 @@ public class Assignment {
      public static List<Assignment> findAssignmentRotationAndCourseWise(Long osceDayId,int rotation,Long courseId,int type)
      {
     	 Log.info("findAssignmentRotationAndCourseWise");
-    	 String queryString="select a from Assignment as a where type="+type+" and osceDay="+osceDayId+" and rotationNumber = "+rotation+" and " +
+    	 /*String queryString="select a from Assignment as a where type="+type+" and osceDay="+osceDayId+" and rotationNumber = "+rotation+" and " +
     	 		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where (opr.room in (select rm.room from OscePostRoom as rm where  " +
-    	 		"rm.course="+courseId+" and rm.version<999)  or opr.room is null) and opr.course="+courseId+" ) or (oscePostRoom is null   and rotationNumber = "+rotation+" and sequenceNumber in (select distinct (sequenceNumber) from Assignment where type=0 and osceDay="+osceDayId+" and oscePostRoom in (select id from OscePostRoom where course="+courseId+")) )  order by timeStart";
+    	 		"rm.course="+courseId+" and rm.version<999)  or opr.room is null) and opr.course="+courseId+" ) or (oscePostRoom is null   and rotationNumber = "+rotation+" and sequenceNumber in (select distinct (sequenceNumber) from Assignment where type=0 and osceDay="+osceDayId+" and oscePostRoom in (select id from OscePostRoom where course="+courseId+")) )  order by timeStart";*/
+    	 
+    	 /*String queryString="select a from Assignment as a where type="+type+" and osceDay="+osceDayId+" and rotationNumber = "+rotation+" and " +
+     	 		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where  " +
+     	 		"rm.course="+courseId+" and rm.version<999) and opr.course="+courseId+" ) or (oscePostRoom is null   and rotationNumber = "+rotation+" and sequenceNumber in (select distinct (sequenceNumber) from Assignment where type=0 and osceDay="+osceDayId+" and oscePostRoom in (select id from OscePostRoom where course="+courseId+")) )  order by timeStart";*/
+    	 
+    	 String queryString = "select a from Assignment as a where a.type=" + type + " and a.osceDay.id=" + osceDayId + " and a.rotationNumber = " + rotation + " and (oscePostRoom is null or oscePostRoom in (select opr.id from OscePostRoom opr where opr.course = " + courseId + "))"
+    			 			  + " and a.sequenceNumber in (select distinct (sequenceNumber) from Assignment where type=" + type + " and osceDay.id=" + osceDayId + " and oscePostRoom in (select id from OscePostRoom where course=" + courseId + "))"
+    	 					  + " order by timeStart";
     	 
     	 if(type ==1)
     	 {
@@ -1196,7 +1204,11 @@ public class Assignment {
     	  queryString="select distinct (timeStart) from Assignment a where type=0 and osceDay="+osceDayId+" and rotationNumber = "+rotation+" order by timeStart";
     	 
     	 if(type==1)
-    		 queryString="select distinct (timeEnd) from Assignment a where type=0 and osceDay="+osceDayId+" and rotationNumber = "+rotation+" order by timeStart";
+    	 {
+    		queryString="select distinct (timeEnd) from Assignment a where type=1 and osceDay="+osceDayId+" and timeStart >= (select min(timeStart) from Assignment where type=0 and osceDay = " + osceDayId + " and rotationNumber = " + rotation + ")" 
+    				 + " and timeEnd <= (select max(timeEnd) from Assignment where type=0 and osceDay = " + osceDayId + " and rotationNumber = " + rotation + ") order by timeStart";
+    		 //queryString="select distinct (timeEnd) from Assignment a where type=0 and osceDay="+osceDayId+" and rotationNumber = "+rotation+" order by timeStart";
+    	 }
     	 
     	 EntityManager em = entityManager();
     	 TypedQuery<Date> query = em.createQuery(queryString, Date.class);
@@ -3172,4 +3184,39 @@ public class Assignment {
     	TypedQuery<Long> q = em.createQuery(query, Long.class);
     	return q.getSingleResult();
 	}
+
+	 public static List<Date> findDistinctSPTimeStartRotationWise(Long osceDayId,int rotation)
+     {
+    	 Log.info("findDistinctTimeStartRotationWise");
+    	 
+    	 String queryString="select distinct (timeStart) from Assignment a where type=1 and osceDay="+osceDayId+" and timeStart >= (select min(timeStart) from Assignment where type=0 and osceDay = " + osceDayId + " and rotationNumber = " + rotation + ")" 
+    				 + " and timeEnd <= (select max(timeEnd) from Assignment where type=0 and osceDay = " + osceDayId + " and rotationNumber = " + rotation + ") order by timeStart";
+    	    	 
+    	 EntityManager em = entityManager();
+    	 TypedQuery<Date> query = em.createQuery(queryString, Date.class);
+         List<Date> assignmentList = query.getResultList();
+         Log.info("findDistinctTimeStartRotationWise query String :" + queryString);
+         Log.info("Assignment List Size :" + assignmentList);
+         return assignmentList;
+    	
+     }
+	 
+	 public static List<Date> findDistinctSPTimeEndCourseAndRotationWise(Long courseId, Long osceDayId, int rotation)
+     {
+    	 Log.info("findDistinctTimeStartRotationWise");
+    	 
+    	 String queryString = "select distinct (timeEnd) from Assignment a where type=1 and osceDay="+osceDayId+" and timeStart >= (select min(timeStart) from Assignment where type=0 and osceDay = " + osceDayId + " and rotationNumber = " + rotation + ")" 
+    				 + " and timeEnd <= (select max(timeEnd) from Assignment where type=0 and osceDay = " + osceDayId + " and rotationNumber = " + rotation + ")"
+    				 + " and a.oscePostRoom.id IN (SELECT opr.id FROM OscePostRoom opr WHERE opr.course = " + courseId + ") order by timeStart";
+    		 //queryString="select distinct (timeEnd) from Assignment a where type=0 and osceDay="+osceDayId+" and rotationNumber = "+rotation+" order by timeStart";
+    	 
+    	 
+    	 EntityManager em = entityManager();
+    	 TypedQuery<Date> query = em.createQuery(queryString, Date.class);
+         List<Date> assignmentList = query.getResultList();
+         Log.info("findDistinctTimeStartRotationWise query String :" + queryString);
+         Log.info("Assignment List Size :" + assignmentList);
+         return assignmentList;
+    	
+     }
 } 

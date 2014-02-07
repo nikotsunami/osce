@@ -1,9 +1,11 @@
 package ch.unibas.medizin.osce.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -456,6 +458,24 @@ public class OscePostRoom {
     	String sql = "SELECT distinct o FROM OscePostRoom o WHERE o.course.osce.id = " + osceId + " ORDER BY o.id ";
     	TypedQuery<OscePostRoom> q = em.createQuery(sql, OscePostRoom.class);
     	return q.getResultList();
+	}
+
+	public static Map<Long, Long> findRoomByOscePostAndCourse(List<OscePost> oscePosts, Long courseId) {
+		Map<Long, Long> postWiseRoomMap = new HashMap<Long, Long>();
+		EntityManager em = entityManager();
+		String sql = "SELECT opr FROM OscePostRoom opr WHERE opr.course.id = " + courseId + " AND opr.oscePost IN (:oscePostList) AND opr.version < 999";
+		TypedQuery<OscePostRoom> query = em.createQuery(sql, OscePostRoom.class);
+		query.setParameter("oscePostList", oscePosts);
+		
+		for (OscePostRoom opr : query.getResultList())
+		{
+			if (opr.getRoom() != null)
+				postWiseRoomMap.put(opr.getOscePost().getId(), opr.getRoom().getId());
+			else
+				postWiseRoomMap.put(opr.getOscePost().getId(), null);
+		}
+		
+		return postWiseRoomMap;
 	}
     
     
