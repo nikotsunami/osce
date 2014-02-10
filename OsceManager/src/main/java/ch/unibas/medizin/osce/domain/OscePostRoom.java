@@ -445,10 +445,10 @@ public class OscePostRoom {
     public static OscePostRoom findOscePostRoomByRoomAndStudent(Long studentId, Long roomId)
     {
     	EntityManager em = entityManager();
-    	String sql = "SELECT o FROM OscePostRoom o WHERE o.id IN (SELECT a.oscePostRoom.id FROM Assignment a WHERE a.student.id = " + studentId + ") AND o.room.id = " + roomId;
+    	String sql = "SELECT o FROM OscePostRoom o WHERE o.id IN (SELECT a.oscePostRoom.id FROM Assignment a WHERE a.oscePostRoom IS NOT NULL AND a.student.id = " + studentId + ") AND o.room.id = " + roomId;
     	TypedQuery<OscePostRoom> q = em.createQuery(sql, OscePostRoom.class);
     	if (q.getResultList().size() > 0)
-    		return q.getSingleResult();
+    		return q.getResultList().get(0);
     	else
     		return null;
     }

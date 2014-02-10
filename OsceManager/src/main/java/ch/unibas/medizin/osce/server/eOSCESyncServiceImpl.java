@@ -623,6 +623,64 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			map.put(key, valueSet);
 		}
 	}
+	
+	private void importNotes(Statement statement) {
+		try
+		{			
+			String sql = "SELECT c.zcandidateid, st.zstationid, ex.zexaminerid, datetime(a.zlastviewed+978307200.0, 'unixepoch', 'localtime') as d , a.znotes from zassessment a, zschedule sc, zcandidate c, zstation st, zexaminer ex"
+					+ " WHERE sc.zassessment = a.z_pk AND" 
+					+ " c.z_pk = sc.zcandidate AND"
+					+ " sc.zstation = st.z_pk AND"
+					+ " st.zexaminer = ex.z_pk AND"						
+					+ " c.zfirstname <> '%BREAK%'"
+					+ " ORDER BY c.zcandidateid";
+					
+			ResultSet resultset = statement.executeQuery(sql);
+			
+			long candidateId = 0, examinerid = 0, roomid = 0;
+			String comment = "", stationId;
+			 
+			while (resultset.next())
+			{	
+				if (resultset.getString(1) != null && (resultset.getString(1).isEmpty() == false || resultset.getString(1).equals("") == false))
+				{
+					candidateId = Long.parseLong(resultset.getString(1));
+					stationId = resultset.getString(2);
+					examinerid = Long.parseLong(resultset.getString(3));
+					comment = resultset.getString(5);
+					String[] str = StringUtils.split(stationId, "-");
+					
+					if (str.length == 0)
+						roomid = Long.parseLong(stationId);
+					else if (str.length > 0)
+						roomid = Long.parseLong(str[0]);
+					else
+						throw new IllegalArgumentException("No station id found");
+					
+					Student student = Student.findStudent(candidateId);
+					Doctor doctor = Doctor.findDoctor(examinerid);
+					OscePostRoom oscePostRoom =  OscePostRoom.findOscePostRoom(roomid); //OscePostRoom.findOscePostRoomByRoomAndStudent(candidateId, roomid); //OscePostRoom.findOscePostRoom(roomid);
+										
+					OsceDay osceDay = oscePostRoom.getOscePost().getOsceSequence().getOsceDay();
+					
+					Notes notes = new Notes();
+					notes.setStudent(student);
+					notes.setDoctor(doctor);
+					notes.setOscePostRoom(oscePostRoom);
+					notes.setOsceDay(osceDay);
+					notes.setComment(comment);
+					
+					if (resultset.getString("d") != null)
+						notes.setLastviewed(sdf.parse(resultset.getString("d")));
+					
+					notes.persist();
+				}
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	private void importSignature(Statement statement) {
 		try
