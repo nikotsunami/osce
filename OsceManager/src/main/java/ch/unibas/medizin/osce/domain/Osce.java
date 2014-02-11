@@ -37,6 +37,7 @@ import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
 import ch.unibas.medizin.osce.shared.PostType;
+import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
@@ -141,7 +142,7 @@ public class Osce {
 		int slotsUntilChange = Integer.MAX_VALUE;
 		 
 	
-		Iterator<OscePostBlueprint> it = getOscePostBlueprints().iterator();
+		/*Iterator<OscePostBlueprint> it = getOscePostBlueprints().iterator();
 		while (it.hasNext()) 
 		{
 			OscePostBlueprint oscePostBlueprint = (OscePostBlueprint) it.next();
@@ -153,7 +154,17 @@ public class Osce {
 			if(slots > 0 && slots < slotsUntilChange) {
 				slotsUntilChange = slots;
 			}
-		}
+		}*/
+		
+		EntityManager em = entityManager();
+		String sql = "select min(rt.slotsUntilChange) from RoleTopic rt, OscePostBlueprint opb, StandardizedRole sr"
+						+ " where rt.id = opb.roleTopic.id"
+						+ " and opb.roleTopic.id = sr.roleTopic.id"
+						+ " and sr.roleType <> " + RoleTypes.Material.ordinal()
+						+ " and opb.osce = " + this.getId();	
+		TypedQuery<Integer> query = em.createQuery(sql, Integer.class);
+		if (query.getResultList().size() > 0)
+			slotsUntilChange = query.getResultList().get(0);
 		
 		return slotsUntilChange;
 	}
