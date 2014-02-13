@@ -568,6 +568,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				answerTable.persist();
 			}
 			
+			importNotes(statement);
 			importSignature(statement);
 			
 			resultset.close();
