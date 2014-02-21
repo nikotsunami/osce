@@ -5,9 +5,11 @@ package ch.unibas.medizin.osce.domain;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -26,11 +28,14 @@ import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
 import ch.unibas.medizin.osce.server.spalloc.SPAllocator;
 import ch.unibas.medizin.osce.server.spalloc.SPFederalAllocator;
 import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
+import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.MapOsceRole;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
@@ -320,8 +325,38 @@ public class Osce {
    
     //spec start
     //This method assigns students in Assignment Table.
-    public static Boolean autoAssignStudent(Long osceId,Integer orderBy)
+   
+    public static Boolean autoAssignStudent(Long osceId,Integer orderBy, boolean changeRequire)
     {
+    	Osce osce = new Osce();
+    	return osce.autoStudentAssignToOsce(osceId, orderBy, changeRequire);
+    }
+    
+    @Transactional(rollbackFor=Exception.class, propagation=Propagation.REQUIRED)
+    public Boolean autoStudentAssignToOsce(Long osceId,Integer orderBy, boolean changeRequire)
+    {
+    	Osce osce = Osce.findOsce(osceId);
+    	Map<Long, Map<Long, Map<Integer, List<PatientInRole>>>> spMap = null;
+    	List<Assignment> examinerAssList = null;
+    			
+    	if (changeRequire == true)
+    	{
+    		
+    		int totalStudent = osce.getMaxNumberStudents();
+    		Integer actualStudent = StudentOsces.countStudentByOsce(osceId);
+    		osce.setMaxNumberStudents(actualStudent);
+    		osce.persist();
+    		
+    		Integer remainingStudent = osce.getMaxNumberStudents() - actualStudent;
+    		spMap = storeSPDataBeforeRemove(osce);
+    		examinerAssList = storeExaminerDataBeforeRemove(osce);
+    		
+    		changeOsceStructure(osce, remainingStudent);
+    		
+    		osce.setMaxNumberStudents(totalStudent);
+    		osce.persist();
+    	}
+    	
     	EntityManager em = entityManager();
     	
     	try{
@@ -371,15 +406,230 @@ public class Osce {
     	
     	}
    // 	em.getTransaction().commit();
+    	if (spMap != null && spMap.size() > 0)
+    		allocateStandardizedPatient(osce, spMap);
+    		
+    	if (examinerAssList != null && examinerAssList.size() > 0)
+    		allocateExaminer(osceId, examinerAssList);
+    	
     	return true;
     	}
     	catch (Exception e) {
 			e.printStackTrace();
 		//	em.getTransaction().rollback();
 			return false;
-		}
+		}    
     }
     
+    private void allocateExaminer(Long osceId, List<Assignment> examinerAssList) {
+    	Map<Long, Map<Integer, Date>> rotWiseStartTimeMap = new HashMap<Long, Map<Integer,Date>>();
+    	Map<Long, Map<Integer, Date>> rotWiseEndTimeMap = new HashMap<Long, Map<Integer,Date>>();
+    	List<OscePostRoom> oscePostRoomList = Assignment.findDistinctOscePostRoomOfStudentAssignment(osceId);
+    	
+    	for (OscePostRoom opr : oscePostRoomList)
+    	{
+    		Map<Integer, Date> startTimeMap = Assignment.findTimeStartByOscePostRoom(osceId, opr);
+    		rotWiseStartTimeMap.put(opr.getId(), startTimeMap);
+    		Map<Integer, Date> endTimeMap = Assignment.findTimeEndByOscePostRoom(osceId, opr);
+    		rotWiseEndTimeMap.put(opr.getId(), endTimeMap);
+    	}
+    	
+    	for (Assignment ass : examinerAssList)
+    	{
+    		//System.out.println("EXAMINER ID : " + ass.getExaminer().getId() + " OPR ID : " + ass.getOscePostRoom().getId());
+    		Date timeStart = ass.getTimeStart();
+    		Date timeEnd = ass.getTimeEnd();
+    		Long oprId = ass.getOscePostRoom().getId();
+    		
+    		Map<Integer, Date> startTimeMap = rotWiseStartTimeMap.get(oprId);
+    		if (startTimeMap.size() > 0)
+    		{
+    			if (startTimeMap.containsValue(timeStart) == false)
+    			{
+    				int preRotNo = -1;
+        			for (Integer rotNo : startTimeMap.keySet())
+        			{
+        				if (preRotNo == -1) preRotNo = rotNo;
+        				
+        				if (startTimeMap.get(rotNo).before(timeStart) == false)
+        				{
+        					timeStart = startTimeMap.get(preRotNo);
+        					preRotNo = -1;
+        					break;
+        				}
+        				preRotNo = rotNo;
+        			}
+        			
+        			if (preRotNo != -1)
+        			{
+        				timeStart = startTimeMap.get(preRotNo);
+        			}
+    			}
+    		}    		
+    		
+    		Map<Integer, Date> endTimeMap = rotWiseEndTimeMap.get(oprId);    		
+    		if (endTimeMap.size() > 0)
+    		{
+    			if (endTimeMap.containsValue(timeEnd) == false)
+    			{
+    				int preRotNo = -1;
+    				for (Integer rotNo : endTimeMap.keySet())
+    				{
+    					if (preRotNo == -1) preRotNo = rotNo;
+    					
+    					if (timeEnd.after(endTimeMap.get(rotNo)) == false)
+    					{
+    						timeEnd = endTimeMap.get(preRotNo);
+    						preRotNo = -1;
+    						break;
+    					}
+    					preRotNo = rotNo;
+    				}
+    				
+    				if (preRotNo != -1)
+    				{
+    					timeEnd = endTimeMap.get(preRotNo);
+    				}
+    			}
+    		}
+    		
+    		Assignment assignment = new Assignment();
+    		assignment.setSequenceNumber(ass.getSequenceNumber());
+    		assignment.setTimeStart(timeStart);
+    		assignment.setTimeEnd(timeEnd);
+    		assignment.setType(ass.getType());
+    		assignment.setExaminer(ass.getExaminer());
+    		assignment.setOsceDay(ass.getOsceDay());
+    		assignment.setOscePostRoom(ass.getOscePostRoom());
+    		assignment.persist();
+    	}   	
+	}
+
+	private void allocateStandardizedPatient(Osce osce, Map<Long, Map<Long, Map<Integer, List<PatientInRole>>>> osceDaySpMap) {
+    	Map<Integer, List<PatientInRole>> pirMap = null;    	
+    
+    	for (OsceDay osceDay : osce.getOsce_days())
+    	{
+    		if (osceDay.getId().equals(100l))
+    			System.out.println("ID");
+    		
+    		Map<Long, Map<Integer, List<PatientInRole>>> spMap = osceDaySpMap.get(osceDay.getId());    		
+    		for (Long oscePostRoomId : spMap.keySet())
+        	{
+        		Long oprId = oscePostRoomId == null ? null : oscePostRoomId;
+        		pirMap = spMap.get(oprId);
+        		
+        		//if oscepostroom is null then enter new entry of pir for break in assignment
+        		if (oprId == null)
+        		{    			
+        			for (Integer seqNumber : pirMap.keySet())
+        			{
+        				List<PatientInRole> pirList = pirMap.get(seqNumber);
+        				Assignment assignment = Assignment.findSpTimeBySequenceNumberAndOsceDay(osceDay.getId(), seqNumber);
+    					if (assignment != null)
+    					{
+    						for (PatientInRole pir : pirList)
+        					{
+        						Assignment ass = new Assignment();
+        						ass.setType(AssignmentTypes.PATIENT);
+        						ass.setTimeEnd(assignment.getTimeEnd());
+        						ass.setTimeStart(assignment.getTimeStart());
+        						ass.setOsceDay(assignment.getOsceDay());
+        						ass.setPatientInRole(pir);
+        						ass.setSequenceNumber(seqNumber);
+        						ass.setOscePostRoom(null);
+        						ass.persist();
+        					}
+    					}   	
+        			}
+        		}
+        		else
+        		{
+        			for (Integer seqNumber : pirMap.keySet())
+            		{
+            			if (pirMap != null)
+            			{
+            				List<PatientInRole> pirList = pirMap.get(seqNumber);
+            				List<Assignment> assList = Assignment.findSpAssignmentByOscePostRoomAndSequenceNumberByOsceDay(oprId, osceDay.getId(), seqNumber);	
+            				if (pirList != null)
+            				{
+            					if (pirList.size() == assList.size())
+                				{
+                					for (int i=0; i<pirList.size(); i++)
+                					{
+                						Assignment ass = assList.get(i);
+                						ass.setPatientInRole(pirList.get(i));
+                						ass.persist();
+                					}
+                				}
+            				}
+            			}    			
+            		}
+        		}
+        	}  
+    	}    		
+	}
+
+    private List<Assignment> storeExaminerDataBeforeRemove(Osce osce)
+    {
+    	List<Assignment> examinerAssList = Assignment.findExaminerAssignmentByOsce(osce.getId());
+    	return examinerAssList;
+    }
+    	
+    private Map<Long, Map<Long, Map<Integer, List<PatientInRole>>>> storeSPDataBeforeRemove(Osce osce)
+    {
+    	Map<Long, Map<Long, Map<Integer, List<PatientInRole>>>> osceDaySpMap = new HashMap<Long, Map<Long,Map<Integer,List<PatientInRole>>>>();
+    	
+    	Map<Long, Map<Integer, List<PatientInRole>>> spMap;
+    	Map<Integer, List<PatientInRole>> pirMap = null;
+    	try
+    	{	
+    		for (OsceDay osceDay : osce.getOsce_days())
+    		{
+    			spMap = new HashMap<Long, Map<Integer,List<PatientInRole>>>();
+    			List<OscePostRoom> oscePostRoomList = Assignment.findDistinctOscePostRoomAssignmentByOsceDay(osceDay.getId());
+            	oscePostRoomList.add(null);
+            	//System.out.println("oscePostRoomList size : " + oscePostRoomList.size());
+            	
+            	for (OscePostRoom oscePostRoom : oscePostRoomList)
+            	{
+            		pirMap = new HashMap<Integer, List<PatientInRole>>();
+            		
+            		Long oprId = oscePostRoom == null ? null : oscePostRoom.getId();
+            		List<Integer> sequenceNumberList = Assignment.findDistinctSPSequenceNumberByOscePostRoomByOsceDay(oprId, osceDay.getId());
+            		
+            		for (Integer seqNumber : sequenceNumberList)
+            		{
+            			List<PatientInRole> pirList = Assignment.findSPByOscePostRoomAndSequenceNumberByOsceDay(oprId, osceDay.getId(), seqNumber);
+            			pirMap.put(seqNumber, pirList);
+            		}
+            		
+            		if (pirMap != null)
+            			spMap.put(oprId, pirMap);
+            	}    	
+            	osceDaySpMap.put(osceDay.getId(), spMap);            	
+    		}        	
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    	}
+    	return osceDaySpMap;
+    }
+    
+	private void changeOsceStructure(Osce osce, Integer remainingStudent) {
+    	
+    	try 
+    	{
+    		String sql = "DELETE FROM Assignment WHERE osce_Day in (SELECT id FROM osce_day WHERE osce = " + osce.getId() + ")";
+    		int deletedCount = entityManager().createNativeQuery(sql).executeUpdate();
+    		TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(osce);
+			optGen.createAssignments();
+    	} catch(Exception e) {
+    		e.printStackTrace();    		
+    	}    	    	
+	}
+
     public static List<Osce> findAllOsceBySemster(Long id) {
     	EntityManager em = entityManager();
     	//System.out.println("BEFORE CALL------->");

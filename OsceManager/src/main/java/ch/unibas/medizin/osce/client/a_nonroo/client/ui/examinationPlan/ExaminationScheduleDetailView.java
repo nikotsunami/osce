@@ -21,11 +21,13 @@ public interface ExaminationScheduleDetailView extends IsWidget{
 		// TODO define methods to be delegated!
 		public void autoAssignSP(long id);
 		
-		public void autoAssignStudent(long id,Integer orderType);
+		public void autoAssignStudent(long id,Integer orderType, boolean changeRequire);
 		
 		public void exportAssignment(Long osceId,int type);
 		
 		public void moveLunchBreak(int flag, OsceDayProxy osceDayProxy);
+
+		public void countOsceWiseStudent(OsceProxy osceProxy);
 	}
 	
 	 void setDelegate(Delegate delegate);
@@ -51,6 +53,6 @@ public interface ExaminationScheduleDetailView extends IsWidget{
 	 
 	 public Label getLongBreakValue();
 	 
-	 
+	 public void showStudentAssignPopup(boolean isLessStudent);
 	 
 }

@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.server.ttgen;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,6 +45,7 @@ public class TimetableGenerator {
 	private static int LONG_BREAK_MIDDLE_THRESHOLD = 150;
 	//SPEC[
 	private static int LUNCH_BREAK_MIDDLE_THRESHOLD = 360;
+	private static int NUMBER_OF_LOGICAL_BREAK = 1;
 	//SPEC]
 	
 	private Osce osce;
@@ -127,6 +129,91 @@ public class TimetableGenerator {
 		return optGen;
 	}
 	
+	private void shiftLogicalBreak() {
+		List<OsceDay> days = new ArrayList<OsceDay>(osce.getOsce_days());
+		Iterator<OsceDay> itDays = days.iterator();
+		
+		int rotationOffset = 0;
+		int totalRotation = 0;
+		
+		while (itDays.hasNext()) {
+			
+			OsceDay osceDay = (OsceDay) itDays.next();
+			Iterator<OsceSequence> itSeq = osceDay.getOsceSequences().iterator();
+			int noOfParcour = 0;
+			
+			while (itSeq.hasNext()) {
+				OsceSequence osceSequence = (OsceSequence) itSeq.next();
+				totalRotation += osceSequence.getNumberRotation();
+				noOfParcour = osceSequence.getCourses().size();
+			}
+			
+			List<Integer> breakList;
+			int lastBreakRotation = -1;			
+			
+			for (int i=rotationOffset; i<totalRotation; i++)
+			{
+				 breakList = new ArrayList<Integer>();
+				 for (int j=0; j<noOfParcour; j++)
+				 {
+					 List<Integer> list = rotations[j];
+					 breakList.add(list.get(i));
+				 }
+				 
+				 int count = Collections.frequency(breakList, NUMBER_OF_LOGICAL_BREAK);
+				
+				 if (count > 0 && count < rotations.length)
+				 {
+					 lastBreakRotation = i;
+					 break;
+				 }
+			}
+			
+			 if (lastBreakRotation >= 0)
+			 {
+				 for (int j=0; j<noOfParcour; j++)
+				 {
+					 int value = rotations[j].get(lastBreakRotation);
+					 rotations[j].set(lastBreakRotation, 0);
+					 rotations[j].set(totalRotation-1, value);
+				 }
+			 }
+			
+			rotationOffset = totalRotation;
+		}
+	}
+	
+	public void removeLogicalBreakForLessStudent(int totalRemoveStudent) {
+		List<OsceDay> days = new ArrayList<OsceDay>(osce.getOsce_days());
+		Iterator<OsceDay> itDays = days.iterator();
+		int totalRotation = 0;
+		int noOfParcour = 0;
+		
+		while (itDays.hasNext()) {
+			OsceDay osceDay = (OsceDay) itDays.next();
+			Iterator<OsceSequence> itSeq = osceDay.getOsceSequences().iterator();			
+			
+			while (itSeq.hasNext()) {
+				OsceSequence osceSequence = (OsceSequence) itSeq.next();
+				totalRotation += osceSequence.getNumberRotation();
+				noOfParcour = osceSequence.getCourses().size();
+			}
+		}
+		
+		for (int i=(totalRotation-1); i>=0; i--)
+		{
+			 for (int j=(noOfParcour-1); j>=0; j--)
+			 {
+				 List<Integer> list = rotations[j];
+				 if (list.get(i) == 1 && totalRemoveStudent > 0)
+				 {
+					 rotations[j].set(i, 0);
+					 totalRemoveStudent--;
+				 }
+			 }
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	public TimetableGenerator(Osce osce, int nBreakPosts, int nParcours) {
 		
@@ -413,6 +500,8 @@ public class TimetableGenerator {
 
 			
 			log.info("  rotation " + j + " (breakposts: " + numberBreakPostsThisRotation + ") - start: " + timeNeededCurrentDay);
+			System.out.println("==========================================================================================================");
+			System.out.println("  rotation " + j + " (breakposts: " + numberBreakPostsThisRotation + ") - start: " + timeNeededCurrentDay);
 			
 			// posts
 			for(int k = 0; k < nPostsThisRotation; k++) {
@@ -440,19 +529,26 @@ public class TimetableGenerator {
 			}
 			
 			log.info("  rotation " + j + " end: " + timeNeededCurrentDay);
-			
+			System.out.println("  rotation " + j + " end: " + timeNeededCurrentDay);
 			
 			boolean lastRotation = (j % rotationsMax) == rotationsByDay.get(i) - 1;
 			
 			//spec[
 			boolean isLongBreakBetweenTwoRotation = false;
-			timeUntilLongORLunchBreak += timeNeededCurrentDay;
-			timeUntilLongORLunchBreak -= timeUntilLastLongBreak;
+			System.out.println("timeNeededCurrentDay : " + timeNeededCurrentDay);
+			System.out.println("BEFORE timeUntilLongORLunchBreak : " + timeUntilLongORLunchBreak);
+			//timeUntilLongORLunchBreak += timeNeededCurrentDay;
+			//System.out.println("AFTER timeUntilLongORLunchBreak : " + timeUntilLongORLunchBreak);
+			timeUntilLongORLunchBreak = timeNeededCurrentDay - timeUntilLastLongBreak;
+			System.out.println("timeUntilLastLongBreak : " + timeUntilLastLongBreak);
+			System.out.println("AFTER timeUntilLastLongBreak timeUntilLongORLunchBreak : " + timeUntilLongORLunchBreak);
 			if(!lastRotation)
 			{
 				int nextNumberSlotsTotal = nPostsGeneral + rotations[0].get(j+1);
 				int totalTimeForLongBreak = ((nextNumberSlotsTotal * osce.getPostLength()) +  ((nextNumberSlotsTotal - 1) * osce.getShortBreak()) + osce.getMiddleBreak());
+				System.out.println("BEFORE totalTimeForLongBreak : " + totalTimeForLongBreak);
 				totalTimeForLongBreak += timeUntilLongORLunchBreak;
+				System.out.println("AFTER totalTimeForLongBreak : " + totalTimeForLongBreak);
 				isLongBreakBetweenTwoRotation = totalTimeForLongBreak > LONG_BREAK_MIDDLE_THRESHOLD;
 				
 				if (isLongBreakBetweenTwoRotation)
@@ -474,6 +570,7 @@ public class TimetableGenerator {
 					timeNeededCurrentDay += osce.getLunchBreak();
 					timeUntilLastLongBreak = timeNeededCurrentDay; //Reset time when lunch break added
 					log.info("  lunch break");
+					System.out.println("LUNCH BREAK");
 					breakByRoatation.add(j, (int) osce.getLunchBreak());
 				//SPEC[
 				//} else if(simpatChangeWithinSlots(slotsSinceLastSimpatChange + nPostsGeneral + rotations[0].get(j + 1)) || longBreakInRotationHalf) {
@@ -488,10 +585,12 @@ public class TimetableGenerator {
 							timeNeededCurrentDay += osce.getLongBreak();
 							timeUntilLastLongBreak = timeNeededCurrentDay; //Reset time when long break added 
 							log.info("  long break");
+							System.out.println("LONG BREAK");
 							breakByRoatation.add(j, (int) osce.getLongBreak());
 						} else {
 							timeNeededCurrentDay += osce.getMiddleBreak();
 							log.info("  middle break");
+							System.out.println("MIDDLE BREAK");
 							breakByRoatation.add(j, (int) osce.getMiddleBreak());
 						}
 					//SPEC[
@@ -705,6 +804,7 @@ public class TimetableGenerator {
 				{
 					timeUntilLastLongBreak = totalTimeForLongBreak;
 					isLongBreakBetweenTwoRotation = true;
+					//abhay need to check time also if time exceed from LONG_BREAK_MIDDLE_THRESHOLD then only put long break after that rotation
 					longBreakRotation += lunchBreakRotation;
 				}
 			}
@@ -2206,6 +2306,9 @@ public class TimetableGenerator {
 	
 	//SPEC[
 	public Set<Assignment> createAssignments() {
+		
+		shiftLogicalBreak();
+		
 		String breakPerRotation = "";
 		assignments = new HashSet<Assignment>();
 		

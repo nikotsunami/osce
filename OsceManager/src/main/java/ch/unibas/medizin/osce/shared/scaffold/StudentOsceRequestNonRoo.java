@@ -23,4 +23,6 @@ public interface StudentOsceRequestNonRoo extends RequestContext{
 	abstract Request<List<StudentOscesProxy>> findStudentByRange(int start, int max, Long id, String name);
 	
 	abstract Request<Integer> countStudentByRange(Long id, String name);
+	
+	abstract Request<Integer> countStudentByOsce(Long osceId);
 }

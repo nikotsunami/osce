@@ -15,6 +15,8 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -25,6 +27,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -328,14 +331,34 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 	@UiHandler("studentAssignmentButton")
 	public void studentAssignmentButtonClicked(ClickEvent event)
 	{
-		showStudentAssignPopup();
+		delegate.countOsceWiseStudent(osceProxy);
+		
+		//showStudentAssignPopup();
 		
 	}
-	public void showStudentAssignPopup()
+	public void showStudentAssignPopup(final boolean isLessStudent)
 	{
 		final PopupPanel popup=new PopupPanel(true);
+	
+		final CheckBox allowStructureChange = new CheckBox();
+		Label textLbl = new Label(constants.requireOsceChange());
+		textLbl.getElement().getStyle().setMarginTop(8, Unit.PX);
+		HorizontalPanel structureChangeHp = new HorizontalPanel();
+		structureChangeHp.add(allowStructureChange);
+		structureChangeHp.add(textLbl);
 		
+		Label structureChangeMsg = new Label(constants.lessStudentMsg());
 		VerticalPanel vp=new VerticalPanel();
+		
+		vp.setWidth("400px");
+		
+		VerticalPanel vp1 = new VerticalPanel();
+		VerticalPanel vp2 = new VerticalPanel();
+		vp1.addStyleName("studentpopup-arrow-popup-border");
+		vp2.addStyleName("studentpopup-arrow-popup");
+		
+		vp.add(vp1);
+		vp.add(vp2);
 		
 		HorizontalPanel hp=new HorizontalPanel();
 		Button alphabeticButton=new Button();
@@ -361,7 +384,11 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				delegate.autoAssignStudent(osceProxy.getId(),0);
+				if (isLessStudent && allowStructureChange.getValue())
+					delegate.autoAssignStudent(osceProxy.getId(),0, true);
+				else
+					delegate.autoAssignStudent(osceProxy.getId(),0, false);
+					
 				popup.hide();
 			}
 		});
@@ -370,7 +397,10 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				delegate.autoAssignStudent(osceProxy.getId(),1);
+				if (isLessStudent && allowStructureChange.getValue())
+					delegate.autoAssignStudent(osceProxy.getId(),1, true);
+				else
+					delegate.autoAssignStudent(osceProxy.getId(),1, false);
 				popup.hide();
 			}
 		});
@@ -378,10 +408,12 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		hp.setSpacing(3);
 		hp.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 		hp.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+		if (isLessStudent)
+			hp.add(structureChangeHp);
+			
 		hp.add(alphabeticButton);
 		hp.add(scrumbleButton);
-		hp.add(cancelButton);
-		
+		hp.add(cancelButton);		
 		
 		Label msgLbl=new Label();
 		msgLbl.setText(constants.previousAssignmentWillLost());
@@ -389,12 +421,17 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		vp.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
 		vp.setSpacing(5);
 		vp.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+		
+		if (isLessStudent)
+			vp.add(structureChangeMsg);
+		
 		vp.add(msgLbl);
 		vp.add(hp);
 		
+		
 		popup.add(vp);
 		
-		popup.setPopupPosition(studentAssignmentButton.getAbsoluteLeft()-40, studentAssignmentButton.getAbsoluteTop()-60);
+		popup.setPopupPosition(studentAssignmentButton.getAbsoluteLeft()-110, studentAssignmentButton.getAbsoluteTop()+28);
 		popup.show();
 	}
 	public void showPopup()
@@ -402,6 +439,14 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		final PopupPanel popup=new PopupPanel(true);
 		
 		VerticalPanel vp=new VerticalPanel();
+		
+		VerticalPanel vp1 = new VerticalPanel();
+		VerticalPanel vp2 = new VerticalPanel();
+		vp1.addStyleName("studentpopup-arrow-popup-border");
+		vp2.addStyleName("studentpopup-arrow-popup");
+		
+		vp.add(vp1);
+		vp.add(vp2);
 		
 		HorizontalPanel hp=new HorizontalPanel();
 		Button okButton=new Button();
@@ -446,7 +491,7 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		
 		popup.add(vp);
 		
-		popup.setPopupPosition(studentAssignmentButton.getAbsoluteLeft()+40, studentAssignmentButton.getAbsoluteTop()-60);
+		popup.setPopupPosition(studentAssignmentButton.getAbsoluteLeft()+40, studentAssignmentButton.getAbsoluteTop()+28);
 		popup.show();
 	}
 	

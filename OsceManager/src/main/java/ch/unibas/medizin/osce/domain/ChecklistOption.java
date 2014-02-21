@@ -87,7 +87,7 @@ public class ChecklistOption implements Comparable<ChecklistOption> {
 		String sql = "SELECT c FROM ChecklistOption c WHERE c.checklistQuestion.id = " + questionId + " AND c.value = " + optionValue;
 		TypedQuery<ChecklistOption> q = em.createQuery(sql, ChecklistOption.class);
 		if (q.getResultList().size() > 0)
-			return q.getSingleResult();
+			return q.getResultList().get(0);
 		else
 			return null;
 	}

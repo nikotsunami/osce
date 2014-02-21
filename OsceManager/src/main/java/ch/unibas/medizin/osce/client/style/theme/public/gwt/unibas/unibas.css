@@ -3712,3 +3712,27 @@ color: #f1b532;
     text-indent: -99999px;
     width: 11px;
 }
+
+.studentpopup-arrow-popup-border{
+	border-bottom: 8px solid #AAAAAA;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    bottom: -8px;
+    height: 0;
+    left: 178px;
+    position: absolute;
+    top: -8px;
+    width: 0;
+}
+
+.studentpopup-arrow-popup{
+	border-bottom: 8px solid #FFFFFF;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    bottom: -8px;
+    height: 0;
+    left: 180px;
+    position: absolute;
+    top: -8px;
+    width: 0;
+}	

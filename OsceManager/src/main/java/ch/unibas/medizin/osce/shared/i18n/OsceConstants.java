@@ -1401,5 +1401,10 @@ public interface OsceConstants extends Constants {
 	public String longBreakWarningMsg();
 	
 	public String exportOsce();
+	
+	public String lessStudentMsg();
+	
+	public String requireOsceChange();
 }
+
 

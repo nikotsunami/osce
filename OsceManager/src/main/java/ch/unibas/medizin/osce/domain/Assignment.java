@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -109,7 +110,7 @@ public class Assignment {
 
     public static List<Assignment> retrieveAssignmentsOfTypeSP(Osce osce) {
         Log.info("retrieveAssignmenstOfTypeSP :");
-        EntityManager em = entityManager();
+        EntityManager em = entityManager();        
         String queryString = "SELECT o FROM Assignment AS o WHERE o.osceDay.osce = :osce AND o.type = :type AND o.oscePostRoom IS NOT NULL";
         TypedQuery<Assignment> q = em.createQuery(queryString, Assignment.class);
         q.setParameter("osce", osce);
@@ -193,6 +194,21 @@ public class Assignment {
         q.setParameter("postType", PostType.NORMAL);
         q.setParameter("type", AssignmentTypes.PATIENT);
         List<Assignment> assignmentList = q.getResultList();
+        
+        if (assignmentList != null && assignmentList.size() == 0)
+        {
+        	String queryString1 = "SELECT o FROM Assignment AS o WHERE o.osceDay.osce = :osce AND o.type = :type AND o.oscePostRoom.oscePost.oscePostBlueprint.postType IN (:postType) AND o.oscePostRoom.oscePost.oscePostBlueprint.isFirstPart = :isFirstPart GROUP BY o.timeStart ORDER BY o.timeStart";
+            TypedQuery<Assignment> q1 = em.createQuery(queryString1, Assignment.class);
+            q1.setParameter("osce", osce);
+            List<PostType> postTypeList = new ArrayList<PostType>();
+            postTypeList.add(PostType.ANAMNESIS_THERAPY);
+            postTypeList.add(PostType.PREPARATION);
+            q1.setParameter("postType", postTypeList);
+            q1.setParameter("type", AssignmentTypes.PATIENT);
+            q1.setParameter("isFirstPart", false);
+            assignmentList = q1.getResultList();
+        }
+        
         return assignmentList;
     }
     
@@ -1812,7 +1828,7 @@ public class Assignment {
      				
      				newLunchValue = newLunchValue - osceDay.getOsce().getMiddleBreak().intValue();
   	     			
-  	     			updateAssignemntByDiffForShiftLunchBreakForOsceDay(osceDay, newLunchValue.intValue(), rotationNumber, 2);   					
+  	     			updateAssignemntByDiffForShiftLunchBreakForOsceDay(osceDay, newLunchValue.intValue(), rotationNumber, 2);				
     	    			
 	    			for (int i=0; i<rotationStr.length; i++)
 	    			{
@@ -3219,4 +3235,129 @@ public class Assignment {
          return assignmentList;
     	
      }
+	 
+	 public static List<Assignment> findSPAssignmentByOsce(Long osceId)
+	 {
+		 EntityManager em = entityManager();
+		 String sql = "SELECT a FROM Assignment a WHERE a.type = 1 AND a.osceDay.osce.id = " + osceId + " ORDER BY a.sequenceNumber";
+		 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+		 return query.getResultList();
+	 }
+	 
+	 public static List<OscePostRoom> findDistinctOscePostRoomAssignmentByOsceDay(Long osceDayId)
+	 {
+		 EntityManager em = entityManager();
+		 String sql = "SELECT DISTINCT a.oscePostRoom FROM Assignment a WHERE a.type = 1 AND a.osceDay.id = " + osceDayId + " ORDER BY a.sequenceNumber";
+		 TypedQuery<OscePostRoom> query = em.createQuery(sql, OscePostRoom.class);
+		 return query.getResultList();
+	 }
+	 
+	 public static List<OscePostRoom> findDistinctOscePostRoomOfStudentAssignment(Long osceId)
+	 {
+		 EntityManager em = entityManager();
+		 String sql = "SELECT DISTINCT a.oscePostRoom FROM Assignment a WHERE a.type = 0 AND a.osceDay.osce.id = " + osceId + " ORDER BY a.sequenceNumber";
+		 TypedQuery<OscePostRoom> query = em.createQuery(sql, OscePostRoom.class);
+		 return query.getResultList();
+	 }
+	 
+	 public static List<Integer> findDistinctSPSequenceNumberByOscePostRoomByOsceDay(Long oscePostRoomId, Long osceDayId)
+	 {
+		 EntityManager em = entityManager();
+		 String sql = "";
+		 if (oscePostRoomId != null)
+			 sql = "SELECT DISTINCT a.sequenceNumber FROM Assignment a WHERE a.type = 1 AND a.osceDay.id = " + osceDayId + " AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.id = " + oscePostRoomId + " ORDER BY a.sequenceNumber";
+		 else			 
+			 sql = "SELECT DISTINCT a.sequenceNumber FROM Assignment a WHERE a.type = 1 AND a.osceDay.id = " + osceDayId + " AND a.oscePostRoom IS NULL ORDER BY a.sequenceNumber";
+			 
+		 TypedQuery<Integer> query = em.createQuery(sql, Integer.class);
+		 return query.getResultList();
+	 }
+	 
+	 public static List<PatientInRole> findSPByOscePostRoomAndSequenceNumberByOsceDay(Long oscePostRoomId, Long osceDayId, Integer sequenceNumber)
+	 {
+		 EntityManager em = entityManager();
+		 String sql = "";
+		 if (oscePostRoomId != null)
+			 sql = "SELECT a.patientInRole FROM Assignment a WHERE a.type = 1 AND a.sequenceNumber = " + sequenceNumber + " AND a.osceDay.id = " + osceDayId + " AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.id = " + oscePostRoomId;
+		 else			 
+			 sql = "SELECT a.patientInRole FROM Assignment a WHERE a.type = 1 AND a.sequenceNumber = " + sequenceNumber + " AND a.osceDay.id = " + osceDayId + " AND a.oscePostRoom IS NULL";
+			 
+		 TypedQuery<PatientInRole> query = em.createQuery(sql, PatientInRole.class);
+		 return query.getResultList();
+	 }
+	 
+	 public static List<Assignment> findSpAssignmentByOscePostRoomAndSequenceNumberByOsceDay(Long oscePostRoomId, Long osceDayId, Integer sequenceNumber)
+	 {
+		 EntityManager em = entityManager();
+		 String sql = "";
+		 if (oscePostRoomId != null)
+			 sql = "SELECT a FROM Assignment a WHERE a.type = 1 AND a.sequenceNumber = " + sequenceNumber + " AND a.osceDay.id = " + osceDayId + " AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.id = " + oscePostRoomId;
+		 else			 
+			 sql = "SELECT a FROM Assignment a WHERE a.type = 1 AND a.sequenceNumber = " + sequenceNumber + " AND a.osceDay.id = " + osceDayId + " AND a.oscePostRoom IS NULL";
+			 
+		 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+		 return query.getResultList();
+	 }
+	 
+	 public static Assignment findSpTimeBySequenceNumberAndOsceDay(Long osceDayId, Integer sequenceNumber)
+	 {
+		 EntityManager em = entityManager();
+		 String sql = "SELECT a FROM Assignment a WHERE a.type = 1 AND a.sequenceNumber = " + sequenceNumber + " AND a.osceDay.id = " + osceDayId;
+		 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+		 if (query.getResultList().size() > 0)
+			 return query.getResultList().get(0);
+		 else
+			 return null;				 
+	 }	 
+	 
+	 public static List<Assignment> findExaminerAssignmentByOsce(Long osceId)
+	 {
+		 EntityManager em = entityManager();
+		 String sql = "SELECT a FROM Assignment a WHERE a.type = 2 AND a.osceDay.osce.id = " + osceId + " ORDER BY a.timeStart";
+		 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+		 return query.getResultList();
+	 }
+	 
+	 public static List<Assignment> findAssignmentByOsce(Long osceId)
+	 {
+		 EntityManager em = entityManager();
+		 String sql = "SELECT a FROM Assignment a WHERE a.osceDay.osce.id = " + osceId + " ORDER BY a.timeStart";
+		 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+		 return query.getResultList();
+	 }
+	 
+	 public static Map<Integer, Date> findTimeStartByOscePostRoom(Long osceId, OscePostRoom opr)
+	 {
+		 Map<Integer, Date> map = new LinkedHashMap<Integer, Date>();
+		 if (opr.getCourse() != null && opr.getRoom() != null)
+		 {
+			 EntityManager em = entityManager();
+			 String sql = "SELECT a.rotationNumber, MIN(a.timeStart) FROM Assignment a WHERE a.type = 0 AND a.osceDay.osce.id = " + osceId + " AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.id IN (SELECT opr.id FROM OscePostRoom opr WHERE opr.course.id = " + opr.getCourse().getId() + " AND opr.room.id = " + opr.getRoom().getId() + ") GROUP BY a.rotationNumber ORDER BY a.timeStart";
+			 List<Object[]> resultList = em.createQuery(sql).getResultList();
+			 
+			 for (Object[] result : resultList)
+			 {
+				map.put((Integer)result[0], (Date)result[1]);
+			 }
+		 }
+		 return map;
+	 }
+	 
+	 public static Map<Integer, Date> findTimeEndByOscePostRoom(Long osceId, OscePostRoom opr)
+	 {
+		 Map<Integer, Date> map = new LinkedHashMap<Integer, Date>();
+		 if (opr.getCourse() != null && opr.getRoom() != null)
+		 {
+			 EntityManager em = entityManager();
+			 String sql = "SELECT a.rotationNumber, MAX(a.timeEnd) FROM Assignment a WHERE a.type = 0 AND a.osceDay.osce.id = " + osceId + " AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.id IN (SELECT opr.id FROM OscePostRoom opr WHERE opr.course.id = " + opr.getCourse().getId() + " AND opr.room.id = " + opr.getRoom().getId() + ") GROUP BY a.rotationNumber ORDER BY a.timeStart";
+			 List<Object[]> resultList = em.createQuery(sql).getResultList();
+			
+			 for (Object[] result : resultList)
+			 {
+				 map.put((Integer)result[0], (Date)result[1]);
+			 }
+		 }
+		 
+		 return map;
+	 }
 } 
