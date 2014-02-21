@@ -24,6 +24,9 @@
 		
 		.checkbox-fix label {
 			bottom: 0;
+			vertical-align: middle;
+			padding-left: 2px;
+			padding-top: 7px;
 		}
 	</ui:style>
 	

@@ -116,7 +116,7 @@ OsceEditView.Presenter, OsceEditView.Delegate {
 		*/
 		
 				
-		requests.osceRequest().findAllOsces().with("tasks").fire(new OSCEReceiver<List<OsceProxy>>() {
+		requests.osceRequest().findAllOsces().with("tasks", "semester").fire(new OSCEReceiver<List<OsceProxy>>() {
 
 			public void onSuccess(List<OsceProxy> response) {
 				

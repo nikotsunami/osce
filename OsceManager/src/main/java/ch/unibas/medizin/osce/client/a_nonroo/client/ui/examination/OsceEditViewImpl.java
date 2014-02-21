@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
+import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -350,9 +351,8 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 					copiedOsce.setEnabled(false);
 				}
 			}
-		});
+		});		
 	}
-
 
 	@Override
 	public RequestFactoryEditorDriver<OsceProxy, OsceEditViewImpl> createEditorDriver() {
@@ -467,7 +467,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 				// TODO Auto-generated method stub
 				if(object!=null)
 				{
-				return object.getName();
+					return object.getName();
 				}
 				else
 				{
@@ -483,6 +483,9 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		//copiedOsce.setSuggestOracle(suggestOracle1);
 		//copiedOsce.setRenderer(new AbstractRenderer<OsceProxy>() {
 
+		final EnumRenderer<StudyYears> studyYearEnumRenderer = new EnumRenderer<StudyYears>();
+		final EnumRenderer<Semesters> semesterEnumRenderer = new EnumRenderer<Semesters>();
+		
 		DefaultSuggestOracle<OsceProxy> suggestOracle = (DefaultSuggestOracle<OsceProxy>) copiedOsce.getSuggestOracle();
 		suggestOracle1.setPossiblilities(emptyList);
 		copiedOsce.setSuggestOracle(suggestOracle1);
@@ -490,10 +493,17 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 
 			@Override
 			public String render(OsceProxy object) {
-				// TODO Auto-generated method stub
 				if(object!=null)
 				{
-				return object.getName();
+					String studyYear = studyYearEnumRenderer.render(object.getStudyYear());
+					String semsterStr = semesterEnumRenderer.render(object.getSemester().getSemester()) + " " + object.getSemester().getCalYear();
+					studyYear = studyYear + " - " + semsterStr;
+					
+					if (object.getIsRepeOsce())
+						studyYear = studyYear + " (Repe)";
+					
+					return studyYear;
+					//return object.getName();
 				}
 				else
 				{
