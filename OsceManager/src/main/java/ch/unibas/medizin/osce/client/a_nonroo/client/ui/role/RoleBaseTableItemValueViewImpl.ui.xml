@@ -36,6 +36,9 @@
 	{
 		padding-left: 25px;
 	}
+	.toolBarStyle{
+		margin-top: -2px;
+	}
 	</ui:style>
 	<ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons"></ui:with>
 	<g:HTMLPanel styleName="{style.patientTopContainer}">
@@ -64,15 +67,20 @@
 					 <my:IconButton ui:field="saveRichTextArea" icon="disk"></my:IconButton>
    					<my:IconButton ui:field="addRichTextAreaValue" icon="pencil"></my:IconButton>
    					</div>
-   						 <my1:RichTextToolbar ui:field="toolbar" />
-   					<div style="-moz-border-radius-bottomleft: 8px; 
-   							-moz-border-radius-bottomright: 8px; 
-   							border: 1px solid #AAA; 
-   							border-top: 0; 
-   						padding: 4px">
-   						<div  ui:field="descriptionValue"> </div>
+   						 
+   					<div style="-moz-border-bottom-colors: none;
+							    -moz-border-left-colors: none;
+							    -moz-border-right-colors: none;
+							    -moz-border-top-colors: none;
+							    border-color: #AAAAAA;
+							    border-radius: 5px 5px 5px 5px;
+							    border-style: solid;    
+							    border-width: 1px;">   						
+   						<my1:RichTextToolbar addStyleNames="{style.toolBarStyle}" ui:field="toolbar" visible="false" />
    						
-   					<g:RichTextArea ui:field='description' enabled="false"/>
+   						<div ui:field="descriptionValue" style="margin: 5px;"> </div>
+   						
+   						<g:RichTextArea ui:field='description' enabled="false"/>
    					</div>
 							
 						

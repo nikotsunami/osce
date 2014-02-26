@@ -143,7 +143,7 @@ RoleBaseTableItemValueView {
 		description.setEnabled(true);
 		descriptionValue.setInnerText("");		
 		description.setVisible(true);
-
+		toolbar.setVisible(true);
 		/*descriptionValue.setInnerText("");
 					
 		description.setVisible(true);*/
@@ -465,6 +465,7 @@ RoleBaseTableItemValueView {
 				
 				@Override
 				public void onClick(ClickEvent event) {
+					toolbar.setVisible(false);
 					saveRichTextArea.setVisible(false);
 					description.setVisible(false);
 				
@@ -486,7 +487,7 @@ RoleBaseTableItemValueView {
 				
 				@Override
 				public void onClick(ClickEvent event) {
-					
+					toolbar.setVisible(false);
 					saveRichTextArea.setVisible(false);
 					description.setVisible(false);
 				
