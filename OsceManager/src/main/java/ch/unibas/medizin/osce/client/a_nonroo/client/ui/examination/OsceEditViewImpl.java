@@ -22,6 +22,7 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -35,6 +36,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -259,6 +262,14 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 
 	private Presenter presenter;
 	
+	@UiField
+	IconButton preview;
+	
+	@UiField
+	HTMLPanel canvasPanel;
+	
+	@UiField
+	HorizontalPanel horizontalTabPanel;
 	
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 	
@@ -268,13 +279,14 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 
 		
 	public OsceEditViewImpl() {
-		System.out.println("my edit");
 		initWidget(BINDER.createAndBindUi(this));
+		
 		oscePanel.selectTab(0);
 		oscePanel.getTabBar().setTabText(0, constants.manageOsces());
 		TabPanelHelper.moveTabBarToBottom(oscePanel);
 		cancel.setText(constants.cancel());
 		save.setText(constants.save());
+		preview.setText(constants.preview());
 		//copiedOsce.setEnabled(false);
 		
 		labelTitleGeneral.setInnerText(constants.general());
@@ -352,6 +364,9 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 				}
 			}
 		});		
+		
+		horizontalTabPanel.getElement().getStyle().setMarginTop(5, Unit.PX);
+		//horizontalTabPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 	}
 
 	@Override
@@ -550,5 +565,50 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	}
 	// E Highlight onViolation	
 	
+	@UiHandler("preview")
+	public void previewButtonClicked(ClickEvent e)
+	{
+		if (validateFields() == false)
+		{
+			MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+			dialogBox.showConfirmationDialog(constants.warningNoOfOscePost());
+			
+			return;
+		}
+		
+		delegate.previewButtonClicked(preview.getAbsoluteLeft(), preview.getAbsoluteTop());
+	}
 	
+	private boolean validateFields() {
+		boolean flag = true;
+	
+		if (numberCourses.getValue() == null)
+			flag = false;
+		else if (maxNumberStudents.getValue() == null)
+			flag = false;
+		else if (numberRooms.getValue() == null)
+			flag = false;
+		else if (postLength.getValue() == null)
+			flag = false;
+		else if (shortBreak.getValue() == null)
+			flag = false;
+		else if (shortBreakSimpatChange.getValue() == null)
+			flag = false;
+		else if (middleBreak.getValue() == null)
+			flag = false;
+		else if (LongBreak.getValue() == null)
+			flag = false;
+		else if (lunchBreak.getValue() == null)
+			flag = false;
+		else if (longBreakRequiredTime.getValue() == null)
+			flag = false;
+		else if (lunchBreakRequiredTime.getValue() == null)
+			flag = false;
+		
+		return flag;
+	}
+
+	public HorizontalPanel getHorizontalTabPanel() {
+		return horizontalTabPanel;
+	}
 }

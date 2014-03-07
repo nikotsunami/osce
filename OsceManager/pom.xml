@@ -28,6 +28,12 @@
     	FOR GWTRPC-SPRING -->  
     
         <repository>
+		   <id>vaadin-addons</id>
+		   <url>http://maven.vaadin.com/vaadin-addons</url>
+		</repository>
+    	
+    
+        <repository>
             <id>spring-maven-release</id>
             <name>Spring Maven Release Repository</name>
             <url>http://maven.springframework.org/release</url>
@@ -139,6 +145,13 @@
     <version>3.9</version>
 </dependency>
 <!-- Apache POI for excel export -->
+   
+    <dependency>
+	   <groupId>org.vaadin.addons</groupId>
+	   <artifactId>gwt-graphics</artifactId>
+	   <version>1.0.0</version>
+	</dependency>
+   
    
     <dependency>
 		<groupId>de.novanic.gwteventservice</groupId>

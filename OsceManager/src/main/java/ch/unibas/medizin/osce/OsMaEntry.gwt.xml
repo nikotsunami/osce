@@ -54,7 +54,7 @@
   <set-property-fallback name="locale" value="de"/>
   <set-property name="locale" value="de,en,cn" />
   
-  
+  <inherits name='org.vaadin.gwtgraphics.GWTGraphics' />
   
   <inherits name="com.allen_sauer.gwt.log.gwt-log-ERROR" />
   <!-- <extend-property name="log_level" values="DEBUG"/> -->

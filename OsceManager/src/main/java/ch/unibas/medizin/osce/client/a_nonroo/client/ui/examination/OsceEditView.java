@@ -11,6 +11,7 @@ import ch.unibas.medizin.osce.shared.StudyYears;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface OsceEditView extends IsWidget {
@@ -26,6 +27,8 @@ public interface OsceEditView extends IsWidget {
 
 		void saveClicked();
 
+		void previewButtonClicked(int left, int top);
+
 	}
 
 	RequestFactoryEditorDriver<OsceProxy, OsceEditViewImpl> createEditorDriver();
@@ -36,6 +39,6 @@ public interface OsceEditView extends IsWidget {
 	void setOsceValues(List<OsceProxy> emptyList);
 	Set<TaskProxy> getTaskValue();
 	Map getOsceMap();
-	
+	HorizontalPanel getHorizontalTabPanel();	
 
 }

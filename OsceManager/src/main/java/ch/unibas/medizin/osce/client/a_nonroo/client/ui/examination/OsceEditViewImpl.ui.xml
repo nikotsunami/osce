@@ -18,7 +18,7 @@
 			<h3 class="{style.header}" style="display:inline"><span ui:field="title"></span></h3>
 			<my:IconButton ui:field="save" icon="disk"></my:IconButton>
 			<my:IconButton ui:field="cancel" icon="closethick"></my:IconButton>
-			
+			<my:IconButton ui:field="preview" icon="calculator"></my:IconButton>
 		</div>
 	</g:HTMLPanel>
 	<g:HTMLPanel>
@@ -362,6 +362,14 @@
 	</g:Tab>
 		</g:TabPanel>
 		    </g:HTMLPanel>
+		    <g:HTMLPanel ui:field="canvasPanel">
+		    	<g:HorizontalPanel	ui:field="horizontalTabPanel">
+		    	
+				</g:HorizontalPanel>
+		    </g:HTMLPanel>
+		    
+	
 		 </g:VerticalPanel>
+	
 </ui:UiBinder>
 

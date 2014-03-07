@@ -1405,6 +1405,34 @@ public interface OsceConstants extends Constants {
 	public String lessStudentMsg();
 	
 	public String requireOsceChange();
+	
+	public String preview();
+	
+	public String noOfOscePost();
+	
+	public String warningNoOfOscePost();
+	
+	public String osceWarinigMsg();
+	
+	public String precalculationError();
+	
+	public String middleBreak();
+			
+	public String longBreak();
+			
+	public String logicalBreak();
+	
+	public String lunchBreak();
+	
+	public String oscePost();
+	
+	public String osceDate();
+	
+	public String rotation();
+			
+	public String parcour();
+	
+	public String day();
 }
 
 
