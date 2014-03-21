@@ -28,6 +28,9 @@
 			padding-left: 2px;
 			padding-top: 7px;
 		}
+	.margin-Top{
+		padding-top: 5px;
+	}
 	</ui:style>
 	
 <g:VerticalPanel>
@@ -49,10 +52,14 @@
 						</div>
 						<n:PatientInSemesterFlexTable addStyleNames="{style.standardTable} {style.margin-fix}" ui:field="table"></n:PatientInSemesterFlexTable>
 						<div class="{style.controls}  {style.controlsleft} {style.margin-fix}">
-							<my:IconButton icon="gear" ui:field="autoAssignmentBtn"></my:IconButton>
 							<my:IconButton icon="plusthick" ui:field="addManuallyBtn"></my:IconButton>
 							<my:IconButton icon="arrowrefresh-1-w" ui:field="clearSelectionBtn"></my:IconButton>
 							<my:IconButton icon="extlink" ui:field="exportCsv"></my:IconButton>
+						</div>
+						<div class="{style.controls}  {style.controlsleft} {style.margin-fix}">
+							<my:IconButton icon="gear" ui:field="autoAssignmentBtn"></my:IconButton>
+							<g:CheckBox ui:field="isAssignPatientForHalfDay"></g:CheckBox>
+							<g:Label ui:field="isAssignPatientForHalfDayLbl" styleName="{style.margin-Top}"></g:Label>
 						</div>
 					<!-- </g:HTMLPanel> -->
 					<!-- <g:HorizontalPanel spacing="4">

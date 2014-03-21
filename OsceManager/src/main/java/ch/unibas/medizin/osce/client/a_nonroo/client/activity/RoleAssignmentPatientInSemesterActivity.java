@@ -3433,8 +3433,11 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 				// For Loding Image
 				
 				this.showApplicationLoading(true);
+				boolean isAssignPatientForHalfDay =view.getIsAssignPatientForHalfDay().getValue();
 				
-				autoAssignmentPatientInSemesterService.autoAssignPatientInSemester(semesterProxy.getId(), new AsyncCallback<Void>() {
+				Log.info("is Assign Patient for half day " + isAssignPatientForHalfDay);
+				
+				autoAssignmentPatientInSemesterService.autoAssignPatientInSemester(semesterProxy.getId(),isAssignPatientForHalfDay, new AsyncCallback<Void>() {
 
 					@Override
 					public void onFailure(Throwable caught) {

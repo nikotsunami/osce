@@ -1433,6 +1433,8 @@ public interface OsceConstants extends Constants {
 	public String parcour();
 	
 	public String day();
+
+	public String assignPatientForHalfDay();
 }
 
 

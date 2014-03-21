@@ -42,6 +42,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
@@ -67,6 +68,12 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 
 	@UiField (provided = true)
 	public QuickSearchBox searchBox;
+	
+	@UiField
+	CheckBox isAssignPatientForHalfDay;
+	
+	@UiField
+	Label isAssignPatientForHalfDayLbl;
 	
 	// Module 3 {
 
@@ -165,6 +172,7 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 		
 		exportCsv.setText(constants.exportCsv());
 		
+		isAssignPatientForHalfDayLbl.setText(constants.assignPatientForHalfDay());
 		headers = new String[] { constants.name(), constants.roleAccepted(),
 				constants.roleAssignTo(), "", "" };
 
@@ -387,4 +395,11 @@ delegate.showApplicationLoading(true);
 	public void onExportCsvClicked(ClickEvent event) {
 		delegate.exportCsvClicked();
 	}
+	public CheckBox getIsAssignPatientForHalfDay() {
+		return isAssignPatientForHalfDay;
+	}
+	public void setIsAssignPatientForHalfDay(CheckBox isAssignPatientForHalfDay) {
+		this.isAssignPatientForHalfDay = isAssignPatientForHalfDay;
+	}
+	
 }

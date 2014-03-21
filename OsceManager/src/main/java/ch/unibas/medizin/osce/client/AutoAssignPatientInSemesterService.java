@@ -10,5 +10,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("autoAssignPatientInSemster")
 public interface AutoAssignPatientInSemesterService extends RemoteService {
 
-	void autoAssignPatientInSemester(Long semesterId);
+	void autoAssignPatientInSemester(Long semesterId,boolean isAssignSPForHalfDay);
 }
