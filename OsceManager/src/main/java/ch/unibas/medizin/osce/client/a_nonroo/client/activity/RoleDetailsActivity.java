@@ -105,7 +105,6 @@ import ch.unibas.medizin.osce.client.managed.request.MaterialListProxy;
 import ch.unibas.medizin.osce.client.managed.request.MinorSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.MinorSkillRequest;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
-import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleBaseItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.RoleItemAccessProxy;
@@ -3028,7 +3027,7 @@ final int index2 = index;
 			
 			
 		}
-		// Highlight onViolation
+		// Highlight onViolationimp
 		public void importQuestion(final ChecklistQuestionProxy proxy,final RoleDetailsChecklistSubViewChecklistTopicItemViewImpl topicView,final ImportTopicPopupViewImpl viewforMap)
 		// E Highlight onViolation
 		{
@@ -3093,6 +3092,7 @@ final int index2 = index;
 									addOptionProxy.setOptionName(optionProxy.getOptionName());
 									addOptionProxy.setValue(optionProxy.getValue());
 									addOptionProxy.setCriteriaCount(optionProxy.getCriteriaCount());
+									addOptionProxy.setSequenceNumber(optionProxy.getSequenceNumber());
 									
 									Log.info("Option Question ID is :"+addOptionProxy.getChecklistQuestion().getId());
 									optionRequest.persist().using(addOptionProxy).fire(new Receiver<Void>() {
@@ -3120,6 +3120,7 @@ final int index2 = index;
 									ChecklistCriteriaProxy addCriteriaProxy=criteriaRequest.create(ChecklistCriteriaProxy.class);
 									addCriteriaProxy.setChecklistQuestion(queProxy);
 									addCriteriaProxy.setCriteria(criteriaProxy.getCriteria());
+									addCriteriaProxy.setSequenceNumber(criteriaProxy.getSequenceNumber());
 									
 									Log.info("Criteria Question ID is :"+addCriteriaProxy.getChecklistQuestion().getId());
 									criteriaRequest.persist().using(addCriteriaProxy).fire(new Receiver<Void>() {
