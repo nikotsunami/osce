@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.hibernate.mapping.Array;
 import org.springframework.transaction.annotation.Transactional;
 
 import ch.unibas.medizin.osce.client.AutoAssignPatientInSemesterService;
@@ -56,7 +55,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 	private List<OsceSequence> listOsceSequencesForFedralExam = new ArrayList<OsceSequence>();
 	private List<OsceSequence> listOsceSequencesForSimpleExam = new ArrayList<OsceSequence>();
 	private List<OsceSequence> listOsceSequencesForBkP = new ArrayList<OsceSequence>();
-	
+	// Added this to assign sp for half day.
 	private Map<Long, List<Long>> spPerSequenceMapForSimpleExam;
 	private Map<Long, List<Long>> spPerSequenceMapForFedralExam;
 	private Map<Long, List<Long>> spPerSequenceMapForBkp;
@@ -255,6 +254,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 									neededSp=(parcourList.size()*util.checkInteger(sortedOscePost.getStandardizedRole().getFactor()))+ util.checkInteger(sortedOscePost.getStandardizedRole().getSum());
 								}
 								
+								// Added this to assign sp for half day.
 								if(isAssignSPForHalfDay){
 									if(isChangedOsceDay){
 										
@@ -817,6 +817,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 												break;
 											PatientInSemester key = keyList.get(i);
 											//System.out.println("~~SORTED MAP KEY : " + key.getId() + "  ~~SIZE : " + valueList.get(i).size());
+											// Added this to assign sp for half day.
 											if(isAssignSPForHalfDay){
 												
 												if(isChangedOsceDayForBkp){
@@ -835,7 +836,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 											}
 											if(postallocationInSeqFlag < valueList.get(i).size() && valueList.get(i).get(postallocationInSeqFlag)!=null){
 												if(PatientInRole.getTotalTimePatientAssignInRole(sortedOsceDay.getId(), key.getId())==0){
-													
+													// Added this to assign sp for half day.
 													if(isAssignSPForHalfDay){
 														
 														boolean isAssignInPost=checkIsToAssignSpInSequence(spPerSequenceMapForBkp,valueList.get(i).get(postallocationInSeqFlag).getOsceSequence().getId(),key.getId());
@@ -854,7 +855,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 													}
 												}
 												else{
-													
+													// Added this to assign sp for half day.
 														if(isAssignSPForHalfDay){
 														
 															boolean isAssignInPost=checkIsToAssignSpInSequence(spPerSequenceMapForBkp,valueList.get(i).get(postallocationInSeqFlag).getOsceSequence().getId(),key.getId());
@@ -873,6 +874,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 											else{
 											
 													if(PatientInRole.getTotalTimePatientAssignInRole(sortedOsceDay.getId(), key.getId())==0){
+														// Added this to assign sp for half day.
 														if(isAssignSPForHalfDay){
 															
 															boolean isAssignInPost=checkIsToAssignSpInSequence(spPerSequenceMapForBkp,valueList.get(i).get(0).getOsceSequence().getId(),key.getId());
@@ -890,6 +892,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 														}
 													}
 													else{
+														// Added this to assign sp for half day.
 														if(isAssignSPForHalfDay){
 															boolean isAssignInPost=checkIsToAssignSpInSequence(spPerSequenceMapForBkp,valueList.get(i).get(0).getOsceSequence().getId(),key.getId());
 															
@@ -943,7 +946,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 				return;
 			
 				if(getTotalTimePatientAssignInRole==0){
-					
+					// Added this to assign sp for half day.
 					if(isAssignSPForHalfDay){
 							
 						boolean isAssisnSpInPost =checkIsToAssignSpInSequence(spPerSequenceMapForFedralExam, sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId());
@@ -989,6 +992,8 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 						newPatientAssignToRole.setOscePost(sortedOscePost);
 						newPatientAssignToRole.setPatientInSemester(sortedPatientInSemester1);
 						newPatientAssignToRole.persist();*/
+						
+						// Added this to assign sp for half day.
 						if(isAssignSPForHalfDay){
 							
 							boolean isAssisnSpInPost =checkIsToAssignSpInSequence(spPerSequenceMapForFedralExam, sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId());
@@ -1029,7 +1034,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					return;
 				
 				OscePost sortedOscePost2=sortedOscePostByTypeAndComplexyList.get(index);
-			
+				// Added this to assign sp for half day.
 				if(isAssignSPForHalfDay){
 					if(isChangedOsceDayForSimpleExam){
 						isChangedOsceDayForSimpleExam=false;
@@ -1062,7 +1067,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 					if(getTotalTimePatientAssignInRole==0){
 						
 						Log.info("Search Criteria Found For Role2 List"+sortedPatientInSemester1.getId());
-					
+						// Added this to assign sp for half day if sp fits in both post and if they are not in same sequence then assigning otherwise removing form list in which he is added .
 							if(isAssignSPForHalfDay){
 								
 								boolean isAssignInFirstPost=checkIsToAssignSpInSequence(spPerSequenceMapForSimpleExam,sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId());
@@ -1072,6 +1077,20 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 									spFitInCriteria=true;
 			 						assignSpInToRole1AndRole2IsRoleAssigningFirstTime(sortedOscePost,sortedOscePost2,sortedPatientInSemester1);
 			 						break;
+								}else{
+									if(isAssignInFirstPost){
+										
+										List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost.getOsceSequence().getId());
+										spList.remove(sortedPatientInSemester1.getId());
+										spPerSequenceMapForSimpleExam.put(sortedOscePost.getOsceSequence().getId(),spList);
+										break;
+									}else if(isAssignInSecondPost){
+										
+										List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost2.getOsceSequence().getId());
+										spList.remove(sortedPatientInSemester1.getId());
+										spPerSequenceMapForSimpleExam.put(sortedOscePost2.getOsceSequence().getId(),spList);
+										break;
+									}
 								}
 							}else{
 		 						spFitInCriteria=true;
@@ -1110,7 +1129,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 						}
 					
 						else{
-					
+							//Added this to assign sp for half day if sp fits in both post and if they are not in same sequence then assigning otherwise removing form list in which he is added .
 							if(isAssignSPForHalfDay){
 								
 								boolean isAssignInFirstPost=checkIsToAssignSpInSequence(spPerSequenceMapForSimpleExam,sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId());
@@ -1120,6 +1139,20 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 									spFitInCriteria=true;
 	 								assignSpInToRole1AndRole2IsRoleAssigningSecondTime(sortedOscePost,sortedOscePost2,sortedPatientInSemester1);
 			 						break;
+								}else{
+									if(isAssignInFirstPost){
+										
+										List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost.getOsceSequence().getId());
+										spList.remove(sortedPatientInSemester1.getId());
+										spPerSequenceMapForSimpleExam.put(sortedOscePost.getOsceSequence().getId(),spList);
+										break;
+									}else if(isAssignInSecondPost){
+										
+										List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost2.getOsceSequence().getId());
+										spList.remove(sortedPatientInSemester1.getId());
+										spPerSequenceMapForSimpleExam.put(sortedOscePost2.getOsceSequence().getId(),spList);
+										break;
+									}
 								}
 								
 							}else{
@@ -1170,7 +1203,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 								if(getTotalTimePatientAssignInRole==0){
 										
 								Log.info("Search Criteria Found For Role2 List"+sortedPatientInSemester1.getId());
-							
+								//Added this to assign sp for half day if sp fits in both post and if they are not in same sequence then assigning otherwise removing form list in which he is added .
 									if(isAssignSPForHalfDay){
 										
 										boolean isAssignInFirstPost=checkIsToAssignSpInSequence(spPerSequenceMapForSimpleExam,sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId());
@@ -1180,6 +1213,20 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 											spFitInCriteria=true;
 					 						assignSpInToRole1AndRole2IsRoleAssigningFirstTime(sortedOscePost,sortedOscePost2,sortedPatientInSemester1);
 					 						break;
+										}else{
+											if(isAssignInFirstPost){
+												
+												List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost.getOsceSequence().getId());
+												spList.remove(sortedPatientInSemester1.getId());
+												spPerSequenceMapForSimpleExam.put(sortedOscePost.getOsceSequence().getId(),spList);
+												break;
+											}else if(isAssignInSecondPost){
+												
+												List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost2.getOsceSequence().getId());
+												spList.remove(sortedPatientInSemester1.getId());
+												spPerSequenceMapForSimpleExam.put(sortedOscePost2.getOsceSequence().getId(),spList);
+												break;
+											}
 										}
 										
 									}else{
@@ -1219,7 +1266,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 									}		
 								}
 								else{
-							
+									//Added this to assign sp for half day if sp fits in both post and if they are not in same sequence then assigning otherwise removing form list in which he is added .
 										if(isAssignSPForHalfDay){
 										
 											boolean isAssignInFirstPost=checkIsToAssignSpInSequence(spPerSequenceMapForSimpleExam,sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId());
@@ -1229,6 +1276,20 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 												spFitInCriteria=true;
 				 								assignSpInToRole1AndRole2IsRoleAssigningSecondTime(sortedOscePost,sortedOscePost2,sortedPatientInSemester1);
 						 						break;
+											}else{
+												if(isAssignInFirstPost){
+													
+													List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost.getOsceSequence().getId());
+													spList.remove(sortedPatientInSemester1.getId());
+													spPerSequenceMapForSimpleExam.put(sortedOscePost.getOsceSequence().getId(),spList);
+													break;
+												}else if(isAssignInSecondPost){
+													
+													List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost2.getOsceSequence().getId());
+													spList.remove(sortedPatientInSemester1.getId());
+													spPerSequenceMapForSimpleExam.put(sortedOscePost2.getOsceSequence().getId(),spList);
+													break;
+												}
 											}
 										}else{
 			 								spFitInCriteria=true;
@@ -1285,7 +1346,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 							
 							if(getTotalTimePatientAssignInRole==0){
 	 							Log.info("Assign Patient In Role With One Post As NULL");
-	 							
+	 						///Added this to assign sp for half day if sp fits in both post and if they are not in same sequence then assigning otherwise removing form list in which he is added .
 	 							if(isAssignSPForHalfDay){
 	 								
 	 								boolean isAssignInFirstPost=checkIsToAssignSpInSequence(spPerSequenceMapForSimpleExam,sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId());
@@ -1294,6 +1355,20 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 									if(isAssignInFirstPost && isAssignInSecondPost){
 										assignSpInToRole1AndRole2IsRoleAssigningFirstTime(sortedOscePost,sortedOscePost3,sortedPatientInSemester1);
 				 						break;
+									}else{
+										if(isAssignInFirstPost){
+											
+											List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost.getOsceSequence().getId());
+											spList.remove(sortedPatientInSemester1.getId());
+											spPerSequenceMapForSimpleExam.put(sortedOscePost.getOsceSequence().getId(),spList);
+											break;
+										}else if(isAssignInSecondPost){
+											
+											List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost3.getOsceSequence().getId());
+											spList.remove(sortedPatientInSemester1.getId());
+											spPerSequenceMapForSimpleExam.put(sortedOscePost3.getOsceSequence().getId(),spList);
+											break;
+										}
 									}
 	 							}else{
 		 							assignSpInToRole1AndRole2IsRoleAssigningFirstTime(sortedOscePost,sortedOscePost3,sortedPatientInSemester1);
@@ -1347,6 +1422,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			 						newPatientAssignInRole2.setOscePost(sortedOscePost3);
 			 						newPatientAssignInRole2.setPatientInSemester(sortedPatientInSemester1);
 			 						newPatientAssignInRole2.persist();*/
+								//Added this to assign sp for half day if sp fits in both post and if they are not in same sequence then assigning otherwise removing form list in which he is added .
 								if(isAssignSPForHalfDay){
 									
 									boolean isAssignInFirstPost=checkIsToAssignSpInSequence(spPerSequenceMapForSimpleExam,sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId());
@@ -1355,6 +1431,20 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 									if(isAssignInFirstPost && isAssignInSecondPost){
 										assignSpInToRole1AndRole2IsRoleAssigningSecondTime(sortedOscePost,sortedOscePost3,sortedPatientInSemester1);
 				 						break;
+									}else{
+										if(isAssignInFirstPost){
+											
+											List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost.getOsceSequence().getId());
+											spList.remove(sortedPatientInSemester1.getId());
+											spPerSequenceMapForSimpleExam.put(sortedOscePost.getOsceSequence().getId(),spList);
+											break;
+										}else if(isAssignInSecondPost){
+											
+											List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost3.getOsceSequence().getId());
+											spList.remove(sortedPatientInSemester1.getId());
+											spPerSequenceMapForSimpleExam.put(sortedOscePost3.getOsceSequence().getId(),spList);
+											break;
+										}
 									}
 								}else{
 									assignSpInToRole1AndRole2IsRoleAssigningSecondTime(sortedOscePost,sortedOscePost3,sortedPatientInSemester1);
@@ -1384,7 +1474,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 	 							if(getTotalTimePatientAssignInRole==0){
 	 								
 	 							Log.info("Assign Patient In Role With One Post As NULL");
-	 							
+	 							//Added this to assign sp for half day if sp fits in both post and if they are not in same sequence then assigning otherwise removing form list in which he is added .
 	 							if(isAssignSPForHalfDay){
 	 								
 	 								boolean isAssignInFirstPost=checkIsToAssignSpInSequence(spPerSequenceMapForSimpleExam,sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId());
@@ -1393,6 +1483,20 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 									if(isAssignInFirstPost && isAssignInSecondPost){
 										assignSpInToRole1AndRole2IsRoleAssigningFirstTime(sortedOscePost,sortedOscePost3,sortedPatientInSemester1);
 				 						break;
+									}else{
+										if(isAssignInFirstPost){
+											
+											List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost.getOsceSequence().getId());
+											spList.remove(sortedPatientInSemester1.getId());
+											spPerSequenceMapForSimpleExam.put(sortedOscePost.getOsceSequence().getId(),spList);
+											break;
+										}else if(isAssignInSecondPost){
+											
+											List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost3.getOsceSequence().getId());
+											spList.remove(sortedPatientInSemester1.getId());
+											spPerSequenceMapForSimpleExam.put(sortedOscePost3.getOsceSequence().getId(),spList);
+											break;
+										}
 									}
 	 							}else{
 		 							assignSpInToRole1AndRole2IsRoleAssigningFirstTime(sortedOscePost,sortedOscePost3,sortedPatientInSemester1);
@@ -1444,6 +1548,7 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 	 						newPatientAssignInRole2.setOscePost(sortedOscePost3);
 	 						newPatientAssignInRole2.setPatientInSemester(sortedPatientInSemester1);
 	 						newPatientAssignInRole2.persist();*/
+	 								//Added this to assign sp for half day if sp fits in both post and if they are not in same sequence then assigning otherwise removing form list in which he is added .
 	 								if(isAssignSPForHalfDay){
 
 		 								boolean isAssignInFirstPost=checkIsToAssignSpInSequence(spPerSequenceMapForSimpleExam,sortedOscePost.getOsceSequence().getId(),sortedPatientInSemester1.getId());
@@ -1452,6 +1557,20 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 										if(isAssignInFirstPost && isAssignInSecondPost){
 											assignSpInToRole1AndRole2IsRoleAssigningSecondTime(sortedOscePost,sortedOscePost3,sortedPatientInSemester1);
 					 						break;
+										}else{
+											if(isAssignInFirstPost){
+												
+												List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost.getOsceSequence().getId());
+												spList.remove(sortedPatientInSemester1.getId());
+												spPerSequenceMapForSimpleExam.put(sortedOscePost.getOsceSequence().getId(),spList);
+												break;
+											}else if(isAssignInSecondPost){
+												
+												List<Long> spList = spPerSequenceMapForSimpleExam.get(sortedOscePost3.getOsceSequence().getId());
+												spList.remove(sortedPatientInSemester1.getId());
+												spPerSequenceMapForSimpleExam.put(sortedOscePost3.getOsceSequence().getId(),spList);
+												break;
+											}
 										}
 	 								}else{
 	 									assignSpInToRole1AndRole2IsRoleAssigningSecondTime(sortedOscePost,sortedOscePost3,sortedPatientInSemester1);
@@ -1661,6 +1780,5 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 		return isInsert;
 		
 	}
-	
 	
 }
