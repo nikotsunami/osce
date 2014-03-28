@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import ch.unibas.medizin.osce.client.AutoAssignPatientInSemesterService;
@@ -62,12 +63,11 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 	
 	@Override
 	
-	public void autoAssignPatientInSemester(Long semesterId,boolean isAssignSPForHalfDay) {
+	public void autoAssignPatientInSemester(Long semesterId) {
 		
 		Log.info("Inside autoAssignPatientInSemester With Semester Id :" + semesterId);
 		this.semesterId=semesterId;
 		this.autoAssignPatientInSemester2();
-		this.isAssignSPForHalfDay=isAssignSPForHalfDay;
 		return;
 	}
 	public void autoAssignPatientInSemester2(){
@@ -212,6 +212,11 @@ public class AutoAssignPatientInSemesterServiceImpl  extends RemoteEventServiceS
 			 			
 			 			Osce osce=sortedOsceDay.getOsce();
 			 			
+			 			if(osce.getAssignSPForHalfDay()==null){
+			 				isAssignSPForHalfDay=false;
+			 			}else{
+			 				isAssignSPForHalfDay=osce.getAssignSPForHalfDay();
+			 			}
 			 			isChangedOsceDay=true;
 			 			isChangedOsceDayForBkp=true;
 			 			isChangedOsceDayForSimpleExam=true;

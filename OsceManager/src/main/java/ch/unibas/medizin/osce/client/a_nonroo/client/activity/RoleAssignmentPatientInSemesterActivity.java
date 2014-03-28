@@ -165,7 +165,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	public static Timer osceDayTimer;
 	private OsMaConstant osMaConstant = GWT.create(OsMaConstant.class);
 	private boolean isPatientInSemesterFulfill;
-	
+	private boolean isFirstDayOfOsce;
 	// change {
 		private OsceDayProxy roleSelectedInOsceDay;
 		private OsceDayProxy osce_DayAtDelete;
@@ -449,7 +449,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 				Log.info("Total OSce Day is : " + setOsceDayProxy.size());
 				Iterator<OsceDayProxy> iteratorOSceDayProxy = setOsceDayProxy.iterator();
 				
-			
+				isFirstDayOfOsce=true;
 				while(iteratorOSceDayProxy.hasNext()){
 					
 					osceDayProxy=iteratorOSceDayProxy.next();
@@ -468,8 +468,12 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 					if(studyYear != null && name !=null){
 						String header = new EnumRenderer<StudyYears>().render(studyYear) +"." + name +" - " + DateTimeFormat.getShortDateFormat().format(osceDayProxy.getOsceDate());
 //						osceDaySubViewImpl.simpleDiscloserPanel.getHeaderTextAccessor().setText(header);
-						
-						osceDaySubViewImpl.getHeaderPanelForTitle(header);
+						if(isFirstDayOfOsce){
+							osceDaySubViewImpl.getHeaderPanelForTitle(header,isFirstDayOfOsce);
+							isFirstDayOfOsce=false;
+						}else{
+							osceDaySubViewImpl.getHeaderPanelForTitle(header,isFirstDayOfOsce);
+						}
 						osceDaySubViewContainerPanel.add(osceDaySubViewImpl);
 					}
 					else{
@@ -3433,11 +3437,8 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 				// For Loding Image
 				
 				this.showApplicationLoading(true);
-				boolean isAssignPatientForHalfDay =view.getIsAssignPatientForHalfDay().getValue();
 				
-				Log.info("is Assign Patient for half day " + isAssignPatientForHalfDay);
-				
-				autoAssignmentPatientInSemesterService.autoAssignPatientInSemester(semesterProxy.getId(),isAssignPatientForHalfDay, new AsyncCallback<Void>() {
+				autoAssignmentPatientInSemesterService.autoAssignPatientInSemester(semesterProxy.getId(), new AsyncCallback<Void>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
@@ -3715,6 +3716,27 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 			Window.open(url, "", "");
 		}
 		
+	}
+
+	@Override
+	public OsceProxy assignSPForHalfDayIsClicked(final OsceProxy osceProxy,Boolean isToAssignSPForHalfDay) {
+		GWT.log("persisting isToAssignSPForHalfDay value " + isToAssignSPForHalfDay + " for osce : " + osceProxy.getId());
+		showApplicationLoading(true);
+		OsceRequest osceRequest = requests.osceRequest();
+		
+		OsceProxy editedOsceProxy = osceRequest.edit(osceProxy);
+		editedOsceProxy.setAssignSPForHalfDay(isToAssignSPForHalfDay);
+		
+		osceRequest.persist().using(editedOsceProxy).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				GWT.log("assign SP for half day value is updated for osce" + osceProxy.getId());
+				showApplicationLoading(false);
+			}
+		});
+		
+		return editedOsceProxy;
 	}
 
 }

@@ -104,6 +104,8 @@ public class Osce {
    @NotNull
     private Boolean spStayInPost=false;
     
+	private Boolean assignSPForHalfDay=false;
+	
     @NotNull
     @ManyToOne
     private Semester semester;

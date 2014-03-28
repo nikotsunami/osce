@@ -69,12 +69,6 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	@UiField (provided = true)
 	public QuickSearchBox searchBox;
 	
-	@UiField
-	CheckBox isAssignPatientForHalfDay;
-	
-	@UiField
-	Label isAssignPatientForHalfDayLbl;
-	
 	// Module 3 {
 
 	@UiField
@@ -172,7 +166,6 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 		
 		exportCsv.setText(constants.exportCsv());
 		
-		isAssignPatientForHalfDayLbl.setText(constants.assignPatientForHalfDay());
 		headers = new String[] { constants.name(), constants.roleAccepted(),
 				constants.roleAssignTo(), "", "" };
 
@@ -395,11 +388,5 @@ delegate.showApplicationLoading(true);
 	public void onExportCsvClicked(ClickEvent event) {
 		delegate.exportCsvClicked();
 	}
-	public CheckBox getIsAssignPatientForHalfDay() {
-		return isAssignPatientForHalfDay;
-	}
-	public void setIsAssignPatientForHalfDay(CheckBox isAssignPatientForHalfDay) {
-		this.isAssignPatientForHalfDay = isAssignPatientForHalfDay;
-	}
-	
+
 }

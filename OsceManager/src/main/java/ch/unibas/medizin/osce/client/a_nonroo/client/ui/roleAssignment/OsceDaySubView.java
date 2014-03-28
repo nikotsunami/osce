@@ -46,6 +46,8 @@ public interface OsceDaySubView extends IsWidget{
 		
 		void onOSCESecurityChange(OsceProxy osceProxy,OSCESecurityStatus osceSecurityStatus,PatientAveragePerPost patientAveragePerPost,boolean isSecurityChange);
 		
+		public OsceProxy assignSPForHalfDayIsClicked(OsceProxy osceProxy, Boolean isToAssignSPForHalfDay);
+		
 		
 	}
 

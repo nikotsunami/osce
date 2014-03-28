@@ -8,7 +8,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface AutoAssignPatientInSemesterServiceAsync {
 
-	void autoAssignPatientInSemester(Long semesterId,boolean isAssignSPForHalfDay,
-			AsyncCallback<Void> callback);
+	void autoAssignPatientInSemester(Long semesterId,AsyncCallback<Void> callback);
 
 }

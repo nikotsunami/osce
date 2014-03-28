@@ -24,6 +24,7 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -37,6 +38,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -224,7 +226,7 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 
 	}
 	
-	public void getHeaderPanelForTitle(final String title) {
+	public void getHeaderPanelForTitle(final String title,boolean isFirstDayOfOsce) {
 
 		HorizontalPanel panel = new HorizontalPanel();
 		
@@ -248,7 +250,7 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 				}
 			}
 		};
-		headerPanel.setWidth("500px");
+		headerPanel.setWidth("297px");
 		
 		final HorizontalPanel iconImagePanel = new HorizontalPanel();
 		iconImagePanel.addStyleName("rightIcon");
@@ -263,8 +265,30 @@ public class OsceDaySubViewImpl extends Composite implements OsceDaySubView, Pat
 		
 		headerPanel.add(iconImagePanel);
 		headerPanel.add(label);
-		headerPanel.add(new Label());
+		// I think this is added to put extra space but as now I am putting isAssignPatientForHalfDay checkbox so commenting this line to make more room on panel.
+		//headerPanel.add(new Label());
 		panel.add(headerPanel);
+			
+		// This is to add checkbox which will determine whether to assign sP for half day in given osce so adding checkbox on first day of osce
+		if(isFirstDayOfOsce){
+			HorizontalPanel assignPatientForHalfDayContainer = new HorizontalPanel();
+			final CheckBox assignPatientForHalfDayCheckBox = new CheckBox();
+			assignPatientForHalfDayCheckBox.setValue(osceProxy.getAssignSPForHalfDay());
+			assignPatientForHalfDayCheckBox.addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					GWT.log("Assign patient for half day checkbox clicked");
+					osceProxy=delegate.assignSPForHalfDayIsClicked(osceProxy,assignPatientForHalfDayCheckBox.getValue());
+				}
+			});
+			Label msgLbl = new Label(constants.assignPatientForHalfDay());
+			msgLbl.getElement().getStyle().setPaddingTop(9, Unit.PX);
+			assignPatientForHalfDayContainer.add(assignPatientForHalfDayCheckBox);
+			assignPatientForHalfDayContainer.add(msgLbl);
+			panel.add(assignPatientForHalfDayContainer);
+			
+		}
 			
 		HorizontalPanel comboPanel = new HorizontalPanel();
 		comboPanel.setWidth("100px");
