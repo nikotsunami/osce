@@ -356,15 +356,29 @@ public class PatientInRole {
     
     public static void removePatientInRoleOfNullEntry(Long pisId)
     {
-    	EntityManager em = entityManager();
-    	String sql = "SELECT pir FROM PatientInRole AS pir WHERE pir.patientInSemester = " + pisId + " AND pir.oscePost IS NULL";
-    	TypedQuery<PatientInRole> q = em.createQuery(sql, PatientInRole.class);
-    	if (q.getResultList().size() == 1)
+    	int count = PatientInRole.findPatientInRoleByPatientInSemester(pisId);
+    			
+    	if (count < 2)
     	{
-    		PatientInRole pir = q.getSingleResult();
-    		pir.remove();
+    		EntityManager em = entityManager();
+        	String sql = "SELECT pir FROM PatientInRole AS pir WHERE pir.patientInSemester = " + pisId + " AND pir.oscePost IS NULL";
+        	TypedQuery<PatientInRole> q = em.createQuery(sql, PatientInRole.class);
+        	if (q.getResultList().size() == 1)
+        	{
+        		PatientInRole pir = q.getSingleResult();
+        		pir.remove();
+        	}
     	}
     }
+    
+    public static int findPatientInRoleByPatientInSemester(Long pisId)
+    {
+    	EntityManager em = entityManager();
+    	String sql = "SELECT pir FROM PatientInRole AS pir WHERE pir.patientInSemester = " + pisId + " AND pir.oscePost IS NOT NULL";
+    	TypedQuery<PatientInRole> q = em.createQuery(sql, PatientInRole.class);
+    	return q.getResultList().size();
+    }
+    
     //spec bug sol
     public static String savePatientInRole(Long osceDayId,Long oscePostId,Long patientInsemesterId,Long standardizedRoleId){
     	Log.info("Inside savePatientInRole");
