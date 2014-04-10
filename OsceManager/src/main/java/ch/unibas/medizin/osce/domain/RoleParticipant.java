@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.domain;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 
@@ -18,6 +19,9 @@ import ch.unibas.medizin.osce.shared.RoleParticipantTypes;
 @RooEntity
 public class RoleParticipant {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
 	private static Logger Log = Logger.getLogger(RoleParticipant.class);
 	
     @ManyToOne

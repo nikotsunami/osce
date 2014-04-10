@@ -1,0 +1,12 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<body> Dear User,<p/>
+
+Please click on the below link with in 4 hours that will redirect you at sp portal and then you can create/change your password.<br/>
+<a href='http://localhost:8080/spportal/#!reset/$randomString'>click here</a>
+
+<br/><br/>Thanks,<br/>
+Sp Portal Team.
+
+</body>
+</html>

@@ -16,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -33,6 +34,9 @@ import com.csvreader.CsvWriter;
 @RooEntity(finders = { "findPatientInSemestersBySemester" })
 public class PatientInSemester {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
 	private static Logger Log = Logger.getLogger(PatientInSemester.class);
 	
     @ManyToOne

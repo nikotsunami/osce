@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 
@@ -24,6 +25,9 @@ import ch.unibas.medizin.osce.shared.Semesters;
 @RooEntity
 public class Semester {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
     private static Logger Log = Logger.getLogger(Semester.class);
 	
 	@NotNull

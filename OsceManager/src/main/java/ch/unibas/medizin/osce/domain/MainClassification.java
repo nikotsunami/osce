@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.domain;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
@@ -14,6 +15,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooEntity
 public class MainClassification {
+	
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
 	
 	@Size(max = 2)
 	private String shortcut;

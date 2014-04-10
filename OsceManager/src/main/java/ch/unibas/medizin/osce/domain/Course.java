@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 
@@ -20,6 +21,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooEntity
 public class Course {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
 	private static Logger Log = Logger.getLogger(Course.class);
 	
     @NotNull

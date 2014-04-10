@@ -23,6 +23,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
@@ -47,6 +48,9 @@ import com.csvreader.CsvWriter;
 @RooEntity
 public class OsceDay {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
 	private static Logger Log = Logger.getLogger(OsceDay.class);
 	
 	@Temporal(TemporalType.TIMESTAMP)

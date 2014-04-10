@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -17,6 +18,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooEntity
 public class ItemAnalysis {
+	
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
 	
 	@ManyToOne
 	OscePost oscePost;

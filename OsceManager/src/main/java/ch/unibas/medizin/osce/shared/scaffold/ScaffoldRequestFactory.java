@@ -82,4 +82,6 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	BucketInformationRequestNonRoo bucketInformationRequestNonRoo();
 	
 	ItemAnalysisNonRoo itemAnalysisNonRoo();
+	
+	SpPortalPersonRequestNonRoo spPortalPersonRequestNonRoo();
 }

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
@@ -19,6 +20,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooEntity
 public class AnamnesisChecksValue{
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
     private Boolean truth;
 
     @Size(max = 255)

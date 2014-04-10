@@ -47,7 +47,8 @@
         <context:exclude-filter expression=".*_Roo_.*" type="regex"/>
         <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
-    <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="dataSource">
+    
+     <!-- <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="osceDataSource">
         <property name="driverClassName" value="${database.driverClassName}"/>
         <property name="url" value="${database.url}"/>
         <property name="username" value="${database.username}"/>
@@ -59,16 +60,79 @@
         <property name="numTestsPerEvictionRun" value="3"/>
         <property name="minEvictableIdleTimeMillis" value="1800000"/>
         <property name="validationQuery" value="SELECT 1"/>
-    </bean>
-    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory"/>
-    </bean>
-    <tx:annotation-driven mode="aspectj" transaction-manager="transactionManager"/>
-    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
+    </bean> -->
+    
+   <!--   <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="spportalDataSource">
+        <property name="driverClassName" value="${spportal.database.driverClassName}"/>
+        <property name="url" value="${spportal.database.url}"/>
+        <property name="username" value="${spportal.database.username}"/>
+        <property name="password" value="${spportal.database.password}"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="testOnReturn" value="true"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="timeBetweenEvictionRunsMillis" value="1800000"/>
+        <property name="numTestsPerEvictionRun" value="3"/>
+        <property name="minEvictableIdleTimeMillis" value="1800000"/>
+        <property name="validationQuery" value="SELECT 1"/>
+    </bean> -->
+    
+  	  <bean id="persistenceUnitManager" class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager" >
+        <property name="persistenceXmlLocations">
+            <!-- <list value-type="java.lang.String">classpath*:META-INF/persistence.xml</list> -->
+            <list><value type="java.lang.String">classpath*:META-INF/persistence.xml</value></list>
+        </property>
+         <!-- <property name="dataSources">
+            <map>
+                <entry key="osceDataSource" value-ref="osceDataSource" />
+                <entry key="spportalDataSource" value-ref="spportalDataSource" />
+            </map>
+        </property>
+        <property name="defaultDataSource" ref="osceDataSource" />
+        <property name="defaultPersistenceUnitRootLocation" value="persistenceUnit"/> -->
+     </bean>
+     
+   <!--data store  -->
+    
+     <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
+     <property name="persistenceUnitManager" ref="persistenceUnitManager" />
         <property name="persistenceUnitName" value="persistenceUnit"/>
-        <property name="dataSource" ref="dataSource"/>
+        <!-- <property name="dataSource" ref="osceDataSource"/> -->
+        <!-- <property name="persistenceUnitManager" ref="persistenceUnitManager" />
+         <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="true" />
+                <property name="generateDdl" value="false" />
+            </bean>    
+        </property>    --> 
+    </bean>
+
+ 	<bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="spportalEntityManagerFactory">
+        <property name="persistenceUnitManager" ref="persistenceUnitManager" />
+        <property name="persistenceUnitName" value="spportalPersistenceUnit"/>
+        <!-- <property name="dataSource" ref="spportalDataSource"/> -->
+         <!-- <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="true" />
+                <property name="generateDdl" value="true" />
+            </bean>
+        </property> -->
     </bean>
     
+ 	<bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+   
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="spportalTransactionManager">
+        <property name="entityManagerFactory" ref="spportalEntityManagerFactory"/>
+    </bean>
+    
+        
+    <tx:annotation-driven mode="aspectj" transaction-manager="transactionManager"/>
+
+    <!-- This is for sp portal data source -->
+    
+    <tx:annotation-driven mode="aspectj" transaction-manager="spportalTransactionManager"/>
+      
     <!--     Mail Configuration -->
     
     <bean id="sender" class="org.springframework.mail.javamail.JavaMailSenderImpl" >
@@ -86,6 +150,24 @@
     		</props>
     	</property>
     </bean>
+    
+     <!-- You can have some pre-configured messagess also which are ready to send -->
+    <bean id="emailServiceImpl" class="ch.unibas.medizin.osce.server.util.email.impl.EmailServiceImpl">
+        <property name="fromAddress" value="${spportal.from.mail.id}"></property>
+        <property name="subject" value="${spportal.mail.subject}"/>
+        <property name="sender" ref="sender"/>
+    </bean>
+    
+     <!-- velocity template to create email message -->
+    <bean id="velocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+        <property name="velocityProperties">
+            <value>
+                resource.loader=class
+                class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+            </value>
+        </property>
+    </bean>
+    
     <!--  Feature: 154 
     <bean id="emailServiceImpl" class="ch.unibas.medizin.osce.server.util.email.impl.EmailServiceImpl" >
     	<property name="sender" ref="sender"></property>

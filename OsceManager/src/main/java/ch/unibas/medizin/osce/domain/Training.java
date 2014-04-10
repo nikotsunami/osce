@@ -10,6 +10,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
@@ -23,6 +24,11 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooEntity(identifierColumn = "id", identifierType = Integer.class, table = "trainings")
 public class Training {
+	
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
+	
 	private String name;
 
 	@ManyToOne

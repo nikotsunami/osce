@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
@@ -24,6 +25,9 @@ import ch.unibas.medizin.osce.shared.OsceSecurityType;
 @RooToString
 @RooEntity
 public class PatientInRole {
+	
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
 	
 	private static Logger Log = Logger.getLogger(PatientInRole.class);
 	

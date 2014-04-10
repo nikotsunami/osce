@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
@@ -18,6 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RooToString
 @RooEntity
 public class ChecklistOption implements Comparable<ChecklistOption> {
+	
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
 	
 	private static Logger log = Logger.getLogger(ChecklistOption.class);
 	

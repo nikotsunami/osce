@@ -678,6 +678,13 @@
         	<type>jar</type>
         	<scope>test</scope>
         </dependency>
+        <!-- Velocity for mail template to send email to spportal user start -->
+		<dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+        </dependency>
+	<!-- Velocity for mail template to send email to spportal user end-->
     </dependencies>
     <build>
          <plugins>

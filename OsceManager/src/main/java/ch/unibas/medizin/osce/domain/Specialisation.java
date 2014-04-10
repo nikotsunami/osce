@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.OneToMany;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -31,6 +32,10 @@ import javax.validation.constraints.Size;
 @RooToString
 @RooEntity
 public class Specialisation {
+	
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
 	
 	private static Logger Log = Logger.getLogger(Specialisation.class);
 	

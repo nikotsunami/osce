@@ -8,6 +8,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
@@ -20,6 +21,10 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooEntity
 public class Skill {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
+	
 	private Integer shortcut;
 	
 	@Size(max = 1024)

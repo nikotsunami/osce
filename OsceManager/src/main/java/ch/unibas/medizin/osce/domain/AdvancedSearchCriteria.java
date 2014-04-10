@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -21,6 +22,9 @@ import ch.unibas.medizin.osce.shared.PossibleFields;
 @RooEntity
 public class AdvancedSearchCriteria {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
 	@NotNull
 	private PossibleFields field;
 

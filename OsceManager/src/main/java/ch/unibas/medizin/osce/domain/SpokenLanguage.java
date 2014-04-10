@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.OneToMany;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
@@ -19,6 +20,10 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooEntity
 public class SpokenLanguage {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
+	
     @Size(max = 40)
     private String languageName;
 

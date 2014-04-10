@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
@@ -15,6 +16,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooEntity
 public class ChecklistCriteria implements Comparable<ChecklistCriteria> {
+	
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
 	
 	@Size(max=255)
 	private String criteria;

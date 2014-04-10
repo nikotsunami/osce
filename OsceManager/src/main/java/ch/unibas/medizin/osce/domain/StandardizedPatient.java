@@ -17,6 +17,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
@@ -64,6 +65,9 @@ import com.google.gwt.requestfactory.server.RequestFactoryServlet;
 @RooEntity
 public class StandardizedPatient {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
     private static Logger Log = Logger.getLogger(StandardizedPatient.class);
 
     @Enumerated
@@ -137,15 +141,20 @@ public class StandardizedPatient {
     @Size(max = 20)
     private String socialInsuranceNo;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)    
     private AnamnesisForm anamnesisForm;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedpatient")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedpatient") 
     private Set<LangSkill> langskills = new HashSet<LangSkill>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedPatient")
 	private Set<PatientInSemester> patientInSemester = new HashSet<PatientInSemester>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+	private Person person;
+    
+    private Boolean ignoreSocialInsuranceNo;
+    
     private static class PatientSearch {
 
         private StringBuilder wholeSearchString;
@@ -1282,4 +1291,31 @@ public class StandardizedPatient {
 		return result;
 	}
 
+	// This method is used to save standardized patient data in sp portal db.
+	/*public static void insertStandardizedPatientDetailsInSPportal(Long standardizedPatinetId){
+		Log.info("insertStandardizedPatientDetailsInSPportal() called");
+		 To complete the user management flow I am persisting only user details in sp portal database. But we also need to persist
+		 sp details as well as all anamnesisChecksValue  details in sp portal db.
+		
+		try {
+				StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatinetId);
+				EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+				EntityManager em = emFactory.createEntityManager();
+				
+				String randomString = RandomStringUtils.randomAlphanumeric(OsMaConstant.RANDOM_STRING_LENGTH);
+				//String hashValue =HashGenerator.generateHash(randomString);
+				
+				SPPortalPerson spportalUser = new SPPortalPerson();
+				spportalUser.setActivationUrl(randomString);
+				spportalUser.setEmail(standardizedPatient.getEmail());
+				spportalUser.setExpiration(new Date());
+				spportalUser.setIsFirstLogin(true);
+				
+				em.persist(spportalUser);
+		}catch (Exception e) {
+			e.printStackTrace();
+			Log.error("Exception occured during persisting patient data in sp portal db." + e.getMessage(),e);
+		}
+	}*/
+	
 }

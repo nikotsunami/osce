@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
@@ -28,6 +29,9 @@ import ch.unibas.medizin.osce.shared.Sorting;
 @RooEntity(identifierColumn = "id", identifierType = Integer.class, table = "role_template")
 public class RoleTemplate {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
 	private static Logger Log = Logger.getLogger(RoleTemplate.class);
 	
 	@Column(name = "templateName")

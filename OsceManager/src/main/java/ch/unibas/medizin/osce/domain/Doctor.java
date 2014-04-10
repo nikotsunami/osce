@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -30,6 +31,9 @@ public class Doctor {
 	
 	private static Logger Log = Logger.getLogger(Doctor.class);
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
     @Enumerated
     private Gender gender;
 

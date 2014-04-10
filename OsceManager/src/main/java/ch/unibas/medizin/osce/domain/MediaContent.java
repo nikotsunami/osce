@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.domain;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -15,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RooToString
 @RooEntity
 public class MediaContent {
+	
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
 	
 	private static Logger Log = Logger.getLogger(MediaContent.class);
 	

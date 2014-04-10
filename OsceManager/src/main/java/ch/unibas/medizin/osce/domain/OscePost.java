@@ -9,6 +9,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
@@ -24,6 +25,9 @@ import ch.unibas.medizin.osce.shared.RoleTypes;
 @RooEntity(finders = { "findOscePostsByOscePostBlueprintAndOsceSequence" })
 public class OscePost {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
 	private static Logger Log = Logger.getLogger(OscePost.class);
     @ManyToOne
     private OscePostBlueprint oscePostBlueprint;

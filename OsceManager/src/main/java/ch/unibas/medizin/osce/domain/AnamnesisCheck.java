@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,6 +29,9 @@ import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 @RooEntity
 public class AnamnesisCheck {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
     @Size(max = 999)
     private String text;
 

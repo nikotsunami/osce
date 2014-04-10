@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.springframework.roo.addon.entity.RooEntity;
@@ -16,6 +17,10 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooEntity(table = "Simple_Search_Criteria")
 public class SimpleSearchCriteria {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
+	
 	@Column(name = "name")
 	private String name;
 

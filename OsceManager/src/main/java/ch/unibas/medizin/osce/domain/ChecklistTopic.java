@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
@@ -21,6 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RooToString
 @RooEntity
 public class ChecklistTopic {
+	
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
 	
 	private static Logger Log = Logger.getLogger(ChecklistTopic.class);
 	

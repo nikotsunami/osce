@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.domain;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.springframework.roo.addon.entity.RooEntity;
@@ -14,6 +15,10 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooEntity
 public class SkillLevel {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
+	
 	private Integer levelNumber;
 	
 	public static List<SkillLevel> getSkillLevelByLevelNumber(int val)

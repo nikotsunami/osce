@@ -25,6 +25,10 @@ public class EmailServiceImpl extends RemoteServiceServlet implements EmailServi
 	
 	private JavaMailSender sender;
 	
+	private String fromAddress;
+
+	private String subject;
+	
 	public EmailServiceImpl() {
 
 //		ClassPathResource res = new ClassPathResource("META-INF/spring/applicationContext.xml");
@@ -93,10 +97,65 @@ public class EmailServiceImpl extends RemoteServiceServlet implements EmailServi
 			preparator = null;
 		}
     }
+/**
+ * This method is used to send email. This is added when I need to send email to standardized patients when their entry is created in osce to notify them that 
+ * now they can use sp-portal by using sent link.
+ * @param toAddress
+ * @param message
+ * @return
+ */
+	public Boolean sendMail(final String[] toAddress, final String message) {
 
+		MimeMessagePreparator preparator = null;
+		try {
+			log.info("=======================Sending Mail Start=======================");
+
+			preparator = new MimeMessagePreparator() {
+				@Override
+				public void prepare(MimeMessage mimeMessage) throws Exception {
+
+					MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+					helper.setTo(toAddress);
+					helper.setFrom(fromAddress);
+					helper.setSubject(subject);
+					helper.setText(message, true);
+
+				}
+			};
+
+			sender.send(preparator);
+			log.info("=======================Mail Sent successfully=======================");
+			log.info("=======================Sending Mail End=======================");
+
+			return true;
+
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return false;
+		} finally {
+			preparator = null;
+		}
+	}
+	
 	public void setSender(JavaMailSender sender) {
 		log.info("setSender");
 		this.sender = sender;
+	}
+
+	public String getFromAddress() {
+		return fromAddress;
+	}
+
+	public void setFromAddress(String fromAddress) {
+		this.fromAddress = fromAddress;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 	
 }

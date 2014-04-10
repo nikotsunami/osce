@@ -12,6 +12,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
@@ -36,6 +37,9 @@ import com.google.gwt.requestfactory.server.RequestFactoryServlet;
 @RooEntity
 public class Answer {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
 	String answer;
 
 	@ManyToOne

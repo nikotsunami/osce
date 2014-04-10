@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 
@@ -19,6 +20,10 @@ import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 @RooEntity(table = "used_material")
 public class UsedMaterial {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
+	
 	@NotNull
 	private Integer materialCount;
 
