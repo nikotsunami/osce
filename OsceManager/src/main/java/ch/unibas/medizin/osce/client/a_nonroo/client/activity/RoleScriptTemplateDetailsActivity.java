@@ -1,6 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -189,10 +189,10 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 							Range range = roleBaseTableItemViewImpl.getTable().getVisibleRange();
 							roleBaseTableItemViewImpl.getTable().setRowCount(roleBaseItemProxy.getRoleTableItem().size());
 						
-							RoleTableItemProxy[] arrRoleTableItemProxy = new  RoleTableItemProxy[roleBaseItemProxy.getRoleTableItem().size()];								
+							/*RoleTableItemProxy[] arrRoleTableItemProxy = new  RoleTableItemProxy[roleBaseItemProxy.getRoleTableItem().size()];								
 							roleBaseItemProxy.getRoleTableItem().toArray(arrRoleTableItemProxy);
-							List<RoleTableItemProxy> listRoleTableItemProxy = Arrays.asList(arrRoleTableItemProxy);						
-							roleBaseTableItemViewImpl.getTable().setRowData(range.getStart(),listRoleTableItemProxy);
+							List<RoleTableItemProxy> listRoleTableItemProxy = Arrays.asList(arrRoleTableItemProxy);	*/					
+							roleBaseTableItemViewImpl.getTable().setRowData(range.getStart(),roleBaseItemProxy.getRoleTableItem());
 						}
 						else
 						{
@@ -299,9 +299,11 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 								//roleBaseTableItemViewImpl.baseItemHeaderLable.setText(rolebaseItem.getItem_name());																
 									roleBaseTableItemViewImpl.setDelegate(roleScriptTemplateDetailsActivity);
 									roleBaseTableItemViewImpl.setValue((RoleBaseItemProxy)response);
+									Range range = roleBaseTableItemViewImpl.getTable().getVisibleRange();
+									List<RoleTableItemProxy> proxyList = new ArrayList<RoleTableItemProxy>();
+									roleBaseTableItemViewImpl.getTable().setRowCount(proxyList.size());
+									roleBaseTableItemViewImpl.getTable().setRowData(range.getStart(), proxyList);
 									view.getTableItem().add(roleBaseTableItemViewImpl);
-																
-																
 								}
 								else
 								{
