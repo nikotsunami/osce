@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.domain;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -182,18 +183,32 @@ public class PatientInRole {
     	Log.info("PatientInSemester Is :" + patientInRole.getPatientInSemester().getId());
     	
     	OscePost oscePost=patientInRole.getOscePost();
-    	PatientInSemester patientInSemester = patientInRole.getPatientInSemester();
     	
-    	OsceDay osceDay =getOsceDayBasedonPostId(patientInRole.getId());
+    	List<Date> timeStartEndList = Assignment.findMinTimeStartAndMaxTimeEndByOscePost(oscePost.getId());
+    	
+    	PatientInSemester patientInSemester = patientInRole.getPatientInSemester();
+    	List<Assignment> assignmentList = new ArrayList<Assignment>();
+    	OsceDay osceDay = oscePost.getOsceSequence().getOsceDay();
+    	Osce osce = oscePost.getOsceSequence().getOsceDay().getOsce();
+    	
+    	if (timeStartEndList.size() == 2)
+    	{
+    		Long osceDayId = osceDay.getId();
+    		
+    		assignmentList = Assignment.findAssignmentByPatientInSemesterAndTimeStartAndTimeEnd(timeStartEndList.get(0), timeStartEndList.get(1), osceDayId, patientInSemester.getId());
+    	}
+    	
+    	
+    	/*OsceDay osceDay =getOsceDayBasedonPostId(patientInRole.getId());
     	Osce osce=Osce.findOsce(osceDay.getOsce().getId());
     	
     	Log.info("OSceDay Is :" + osceDay.getId());
     	
     	Set<Assignment> assignments =patientInRole.getAssignments();
-    	Log.info("Assignment of day and Pir is :" + assignments.size());
+    	Log.info("Assignment of day and Pir is :" + assignments.size());*/
     	
     	try{
-	    	if(assignments.size() > 0) {
+	    	/*if(assignments.size() > 0) {
 	    		
 		    	for (Iterator iterator = assignments.iterator(); iterator.hasNext();) {
 					Assignment assignment = (Assignment) iterator.next();
@@ -201,7 +216,14 @@ public class PatientInRole {
 					assignment.setPatientInRole(null);
 					assignment.persist();
 				}
-	    	}
+	    	}*/
+    		
+    		for (Assignment assignment : assignmentList)
+    		{
+    			assignment.setPatientInRole(null);
+				assignment.persist();
+    		}
+    		
     	Integer count=getTotalTimePatientAssignInRole(osceDay.getId(),patientInRole.getPatientInSemester().getId());
     	Log.info("Number of PatientIn Role Is " +count);
     	

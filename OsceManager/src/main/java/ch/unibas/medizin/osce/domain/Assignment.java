@@ -3360,4 +3360,32 @@ public class Assignment {
 		 
 		 return map;
 	 }
+	 
+	 public static List<Date> findMinTimeStartAndMaxTimeEndByOscePost(Long oscePostId)
+	 {
+		 List<Date> timeList = new ArrayList<Date>();
+		 EntityManager em = entityManager();
+		 String sql = "SELECT MIN(a.timeStart), MAX(a.timeEnd) FROM Assignment a WHERE a.type = 0 AND a.oscePostRoom.oscePost.id = " + oscePostId;
+		 List<Object[]> resultList = em.createQuery(sql).getResultList();
+		 
+		 if (resultList.size() > 0)
+		 {
+			 Object[] result = resultList.get(0);
+			 timeList.add(((Date)result[0]));
+			 timeList.add(((Date)result[1]));
+		 }
+		 
+		 return timeList;
+	 }
+	 
+	 public static List<Assignment> findAssignmentByPatientInSemesterAndTimeStartAndTimeEnd(Date timeStart, Date timeEnd, Long osceDayId, Long patientInSemesterId)
+	 {
+		 EntityManager em = entityManager();
+		 String sql = "SELECT a FROM Assignment a WHERE a.osceDay.id = " + osceDayId + " AND a.type = 1 AND a.timeStart >= :timeStart AND timeStart <= :timeEnd AND a.patientInRole.patientInSemester.id = " + patientInSemesterId;
+		 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+		 query.setParameter("timeStart", timeStart);
+		 query.setParameter("timeEnd", timeEnd);
+		 List<Assignment> assignmentList = query.getResultList(); 
+		 return assignmentList;
+	 }
 } 
