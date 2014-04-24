@@ -3275,15 +3275,22 @@ public class Assignment {
 	 
 	 public static List<PatientInRole> findSPByOscePostRoomAndSequenceNumberByOsceDay(Long oscePostRoomId, Long osceDayId, Integer sequenceNumber)
 	 {
+		 List<PatientInRole> patientInRoleList = new ArrayList<PatientInRole>();
 		 EntityManager em = entityManager();
 		 String sql = "";
 		 if (oscePostRoomId != null)
-			 sql = "SELECT a.patientInRole FROM Assignment a WHERE a.type = 1 AND a.sequenceNumber = " + sequenceNumber + " AND a.osceDay.id = " + osceDayId + " AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.id = " + oscePostRoomId;
+			 sql = "SELECT a FROM Assignment a WHERE a.type = 1 AND a.sequenceNumber = " + sequenceNumber + " AND a.osceDay.id = " + osceDayId + " AND a.oscePostRoom IS NOT NULL AND a.oscePostRoom.id = " + oscePostRoomId;
 		 else			 
-			 sql = "SELECT a.patientInRole FROM Assignment a WHERE a.type = 1 AND a.sequenceNumber = " + sequenceNumber + " AND a.osceDay.id = " + osceDayId + " AND a.oscePostRoom IS NULL";
+			 sql = "SELECT a FROM Assignment a WHERE a.type = 1 AND a.sequenceNumber = " + sequenceNumber + " AND a.osceDay.id = " + osceDayId + " AND a.oscePostRoom IS NULL";
 			 
-		 TypedQuery<PatientInRole> query = em.createQuery(sql, PatientInRole.class);
-		 return query.getResultList();
+		 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+		 
+		 for (Assignment a : query.getResultList())
+		 {
+			 patientInRoleList.add(a.getPatientInRole());
+		 }
+		 
+		 return patientInRoleList;
 	 }
 	 
 	 public static List<Assignment> findSpAssignmentByOscePostRoomAndSequenceNumberByOsceDay(Long oscePostRoomId, Long osceDayId, Integer sequenceNumber)

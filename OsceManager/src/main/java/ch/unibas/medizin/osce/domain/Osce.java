@@ -512,9 +512,6 @@ public class Osce {
     
     	for (OsceDay osceDay : osce.getOsce_days())
     	{
-    		if (osceDay.getId().equals(100l))
-    			System.out.println("ID");
-    		
     		Map<Long, Map<Integer, List<PatientInRole>>> spMap = osceDaySpMap.get(osceDay.getId());    		
     		for (Long oscePostRoomId : spMap.keySet())
         	{
@@ -623,7 +620,7 @@ public class Osce {
     	
     	try 
     	{
-    		String sql = "DELETE FROM Assignment WHERE osce_Day in (SELECT id FROM osce_day WHERE osce = " + osce.getId() + ")";
+    		String sql = "delete from assignment where osce_day in (select id from osce_day where osce = " + osce.getId() + ")";
     		int deletedCount = entityManager().createNativeQuery(sql).executeUpdate();
     		TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(osce);
 			optGen.createAssignments();
