@@ -137,6 +137,39 @@ public class EmailServiceImpl extends RemoteServiceServlet implements EmailServi
 		}
 	}
 	
+	public Boolean sendMail(final String[] toAddress, final String subject,final String message) {
+
+		MimeMessagePreparator preparator = null;
+		try {
+			log.info("=======================Sending Mail Start=======================");
+
+			preparator = new MimeMessagePreparator() {
+				@Override
+				public void prepare(MimeMessage mimeMessage) throws Exception {
+
+					MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+					helper.setTo(toAddress);
+					helper.setFrom(fromAddress);
+					helper.setSubject(subject);
+					helper.setText(message, true);
+
+				}
+			};
+
+			sender.send(preparator);
+			log.info("=======================Mail Sent successfully=======================");
+			log.info("=======================Sending Mail End=======================");
+
+			return true;
+
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return false;
+		} finally {
+			preparator = null;
+		}
+	}
+	
 	public void setSender(JavaMailSender sender) {
 		log.info("setSender");
 		this.sender = sender;

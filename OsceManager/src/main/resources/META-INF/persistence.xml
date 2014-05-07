@@ -73,7 +73,7 @@
 		<class>ch.unibas.medizin.osce.domain.Topic</class>
 		<class>ch.unibas.medizin.osce.domain.Training</class>
 		<class>ch.unibas.medizin.osce.domain.UsedMaterial</class>
-		<class>ch.unibas.medizin.osce.domain.Person</class>
+		<!-- <class>ch.unibas.medizin.osce.domain.SPPortalPerson</class> -->
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
@@ -117,7 +117,7 @@
         <class>ch.unibas.medizin.osce.domain.spportal.SpBankaccount</class>
         <class>ch.unibas.medizin.osce.domain.spportal.SpEliminationCriterion</class>
         <class>ch.unibas.medizin.osce.domain.spportal.SpNationality</class>
-        <class>ch.unibas.medizin.osce.domain.spportal.SpPerson</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SPPortalPerson</class>
         <class>ch.unibas.medizin.osce.domain.spportal.SpProfession</class>
         <class>ch.unibas.medizin.osce.domain.spportal.SpScar</class>
         <class>ch.unibas.medizin.osce.domain.spportal.SpStandardizedPatient</class>

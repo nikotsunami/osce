@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +15,15 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRenderer;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPDataChangedNotificationView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPDataChangedNotificationViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPDetailsReviewAnamnesisSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPDetailsReviewAnamnesisSubViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPDetailsReviewAnamnesisTableSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPDetailsReviewView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPDetailsReviewViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPEditRequestNotificationView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPEditRequestNotificationViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandardizedPatientAdvancedSearchAnamnesisPopup;
@@ -36,15 +46,22 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.Standardized
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUp;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchBasicCriteriaPopUpImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.util.OSCEReceiverPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpAnamnesisChecksValueProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpAnamnesisFormProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpStandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
@@ -74,6 +91,8 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.http.client.URL;
@@ -109,7 +128,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		StandardizedPatientAdvancedSearchLanguagePopup.Delegate, StandardizedPatientAdvancedSearchScarPopup.Delegate,
 		StandardizedPatientAdvancedSearchAnamnesisPopup.Delegate, StandardizedPatientAdvancedSearchNationalityPopup.Delegate,StandardizedPatientAdvancedSearchProfessionPopup.Delegate
 		,StandardizedPatientAdvancedSearchWorkPermissionPopup.Delegate,StandardizedPatientAdvancedSearchMaritialStatusPopupView.Delegate,
-		StandardizedPatientAdvancedSearchGenderPopupView.Delegate {
+		StandardizedPatientAdvancedSearchGenderPopupView.Delegate,SPEditRequestNotificationView.Delegate,SPDataChangedNotificationView.Delegate,
+		SPDetailsReviewView.Delegate,SPDetailsReviewAnamnesisTableSubView.Delegate,
+		SPDetailsReviewAnamnesisSubView.Delegate{
 
 	/** Holds the applications request factory */
 	private OsMaRequestFactory requests;
@@ -175,12 +196,16 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	private IconButton iconButton;
 	private HandlerRegistration placeChangeHandlerRegistration;
 
+	private StandardizedPatientActivity standardizedPatientActivity;
+	
 	// private final String filePath = "StandardizedPatientList.csv";
 
 	// BY SPEC v(End)
 
 	/*custom celltable start code*/
 	
+	private SPEditRequestNotificationView speditReuestView;
+	private SPDataChangedNotificationView spDataChangedNotificationView;
 	
 	public String columnHeader;
 	public String cellValue;
@@ -195,6 +220,24 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	/*private CellTable<StandardizedPatientProxy> table;*/
 	/*custom celltable end code*/
 
+	private Map<AnamnesisCheckTitleProxy,SPDetailsReviewAnamnesisTableSubView>  spDetailsReviewAmnesisTableViewMap = 
+			new HashMap<AnamnesisCheckTitleProxy,SPDetailsReviewAnamnesisTableSubView >();
+	
+	private SPDetailsReviewView  spDetailsReviewView;
+	
+	private SPDetailsReviewAnamnesisSubViewImpl spDetailsReviewAnamnesisSubViewImpl;
+	 
+	private SPDetailsReviewAnamnesisTableSubView spDetailsReviewAnamnesisTableSubView;
+	
+	private List<SpStandardizedPatientProxy> listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal;
+	
+	private List<StandardizedPatientProxy> listOfAllStandardizedPatientWhoseDataIsChanged;
+	
+	private int currentSPIndexWhoseDataIsReviewing=0;
+	
+	private Map<Integer,Integer> anamnesisTabSelectedIndexMap = new HashMap<Integer, Integer>();
+	
+	protected List<AnamnesisCheckTitleProxy> allAnamnesisCheckTitleProxyList;
 	
 	/**
 	 * Sets the dependencies of this activity and initializes the corresponding activity manager 
@@ -315,69 +358,85 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				path.add(colName.toString());
 				path.add(" ");
 				
-				
-			
-
-			table.addColumn(new TextColumn<StandardizedPatientProxy>() {
-
-				{
-					this.setSortable(true);
-				}
-
-				Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
-
-					public String render(java.lang.String obj) {
-						return obj == null ? "" : String.valueOf(obj);
-					}
-				};
-
-				String tempColumnHeader = columnHeader;
-
-				@Override
-				public String getValue(StandardizedPatientProxy object) {
-
+				/*if(columnHeader.equals(constants.editRequest()) ){
 					
-
-					if (tempColumnHeader == constants.name()) {
-						
-						return renderer.render(object.getName()!=null?object.getName():"");
-					} else if (tempColumnHeader == constants.preName()) {
-						
-						return renderer.render(object.getPreName()!=null?object.getPreName():"");
-					} else if (tempColumnHeader == constants.email()) {
-						
-						return renderer.render(object.getEmail()!=null?object.getEmail():"");
-					} else if (tempColumnHeader == constants.street()) {
-						
-						return renderer.render(object.getStreet()!=null?object.getStreet():"");
-					} else if (tempColumnHeader == constants.city()) {
-						
-						return renderer.render(object.getCity()!=null?object.getCity():"");
-						
-					} else if (tempColumnHeader == constants.telephone()) {
-						
-						return renderer.render(object.getTelephone()!=null?object.getTelephone():"");
-
-					} else if (tempColumnHeader == constants.height()) {
-						
-						return renderer.render(object.getHeight()!=null?object.getHeight().toString():"");
-
-					}
-					else if (tempColumnHeader == constants.weight()) {
-						
-						return renderer.render(object.getWeight()!=null?object.getWeight().toString():"");
-
-					}
-
-
-					else {
-						return "";
-					}
-
-					// return renderer.render(cellValue);
+					table.addColumn(new Column<SPDataProxy, SPDataProxy>(new StandardizedPatientViewImpl.EditRequestTextCell()) {
+						   @Override
+						   public SPDataProxy getValue(SPDataProxy object) {
+						    return object;
+						   }
+						  }, constants.editRequest());
 				}
-			}, columnHeader, false);
-			//path.add(" ");
+			
+				else if(columnHeader.equals(constants.dataChange())){
+					table.addColumn(new Column<SPDataProxy, SPDataProxy>(new StandardizedPatientViewImpl.DataChangedTextCell()) {
+						   @Override
+						   public SPDataProxy getValue(SPDataProxy object) {
+						    return object;
+						   }
+						  }, constants.dataChange());
+				}*/
+				/*else{*/
+					
+					table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+		
+						{
+							this.setSortable(true);
+						}
+		
+						Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+		
+							public String render(java.lang.String obj) {
+								return obj == null ? "" : String.valueOf(obj);
+							}
+						};
+		
+						String tempColumnHeader = columnHeader;
+		
+						@Override
+						public String getValue(StandardizedPatientProxy object) {
+		
+		
+							if (tempColumnHeader == constants.name()) {
+								
+								return renderer.render(object.getName()!=null?object.getName():"");
+							} else if (tempColumnHeader == constants.preName()) {
+								
+								return renderer.render(object.getPreName()!=null?object.getPreName():"");
+							} else if (tempColumnHeader == constants.email()) {
+								
+								return renderer.render(object.getEmail()!=null?object.getEmail():"");
+							} else if (tempColumnHeader == constants.street()) {
+								
+								return renderer.render(object.getStreet()!=null?object.getStreet():"");
+							} else if (tempColumnHeader == constants.city()) {
+								
+								return renderer.render(object.getCity()!=null?object.getCity():"");
+								
+							} else if (tempColumnHeader == constants.telephone()) {
+								
+								return renderer.render(object.getTelephone()!=null?object.getTelephone():"");
+		
+							} else if (tempColumnHeader == constants.height()) {
+								
+								return renderer.render(object.getHeight()!=null?object.getHeight().toString():"");
+		
+							}
+							else if (tempColumnHeader == constants.weight()) {
+								
+								return renderer.render(object.getWeight()!=null?object.getWeight().toString():"");
+		
+							}
+		
+							else {
+								return "";
+							}
+		
+							// return renderer.render(cellValue);
+						}
+					}, columnHeader, false);
+					//path.add(" ");
+				/*}*/
 		}
 		}
 
@@ -396,6 +455,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		this.widget = panel;
 		this.view = standardizedPatientView;
 		widget.setWidget(standardizedPatientView.asWidget());
+		
+		standardizedPatientActivity=this;
 		
 		RecordChangeEvent.register(requests.getEventBus(), (StandardizedPatientViewImpl)view);
 		
@@ -546,7 +607,6 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				Log.info("mouse down");
 				x = event.getClientX();
 				y = event.getClientY();
-
 				if(criteriaTable.getRowCount()>0)
 				{
 				Log.info(criteriaTable.getRowElement(0).getAbsoluteTop() + "--"+ event.getClientY());
@@ -781,8 +841,90 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			}
 		});
 		view.setDelegate(this);
-	}
+		
+		//SPportal related changes start {
+		speditReuestView = new SPEditRequestNotificationViewImpl();
+		speditReuestView.setDelegate(this);
+		
+		spDataChangedNotificationView = new SPDataChangedNotificationViewImpl();
+		
+		spDataChangedNotificationView.setDelegate(this);
+		
+		
+		((SPEditRequestNotificationViewImpl)speditReuestView).getTable().addRangeChangeHandler(new RangeChangeEvent.Handler() {
+			public void onRangeChange(RangeChangeEvent event) {
+				setSPDataInEditRequestNotificationViewTable();
+			}
+		});
+		
+		((SPDataChangedNotificationViewImpl)spDataChangedNotificationView).getTable().addRangeChangeHandler(new RangeChangeEvent.Handler() {
+			public void onRangeChange(RangeChangeEvent event) {
+				setSPDataInDataChangedNotificationViewTable();
+			}
+		});
 	
+	
+		findOldAndNewDetailsOfSP();
+		
+		spDetailsReviewView = new SPDetailsReviewViewImpl();
+		
+		spDetailsReviewView.setDelegate(this);
+		
+		spDetailsReviewAnamnesisSubViewImpl = ((SPDetailsReviewViewImpl)spDetailsReviewView).getSpDetailsReviewAnamnesisSubViewImpl();
+		
+		spDetailsReviewAnamnesisSubViewImpl.setDelegate(this);
+		
+		addAnamnesisCheckTitleTabSelectionHandler();
+		
+		addClickHandlerOfAcceptedAndDiscardButton();
+		
+		showAllSpsWhoSentEditRequest();
+		
+		//findAllAnamnesisCheckTitle();
+		
+		//SPportal related changes end }
+	}
+
+	private void addAnamnesisCheckTitleTabSelectionHandler() {
+
+		spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.addSelectionHandler(new SelectionHandler<Integer>() {
+
+				@Override
+				public void onSelection(SelectionEvent<Integer> event) {
+					Log.info("Selected tab index is : " + event.getSelectedItem());
+					anamnesisTitleTabSelected(event.getSelectedItem());
+				}
+				
+			});
+			
+}
+
+	@SuppressWarnings("deprecation")
+	private void findAllAnamnesisCheckTitle() {
+		
+	requests.spPortalPersonRequestNonRoo().findAllAnamnesisThatIsSendToDMZ().fire(new OSCEReceiver<List<AnamnesisCheckTitleProxy>>() {
+
+		@Override
+		public void onSuccess(List<AnamnesisCheckTitleProxy> response) {
+
+			if (response == null) {
+				return;
+			}
+			Log.info("Total anamnesis check is : " + response.size());
+			
+			allAnamnesisCheckTitleProxyList =response;
+			
+			for (final AnamnesisCheckTitleProxy title : response) {
+				SPDetailsReviewAnamnesisTableSubView subView = spDetailsReviewAnamnesisSubViewImpl.addAnamnesisCheckTitle(title);
+				subView.setDelegate(standardizedPatientActivity);
+				spDetailsReviewAmnesisTableViewMap.put(title, subView);
+			//	anamnesisCheckTitles.add(title);
+			}
+		}
+	});
+	
+}
+
 	/**
 	 * Receiver class for count request. if the request succeeds, sets 
 	 * the rowCount of the standardized patient table and then executes
@@ -1444,4 +1586,492 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		addAdvSeaBasicButtonClicked(null, gender.toString(), displayValue, bindType, PossibleFields.GENDER, comparison);
 	}
 
+	/**
+	 * This method is used to show all sps that sent edit request
+	 */
+	@SuppressWarnings("deprecation")
+	private void showAllSpsWhoSentEditRequest() {
+	
+		Log.info("Finding all SPS who sent edit request");
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+
+		requests.spPortalPersonRequestNonRoo().findAllSpsCountWhoSentEditReq().fire(new OSCEReceiver<Long>() {
+
+			@Override
+			public void onSuccess(Long response) {
+				Log.info("Users count who sent edit requests are : " + response);
+				((SPEditRequestNotificationViewImpl)speditReuestView).getTable().setRowCount(response.intValue(), true);
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				
+				if(response > 0 ){
+					
+					((SPEditRequestNotificationViewImpl)speditReuestView).show();
+					
+					setSPDataInEditRequestNotificationViewTable();
+					
+					((SPEditRequestNotificationViewImpl)speditReuestView).setButtonText(response.intValue());
+				}
+				
+				if(response==0){
+					showAllSpsWhoEditedData();
+				}
+			}
+			
+		});
+		
+	}
+	/**
+	 * This method set data of sp sent edit request in table.
+	 */
+	@SuppressWarnings("deprecation")
+	private void setSPDataInEditRequestNotificationViewTable() {
+		
+		Range range = ((SPEditRequestNotificationViewImpl)speditReuestView).getTable().getVisibleRange();
+
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+	
+		requests.spPortalPersonRequestNonRoo().findAllSpsWhoSentEditRequest(range.getStart(),range.getLength()).fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
+
+			@Override
+			public void onSuccess(List<StandardizedPatientProxy> response) {
+				
+				Log.info("Total SP sent edit request list is : " + response);
+				
+				Range range = ((SPEditRequestNotificationViewImpl)speditReuestView).getTable().getVisibleRange();
+			
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				
+				((SPEditRequestNotificationViewImpl)speditReuestView).getTable().setRowData(range.getStart(), response);
+			}
+		});
+		
+		
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void denyEditRequestButtonClicked() {
+		Log.info("updating user request flag and sending email to all sps who sent edit request as their req is denied");
+		
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+
+		requests.spPortalPersonRequestNonRoo().denyAllSpsEditRequest().fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				
+				Log.info("Sent mail to all spes and their status is updated");
+				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				
+				((SPEditRequestNotificationViewImpl)speditReuestView).hide();
+				
+				showAllSpsWhoEditedData();
+			}
+		});
+		
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void allowEditRequestButtonClicked() {
+
+		Log.info("updating user request flag and sending email to all sps who sent edit request as their req is accepted");
+		
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+
+		requests.spPortalPersonRequestNonRoo().allSpsEditRequestIsApproved().fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				
+				Log.info("Sent mail to all spes and their status is updated");
+				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				
+				((SPEditRequestNotificationViewImpl)speditReuestView).hide();
+				
+				showAllSpsWhoEditedData();
+			}
+		});
+	}
+	/**
+	 * This method is used to show all sps that changed their data
+	 */
+	@SuppressWarnings("deprecation")
+	public void showAllSpsWhoEditedData() {
+	
+		Log.info("Finding all SPS who changed their Data");
+		
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		
+		requests.spStandardizedPatientRequestNonRoo().findAllSpsCountWhoEditedData().fire(new OSCEReceiver<Long>() {
+
+			@Override
+			public void onSuccess(Long response) {
+				
+				Log.info("Users count who edited their data are : " + response);
+				
+				((SPDataChangedNotificationViewImpl)spDataChangedNotificationView).getTable().setRowCount(response.intValue(), true);
+				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				
+				if(response > 0 ){
+					
+					((SPDataChangedNotificationViewImpl)spDataChangedNotificationView).show();
+					
+					setSPDataInDataChangedNotificationViewTable();
+				}
+				
+			}
+			
+		});
+	}
+	/**
+	 * This method is used to show all sps that changed their data in table.
+	 */
+	@SuppressWarnings("deprecation")
+	private void setSPDataInDataChangedNotificationViewTable() {
+		
+		Range range = ((SPDataChangedNotificationViewImpl)spDataChangedNotificationView).getTable().getVisibleRange();
+
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		
+			requests.spStandardizedPatientRequestNonRoo().findAllSPWhoEditedDetails(range.getStart(),range.getLength()).fire(new OSCEReceiver<List<SpStandardizedPatientProxy>>() {
+
+			@Override
+			public void onSuccess(List<SpStandardizedPatientProxy> response) {
+				
+				Log.info("Total SP edited their data list is : " + response.size());
+				
+				Range range = ((SPDataChangedNotificationViewImpl)spDataChangedNotificationView).getTable().getVisibleRange();
+			
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				
+				((SPDataChangedNotificationViewImpl)spDataChangedNotificationView).getTable().setRowData(range.getStart(), response);
+			}
+		});
+		
+	}
+
+	/**
+	 * This method is used to handle review button click handler.
+	 */
+	@Override
+	public void reviewChangeButtonClicked() {
+		
+		showOldAndNewDataOfSPToAdmin();
+		
+		findAllAnamnesisCheckTitle();
+		
+		//hide changes view.
+		((SPDataChangedNotificationViewImpl)spDataChangedNotificationView).showView(false);
+		
+		//showing review view.
+		((SPDetailsReviewViewImpl)spDetailsReviewView).setViewVisible(true);
+		
+		//findOldAndNewDetailsOfSP();
+		
+		//spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.selectTab(0);
+	}
+
+	@SuppressWarnings("deprecation")
+	private void findOldAndNewDetailsOfSP() {
+		
+		Log.info("finding all sps who changed their data at sp portal");
+		
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		
+		requests.spStandardizedPatientRequestNonRoo().findALlSPWhoEditedDetails().with("anamnesisForm").fire(new OSCEReceiver<List<SpStandardizedPatientProxy>>() {
+
+			@Override
+			public void onSuccess(List<SpStandardizedPatientProxy> response) {
+
+				Log.info("total sp who edited their data at sp portal is :" + response.size());
+				
+				listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal=response;
+				
+				Log.info("finding all standar dized patient whoes data is changed at sp portal to get theird old data");
+				
+				requests.spPortalPersonRequestNonRoo().findAllStandardizedPAtientWhoesDataIsChangedAtSPPortal(listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal).with("anamnesisForm").
+			
+				fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
+
+					@Override
+					public void onSuccess(List<StandardizedPatientProxy> response) {
+					
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						
+						Log.info("total standardized patient found is  :" + response.size());
+						
+						listOfAllStandardizedPatientWhoseDataIsChanged=response;
+						
+						//showOldAndNewDataOfSPToAdmin();
+					}
+					
+				});
+				
+			}
+		});
+		
+	}
+	
+	private void showOldAndNewDataOfSPToAdmin() {
+		
+		if(listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal.size() > currentSPIndexWhoseDataIsReviewing){
+			StandardizedPatientProxy standardizedPatientProxy = listOfAllStandardizedPatientWhoseDataIsChanged.get(currentSPIndexWhoseDataIsReviewing);
+			SpStandardizedPatientProxy spStandardizedPatientProxy = listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal.get(currentSPIndexWhoseDataIsReviewing);
+			
+			spDetailsReviewView.setValue(standardizedPatientProxy, spStandardizedPatientProxy);
+		}
+		
+	}
+
+	private void addClickHandlerOfAcceptedAndDiscardButton(){
+
+		((SPDetailsReviewViewImpl)spDetailsReviewView).getAcceptChangesButton().addClickHandler(new ClickHandler() {
+			
+			@SuppressWarnings("deprecation")
+			@Override
+			public void onClick(ClickEvent event) {
+				Log.info("Accepted changes button clicked");
+		
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+				
+				StandardizedPatientProxy standardizedPatientProxy = listOfAllStandardizedPatientWhoseDataIsChanged.get(currentSPIndexWhoseDataIsReviewing);
+
+				SpStandardizedPatientProxy spStandardizedPatientProxy = listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal.get(currentSPIndexWhoseDataIsReviewing);
+				
+				
+				requests.spStandardizedPatientRequestNonRoo().moveChangedDetailsOfSPFormSPPortal(standardizedPatientProxy.getId(), spStandardizedPatientProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+					@Override
+					public void onSuccess(Boolean response) {
+						
+						Log.info("Data moved successfully is" + response);
+						
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						
+						if(response){
+							anamnesisTabSelectedIndexMap.clear();
+							resetTabStyle();
+							currentSPIndexWhoseDataIsReviewing+=1;
+							
+							if(spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.getWidgetCount()>=1)
+							spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.selectTab(1);
+							
+							spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.selectTab(0);
+							
+							if(listOfAllStandardizedPatientWhoseDataIsChanged.size()==currentSPIndexWhoseDataIsReviewing){
+								((SPDetailsReviewViewImpl)spDetailsReviewView).setViewVisible(false);
+							}else{
+								showOldAndNewDataOfSPToAdmin();
+							}
+						}else{
+						
+							((SPDetailsReviewViewImpl)spDetailsReviewView).setViewVisible(false);
+							
+							final OSCEReceiverPopupViewImpl errorMsgDisplayView =new OSCEReceiverPopupViewImpl();
+							
+							errorMsgDisplayView.showMessage(constants.dataSaveFailure());
+							
+							errorMsgDisplayView.getBtnOk().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									errorMsgDisplayView.hide();
+								}
+							});
+						}
+					}
+					
+				});
+				
+				
+			}
+		});
+		
+		((SPDetailsReviewViewImpl)spDetailsReviewView).getDiscardChangesButton().addClickHandler(new ClickHandler() {
+			
+			@SuppressWarnings("deprecation")
+			@Override
+			public void onClick(ClickEvent event) {
+				Log.info("Discard changes button clicked");
+				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+				
+				StandardizedPatientProxy standardizedPatientProxy = listOfAllStandardizedPatientWhoseDataIsChanged.get(currentSPIndexWhoseDataIsReviewing);
+
+				SpStandardizedPatientProxy spStandardizedPatientProxy = listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal.get(currentSPIndexWhoseDataIsReviewing);
+				
+				
+				requests.spStandardizedPatientRequestNonRoo().removeSPDetailsFromSPPortal(standardizedPatientProxy.getId(),spStandardizedPatientProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+					@Override
+					public void onSuccess(Boolean response) {
+					
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						
+						if(response){
+							
+							anamnesisTabSelectedIndexMap.clear();
+							resetTabStyle();
+							currentSPIndexWhoseDataIsReviewing+=1;
+							
+							if(spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.getWidgetCount()>=1)
+							spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.selectTab(1);
+							
+							spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.selectTab(0);
+							
+							if(listOfAllStandardizedPatientWhoseDataIsChanged.size()==currentSPIndexWhoseDataIsReviewing){
+								((SPDetailsReviewViewImpl)spDetailsReviewView).setViewVisible(false);
+							}else{
+								showOldAndNewDataOfSPToAdmin();
+							}
+						}else{
+						
+							((SPDetailsReviewViewImpl)spDetailsReviewView).setViewVisible(false);
+							
+							final OSCEReceiverPopupViewImpl errorMsgDisplayView =new OSCEReceiverPopupViewImpl();
+							
+							errorMsgDisplayView.showMessage(constants.dataSaveFailure());
+							
+							errorMsgDisplayView.getBtnOk().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									errorMsgDisplayView.hide();
+								}
+							});
+						}
+						
+					}
+				});
+				
+				
+			}
+		});
+	}
+	
+	private void resetTabStyle() {
+		int totalTabBarCount=spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.getWidgetCount();
+		Log.info("Total tabs are :" + totalTabBarCount);
+		for(int count=1; count< totalTabBarCount;count++){
+			if(count==(spDetailsReviewAnamnesisSubViewImpl.getAnamnesisTabs().getWidgetCount()-1)){
+				spDetailsReviewAnamnesisSubViewImpl.getAnamnesisTabs().getTabWidget(count).removeStyleName("lastTabChangedTabSty");
+			}else{
+				spDetailsReviewAnamnesisSubViewImpl.getAnamnesisTabs().getTabWidget(count).removeStyleName("chnagedTabStyle");
+			}
+		}
+		
+	}
+	@SuppressWarnings("deprecation")
+	public void anamnesisTitleTabSelected(final Integer selectedIndex) {
+		
+		Log.info("finding data if index "+ selectedIndex +"  is selected first time.");
+		
+		if(anamnesisTabSelectedIndexMap.get(selectedIndex)==null){
+			
+			anamnesisTabSelectedIndexMap.put(selectedIndex, selectedIndex);
+			
+			StandardizedPatientProxy standardizedPatientProxy =listOfAllStandardizedPatientWhoseDataIsChanged.get(currentSPIndexWhoseDataIsReviewing);
+			
+			AnamnesisFormProxy anamnesisFormProxy = standardizedPatientProxy.getAnamnesisForm();
+			
+			final AnamnesisCheckTitleProxy anamnesisCheckTitleProxy = allAnamnesisCheckTitleProxyList.get(selectedIndex);
+			
+			SpStandardizedPatientProxy spStandardizedPatientProxy = listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal.get(currentSPIndexWhoseDataIsReviewing);
+			
+			final SpAnamnesisFormProxy spAnamnesisFormProxy = spStandardizedPatientProxy.getAnamnesisForm();
+			
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+			
+			requests.anamnesisChecksValueRequestNonRoo().findAnamnesisChecksValuesByAnamnesisFormAndCheckTitle(anamnesisFormProxy.getId(),anamnesisCheckTitleProxy.getId()).with("anamnesischeck").fire(new OSCEReceiver<List<AnamnesisChecksValueProxy>>() {
+
+				@Override
+				public void onSuccess(final List<AnamnesisChecksValueProxy> response1) {
+
+					Log.info("Total osce standardized patient anamnesis check value proxy is : " + response1.size());
+					
+					Log.info("Now finding all anamnesis check value proxy is of sp portal");
+					
+					String anmnesisCheckText = getSPAnamnesisCheckText(response1);
+					
+					requests.spStandardizedPatientRequestNonRoo().findAnamnesisChecksValuesByAnamnesisFormAndCheckTitleText(spAnamnesisFormProxy.getId(),anmnesisCheckText).with("anamnesischeck").fire(new OSCEReceiver<List<SpAnamnesisChecksValueProxy>>() {
+
+						@Override
+						public void onSuccess(List<SpAnamnesisChecksValueProxy> response2) {
+							
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+							
+							Log.info("Total sp portal standardized patient anamnesis check value proxy is : " + response2.size());
+							
+							SPDetailsReviewAnamnesisTableSubView tableView = spDetailsReviewAmnesisTableViewMap.get(anamnesisCheckTitleProxy);
+						
+							if(response1.size() != response2.size()){
+								//No proper data found show hiding review view and showing message to user.
+								
+								Log.info("No proper data found for anamnesis check value form sp portal so hiding view");
+								
+								((SPDetailsReviewViewImpl)spDetailsReviewView).setViewVisible(false);
+								
+								final OSCEReceiverPopupViewImpl errorMsgDisplayView =new OSCEReceiverPopupViewImpl();
+								
+								errorMsgDisplayView.showMessage(constants.osceSPPortalDataMismatch());
+								
+								errorMsgDisplayView.getBtnOk().addClickHandler(new ClickHandler() {
+									
+									@Override
+									public void onClick(ClickEvent event) {
+										errorMsgDisplayView.hide();
+									}
+								});
+							}
+							else{
+								
+								boolean isDatachanged=tableView.setValue(response1,response2);
+								if(isDatachanged){
+									if(selectedIndex==(spDetailsReviewAnamnesisSubViewImpl.getAnamnesisTabs().getWidgetCount()-1)){
+										spDetailsReviewAnamnesisSubViewImpl.getAnamnesisTabs().getTabWidget(selectedIndex).addStyleName("lastTabChangedTabSty");
+									}else{
+										spDetailsReviewAnamnesisSubViewImpl.getAnamnesisTabs().getTabWidget(selectedIndex).addStyleName("chnagedTabStyle");
+									}
+								}else{
+									if(selectedIndex==(spDetailsReviewAnamnesisSubViewImpl.getAnamnesisTabs().getWidgetCount()-1)){
+										spDetailsReviewAnamnesisSubViewImpl.getAnamnesisTabs().getTabWidget(selectedIndex).removeStyleName("lastTabChangedTabSty");	
+									}else{
+										spDetailsReviewAnamnesisSubViewImpl.getAnamnesisTabs().getTabWidget(selectedIndex).removeStyleName("chnagedTabStyle");	
+									}
+									
+								}
+							}
+						}
+					});
+				}
+			});
+		}
+	}
+
+	protected String getSPAnamnesisCheckText(List<AnamnesisChecksValueProxy> anamnesisCheckValueProxyList) {
+		Log.info("Taking anamnisis check text from anmnesisValue proxy");
+		
+		if (anamnesisCheckValueProxyList == null|| anamnesisCheckValueProxyList.size() == 0) {
+			Log.info("Return as null");
+			return "";
+		}
+		Iterator<AnamnesisChecksValueProxy> anamnesisCheckValueIterator = anamnesisCheckValueProxyList.iterator();
+		StringBuilder anamnesisCheckText = new StringBuilder();
+		anamnesisCheckText.append("'',");
+		while (anamnesisCheckValueIterator.hasNext()) {
+			
+			AnamnesisChecksValueProxy anamnesisCheckValueProxy = anamnesisCheckValueIterator.next();
+			//System.out.println("Ana check value is " + anamnesisCheckValueProxy.getId() + " check text is" + anamnesisCheckValueProxy.getAnamnesischeck().getText());
+			anamnesisCheckText.append("'"+anamnesisCheckValueProxy.getAnamnesischeck().getText()+"'");
+			if (anamnesisCheckValueIterator.hasNext()) {
+				anamnesisCheckText.append(" ,");
+			}
+		}
+		
+		return anamnesisCheckText.toString();
+	}
 }

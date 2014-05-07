@@ -84,4 +84,6 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	ItemAnalysisNonRoo itemAnalysisNonRoo();
 	
 	SpPortalPersonRequestNonRoo spPortalPersonRequestNonRoo();
+	
+	SpStandardizedPatientRequestNonRoo spStandardizedPatientRequestNonRoo();
 }

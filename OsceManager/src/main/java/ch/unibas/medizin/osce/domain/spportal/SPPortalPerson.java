@@ -1,19 +1,19 @@
 package ch.unibas.medizin.osce.domain.spportal;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Enumerated;
-import javax.persistence.OneToOne;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
@@ -40,8 +40,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-
-
 import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 import ch.unibas.medizin.osce.domain.AnamnesisCheckTitle;
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
@@ -55,6 +53,7 @@ import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.server.util.email.impl.EmailServiceImpl;
 import ch.unibas.medizin.osce.shared.EditRequestState;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 
 
 @RooJavaBean
@@ -62,7 +61,7 @@ import ch.unibas.medizin.osce.shared.OsMaConstant;
 @RooEntity
 @PersistenceContext(unitName="spportalPersistenceUnit")
 @Table(name="person")
-public class SpPerson {
+public class SPPortalPerson {
 	
 	@PersistenceContext(unitName="spportalPersistenceUnit")
 	 transient EntityManager entityManager;
@@ -95,40 +94,28 @@ public class SpPerson {
 	 
 	 private Boolean changed;
 	 
-	 private static transient Logger log = Logger.getLogger(SpPerson.class);
+	 private static transient Logger log = Logger.getLogger(SPPortalPerson.class);
 	 
 	// This method is used to save standardized patient data in sp portal db.
 	 	@Transactional
 		public static void insertStandardizedPatientDetailsInSPportal(Long standardizedPatinetId){
 	 		
 	 		log.info("insertStandardizedPatientDetailsInSPportal() called");
-			SpPerson spportalUser = new SpPerson();
+			SPPortalPerson spportalUser2 = new SPPortalPerson();
 			log.info("taking sp based on given id from database");
 			StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatinetId);
 			
 			String randomString = RandomStringUtils.randomAlphanumeric(OsMaConstant.RANDOM_STRING_LENGTH);
 			
-			Person newSP = new Person();
+			spportalUser2.saveStandardizedPatientDetailsInSpPortal(standardizedPatient,randomString);
 			
-			newSP.setActivationUrl(randomString);
+			SPPortalPerson spPortalUser=findSpPortalPersonBasedOnEmailAddress(standardizedPatient.getEmail());
 			
-			newSP.setEmail(standardizedPatient.getEmail());
+			standardizedPatient.setStatus(StandardizedPatientStatus.EXPORTED);
 			
-			Date date = new Date();
-			int currentHour =date.getHours();
-			date.setHours(currentHour+4);
-			
-			newSP.setExpiration(date);
-			
-			newSP.setIsFirstLogin(true);
-			
-			newSP.setEditRequestState(EditRequestState.APPROVED);
-			
-			standardizedPatient.setPerson(newSP);
+			standardizedPatient.setSpPortalPersonId(spPortalUser.getId());
 			
 			standardizedPatient.persist();
-			
-			spportalUser.saveStandardizedPatientDetailsInSpPortal(standardizedPatient,randomString);
 		}
 
 		public EntityManager getEntityManager() {
@@ -136,7 +123,7 @@ public class SpPerson {
 			return entityManager;
 			
 		}
-
+		
 		/**
 		 * This method is used to actually save all patient data in sp portal database
 		 * @param standardizedPatient
@@ -188,7 +175,7 @@ public class SpPerson {
 			log.info("saving sp portal user details");
 			boolean isSaved=true;
 			try{
-				SpPerson spportalUser = new SpPerson();
+				SPPortalPerson spportalUser = new SPPortalPerson();
 				
 				spportalUser.setActivationUrl(randomString);
 				
@@ -248,7 +235,7 @@ public class SpPerson {
 			
 			velocityContext.put("randomString",randomString);
 			
-			Template template = velocityEngine.getTemplate("templates/emailTemplate.vm");
+			Template template = velocityEngine.getTemplate("templates/spCreatedEmailTemplate.vm");
 			
 			StringWriter writer =new StringWriter();
 			
@@ -585,5 +572,422 @@ public class SpPerson {
 			}
 			
 		}
-}
+	
+	/**
+	 * This method finds count of all SpPerson who sent edit request.
+	 * @return
+	 */
+	 public static Long findAllSpsCountWhoSentEditReq(){
 
+		 log.info("fonding sp coung who sent edit request");
+		 
+		 List<SPPortalPerson> spPersons = allSPsWhoSentEditRequest();
+		
+		 return Long.parseLong(String.valueOf(spPersons.size()));
+	 }
+	 
+	 /**
+	  * This method return list of all sps who sent edit request.
+	  * @return
+	  */
+	 public static List<SPPortalPerson> allSPsWhoSentEditRequest(){
+		
+		 log.info("finding count of sp who sent edit request");
+		 
+		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+
+		 EntityManager em = emFactory.createEntityManager();
+		 
+		 String queryString ="select sp from SPPortalPerson sp where sp.editRequestState="+EditRequestState.REQUEST_SEND.ordinal();
+		 
+		 TypedQuery<SPPortalPerson> query =em.createQuery(queryString,SPPortalPerson.class);
+		 
+		 List<SPPortalPerson> spPersons = query.getResultList();
+		 
+		 return spPersons;
+		 
+	 }
+	 /**
+	  * This method finds all SpStandardizedPatient who sent edit request.
+	  * @return
+	  */
+	 public static List<StandardizedPatient> findAllSpsWhoSentEditRequest(int firstResult,int maxResults){
+		
+		 log.info("finding list of sp who sent edit request");
+		 
+		 EntityManager em = StandardizedPatient.entityManager();
+		 
+		 String queryString ="select sp from StandardizedPatient sp where sp.email in (''"+ getEmailOfSPs(allSPsWhoSentEditRequest()) +") ";
+		 
+		 TypedQuery<StandardizedPatient> query =em.createQuery(queryString,StandardizedPatient.class);
+		
+		 query.setFirstResult(firstResult);
+	
+		 query.setMaxResults(maxResults);
+		 
+		 List<StandardizedPatient> standardizedPatientList = query.getResultList();
+		
+		return standardizedPatientList;
+	 }
+	 /**
+	  * This method return all sps email as comma separated string.
+	  * @param spPersonList
+	  * @return
+	  */
+	 private static String getEmailOfSPs(List<SPPortalPerson> spPersonList) {
+
+			if (spPersonList == null|| spPersonList.size() == 0) {
+				log.info("Return as null");
+				return "";
+			}
+			Iterator<SPPortalPerson> spPersonlistIterator = spPersonList.iterator();
+			StringBuilder spEmailAddress = new StringBuilder();
+			spEmailAddress.append(",");
+			while (spPersonlistIterator.hasNext()) {
+				
+				SPPortalPerson spPerson = spPersonlistIterator.next();
+
+				spEmailAddress.append("'"+spPerson.getEmail()+"'");
+				if (spPersonlistIterator.hasNext()) {
+					spEmailAddress.append(" ,");
+				}
+			}
+			
+			return spEmailAddress.toString();
+		}
+	 
+	 /**
+	  * This method sent mail and reset edit request state.
+	  */
+	 public static void denyAllSpsEditRequest(){
+		 log.info("sending mail and resetting flag in db as all sps edit req is denied");
+		
+		List<SPPortalPerson> spPersonsList =allSPsWhoSentEditRequest();
+		 
+		sendMailToSPAndUpdateStatusToDenyRequest(spPersonsList);
+		
+	 }
+
+	 private static void sendMailToSPAndUpdateStatusToDenyRequest(List<SPPortalPerson> spPersonList){
+		 
+		 boolean isMailSendToSPs =sendEmailToAllSpsAsTheirEditRequestIsApprovedOrDenied(spPersonList,false);
+			
+			if(isMailSendToSPs){
+				 
+				 for(SPPortalPerson person : spPersonList){
+					 person=SPPortalPerson.findSPPortalPerson(person.getId());
+					 person.setEditRequestState(EditRequestState.NONE);
+					 person.persist();
+				 }
+			 }
+	 }
+	 public static void allSpsEditRequestIsApproved(){
+		 
+		 log.info("sending mail and resetting flag in db as all sps edit req is approved");
+		 
+		 EntityManager em = StandardizedPatient.entityManager();
+		 
+		 String queryString ="select sp from StandardizedPatient sp where sp.email in (''"+ getEmailOfSPs(allSPsWhoSentEditRequest()) +") ";
+		 
+		 TypedQuery<StandardizedPatient> query =em.createQuery(queryString,StandardizedPatient.class);
+		
+		 List<StandardizedPatient> standardizedPatientList = query.getResultList();
+		 
+		 List<SPPortalPerson> spPersonsList =allSPsWhoSentEditRequest();
+		 
+		 sendMailToSPAndUpdateStatusToApproveRequest(standardizedPatientList,spPersonsList);
+
+	 }
+	 private static void sendMailToSPAndUpdateStatusToApproveRequest(List<StandardizedPatient> standardizedPatientList,List<SPPortalPerson> spPersonsList){
+		 
+		 //initializing and persisting standardized patient data in spPortal.
+		 
+		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+
+		 EntityManager emOfSPPortal = emFactory.createEntityManager();
+		 
+		 SPPortalPerson sppoPerson = new SPPortalPerson();
+		 
+		 for(StandardizedPatient standardizedPatient : standardizedPatientList){
+		
+			SpStandardizedPatient spStandardizedPatient= sppoPerson.initializeStandardizedPatientAndAnamnesisCheckValueDetails(emOfSPPortal,standardizedPatient);
+			
+			SPPortalPerson spPerson = findSpPortalPersonBasedOnEmailAddress(standardizedPatient.getEmail());
+			
+			spPerson=SPPortalPerson.findSPPortalPerson(spPerson.getId());
+			
+			sppoPerson.setChanged(false);
+			
+			spStandardizedPatient.setPerson(spPerson);
+			
+			//pushing all sp data in sp portal.
+			spStandardizedPatient.persist();
+			
+			//changing sp status to exported.
+			standardizedPatient=StandardizedPatient.findStandardizedPatient(standardizedPatient.getId());
+			standardizedPatient.setStatus(StandardizedPatientStatus.EXPORTED);
+			standardizedPatient.persist();
+			
+			log.info("user detail that is saving in sp portal db is : " + spPerson.getEmail());
+			
+		}
+		 
+		 //sending email to all sps as their request is approved
+		boolean isMailSendToAllSPs =sendEmailToAllSpsAsTheirEditRequestIsApprovedOrDenied(spPersonsList,true);
+			
+			if(isMailSendToAllSPs){
+				 
+				 for(SPPortalPerson person : spPersonsList){
+					 person=SPPortalPerson.findSPPortalPerson(person.getId());
+					 //setting sp portal user flag to request approved.
+					 person.setEditRequestState(EditRequestState.APPROVED);
+					 person.persist();
+				 }
+			 }
+	 }
+	 
+	 /**
+	  * This method is used to send emil to all sps whose edit request is accepted/denied. 
+	  * @param spPersonsList
+	  * @return
+	  */
+	private static boolean sendEmailToAllSpsAsTheirEditRequestIsApprovedOrDenied(List<SPPortalPerson> spPersonsList,boolean isRequestIsApproved) {
+		
+		boolean isMailSendToAllSPs=false;
+		try{
+			@SuppressWarnings("deprecation")
+			HttpServletRequest request = com.google.gwt.requestfactory.server.RequestFactoryServlet.getThreadLocalRequest();
+			
+			HttpSession session = request.getSession();
+			
+			ServletContext servletContex =session.getServletContext();
+			
+			WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(servletContex);
+			 
+			
+			EmailServiceImpl emailServiceImpl =applicationContext.getBean(EmailServiceImpl.class);
+			 
+			VelocityEngine velocityEngine = applicationContext.getBean(VelocityEngine.class);
+			
+			velocityEngine.init();
+			
+			Properties prop = new Properties();
+			
+			prop.load(applicationContext.getResource("classpath:META-INF/spring/smtp.properties").getInputStream());
+			
+			String emailSubject;
+			
+			if(isRequestIsApproved){
+				emailSubject= prop.getProperty("spportal.editRequestApprovedEmail.subject");
+			}else{
+				emailSubject= prop.getProperty("spportal.editRequestDeniedEmail.subject");
+			}
+			
+			Template template;
+			
+			for (SPPortalPerson person : spPersonsList) {
+				
+				VelocityContext velocityContext = new VelocityContext();
+				
+				if(isRequestIsApproved){
+					template= velocityEngine.getTemplate("templates/editRequestApprovedEmailTemplate.vm");
+				}else{
+					template= velocityEngine.getTemplate("templates/editRequestDeniedEmailTemplate.vm");
+				}
+				StringWriter writer =new StringWriter();
+				
+				template.merge(velocityContext,writer);
+				
+				String emailContent = writer.toString(); //VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,"/templates/emailTemplate.vm", "UTF-8",null);
+				
+				//sending email to user
+				emailServiceImpl.sendMail( new String [] {person.getEmail()},emailSubject,emailContent);
+			}
+			
+			isMailSendToAllSPs=true;
+			
+		}catch (Exception e) {
+			log.error(e.getMessage(),e);
+			isMailSendToAllSPs=false;
+			return isMailSendToAllSPs;
+		}
+		return isMailSendToAllSPs;
+	}
+	public static SpStandardizedPatient findSpPortalSPBasedOnOsceSPID(Long osceSPId){
+		
+		log.info("finding sp portal sp based on osce sp id : " + osceSPId);
+		
+		StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(osceSPId);
+		
+		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+
+		 EntityManager em = emFactory.createEntityManager();
+		 
+		 String queryString ="select sp from SpStandardizedPatient sp where sp.person.id="+standardizedPatient.getSpPortalPersonId();
+		 
+		 TypedQuery<SpStandardizedPatient> query =em.createQuery(queryString,SpStandardizedPatient.class);
+		 
+		 List<SpStandardizedPatient> spportalSP = query.getResultList();
+		 
+		 if(spportalSP.size()==1){
+			 return spportalSP.get(0);
+		 }else{
+			 return null;
+		 }
+		 
+	}
+	
+public static SPPortalPerson findSpPortalPersonBasedOnEmailAddress(String emailAddress){
+		
+		log.info("finding sp portal person based on email address : " + emailAddress);
+		
+		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+
+		 EntityManager em = emFactory.createEntityManager();
+		 
+		 String queryString ="select sp from SPPortalPerson sp where sp.email='"+emailAddress + "'";
+		 
+		 TypedQuery<SPPortalPerson> query =em.createQuery(queryString,SPPortalPerson.class);
+		 
+		 List<SPPortalPerson> spportalSP = query.getResultList();
+		 
+		 if(spportalSP.size()==1){
+			 return spportalSP.get(0);
+		 }else{
+			 return null;
+		 }
+		 
+	}
+
+	
+	public static List<StandardizedPatient> findAllStandardizedPAtientWhoesDataIsChangedAtSPPortal(List<SpStandardizedPatient> lisOfAllSPsWhoEditedData){
+		
+		EntityManager em = StandardizedPatient.entityManager();
+		
+		List<StandardizedPatient> allStandardizedPatientsList = new ArrayList<StandardizedPatient>();
+		
+		for(SpStandardizedPatient spStandardizedPatient : lisOfAllSPsWhoEditedData){
+		 
+			//String queryString ="select sp from StandardizedPatient sp where sp.email in (''"+ getEmailOfStandardizedPAtient(lisOfAllSPsWhoEditedData) +") ";
+		 
+			String queryString ="select sp from StandardizedPatient sp where sp.spPortalPersonId="+ spStandardizedPatient.getPerson().getId();
+		 
+			TypedQuery<StandardizedPatient> query =em.createQuery(queryString,StandardizedPatient.class);
+		
+		 
+			allStandardizedPatientsList.add(query.getSingleResult());
+		 
+		}
+		//return standardizedPatientList;
+		return allStandardizedPatientsList;
+	}
+	
+	 private static String getEmailOfStandardizedPAtient(List<SpStandardizedPatient> spStandardizedPatientList) {
+
+			if (spStandardizedPatientList == null|| spStandardizedPatientList.size() == 0) {
+				log.info("Return as null");
+				return "";
+			}
+			Iterator<SpStandardizedPatient> spPatientlistIterator = spStandardizedPatientList.iterator();
+			StringBuilder spEmailAddress = new StringBuilder();
+			spEmailAddress.append(",");
+			while (spPatientlistIterator.hasNext()) {
+				
+				SpStandardizedPatient sp = spPatientlistIterator.next();
+
+				spEmailAddress.append("'"+sp.getEmail()+"'");
+				if (spPatientlistIterator.hasNext()) {
+					spEmailAddress.append(" ,");
+				}
+			}
+			
+			return spEmailAddress.toString();
+		}
+	 
+	/**
+	 * This method is used to get all sps who changed their personal data.
+	 */
+	
+	/*public static List<SpStandardizedPatient> gatherSPDetailsOfDataChanged(int firstResult,int maxResults){
+		log.info("finding SPs whose data is changed");
+		//return SpStandardizedPatient.getAllSPWhoEditedDetails(firstResult, maxResults);
+		return null;
+	}*/
+	
+	public static SPPortalPerson findSPPersonToCheckWhetherHeHasSentEditReqOrChandedData(String standardizedPatientEmailAddress){
+		log.info("finding sp that is used to check whetther he has sent edit request");
+		return findSpPortalPersonBasedOnEmailAddress(standardizedPatientEmailAddress);
+		
+	}
+	
+	/**
+	 * This method is used to send email and clear request flag as sps edit request is denied 
+	 * @param standardizedPatientId
+	 * @param spPersonId
+	 */
+	public static void denyEditRequestOfSP(Long spPersonId){
+
+		SPPortalPerson spPerson = SPPortalPerson.findSPPortalPerson(spPersonId);
+
+		List<SPPortalPerson> spPersonsList = new ArrayList<SPPortalPerson>();
+		spPersonsList.add(spPerson);
+		
+		sendMailToSPAndUpdateStatusToDenyRequest(spPersonsList);
+	}
+	
+	/**
+	 * This method is used to send email and clear request flag as sps edit request is approved. 
+	 * @param standardizedPatientId
+	 * @param spPersonId
+	 */
+	public static void approveEditRequestOfSP(Long standardizedPatientId, Long spPersonId){
+		
+		StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
+		
+		SPPortalPerson spPerson = SPPortalPerson.findSPPortalPerson(spPersonId);
+		
+		List<StandardizedPatient> standardizedPatientsList = new ArrayList<StandardizedPatient>();
+		standardizedPatientsList.add(standardizedPatient);
+		
+		List<SPPortalPerson> spPersonsList = new ArrayList<SPPortalPerson>();
+		spPersonsList.add(spPerson);
+		
+		sendMailToSPAndUpdateStatusToApproveRequest(standardizedPatientsList,spPersonsList);
+	}
+	 
+	/**
+	 * This method is used to return all Anamnesis that is sent to DMZ
+	 * 
+	 */
+		public static List<AnamnesisCheckTitle> findAllAnamnesisThatIsSendToDMZ(){
+		
+		log.info("getting all AnamnesisCheckTitle value");
+		
+		List<AnamnesisCheckTitle> allAnamnesisCheckTitles= AnamnesisCheckTitle.entityManager().createQuery("SELECT o FROM AnamnesisCheckTitle o ORDER BY sort_order", AnamnesisCheckTitle.class).getResultList();
+		
+		boolean isAllAnamnesisCheckIsSentToDMZ;
+		
+		List<AnamnesisCheckTitle> anamnesisCheckTitlesThatIsToShow = new ArrayList<AnamnesisCheckTitle>();
+		
+		for (AnamnesisCheckTitle anamnesisCheckTitle : allAnamnesisCheckTitles) {
+			
+			isAllAnamnesisCheckIsSentToDMZ=false;
+			
+			Set<AnamnesisCheck> setAnamnesisChecks = anamnesisCheckTitle.getAnamnesisChecks();
+			
+			for (Iterator iterator = setAnamnesisChecks.iterator(); iterator.hasNext();) {
+				AnamnesisCheck anamnesisCheck = (AnamnesisCheck) iterator.next();
+				if(anamnesisCheck.getSendToDMZ()){
+					isAllAnamnesisCheckIsSentToDMZ=true;
+					break;
+				}
+			}
+			
+			if(isAllAnamnesisCheckIsSentToDMZ){
+				anamnesisCheckTitlesThatIsToShow.add(anamnesisCheckTitle);
+			}
+		}
+		
+			return anamnesisCheckTitlesThatIsToShow;
+	}
+}

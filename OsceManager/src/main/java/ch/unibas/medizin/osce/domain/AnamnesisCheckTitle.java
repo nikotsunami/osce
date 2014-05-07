@@ -1,8 +1,12 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
+import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
@@ -28,6 +32,9 @@ public class AnamnesisCheckTitle {
     @NotNull
     private Integer sort_order;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anamnesisCheckTitle")
+   	private Set<AnamnesisCheck> anamnesisChecks = new HashSet<AnamnesisCheck>();
+    
     @Override
     public int hashCode() {
         final int prime = 31;

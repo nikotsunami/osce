@@ -3779,3 +3779,68 @@ color: #f1b532;
     top: -8px;
     width: 0;
 }
+.gwt-PopupPanel.popupPanelWidth.popupPanelWidth{
+	width: 46%;
+}
+.flexTableHeader{
+	 background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAcCAYAAACgXdXMAAAAQElEQVR42qXEyQ3AIADAsOw/IpdA3FOETzeoH2aMIb8LIXzFGCWlJDlnKaVIrVVaa9J7lzmnrLVk7y3nHLn3+gDv82Y031fsVwAAAABJRU5ErkJggg==") repeat-x scroll 0 0 #DADADA;
+    border-bottom: 1px solid #AAAAAA;
+    color: #212121;
+    height: 28px;
+    max-height: 28px !important;
+    overflow: hidden;
+    padding: 0 10px;
+    text-align: left;
+    white-space: nowrap;
+    margin-left: 0px;
+}
+.newData{
+	background:#7FFF7F;
+	margin: 1px 0; 
+	padding: 3px; display: block;
+}
+.oldData{
+	background: #FFC482;
+	text-decoration: line-through;
+}
+.newAnswered{
+	background:#7FFF7F;
+	margin: 3px 0; 
+	padding: 3px;
+}
+.oldAnswered{
+	background: #FFC482;
+	margin: 3px 0;
+	padding: 3px;
+}
+.nullDataStyle{
+    display: none;
+}
+.oddRowBgColor{
+	background-color:#fff9d7;
+}
+.evenRowBgColor{
+	background-color:#fbe5aa;
+
+}
+.oldAnswered span {
+    float: left;
+    margin: 2px;
+}
+.newAnswered span {
+    float: left;
+    margin: 2px;
+}
+.chnagedTabStyle{
+	/* background: red !important; */
+	background-image: url("images/alert.png") !important;
+	background-repeat: no-repeat !important;
+	padding-right: 40px !important;
+	background-position: right center !important;
+}
+.lastTabChangedTabSty{
+	background-image: url("images/alert-1.png") !important;
+	background-repeat: no-repeat !important;
+	padding-right: 20px !important;
+	background-position: right center !important;
+}

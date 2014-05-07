@@ -1,24 +1,39 @@
 package ch.unibas.medizin.osce.domain.spportal;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.apache.log4j.Logger;
+import org.mortbay.log.Log;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.orm.jdo.support.SpringPersistenceManagerProxyBean;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import com.google.gwt.requestfactory.shared.Request;
+
+import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
+import ch.unibas.medizin.osce.domain.Bankaccount;
+import ch.unibas.medizin.osce.domain.Nationality;
+import ch.unibas.medizin.osce.domain.Profession;
+import ch.unibas.medizin.osce.domain.StandardizedPatient;
+import ch.unibas.medizin.osce.shared.EditRequestState;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
@@ -104,8 +119,281 @@ public class SpStandardizedPatient {
     @OneToOne(cascade = CascadeType.ALL)
     private SpAnamnesisForm anamnesisForm;
 
-    @OneToOne(cascade = CascadeType.ALL)
-	private SpPerson person;
+    @OneToOne(cascade = CascadeType.PERSIST)
+	private SPPortalPerson person;
     
     private Boolean ignoreSocialInsuranceNo;
+    
+    private static transient Logger log = Logger.getLogger(SPPortalPerson.class);
+    
+    
+    /**
+	 * This method is used to get count of sps who changed their data.
+	 * @return
+	 */
+	public static Long findAllSpsCountWhoEditedData(){
+		
+		List<SpStandardizedPatient> spStandardizedPatientsList =findAllSPWhoEditedData();
+		
+		 return Long.parseLong(String.valueOf(spStandardizedPatientsList.size()));
+	}
+	
+    /**
+	  * This method return list of all sps who edit their data.
+	  * @return
+	  */
+	 public static List<SpStandardizedPatient> findAllSPWhoEditedData(){
+		
+		 log.info("finding All sps count who edited their data");
+		 
+		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+
+		 EntityManager em = emFactory.createEntityManager();
+		 
+		 String queryString ="select sp from SpStandardizedPatient sp where sp.person.changed=1";
+		 
+		 TypedQuery<SpStandardizedPatient> query =em.createQuery(queryString,SpStandardizedPatient.class);
+		 
+		 List<SpStandardizedPatient> spStandardizedPatientsList = query.getResultList();
+		 
+		 return spStandardizedPatientsList;
+		 
+	 }
+	 
+	 public static List<SpStandardizedPatient> findAllSPWhoEditedDetails(int firstResult,int maxResults){
+			
+		 log.info("finding All sps who edited their data");
+		 
+		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+
+		 EntityManager em = emFactory.createEntityManager();
+		 
+		 String queryString ="select sp from SpStandardizedPatient sp where sp.person.changed=1";
+		 
+		 TypedQuery<SpStandardizedPatient> query =em.createQuery(queryString,SpStandardizedPatient.class);
+		 
+		 query.setFirstResult(firstResult);
+			
+		 query.setMaxResults(maxResults);
+		 
+		 List<SpStandardizedPatient> spStandardizedPatientsList = query.getResultList();
+		 
+		 return spStandardizedPatientsList;
+		 
+	 }
+	 
+	 public static List<SpStandardizedPatient> findALlSPWhoEditedDetails(){
+			
+			List<SpStandardizedPatient> spStandardizedPatientsList =findAllSPWhoEditedData();
+			
+			return spStandardizedPatientsList;
+			
+		}
+	 
+	public static List<SpAnamnesisChecksValue> findAnamnesisChecksValuesByAnamnesisFormAndCheckTitleText(Long anamnesisFormId,String titleText){
+		
+		log.info("finding All AnamnesisChecksValues based on form id : " + anamnesisFormId);
+		 
+		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+
+		 EntityManager em = emFactory.createEntityManager();
+		 
+		 String queryString ="SELECT a FROM SpAnamnesisChecksValue a WHERE a.anamnesischeck.text in (" + titleText + ") AND a.anamnesisform.id = " + anamnesisFormId + " ORDER BY a.anamnesischeck.text";
+
+		 TypedQuery<SpAnamnesisChecksValue> query = em.createQuery(queryString, SpAnamnesisChecksValue.class);  
+		 
+		 List<SpAnamnesisChecksValue> resultList = query.getResultList();
+	    	
+		 return resultList;
+	}
+	
+	public static Boolean moveChangedDetailsOfSPFormSPPortal(Long standardizedPatientId, Long spStandardizedPatientId){
+		
+		Boolean isDataSavedInOsce =false;
+		Boolean isDataRemovedFromSPPortal=false;
+		try{
+				StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
+				
+				SpStandardizedPatient spStandardizedPatient = SpStandardizedPatient.findSpStandardizedPatient(spStandardizedPatientId);
+				
+				SpBankaccount spBankaccount = spStandardizedPatient.getBankAccount();
+				Bankaccount bankaccount = standardizedPatient.getBankAccount();
+				
+				bankaccount.setBankName(spBankaccount.getBankName()!=null ? spBankaccount.getBankName():"");
+				bankaccount.setBIC(spBankaccount.getBIC()!=null? spBankaccount.getBIC():"");
+				bankaccount.setCity(spBankaccount.getCity()!=null ? spBankaccount.getCity():"");
+				
+				SpNationality spNationality = spBankaccount.getCountry();
+				Nationality nationality=bankaccount.getCountry();
+				
+				if(spNationality!=null && nationality!=null){
+					nationality.setNationality(spNationality.getNationality()!=null ? spNationality.getNationality():"" );
+				}
+				bankaccount.setCountry(nationality);
+				bankaccount.setIBAN(spBankaccount.getIBAN());
+				bankaccount.setOwnerName(spBankaccount.getOwnerName());
+				bankaccount.setPostalCode(spBankaccount.getPostalCode());
+				
+				standardizedPatient.setBankAccount(bankaccount);
+				
+				standardizedPatient.setBirthday(spStandardizedPatient.getBirthday());
+				standardizedPatient.setCity(spStandardizedPatient.getCity());
+				standardizedPatient.setEmail(spStandardizedPatient.getEmail());
+				standardizedPatient.setGender(spStandardizedPatient.getGender());
+				standardizedPatient.setHeight(spStandardizedPatient.getHeight());
+				standardizedPatient.setIgnoreSocialInsuranceNo(spStandardizedPatient.getIgnoreSocialInsuranceNo());
+				//standardizedPatient.setImmagePath(spStandardizedPatient.getImmagePath());
+				standardizedPatient.setMaritalStatus(spStandardizedPatient.getMaritalStatus());
+				standardizedPatient.setMobile(spStandardizedPatient.getMobile());
+				standardizedPatient.setName(spStandardizedPatient.getName());
+				
+				SpNationality spNationality2 = spStandardizedPatient.getNationality();
+				
+				Nationality nationality2= standardizedPatient.getNationality();
+				
+				if(spNationality2!=null && nationality2!=null){
+					nationality2.setNationality(spNationality2.getNationality());
+				}
+				standardizedPatient.setNationality(nationality2);
+				standardizedPatient.setPostalCode(spStandardizedPatient.getPostalCode());
+				standardizedPatient.setPreName(spStandardizedPatient.getPreName());
+				
+				SpProfession spProfession = spStandardizedPatient.getProfession();
+				
+				Profession profession = standardizedPatient.getProfession();
+				
+				if(spProfession!=null && profession!=null){
+					profession.setProfession(spProfession.getProfession());
+				}
+				standardizedPatient.setProfession(profession);
+				
+				standardizedPatient.setSocialInsuranceNo(spStandardizedPatient.getSocialInsuranceNo());
+				standardizedPatient.setStatus(StandardizedPatientStatus.ACTIVE);
+				standardizedPatient.setStreet(spStandardizedPatient.getStreet());
+				standardizedPatient.setTelephone(spStandardizedPatient.getTelephone());
+				standardizedPatient.setTelephone2(spStandardizedPatient.getTelephone2());
+				//standardizedPatient.setVideoPath(spStandardizedPatient.getVideoPath());
+				standardizedPatient.setWeight(spStandardizedPatient.getWeight());
+				standardizedPatient.setWorkPermission( spStandardizedPatient.getWorkPermission());
+				
+				log.info("Persisting standardized Patient new data ");
+				standardizedPatient.persist();
+				
+				List<AnamnesisChecksValue> oldAnamnesisChecksValuesList =findOldAnamnesisCheckValuesBasedOnFormId(standardizedPatient.getAnamnesisForm().getId());
+				
+				List<SpAnamnesisChecksValue> newAnamnesisCheckValuesList = findNewAnamnesisCheckValuesBasedOnFormId(spStandardizedPatient.anamnesisForm.getId());
+
+				for(int count=0;count < oldAnamnesisChecksValuesList.size();count++){
+					AnamnesisChecksValue anamnesisChecksValue = oldAnamnesisChecksValuesList.get(count);
+					SpAnamnesisChecksValue spAnamnesisChecksValue = newAnamnesisCheckValuesList.get(count);
+					
+					anamnesisChecksValue=AnamnesisChecksValue.findAnamnesisChecksValue(anamnesisChecksValue.getId());
+					
+					anamnesisChecksValue.setAnamnesisChecksValue(spAnamnesisChecksValue.getAnamnesisChecksValue());
+					
+					anamnesisChecksValue.setTruth(spAnamnesisChecksValue.getTruth());
+					
+					anamnesisChecksValue.persist();
+					
+				}
+				
+				isDataRemovedFromSPPortal=removeSPDataFromSPPortal(spStandardizedPatient,newAnamnesisCheckValuesList);
+				
+				isDataSavedInOsce=true;
+				
+		}catch (Exception e) {
+			log.error(e.getMessage(),e);
+			isDataSavedInOsce=false;
+			return isDataSavedInOsce;
+		}
+		if(isDataSavedInOsce && isDataRemovedFromSPPortal){
+			return true;
+		}else{
+			return false;	
+		}
+		
+	}
+	
+
+	private static Boolean removeSPDataFromSPPortal(SpStandardizedPatient spStandardizedPatient,List<SpAnamnesisChecksValue> newAnamnesisCheckValuesList) {
+		log.info("Removing sp old details and all associated data from sp portal");
+		Boolean result=false;
+		try{
+			spStandardizedPatient = SpStandardizedPatient.findSpStandardizedPatient(spStandardizedPatient.getId());
+		
+			SPPortalPerson spperson = spStandardizedPatient.getPerson();
+			
+			spperson.setChanged(false);
+			
+			spperson.setEditRequestState(EditRequestState.NONE);
+			
+			spperson.persist();
+			
+			for(SpAnamnesisChecksValue spAnamnesisChecksValue : newAnamnesisCheckValuesList){
+				spAnamnesisChecksValue=SpAnamnesisChecksValue.findSpAnamnesisChecksValue(spAnamnesisChecksValue.getId());
+				spAnamnesisChecksValue.remove();
+			}
+			
+			spStandardizedPatient.setAnamnesisForm(spStandardizedPatient.getAnamnesisForm());
+			spStandardizedPatient.setBankAccount(spStandardizedPatient.getBankAccount());
+			spStandardizedPatient.setNationality(spStandardizedPatient.getNationality());
+			spStandardizedPatient.setProfession(spStandardizedPatient.getProfession());
+			spStandardizedPatient.remove();
+			
+			
+		}catch (Exception e) {
+			result=false;
+			log.error(e.getMessage(), e);
+			return result;
+		}
+		result=true;
+		return result;
+	}
+
+	public static Boolean removeSPDetailsFromSPPortal(Long standardizedPatientId,Long spStandardizedPatientId){
+		
+		Log.info("Updating osce sp status to active and removing sp details from sp portal");
+		
+		StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
+		standardizedPatient.setStatus(StandardizedPatientStatus.ACTIVE);
+		standardizedPatient.persist();
+		
+		SpStandardizedPatient spStandardizedPatient = SpStandardizedPatient.findSpStandardizedPatient(spStandardizedPatientId);
+		List<SpAnamnesisChecksValue> spAnamnesisChecksValuesList = findNewAnamnesisCheckValuesBasedOnFormId(null);
+		
+		Boolean isRemovedAllData = removeSPDataFromSPPortal(spStandardizedPatient, spAnamnesisChecksValuesList);
+	
+		return isRemovedAllData;
+	}
+	private static List<AnamnesisChecksValue> findOldAnamnesisCheckValuesBasedOnFormId(Long anamnesisFormId) {
+		
+		log.info("finding All OLD AnamnesisChecksValues based on form id : " + anamnesisFormId);
+		 
+		 EntityManager em = AnamnesisChecksValue.entityManager();
+		 
+		 String queryString ="SELECT a FROM AnamnesisChecksValue a WHERE a.anamnesisform.id = " + anamnesisFormId + " ORDER BY a.anamnesischeck.text";
+
+		 TypedQuery<AnamnesisChecksValue> query = em.createQuery(queryString, AnamnesisChecksValue.class);  
+		 
+		 List<AnamnesisChecksValue> resultList = query.getResultList();
+	    	
+		 return resultList;
+	}
+
+	private static List<SpAnamnesisChecksValue> findNewAnamnesisCheckValuesBasedOnFormId(Long anamnesisFormId) {
+		
+		log.info("finding All NEW AnamnesisChecksValues based on form id : " + anamnesisFormId);
+		 
+		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+
+		 EntityManager em = emFactory.createEntityManager();
+		 
+		 String queryString ="SELECT a FROM SpAnamnesisChecksValue a WHERE a.anamnesisform.id = " + anamnesisFormId + " ORDER BY a.anamnesischeck.text";
+
+		 TypedQuery<SpAnamnesisChecksValue> query = em.createQuery(queryString, SpAnamnesisChecksValue.class);  
+		 
+		 List<SpAnamnesisChecksValue> resultList = query.getResultList();
+	    	
+		 return resultList;
+	}
 }

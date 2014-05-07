@@ -15,6 +15,8 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
+
 @RooJavaBean
 @RooToString
 @RooEntity
@@ -275,4 +277,13 @@ public class AnamnesisChecksValue{
     	data_Set.addAll(query.getResultList());
     	return data_Set;
     }
+    public static List<AnamnesisChecksValue> findAnamnesisChecksValuesByAnamnesisFormAndCheckTitle(Long anamnesisFormId,Long anamnesisChecktitleId){
+    	log.info("finding anamnesis check value based on form id : " + anamnesisFormId);
+    	EntityManager em = entityManager();
+    	String sql = "SELECT a FROM AnamnesisChecksValue a WHERE a.anamnesisform.id = " + anamnesisFormId + " AND a.anamnesischeck.anamnesisCheckTitle.id=" + anamnesisChecktitleId + "ORDER BY a.anamnesischeck.text";
+    	TypedQuery<AnamnesisChecksValue> query = em.createQuery(sql, AnamnesisChecksValue.class);  
+    	List<AnamnesisChecksValue> resultList = query.getResultList();
+    	return resultList;
+    }
+    
 }

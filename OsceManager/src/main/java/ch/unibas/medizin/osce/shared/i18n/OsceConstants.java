@@ -1435,6 +1435,52 @@ public interface OsceConstants extends Constants {
 	public String day();
 
 	public String assignPatientForHalfDay();
+	
+	public String spsSendEditRequest();
+	
+	public String allowUserToEditData();
+	
+	public String allowAllSps();
+	
+	public String denyAllSps();
+	
+	public String individuallyDecide();
+	
+	public String allow();
+	
+	public String deny();
+	
+	public String decideLater();
+	
+	public String spChangedData();
+	
+	public String wantToReviewData();
+	
+	public String reviewChanges();
+	
+	public String reviewLater();
+	
+	public String changed();
+
+	public String individualSPEditReqMsg();
+	
+	public String individualSPDataChangeMsg();
+
+	public String spDataPullNotificationMsg();
+	
+	public String acceptChanges();
+	
+	public String discardChanges();
+	
+	public String osceSPPortalDataMismatch();
+	
+	public String dataSaveFailure();
+	
+	public String dataChange();
+	
+	public String editRequest();
+	
 }
+
 
 

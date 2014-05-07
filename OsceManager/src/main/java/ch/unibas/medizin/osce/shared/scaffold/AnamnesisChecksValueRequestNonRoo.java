@@ -25,4 +25,7 @@ public interface AnamnesisChecksValueRequestNonRoo extends RequestContext {
     public abstract Request<List<AnamnesisChecksValueProxy>> findAnamnesisChecksValuesByAnamnesisFormAndTitle(Long anamnesisFormId, Long anamnesisTitleId, String needle, int firstResult, int maxResults);
     public abstract Request<List<AnamnesisChecksValueProxy>> findAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitle(Long anamnesisFormId, Long anamnesisTitleId, String needle, int firstResult, int maxResults);
     public abstract Request<List<AnamnesisChecksValueProxy>> findUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitle(Long anamnesisFormId, Long anamnesisTitleId, String needle, int firstResult, int maxResults);
+    
+    public abstract Request<List<AnamnesisChecksValueProxy>> findAnamnesisChecksValuesByAnamnesisFormAndCheckTitle(Long anamnesisFormId,Long anamnesisChecktitleId);
+
 }

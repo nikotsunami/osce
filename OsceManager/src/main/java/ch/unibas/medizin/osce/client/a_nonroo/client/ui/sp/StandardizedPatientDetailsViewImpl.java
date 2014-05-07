@@ -240,6 +240,12 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 
 	private Delegate delegate;
 
+	@UiField
+	IndividualSPEditRequestNotificationViewImpl individualSPEditRequestNotificationViewImpl;
+	
+	@UiField
+	IndividualSPDataChangedNotificationViewImpl individualSPDataChandedNotificationViewImpl;
+	
 	/**
 	 * Because this class has a default constructor, it can
 	 * be used as a binder template. In other words, it can be used in other
@@ -292,8 +298,10 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 				storeDisplaySettings();
 			}
 		});
+		individualSPEditRequestNotificationViewImpl.setVisible(false);
+		individualSPDataChandedNotificationViewImpl.setVisible(false);
 	}
-	
+
 	private void storeDisplaySettings() {
 		if (delegate != null) {
 			delegate.storeDisplaySettings();
@@ -660,4 +668,40 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		videoUploadPopUpView.show();
 		
 	}
+
+	/**
+	 * This method is used to show or hide edit request view.
+	 * @param isSentEditRequest
+	 */
+	public void showEditRequestViewToAdmin(boolean isSentEditRequest) {
+		individualSPEditRequestNotificationViewImpl.setVisible(isSentEditRequest);
+		
+	}
+
+	/**
+	 * This method is used to show or hide data changed view.
+	 * @param isSentEditRequest
+	 */
+	public void showDataChandedViewToAdmin(boolean isSentEditRequest) {
+		individualSPDataChandedNotificationViewImpl.setVisible(isSentEditRequest);
+		
+	}
+	
+	
+	public IndividualSPEditRequestNotificationViewImpl getIndividualSPEditRequestSendNotificationViewImpl() {
+		return individualSPEditRequestNotificationViewImpl;
+	}
+
+	public IndividualSPDataChangedNotificationViewImpl getIndividualSPDataChandedNotificationViewImpl() {
+		return individualSPDataChandedNotificationViewImpl;
+	}
+
+	public IconButton getSend() {
+		return send;
+	}
+
+	public IconButton getPull() {
+		return pull;
+	}
+	
 }

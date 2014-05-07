@@ -40,6 +40,7 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.util.StringUtils;
 
+import ch.unibas.medizin.osce.domain.spportal.SPPortalPerson;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.CsvUtil;
 import ch.unibas.medizin.osce.server.util.file.FileUtil;
@@ -150,8 +151,7 @@ public class StandardizedPatient {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedPatient")
 	private Set<PatientInSemester> patientInSemester = new HashSet<PatientInSemester>();
 
-    @OneToOne(cascade = CascadeType.ALL)
-	private Person person;
+	private Long spPortalPersonId;
     
     private Boolean ignoreSocialInsuranceNo;
     
@@ -484,6 +484,70 @@ public class StandardizedPatient {
         return result;
     }
 
+    /*public static List<SPData> findSPByAdvancedSearchAndSort(String sortColumn,Sorting order,String searchWord,List<String> searchThrough,List<AdvancedSearchCriteria> searchCriteria,
+    		Integer firstResult, Integer maxResults){
+    	
+    	Log.info("finding sp based on searcha value and sprt order");
+    	
+    	List<StandardizedPatient> standardizedPatientsList =findPatientsByAdvancedSearchAndSort(sortColumn,order,searchWord,searchThrough,searchCriteria,firstResult,maxResults);
+    	
+    	List<SPData> spDataList = new ArrayList<SPData>();
+    	
+    	Log.info("Initializing value proxy from sp list data and returning it.");
+    	
+    	for(StandardizedPatient standardizedPatient : standardizedPatientsList){
+    	
+    		SPData spData = new SPData();
+    	
+    		SPPortalPerson spPortalPerson = findSPPortalPersonForSP(standardizedPatient.getSpPortalPersonId());
+    		
+    		spData.setId(standardizedPatient.getId());
+    		
+    		spData.setCity(standardizedPatient.getCity());
+    		
+    		spData.setEmail(standardizedPatient.getEmail());
+    		
+    		spData.setFirstName(standardizedPatient.getPreName());
+    		
+    		if(standardizedPatient.getHeight()!=null){
+    			spData.setHeight(String.valueOf(standardizedPatient.getHeight()));
+    		}else{
+    			spData.setHeight(null);
+    		}
+    		
+    		spData.setIsDataChanged(spPortalPerson.getChanged());
+    		
+    		if(spPortalPerson.getEditRequestState().ordinal()==EditRequestState.REQUEST_SEND.ordinal()){
+    			spData.setIsSentEditReuest(true);	
+    		}else{
+    			spData.setIsSentEditReuest(false);
+    		}
+    		
+    		spData.setName(standardizedPatient.getName());
+    		
+    		spData.setStreet(standardizedPatient.getStreet());
+    		
+    		spData.setTelephone(standardizedPatient.getTelephone());
+    		
+    		if(standardizedPatient.getWeight()!=null){
+    			spData.setWeight(String.valueOf(standardizedPatient.getWeight()));
+    		}else{
+    			spData.setWeight(null);
+    		}
+    		
+    		spData.setImagePath(standardizedPatient.getImmagePath());
+    		
+    		spData.setVideoPath(standardizedPatient.getVideoPath());
+    		
+    		spDataList.add(spData);
+    	}
+    	return spDataList;
+    	
+    }*/
+    public static SPPortalPerson findSPPortalPersonForSP(Long spPortalPersonId){
+    	SPPortalPerson spPortalPerson = SPPortalPerson.findSPPortalPerson(spPortalPersonId);
+    	return spPortalPerson;
+    }
      //By Spec[Start
     public static String getCSVMapperFindPatientsByAdvancedSearchAndSort(
             String sortColumn, Sorting order, String searchWord,
