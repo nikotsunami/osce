@@ -257,7 +257,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		Log.info("finding sp person to check whether he has sent edit Request");
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
-		requests.spPortalPersonRequestNonRoo().findSPPersonToCheckWhetherHeHasSentEditReqOrChandedData(standardizedPatientProxy.getEmail()).fire(new OSCEReceiver<SPPortalPersonProxy>() {
+		requests.spPortalPersonRequestNonRoo().findSPPersonToCheckWhetherHeHasSentEditReqOrChandedData(standardizedPatientProxy.getId()).fire(new OSCEReceiver<SPPortalPersonProxy>() {
 
 			@Override
 			public void onSuccess(SPPortalPersonProxy response) {
@@ -285,7 +285,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 
-		requests.spPortalPersonRequestNonRoo().findSPPersonToCheckWhetherHeHasSentEditReqOrChandedData(standardizedPatientProxy.getEmail()).fire(new OSCEReceiver<SPPortalPersonProxy>() {
+		requests.spPortalPersonRequestNonRoo().findSPPersonToCheckWhetherHeHasSentEditReqOrChandedData(standardizedPatientProxy.getId()).fire(new OSCEReceiver<SPPortalPersonProxy>() {
 
 			@Override
 			public void onSuccess(SPPortalPersonProxy response) {

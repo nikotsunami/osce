@@ -914,9 +914,28 @@ public static SPPortalPerson findSpPortalPersonBasedOnEmailAddress(String emailA
 		return null;
 	}*/
 	
-	public static SPPortalPerson findSPPersonToCheckWhetherHeHasSentEditReqOrChandedData(String standardizedPatientEmailAddress){
+	public static SPPortalPerson findSPPersonToCheckWhetherHeHasSentEditReqOrChandedData(Long standardizedPatientId){
+		
 		log.info("finding sp that is used to check whetther he has sent edit request");
-		return findSpPortalPersonBasedOnEmailAddress(standardizedPatientEmailAddress);
+		
+		StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
+		
+		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+
+		 EntityManager em = emFactory.createEntityManager();
+		 
+		 String queryString ="select sp from SPPortalPerson sp where sp.id="+standardizedPatient.getSpPortalPersonId();
+		 
+		 TypedQuery<SPPortalPerson> query =em.createQuery(queryString,SPPortalPerson.class);
+		 
+		 List<SPPortalPerson> spportalSP = query.getResultList();
+		 
+		 if(spportalSP.size()==1){
+			 return spportalSP.get(0);
+		 }else{
+			 return null;
+		 }
+		 
 		
 	}
 	

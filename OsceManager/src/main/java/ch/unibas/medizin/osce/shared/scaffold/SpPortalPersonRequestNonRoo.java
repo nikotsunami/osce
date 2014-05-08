@@ -28,7 +28,7 @@ public interface SpPortalPersonRequestNonRoo extends RequestContext {
 
 		abstract Request<Void> allSpsEditRequestIsApproved();
 		
-		abstract Request<SPPortalPersonProxy> findSPPersonToCheckWhetherHeHasSentEditReqOrChandedData(String standardizedPatientEmailAddress);
+		abstract Request<SPPortalPersonProxy> findSPPersonToCheckWhetherHeHasSentEditReqOrChandedData(Long standardizedPatientId);
 
 		abstract Request<Void> denyEditRequestOfSP(Long spPersonId);
 
