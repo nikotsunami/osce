@@ -33,8 +33,8 @@
 	}
 	</ui:style>
 	
-<g:VerticalPanel>
-	<g:SplitLayoutPanel  ui:field="splitLayoutPanel" addStyleNames="{style.styleSplit}">
+
+	<g:SplitLayoutPanel  ui:field="splitLayoutPanel">
 		<g:west size="100">
 			<g:ScrollPanel>
 				<!-- <g:VerticalPanel spacing="5"> -->
@@ -92,5 +92,5 @@
 			</g:ScrollPanel>
 		</g:center>
 	</g:SplitLayoutPanel>
-</g:VerticalPanel>
+
 </ui:UiBinder> 
