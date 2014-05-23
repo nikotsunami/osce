@@ -2435,7 +2435,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			stationsBean.getStation().add(stationBean);
 			
 			stationBean.setId(oscePostRoom.getId());
-			stationBean.setTitle("");//TODO need to ask
+			//stationBean.setTitle("");//TODO need to ask
 			
 			if (oscePostRoom.getRoom() == null)
 				stationBean.setIsBreakStation("yes");
@@ -2449,6 +2449,15 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				StandardizedRole standardizedRole = StandardizedRole.findStandardizedRole(oscepost.getStandardizedRole().getId());
 				CheckList checklist = CheckList.findCheckList(standardizedRole.getCheckList().getId());
 				stationBean.setChecklistId(checklist.getId());
+				
+				if (oscepost.getStandardizedRole().getRoleTopic() != null && oscepost.getStandardizedRole().getRoleTopic().getSpecialisation() != null)
+				{
+					String stationTitle = oscepost.getStandardizedRole().getRoleTopic().getSpecialisation().getName() + " / " + oscepost.getStandardizedRole().getRoleTopic().getName();
+					stationBean.setTitle(stationTitle);
+				}
+				else{
+					stationBean.setTitle("");
+				}
 			}
 		}
 		
