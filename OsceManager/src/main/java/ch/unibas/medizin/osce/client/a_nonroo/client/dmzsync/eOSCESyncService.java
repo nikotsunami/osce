@@ -15,7 +15,7 @@ public interface eOSCESyncService extends RemoteService {
 	
 	List<String> unprocessedFileList(Long semesterID) throws eOSCESyncException;
 	
-	void importFileList(List<String> fileList, Boolean flag, String bucketName, String accessKey, String secretKey) throws eOSCESyncException;
+	void importFileList(List<String> fileList, Boolean flag, String bucketName, String accessKey, String secretKey, String encryptionKey) throws eOSCESyncException;
 	
 	//export
 	void exportOsceFile(Long semesterID) throws eOSCESyncException;

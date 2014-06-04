@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
+@SuppressWarnings("deprecation")
 public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCEView.Delegate, ImporteOSCEView.Presenter {
 	
 	private OsMaRequestFactory requests;
@@ -93,6 +94,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 		removeHandler=handler;
 	}
 	
+	
 	public void loadBucketInformation(SemesterProxy semesterProxy)
 	{
 		requests.bucketInformationRequestNonRoo().findBucketInformationBySemesterForImport(semesterProxy.getId()).fire(new OSCEReceiver<BucketInformationProxy>() {
@@ -105,10 +107,13 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					view.getBucketName().setText(response.getBucketName());
 					view.getAccessKey().setText(response.getAccessKey());
 					view.getSecretKey().setText(response.getSecretKey());
+					if (response.getEncryptionKey() != null)
+						view.getEncryptionKey().setText(response.getEncryptionKey());
 					
 					view.getBucketName().setEnabled(false);
 					view.getAccessKey().setEnabled(false);
 					view.getSecretKey().setEnabled(false);
+					view.getEncryptionKey().setEnabled(false);
 					
 					view.getSaveEditButton().setText(constants.edit());
 					view.setBucketInformationProxy(response);
@@ -123,10 +128,12 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					view.getBucketName().setEnabled(true);
 					view.getAccessKey().setEnabled(true);
 					view.getSecretKey().setEnabled(true);
+					view.getEncryptionKey().setEnabled(true);
 					
 					view.getBucketName().setText("");
 					view.getAccessKey().setText("");
 					view.getSecretKey().setText("");
+					view.getEncryptionKey().setText("");
 					//System.out.println("RESPONSE NOT FOUND");
 					view.getSaveEditButton().setText(constants.save());
 					
@@ -203,7 +210,6 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 
 	@Override
 	public void goTo(Place place) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -223,7 +229,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 		
 		System.out.println("IMPORT FILELIST SIZE : " + fileList.size());
 		
-		eOsceServiceAsync.importFileList(fileList, flag, view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(), new AsyncCallback<Void>() {
+		eOsceServiceAsync.importFileList(fileList, flag, view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(), view.getEncryptionKey().getText(), new AsyncCallback<Void>() {
 			@Override
 			public void onFailure(Throwable caught) {
 				showApplicationLoading(false);
@@ -376,8 +382,9 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 		return flag;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey) {
+	public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey, String encryptionKey) {
 		BucketInformationRequest request = requests.bucketInformationRequest();
 		final BucketInformationProxy bucketInformationProxy;
 		
@@ -396,6 +403,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 		bucketInformationProxy.setBucketName(bucketName);
 		bucketInformationProxy.setAccessKey(accessKey);
 		bucketInformationProxy.setSecretKey(secretKey);
+		bucketInformationProxy.setEncryptionKey(encryptionKey);
 		
 		
 		request.persist().using(bucketInformationProxy).fire(new OSCEReceiver<Void>() {
@@ -405,6 +413,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 				view.getBucketName().setEnabled(false);
 				view.getAccessKey().setEnabled(false);
 				view.getSecretKey().setEnabled(false);
+				view.getEncryptionKey().setEnabled(false);
 				
 				view.getSaveEditButton().setText(constants.edit());
 				view.setBucketInformationProxy(bucketInformationProxy);

@@ -9,7 +9,7 @@ public interface eOSCESyncServiceAsync {
 	void deleteAmzonS3Object(List<String> fileList, String bucketName, String accessKey, String secretKey, AsyncCallback<Void> cb);
 	void processedFileList(Long semesterID, AsyncCallback<List<String>> cb);
 	void unprocessedFileList(Long semesterID, AsyncCallback<List<String>> cb);
-	void importFileList(List<String> fileList, Boolean flag, String bucketName, String accessKey, String secretKey, AsyncCallback<Void> cb);
+	void importFileList(List<String> fileList, Boolean flag, String bucketName, String accessKey, String secretKey, String encryptionKey, AsyncCallback<Void> cb);
 	
 	//export
 	void exportOsceFile(Long semesterID, AsyncCallback<Void> cb);

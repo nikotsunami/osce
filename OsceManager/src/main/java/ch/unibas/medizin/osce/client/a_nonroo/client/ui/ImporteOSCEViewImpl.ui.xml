@@ -36,6 +36,9 @@
 			<span class="{style.label}" ui:field="secretKeyLbl" />
 			<g:TextBox ui:field="secretKey"></g:TextBox>
 			
+			<span class="{style.label}" ui:field="encryptionKeyLbl" />
+			<g:TextBox ui:field="encryptionKey"></g:TextBox>
+			
 			<my:IconButton icon="pencil" ui:field="saveEditButton"></my:IconButton>
 			<my:IconButton icon="closethick" ui:field="cancelButton"></my:IconButton>
 			</g:HTMLPanel>

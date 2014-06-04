@@ -278,7 +278,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 	}
 	
-	public boolean addFile(String filename, InputStream input, String secretKey)
+	public boolean addFile(String filename, InputStream input, String secretKey, String encryptionKey)
 	{
 		
 		String file_name = filename.replaceAll(" ", "_");
@@ -305,7 +305,12 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			bis.close();
 			bos.close();
 		
-			String symmetricKey = secretKey.substring(0, 16);
+			String symmetricKey = "";
+			if (StringUtils.isNotBlank(encryptionKey) && encryptionKey.length() >= 16)
+				symmetricKey = encryptionKey.substring(0, 16);
+			else
+				symmetricKey = secretKey.substring(0, 16);
+			
 			String decFileName = S3Decryptor.decrypt(symmetricKey, file_name);
 			
 			return importEOSCE(decFileName);
@@ -329,7 +334,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		return folder.exists();
 	}
 	
-	public void importFileList(List<String> fileList, Boolean flag, String bucketName, String accessKey, String secretKey) throws eOSCESyncException
+	public void importFileList(List<String> fileList, Boolean flag, String bucketName, String accessKey, String secretKey, String encryptionKey) throws eOSCESyncException
 	{
 		try
 		{
@@ -344,7 +349,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			{
 				object = client.getObject(new GetObjectRequest(bucketName, fileList.get(i)));
 				//import in answer table is dont from add file
-				deleteFlag = deleteFlag & addFile(object.getKey(), object.getObjectContent(), secretKey);				
+				deleteFlag = deleteFlag & addFile(object.getKey(), object.getObjectContent(), secretKey, encryptionKey);				
 			}
 		
 			if (flag == true && deleteFlag == true)

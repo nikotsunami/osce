@@ -65,6 +65,9 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	SpanElement secretKeyLbl;
 	
 	@UiField
+	SpanElement encryptionKeyLbl;
+	
+	@UiField
 	TextBox bucketName;
 	
 	@UiField
@@ -72,6 +75,9 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	
 	@UiField
 	TextBox secretKey;
+	
+	@UiField
+	TextBox encryptionKey;
 	
 	@UiField
 	IconButton saveEditButton;
@@ -101,6 +107,7 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		bucketNameLbl.setInnerText(constants.bucketName());
 		accessKeyLbl.setInnerText(constants.accessKey());
 		secretKeyLbl.setInnerText(constants.secretKey());
+		encryptionKeyLbl.setInnerText(constants.encryptionKey());
 		cancelButton.setText(constants.cancel());
 	}	
 	
@@ -238,19 +245,28 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		this.bucketInformationProxy = bucketInformationProxy;
 	}
 	
+	public TextBox getEncryptionKey() {
+		return encryptionKey;
+	}
+	
+	public void setEncryptionKey(TextBox encryptionKey) {
+		this.encryptionKey = encryptionKey;
+	}
+	
 	@UiHandler("saveEditButton")
 	public void saveEditButtonClicked(ClickEvent event)
 	{
 		if (saveEditButton.getText().equals(constants.save()))
 		{
 			cancelButton.setVisible(false);
-			delegate.bucketSaveButtonClicked(bucketInformationProxy, bucketName.getText(), accessKey.getText(), secretKey.getText());
+			delegate.bucketSaveButtonClicked(bucketInformationProxy, bucketName.getText(), accessKey.getText(), secretKey.getText(), encryptionKey.getText());
 		}
 		else if (saveEditButton.getText().equals(constants.edit()))
 		{
 			bucketName.setEnabled(true);
 			accessKey.setEnabled(true);
 			secretKey.setEnabled(true);
+			encryptionKey.setEnabled(true);
 			
 			saveEditButton.setText(constants.save());
 			
@@ -264,6 +280,7 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		bucketName.setEnabled(false);
 		accessKey.setEnabled(false);
 		secretKey.setEnabled(false);
+		encryptionKey.setEnabled(false);
 		
 		saveEditButton.setText(constants.edit());
 		cancelButton.setVisible(false);

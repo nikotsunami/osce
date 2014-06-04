@@ -22,7 +22,7 @@ public interface ImporteOSCEView extends IsWidget {
 		 public void deleteButtonClicked();
 		 public Boolean checkSelectedValue();
 		 
-		 public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey);
+		 public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey, String encryptionKey);
 	}
 	 
 	 public VerticalPanel getFileListPanel();
@@ -48,4 +48,8 @@ public interface ImporteOSCEView extends IsWidget {
 	 public RadioButton getProcessed();
 	 
 	 public RadioButton getUnprocessed();
+	 
+	 public TextBox getEncryptionKey();
+		
+	 public void setEncryptionKey(TextBox encryptionKey);
 }
