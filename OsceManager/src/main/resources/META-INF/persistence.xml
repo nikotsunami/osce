@@ -73,6 +73,10 @@
 		<class>ch.unibas.medizin.osce.domain.Topic</class>
 		<class>ch.unibas.medizin.osce.domain.Training</class>
 		<class>ch.unibas.medizin.osce.domain.UsedMaterial</class>
+		<class>ch.unibas.medizin.osce.domain.TrainingBlock</class>
+		<class>ch.unibas.medizin.osce.domain.TrainingDate</class>
+		<class>ch.unibas.medizin.osce.domain.OsceDate</class>
+		<class>ch.unibas.medizin.osce.domain.TrainingSuggestion</class>
 		<!-- <class>ch.unibas.medizin.osce.domain.SPPortalPerson</class> -->
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
@@ -121,6 +125,11 @@
         <class>ch.unibas.medizin.osce.domain.spportal.SpProfession</class>
         <class>ch.unibas.medizin.osce.domain.spportal.SpScar</class>
         <class>ch.unibas.medizin.osce.domain.spportal.SpStandardizedPatient</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpSemester</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpPatientInSemester</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpOsceDate</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpTrainingBlock</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpTrainingDate</class>
         <!-- <class>ch.unibas.medizin.osce.spportal.domain.SPPortalPerson</class> -->
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
