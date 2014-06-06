@@ -1,0 +1,44 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	
+	<ui:with type="ch.unibas.medizin.osce.shared.i18n.OsceConstants" field="constants"></ui:with>
+	
+	<ui:style src="../../styles.css">
+	.monthLblStyle{
+		font-weight: bold;
+	}
+	.line_height{
+		line-height: 20px;
+
+	}
+	
+	</ui:style>
+		
+	<g:ScrollPanel width="100%" height="100%">	
+		<g:VerticalPanel width="100%">
+			<g:HorizontalPanel spacing="5">
+				<s:IconButton ui:field="startSurvey" text="{constants.startSurvey}" icon="clipboard"></s:IconButton>
+				<s:IconButton ui:field="stopSurvey" text="{constants.stopSurvey}" icon="close" visible="false"></s:IconButton>
+				<s:IconButton ui:field="showSuggestion" text="{constants.showSuggestion}" icon="lightbulb"></s:IconButton>
+				<s:IconButton ui:field="hideSuggestion" text="{constants.hideSuggestion}" icon="lightbulb" visible="false"></s:IconButton>
+			</g:HorizontalPanel>
+			
+			<g:HorizontalPanel spacing="5" width="100%" addStyleNames="{style.line_height}">
+				<g:cell horizontalAlignment="ALIGN_CENTER" verticalAlignment="ALIGN_MIDDLE">
+					<g:HorizontalPanel spacing="5">
+						<s:IconButton ui:field="todayDate" text="{constants.today}" icon="calendar"></s:IconButton>
+						<s:IconButton ui:field="previousMonth" icon="triangle-1-w"></s:IconButton>
+						<g:cell verticalAlignment="ALIGN_MIDDLE">
+							<g:Label ui:field="monthValue" text="January 2014" addStyleNames="{style.monthLblStyle}"></g:Label>
+						</g:cell>
+						<s:IconButton ui:field="nextMonth" icon="triangle-1-e"></s:IconButton>
+					</g:HorizontalPanel>				
+				</g:cell>	
+			</g:HorizontalPanel>
+			
+			<g:VerticalPanel ui:field="calendarPanel">
+			</g:VerticalPanel>
+		</g:VerticalPanel>
+	</g:ScrollPanel>
+</ui:UiBinder> 

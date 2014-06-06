@@ -3844,3 +3844,130 @@ color: #f1b532;
 	padding-right: 20px !important;
 	background-position: right center !important;
 }
+.weekDayLabel{
+	background-color: #C3D9FF;
+    color: #112ABB;
+    font-size: 13px;
+    height: 20px;
+    text-align: center;
+}
+
+.dayCellLabel
+{
+	border-bottom: 1px solid #C3D9FF;
+    border-left: 1px solid #C3D9FF;    
+    font-family: arial;
+    font-size: 11px;
+    min-height: 120px;    
+   	text-align: right;
+   	background: url("images/dot.png") repeat-x center;
+}
+
+.blockCell
+{
+	border-bottom: 1px solid #C3D9FF;
+    border-left: 1px solid #C3D9FF;    
+    font-family: arial;
+    font-size: 11px;
+    height: 15px;    
+   	text-align: right;   	
+}
+
+.lastBlockCell
+{
+	border-left: 1px solid #C3D9FF;    
+    font-family: arial;
+    font-size: 11px;
+    height: 15px;    
+   	text-align: right;   	
+}
+
+.dayCellLabel-enabled
+{
+	background-color: #E8EEF7;
+    display: block;
+    font-family: arial;
+    font-size: 11px;
+    height: 15px;
+    text-align: right;
+}
+
+.dayCellLabel-disabled
+{
+	background-color: #EEEEEE;
+    color: #999999;
+    display: block;
+    font-family: arial;
+    font-size: 11px;
+    height: 15px;
+   	text-align: right;
+}
+
+.dayCellLabel-today{
+	background: #FFE0E0 url("images/dot.png") repeat-x center !important;
+}
+
+.dayCellLabel-selected{
+	background-color: #F1E3C2; 
+}
+.dayIsProposedDay{
+	background: url("images/dot.png") repeat-x center !important;
+	background-color: #ddd !important;
+}
+.proposedDayLabel{
+	font-size: 12px;
+}
+.trainingDateOfSplittedBlock{
+	background: url("images/dot.png") repeat-x center !important;
+	background-color: #eee !important;
+}
+.trainingSuggestionPopup{
+	background: none repeat scroll 0 0 #DDDDDD;
+    border-radius: 10px 10px 10px 10px;
+    overflow: visible;
+    padding-left: 11px;
+    width: 200px;
+}
+.GOTTRBRDNND table { min-height:60px;}
+
+.suggetionRoleLbl{
+	font-weight: bold !important;
+    line-height: 0.9em !important;
+    font-size: 10px !important;
+}
+.moreButton{
+	/* background: url("images/ui-bg_glass_75_dadada_1x400.png") repeat-x scroll 50% 50% #DADADA;
+   	border: 1px solid #999999;
+   	border-radius: 4px 4px 4px 4px;
+   	cursor: pointer; */
+   	font-size: 76.2% !important;
+   	height: 12px !important;
+   	padding: 0px 3px !important;
+   	margin-right: 0 !important;
+   	width: 74% !important;
+   	
+   	
+   /* 	margin: 0;
+   	outline-style: none !important;
+   	padding: 3px 6px 3px 3px;
+   	text-decoration: none !important;
+   	white-space: nowrap; */
+}
+.yellowBackGround{
+	background-color:#FFFF80;
+}
+.GOTTRBRDAOD table{
+	display: block;
+    line-height: 0 !important;
+    width: 100%;
+}
+.afterNoonStyle{
+	background-color:#FFFF80;
+	margin-top: 34% !important;
+}
+.greenBackGround{
+	 background: none repeat scroll 0 0 #82FF91;
+}
+.overlapTrainingBackGround{
+	background-color: #F9C56B !important;
+}

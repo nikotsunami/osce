@@ -102,7 +102,11 @@ public class StandardizedRole {
 	private Integer sum ;
 	
 	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
+	private Set<Training> trainings = new HashSet<Training>();
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
+	private Set<TrainingSuggestion> trainingSuggestions = new HashSet<TrainingSuggestion>();
 	
 	/*
 	 * @NotNull

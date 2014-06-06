@@ -77,6 +77,7 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	
 	AnswerRequestNonRoo answerRequestNonRoo();
 	CourseRequestNonRoo courseRequestNonRoo();
+	
 	SemesterRequestNonRoo semesterRequestNonRoo();
 	
 	BucketInformationRequestNonRoo bucketInformationRequestNonRoo();
@@ -86,4 +87,14 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	SpPortalPersonRequestNonRoo spPortalPersonRequestNonRoo();
 	
 	SpStandardizedPatientRequestNonRoo spStandardizedPatientRequestNonRoo();
+	
+	OsceDateRequestNonRoo osceDateRequestNonRoo();
+	
+	TrainingDateRequestNonRoo trainingDateRequestNonRoo();
+	
+	TrainingBlockRequestNonRoo trainingBlockRequestNonRoo();
+	
+	TrainingSuggestionRequestNonRoo trainingSuggestionRequestNonRoo();
+	
+	TrainingRequestNonRoo trainingRequestNonRoo();
 }

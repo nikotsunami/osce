@@ -1,13 +1,20 @@
 package ch.unibas.medizin.osce.domain.spportal;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
@@ -21,12 +28,9 @@ import javax.validation.constraints.Size;
 import org.apache.log4j.Logger;
 import org.mortbay.log.Log;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.orm.jdo.support.SpringPersistenceManagerProxyBean;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
-
-import com.google.gwt.requestfactory.shared.Request;
 
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
 import ch.unibas.medizin.osce.domain.Bankaccount;
@@ -50,6 +54,10 @@ public class SpStandardizedPatient {
 	@PersistenceContext(unitName="spportalPersistenceUnit")
 	 transient EntityManager entityManager;
     
+	 @Id
+	 @Column(name = "id")
+	 private Long id;
+	    
 	@Size(max = 40)
     private String preName;
 	
@@ -123,6 +131,10 @@ public class SpStandardizedPatient {
 	private SPPortalPerson person;
     
     private Boolean ignoreSocialInsuranceNo;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedPatient")
+	private Set<SpPatientInSemester> patientInSemester = new HashSet<SpPatientInSemester>();
+
     
     private static transient Logger log = Logger.getLogger(SPPortalPerson.class);
     
@@ -395,5 +407,26 @@ public class SpStandardizedPatient {
 		 List<SpAnamnesisChecksValue> resultList = query.getResultList();
 	    	
 		 return resultList;
+	}
+
+	public static SpStandardizedPatient findSPWithId(Long id) {
+		
+		log.info("finding sp based on id : " + id);
+		 
+		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+
+		 EntityManager em = emFactory.createEntityManager();
+		 
+		 String queryString ="SELECT sp FROM SpStandardizedPatient sp WHERE sp.id="+id;
+
+		 TypedQuery<SpStandardizedPatient> query = em.createQuery(queryString, SpStandardizedPatient.class);  
+		 
+		 List<SpStandardizedPatient> resultList = query.getResultList();
+	    	
+		 if(resultList==null || resultList.size()== 0){
+			 return null;
+		 }else{
+			 return resultList.get(0);
+		 }
 	}
 }

@@ -27,6 +27,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsceDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.PaymentPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.PlanSPTrainingPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
@@ -306,6 +307,10 @@ public class FilterForMainPlaces implements AsyncFilteredActivityMapper.Filter {
 			StudentManagementDetailsPlace studentManagementDetailsPlace = (StudentManagementDetailsPlace) place;
 			return new StudentManagementPlace(studentManagementDetailsPlace.getToken());
 		}
+		
+		if (place instanceof PlanSPTrainingPlace)
+			return (PlanSPTrainingPlace) place;
+		
 		return null;
 	}
 

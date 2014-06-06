@@ -1480,6 +1480,80 @@ public interface OsceConstants extends Constants {
 	
 	public String editRequest();
 	
+    public String planSPTraining();
+	
+	public String startSurvey(); 
+			
+	public String showSuggestion();
+	
+	public String today();
+	
+	public String proposeTrainingDay();
+	
+	public String proposeOsceDay();
+	
+	public String scheduleTraining();
+	
+	public String removeTrainingDay();
+	
+	public String removeOsceDay();
+	
+	public String possibleSpTraining();
+	
+	public String possibleOsceDay();
+	
+	public String proposeTrainingDays();
+	
+	public String proposeOsceDays();
+
+	public String block();
+	
+	public String splitBlock();
+	
+	public String joinBlock();
+	
+	public String startSurveyConfirmation();
+	
+	public String trainingDateIsAfterOsceDate();
+	
+	public String noPISFoundForSemester();
+	
+	public String assignAllActiveSP();
+	
+	public String assignSPManually();
+	
+	public String noOsceOrTrainingdateProposed();
+	
+	public String  stopSurvey();
+	
+	public String spsAreNotAssignedToRole();
+	
+	public String more();
+	
+	public String hideSuggestion();
+	
+	public String schedule();
+	
+	public String roleNotDefined();
+	
+	public String timeTo();
+
+	public String inValidTimeProvided();
+	
+	public String pleaseSelectRole();
+	
+	public String ignoreTrainingBlocks();
+	
+	public String suggestedTraining();
+	
+	public String morning();
+	
+	public String afterNoon();
+	
+	public String overrideSuggestions();
+	
+	public String scheduledTrainings();
+	
 }
 
 

@@ -537,7 +537,7 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 			send.setEnabled(false);
 			pull.setEnabled(true);
 			break;
-		case EXPORTED_FOR_SCHEDULING:
+		//case EXPORTED_FOR_SCHEDULING:
 		case INACTIVE:
 			edit.setEnabled(true);
 			send.setEnabled(false);

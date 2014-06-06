@@ -142,6 +142,10 @@ public class StandardizedPatient {
     @Size(max = 20)
     private String socialInsuranceNo;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date created;
+    
     @OneToOne(cascade = CascadeType.ALL)    
     private AnamnesisForm anamnesisForm;
 
@@ -1381,5 +1385,133 @@ public class StandardizedPatient {
 			Log.error("Exception occured during persisting patient data in sp portal db." + e.getMessage(),e);
 		}
 	}*/
+
+	public static List<StandardizedPatient> findAllActiveSps(){
+
+		try{
+		EntityManager em = StandardizedPatient.entityManager();
+	        String sql = "SELECT sp FROM StandardizedPatient AS sp WHERE sp.status!=0 AND sp.status!=3";
+	        TypedQuery<StandardizedPatient> query = em.createQuery(sql, StandardizedPatient.class);
+	        List<StandardizedPatient> resultList = query.getResultList();
+	        
+	        if (resultList == null || resultList.size() == 0) return null;
+	        return resultList;
+		}catch (Exception e) {
+			Log.error(e.getMessage(),e);
+			return null;
+		}
+	}
 	
+	public static List<StandardizedPatient> findAllSPWithStatusActive(Long semId){
+
+		try{
+		
+			Semester semester = Semester.findSemester(semId);
+			Set<PatientInSemester> patientInSemSet= semester.getPatientsInSemester();
+			 
+			EntityManager em = StandardizedPatient.entityManager();
+	        String sql = "SELECT sp FROM StandardizedPatient AS sp WHERE sp.id in (''"+ getIdOfSP(patientInSemSet) +") AND sp.status=1";
+	      
+	        TypedQuery<StandardizedPatient> query = em.createQuery(sql, StandardizedPatient.class);
+	        
+	        List<StandardizedPatient> resultList = query.getResultList();
+	        
+	        if (resultList == null || resultList.size() == 0) return null;
+	        return resultList;
+		}catch (Exception e) {
+			Log.error(e.getMessage(),e);
+			return null;
+		}
+	}
+	
+	public static List<StandardizedPatient> findAllSPWithStatusExported(Long semId){
+
+		try{
+		
+			Semester semester = Semester.findSemester(semId);
+			Set<PatientInSemester> patientInSemSet= semester.getPatientsInSemester();
+			 
+			EntityManager em = StandardizedPatient.entityManager();
+	        String sql = "SELECT sp FROM StandardizedPatient AS sp WHERE sp.id in (''"+ getIdOfSP(patientInSemSet) +")  AND sp.status=2";
+	      
+	        TypedQuery<StandardizedPatient> query = em.createQuery(sql, StandardizedPatient.class);
+	        
+	        List<StandardizedPatient> resultList = query.getResultList();
+	        
+	        if (resultList == null || resultList.size() == 0) return null;
+	        return resultList;
+		}catch (Exception e) {
+			Log.error(e.getMessage(),e);
+			return null;
+		}
+	}
+	
+	public static List<StandardizedPatient> findAllSPWithStatusInSurvey(Long semId){
+
+		try{
+		
+			Semester semester = Semester.findSemester(semId);
+		
+			Set<PatientInSemester> patientInSemSet= semester.getPatientsInSemester();
+			 
+			EntityManager em = StandardizedPatient.entityManager();
+	      
+			String sql = "SELECT sp FROM StandardizedPatient AS sp WHERE sp.id in (''"+ getIdOfSP(patientInSemSet) +")  AND sp.status=4";
+	      
+	        TypedQuery<StandardizedPatient> query = em.createQuery(sql, StandardizedPatient.class);
+	        
+	        List<StandardizedPatient> resultList = query.getResultList();
+	        
+	        if (resultList == null || resultList.size() == 0) return null;
+	        return resultList;
+		}catch (Exception e) {
+			Log.error(e.getMessage(),e);
+			return null;
+		}
+	}
+	
+	public static List<StandardizedPatient> findAllSPWithStatusExportedANDSurvey(Long semId){
+
+		try{
+		
+			Semester semester = Semester.findSemester(semId);
+		
+			Set<PatientInSemester> patientInSemSet= semester.getPatientsInSemester();
+			 
+			EntityManager em = StandardizedPatient.entityManager();
+	      
+			String sql = "SELECT sp FROM StandardizedPatient AS sp WHERE sp.id in (''"+ getIdOfSP(patientInSemSet) +")  AND sp.status=5";
+	      
+	        TypedQuery<StandardizedPatient> query = em.createQuery(sql, StandardizedPatient.class);
+	        
+	        List<StandardizedPatient> resultList = query.getResultList();
+	        
+	        if (resultList == null || resultList.size() == 0) return null;
+	        return resultList;
+		}catch (Exception e) {
+			Log.error(e.getMessage(),e);
+			return null;
+		}
+	}
+	 private static String getIdOfSP(Set<PatientInSemester> patientInSemSet) {
+
+			if (patientInSemSet == null|| patientInSemSet.size() == 0) {
+				Log.info("Return as null");
+				return "";
+			}
+			Iterator<PatientInSemester> spPersonlistIterator = patientInSemSet.iterator();
+			StringBuilder spIds = new StringBuilder();
+			spIds.append(",");
+			while (spPersonlistIterator.hasNext()) {
+				
+				PatientInSemester pis = spPersonlistIterator.next();
+
+				spIds.append("'"+pis.getStandardizedPatient().getId()+"'");
+				if (spPersonlistIterator.hasNext()) {
+					spIds.append(" ,");
+				}
+			}
+			
+			return spIds.toString();
+		}
 }

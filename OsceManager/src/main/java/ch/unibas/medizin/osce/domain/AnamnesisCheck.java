@@ -67,7 +67,7 @@ public class AnamnesisCheck {
 	}
 
 
-	private Integer userSpecifiedOrder;
+	/*private Integer userSpecifiedOrder;
 
 
     public Integer getUserSpecifiedOrder() {
@@ -77,7 +77,7 @@ public class AnamnesisCheck {
 
     public void setUserSpecifiedOrder(Integer userSpecifiedOrder) {
         this.userSpecifiedOrder = userSpecifiedOrder;
-    }
+    }*/
 
 
     public static Long countAnamnesisChecksBySearchWithTitle(String q,

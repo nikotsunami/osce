@@ -1,0 +1,56 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl" xmlns:c="urn:import:com.google.gwt.cell.client">
+	
+	<ui:with type="ch.unibas.medizin.osce.shared.i18n.OsceConstants" field="constants"></ui:with>
+	
+	<ui:style src="../../styles.css">
+	
+	.timeBoxWidth{
+	}
+	.mainPanelStyle{
+	
+		background: #EEEEEE; 
+	}
+	.toLabel{
+		margin-top: 5px;
+
+	}
+	.dateLabelStyle{
+		font-size: 13px;
+    	font-weight: bold;
+    	margin-left: 125px;
+	}
+	.checkBoxStyle label{
+	 	bottom:11px !important;
+    	left: 5px;
+    	position: relative;
+	}
+	</ui:style>
+	<g:HTMLPanel ui:field="trainingHtmlPanel" addStyleNames="{style.mainPanelStyle}" >
+		
+		<g:Label ui:field="dateLabel" addStyleNames="{style.dateLabelStyle}"></g:Label>
+		
+		<g:VerticalPanel ui:field="scheduledTrainingsPanel" width="98%"></g:VerticalPanel>
+		
+		<g:HorizontalPanel ui:field="scheduleTrainingHP" spacing="5">
+			<g:TextBox ui:field="startTimeBox" addStyleNames="{style.timeBoxWidth}"></g:TextBox>
+			<g:Label ui:field="toLabel" text="{constants.timeTo}" addStyleNames="{style.toLabel}"></g:Label>
+			<g:TextBox ui:field="endTimeBox" addStyleNames="{style.timeBoxWidth}"></g:TextBox>
+			<!-- <g:SuggestBox ui:field="standardizedRoleSuggestionBox"></g:SuggestBox> -->
+			<i:DefaultSuggestBox ui:field="standardizedRoleSuggestionBox"></i:DefaultSuggestBox>
+		</g:HorizontalPanel>
+		
+		<g:HorizontalPanel ui:field="buttonHP" horizontalAlignment="ALIGN_RIGHT" spacing="5" width="100%">
+			
+				<g:CheckBox ui:field="ignoreTrainingBlock" text="{constants.ignoreTrainingBlocks}" addStyleNames="{style.checkBoxStyle}"></g:CheckBox>
+			
+			<g:Cell width="17%">
+				<s:IconButton ui:field="cancelButton" icon="close" text="{constants.cancel}"></s:IconButton>
+			</g:Cell>
+			<g:Cell width="17%">
+				<s:IconButton ui:field="schedultButton" icon="clock" text="{constants.schedule}"></s:IconButton>
+			</g:Cell>
+		</g:HorizontalPanel>
+	</g:HTMLPanel>	
+</ui:UiBinder> 

@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.PaymentPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.PlanSPTrainingPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsPlace;
@@ -882,6 +883,37 @@ public class ApplicationMainActivitiesMapper implements AsyncActivityMapper {
 				public void onFailure(Throwable reason) {
 					
 					Window.alert("Not able to provide StudentManagmentActivity");
+				}
+			});
+			
+		}
+
+		if(place instanceof PlanSPTrainingPlace){
+			Log.info("is PlanSPTrainingPlace");
+			final Place places=place;
+			//return new StudentManagmentActivity(requests, placeController, (StudentManagementPlace) place);
+			
+			GWT.runAsync(new RunAsyncCallback() {
+				
+				@Override
+				public void onSuccess() {
+					
+					PlanSPTrainingPlace planSPTraingPlace = (PlanSPTrainingPlace)places;
+					if (planSPTraingPlace.handler == null) {
+						planSPTraingPlace.handler = handler;
+					}
+
+					if (planSPTraingPlace.semesterProxy == null) {
+						planSPTraingPlace.semesterProxy = semesterProxy;
+					}
+					
+					callbackHandler.onRecieveActivity(new PlanSPTrainingActivity(requests, placeController,(PlanSPTrainingPlace)places));	
+				}
+				
+				@Override
+				public void onFailure(Throwable reason) {
+					
+					Window.alert("Not able to provide PlanSPTrainingPlace");
 				}
 			});
 			

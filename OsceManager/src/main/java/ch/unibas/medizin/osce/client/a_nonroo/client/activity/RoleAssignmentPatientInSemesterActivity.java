@@ -2971,7 +2971,8 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 					StringBuffer tempOsceDay = new StringBuffer();
 					StringBuffer tempAssignedRole = new StringBuffer();
 
-					if (patientInSemesterProxy.getTrainings() != null) {
+					/*@Commented by Manish as changed entity for training task
+					 * if (patientInSemesterProxy.getTrainings() != null) {
 
 						for (Iterator<TrainingProxy> iterator = patientInSemesterProxy.getTrainings().iterator(); iterator.hasNext();) {
 							TrainingProxy trainingProxy = (TrainingProxy) iterator.next();
@@ -2984,7 +2985,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 							}
 
 						}
-					}
+					}*/
 
 					// DateFormat dateFormat = new SimpleDateFormat("DD-MM-YYYY");
 					if (patientInSemesterProxy.getOsceDays() != null) {

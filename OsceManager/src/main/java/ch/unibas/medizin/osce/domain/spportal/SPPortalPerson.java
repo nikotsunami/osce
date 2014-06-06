@@ -9,11 +9,13 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
@@ -93,6 +95,9 @@ public class SPPortalPerson {
 	 private String token;
 	 
 	 private Boolean changed;
+	 
+	 @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
+	private Set<SpPatientInSemester> patientInSemester = new HashSet<SpPatientInSemester>();
 	 
 	 private static transient Logger log = Logger.getLogger(SPPortalPerson.class);
 	 
@@ -487,7 +492,9 @@ public class SPPortalPerson {
 						spStandardizedPatient.setTelephone2(standardizedPatient.getTelephone2());
 						spStandardizedPatient.setWeight(standardizedPatient.getWeight());
 						spStandardizedPatient.setWorkPermission(standardizedPatient.getWorkPermission());
-						
+						spStandardizedPatient.setId(standardizedPatient.getId());
+						System.out.println("stand patient id is" + standardizedPatient.getId());
+						System.out.println("SP stand patient id is" + spStandardizedPatient.getId());
 						log.info("standardized patient detail that will be saved in sp portal db is : " + spStandardizedPatient);
 						
 					}
@@ -549,7 +556,7 @@ public class SPPortalPerson {
 							spAnamnesisCheck.setText(anamnesisCheck.getText());
 							spAnamnesisCheck.setSort_order(anamnesisCheck.getSort_order());
 							spAnamnesisCheck.setType(anamnesisCheck.getType());
-							spAnamnesisCheck.setUserSpecifiedOrder(anamnesisCheck.getUserSpecifiedOrder());
+							//spAnamnesisCheck.setUserSpecifiedOrder(anamnesisCheck.getUserSpecifiedOrder());
 							spAnamnesisCheck.setValue(anamnesisCheck.getValue());
 							
 							//initializing SpAnamnesisChecksValue value.	
@@ -617,7 +624,9 @@ public class SPPortalPerson {
 		 
 		 EntityManager em = StandardizedPatient.entityManager();
 		 
-		 String queryString ="select sp from StandardizedPatient sp where sp.email in (''"+ getEmailOfSPs(allSPsWhoSentEditRequest()) +") ";
+		// String queryString ="select sp from StandardizedPatient sp where sp.email in (''"+ getEmailOfSPs(allSPsWhoSentEditRequest()) +") ";
+		 
+		 String queryString ="select sp from StandardizedPatient sp where sp.spPortalPersonId in (''"+ getIdOfSPs(allSPsWhoSentEditRequest()) +") ";
 		 
 		 TypedQuery<StandardizedPatient> query =em.createQuery(queryString,StandardizedPatient.class);
 		
@@ -656,6 +665,27 @@ public class SPPortalPerson {
 			return spEmailAddress.toString();
 		}
 	 
+	 private static String getIdOfSPs(List<SPPortalPerson> spPersonList) {
+
+			if (spPersonList == null|| spPersonList.size() == 0) {
+				log.info("Return as null");
+				return "";
+			}
+			Iterator<SPPortalPerson> spPersonlistIterator = spPersonList.iterator();
+			StringBuilder spIds = new StringBuilder();
+			spIds.append(",");
+			while (spPersonlistIterator.hasNext()) {
+				
+				SPPortalPerson spPerson = spPersonlistIterator.next();
+
+				spIds.append("'"+spPerson.getId()+"'");
+				if (spPersonlistIterator.hasNext()) {
+					spIds.append(" ,");
+				}
+			}
+			
+			return spIds.toString();
+		}
 	 /**
 	  * This method sent mail and reset edit request state.
 	  */
@@ -687,7 +717,9 @@ public class SPPortalPerson {
 		 
 		 EntityManager em = StandardizedPatient.entityManager();
 		 
-		 String queryString ="select sp from StandardizedPatient sp where sp.email in (''"+ getEmailOfSPs(allSPsWhoSentEditRequest()) +") ";
+		 //String queryString ="select sp from StandardizedPatient sp where sp.email in (''"+ getIdOfSPs(allSPsWhoSentEditRequest()) +") ";
+		 
+		 String queryString ="select sp from StandardizedPatient sp where sp.spPortalPersonId in (''"+ getIdOfSPs(allSPsWhoSentEditRequest()) +") ";
 		 
 		 TypedQuery<StandardizedPatient> query =em.createQuery(queryString,StandardizedPatient.class);
 		

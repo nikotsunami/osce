@@ -312,7 +312,7 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			}
 			
 			try{
-				syncTraining(myjson);
+				//@Commented by Manish as changed entity for training task -->> syncTraining(myjson);
 			}catch(Exception e){
 				Log.error(e.getMessage());
 				throw new DMZSyncException(DMZSyncExceptionType.SYNC_TRAINING_EXCEPTION,e.getMessage());
@@ -463,7 +463,7 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 				semester.setStandardizedPatient(patient);
 				semester.setAccepted(accepted);
 				setOsceDays(jsonObject,semester);
-				setTrainings(jsonObject,semester);	
+				//@Commented by Manish as changed entity for training task -->> setTrainings(jsonObject,semester);	
 									 
 				if(inSemester != null){
 					semester.setSemester(inSemester);	
@@ -534,7 +534,8 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	/**
 	 * save accepted trainings
 	 * */
-	private void setTrainings(JSONObject jsonObject,PatientInSemester semester)throws JSONException{
+	/*@Commented by Manish as changed entity for training task
+	 	private void setTrainings(JSONObject jsonObject,PatientInSemester semester)throws JSONException{
 		JSONArray trainingArray = jsonObject.getJSONArray("acceptedTrainings");
 		Set<Training> jsonTrainings = semester.getTrainings();
 		if (jsonTrainings == null) {
@@ -569,12 +570,13 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			}
 		 }
 		 semester.setTrainings(jsonTrainings);
-	}
+	}*/
 	
 	/**
 	 * sync the class of Training
 	 * */
-	private void syncTraining(JSONObject myjson) throws JSONException{
+	/*@Commented by Manish as changed entity for training task
+	 * private void syncTraining(JSONObject myjson) throws JSONException{
 		JSONArray jsonArray = myjson.getJSONArray("trainings");			
 	    for(int i =0;i<jsonArray.length();i++){
 	    	JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -631,7 +633,7 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 
 	    	}	    		    	
 	    }
-	}
+	}*/
 	
 
 	
@@ -655,7 +657,7 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 					sb.append(",");
 				}
 				// add sendDMZ  status
-				p.getStandardizedPatient().setStatus(StandardizedPatientStatus.EXPORTED_FOR_SCHEDULING);
+				//p.getStandardizedPatient().setStatus(StandardizedPatientStatus.EXPORTED_FOR_SCHEDULING);
 				p.getStandardizedPatient().persist();
 				patients.add(p.getStandardizedPatient());
 			}
@@ -709,7 +711,7 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		int j = 0; 
 		for(Training training : trainings){
 			j++;
-			sb.append(getTrainingJsonStr(training));
+			//@Commented by Manish as changed entity for training task -->> sb.append(getTrainingJsonStr(training));
 			if(j != trainings.size()){
 				sb.append(",");
 			}
@@ -847,7 +849,8 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 	 * @param training
 	 * @return
 	 */
-	private String getTrainingJsonStr(Training training){
+	/*@Commented by Manish as changed entity for training task
+	 * private String getTrainingJsonStr(Training training){
 		StringBuilder sb = new StringBuilder();
 		sb.append("{");
 		String name = "";
@@ -886,7 +889,7 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 		}
 		sb.append("}");
 		return sb.toString();
-	}
+	}*/
 	
 	/***
 	 * get one json string of osce
@@ -1344,7 +1347,7 @@ public  class DMZSyncServiceImpl extends RemoteServiceServlet implements
 			} else if(valueI == 3){
 				return StandardizedPatientStatus.ANONYMIZED;
 			}else if(valueI == 4){
-				return StandardizedPatientStatus.EXPORTED_FOR_SCHEDULING;
+				return null;//StandardizedPatientStatus.EXPORTED_FOR_SCHEDULING;
 			} else {
 				return null;
 			}

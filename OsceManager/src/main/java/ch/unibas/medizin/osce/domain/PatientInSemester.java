@@ -12,10 +12,12 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
@@ -25,6 +27,7 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import ch.unibas.medizin.osce.domain.spportal.SpPatientInSemester;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 
 import com.csvreader.CsvWriter;
@@ -51,15 +54,25 @@ public class PatientInSemester {
     @JoinTable(name = "accepted_osce_days")
     private Set<OsceDay> osceDays = new HashSet<OsceDay>();
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "accepted_osce")
+    private Set<OsceDate> osceDates = new HashSet<OsceDate>();
+    
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "accepted_trainings")
+    private Set<TrainingDate> trainingDates = new HashSet<TrainingDate>();
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "patientInSemester")
     private Set<PatientInRole> patientInRole = new HashSet<PatientInRole>();
 
-    @ManyToMany
+   /* @ManyToMany
     @JoinTable(name = "accepted_trainings")
-    private Set<Training> trainings = new HashSet<Training>();
+    private Set<Training> trainings = new HashSet<Training>();*/
 
     private Integer value = 0;
 
+    private Long spPortalPersonId;
+    
     public static PatientInSemester findPatientInSemesterByStandardizedPatient(StandardizedPatient patient) {
         if (patient == null) return null;
         EntityManager em = entityManager();
@@ -486,5 +499,70 @@ public class PatientInSemester {
         return "SPInSemester.csv";
         
     }
-    
+    public static Boolean assignSPToSemester(Long semId){
+    	try{
+    			Semester semester = Semester.findSemester(semId);
+    		
+    			List<StandardizedPatient> listStandardizedPatients  =StandardizedPatient.findAllActiveSps();
+    			if(listStandardizedPatients!=null)
+    			Log.info("Total active sp found :" + listStandardizedPatients.size());
+    			
+    			for(StandardizedPatient sp : listStandardizedPatients){
+    				PatientInSemester pis = new PatientInSemester();
+    				pis.setAccepted(true);
+    				pis.setSemester(semester);
+    				pis.setStandardizedPatient(sp);
+    				pis.setSpPortalPersonId(sp.getSpPortalPersonId());
+    				pis.setValue(0);
+    				pis.persist();
+    			}
+    		
+    	}catch (Exception e) {
+			Log.error(e.getMessage(), e);
+			return false;
+		}
+    	return true;
+	}
+
+	public static List<PatientInSemester> findPatientInSemesterBasedOnSemAndId(Long lastspPatientInSemId, Long semId) {
+		try{
+			EntityManager em = PatientInSemester.entityManager();
+		        String sql = "SELECT pis FROM PatientInSemester AS pis WHERE pis.id >" + lastspPatientInSemId + " AND pis.semester.id="+semId + " AND pis.standardizedPatient.status=1";
+		        TypedQuery<PatientInSemester> query = em.createQuery(sql, PatientInSemester.class);
+		        List<PatientInSemester> resultList = query.getResultList();
+		        
+		        if (resultList == null || resultList.size() == 0){ 
+		        	return null;
+		        }else{
+		        	return resultList;
+		        }
+		        
+			}catch (Exception e) {
+				Log.error(e.getMessage(),e);
+				return null;
+			}
+		
+	}
+
+	public static List<PatientInSemester> findPatientInSemesterBasedOnSemesterId(Long semId) {
+		
+		Log.info("finding patient in semester based on semester id : " + semId);
+		 
+
+		 EntityManager em = PatientInSemester.entityManager();
+		 
+		 String queryString ="select pis from PatientInSemester pis where pis.semester.id="+semId + " ORDER BY id DESC";
+		 
+		 TypedQuery<PatientInSemester> query =em.createQuery(queryString,PatientInSemester.class);
+		 
+		 List<PatientInSemester> patientInSemesterList = query.getResultList();
+		 
+		 if(patientInSemesterList==null || patientInSemesterList.size()==0){
+			 return null;
+		 }else{
+		
+			 return patientInSemesterList;
+		 }
+		
+	}
 }
