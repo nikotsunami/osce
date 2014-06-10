@@ -1356,8 +1356,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).show();
 		
 		int height = ((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).getTrainingHtmlPanel().getOffsetHeight();
-		System.out.println("height is :" + height);
-		height+=20;
+		height+=22;
 		
 		((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).setPopupPosition(xPosition-250,yPosition-height);	
 		
@@ -1387,7 +1386,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		((ScheduleTrainingViewImpl)scheduleTrainingView).show();
 		
 		int height = ((ScheduleTrainingViewImpl)scheduleTrainingView).getTrainingHtmlPanel().getOffsetHeight();
-		height+=20;
+		height+=22;
 		
 		((ScheduleTrainingViewImpl)scheduleTrainingView).setPopupPosition(xPosition-250,yPosition-height);	
 		

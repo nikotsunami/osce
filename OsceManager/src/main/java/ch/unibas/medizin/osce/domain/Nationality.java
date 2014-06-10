@@ -11,9 +11,16 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
+import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+
+import com.google.gwt.requestfactory.shared.Request;
+
+import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+import ch.unibas.medizin.osce.domain.spportal.SpNationality;
+import ch.unibas.medizin.osce.domain.spportal.SpProfession;
 
 @RooJavaBean
 @RooToString
@@ -28,6 +35,8 @@ public class Nationality {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "nationality")
     private Set<StandardizedPatient> standardizedpatients = new HashSet<StandardizedPatient>();
+    
+    private static Logger log = Logger.getLogger(Nationality.class);
     
     public static Long countNationalitiesByName(String name) {
     	EntityManager em = entityManager();
@@ -54,5 +63,60 @@ public class Nationality {
     	String sql = "SELECT n FROM Nationality n WHERE n.nationality = '" + name + "'";
     	TypedQuery<Nationality> q = em.createQuery(sql, Nationality.class);
     	return q.getResultList().size();
+    }
+    
+    public static Boolean saveNationalityInSpPortal(Nationality nation){
+    	try{
+	    		
+    		SpNationality spNationality = new SpNationality();
+    		
+    		spNationality.setNationality(nation.getNationality());
+    		
+    		spNationality.persist();
+	    		
+    		return true;
+    	}catch (Exception e) {
+			
+    		log.error(e.getMessage(), e);
+			
+    		return false;
+		}
+    }
+    public static Boolean editNationalityInSpPortal(Nationality nation,String value){
+    	try{
+    		SpNationality spNationality = SpNationality.findNationalityOnNationalityText(nation.getNationality());
+    		if(spNationality!=null){
+    		
+    			spNationality.setNationality(value);
+    			
+    			spNationality.persist();
+    			
+    			return true;
+    		}else{
+    			return false;
+    		}
+    	}catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return false;
+		}
+    }
+    
+    public static Boolean deleteNatinalityInSpPortal(Nationality nation){
+    
+    	try{
+	    	SpNationality spNationality = SpNationality.findNationalityOnNationalityText(nation.getNationality());
+			
+	    	if(spNationality!=null){
+			
+				spNationality.remove();
+				
+				return true;
+			}else{
+				return false;
+			}
+		}catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return false;
+		}
     }
 }

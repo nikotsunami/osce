@@ -33,4 +33,6 @@ public interface AnamnesisCheckRequestNonRoo extends RequestContext {
 	
 	public abstract Request<List<AnamnesisCheckProxy>> getReSortingList(AnamnesisCheckTitleProxy anamnesisCheckTitle, Integer sortFrom);
 	public abstract Request<Void> reSorting(AnamnesisCheckTitleProxy anamnesisCheckTitle, Integer sortFrom);
+	public abstract Request<Boolean> saveOrEditAnamnesisCheck(AnamnesisCheckProxy anamnesisCheck);
+	public abstract Request<Boolean> deleteAnamnesisCheckFromSpPortal(Long long1);
 }

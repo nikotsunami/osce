@@ -22,6 +22,10 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import com.google.gwt.requestfactory.shared.Request;
+
+import ch.unibas.medizin.osce.domain.spportal.SpAnamnesisCheck;
+import ch.unibas.medizin.osce.domain.spportal.SpAnamnesisCheckTitle;
 import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 
 @RooJavaBean
@@ -437,6 +441,11 @@ public class AnamnesisCheck {
     			if(check.sort_order != null){
     				check.sort_order = check.sort_order - 1;
     				check.persist();
+    				
+    				//Setting sort order in spportal !!!!!.
+    				SpAnamnesisCheck spAnamnesisCheck = SpAnamnesisCheck.findSpAnamnesisCheck(check.getId());
+    				spAnamnesisCheck.setSort_order(check.getSort_order());
+    				spAnamnesisCheck.persist();
     			}
     			
     		}
@@ -451,6 +460,17 @@ public class AnamnesisCheck {
     		int maxSortOder = getMaxSortOderInTitle(this.anamnesisCheckTitle);
     		this.sort_order = maxSortOder + 1;
     		this.persist();
+    		
+    		//Setting sort order in spportal !!!!!.
+    		SpAnamnesisCheck spAnamnesisCheck = SpAnamnesisCheck.findSpAnamnesisCheck(this.getId());
+    		if(spAnamnesisCheck==null){
+    			spAnamnesisCheck=new SpAnamnesisCheck();
+    			spAnamnesisCheck.setId(this.getId());
+    		}
+    		//Here this is always 1 because this AnamnesisCheck is created as last.
+			spAnamnesisCheck.setSort_order(1);
+			spAnamnesisCheck.persist();
+			
     	//oderByPreviousAnamnesisCheck
     		oderByPreviousAnamnesisCheck(preSortorder);
     }
@@ -479,6 +499,11 @@ public class AnamnesisCheck {
 			if(check.sort_order != null){
 				check.sort_order = check.sort_order + 1;
 				check.persist();
+				
+				//Setting sort order in spportal !!!!!.
+				SpAnamnesisCheck spAnamnesisCheck = SpAnamnesisCheck.findSpAnamnesisCheck(check.getId());
+				spAnamnesisCheck.setSort_order(check.getSort_order());
+				spAnamnesisCheck.persist();
 			}
 		}
 
@@ -500,6 +525,11 @@ public class AnamnesisCheck {
 			if(check.sort_order != null){
 				check.sort_order = check.sort_order - 1;
 				check.persist();
+				
+				//Setting sort order in spportal !!!!!.
+				SpAnamnesisCheck spAnamnesisCheck = SpAnamnesisCheck.findSpAnamnesisCheck(check.getId());
+				spAnamnesisCheck.setSort_order(check.getSort_order());
+				spAnamnesisCheck.persist();
 			}
 		}
 
@@ -587,9 +617,65 @@ public class AnamnesisCheck {
 		return true;
 	}
     
-    
-    
-    
+	public static Boolean saveOrEditAnamnesisCheck(AnamnesisCheck anamnesisChk){
+		log.info("saving anamnesis check value in spportal");
+		try{
+			AnamnesisCheck anamnesisCheck = AnamnesisCheck.findAnamnesisCheck(anamnesisChk.getId());
+			
+			SpAnamnesisCheck spAnamnesisCheck = SpAnamnesisCheck.findSpAnamnesisCheck(anamnesisChk.getId());
+			
+			if(spAnamnesisCheck==null){
+				
+				spAnamnesisCheck= new SpAnamnesisCheck();
+				
+				SpAnamnesisCheckTitle spAnamnesisCheckTitle = SpAnamnesisCheckTitle.findAnamnisisCheckTitleBasedonId(anamnesisCheck.getAnamnesisCheckTitle().getId());
+				
+				spAnamnesisCheck.setAnamnesisCheckTitle(spAnamnesisCheckTitle);
+				
+				spAnamnesisCheck.setSendToDMZ(anamnesisCheck.getSendToDMZ());
+				spAnamnesisCheck.setSort_order(anamnesisCheck.getSort_order()==null ? 1: anamnesisCheck.getSort_order());
+				spAnamnesisCheck.setText(anamnesisCheck.getText());
+				spAnamnesisCheck.setType(anamnesisCheck.getType());
+				spAnamnesisCheck.setValue(anamnesisCheck.getValue());
+				spAnamnesisCheck.setId(anamnesisCheck.getId());
+				spAnamnesisCheck.persist();
+				return true;
+			}else{
+				
+				SpAnamnesisCheckTitle spAnamnesisCheckTitle = SpAnamnesisCheckTitle.findAnamnisisCheckTitleBasedonId(anamnesisCheck.getAnamnesisCheckTitle().getId());
+				
+				spAnamnesisCheck.setAnamnesisCheckTitle(spAnamnesisCheckTitle);
+				spAnamnesisCheck.setSendToDMZ(anamnesisCheck.getSendToDMZ());
+				spAnamnesisCheck.setSort_order(anamnesisCheck.getSort_order()==null ? 1: anamnesisCheck.getSort_order());
+				spAnamnesisCheck.setText(anamnesisCheck.getText());
+				spAnamnesisCheck.setType(anamnesisCheck.getType());
+				spAnamnesisCheck.setValue(anamnesisCheck.getValue());
+				spAnamnesisCheck.persist();
+				return true;
+			}
+			
+		}catch (Exception e) {
+			log.error(e.getMessage(),e);
+			return false;
+		}
+	}
+	
+	public static Boolean deleteAnamnesisCheckFromSpPortal(Long anamnesisCheckId){
+		log.info("deleting anamnesis check value in spportal");
+		try{
+			SpAnamnesisCheck spAnamnesisCheck = SpAnamnesisCheck.findSpAnamnesisCheck(anamnesisCheckId);
+			if(spAnamnesisCheck!=null){
+				spAnamnesisCheck.remove();
+				return true;
+			}else{
+				return false;
+			}
+		}catch (Exception e) {
+			log.error(e.getMessage(),e);
+			return false;
+		}
+		
+	}
     
 }
 

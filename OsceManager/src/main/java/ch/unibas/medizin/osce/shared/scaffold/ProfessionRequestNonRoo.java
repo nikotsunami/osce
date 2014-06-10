@@ -16,4 +16,10 @@ public interface ProfessionRequestNonRoo extends RequestContext {
 	abstract Request<Long> countProfessionsByName(String name);
 	
 	abstract Request<List<ProfessionProxy>> findProfessionsByName(String name, int firstResult, int maxResults);
+
+	abstract Request<Boolean> saveNewProfessionInSpPortal(ProfessionProxy profession);
+
+	abstract Request<Boolean> deleteProfessionInSpportal(ProfessionProxy prof);
+
+	abstract Request<Boolean> editProfessionInSpPortal(ProfessionProxy proxy, String value);
 }

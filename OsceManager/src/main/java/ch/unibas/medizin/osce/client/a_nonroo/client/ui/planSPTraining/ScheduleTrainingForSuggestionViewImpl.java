@@ -16,6 +16,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -95,6 +96,17 @@ public class ScheduleTrainingForSuggestionViewImpl extends PopupPanel implements
 	@UiField
 	IconButton schedultButton;
 	
+	@UiField
+	Image bottomAttow;
+	
+	@UiField
+	HorizontalPanel morninLabelPanel;
+	
+	@UiField
+	HorizontalPanel scheduleTrainingPanel;
+	
+	@UiField
+	HorizontalPanel afternoonLabelPanel;
 	
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 		
@@ -105,6 +117,12 @@ public class ScheduleTrainingForSuggestionViewImpl extends PopupPanel implements
 		setWidget(uiBinder.createAndBindUi(this));
 		this.setAnimationEnabled(true);
 		this.setAutoHideEnabled(true);
+		
+		this.bottomAttow.setUrl("osMaEntry/gwt/unibas/images/bottomarrow.png");
+		
+		morninLabelPanel.addStyleName("labelLine");
+		scheduleTrainingPanel.addStyleName("labelLine");
+		afternoonLabelPanel.addStyleName("labelLine");
 		
 		suggestedTrainingMorningLbl.setText(constants.suggestedTraining() + "- " + constants.morning());
 		suggestedTrainingAfternoonLbl.setText(constants.suggestedTraining() + " - " +constants.afterNoon());

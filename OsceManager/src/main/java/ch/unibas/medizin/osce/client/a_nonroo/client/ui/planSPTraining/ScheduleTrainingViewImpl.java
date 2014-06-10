@@ -17,6 +17,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -64,6 +65,9 @@ public class ScheduleTrainingViewImpl extends PopupPanel implements ScheduleTrai
 	@UiField
 	CheckBox ignoreTrainingBlock;
 	
+	@UiField
+	Image bottomAttow;
+	
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 		
 	private Delegate delegate;
@@ -74,6 +78,7 @@ public class ScheduleTrainingViewImpl extends PopupPanel implements ScheduleTrai
 		this.setAnimationEnabled(true);
 		this.setAutoHideEnabled(true);
 		
+		this.bottomAttow.setUrl("osMaEntry/gwt/unibas/images/bottomarrow.png");
 	}
 
 	@UiHandler("cancelButton")

@@ -515,7 +515,23 @@ public class Semester {
 				 lastspPatientInSemId= patientInSemList.get(0).getId();
 			}
 			
-			List<SpPatientInSemester> spPatientInSemsList =SpPatientInSemester.findPatientInSemesterBasedOnSemAndId(lastspPatientInSemId,spSemester.getId());
+			Set<SpPatientInSemester> setPatientInSemes= spSemester.getPatientsInSemester();
+		
+			if(setPatientInSemes!=null && setPatientInSemes.size() > 0){
+				//Updating status of patient in sem as Patient may accepted it.
+				for(SpPatientInSemester spPatientInSem : setPatientInSemes){
+				
+					String isAccepted=spPatientInSem.getAccepted() ? "1" :"0";
+					
+					String sql ="UPDATE `patient_in_semester` set accepted=" +isAccepted  +" WHERE id="+spPatientInSem.getId();
+					
+					Query query =  em.createNativeQuery(sql);
+					
+					query.executeUpdate();
+				}
+				
+			}
+			/*List<SpPatientInSemester> spPatientInSemsList =SpPatientInSemester.findPatientInSemesterBasedOnSemAndId(lastspPatientInSemId,spSemester.getId());
 			
 			if(spPatientInSemsList==null){
 				return;
@@ -537,11 +553,11 @@ public class Semester {
 			
 			//transaction.begin();
 			
-			int totalEntryCreated =query.executeUpdate();
+			int totalEntryCreated =query.executeUpdate();*/
 			
 			//transaction.commit();
 			
-			Log.info(totalEntryCreated +" patient in semester is created in spportal");
+			//Log.info(totalEntryCreated +" patient in semester is created in spportal");
 		}catch (Exception e) {
 			Log.error(e.getMessage(), e);
 			throw e;

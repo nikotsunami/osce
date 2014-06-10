@@ -9,16 +9,21 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.EditPopViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ProfessionView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ProfessionViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceRequest;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionRequest;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
@@ -28,6 +33,8 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.requestfactory.shared.BaseProxy;
+import com.google.gwt.requestfactory.shared.InstanceRequest;
 import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.user.cellview.client.AbstractHasData;
@@ -60,7 +67,7 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 	private ActivityManager activityManger;
 	private ProfessionDetailsActivityMapper ProfessionDetailsActivityMapper;
 	
-	
+	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	public ProfessionActivity(OsMaRequestFactory requests, PlaceController placeController) {
     	this.requests = requests;
@@ -194,6 +201,8 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 	private int totalRecords;
 	private boolean isInserted;
 	
+	private ProfessionProxy editedProfession;
+	
 	public boolean isInserted() {
 		return isInserted;
 	}
@@ -297,11 +306,12 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 		
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void newClicked(String name) {
 		Log.debug("Add profession");
 		ProfessionRequest profReq = requests.professionRequest();
-		ProfessionProxy profession = profReq.create(ProfessionProxy.class);
+		final ProfessionProxy profession = profReq.create(ProfessionProxy.class);
 		profession.setProfession(name);
 		
 		// Highlight onViolation
@@ -310,21 +320,44 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 		// E Highlight onViolation
 			@Override
 			public void onSuccess(Void arg0) {
+				
+				requests.professionRequestNonRoo().saveNewProfessionInSpPortal(profession).fire(new OSCEReceiver<Boolean>() {
+
+					@Override
+					public void onSuccess(Boolean response) {
+					
+						if(response==false){
+							showErrorMessageToUser("System could not create Profession in SpPortal");
+						}
+					}
+				});
 				setInserted(true);
 				init();
 			}
 		});
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void deleteClicked(ProfessionProxy prof) {
-		requests.professionRequest().remove().using(prof).fire(new Receiver<Void>() {
-			public void onSuccess(Void ignore) {
-				Log.debug("Sucessfully deleted");
-				setInserted(false);
-				init();
+	public void deleteClicked(final ProfessionProxy prof) {
+		requests.professionRequestNonRoo().deleteProfessionInSpportal(prof).fire(new OSCEReceiver<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean response) {
+				if(response==false){
+					showErrorMessageToUser("System could not delete Profession in spportal");
+				}
+				
+				requests.professionRequest().remove().using(prof).fire(new Receiver<Void>() {
+					public void onSuccess(Void ignore) {
+						Log.debug("Sucessfully deleted");
+						setInserted(false);
+						init();
+					}
+				});
 			}
 		});
+		
 	}
 	
 	@Override
@@ -340,24 +373,44 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 		
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void updateClicked(ProfessionProxy proxy, String value) {
-		ProfessionRequest profRequest = requests.professionRequest();
-		proxy = profRequest.edit(proxy);
-		proxy.setProfession(value);
-		// Highlight onViolation		
-		Log.info("Map Size: " + view.getProfessionMap().size());
-		profRequest.persist().using(proxy).fire(new OSCEReceiver<Void>(view.getProfessionMap()) {
-			// E Highlight onViolation
+	public void updateClicked(final ProfessionProxy proxy,final String value) {
+		
+		editedProfession=proxy;
+		
+		requests.professionRequestNonRoo().editProfessionInSpPortal(proxy,value).fire(new OSCEReceiver<Boolean>() {
+
+			
 			@Override
-			public void onSuccess(Void response) {
-				// Highlight onViolation	
-				((EditPopViewImpl)view.getEditPopView()).hide();
-				// E Highlight onViolation
-				setInserted(false);
-				init();			
+			public void onSuccess(Boolean response) {
+				if(response==false){
+					showErrorMessageToUser("System could not edit Professsion for spportal");
+				}
+
+				ProfessionRequest profRequest = requests.professionRequest();
+				editedProfession = profRequest.edit(editedProfession);
+				editedProfession.setProfession(value);
+				// Highlight onViolation		
+				Log.info("Map Size: " + view.getProfessionMap().size());
+				profRequest.persist().using(editedProfession).fire(new OSCEReceiver<Void>(view.getProfessionMap()) {
+					// E Highlight onViolation
+					@Override
+					public void onSuccess(Void response) {
+						// Highlight onViolation	
+						((EditPopViewImpl)view.getEditPopView()).hide();
+						// E Highlight onViolation
+						setInserted(false);
+						init();			
+					}
+				});
 			}
 		});
+		
 	}
 
+	public void showErrorMessageToUser(String message){
+		final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
+		confirmationDialogBox.showConfirmationDialog(message);
+	}
 }

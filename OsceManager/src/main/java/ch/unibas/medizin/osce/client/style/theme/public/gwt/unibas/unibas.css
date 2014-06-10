@@ -3971,3 +3971,9 @@ color: #f1b532;
 .overlapTrainingBackGround{
 	background-color: #F9C56B !important;
 }
+.btmarw{ background:url("images/bottomarrow.png") no-repeat;}
+
+ .labelLine {
+	 background:url("images/line.png") 9px 5px repeat-x; width:100%;
+ }
+ 

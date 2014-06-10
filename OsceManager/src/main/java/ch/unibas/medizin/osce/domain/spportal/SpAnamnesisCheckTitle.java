@@ -1,8 +1,17 @@
 package ch.unibas.medizin.osce.domain.spportal;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
+import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -19,6 +28,10 @@ public class SpAnamnesisCheckTitle {
 	@PersistenceContext(unitName="spportalPersistenceUnit")
 	 transient EntityManager entityManager;
 	
+	 @Id
+	 @Column(name = "id")
+	 private Long id;
+	 
     @NotNull
     @Size(max = 255)
     private String text;
@@ -26,6 +39,9 @@ public class SpAnamnesisCheckTitle {
     @NotNull
     private Integer sort_order;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anamnesisCheckTitle")
+   	private Set<SpAnamnesisCheck> anamnesisChecks = new HashSet<SpAnamnesisCheck>();
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -56,5 +72,38 @@ public class SpAnamnesisCheckTitle {
             return false;
         return true;
     }
+    
+    public static SpAnamnesisCheckTitle findAnamnisisCheckTitleBasedonId(Long titleId){
+    	
+		 EntityManager em = SpAnamnesisCheckTitle.entityManager();
+		
+		String sql ="SELECT act FROM SpAnamnesisCheckTitle as act WHERE act.id="+titleId;
+		
+		TypedQuery<SpAnamnesisCheckTitle> query = em.createQuery(sql, SpAnamnesisCheckTitle.class);
+		
+		List<SpAnamnesisCheckTitle> listAnamnesisCheckTitles=query.getResultList();
+		
+		if(listAnamnesisCheckTitles.size()==1){
+			return listAnamnesisCheckTitles.get(0);
+		}else{
+			return null;
+		}
+    }
 
+ public static SpAnamnesisCheckTitle findAnamnisisCheckTitleBasedonText(String titleText){
+    	
+    	EntityManager em = SpAnamnesisCheckTitle.entityManager();
+		
+		String sql ="SELECT act FROM SpAnamnesisCheckTitle as act WHERE act.text="+titleText;
+		
+		TypedQuery<SpAnamnesisCheckTitle> query = em.createQuery(sql, SpAnamnesisCheckTitle.class);
+		
+		List<SpAnamnesisCheckTitle> listAnamnesisCheckTitles=query.getResultList();
+		
+		if(listAnamnesisCheckTitles.size()==1){
+			return listAnamnesisCheckTitles.get(0);
+		}else{
+			return null;
+		}
+    }
 }

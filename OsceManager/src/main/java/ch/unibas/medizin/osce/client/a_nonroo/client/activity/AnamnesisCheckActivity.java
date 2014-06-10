@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckTitlePopup
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckTitlePopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
@@ -433,6 +434,8 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     
     HashMap<AnamnesisCheckTitleProxy, ListDataProvider<AnamnesisCheckProxy>> mapTitlesToProviders = 
     		new HashMap<AnamnesisCheckTitleProxy, ListDataProvider<AnamnesisCheckProxy>>();
+	private AnamnesisCheckTitleProxy editedTitle;
+	private AnamnesisCheckTitleProxy deletedTitle;
 
     @Override
     public void addDataProvider(AnamnesisCheckTitleProxy title, ListDataProvider<AnamnesisCheckProxy> dataProvider) {
@@ -527,7 +530,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 //			titlePopupView.hide();
 //			titlePopupView = null;
 //		}
-		
+		editedTitle = title;
 		titlePopupView = new AnamnesisCheckTitlePopupViewImpl(refObj);
 		titleEditorDriver = titlePopupView.createEditorDriver();
 		titlePopupView.setDelegate(this);
@@ -543,21 +546,43 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		});
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void deleteTitle(final AnamnesisCheckTitleProxy title) {
-		requests.anamnesisCheckTitleRequest().remove().using(title).fire(new OSCEReceiver<Void>() {
+		
+		deletedTitle=title;
+		
+		requests.anamnesisCheckTitleRequestNonRoo().deleteTitleFromSpPortal(deletedTitle.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
-			public void onSuccess(Void response) {
-				removeDataProvider(title);
-				view.filterTitle(null);
-				fireGetAllTitlesRequest(new FilterTitleReceiver());
-		        getTitlesBySearchStringAndFilter();
+			public void onSuccess(Boolean response) {
+				if(response==null){
+					showErrorMessageToUser("System could not delete AnamnesisCheckTitle from SpPortal for id : " +deletedTitle.getId());
+				}else{
+
+					requests.anamnesisCheckTitleRequest().remove().using(title).fire(new OSCEReceiver<Void>() {
+	
+						
+						@Override
+						public void onSuccess(Void response) {
+							
+	
+							removeDataProvider(title);
+							view.filterTitle(null);
+							fireGetAllTitlesRequest(new FilterTitleReceiver());
+					        getTitlesBySearchStringAndFilter();
+						}
+						
+					});
+				}
 			}
 			
 		});
+		
+		
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void addNewTitleClicked(String titleText) {
 		//Log.info("saveClicked");
@@ -566,6 +591,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		sort_order = 0;
 		title = titleText;
 		requests.anamnesisCheckTitleRequestNonRoo().findMaxSortOrder().fire(new OSCEReceiver<Integer>() {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void onSuccess(Integer response) {
 				if (response == null) {
@@ -578,15 +604,30 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 					title = null;
 				
 				AnamnesisCheckTitleRequest request = requests.anamnesisCheckTitleRequest();
-				AnamnesisCheckTitleProxy anamnesisCheckTitle = request.create(AnamnesisCheckTitleProxy.class);
+				final AnamnesisCheckTitleProxy anamnesisCheckTitle = request.create(AnamnesisCheckTitleProxy.class);
 				anamnesisCheckTitle.setText(title);
 				anamnesisCheckTitle.setSort_order((sort_order+1));
 				
 				// Highlight onViolation
 				request.persist().using(anamnesisCheckTitle).fire(new OSCEReceiver<Void>(view.getAnamnesisCheckTitleMap()) {
 				// E Highlight onViolation
+					@SuppressWarnings("deprecation")
 					@Override
 					public void onSuccess(Void response) {
+						//Create Anamnisis check title in spportal
+						requests.anamnesisCheckTitleRequestNonRoo().saveAnamnesisCheckTitleInSpPortal(anamnesisCheckTitle).fire(new OSCEReceiver<Boolean>() {
+
+							@Override
+							public void onSuccess(Boolean response) {
+								if(response==null){
+									showErrorMessageToUser("System could not create AnamnesisCheckTitle in Spportal");
+								}else{
+									Log.info("AnamnesisCheck title is created in sp portal successfully");
+								}
+							}
+							
+						});
+						
 						view.filterTitle(null);
 						fireGetAllTitlesRequest(new FilterTitleReceiver());
 				        getTitlesBySearchStringAndFilter();
@@ -599,18 +640,36 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 	private RequestFactoryEditorDriver<AnamnesisCheckTitleProxy,AnamnesisCheckTitlePopupViewImpl> titleEditorDriver;
 	private AnamnesisCheckTitlePopupView titlePopupView;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void saveEditedTitle() {
 		titleEditorDriver.flush().fire(new OSCEReceiver<Void>() {
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public void onSuccess(Void response) {
+				
+				requests.anamnesisCheckTitleRequestNonRoo().edittitleInSpportal(editedTitle.getId()).fire(new OSCEReceiver<Boolean>() {
+
+					@Override
+					public void onSuccess(Boolean response) {
+						if(response==null){
+							showErrorMessageToUser("System could not edit AnamnesisCheckTitle in spportal");
+						}
+					}
+				});
+				
 				titlePopupView.hide();
 				titlePopupView = null;
 				titleEditorDriver = null;
 				fireGetAllTitlesRequest(new FilterTitleReceiver());
-		        getTitlesBySearchStringAndFilter();
+				getTitlesBySearchStringAndFilter();
 			}
 		});
+	}
+	
+	public void showErrorMessageToUser(String message){
+		final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
+		confirmationDialogBox.showConfirmationDialog(message);
 	}
 }

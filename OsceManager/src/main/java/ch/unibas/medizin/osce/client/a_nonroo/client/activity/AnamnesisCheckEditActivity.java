@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckEditView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckEditViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckRequest;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
@@ -477,11 +478,13 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 
 									save = true;
 
+									saveOrEditAnamnesisCheckTitleInSpportal(anamnesisCheck);
 									sortOderByPrevious();
 									// placeController.goTo(new
 									// AnamnesisCheckDetailsPlace(anamnesisCheck.stableId(),
 									// Operation.NEW));
 								}
+								
 							});
 
 						}
@@ -492,6 +495,19 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 
 	}
 	
+	private void saveOrEditAnamnesisCheckTitleInSpportal(AnamnesisCheckProxy anamnesisCheck) {
+		requests.anamnesisCheckRequestNonRoo().saveOrEditAnamnesisCheck(anamnesisCheck).fire(new OSCEReceiver<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean response) {
+				if(response==false){
+					showErrorMessageToUser("System could not save AnamnesisCheck Data for spportal");
+				}
+				
+			}
+		});
+		
+	}
 	private void reSorting(AnamnesisCheckTitleProxy anamnesisCheckTitle, Integer sortOder){
 		requests.anamnesisCheckRequestNonRoo().reSorting(anamnesisCheckTitle, sortOder+1).fire(new Receiver<Void>() {
 
@@ -560,5 +576,8 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 		
 		
 	}
-	
+	public void showErrorMessageToUser(String message){
+		final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
+		confirmationDialogBox.showConfirmationDialog(message);
+	}
 }

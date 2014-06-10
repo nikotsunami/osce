@@ -80,6 +80,7 @@ public class CustomCalendar extends Composite implements MouseDownHandler, Mouse
 	public void setDate(Date date)
 	{
 		this.date = date;
+		widgets.clear();
 		table.removeAllRows();
 		table.clear();
 		buildCalendarGrid();

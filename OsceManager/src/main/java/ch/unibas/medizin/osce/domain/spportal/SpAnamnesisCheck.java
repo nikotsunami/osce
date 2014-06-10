@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
@@ -33,6 +34,10 @@ public class SpAnamnesisCheck {
 	@PersistenceContext(unitName="spportalPersistenceUnit")
 	 transient EntityManager entityManager;
 	
+	 @Id
+	 @Column(name = "id")
+	 private Long id;
+	 
     @Size(max = 999)
     private String text;
 
@@ -57,8 +62,6 @@ public class SpAnamnesisCheck {
 	@Value("false")
 	@Column(columnDefinition="BIT", length = 1)
     private Boolean sendToDMZ;    
-    
-	private Integer userSpecifiedOrder;
     
 }
 
