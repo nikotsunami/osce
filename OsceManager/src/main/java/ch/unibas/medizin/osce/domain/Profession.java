@@ -104,4 +104,29 @@ public class Profession {
 			return false;
 		}
     }
+    
+    public static Profession findProfessionByProfessionText(String profession){
+    	
+    	log.info("fininding profession of text : " + profession);
+		
+    	try{
+			
+			EntityManager em = Profession.entityManager();
+			
+			String sql="SELECT p FROM Profession as p where p.profession='"+profession + "'";
+			
+			TypedQuery<Profession> query = em.createQuery(sql,Profession.class);
+			
+			List<Profession> listOfProfession = query.getResultList();
+			
+			if(listOfProfession.size()==1){
+				return listOfProfession.get(0);
+			}else{
+				return null;
+			}
+		}catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return null;
+		}
+    }
 }

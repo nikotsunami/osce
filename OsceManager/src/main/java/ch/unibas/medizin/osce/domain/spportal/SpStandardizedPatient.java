@@ -231,15 +231,17 @@ public class SpStandardizedPatient {
 				SpBankaccount spBankaccount = spStandardizedPatient.getBankAccount();
 				Bankaccount bankaccount = standardizedPatient.getBankAccount();
 				
-				bankaccount.setBankName(spBankaccount.getBankName()!=null ? spBankaccount.getBankName():"");
-				bankaccount.setBIC(spBankaccount.getBIC()!=null? spBankaccount.getBIC():"");
-				bankaccount.setCity(spBankaccount.getCity()!=null ? spBankaccount.getCity():"");
+				bankaccount.setBankName(spBankaccount.getBankName());
+				bankaccount.setBIC(spBankaccount.getBIC());
+				bankaccount.setCity(spBankaccount.getCity());
 				
 				SpNationality spNationality = spBankaccount.getCountry();
-				Nationality nationality=bankaccount.getCountry();
+				Nationality nationality=null;//=bankaccount.getCountry();
 				
-				if(spNationality!=null && nationality!=null){
-					nationality.setNationality(spNationality.getNationality()!=null ? spNationality.getNationality():"" );
+				if(spNationality!=null){
+					
+					nationality=Nationality.findNationalityByName(spNationality.getNationality());
+					
 				}
 				bankaccount.setCountry(nationality);
 				bankaccount.setIBAN(spBankaccount.getIBAN());
@@ -261,22 +263,34 @@ public class SpStandardizedPatient {
 				
 				SpNationality spNationality2 = spStandardizedPatient.getNationality();
 				
-				Nationality nationality2= standardizedPatient.getNationality();
+				Nationality nationality2=null; //standardizedPatient.getNationality();
 				
-				if(spNationality2!=null && nationality2!=null){
-					nationality2.setNationality(spNationality2.getNationality());
+				if(spNationality2!=null){
+
+					nationality2=Nationality.findNationalityByName(spNationality2.getNationality());
 				}
+				
 				standardizedPatient.setNationality(nationality2);
+				
 				standardizedPatient.setPostalCode(spStandardizedPatient.getPostalCode());
 				standardizedPatient.setPreName(spStandardizedPatient.getPreName());
 				
 				SpProfession spProfession = spStandardizedPatient.getProfession();
 				
-				Profession profession = standardizedPatient.getProfession();
+				Profession profession=null; //standardizedPatient.getProfession();
 				
-				if(spProfession!=null && profession!=null){
-					profession.setProfession(spProfession.getProfession());
+				if(spProfession!=null){
+					
+					profession =Profession.findProfessionByProfessionText(spProfession.getProfession());
+					
+					if(profession==null){
+						profession = new Profession();
+						profession.setProfession(spProfession.getProfession());
+						profession.persist();
+					}
+					
 				}
+				
 				standardizedPatient.setProfession(profession);
 				
 				standardizedPatient.setSocialInsuranceNo(spStandardizedPatient.getSocialInsuranceNo());

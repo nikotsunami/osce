@@ -584,6 +584,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 					initializeBlock(firstDateOfThisWeek,response,false,true);
 				}else{
 					Log.info("system could not create training date for given date");
+					showErrorMessageToUser("system could not create training date for given date");
 				}
 			}
 
@@ -626,6 +627,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 					initializeBlock(firstDateOfThisWeek,response,false,false);
 				}else{
 					Log.info("system could not create training dates for given dates");
+					showErrorMessageToUser("system could not create training dates for given dates");
 				}
 			}
 		});
@@ -770,6 +772,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 					}
 				}else{
 					Log.info("System could not create osce date for selecte dates");
+					showErrorMessageToUser("System could not create osce date for selecte dates");
 				}
 				
 			}
@@ -798,6 +801,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 					}
 				}else{
 					Log.info(" System could not create osce date");
+					showErrorMessageToUser("System could not create osce date");
 				}
 				
 			}
@@ -1436,6 +1440,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 					removeBlock(firstDateOfWeek,lastDateOfWeek,firstDate);
 				}else{
 					Log.info("System could not remove Training date");
+					showErrorMessageToUser("System could not remove Training date");
 				}
 				
 			}
@@ -1516,6 +1521,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 					}
 				}else{
 					Log.info("System could not remove osce date");
+					showErrorMessageToUser("System could not remove osce date");
 				}
 				
 			}
@@ -1547,6 +1553,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 					showApplicationLoading(false);
 				}else{
 					Log.info("System could not split training blocks");
+					showErrorMessageToUser("System could not split training blocks");
 				}
 			}
 			
@@ -1578,6 +1585,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 					showApplicationLoading(false);
 				}else{
 					Log.info("System could not join training blocks");
+					showErrorMessageToUser("System could not join training blocks");
 				}
 			}
 		});
@@ -1771,6 +1779,8 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 						view.getStopSurveyButton().setVisible(true);
 						isSurveyIsStarted=true;
 					}
+				}else{
+					showErrorMessageToUser("System could not start survey please try again");
 				}
 				
 			}
@@ -1805,6 +1815,8 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 						view.getStopSurveyButton().setVisible(false);
 						isSurveyIsStarted=false;
 					}
+				}else{
+					showErrorMessageToUser("System could not stop survey please try again");
 				}
 				
 			}
@@ -1834,6 +1846,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 				}
 			}else{
 				Log.info("System could not find whether all sps are assign in role");
+				showErrorMessageToUser("System could not find whether all sps are assign in role");
 			}
 			
 		}
@@ -1882,6 +1895,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 					showSuggestion();
 				}else{
 					Log.info("System could not get training suggestions");
+					showErrorMessageToUser("System could not get training suggestions");
 				}
 				
 				showApplicationLoading(false);
@@ -2279,6 +2293,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 					
 				}else{
 					Log.info("System could not create training");
+					showErrorMessageToUser("System could not create training please try again");
 				}
 			}
 		});
@@ -2471,8 +2486,8 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 							
 						}
 					}else{
-						final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
-						confirmationDialogBox.showConfirmationDialog("System could not delete Training");
+						
+						showErrorMessageToUser("System could not delete Training");
 					}
 					
 				}
@@ -2663,5 +2678,10 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 					vpanel.add(trainingSuggestionAfterNoonMap.get(selectedDate));
 				}
 			}
+	}
+	
+	public void showErrorMessageToUser(String message){
+		final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
+		confirmationDialogBox.showConfirmationDialog(message);
 	}
 }

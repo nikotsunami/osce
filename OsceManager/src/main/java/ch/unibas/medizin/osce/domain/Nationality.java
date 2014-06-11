@@ -119,4 +119,29 @@ public class Nationality {
 			return false;
 		}
     }
+
+	public static Nationality findNationalityByName(String nationality) {
+		
+		log.info("finding Nationality of text :" + nationality);
+		
+		try{
+		
+			EntityManager em = Nationality.entityManager();
+			
+			String sql="SELECT n FROM Nationality as n where n.nationality='"+nationality + "'";
+
+			TypedQuery<Nationality> query = em.createQuery(sql,Nationality.class);
+			
+			List<Nationality> listOfNationalities = query.getResultList();
+			
+			if(listOfNationalities.size()==1){
+				return listOfNationalities.get(0);
+			}else{
+				return null;
+			}
+		}catch (Exception e) {
+			log.error(e.getMessage(), e);
+			return null;
+		}
+	}
 }
