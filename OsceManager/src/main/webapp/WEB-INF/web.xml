@@ -36,6 +36,15 @@
         <param-value>classpath*:META-INF/spring/applicationContext*.xml</param-value>
     </context-param>
     
+	<filter> 
+        <filter-name>NoCache</filter-name> 
+    	<filter-class>ch.unibas.medizin.osce.server.util.security.GWTCacheControlFilter</filter-class> 
+  	</filter> 
+  	<filter-mapping> 
+    	<filter-name>NoCache</filter-name> 
+    	<url-pattern>*nocache.js</url-pattern> 
+  	</filter-mapping>
+    
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
