@@ -139,14 +139,15 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			
 			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
 			AmazonS3Client client = new AmazonS3Client(credentials);			
+			
 			ObjectListing objectListing = client.listObjects(bucketName.toLowerCase());
 			
 			for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries())
 			{
 				String fileName = objectSummary.getKey();
 				 
-				if (fileName.substring(0, 1).matches("[0-9]"))
-				{
+				/*if (fileName.substring(0, 1).matches("[0-9]"))
+				{*/
 					if (StringUtils.startsWith(fileName, "00") == false)
 					{
 						fileName = fileName.replaceAll(" ", "_");
@@ -155,7 +156,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 							fileList.add(objectSummary.getKey());					
 						}
 					}
-				}
+				//}
 				
 			}
 		}
@@ -204,8 +205,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries())
 			{
 				String fileName = objectSummary.getKey();
-				if (fileName.substring(0, 1).matches("[0-9]"))
-				{
+				/*if (fileName.substring(0, 1).matches("[0-9]"))
+				{*/
 					if (StringUtils.startsWith(fileName, "00") == false)
 					{
 						fileName = fileName.replaceAll(" ", "_");
@@ -214,7 +215,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 							fileList.add(objectSummary.getKey());					
 						}
 					}
-				}
+				//}
 			}
 		}
 		catch(AmazonServiceException ase)
@@ -536,7 +537,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				examinerid = Long.parseLong(resultset.getString(3));
 				questionId = Long.parseLong(resultset.getString(4));
 				optionvalue = String.valueOf((int)resultset.getFloat(5));
-				roomid = Long.parseLong(resultset.getString(6));
+				String oprId = StringUtils.substring(resultset.getString(6), 0, 4);
+				roomid = Long.parseLong(oprId);
 				
 				Student stud = Student.findStudent(candidateId);
 				ChecklistQuestion checklistQuestion = ChecklistQuestion.findChecklistQuestion(questionId);
@@ -702,7 +704,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			while(resultSet.next())
 			{
 				examinerId = Long.parseLong(resultSet.getString(1));
-				oscePostRoomId = Long.parseLong(resultSet.getString(3));
+				String oprId = StringUtils.substring(resultSet.getString(3), 0, 4);
+				oscePostRoomId = Long.parseLong(oprId);
 				
 				OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoom(oscePostRoomId);
 				Doctor examiner = Doctor.findDoctor(examinerId);
