@@ -26,7 +26,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.apache.log4j.Logger;
-import org.mortbay.log.Log;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -378,7 +378,7 @@ public class SpStandardizedPatient {
 
 	public static Boolean removeSPDetailsFromSPPortal(Long standardizedPatientId,Long spStandardizedPatientId){
 		
-		Log.info("Updating osce sp status to active and removing sp details from sp portal");
+		log.info("Updating osce sp status to active and removing sp details from sp portal");
 		
 		StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
 		standardizedPatient.setStatus(StandardizedPatientStatus.ACTIVE);

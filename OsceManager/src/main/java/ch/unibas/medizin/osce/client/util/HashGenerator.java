@@ -5,18 +5,18 @@ package ch.unibas.medizin.osce.client.util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.apache.log4j.Logger;
+
 
 public class HashGenerator {
 	public static String generateHash(String randomString){
 		
 		StringBuffer stringBuffer = new StringBuffer();
-		final Logger log = Logger.getLogger(HashGenerator.class);
+		//final Logger log = Logger.getLogger(HashGenerator.class);
 		try {
 		
 			//System.out.println("Random no is : " + RandomStringUtils.randomAlphanumeric(10));
 			//randomString= RandomStringUtils.randomAlphanumeric(SPConstants.RANDOM_STRING_LENGTH);
-			log.info("generating hash of random string");
+			System.out.println("generating hash of random string");
 			MessageDigest md = MessageDigest.getInstance("SHA-256");
 		
 			md.update(randomString.getBytes());
@@ -29,10 +29,10 @@ public class HashGenerator {
 		        }
 		 
 		} catch (NoSuchAlgorithmException e) {
-			log.error(e.getMessage(), e);
+			System.out.println("Error : "+e.getMessage());
 			return randomString;
 		}
-		log.info(" returning generating hash of random string");
+		System.out.println(" returning generating hash of random string");
 	    return stringBuffer.toString();
 	}
 	
