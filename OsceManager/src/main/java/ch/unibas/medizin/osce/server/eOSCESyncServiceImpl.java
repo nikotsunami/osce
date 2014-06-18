@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
@@ -96,6 +97,8 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.ClientConfiguration;
+import com.amazonaws.Protocol;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
@@ -138,7 +141,25 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			}
 			
 			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-			AmazonS3Client client = new AmazonS3Client(credentials);			
+			AmazonS3Client client;
+			
+			Properties properties =  new Properties();
+			properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/proxy.properties"));			
+			String proxyHost = properties.getProperty("proxy.host");
+			String proxyPort = properties.getProperty("proxy.port");
+			
+			if (StringUtils.isNotBlank(proxyHost) && StringUtils.isNotBlank(proxyPort))
+			{
+				ClientConfiguration configuration = new ClientConfiguration();
+				configuration.setProtocol(Protocol.HTTP);
+				configuration.setProxyHost(proxyHost);
+				configuration.setProxyPort(Integer.parseInt(proxyPort));
+				client = new AmazonS3Client(credentials, configuration);
+			}
+			else  
+			{
+				client = new AmazonS3Client(credentials);			
+			}
 			
 			ObjectListing objectListing = client.listObjects(bucketName.toLowerCase());
 			
@@ -199,7 +220,26 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			}
 			
 			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-			AmazonS3Client client = new AmazonS3Client(credentials);			
+			AmazonS3Client client;
+			
+			Properties properties =  new Properties();
+			properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/proxy.properties"));			
+			String proxyHost = properties.getProperty("proxy.host");
+			String proxyPort = properties.getProperty("proxy.port");
+			
+			if (StringUtils.isNotBlank(proxyHost) && StringUtils.isNotBlank(proxyPort))
+			{
+				ClientConfiguration configuration = new ClientConfiguration();
+				configuration.setProtocol(Protocol.HTTP);
+				configuration.setProxyHost(proxyHost);
+				configuration.setProxyPort(Integer.parseInt(proxyPort));
+				client = new AmazonS3Client(credentials, configuration);
+			}
+			else  
+			{
+				client = new AmazonS3Client(credentials);			
+			}
+			
 			ObjectListing objectListing = client.listObjects(bucketName.toLowerCase());
 			
 			for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries())
@@ -245,7 +285,25 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		{
 			//write access and secret key
 			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-			AmazonS3Client client = new AmazonS3Client(credentials);	
+			AmazonS3Client client;
+			
+			Properties properties =  new Properties();
+			properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/proxy.properties"));			
+			String proxyHost = properties.getProperty("proxy.host");
+			String proxyPort = properties.getProperty("proxy.port");
+			
+			if (StringUtils.isNotBlank(proxyHost) && StringUtils.isNotBlank(proxyPort))
+			{
+				ClientConfiguration configuration = new ClientConfiguration();
+				configuration.setProtocol(Protocol.HTTP);
+				configuration.setProxyHost(proxyHost);
+				configuration.setProxyPort(Integer.parseInt(proxyPort));
+				client = new AmazonS3Client(credentials, configuration);
+			}
+			else  
+			{
+				client = new AmazonS3Client(credentials);			
+			}				
 			
 			for (int i=0; i<fileList.size(); i++)
 			{
@@ -342,7 +400,26 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			bucketName = bucketName.toLowerCase();
 			
 			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-			AmazonS3Client client = new AmazonS3Client(credentials);
+			AmazonS3Client client;
+			
+			Properties properties =  new Properties();
+			properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/proxy.properties"));			
+			String proxyHost = properties.getProperty("proxy.host");
+			String proxyPort = properties.getProperty("proxy.port");
+			
+			if (StringUtils.isNotBlank(proxyHost) && StringUtils.isNotBlank(proxyPort))
+			{
+				ClientConfiguration configuration = new ClientConfiguration();
+				configuration.setProtocol(Protocol.HTTP);
+				configuration.setProxyHost(proxyHost);
+				configuration.setProxyPort(Integer.parseInt(proxyPort));
+				client = new AmazonS3Client(credentials, configuration);
+			}
+			else  
+			{
+				client = new AmazonS3Client(credentials);			
+			}	
+			
 			S3Object object = null;			
 			boolean deleteFlag = true;
 			
@@ -1927,7 +2004,27 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			//System.out.println("BUCKET NAME : " + bucketName);
 			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
 			//AmazonS3Client client = new AmazonS3Client(new PropertiesCredentials(eOSCESyncServiceImpl.class.getResourceAsStream("AwsCredentials.properties")));
-			AmazonS3Client client = new AmazonS3Client(credentials);
+			
+			AmazonS3Client client;
+			
+			Properties properties =  new Properties();
+			properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/proxy.properties"));			
+			String proxyHost = properties.getProperty("proxy.host");
+			String proxyPort = properties.getProperty("proxy.port");
+			
+			if (StringUtils.isNotBlank(proxyHost) && StringUtils.isNotBlank(proxyPort))
+			{
+				ClientConfiguration configuration = new ClientConfiguration();
+				configuration.setProtocol(Protocol.HTTP);
+				configuration.setProxyHost(proxyHost);
+				configuration.setProxyPort(Integer.parseInt(proxyPort));
+				client = new AmazonS3Client(credentials, configuration);
+			}
+			else  
+			{
+				client = new AmazonS3Client(credentials);			
+			}
+			
 			List<Bucket> bucketList = client.listBuckets();
 			Boolean bucketExist = false;
 			
