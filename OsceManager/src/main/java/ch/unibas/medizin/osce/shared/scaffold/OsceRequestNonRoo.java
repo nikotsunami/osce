@@ -6,6 +6,8 @@ import java.util.List;
 import ch.unibas.medizin.osce.client.a_nonroo.client.MapOsceRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.domain.Osce;
+import ch.unibas.medizin.osce.shared.OsceCreationType;
+import ch.unibas.medizin.osce.shared.OsceStatus;
 
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.RequestContext;
@@ -23,7 +25,6 @@ public interface OsceRequestNonRoo extends RequestContext{
 	
 	public abstract Request<List<OsceProxy>> findAllOsceSemester(Long id , Date startDate, Date endDate);
 	
-	
 	public abstract Request<Boolean> generateOsceScaffold(Long osceId);
 	
 	public abstract Request<Boolean> generateAssignments(Long osceId);
@@ -32,29 +33,27 @@ public interface OsceRequestNonRoo extends RequestContext{
 	
 	public abstract Request<Boolean> autoAssignPatientInRole(Long osceId);
 	
-	
 	public abstract Request<Boolean> autoAssignStudent(Long osceId,Integer orderType, boolean changeRequire);
 	
-	// module 3 f {
-		public abstract Request<Void> autoAssignPatientInsemester(Long semesterId);
+	public abstract Request<Void> autoAssignPatientInsemester(Long semesterId);
 
-		
-		// module 3 f }
-		
-		// Module 5 changes {
-		
-		//public abstract Request<Void> deleteAllPatentInRoleForOsce(Long osceId);
-		
-		// Module 5 changes }
-		// Module10 Create plans
-		abstract Request<Long> findOsceIdByOsceName(String osceName);
-		// E Module10 Create plans
-		
-		public abstract Request<Boolean> removeassignment(OsceProxy osceName);
-		
-		/*abstract Request<Boolean> removeassignment(OsceProxy osceName);*/
-		
-		public abstract Request<List<MapOsceRoleProxy>> findAllOsceSemesterByRole(List<Long>  StandardizedRoleId , Date startDate, Date endDate);
+	abstract Request<Long> findOsceIdByOsceName(String osceName);
 
-		//public abstract Request<List<MapOsceRoleProxy>> findAllOsceSemesterByStandardizedRole(Long id , Date startDate, Date endDate);
+	public abstract Request<Boolean> removeassignment(OsceProxy osceName);
+	
+	public abstract Request<List<MapOsceRoleProxy>> findAllOsceSemesterByRole(List<Long>  StandardizedRoleId , Date startDate, Date endDate);
+
+	public abstract Request<Void> createOsceDaySequeceAndCourse(Long osceId);
+	
+	public abstract Request<List<OsceProxy>> findAllOsceByStatusAndSemesterId(Long semesterId);
+	
+	public abstract Request<List<OsceProxy>> findAllOsceBySemesterIdAndCreationType(Long semesterId, OsceCreationType osceCreationType);
+	
+	public abstract Request<Void> calculateManualOsce(Long osceId);
+	
+	public abstract Request<String> createAssignmentInManualOsce(Long osceId);
+	
+	public abstract Request<OsceProxy> clearAllManualOsce(Long osceId);
+	
+	public abstract Request<OsceProxy> changeOsceStatus(Long osceId, OsceStatus osceStatus);
 }

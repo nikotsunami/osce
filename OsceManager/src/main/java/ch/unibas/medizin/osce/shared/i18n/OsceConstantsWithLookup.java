@@ -357,5 +357,18 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String STATION_FIRST_CANDIDATE_ID();
 	
 	public String INAPT_ROLE();
+	
+	//manual osce messages
+	public String manualOsceNoLongBreak();
+	
+	public String manualOsceNotAllowedLongBreak();
+	
+	public String manualOsceNoRotation();
+	
+	public String manualOsceClostRoleError();
+	
+	public String manualOsceClostRoomError();
+	
+	public String manualOsceCloseError();
 }
 

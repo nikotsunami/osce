@@ -38,6 +38,8 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 	@UiField
 	VerticalPanel headerPanel;
 	
+	@UiField
+	VerticalPanel deleteBtnPanel;
 
 	// Change in ParcourView
 	@UiField
@@ -209,6 +211,10 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 		view=this;				
 		//this.setStylePrimaryName("course-color-red");
 	}
+	
+	public void addParcourStyle(String style){
+		this.addStyleName("accordion-title-selected" + style);
+	}
 
 	@Override
 	public void setDelegate(Delegate delegate) {
@@ -314,7 +320,10 @@ public class HeaderViewImpl extends Composite implements HeaderView{
 	{
 		this.contentView=contentView;
 	}
-	
+		
+	public VerticalPanel getDeleteBtnPanel() {
+		return deleteBtnPanel;
+	}
 	// E Change in ParcourView
 	//E Module 5 Bug Report Solution
 		

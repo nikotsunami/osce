@@ -19,6 +19,7 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PostType;
 
 @RooJavaBean
@@ -93,7 +94,7 @@ public class OscePostRoom {
     public static List<OscePostRoom> findOscePostRoomByCourseID(long courseId)
     {
     	EntityManager em = entityManager();
-    	String query = "SELECT o FROM OscePostRoom o WHERE course.id = " + courseId;
+    	String query = "SELECT o FROM OscePostRoom o WHERE o.course.id = " + courseId;
     	TypedQuery<OscePostRoom> q = em.createQuery(query, OscePostRoom.class);
     	return q.getResultList();
     }
@@ -478,5 +479,240 @@ public class OscePostRoom {
 		return postWiseRoomMap;
 	}
     
-    
+	public static List<OsceSequence> deleteOscePostRoom(Long oscePostRoomId)
+	{
+		List<OsceSequence> osceSeqList = new ArrayList<OsceSequence>();
+		OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoom(oscePostRoomId);
+		OscePost oscePost = oscePostRoom.getOscePost();
+		OscePostBlueprint oscePostBlueprint = oscePost.getOscePostBlueprint();
+		Osce osce = oscePostBlueprint.getOsce();
+		
+		oscePostBlueprint.remove();
+		
+		int index = 1;
+		for (OscePostBlueprint oscePostBlueprint2 : osce.getOscePostBlueprints())
+		{
+			oscePostBlueprint2.setSequenceNumber(index);
+			oscePostBlueprint2.persist();
+			index += 1;
+		}
+		
+		for (OsceDay osceDay : osce.getOsce_days())
+		{
+			for (OsceSequence osceSeq : osceDay.getOsceSequences())
+			{
+				int seqNo = 1;
+				for (OscePost oscePost1 : osceSeq.getOscePosts())
+				{
+					oscePost1.setSequenceNumber(seqNo);
+					oscePost1.persist();
+					seqNo += 1;
+				}
+				
+				osceSeqList.add(osceSeq);
+			}
+		}
+		
+		if (osce.getOscePostBlueprints().size() == 0)
+		{
+			osce.setOsceStatus(OsceStatus.OSCE_NEW);
+			osce.persist();
+		}
+		
+		return osceSeqList;
+	}
+	
+	public static List<OscePostRoom> findOscePostRoomByOscePostId(Long oscePostId)
+	{
+		EntityManager em = entityManager();
+		String sql = "SELECT opr FROM OscePostRoom opr WHERE opr.oscePost.id = " + oscePostId;
+		TypedQuery<OscePostRoom> query = entityManager().createQuery(sql, OscePostRoom.class);
+		return query.getResultList();
+	}
+	
+	 public static List<OscePostRoom> insertRoomForVerticalOscePost(Long oscePostRoomId, Long roomId)
+	 {
+    	List<OscePostRoom> oscePostRoomList = new ArrayList<OscePostRoom>();
+    	try
+    	{
+    		OscePostRoom opr = OscePostRoom.findOscePostRoom(oscePostRoomId);
+    		Room room = Room.findRoom(roomId);
+    		
+    		Osce osce = opr.getOscePost().getOscePostBlueprint().getOsce();    		
+    		OscePost oscePost = opr.getOscePost();    		
+    		OscePostBlueprint oscePostBlueprint = oscePost.getOscePostBlueprint();    		
+    		OsceSequence osceSeq = opr.getCourse().getOsceSequence();    		
+    		List<Course> courseList = osceSeq.getCourses();
+    		
+    		int courseCount = 0;
+    		
+    		for (int i=0; i<courseList.size(); i++)
+    		{
+    			if (courseList.get(i).getId().equals(opr.getCourse().getId()))
+    			{
+    				courseCount = i;
+    				break;
+    			}
+    		}
+    		
+        	Iterator<OsceDay> osceDayItr = osce.getOsce_days().iterator();        	
+        	while (osceDayItr.hasNext())
+        	{
+        		OsceDay osceDay = osceDayItr.next();
+        		
+        		Iterator<OsceSequence> osceSeqItr = osceDay.getOsceSequences().iterator();
+        		
+        		while (osceSeqItr.hasNext())
+        		{
+        			OsceSequence osceSequence = osceSeqItr.next();
+        			List<Course> couList = osceSequence.getCourses();
+        			
+        			if (courseCount < couList.size())
+        			{
+        				Course courseVal = couList.get(courseCount);        			        			
+            			
+        				Iterator<OscePostRoom> itr = findOscePostRoomByOsceSeqCourseOscePost(osceSequence.getId(), oscePostBlueprint.getId(), courseVal.getId());
+            			
+            			while (itr.hasNext())
+            			{
+            				OscePostRoom oscePostRoom = itr.next();            				
+            				oscePostRoom.setRoom(room);            				
+            				oscePostRoom.persist();            				
+            				oscePostRoomList.add(oscePostRoom);
+            			}
+        			}        			
+        		}
+        	}
+        	
+        	return oscePostRoomList;
+    	}
+    	catch(Exception e)
+    	{
+    		System.out.println(e.getMessage());
+    		return oscePostRoomList;
+    	}	    	
+	 }
+	 
+	 public static List<OscePostRoom> findOscePostRoomListByRoomAndOscePostRoomId(Long oscePostRoomId, Long roomId)
+     {
+		OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoom(oscePostRoomId);
+    	
+		EntityManager em = entityManager();
+    	String sql = "SELECT o FROM OscePostRoom o WHERE o.room.id = " + roomId + " AND o.oscePost IN(SELECT os FROM OscePost AS os WHERE os.osceSequence.id = " + oscePostRoom.getOscePost().getOsceSequence().getId() +")";
+    	TypedQuery<OscePostRoom> q = em.createQuery(sql, OscePostRoom.class);
+    	return q.getResultList();
+     }
+	 
+	 public static List<OscePostRoom> replaceRoomAndAssignRoomVertically(Long oscePostRoomId, Long roomId)
+	 {
+		 EntityManager em = entityManager();
+		 List<OscePostRoom> finalOprList = new ArrayList<OscePostRoom>();
+		
+		 OscePostRoom opr = OscePostRoom.findOscePostRoom(oscePostRoomId);
+		 Osce osce = opr.getCourse().getOsce();
+		 		 
+		 String sql = "SELECT o FROM OscePostRoom o WHERE o.room.id = " + roomId + " AND o.oscePost.osceSequence.osceDay.osce.id = " + osce.getId();
+	     TypedQuery<OscePostRoom> q = em.createQuery(sql, OscePostRoom.class);
+	     for (OscePostRoom oscePostRoom : q.getResultList())
+		 {
+			 oscePostRoom.setRoom(null);
+			 oscePostRoom.persist();
+			 
+			 finalOprList.add(oscePostRoom);
+		 }
+		 
+		 List<OscePostRoom> newOprList = OscePostRoom.insertRoomForVerticalOscePost(oscePostRoomId, roomId);		 
+		 finalOprList.addAll(newOprList);
+		 
+		 return finalOprList;
+		 
+	 }
+	 
+	 public static List<OsceSequence> updateOscePostBlueprintSeqNumber(List<Long> oprIdList)
+	 {
+		 Osce osce = null;
+		 Long osceId = null;
+		 int index = 1;
+		 
+		 for (Long oprId : oprIdList)
+		 {
+			 OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoom(oprId);
+			 OscePostBlueprint oscePostBlueprint = oscePostRoom.getOscePost().getOscePostBlueprint();
+			 			 
+			 if (osce == null)
+			 {
+				 osce = oscePostBlueprint.getOsce();
+				 osceId = osce.getId();
+			 }
+			 
+			 oscePostBlueprint.setSequenceNumber(index);			 			 
+			 index += 1;
+			 oscePostBlueprint.persist();
+			 
+			 for (OscePostBlueprint opb : osce.getOscePostBlueprints())
+			 {
+				 for (OscePost op : opb.getOscePosts())
+				 {
+					 op.setSequenceNumber(opb.getSequenceNumber());						 
+					 op.persist();
+				 }
+			 }
+		 }
+		 
+		 return OsceSequence.findOsceSequenceByOsceId(osceId);
+	 }
+	 
+	 public static List<OsceSequence> updateOscePostSequenceNumber(Long osceId)
+	 {
+		 Osce osce = Osce.findOsce(osceId);
+		 
+		 for (OscePostBlueprint opb : osce.getOscePostBlueprints())
+		 {
+			 for (OscePost op : opb.getOscePosts())
+			 {
+				 OscePost oscePost = OscePost.findOscePost(op.getId());
+				 oscePost.setSequenceNumber(opb.getSequenceNumber());						 
+				 oscePost.persist();
+			 }
+		 }
+		 
+		 return OsceSequence.findOsceSequenceByOsceId(osceId);
+	 }
+	 
+	 public static List<OscePostRoom> findOscePostRoomByCourseIdOrderByOscePostSeqNo(Long courseId)
+     {
+		 EntityManager em = entityManager();
+		 String query = "SELECT o FROM OscePostRoom o WHERE o.course.id = " + courseId + " ORDER BY o.oscePost.sequenceNumber";
+		 TypedQuery<OscePostRoom> q = em.createQuery(query, OscePostRoom.class);
+		 return q.getResultList();
+     }
+	 
+	 public static OscePostRoom findOscePostRoomByCourseIdAndOscePostId(Long oscePostId, Long courseId)
+	 {
+		 EntityManager em = entityManager();
+		 String query = "SELECT o FROM OscePostRoom o WHERE o.course.id = " + courseId + " AND o.oscePost.id = " + oscePostId + " ORDER BY o.oscePost.sequenceNumber";
+		 TypedQuery<OscePostRoom> q = em.createQuery(query, OscePostRoom.class);
+		 List<OscePostRoom> resultList = q.getResultList();
+		 if (resultList.isEmpty() == false)
+			 return resultList.get(0);
+			 
+		 return null;
+	 }
+	 
+	 public static List<OscePostRoom> findOscePostRoomOfNullRoomByOsceId(Long osceId)
+	 {
+		 EntityManager em = entityManager();
+		 String sql = "SELECT opr FROM OscePostRoom opr WHERE opr.oscePost.oscePostBlueprint.postType = " + PostType.NORMAL.ordinal() + " AND opr.room IS NULL AND opr.oscePost.osceSequence.osceDay.osce.id = " + osceId;
+		 TypedQuery<OscePostRoom> query = em.createQuery(sql, OscePostRoom.class);
+		 return query.getResultList();
+				 
+	 }
+	 
+	 public static List<OscePost> findOscePostByCourseId(Long courseId)
+	 {
+		 EntityManager em = entityManager();
+		 String query = "SELECT DISTINCT o.oscePost FROM OscePostRoom o WHERE o.course.id = " + courseId + " ORDER BY o.oscePost.sequenceNumber";
+		 TypedQuery<OscePost> q = em.createQuery(query, OscePost.class);
+		 return q.getResultList();
+	 }
 }

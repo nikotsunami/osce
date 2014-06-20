@@ -14,10 +14,10 @@
 		<!-- Module 5 Bug Report Solution -->
 		<g:VerticalPanel ui:field="headerSimplePanel" height="100%" width="100%" horizontalAlignment="center" >
 		<!-- E Module 5 Bug Report Solution -->
-			<!-- <g:VerticalPanel  height="25px" horizontalAlignment="center" verticalAlignment="middle">
-				<s:IconButton ui:field="deleteBtn" icon="close" width="40px" height="25px"></s:IconButton>
-			</g:VerticalPanel> -->
-			<g:VerticalPanel ui:field="labelVP" width="50px" height="100%" horizontalAlignment="center" spacing="10" verticalAlignment="middle">
+			<g:VerticalPanel ui:field="deleteBtnPanel" height="25px" horizontalAlignment="center" verticalAlignment="middle">
+				<!-- <s:IconButton ui:field="deleteBtn" icon="close" width="40px" height="25px"></s:IconButton> -->
+			</g:VerticalPanel>
+			<g:VerticalPanel ui:field="labelVP" width="50px" height="60%" horizontalAlignment="center" spacing="10" verticalAlignment="middle">
 				<g:Label ui:field="headerLabel" width="10px" wordWrap="true" directionEstimator="true"  ></g:Label>
 			</g:VerticalPanel>
 		<!--  Module 5 Bug Report Solution -->

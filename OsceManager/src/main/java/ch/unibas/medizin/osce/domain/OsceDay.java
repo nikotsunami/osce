@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -37,6 +38,7 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
+import ch.unibas.medizin.osce.shared.BreakType;
 import ch.unibas.medizin.osce.shared.RingtoneTypes;
 
 import com.csvreader.CsvWriter;
@@ -92,6 +94,10 @@ public class OsceDay {
 	
 	@Column(nullable=false, columnDefinition = "int default 0")
 	private Integer lunchBreakAdjustedTime = 0;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "osceDay")
+	@OrderBy("timeStart")
+	private List<OsceDayRotation> osceDayRotations = new ArrayList<OsceDayRotation>();
 	
 	/**
 	 * Sum up number of rotations of sequences belonging to this OSCE day
@@ -1028,7 +1034,343 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 		return rotationBreak;
 	}
 	
+	public static Osce createOsceDaySequenceCourseAndOscePost(Long osceId)
+	{
+		//create a new day with one sequence and one parcour and copy all osce post from above osce day.
+		Osce osce = Osce.findOsce(osceId);
+		
+		List<OsceDay> osceDayList = osce.getOsce_days();
+		OsceDay lastOsceDay = osceDayList.get(osceDayList.size() - 1);
+		
+		//create new osce day
+		Calendar calendar = Calendar.getInstance();
+		
+		calendar.setTime(lastOsceDay.getOsceDate());
+		calendar.add(Calendar.DATE, 1);
+		calendar.add(Calendar.HOUR, 0);
+		calendar.add(Calendar.MINUTE, 0);
+		calendar.add(Calendar.SECOND, 0);
+		Date newOsceDate = calendar.getTime();
+		
+ 		calendar.setTime(lastOsceDay.getTimeStart());
+ 		calendar.add(Calendar.DATE, 1);
+ 		Date newTimeStart = calendar.getTime(); 		
+ 		
+ 		calendar.setTime(lastOsceDay.getTimeEnd());
+ 		calendar.add(Calendar.DATE, 1);
+ 		Date newTimeEnd = calendar.getTime();
+ 		
+		OsceDay osceDay = new OsceDay();
+		osceDay.setOsceDate(newOsceDate);
+		osceDay.setTimeStart(newTimeStart);
+		osceDay.setTimeEnd(newTimeEnd);
+		osceDay.setOsce(osce);
+		osceDay.persist();
+		
+		List<OsceSequence> osceSeqList = new ArrayList<OsceSequence>();		
+		OsceSequence oldOsceSeq = lastOsceDay.getOsceSequences().get(0);
+		
+		//create new osce sequence		
+		OsceSequence osceSequence = new OsceSequence();
+		osceSequence.setLabel(oldOsceSeq.getLabel());
+		osceSequence.setNumberRotation(oldOsceSeq.getNumberRotation());
+		osceSequence.setOsceDay(osceDay);
+		osceSequence.persist();
+		
+		Map<Long, OscePost> oscePostMap = new HashMap<Long, OscePost>();
+		for (OscePost oscePost : oldOsceSeq.getOscePosts())
+ 		{
+ 			OscePost newOscePost = new OscePost();
+ 			newOscePost.setSequenceNumber(oscePost.getSequenceNumber());
+ 			newOscePost.setValue(oscePost.getValue());
+ 			newOscePost.setOscePostBlueprint(oscePost.getOscePostBlueprint());
+ 			newOscePost.setOsceSequence(osceSequence);
+ 			newOscePost.setStandardizedRole(oscePost.getStandardizedRole());
+ 			newOscePost.persist();
+ 			oscePostMap.put(oscePost.getId(), newOscePost);
+ 		}
+		
+		//create new course
+		List<Course> courseList = new ArrayList<Course>();
+		Course oldCourse = oldOsceSeq.getCourses().get(0);
+		
+		Course course = new Course();
+		course.setColor(oldCourse.getColor());
+		course.setOsce(osce);
+		course.setOsceSequence(osceSequence);
+		course.persist();
+		courseList.add(course);
+		
+		//create OscePostRoom
+		for (OscePostRoom oscePostRoom : oldCourse.getOscePostRooms())
+		{
+			OscePostRoom newOscePostRoom = new OscePostRoom();
+			newOscePostRoom.setCourse(course);
+			newOscePostRoom.setOscePost(oscePostMap.get(oscePostRoom.getOscePost().getId()));
+			newOscePostRoom.setRoom(oscePostRoom.getRoom());
+			newOscePostRoom.persist();
+		}
+		
+		osceSequence.setCourses(courseList);		
+		osceSeqList.add(osceSequence);
+		osceDay.setOsceSequences(osceSeqList);		
+		osceDayList.add(osceDay);
+		osce.setOsce_days(osceDayList);
+		
+		return osce;
+	}
 	
+	public static void removeOsceDay(Long osceDayId)
+	{
+		OsceDay osceDay = OsceDay.findOsceDay(osceDayId);
+		osceDay.remove();
+	}
+	
+	public static void manualOsceAddRotation(Long osceSeqId)
+	{
+		OsceSequence osceSeq = OsceSequence.findOsceSequence(osceSeqId);
+		OsceDay osceDay = osceSeq.getOsceDay();
+		Osce osce = osceDay.getOsce();
+		List<OsceDay> osceDayList = osce.getOsce_days();
+		List<OsceSequence> osceSeqList = osceDay.getOsceSequences();
+		
+		if (osceSeqList.size() == 2)
+		{
+			OsceSequence firstOsceSeq = osceSeqList.get(0);
+			OsceSequence secondOsceSeq = osceSeqList.get(1);
+			
+			if (firstOsceSeq.getId().equals(osceSeqId))
+			{
+				List<OsceDayRotation> firstOsceSeqRotationList = firstOsceSeq.getOsceDayRotations();
+				List<OsceDayRotation> secondOsceSeqRotationList = secondOsceSeq.getOsceDayRotations();
+				
+				if (firstOsceSeqRotationList.isEmpty() == false && secondOsceSeqRotationList.isEmpty() == false)
+				{
+					OsceDayRotation firstSeqLastRot = firstOsceSeqRotationList.get((firstOsceSeqRotationList.size() - 1));
+					OsceDayRotation secondSeqFirstRot = secondOsceSeqRotationList.get(0);
+					
+					Integer firstSeqRotBreak = firstSeqLastRot.getBreakDuration();
+					Integer secondSeqRotBreak = secondSeqFirstRot.getBreakDuration();
+					
+					BreakType firstSeqRotBreakType = firstSeqLastRot.getBreakType();
+					BreakType secondSeqRotBreakType = secondSeqFirstRot.getBreakType();
+					
+					Integer diff = firstSeqRotBreak - secondSeqRotBreak;
+					
+					Date rotTimeStart = dateSubtractMin(secondSeqFirstRot.getTimeStart(), diff);
+					Date rotTimeEnd = dateSubtractMin(secondSeqFirstRot.getTimeEnd(), diff);
+					
+					secondSeqFirstRot.setRotationNumber((firstSeqLastRot.getRotationNumber() + 1));
+					secondSeqFirstRot.setTimeStart(rotTimeStart);
+					secondSeqFirstRot.setTimeEnd(rotTimeEnd);
+					secondSeqFirstRot.setBreakType(firstSeqRotBreakType);
+					secondSeqFirstRot.setBreakDuration(firstSeqRotBreak);
+					secondSeqFirstRot.setOsceSequence(firstOsceSeq);
+					secondSeqFirstRot.persist();
+					
+					for (int i=1; i<secondOsceSeqRotationList.size(); i++)
+					{
+						OsceDayRotation osceDayRotation = secondOsceSeqRotationList.get(i);
+						if (i==1)
+						{
+							Date timeStartRot = dateAddMin(osceDayRotation.getTimeStart(), diff);
+							Date timeEndRot = dateAddMin(osceDayRotation.getTimeEnd(), diff);
+							
+							osceDayRotation.setRotationNumber(i);
+							osceDayRotation.setTimeStart(timeStartRot);
+							osceDayRotation.setTimeEnd(timeEndRot);
+							osceDayRotation.setBreakType(secondSeqRotBreakType);
+							osceDayRotation.setBreakDuration(secondSeqRotBreak);
+							osceDayRotation.persist();
+						}
+						else
+						{
+							osceDayRotation.setRotationNumber(i);
+							osceDayRotation.persist();
+						}
+					}
+					
+					firstOsceSeq.setNumberRotation((firstOsceSeqRotationList.size() + 1));
+					firstOsceSeq.persist();
+					
+					secondOsceSeq.setNumberRotation((secondOsceSeqRotationList.size() - 1));
+					secondOsceSeq.persist();					
+				}
+			}
+			else if (secondOsceSeq.getId().equals(osceSeqId))
+			{
+				int indexOfOsceDay = osceDayList.indexOf(osceDay);
+				
+				List<OsceDayRotation> secondOsceSeqRotationList = secondOsceSeq.getOsceDayRotations();
+				
+				OsceDayRotation lastRotation = secondOsceSeqRotationList.get((secondOsceSeqRotationList.size() - 1));
+				OsceDayRotation secondLastRotation = secondOsceSeqRotationList.get((secondOsceSeqRotationList.size() - 2));
+				
+				String breakByRotation = osceDay.getBreakByRotation();
+				String[] splitString = breakByRotation.split("-");
+				String newString = "";
+				
+				for (int i=0; i<(splitString.length - 1); i++)
+				{
+					newString = newString + splitString[i] + "-";
+				}
+				
+				secondOsceSeq.setNumberRotation((secondOsceSeqRotationList.size() - 1));
+				secondOsceSeq.persist();
+				
+				osceDay.setTimeEnd(secondLastRotation.getTimeEnd());
+				osceDay.setBreakByRotation(newString);
+				osceDay.persist();
+				
+				if (indexOfOsceDay == (osceDayList.size() - 1))
+				{
+					Long newOsceSeqId = createOsceDayAndOsceSequence(osce, osceDay, secondOsceSeq);
+					OsceSequence newOsceSeq = OsceSequence.findOsceSequence(newOsceSeqId);
+					OsceDay newOsceDay = newOsceSeq.getOsceDay();
+					
+					Date rotTimeStart = lastRotation.getTimeStart();
+					Date rotTimeEnd = lastRotation.getTimeEnd();
+					
+					int diff = differenceInMinutes(rotTimeStart, rotTimeEnd);
+					
+					Date dayTimeEnd = dateAddMin(newOsceDay.getTimeStart(), diff);
+					String newOsceDayBreakStr = "0:" + lastRotation.getBreakDuration() + "-";
+					
+					newOsceDay.setTimeEnd(dayTimeEnd);
+					newOsceDay.setBreakByRotation(newOsceDayBreakStr);
+					newOsceDay.persist();
+					
+					OsceDayRotation osceDayRotation = new OsceDayRotation();
+					osceDayRotation.setOsceSequence(newOsceSeq);
+					osceDayRotation.setOsceDay(newOsceDay);
+					osceDayRotation.setRotationNumber(1);
+					osceDayRotation.setBreakDuration(lastRotation.getBreakDuration());
+					osceDayRotation.setBreakType(lastRotation.getBreakType());
+					osceDayRotation.setTimeStart(newOsceDay.getTimeStart());
+					osceDayRotation.setTimeEnd(newOsceDay.getTimeEnd());
+					osceDayRotation.persist();
+					
+					lastRotation.remove();
+				}
+				else
+				{
+					if ((indexOfOsceDay+1) >= 0 && (indexOfOsceDay+1) < osceDayList.size())
+					{
+						OsceDay nextOsceDay = osceDayList.get((indexOfOsceDay+1));
+						List<OsceSequence> newOsceSeqList = nextOsceDay.getOsceSequences();
+						OsceSequence newOsceSequence = null;
+						
+						if (newOsceSeqList.size() > 0)
+							newOsceSequence = newOsceSeqList.get(0);
+						
+						if (newOsceSequence != null)
+						{
+							
+						}						
+					}
+					lastRotation.remove();
+				}
+			}
+		}
+		else if (osceSeqList.size() == 1)
+		{
+			
+		}
+			
+	}
+	
+	
+	private static Long createOsceDayAndOsceSequence(Osce osce, OsceDay osceDay, OsceSequence osceSeq)
+	{
+		//create new osce day
+		Calendar calendar = Calendar.getInstance();
+		
+		calendar.setTime(osceDay.getOsceDate());
+		calendar.add(Calendar.DATE, 1);
+		Date newOsceDate = calendar.getTime();
+		
+ 		calendar.setTime(osceDay.getTimeStart());
+ 		calendar.add(Calendar.DATE, 1);
+ 		Date newTimeStart = calendar.getTime(); 		
+ 		
+ 		calendar.setTime(osceDay.getTimeEnd());
+ 		calendar.add(Calendar.DATE, 1);
+ 		Date newTimeEnd = calendar.getTime();
+ 		
+		OsceDay newOsceDay = new OsceDay();
+		newOsceDay.setOsceDate(newOsceDate);
+		newOsceDay.setTimeStart(newTimeStart);
+		newOsceDay.setTimeEnd(newTimeEnd);
+		newOsceDay.setOsce(osce);
+		newOsceDay.persist();
+		
+		//create new osce sequence		
+		OsceSequence newOsceSequence = new OsceSequence();
+		newOsceSequence.setLabel("A");
+		newOsceSequence.setNumberRotation(1);
+		newOsceSequence.setOsceDay(newOsceDay);
+		newOsceSequence.persist();
+		
+		Map<Long, OscePost> oscePostMap = new HashMap<Long, OscePost>();
+		for (OscePost oscePost : osceSeq.getOscePosts())
+ 		{
+ 			OscePost newOscePost = new OscePost();
+ 			newOscePost.setSequenceNumber(oscePost.getSequenceNumber());
+ 			newOscePost.setValue(oscePost.getValue());
+ 			newOscePost.setOscePostBlueprint(oscePost.getOscePostBlueprint());
+ 			newOscePost.setOsceSequence(newOsceSequence);
+ 			newOscePost.setStandardizedRole(oscePost.getStandardizedRole());
+ 			newOscePost.persist();
+ 			oscePostMap.put(oscePost.getId(), newOscePost);
+ 		}
+		
+		for (Course course : osceSeq.getCourses())
+		{
+			Course newCourse = new Course();
+			newCourse.setColor(course.getColor());
+			newCourse.setOsce(osce);
+			newCourse.setOsceSequence(newOsceSequence);
+			newCourse.persist();
+			
+			//create OscePostRoom
+			for (OscePostRoom oscePostRoom : course.getOscePostRooms())
+			{
+				OscePostRoom newOscePostRoom = new OscePostRoom();
+				newOscePostRoom.setCourse(newCourse);
+				newOscePostRoom.setOscePost(oscePostMap.get(oscePostRoom.getOscePost().getId()));
+				newOscePostRoom.setRoom(oscePostRoom.getRoom());
+				newOscePostRoom.persist();
+			}
+		}
+	 
+		return newOsceSequence.getId(); 
+	}
+	
+	private static int differenceInMinutes(Date date1, Date date2)
+	{
+		long diff = date2.getTime() - date1.getTime();
+		Long minutes = TimeUnit.MILLISECONDS.toMinutes(diff);
+		return minutes.intValue();
+	}
+	
+	private static Date dateAddMin(Date date, int minToAdd) {
+		return new Date((long) (date.getTime() + minToAdd * 60 * 1000));
+	}
+	
+	private static Date dateSubtractMin(Date date, int minToSubtract) {
+		return new Date((long) (date.getTime() - minToSubtract * 60 * 1000));
+	}
+	
+	public static OsceDay findOsceDayByOsceSequenceId(Long osceSeqId)
+	{
+		EntityManager em = entityManager();
+		String sql = "select os.osceDay from OsceSequence os where os.id = " + osceSeqId;
+		TypedQuery<OsceDay> query = em.createQuery(sql, OsceDay.class);
+		if (query.getResultList() != null && query.getResultList().size() > 0)
+			return query.getResultList().get(0);
+		else
+			return null;
+	}
 }
 
 class Schedule

@@ -127,6 +127,8 @@ public class ExportAssignment  extends HttpServlet {
 		{
 		Osce osce=Osce.findOsce(osceId);
 		
+		int postLength = osce.getPostLength();
+		
 		List<OsceDay> osceDays=osce.getOsce_days();
 		
 		Document doc=createDocument();
@@ -178,7 +180,8 @@ public class ExportAssignment  extends HttpServlet {
 					
 					Element postsElement=createEmptyChildNode("posts",doc,parcourElement);
 					
-					List<OscePost> oscePosts=osceSeq.getOscePosts();
+					//List<OscePost> oscePosts=osceSeq.getOscePosts();
+					List<OscePost> oscePosts = OscePostRoom.findOscePostByCourseId(course.getId());
 					
 					Map<Long, Long> postWiseRoomMap = OscePostRoom.findRoomByOscePostAndCourse(oscePosts, course.getId());
 					
@@ -481,13 +484,11 @@ public class ExportAssignment  extends HttpServlet {
 								}
 								*/
 								if(!found && type==0)
-								{
-									
-									
+								{	
 									Element studentElement=createEmptyChildNode("student",doc,studentsElement);
 									createChildNode("studentName", "NA", doc, studentElement);
 								}
-								else if(!found && type==1 )
+								else if(!found && type==1)
 								{	
 									Element studentElement=createEmptyChildNode("student",doc,studentsElement);
 									createChildNode("studentName", "NA", doc, studentElement);
@@ -513,13 +514,21 @@ public class ExportAssignment  extends HttpServlet {
 								
 							}
 							
+							//if(type==0)
 							if(type==0)
 							{
+								if (endTime == null)
+									endTime = dateAddMin(timeStart, postLength);
+								
 								timeStartValue=timeStartValue +"-"+ String.format("%tR", endTime);
+									
 								createChildNode("startEndTimeValue", timeStartValue, doc, startEndTimeElement);
 							}
 							else if(endTime !=null)
 							{
+								if (timeEnd == null)
+									timeEnd = dateAddMin(timeStart, postLength);
+								
 								timeStartValue=timeStartValue +"-"+ String.format("%tR", timeEnd);
 								createChildNode("startEndTimeValue", timeStartValue, doc, startEndTimeElement);
 							}
@@ -1784,13 +1793,11 @@ color_16=Black
         {
         	seqStyle.setFillForegroundColor(IndexedColors.LAVENDER.getIndex());
         }
-        
-        
         return seqStyle;
         
-        
-        
 	}
-
-
+    
+	private Date dateAddMin(Date date, int minToAdd) {
+		return new Date((long) (date.getTime() + minToAdd * 60 * 1000));
+	}
 }

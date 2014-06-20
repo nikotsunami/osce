@@ -1,0 +1,83 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	<ui:style src="../../styles.css">
+		.marginleft55
+		 {
+			margin-left: 40px;
+		 }
+		 .labelStyle
+		 {
+			padding-top: 5px;
+			height: 20px;
+			word-wrap: break-word;
+			overflow: hidden;
+    		text-overflow: ellipsis;
+    		white-space: nowrap !important;
+    		width: 100px;		
+		 }
+		 .marginTop5
+		 {
+			margin-top: 5px;
+		 }
+		 
+		 .contentPanel
+		 {
+			background-color: #DFECFF;
+			border-radius: 19px 19px 19px 19px;
+			padding-left: 1px;
+			padding-right: 1px;
+			padding-top: 1px;
+			margin-bottom: 8px;
+			margin-right: 8px;
+		 }
+		 .headerPanel
+		 {
+			background-color: #A8CCFF;
+			border-radius: 19px 19px 19px 19px;
+			height: 30px;
+			max-height: 30px;
+			min-height: 30px;
+			padding-left: 8px;
+			padding-right: 8px;
+			padding-top: 6px;
+			margin-bottom: 8px;
+		 }
+	</ui:style>
+	
+	<g:VerticalPanel width="160px" height="240px" horizontalAlignment="left" spacing="0" addStyleNames="{style.contentPanel}">		
+		
+		<g:cell>
+			<g:HorizontalPanel width="160px" addStyleNames="{style.patientControls} {style.headerPanel}" spacing="3" >
+				<g:Label ui:field="postTypeLbl"></g:Label>
+				<s:IconButton ui:field="deletePost" icon="close"></s:IconButton>
+			</g:HorizontalPanel>
+		</g:cell>
+		
+		<g:cell height="100%">
+			<g:HorizontalPanel height="100%">			
+				<g:Label ui:field="postNameLbl" styleName="{style.marginleft55}"></g:Label>					
+			</g:HorizontalPanel>
+		</g:cell>
+		
+		<g:cell>
+			<g:VerticalPanel spacing="15">
+				<g:Label ui:field="specializationLbl" wordWrap="true" styleName="{style.labelStyle}"></g:Label>
+				
+				<g:Label ui:field="roleTopicLbl" wordWrap="true" styleName="{style.labelStyle}"></g:Label>
+				
+				<g:HorizontalPanel>
+					<g:Label ui:field="standardizedRoleLbl" wordWrap="true" styleName="{style.labelStyle}"></g:Label>
+					<s:IconButton ui:field="editStandardizedRole" icon="pencil"></s:IconButton>
+				</g:HorizontalPanel>
+				
+				<g:HorizontalPanel>
+					<g:Label ui:field="roomLbl" wordWrap="true" styleName="{style.labelStyle}"></g:Label>
+					<s:IconButton ui:field="editRoom" icon="pencil"></s:IconButton>
+				</g:HorizontalPanel>			
+			</g:VerticalPanel>
+		</g:cell>		
+		
+	</g:VerticalPanel>		
+
+</ui:UiBinder> 

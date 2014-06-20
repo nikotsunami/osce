@@ -17,6 +17,8 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import ch.unibas.medizin.osce.shared.OsceStatus;
+import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 
 @RooJavaBean
@@ -120,4 +122,225 @@ public class OscePost {
 		TypedQuery<OscePost> query = em.createQuery(sql, OscePost.class);
 		return query.getResultList();		
 	}
+	
+	public static List<OscePostRoom> createOscePostBluePrintOscePostAndOscePostRoom(Long specialisationId, Long roleTopicId, Long standardizedRoleId, Long roomId, Long courseId, PostType postType)
+	{
+		Course course = Course.findCourse(courseId);
+		Osce osce = course.getOsce();
+		OsceSequence osceSequence = course.getOsceSequence();
+		RoleTopic roleTopic = RoleTopic.findRoleTopic(roleTopicId);
+		List<OscePostRoom> oscePostRoomList = new ArrayList<OscePostRoom>();
+		
+		int oscePostBlueprintMaxSeqNumber = OscePostBlueprint.findMaxSequenceNumberByOsce(osce.getId());
+		int oscePostMaxSeqNumber = findMaxSeqNumberByOsceSequence(osceSequence.getId());
+		
+		//create osce post blueprint
+		OscePostBlueprint oscePostBlueprint = new OscePostBlueprint();
+		oscePostBlueprint.setIsFirstPart(false);
+		oscePostBlueprint.setPostType(postType);
+		oscePostBlueprint.setSequenceNumber((oscePostBlueprintMaxSeqNumber + 1));
+		oscePostBlueprint.setOsce(osce);
+		oscePostBlueprint.setRoleTopic(roleTopic);
+		oscePostBlueprint.setSpecialisation(roleTopic.getSpecialisation());
+		oscePostBlueprint.persist();
+		
+		int courseIndex = -1;
+		
+		for (OsceDay osceDay : osce.getOsce_days())
+		{
+			for (OsceSequence osceSeq : osceDay.getOsceSequences())
+			{
+				//create osce post
+				OscePost oscePost = new OscePost();
+				oscePost.setSequenceNumber((oscePostMaxSeqNumber + 1));
+				oscePost.setValue(0);
+				oscePost.setOscePostBlueprint(oscePostBlueprint);
+				oscePost.setOsceSequence(osceSeq);		
+				if (osceSeq.getId().equals(osceSequence.getId()) && standardizedRoleId != null){
+					StandardizedRole standardizedRole = StandardizedRole.findStandardizedRole(standardizedRoleId);
+					oscePost.setStandardizedRole(standardizedRole);
+				}				
+				oscePost.persist();
+				
+				List<Course> courseList = osceSeq.getCourses();
+				for (int i=0; i<courseList.size(); i++)
+				{					
+					Course course1 = courseList.get(i);
+					OscePostRoom oscePostRoom = new OscePostRoom();
+					oscePostRoom.setCourse(course1);
+					oscePostRoom.setOscePost(oscePost);
+					if ((course1.getId().equals(course.getId()) && roomId != null) || (courseIndex >= 0 && courseIndex == i))
+					{
+						Room room = Room.findRoom(roomId);
+						oscePostRoom.setRoom(room);
+						courseIndex = i;
+					}
+					oscePostRoom.persist();
+					
+					oscePostRoomList.add(oscePostRoom);
+				}
+			}
+		}	
+		
+		if (OsceStatus.OSCE_NEW.equals(osce.getOsceStatus()))
+		{
+			osce.setOsceStatus(OsceStatus.OSCE_GENRATED);
+			osce.persist();
+		}	
+		
+		return oscePostRoomList;
+	}
+	
+	public static List<OscePostRoom> createBreakOscePostBluePrintOscePostAndOscePostRoom(Long courseId, PostType postType, Boolean copyHorizontally, Boolean copyVertically)
+	{
+		Course course = Course.findCourse(courseId);
+		Osce osce = course.getOsce();
+		OsceSequence osceSequence = course.getOsceSequence();
+		
+		List<OscePostRoom> oscePostRoomList = new ArrayList<OscePostRoom>();
+		
+		int oscePostBlueprintMaxSeqNumber = OscePostBlueprint.findMaxSequenceNumberByOsce(osce.getId());
+		
+		if (copyHorizontally && copyVertically)
+		{
+			
+		}
+		else if (copyHorizontally == false && copyVertically == false)
+		{
+			OscePostBlueprint oscePostBlueprint;
+			OscePost oscePost = null;
+			
+			oscePostBlueprint = OscePostBlueprint.findOscePostBlueprintByOsceId(osce.getId(), PostType.BREAK);
+			
+			if (oscePostBlueprint == null)
+			{
+				//create osce post blueprint
+				oscePostBlueprint = new OscePostBlueprint();
+				oscePostBlueprint.setIsFirstPart(false);
+				oscePostBlueprint.setPostType(postType);
+				oscePostBlueprint.setSequenceNumber((oscePostBlueprintMaxSeqNumber + 1));
+				oscePostBlueprint.setOsce(osce);
+				oscePostBlueprint.persist();
+			}
+			
+			if (oscePostBlueprint != null)
+			{
+				oscePost = findBreakOscePostByOsceSequenceAndOscePostBlueprint(osceSequence.getId(), oscePostBlueprint.getId());
+				if (oscePost == null)
+				{
+					int oscePostMaxSeqNumber = findMaxSeqNumberByOsceSequence(osceSequence.getId());
+					//create osce post
+					oscePost = new OscePost();
+					oscePost.setSequenceNumber((oscePostMaxSeqNumber + 1));
+					oscePost.setValue(0);
+					oscePost.setOscePostBlueprint(oscePostBlueprint);
+					oscePost.setOsceSequence(osceSequence);		
+					oscePost.persist();
+				}				
+			}
+			
+			if (oscePost != null && oscePostBlueprint != null)
+			{
+				OscePostRoom oscePostRoom = new OscePostRoom();
+				oscePostRoom.setCourse(course);
+				oscePostRoom.setOscePost(oscePost);
+				oscePostRoom.persist();
+				oscePostRoomList.add(oscePostRoom);
+			}			
+		}
+		else if (copyHorizontally && copyVertically == false)
+		{
+			OscePostBlueprint oscePostBlueprint;
+			int oscePostMaxSeqNumber = findMaxSeqNumberByOsceSequence(osceSequence.getId());
+			
+			oscePostBlueprint = OscePostBlueprint.findOscePostBlueprintByOsceId(osce.getId(), PostType.BREAK);
+			
+			if (oscePostBlueprint == null)
+			{
+				//create osce post blueprint
+				oscePostBlueprint = new OscePostBlueprint();
+				oscePostBlueprint.setIsFirstPart(false);
+				oscePostBlueprint.setPostType(postType);
+				oscePostBlueprint.setSequenceNumber((oscePostBlueprintMaxSeqNumber + 1));
+				oscePostBlueprint.setOsce(osce);
+				oscePostBlueprint.persist();
+			}
+			
+			/*//create osce post blueprint
+			OscePostBlueprint oscePostBlueprint = new OscePostBlueprint();
+			oscePostBlueprint.setIsFirstPart(false);
+			oscePostBlueprint.setPostType(postType);
+			oscePostBlueprint.setSequenceNumber((oscePostBlueprintMaxSeqNumber + 1));
+			oscePostBlueprint.setOsce(osce);
+			oscePostBlueprint.persist();*/
+			
+			//create osce post
+			OscePost oscePost = new OscePost();
+			oscePost.setSequenceNumber((oscePostMaxSeqNumber + 1));
+			oscePost.setValue(0);
+			oscePost.setOscePostBlueprint(oscePostBlueprint);
+			oscePost.setOsceSequence(osceSequence);		
+			oscePost.persist();
+			
+			for (Course course1 : osceSequence.getCourses())
+			{					
+				OscePostRoom oscePostRoom = new OscePostRoom();
+				oscePostRoom.setCourse(course1);
+				oscePostRoom.setOscePost(oscePost);
+				oscePostRoom.persist();
+				
+				oscePostRoomList.add(oscePostRoom);
+			}			
+		}
+		else if (copyHorizontally == false && copyVertically)
+		{
+			
+		}
+		
+		if (oscePostRoomList.size() > 0)
+		{
+			if (OsceStatus.OSCE_NEW.equals(osce.getOsceStatus()))
+			{
+				osce.setOsceStatus(OsceStatus.OSCE_GENRATED);
+				osce.persist();
+			}
+		}
+		
+		return oscePostRoomList;
+	}
+	
+	public static int findMaxSeqNumberByOsceSequence(Long osceSeqID)
+	{
+		EntityManager em = entityManager();
+		String sql = "SELECT MAX(op.sequenceNumber) FROM OscePost op WHERE op.osceSequence.id = " + osceSeqID;
+		TypedQuery<Object> query = em.createQuery(sql, Object.class);
+		
+		if (query.getResultList().size() > 0  && query.getResultList().get(0) != null)
+		{
+			int maxSeqNumber = (Integer) query.getResultList().get(0);
+			return maxSeqNumber;
+		}
+		else{
+			return 0;
+		}
+	}
+
+	public static OscePost findBreakOscePostByOsceSequenceAndOscePostBlueprint(Long osceSeqId, Long opbId)
+	{
+		EntityManager em = entityManager();
+		String sql = "SELECT op FROM OscePost op WHERE op.osceSequence.id = " + osceSeqId + " AND op.oscePostBlueprint.id = " + opbId; 
+		TypedQuery<OscePost> query = em.createQuery(sql, OscePost.class);
+		if (query.getResultList() != null && query.getResultList().size() > 0)
+			return query.getResultList().get(0);
+		else
+			return null;
+	}
+	
+	public static List<OscePost> findOscePostOfNullRoleByOsceId(Long osceId)
+	{
+		EntityManager em = entityManager();
+		String sql = "SELECT op FROM OscePost op WHERE op.oscePostBlueprint.postType = " + PostType.NORMAL.ordinal() + " AND op.standardizedRole IS NULL AND op.osceSequence.osceDay.osce.id = " + osceId;
+		TypedQuery<OscePost> query = em.createQuery(sql, OscePost.class);
+		return query.getResultList();
+	}	
 }

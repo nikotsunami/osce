@@ -17,6 +17,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImportObjectiveViewPl
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImporteOSCEPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ManualOscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.PaymentPlace;
@@ -240,6 +241,9 @@ public class OsMaMainNav extends Composite {
 	
 	@UiField
 	Anchor payment;
+	
+	@UiField
+	Anchor manualOsce;
 		
 	@UiField
 	Label createOsceHeader;
@@ -778,6 +782,8 @@ public class OsMaMainNav extends Composite {
 		
 		//payment
 		
+		manualOsce.setText(constants.manualOsce());
+		
 		StudentManagment.setText(constants.StudentDetailsPlace());
 		
 		assetDataHeader.setText(constants.manageFacilities());
@@ -860,6 +866,11 @@ public class OsMaMainNav extends Composite {
 	        }
 	    });
 
+	@UiHandler("manualOsce")
+	void manualOsceClicked(ClickEvent event)
+	{
+		placeController.goTo(new ManualOscePlace("ManualOscePlace", handlerManager, lstSemester.getValue()));
+	}
 	
 	@UiHandler("exportOSCE")
 	void exportOSCEClicked(ClickEvent event)

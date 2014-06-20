@@ -19,6 +19,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.OsceCreationType;
 import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -27,6 +28,7 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.activity.shared.ActivityManager;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.EventBus;
@@ -139,32 +141,36 @@ public class CircuitActivity extends AbstractActivity implements CircuitView.Pre
 			}
 		});
 		
-		requests.osceRequestNonRoo().findAllOsceOnSemesterId(semesterProxy.getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
+		requests.osceRequestNonRoo().findAllOsceBySemesterIdAndCreationType(semesterProxy.getId(), OsceCreationType.Automatic).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
 
 			@Override
 			public void onSuccess(List<OsceProxy> response) {
 				tabIndex=0;
+				if (response.size() == 0)
+					view.getMainHTMLPanel().getElement().getStyle().setDisplay(Display.NONE);
+				else
+					view.getMainHTMLPanel().getElement().getStyle().clearDisplay();
+				
 				if(response != null && response.size() > 0){
-				osceProxyList=response;
-				Log.info("OSce Proxy Size : " + response.size());
-				
-				Iterator<OsceProxy> osceList = response.iterator();
-				
-				osceProxy = response.get(0);
-				while(osceList.hasNext()){
-				
-				Log.info("OSce Proxy index : " + tabIndex);
-				OsceProxy osceProxy = osceList.next();
-				String osceLable = new EnumRenderer<StudyYears>().render(osceProxy.getStudyYear()) 
-						+ "." + new EnumRenderer<Semesters>().render(osceProxy.getSemester().getSemester());
-				osceLable=osceLable+((osceProxy.getIsRepeOsce()==true)?" ("+constants.repe()+")":"");
-				view.getCircuitTabPanel().insert(new SimplePanel(), osceLable,tabIndex);
-				tabIndex++;
-				
-				}
-				
-				view.getCircuitTabPanel().selectTab(0);
-				
+					osceProxyList=response;
+					Log.info("OSce Proxy Size : " + response.size());
+					
+					Iterator<OsceProxy> osceList = response.iterator();
+					
+					osceProxy = response.get(0);
+					while(osceList.hasNext()){
+					
+					Log.info("OSce Proxy index : " + tabIndex);
+					OsceProxy osceProxy = osceList.next();
+					String osceLable = new EnumRenderer<StudyYears>().render(osceProxy.getStudyYear()) 
+							+ "." + new EnumRenderer<Semesters>().render(osceProxy.getSemester().getSemester());
+					osceLable=osceLable+((osceProxy.getIsRepeOsce()==true)?" ("+constants.repe()+")":"");
+					view.getCircuitTabPanel().insert(new SimplePanel(), osceLable,tabIndex);
+					tabIndex++;
+					
+					}
+					
+					view.getCircuitTabPanel().selectTab(0);
 				//activityManager.setDisplay((SimplePanel)view.getCircuitTabPanel().getWidget(0));	
 				/*activityManager.setDisplay((SimplePanel)view.getCircuitTabPanel().getWidget(0));
 				Log.info("Before Goto");

@@ -46,4 +46,8 @@ interface Delegate {
 	 public void setContentView(ContentView view); 
 	 public ContentView getContentView();
 	// E Change in ParcourView
+	 
+	 public void addParcourStyle(String style);
+	 
+	 public VerticalPanel getDeleteBtnPanel();
 }

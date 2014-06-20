@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -35,5 +36,6 @@ public interface CircuitView extends IsWidget{
     
     public SimplePanel getCircuitDetailPanel();
     
+    public HTMLPanel getMainHTMLPanel();
 	
 }

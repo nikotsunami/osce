@@ -1435,6 +1435,76 @@ public interface OsceConstants extends Constants {
 	public String day();
 
 	public String assignPatientForHalfDay();
+	
+	public String manualOsce();
+	
+	public String manualOsceBaseData();
+	
+	public String manualOsceCalculatedData();
+	
+	public String manualOsceLongBreak();
+	
+	public String manualOsceLunchBreak();
+	
+	public String manualOsceMiddleBreak();
+	
+	public String manualOsceStudent();
+	
+	public String manualOsceSP();
+	
+	public String manualOsceRoom();
+	
+	public String manualOsceUnavailable();
+	
+	public String manualOsceAddDay();
+	
+	public String manualOsceBreakSooner();
+			
+	public String manualOsceBreakLater();
+	
+	public String manualOsceBreakDuration();
+	
+	public String manualOsceAddVersion();
+	
+	public String manualOsceSpecialisation();
+	
+	public String manualOsceRoleTopic();
+	
+	public String manualOsceStandardizedRole();
+	
+	public String manualOsceCreateRoom();
+	
+	public String manualOsceDeleteOscePost();
+	
+	public String manualOsceDeleteParcour();
+	
+	public String manualOsceDeleteOsceSequence();
+	
+	public String manualOsceDeleteOsceDay();
+		
+	public String manualOsceSequenceWarning();
+	
+	public String osceCreationType();
+	
+	public String manualOsceHorizontally();
+	
+	public String manualOsceVertically();
+	
+	public String manualOsceNone();
+	
+	public String manualOsceBreakPostWarning();
+	
+	public String manualOsceCopyWithBreak();
+	
+	public String manualOsceCopyWithoutBreak();
+	
+	public String manualOsceParcourWarning();
+	
+	public String manualOsceConfirmation();
+	
+	public String manualOsceCalculateError();
+	
+	public String manualOsceCloseError();
 }
 
 

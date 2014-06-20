@@ -7,6 +7,7 @@ import java.util.List;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentOscesProxy;
@@ -97,4 +98,6 @@ public abstract Request<List<AssignmentProxy>> retrieveAssignmenstOfTypeStudent(
 	public abstract Request<Void> moveLunchBreakOsceDay(int flag, Long osceDayId);
 	
 	public abstract Request<Void> updateLunchBreak(Long osceDayId, int diff);
+	
+	public abstract Request<OsceProxy> removeManualOsceAssignmentByOsceId(Long osceId);
 }

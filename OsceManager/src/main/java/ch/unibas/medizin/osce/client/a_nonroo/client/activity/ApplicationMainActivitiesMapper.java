@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImportObjectiveViewPl
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImporteOSCEPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ManualOscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.PaymentPlace;
@@ -24,7 +25,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomMaterialsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoomPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ScarPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SpokenLanguagePlace;
-import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentManagementPlace;
@@ -35,8 +35,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.shared.HandlerManager;
@@ -887,6 +885,45 @@ public class ApplicationMainActivitiesMapper implements AsyncActivityMapper {
 			
 		}
 
+		if (place instanceof ManualOscePlace) {
+			Log.info("is ManualOscePlace");
+			final Place places =place;
+			/*ExportOscePlace exportOscePlace = (ExportOscePlace) place;
+			if (exportOscePlace.handlerManager == null) {
+				exportOscePlace.handlerManager = handler;
+			}
+
+			if (exportOscePlace.semesterProxy == null) {
+				exportOscePlace.semesterProxy = semesterProxy;
+			}*/
+			//return new ExportOsceActivity(requests, placeController,(ExportOscePlace) place);
+			
+			GWT.runAsync(new RunAsyncCallback() {
+				
+				@Override
+				public void onSuccess() {
+					
+					ManualOscePlace manualOscePlace = (ManualOscePlace) places;
+					if (manualOscePlace.handlerManager == null) {
+						manualOscePlace.handlerManager = handler;
+					}
+
+					if (manualOscePlace.semesterProxy == null) {
+						manualOscePlace.semesterProxy = semesterProxy;
+					}
+					
+					callbackHandler.onRecieveActivity(new ManualOsceActivity(requests, placeController, (ManualOscePlace) places));	
+				}
+				
+				@Override
+				public void onFailure(Throwable reason) {
+					
+					Window.alert("Not able to provide ExportOsceActivity");
+				}
+			});
+
+		}
+		
 		//return null;
 	}
 

@@ -11,7 +11,6 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultValueRendererFactory;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.param.Option;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -104,7 +103,7 @@ public abstract class AbstractSuggestBox<T, W extends EventHandlingValueHolderIt
 	 */
 	protected void init(String defaultText) {
 		//setStyleName(SUGGEST_FIELD_COMP);
-		Log.info("Call Set Style");
+		//Log.info("Call Set Style");
 		addStyleName(SUGGEST_FIELD_COMP);
 		getTextField().setRepresenter(this);
 		//getTextField().setStyleName(SUGGEST_FIELD);

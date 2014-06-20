@@ -42,7 +42,7 @@
   	</filter> 
   	<filter-mapping> 
     	<filter-name>NoCache</filter-name> 
-    	<url-pattern>*nocache.js</url-pattern> 
+    	<url-pattern>osMaEntry/osMaEntry.nocache.js</url-pattern> 
   	</filter-mapping>
     
     <filter>

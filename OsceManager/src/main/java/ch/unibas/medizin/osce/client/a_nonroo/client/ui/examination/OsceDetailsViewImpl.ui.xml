@@ -212,12 +212,13 @@ xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
 				<td>
 					<span ui:field="longBreakRequiredTime" />
 				</td>
-				<td></td>
-				<td></td>
+				<td>
+					<span class="{style.label}" ui:field="labelOsceCreationType">lunch Break:</span>
+				</td>
+				<td>
+					<span ui:field="osceCreationType" />
+				</td>
 			</tr>
-			
-			
-			
 		</table>
 		</g:HTMLPanel>
 		

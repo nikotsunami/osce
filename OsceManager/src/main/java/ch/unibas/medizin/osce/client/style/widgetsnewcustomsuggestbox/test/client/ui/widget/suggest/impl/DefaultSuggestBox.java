@@ -13,7 +13,7 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultValueRenderer;
 
-import com.allen_sauer.gwt.log.client.Log;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
@@ -167,9 +167,9 @@ public class DefaultSuggestBox<T, W extends EventHandlingValueHolderItem<T>> ext
 		String s2 =(i-2)+"px";
 		
 		this.getTextField().advancedTextBox.setWidth(s1);
-		Log.info("Offset Width1: " + this.scrollPanel.getOffsetWidth());
+		//Log.info("Offset Width1: " + this.scrollPanel.getOffsetWidth());
 		this.scrollPanel.setWidth(s);
-		Log.info("Offset Width: " + this.scrollPanel.getOffsetWidth());
+		//Log.info("Offset Width: " + this.scrollPanel.getOffsetWidth());
 		DefaultValueRenderer.widthValue=s2;
 		this.setRendererWidth(s2);
 		//this.textField.setWidth(i);	

@@ -39,28 +39,28 @@ public abstract class OSCEReceiver<T> extends Receiver<T>
 
 	public OSCEReceiver()
 	{
-		Log.info("Call OSCEReceiver Constructor()");
+		//Log.info("Call OSCEReceiver Constructor()");
 	}
 	
 	public OSCEReceiver(Map viewMap)
 	{
-		Log.info("Call OSCEReceiver Constructor(Map)");
-		Log.info("Size of map is: " + viewMap.size());
+		//Log.info("Call OSCEReceiver Constructor(Map)");
+		//Log.info("Size of map is: " + viewMap.size());
 		localViewMap=new HashMap<String, Widget>();
 		localViewMap=viewMap;
 		
 		if(localViewMap==null)
 		  {
-			  Log.info("Map Null from constructor");
+			  //Log.info("Map Null from constructor");
 		  }
 		  else
 		  {
-			  Log.info("Map Not Null  from constructor");
+			  //Log.info("Map Not Null  from constructor");
 			  
 			  Iterator<String> tempIterator=localViewMap.keySet().iterator();
 			  while(tempIterator.hasNext())
 			  {
-				  Log.info("Remove... Highlight");	
+				  //Log.info("Remove... Highlight");	
 				  localViewMap.get(tempIterator.next()).removeStyleName("higlight_onViolation");
 			  }
 		  }
@@ -153,14 +153,14 @@ public abstract void onSuccess(T response);
 
   public void onViolation(Set<Violation> errors) 
   {
-	  Log.info("Call onViolation");		  
+	  //Log.info("Call onViolation");		  
 	  errorBuffor=new StringBuffer();
 	  violationMessageBuffor=new StringBuffer();
 	  // Constraint Violation
 	  if (!errors.isEmpty()) 
 	  {		      			  
 		  Iterator<Violation> iter = errors.iterator();
-		  Log.info("Test Method: "  + errors.contains(errors.iterator().next().getPath()));
+		 // Log.info("Test Method: "  + errors.contains(errors.iterator().next().getPath()));
 		  while (iter.hasNext()) 
 		  {				
 			  
@@ -174,11 +174,11 @@ public abstract void onSuccess(T response);
 		  
 		  if(localViewMap==null)
 		  {
-			  Log.info("Map Null");
+			  //Log.info("Map Null");
 		  }
 		  else
 		  {
-			  Log.info("Map Not Null");
+			  //Log.info("Map Not Null");
 			  
 			 /* Iterator<String> tempIterator=localViewMap.keySet().iterator();
 			  while(tempIterator.hasNext())
@@ -191,10 +191,10 @@ public abstract void onSuccess(T response);
 			  for (String retval: violationMessageBuffor.toString().split(","))
 				{
 			       
-				   Log.info("Local Map Size is: " + localViewMap.size()); 
-			        Log.info("*"+retval+"*");
-				  	Log.info("Violated Value: " + retval);			        
-				  	Log.info(" localViewMap.get(retval) Widget" +  localViewMap.get(retval.trim()));			         
+				 //  Log.info("Local Map Size is: " + localViewMap.size()); 
+			     //   Log.info("*"+retval+"*");
+				//  	Log.info("Violated Value: " + retval);			        
+				//  	Log.info(" localViewMap.get(retval) Widget" +  localViewMap.get(retval.trim()));			         
 			         
 			         Iterator<String> iterator=localViewMap.keySet().iterator();
 			         
@@ -204,12 +204,12 @@ public abstract void onSuccess(T response);
 			        	  
 			        	if(retval.equals(iterator.next()))
 				         {			        	
-				        	 Log.info("Violation... Highlight");	
+				        //	 Log.info("Violation... Highlight");	
 				        	 localViewMap.get(retval).addStyleName("higlight_onViolation");			        	 		        	 	 	        
 				         }
 				         else
 				         {
-				        	 Log.info("Successful No Violation...");	       
+				        //	 Log.info("Successful No Violation...");	       
 				         }
 			        }
 				}

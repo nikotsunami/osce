@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.domain;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,13 +32,17 @@ import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.allen_sauer.gwt.log.client.Log;
+
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
+import ch.unibas.medizin.osce.server.manualoscettgen.ManualOsceTimeTableCalculation;
 import ch.unibas.medizin.osce.server.spalloc.SPAllocator;
 import ch.unibas.medizin.osce.server.spalloc.SPFederalAllocator;
 import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.MapOsceRole;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
+import ch.unibas.medizin.osce.shared.OsceCreationType;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
@@ -138,6 +143,8 @@ public class Osce {
    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "osce")
     private List<PostAnalysis> postAnalysis = new ArrayList<PostAnalysis>();
+    
+    private OsceCreationType osceCreationType;
     /**
 	 * Get number of slots until a SP change is necessary (lowest number of consecutive slots
 	 * is defined by the most difficult role)
@@ -247,7 +254,10 @@ public class Osce {
     
     public static Boolean generateOsceScaffold(Long osceId) {
     	try {
-    		TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(Osce.findOsce(osceId));
+    		new Osce().removeOsceData(osceId);    		
+    		
+    		Osce osce = Osce.findOsce(osceId);
+    		TimetableGenerator optGen = TimetableGenerator.getOptimalSolution(osce);
 
     		// persist scaffold (osce days and all cascading entities)
     		optGen.createScaffold();
@@ -256,6 +266,33 @@ public class Osce {
     		return false;
     	}
     	return true;
+    }
+    
+    @Transactional
+    private void removeOsceData(Long osceId)
+    {
+    	Osce osce = Osce.findOsce(osceId);
+		
+		if (osce.getOsce_days() != null && osce.getOsce_days().size() == 1)
+		{
+			OsceDay osceDay = osce.getOsce_days().get(0);
+			List<OsceSequence> osceSequences = osceDay.getOsceSequences();
+			osceDay.setOsceSequences(new ArrayList<OsceSequence>());
+			osceDay.persist();
+			
+			if (osceSequences != null && osceSequences.size() == 1)
+			{	
+				OsceSequence osceSeq = osceSequences.get(0);
+				osceSeq.remove();
+			}
+			else if (osceSequences != null && osceSequences.size() == 2)
+			{
+				OsceSequence osceSeqA = osceSequences.get(0);
+				OsceSequence osceSeqB = osceSequences.get(1);
+				osceSeqA.remove();
+				osceSeqB.remove();
+			}
+		}
     }
     
     public static Boolean generateAssignments(Long osceId) {
@@ -349,11 +386,11 @@ public class Osce {
     		osce.setMaxNumberStudents(actualStudent);
     		osce.persist();
     		
-    		Integer remainingStudent = osce.getMaxNumberStudents() - actualStudent;
+    		//Integer remainingStudent = osce.getMaxNumberStudents() - actualStudent;
     		spMap = storeSPDataBeforeRemove(osce);
     		examinerAssList = storeExaminerDataBeforeRemove(osce);
     		
-    		changeOsceStructure(osce, remainingStudent);
+    		changeOsceStructure(osce);
     		
     		osce.setMaxNumberStudents(totalStudent);
     		osce.persist();
@@ -396,8 +433,10 @@ public class Osce {
 //    	em.getTransaction().begin();
     	for(int i=0;i<studentList.size();i++)
     	{
+    		if (seqList.size() > i)
+    		{
     			Integer sequence=seqList.get(i);
-    		
+        		
     			assignmentTypedQuery.setParameter("sequenceNumber", sequence);
     			List<Assignment> assignmentList=assignmentTypedQuery.getResultList();
     			for(Assignment assignment:assignmentList)
@@ -405,7 +444,7 @@ public class Osce {
     				assignment.setStudent(studentList.get(i));
     				assignment.persist();
     			}
-    	
+    		}
     	}
    // 	em.getTransaction().commit();
     	if (spMap != null && spMap.size() > 0)
@@ -616,7 +655,7 @@ public class Osce {
     	return osceDaySpMap;
     }
     
-	private void changeOsceStructure(Osce osce, Integer remainingStudent) {
+	private void changeOsceStructure(Osce osce) {
     	
     	try 
     	{
@@ -652,13 +691,18 @@ public class Osce {
         
     }
     
- public static List<Osce> findAllOsceOnSemesterId(Long semesterId){
-		
-    	Log.info("Inside Osce class To retrive all Osce Based On semesterId");
+    public static List<Osce> findAllOsceOnSemesterId(Long semesterId){
 		EntityManager em = entityManager();
 		TypedQuery<Osce> q = em.createQuery("SELECT o FROM Osce AS o WHERE o.semester = " + semesterId ,Osce.class);
 		return q.getResultList();
 				
+	}
+    
+    public static List<Osce> findAllOsceBySemesterIdAndCreationType(Long semesterId, OsceCreationType osceCreationType){
+		EntityManager em = entityManager();
+		String sql = "SELECT o FROM Osce AS o WHERE o.semester.id = " + semesterId + " AND o.osceCreationType = " + osceCreationType.ordinal();
+		TypedQuery<Osce> q = em.createQuery(sql, Osce.class);
+		return q.getResultList();				
 	}
 
  
@@ -1407,4 +1451,216 @@ public class Osce {
  			}
  			return mapOsceRoleProxyList;
  		}
+ 		
+ 		
+ 	public static void createOsceDaySequeceAndCourse(Long osceId)
+ 	{
+ 		Osce osce = Osce.findOsce(osceId);
+ 		
+ 		Calendar calendar = Calendar.getInstance();
+ 		calendar.setTime(new Date());
+ 		calendar.set(Calendar.HOUR_OF_DAY, 0);
+ 		calendar.set(Calendar.MINUTE, 0);
+ 		calendar.set(Calendar.SECOND, 0);
+ 		Date osceDate = calendar.getTime(); 		
+ 		
+ 		calendar.set(Calendar.HOUR_OF_DAY, 8);
+ 		calendar.set(Calendar.MINUTE, 0);
+ 		calendar.set(Calendar.SECOND, 0);
+ 		Date startTime = calendar.getTime();
+ 		
+ 		OsceDay osceDay = new OsceDay();
+ 		osceDay.setOsceDate(osceDate);
+ 		osceDay.setTimeStart(startTime);
+ 		osceDay.setTimeEnd(startTime);
+ 		osceDay.setOsce(osce);
+ 		osceDay.persist();
+ 		
+ 		OsceSequence osceSequence = new OsceSequence();
+ 		osceSequence.setLabel("A");
+ 		osceSequence.setNumberRotation(1);
+ 		osceSequence.setOsceDay(osceDay);
+ 		osceSequence.persist();
+ 		
+ 		Course course = new Course();
+ 		course.setColor("color_1");
+ 		course.setOsce(osce);
+ 		course.setOsceSequence(osceSequence);
+ 		course.persist();
+ 	}
+ 	
+ 	public static List<Osce> findAllOsceByStatusAndSemesterId(Long semesterId){
+		EntityManager em = entityManager();
+		TypedQuery<Osce> q = em.createQuery("SELECT o FROM Osce AS o WHERE o.semester = " + semesterId + " AND o.osceStatus != " + OsceStatus.OSCE_BLUEPRINT.ordinal(),Osce.class);
+		return q.getResultList();
+				
+	}
+ 	
+ 	public static void calculateManualOsce(Long osceId)
+ 	{
+ 		try
+ 		{
+ 			Osce osce = Osce.findOsce(osceId);
+ 	 		
+ 	 		ManualOsceTimeTableCalculation manualOsceTimeTableCalculation = new ManualOsceTimeTableCalculation(osce);
+ 	 		manualOsceTimeTableCalculation.calculateTime();
+ 	 		manualOsceTimeTableCalculation.printResult();
+ 	 		manualOsceTimeTableCalculation.saveOsceData();
+ 		}
+ 		catch (Exception e) {
+ 			e.printStackTrace();
+ 		} 		
+ 	}
+ 	
+ 	public static String createAssignmentInManualOsce(Long osceId)
+ 	{
+ 		try
+ 		{
+ 			Osce osce = Osce.findOsce(osceId);
+ 	 		
+ 			List<OscePost> oscePostList = OscePost.findOscePostOfNullRoleByOsceId(osceId);
+ 			
+ 			if (oscePostList.isEmpty())
+ 			{
+ 				List<OscePostRoom> oscePostRoomList = OscePostRoom.findOscePostRoomOfNullRoomByOsceId(osceId);
+ 				
+ 				if (oscePostRoomList.isEmpty())
+ 				{
+ 					ManualOsceTimeTableCalculation manualOsceTimeTableCalculation = new ManualOsceTimeTableCalculation(osce);
+ 	 	 	 		manualOsceTimeTableCalculation.calculateTime();
+ 	 	 	 		manualOsceTimeTableCalculation.createAssignment();
+ 	 	 	 		
+ 	 	 	 		osce.setOsceStatus(OsceStatus.OSCE_CLOSED);
+ 	 	 	 		osce.persist();
+ 	 	 	 		
+ 	 	 	 		return "";
+ 				}
+ 				
+ 				return "manualOsceClostRoomError";
+ 			}
+ 			
+ 	 		return "manualOsceClostRoleError";
+ 		}
+ 		catch (Exception e) {
+ 			Log.error(e.getMessage(), e);
+ 			return "manualOsceCloseError";
+ 		} 		
+ 	}
+ 	
+ 	public static Osce clearAllManualOsce(Long osceId)
+ 	{
+ 		try
+ 		{
+ 			Osce osce = Osce.findOsce(osceId);
+ 	 		
+ 	 		List<OsceDay> osceDayList = osce.getOsce_days();
+ 	 		
+ 	 		if (osceDayList.size() > 0)
+ 	 		{
+ 	 			OsceDay oldOsceDay = osceDayList.get(0);
+ 	 			Date timeStart = oldOsceDay.getTimeStart();
+ 	 			Date osceDate = oldOsceDay.getOsceDate();
+ 	 			
+ 	 			int osceDayListSize = osceDayList.size();
+ 	 			List<Long> removeOsceDayIdList = new ArrayList<Long>();
+ 	 			
+ 	 			for (OsceDay osceDay : osceDayList)
+ 	 			{
+ 	 				removeOsceDayIdList.add(osceDay.getId());
+ 	 			}
+ 	 			
+ 	 			for (int i=0; i<removeOsceDayIdList.size(); i++)
+ 	 			{
+ 	 				OsceDay osceDay = OsceDay.findOsceDay(removeOsceDayIdList.get(i));
+ 	 				osce.getOsce_days().remove(osceDay);
+ 	 				if (osceDay != null)
+ 	 					osceDay.remove();
+ 	 			}
+ 	 			
+ 	 			List<OscePostBlueprint> oscePostBlueprintList = osce.getOscePostBlueprints();
+ 	 			int opbSize = oscePostBlueprintList.size();
+ 	 			for (OscePostBlueprint oscePostBlueprint : oscePostBlueprintList)
+ 	 			{
+ 	 				osce.getOscePostBlueprints().remove(oscePostBlueprint);
+ 	 				
+ 	 				if (oscePostBlueprint != null)
+ 	 					oscePostBlueprint.remove();
+ 	 			}
+ 	 			
+ 	 			OsceDay osceDay = new OsceDay();
+ 	 	 		osceDay.setOsceDate(osceDate);
+ 	 	 		osceDay.setTimeStart(timeStart);
+ 	 	 		osceDay.setTimeEnd(timeStart);
+ 	 	 		osceDay.setOsce(osce);
+ 	 	 		osceDay.persist();
+ 	 	 		
+ 	 	 		OsceSequence osceSequence = new OsceSequence();
+ 	 	 		osceSequence.setLabel("A");
+ 	 	 		osceSequence.setNumberRotation(1);
+ 	 	 		osceSequence.setOsceDay(osceDay);
+ 	 	 		osceSequence.persist();
+ 	 	 		
+ 	 	 		Course course = new Course();
+ 	 	 		course.setColor("color_1");
+ 	 	 		course.setOsce(osce);
+ 	 	 		course.setOsceSequence(osceSequence);
+ 	 	 		course.persist();
+ 	 	 		
+ 	 	 		List<Course> courseList = new ArrayList<Course>();
+ 	 	 		courseList.add(course);
+ 	 	 		osceSequence.setCourses(courseList);
+ 	 	 		
+ 	 	 		List<OsceSequence> osceSequenceList = new ArrayList<OsceSequence>();
+ 	 	 		osceSequenceList.add(osceSequence);
+ 	 	 		osceDay.setOsceSequences(osceSequenceList);
+ 	 	 		
+ 	 	 		List<OsceDay> newOsceDayList = new ArrayList<OsceDay>();
+ 	 	 		newOsceDayList.add(osceDay);
+ 	 	 		osce.setOsce_days(newOsceDayList);
+ 	 		}
+ 	 		
+ 	 		osce.setOsceStatus(OsceStatus.OSCE_NEW);
+ 	 		osce.persist();
+ 	 		
+ 	 		return osce;
+ 		}
+ 		catch (Exception e) {
+ 			e.printStackTrace();
+ 		}
+ 		return null;	
+ 	}
+ 	
+ 	@Transactional
+ 	public void deleteOsceDayAndBlueprintByOsceId(Long osceId)
+ 	{
+ 		String sql = "delete from osce_day where osce = " + osceId;
+		entityManager().createNativeQuery(sql).executeUpdate();
+ 	}
+
+ 	public static Osce changeOsceStatus(Long osceId, OsceStatus osceStatus)
+ 	{
+ 		Osce osce = Osce.findOsce(osceId);
+ 		boolean flag = true; 
+ 		
+ 		for (OsceDay osceDay : osce.getOsce_days())
+ 		{
+ 			if (osceDay.getOsceDayRotations().isEmpty())
+ 			{
+ 				flag = false;
+ 				break;
+ 			}
+ 		}
+ 		
+ 		if (flag)
+ 		{
+ 			osce.setOsceStatus(osceStatus);
+ 	 		osce.persist(); 	 		
+ 	 		return osce;
+ 		}
+ 		else
+ 		{
+ 			return null;
+ 		}
+ 		
+ 	}
 }

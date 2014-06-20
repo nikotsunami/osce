@@ -22,6 +22,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImporteOSCEPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ManualOsceDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ManualOscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsceDetailsPlace;
@@ -306,6 +308,16 @@ public class FilterForMainPlaces implements AsyncFilteredActivityMapper.Filter {
 			StudentManagementDetailsPlace studentManagementDetailsPlace = (StudentManagementDetailsPlace) place;
 			return new StudentManagementPlace(studentManagementDetailsPlace.getToken());
 		}
+		
+		if (place instanceof ManualOscePlace)
+			return (ManualOscePlace) place;
+		
+		if (place instanceof ManualOsceDetailsPlace)
+		{
+			ManualOsceDetailsPlace manualOsceDetailsPlace = (ManualOsceDetailsPlace) place;
+			return new ManualOscePlace(manualOsceDetailsPlace.getToken());
+		}
+		
 		return null;
 	}
 

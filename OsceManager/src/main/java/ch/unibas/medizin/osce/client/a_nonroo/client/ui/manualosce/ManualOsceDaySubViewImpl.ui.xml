@@ -1,0 +1,108 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:m="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.manualosce">
+	<ui:style src="../../styles.css">
+		.spacing10
+		{
+			padding: 2px 10px;
+		}		
+			
+		.heading {
+			font-weight: bold;
+			margin-bottom: 8px;
+			margin-top: 8px;
+		}
+		
+		.osceDayColor{
+			background-color: white;
+			margin-right: 10px;
+			margin-top: 8px;
+		}
+		
+		.labelHeader{
+			font-weight: bold;
+			padding: 2px 5px;
+		}
+	</ui:style>
+	<ui:with type="ch.unibas.medizin.osce.shared.i18n.OsceConstants" field="constants"></ui:with>
+			
+	<g:HorizontalPanel>
+		<g:cell horizontalAlignment="ALIGN_LEFT" width="250px">
+			<g:VerticalPanel ui:field="mainDayHP" addStyleNames="{style.patientTopContainer} {style.osceDayColor}" height="612px" width="250px">
+	
+				<g:HorizontalPanel horizontalAlignment="center" width="250px">
+					 <g:Label ui:field="dayLabel" styleName="{style.spacing10} {style.heading}"/>				 
+				</g:HorizontalPanel>
+				 
+				<g:VerticalPanel ui:field="dayContentVerticalPanel" horizontalAlignment="ALIGN_CENTER" width="100%" height="100%">
+					<g:VerticalPanel ui:field="presentsVerticlePanel" spacing="10" width="100%" height="50%">
+						<g:HTMLPanel>
+							<g:Label ui:field="baseDataHeaderLbl" styleName="{style.labelHeader}" text="{constants.manualOsceBaseData}"> </g:Label>
+							
+							<table cellSpacing="5">
+								<tr>
+									<td><g:Label ui:field="dateLabel" text="{constants.circuitDate}"></g:Label></td>
+									<td><d:DateBox ui:field="dateTextBox" ></d:DateBox></td> 
+								</tr>
+								<tr>
+									<td><g:Label ui:field="startTimeLable" text="{constants.circuitStart}"></g:Label></td>
+									<td><g:TextBox ui:field="startTimeTextBox" ></g:TextBox></td>
+								</tr>							
+								<tr>									
+									<td colspan="2" align="center" spacing="5">
+										<s:IconButton ui:field="saveOsceDayValue" icon="disk" text="{constants.save}"></s:IconButton>
+										<s:IconButton ui:field="deleteOsceDay" icon="trash" text="{constants.delete}"></s:IconButton>
+									</td>									
+								</tr>
+							</table>
+						</g:HTMLPanel>					
+					</g:VerticalPanel>
+					
+					<g:VerticalPanel ui:field="calculationPanel" spacing="10" width="100%" height="50%"> 
+						<g:HTMLPanel>
+							<g:Label ui:field="calDataHeaderLbl" styleName="{style.labelHeader}" text="{constants.manualOsceCalculatedData}"> </g:Label>
+							
+							<table cellSpacing="5">
+								<tr>
+									<td><g:Label text="1. {constants.manualOsceLongBreak}"></g:Label></td>
+									<td><g:Label ui:field="firstLongBreakValue"></g:Label></td>
+								</tr>
+								<tr>	
+									<td><g:Label text="{constants.manualOsceLunchBreak}"></g:Label></td>
+									<td><g:Label ui:field="lunchBreakValue"></g:Label></td>
+								</tr>
+								<tr>
+									<td><g:Label text="2. {constants.manualOsceLongBreak}"></g:Label></td>
+									<td><g:Label ui:field="secondLongBreakValue"></g:Label></td>
+								</tr>
+								<tr>
+									<td><g:Label text="{constants.circuitEnd}"></g:Label></td>
+									<td><g:Label ui:field="timeEndValue"></g:Label></td>
+								</tr>
+								<tr>
+									<td><g:Label text="{constants.manualOsceStudent}"></g:Label></td>
+									<td><g:Label ui:field="studentValue"></g:Label></td>
+								</tr>
+								<tr>
+									<td><g:Label text="{constants.manualOsceSP}"></g:Label></td>
+									<td><g:Label ui:field="standardizedPatientValue"></g:Label></td>
+								</tr>
+								<tr>
+									<td><g:Label text="{constants.manualOsceRoom}"></g:Label></td>
+									<td><g:Label ui:field="roomValue"></g:Label></td>
+								</tr>
+							</table>
+						</g:HTMLPanel>		
+					</g:VerticalPanel>
+				</g:VerticalPanel>
+			</g:VerticalPanel>	
+		</g:cell>
+		
+		<g:cell horizontalAlignment="ALIGN_LEFT" verticalAlignment="ALIGN_TOP" >
+			<g:VerticalPanel ui:field="sequencePanel">
+				<!-- <m:ManualOsceSequenceViewImpl ui:field="manualOsceSequenceViewImpl"></m:ManualOsceSequenceViewImpl> -->
+			</g:VerticalPanel>					
+		</g:cell>
+	</g:HorizontalPanel>
+		
+</ui:UiBinder> 

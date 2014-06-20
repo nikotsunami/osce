@@ -16,6 +16,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImportObjectiveViewPl
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ImporteOSCEPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.IndividualSchedulesPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.LogPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ManualOsceDetailsPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.ManualOscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsMaDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
@@ -316,6 +318,14 @@ public class OsMaHeaderLogic implements OsMaHeader.Delegate {
 		else if(place instanceof StudentManagementPlace){
 			placeDescription ="StudentManagementPlace";
 		}
+		
+		else if (place instanceof ManualOscePlace){
+			placeDescription = "ManualOscePlace";
+		}			
+		else if (place instanceof ManualOsceDetailsPlace){
+			placeDescription = "ManualOsceDetailsPlace";
+		}
+		
 		else {
 			Log.warn("Unknown instance of place");
 			placeDescription = "?";

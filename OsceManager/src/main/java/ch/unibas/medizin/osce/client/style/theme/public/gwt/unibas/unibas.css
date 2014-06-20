@@ -103,7 +103,7 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-CheckBox label {
-	bottom: 3px;
+	bottom: 8px;
     position: relative;
 }
 
@@ -783,7 +783,7 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-RadioButton label {
-	bottom: 3px;
+	bottom: 8px;
 	position: relative;
 }
 
@@ -3778,4 +3778,28 @@ color: #f1b532;
     position: absolute;
     top: -8px;
     width: 0;
+}
+
+.setOscePostViewHeaderPanelColor
+{
+	background-color: #A8CCFF;
+	border-radius: 19px 19px 19px 19px;
+	min-height: 30px;
+	padding-left: 1px;
+	padding-right: 1px;
+	padding-top: 1px;
+	margin-bottom: 8px;
+}
+
+.setOsceCreatePostViewHeaderPanelColor
+{
+	background-color: #DFECFF;
+	border-radius: 19px 19px 19px 19px;
+	height: 30px;
+	max-height: 30px;
+	min-height: 30px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 6px;
+	margin-bottom: 8px;
 }

@@ -2,7 +2,7 @@ package ch.unibas.medizin.osce.client.style.widgets;
 
 
 
-import com.allen_sauer.gwt.log.client.Log;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -135,7 +135,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
                             //tabBarFlowPanel.add(focusForMouseWheelPanel);
                            
                            tabBarFlowPanel.add(horizontalPanelForButton);
-                           Log.info("flow panel width--"+this.getElement().getStyle().getWidth());
+                           //Log.info("flow panel width--"+this.getElement().getStyle().getWidth());
                           // scrollPanel.setWidth(tabBarFlowPanel.getElement().getStyle().getWidth());
                            
                             tabBarFlowPanel.add(scrollPanel);
@@ -152,8 +152,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 					
 					@Override
 					public void onClick(ClickEvent event) {
-						// TODO Auto-generated method stub
-						Log.info("left click");
+						//Log.info("left click");
 						onresizecall();
 						scrollPanel.setHorizontalScrollPosition(scrollPanel.getHorizontalScrollPosition()- mouseWheelScrollPositionStep);
 					}
@@ -163,8 +162,6 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 					
 					@Override
 					public void onClick(ClickEvent event) {
-						// TODO Auto-generated method stub
-						Log.info("right click");
 						
 						/*if(h2.getHorizontalScrollPosition() < HPwidth-50)
 							h2.setHorizontalScrollPosition(h2.getHorizontalScrollPosition() + mouseWheelScrollPositionStep);
@@ -177,8 +174,6 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 						if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()+tabBar.getWidget(tabBar.getWidgetCount()-1).getOffsetWidth()>(left.getAbsoluteLeft()+scrollPanel.getOffsetWidth()))
 				    	{
 				    	//if(h2.getHorizontalScrollPosition() < HPwidth-50+10)
-							System.out.println("total width--"+tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft());
-							System.out.println("position--"+ scrollPanel.getHorizontalScrollPosition());
 							scrollPanel.setHorizontalScrollPosition(scrollPanel.getHorizontalScrollPosition() + mouseWheelScrollPositionStep);
 				    	}
 					}
@@ -199,7 +194,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 						    	/*if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(offset+50))
 						    	{*/
 						    	//if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(left.getAbsoluteLeft()+getOffsetWidth()-320))
-						    	Log.info(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()+tabBar.getWidget(tabBar.getWidgetCount()-1).getOffsetWidth()+">"+(left.getAbsoluteLeft()+scrollPanel.getOffsetWidth()));
+						    	//Log.info(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()+tabBar.getWidget(tabBar.getWidgetCount()-1).getOffsetWidth()+">"+(left.getAbsoluteLeft()+scrollPanel.getOffsetWidth()));
 						    	if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()+tabBar.getWidget(tabBar.getWidgetCount()-1).getOffsetWidth()>(left.getAbsoluteLeft()+scrollPanel.getOffsetWidth()))
 						    	{
 						    	//if(h2.getHorizontalScrollPosition() < HPwidth-50+10)
@@ -218,8 +213,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 					
 					@Override
 					public void onClick(ClickEvent event) {
-						// TODO Auto-generated method stub
-						Log.info("on click down");
+						//Log.info("on click down");
 						if(tabList.isShowing())
 						{
 							tabList.hide();
@@ -240,8 +234,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 					
 					@Override
 					public void onClick(ClickEvent event) {
-						// TODO Auto-generated method stub
-						Log.info("selected index--"+tabLIstBox.getSelectedIndex());
+						//Log.info("selected index--"+tabLIstBox.getSelectedIndex());
 						tabList.hide();
 						onresizecall();
 						if(tabLIstBox.getSelectedIndex()==-1)
@@ -307,7 +300,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
         public boolean remove(int index) {
         	
         	Boolean result=super.remove(index);       	
-        	Log.info("remove call");
+        	//Log.info("remove call");
         	tabBar.remove(index);
         	tabLIstBox.removeItem(index);      	
         	return result;
@@ -331,7 +324,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
         @Override
         public void insert(Widget child, String text, int beforeIndex) {
         	super.insert(child, text, beforeIndex);
-        	Log.info("insert call----"+text);
+        	//Log.info("insert call----"+text);
             tabLIstBox.addItem(text);
            
             
@@ -354,7 +347,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 
         public void onresizecall()
         {
-        	Log.info("resize---"+this.getOffsetWidth());
+        	//Log.info("resize---"+this.getOffsetWidth());
         	scrollPanel.setWidth((this.getOffsetWidth()-40)+"px");
         }
         @Override
@@ -399,7 +392,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
          	  
          	 offset=this.getOffsetWidth();
          	// Window.alert("value--"+this.getOffsetWidth());
-         	Log.info("resize---"+this.getOffsetWidth());
+         	//Log.info("resize---"+this.getOffsetWidth());
          	//onresizecall();
         }
         
@@ -524,7 +517,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
         }
 
         private void scrollTo(int pos) {
-        	Log.info("inside scrolled to method");
+        	//Log.info("inside scrolled to method");
         	scrollPanel.getElement().getStyle().setLeft(pos, Unit.PX);
                
                

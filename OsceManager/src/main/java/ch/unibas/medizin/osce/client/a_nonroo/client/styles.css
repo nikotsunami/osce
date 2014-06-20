@@ -771,3 +771,47 @@ body {
 		height: 12px;
 	}
 /* module 16 end */
+
+.osceDayAddPanel{
+	border-color: #808080;
+	border-style: dashed;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-radius:16px;	
+	background-color: white;
+	width: 250px;
+	height: 60px;
+	border-width: 2px;
+}
+
+.osceSequenceAddPanel{
+	width: 98%;
+	border-color: #808080;
+	border-style: dashed;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-radius:16px;	
+	background-color: white;
+	width: 25px;
+	height: 268px;
+	border-width: 2px;
+}
+
+.parcourAddPanel{
+	width: 98%;
+	border-color: #808080;
+	border-style: dashed;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-radius:16px;	
+	background-color: white;
+	width: 25px;
+	height: 268px;
+	border-width: 2px;
+}

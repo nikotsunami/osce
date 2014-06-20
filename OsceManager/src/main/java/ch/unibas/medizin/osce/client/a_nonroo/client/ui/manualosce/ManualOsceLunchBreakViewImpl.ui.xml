@@ -1,0 +1,25 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style src="../../styles.css">
+		.padTop3{
+			margin: 0 0 8px 0;
+		} 
+		.textBoxStyle{
+			width: 30px !important;
+			height: 22px !important;
+			margin: 0px !important;
+		}
+	</ui:style>
+
+	<ui:with type="ch.unibas.medizin.osce.shared.i18n.OsceConstants" field="constants"></ui:with>
+	
+	<g:HorizontalPanel spacing="10" addStyleNames="{style.patientTopContainer} {style.padTop3} {style.setWhiteColor}"  width="165px"  height="40px">
+		<g:cell verticalAlignment="ALIGN_MIDDLE">
+			<g:Label text="{constants.manualOsceBreakDuration} : "></g:Label>
+		</g:cell>
+		<g:cell verticalAlignment="ALIGN_MIDDLE">
+			<g:TextBox ui:field="lunchBreakDuration" styleName="{style.textBoxStyle}"></g:TextBox>
+		</g:cell>
+	</g:HorizontalPanel>
+</ui:UiBinder> 

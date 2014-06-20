@@ -1,0 +1,45 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	<ui:style src="../../styles.css">
+		.padTop3{
+			margin-top: 8px;
+		} 
+		.textBoxStyle{
+			width: 30px !important;
+			height: 22px !important;
+			margin: 0px !important;
+			text-align: center;
+		}
+		.mainPanel{
+			margin-top: 8px;
+		}
+		.labelStyle{
+			margin: 5px !important;			
+		}
+	</ui:style>
+	<ui:with type="ch.unibas.medizin.osce.shared.i18n.OsceConstants" field="constants"></ui:with>
+
+	<g:HorizontalPanel addStyleNames="{style.patientTopContainer} {style.mainPanel} {style.setWhiteColor}"  width="40px"  height="268px">
+		<g:VerticalPanel width="100%" spacing="10" height="100%" verticalAlignment="middle" horizontalAlignment="center" >
+			<g:VerticalPanel   horizontalAlignment="center"  width="20px" verticalAlignment="middle">
+				<g:HorizontalPanel spacing="5" ui:field="sequencePanel">
+					<g:Label ui:field="nameOfSequence" styleName="{style.labelStyle}"></g:Label>
+					<g:TextBox ui:field="editNameOfSequence" styleName="{style.textBoxStyle}"></g:TextBox>
+					<s:IconButton ui:field="editSequence"> </s:IconButton>					
+				</g:HorizontalPanel>
+			</g:VerticalPanel>
+		
+			<g:VerticalPanel horizontalAlignment="center" spacing="2" verticalAlignment="middle">
+				<s:IconButton ui:field="breakSooner" icon="triangle-1-n" text="{constants.manualOsceBreakSooner}" width="90px"></s:IconButton>
+				<s:IconButton ui:field="breakLater" icon="triangle-1-s" text="{constants.manualOsceBreakLater}" width="90px"></s:IconButton>
+			</g:VerticalPanel>
+		
+			<g:HorizontalPanel spacing="5">
+				<s:IconButton ui:field="removeRotation" icon="circle-minus"></s:IconButton>
+				<g:TextBox ui:field="rotationNumber" styleName="{style.textBoxStyle}"></g:TextBox>
+				<s:IconButton ui:field="addRotation" icon="circle-plus"></s:IconButton>
+			</g:HorizontalPanel>
+		</g:VerticalPanel>
+	</g:HorizontalPanel>
+</ui:UiBinder> 

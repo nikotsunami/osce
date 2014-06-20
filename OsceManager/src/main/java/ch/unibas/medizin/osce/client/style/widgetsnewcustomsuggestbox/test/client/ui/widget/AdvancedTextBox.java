@@ -6,7 +6,6 @@ package ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clie
 
 
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
@@ -71,11 +70,11 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 
 	public AdvancedTextBox() {		
 		this(null);
-		Log.info("Constructor1");
+		//Log.info("Constructor1");
 	}
 
 	public AdvancedTextBox(final String defautText) {
-		Log.info("Constructor2");
+		//Log.info("Constructor2");
 		this.defaultText = defautText;
 		addFocusHandler(new FocusHandler() {
 

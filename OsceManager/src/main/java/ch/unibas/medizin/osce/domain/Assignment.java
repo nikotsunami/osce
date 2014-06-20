@@ -38,6 +38,7 @@ import ch.unibas.medizin.osce.server.util.file.ExcelUtil;
 import ch.unibas.medizin.osce.server.util.file.QwtUtil;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.BellAssignmentType;
+import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.Sorting;
@@ -1504,9 +1505,6 @@ public class Assignment {
     	 TypedQuery<Integer> query1 = em.createQuery(strSql,Integer.class);
     	 List<Integer> seqNumList = query1.getResultList();
     	 
-    	 for (Integer seq : seqNumList)
-    		 System.out.println("~~~SEQ NO : " + seq);
-    	 
     	 if (seqNumList.size() > 0)
     	 {
     		 Integer seqNum = seqNumList.get(0);
@@ -1649,7 +1647,12 @@ public class Assignment {
     			for (int i=0; i<diff; i++)
     			{
     				// create break assignment
-    				Assignment assignment = listAssignmentSPslot.get(0);
+					Assignment assignment;
+    				Assignment spAss = findAssignmentByOscePostAndOsceDayOrderByTimeEndDesc(osceDayId, oscePostId, sequenceNumber);
+    				if (spAss == null)
+    					assignment = listAssignmentSPslot.get(0);
+    				else
+    					assignment = spAss;
     				
 					Assignment ass = new Assignment();
 					ass.setType(AssignmentTypes.PATIENT);
@@ -1666,6 +1669,19 @@ public class Assignment {
     	 }
     	 
     	 return listAssignmentSPslot;
+     }
+     
+     public static Assignment findAssignmentByOscePostAndOsceDayOrderByTimeEndDesc(Long osceDayId, Long oscePostId, Integer sequenceNumber)
+     {
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE type = 1 AND a.osceDay = " + osceDayId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " AND a.sequenceNumber = " + sequenceNumber + " ORDER BY a.timeEnd desc";
+    	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+    	 if (query.getResultList().isEmpty() == false)
+    	 {
+    		 return query.getResultList().get(0);
+    	 }
+    	 
+    	 return null;
      }
      
      public static Assignment findAssignmentForSPBreak(Long osceDayId, Date timeStart, Date timeEnd)
@@ -3394,5 +3410,41 @@ public class Assignment {
 		 query.setParameter("timeEnd", timeEnd);
 		 List<Assignment> assignmentList = query.getResultList(); 
 		 return assignmentList;
+	 }
+	 
+	 @Transactional
+	 public void insertAssignment(String sql) {
+		 javax.persistence.Query query = entityManager().createNativeQuery(sql); 
+		 query.executeUpdate();
+	 }
+	 
+	 public static Osce removeManualOsceAssignmentByOsceId(Long osceId)
+	 {
+		 new Assignment().removeAssignment(osceId);
+		 
+		 Osce osce = Osce.findOsce(osceId);
+		 osce.setOsceStatus(OsceStatus.OSCE_FIXED);
+		 osce.persist();
+		 
+		 return osce;
+	 }
+	 
+	 @Transactional
+	 public void removeAssignment(Long osceId)
+	 {
+		 //remove student assignment
+		 String studentSql = "delete from assignment where type = 0 and osce_day in (select id from osce_day where osce = " + osceId +")";
+		 javax.persistence.Query studentQuery = entityManager().createNativeQuery(studentSql); 
+		 studentQuery.executeUpdate();
+		 
+		 //remove SP assignment
+		 String spSql = "delete from assignment where type = 1 and osce_day in (select id from osce_day where osce = " + osceId +")";
+		 javax.persistence.Query spQuery = entityManager().createNativeQuery(spSql); 
+		 spQuery.executeUpdate();
+		 
+		 //remove examiner assignment
+		 String examinerSql = "delete from assignment where type = 2 and osce_day in (select id from osce_day where osce = " + osceId +")";
+		 javax.persistence.Query examinerQuery = entityManager().createNativeQuery(examinerSql); 
+		 examinerQuery.executeUpdate();
 	 }
 } 

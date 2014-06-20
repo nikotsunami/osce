@@ -3,7 +3,6 @@ package ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clie
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.AdvancedTextBox;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -336,7 +335,7 @@ public class SuggestTextBoxWidgetImpl<T, W extends EventHandlingValueHolderItem<
 	
 	@UiHandler("textField")
 	public void onMouseDown(MouseDownEvent event) {
-			Log.info("click");
+			//Log.info("click");
 			
 			
 			//chane for click

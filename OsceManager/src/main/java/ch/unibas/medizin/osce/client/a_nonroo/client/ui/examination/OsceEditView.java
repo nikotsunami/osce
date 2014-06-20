@@ -7,12 +7,15 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
+import ch.unibas.medizin.osce.shared.OsceCreationType;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ValueListBox;
 
 public interface OsceEditView extends IsWidget {
 	void setDelegate(Delegate delegate);
@@ -40,5 +43,5 @@ public interface OsceEditView extends IsWidget {
 	Set<TaskProxy> getTaskValue();
 	Map getOsceMap();
 	HorizontalPanel getHorizontalTabPanel();	
-
+	DivElement getLabelOsceCreationType();
 }

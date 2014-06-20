@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
+import ch.unibas.medizin.osce.shared.OsceCreationType;
 import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -59,6 +61,18 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	
 	@UiField(provided = true)
 	public ValueListBox<StudyYears> studyYear = new ValueListBox<StudyYears>(new EnumRenderer<StudyYears>());
+	
+	@UiField(provided = true)
+	public ValueListBox<OsceCreationType> osceCreationType = new ValueListBox<OsceCreationType>(new AbstractRenderer<OsceCreationType>() {
+
+		@Override
+		public String render(OsceCreationType object) {
+			if (object != null)
+				return object.toString();
+			else
+				return "";
+		}
+	});
 	
 	@UiField
 	public TextBox name;
@@ -172,6 +186,9 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 
 	@UiField
 	DivElement labelSpStayInPost;
+	
+	@UiField
+	public DivElement labelOsceCreationType;
 	
 	//remove number post
 //	@UiField
@@ -310,6 +327,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		labelSpStayInPost.setInnerText(constants.osceSpStayInPost());
 		labelLunchBreakRequiredTime.setInnerText(constants.osceLunchBreakRequiredFiled());
 		labelLOngBreakRequiredTime.setInnerText(constants.osceLongBreakRequiredFiled());
+		labelOsceCreationType.setInnerText(constants.osceCreationType());
 		
 		//remove number post
 		//numberPost.setInnerText(constants.circuitStation());
@@ -339,7 +357,8 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		osceMap.put("lunchBreakRequiredTime", lunchBreakRequiredTime);
 		osceMap.put("longBreakRequiredTime", longBreakRequiredTime);
 		
-		
+		osceCreationType.setValue(OsceCreationType.Automatic);
+		osceCreationType.setAcceptableValues(Arrays.asList(OsceCreationType.Automatic, OsceCreationType.Manual));
 		
 		
 		// E Highlight onViolation
@@ -610,5 +629,9 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 
 	public HorizontalPanel getHorizontalTabPanel() {
 		return horizontalTabPanel;
+	}
+	
+	public DivElement getLabelOsceCreationType() {
+		return labelOsceCreationType;
 	}
 }

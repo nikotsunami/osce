@@ -31,6 +31,7 @@ import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.OsceCreationType;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
@@ -52,6 +53,7 @@ import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -182,6 +184,11 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 						((OsceEditViewImpl)view).osceValue.setVisible(false);
 						((OsceEditViewImpl)view).labelOsceForTask.setInnerText("");
 						
+						if (OsceStatus.OSCE_NEW.equals(osce.getOsceStatus()) == false)
+						{
+							((OsceEditViewImpl)view).osceCreationType.removeFromParent();
+							((OsceEditViewImpl)view).labelOsceCreationType.removeFromParent();
+						}
 						
 						
 						
@@ -227,6 +234,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 
 			OsceProxy osce = request.create(OsceProxy.class);
 			this.osce = osce;
+			this.osce.setOsceCreationType(OsceCreationType.Automatic);
 			view.setEditTitle(false);
 			
 			requests.roomRequestNonRoo().countTotalRooms().fire(new OSCEReceiver<Integer>() {
@@ -239,8 +247,8 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 			});
 
 		} else {
-
 			view.setEditTitle(true);
+			
 		}
 
 		Log.info("edit");
@@ -252,6 +260,8 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 		
 		Log.info("flush");
 		editorDriver.flush();
+		
+		
 		Log.debug("Create für: " + osce.getId());
 	}
 
@@ -299,6 +309,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 		}
 	});*/
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void saveClicked() {
 		Log.info("saveClicked");
@@ -310,6 +321,11 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 		{
 			OsceRequest osceRequest=requests.osceRequest();
 			osce = osceRequest.edit(osce);
+			
+			if (OsceStatus.OSCE_NEW.equals(osce.getOsceStatus()) == true)
+			{
+				osce.setOsceCreationType(((OsceEditViewImpl)view).osceCreationType.getValue());
+			}
 			
 			osce.setName(((OsceEditViewImpl)view).name.getValue());
 			osce.setMaxNumberStudents(((OsceEditViewImpl)view).maxNumberStudents.getValue());
@@ -464,6 +480,8 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 			osceProxy.setSecurity(OSCESecurityStatus.FEDERAL_EXAM);
 			osceProxy.setOsceSecurityTypes(OsceSecurityType.federal);
 			osceProxy.setSpStayInPost(((OsceEditViewImpl)view).spStayInPost.isChecked());
+			osceProxy.setOsceCreationType(((OsceEditViewImpl)view).osceCreationType.getValue());
+			
 			//Set<TaskProxy> setTaskProxy = new HashSet<TaskProxy>();
 			//setTaskProxy=((OsceEditViewImpl)view).osceValue.getValue().getTasks();
 			//osceProxy.setTasks(setTaskProxy);
@@ -525,85 +543,77 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 			}*/
 		
 			osceRequest.persist().using(osceProxy).fire(new OSCEReceiver<Void>(view.getOsceMap()) {
-				// E Highlight onViolation	
-				
 				@Override
 				public void onSuccess(Void response) {
-					// TODO Auto-generated method stub
-			//		System.out.println("INside success");
-					Log.info(" task edited successfully");
-				//	init2();
-					Log.info("Call Init Search from onSuccess");
-					//init();
-					
 					save = true;
 					
-					//save tasks
-					//Issue # 122 : Replace pull down with autocomplete.
-					/*if(((OsceEditViewImpl)view).osceValue.getValue()!=null)
-					{*/
 					if(((OsceEditViewImpl)view).osceValue.getSelected()!=null)
 					{
-						//Issue # 122 : Replace pull down with autocomplete.	
-					
-					requests.osceRequestNonRoo().findMaxOsce().fire(new OSCEReceiver<OsceProxy>() {
-
-						@Override
-						public void onViolation(Set<Violation> errors) {
-							Iterator<Violation> iter = errors.iterator();
-							String message = "";
-							while (iter.hasNext()) {
-								message += iter.next().getMessage() + "<br>";
+						requests.osceRequestNonRoo().findMaxOsce().fire(new OSCEReceiver<OsceProxy>() {
+	
+							@Override
+							public void onViolation(Set<Violation> errors) {
+								Iterator<Violation> iter = errors.iterator();
+								String message = "";
+								while (iter.hasNext()) {
+									message += iter.next().getMessage() + "<br>";
+								}
 							}
-							Log.warn(" in Osce -" + message);
-
-							// TODO mcAppFactory.getErrorPanel().setErrorMessage(message);
-
-						}
-
-						@Override
-						public void onSuccess(OsceProxy response) {
-							// TODO Auto-generated method stub
-							System.out.println("max value:---"+response.getName());
-							
-							//Issue # 122 : Replace pull down with autocomplete.
-							if(((OsceEditViewImpl)view).osceValue.getSelected()==null)
-							{
-								return;
-							}
-					//Issue # 122 : Replace pull down with autocomplete.
-					//Issue # 122 : Replace pull down with autocomplete.
-					//Iterator<TaskProxy> taskIterator=((OsceEditViewImpl)view).osceValue.getValue().getTasks().iterator();
-					Iterator<TaskProxy> taskIterator=((OsceEditViewImpl)view).osceValue.getSelected().getTasks().iterator();
-					//Issue # 122 : Replace pull down with autocomplete.
-							while(taskIterator.hasNext())
-							{
-								TaskProxy tp=taskIterator.next();
-								TaskRequest taskRequest=requests.taskRequest();
+	
+							@Override
+							public void onSuccess(OsceProxy response) {
 								
-								TaskProxy addTask=taskRequest.create(TaskProxy.class);
-								addTask.setDeadline(tp.getDeadline());
-								addTask.setIsDone(false);
-								//addTask.setIsDone(tp.getIsDone());
-								addTask.setName(tp.getName());
-								addTask.setAdministrator(tp.getAdministrator());
-								addTask.setOsce(response);
+								if(((OsceEditViewImpl)view).osceValue.getSelected()==null)
+								{
+									return;
+								}
+							
+								Iterator<TaskProxy> taskIterator=((OsceEditViewImpl)view).osceValue.getSelected().getTasks().iterator();
+								while(taskIterator.hasNext())
+								{
+									TaskProxy tp=taskIterator.next();
+									TaskRequest taskRequest=requests.taskRequest();
+									
+									TaskProxy addTask=taskRequest.create(TaskProxy.class);
+									addTask.setDeadline(tp.getDeadline());
+									addTask.setIsDone(false);
+									//addTask.setIsDone(tp.getIsDone());
+									addTask.setName(tp.getName());
+									addTask.setAdministrator(tp.getAdministrator());
+									addTask.setOsce(response);
+									
+									taskRequest.persist().using(addTask).fire();
+								}
 								
-								taskRequest.persist().using(addTask).fire();
+								save = true;
+								
+								editorDriver.flush();
+								
+								if (OsceStatus.OSCE_NEW.equals(response.getOsceStatus()))
+								{
+									createOsceDaySequenceAndParcour(response.getId());
+								}
+								
+								osceActivity.init();
+								placeController.goTo(new OsceDetailsPlace(osceProxy.stableId(),
+										Operation.DETAILS));
 							}
-							
-							save = true;
-							
-							editorDriver.flush();
-							osceActivity.init();
-							placeController.goTo(new OsceDetailsPlace(osceProxy.stableId(),
-									Operation.DETAILS));
-						}
-					});
+						});
 					
 					}
 					else
 					{
+						requests.osceRequestNonRoo().findMaxOsce().fire(new OSCEReceiver<OsceProxy>() {
+
+							@Override
+							public void onSuccess(OsceProxy response) {
+								if (OsceStatus.OSCE_NEW.equals(response.getOsceStatus()))
+								{
+									createOsceDaySequenceAndParcour(response.getId());
+								}
+							}
+						});
+						
 						editorDriver.flush();
 						osceActivity.init();
 						placeController.goTo(new OsceDetailsPlace(osceProxy.stableId(),
@@ -614,12 +624,19 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 			});
 		
 		}
-		
-		
-	
 
 	}	
 	
+	@SuppressWarnings("deprecation")
+	public void createOsceDaySequenceAndParcour(Long osceId) {
+		requests.osceRequestNonRoo().createOsceDaySequeceAndCourse(osceId).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+			}
+		});
+	}
+
 	@Override
 	public void previewButtonClicked(int left, int top) {
 		OsceEditPopupView popupView = new OsceEditPopupViewImpl();

@@ -8,8 +8,6 @@ import java.util.Map;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.SuggestOracle;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.param.Option;
 
-import com.allen_sauer.gwt.log.client.Log;
-
 
 public class DefaultSuggestOracle<T> extends SuggestOracle<T> {
 
@@ -42,7 +40,7 @@ public class DefaultSuggestOracle<T> extends SuggestOracle<T> {
 
 	public void setPossiblilities(List<T> possiblilities) {
 		this.possiblilities = possiblilities;
-		Log.info("Size: " + possiblilities.size());
+		//Log.info("Size: " + possiblilities.size());
 			
 	}
 

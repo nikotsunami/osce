@@ -5,6 +5,7 @@ import java.util.List;
 import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.domain.OsceDay;
 
@@ -34,4 +35,10 @@ public interface OsceDayRequestNooRoo extends RequestContext {
 	public abstract Request<java.util.List<OsceDayProxy>> findOSceDaysForAnOsceId(Long osceId);
 	
 	public abstract Request<java.util.List<OsceDayProxy>> findOsceDayBySemester(Long semesterId);
+	
+	public abstract Request<OsceProxy> createOsceDaySequenceCourseAndOscePost(Long osceId);
+	
+	public abstract Request<Void> removeOsceDay(Long osceDayId);
+	
+	public abstract Request<OsceDayProxy> findOsceDayByOsceSequenceId(Long osceSeqId);
 }

@@ -139,6 +139,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		labelMediumBreak.setInnerText(constants.osceMediumBreak());
 		labelLunchBreakRequiredTime.setInnerText(constants.osceLunchBreakRequiredFiled());
 		labelLOngBreakRequiredTime.setInnerText(constants.osceLongBreakRequiredFiled());
+		labelOsceCreationType.setInnerText(constants.osceCreationType());
 		
 		
 		newButton.setText(constants.osceAddTask());
@@ -302,6 +303,12 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	
 	@UiField
 	SpanElement labelLOngBreakRequiredTime;
+	
+	@UiField
+	SpanElement labelOsceCreationType;
+	
+	@UiField
+	SpanElement osceCreationType;
 	
 	
 	/* @UiField
@@ -860,6 +867,14 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		longBreakRequiredTime.setInnerText(proxy.getLongBreakRequiredTime() == 0 ? "" : String.valueOf(proxy.getLongBreakRequiredTime()));
 		}
 		
+		if (proxy.getOsceCreationType() == null)
+		{
+			osceCreationType.setInnerText("");
+		}
+		else
+		{
+			osceCreationType.setInnerText(proxy.getOsceCreationType().toString());
+		}
 		
 		System.out.println("total task"+ proxy.getTasks().size());
 		

@@ -158,4 +158,8 @@ public class CircuitViewImpl extends Composite implements CircuitView, MenuClick
 		
 		mainHTMLPanel.getElement().setAttribute("style", "margin-left: "+marginLeft+"px; width : "+width+"px;height : "+height+"px;");
 	}
+	
+	public HTMLPanel getMainHTMLPanel() {
+		return mainHTMLPanel;
+	}
 }

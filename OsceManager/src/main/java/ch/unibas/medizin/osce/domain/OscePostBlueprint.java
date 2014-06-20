@@ -125,4 +125,34 @@ public class OscePostBlueprint {
 		
 		return true;
     }
+    
+    public static int findMaxSequenceNumberByOsce(Long osceId)
+    {
+    	EntityManager em = entityManager();
+    	String sql = "select max(opb.sequenceNumber) from OscePostBlueprint opb where opb.osce.id = " + osceId;
+    	TypedQuery<Object> query = em.createQuery(sql, Object.class);
+    	
+    	if (query.getResultList().size() > 0 && query.getResultList().get(0) != null)
+    	{
+    		int maxSeqNumber = (Integer) query.getResultList().get(0);
+    		return maxSeqNumber;
+    	}
+    	else
+    	{
+    		return 0;
+    	}
+    			
+    }
+
+    public static OscePostBlueprint findOscePostBlueprintByOsceId(Long osceId, PostType postType)
+    {
+    	EntityManager em = entityManager();
+    	String sql = "select opb from OscePostBlueprint opb where opb.osce.id = " + osceId + " AND opb.postType = " + postType.ordinal();
+    	TypedQuery<OscePostBlueprint> query = em.createQuery(sql, OscePostBlueprint.class);
+    	List<OscePostBlueprint> resultList = query.getResultList();
+    	if (resultList.isEmpty())
+    		return null;
+    	else 
+    		return resultList.get(0);    				
+    }
 }

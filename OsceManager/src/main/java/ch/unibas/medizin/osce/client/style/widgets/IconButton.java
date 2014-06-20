@@ -54,6 +54,10 @@ public class IconButton extends Button {
 		construct();
 	}
 	
+	public String getIcon() {
+		return icon;
+	}
+	
 	public void setText(String text) {
 		this.text = text;
 		construct();

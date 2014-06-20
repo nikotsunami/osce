@@ -186,10 +186,16 @@
 				</td>
 				
 				<td>
-				<r:ShortBox ui:field="longBreakRequiredTime" />
+					<r:ShortBox ui:field="longBreakRequiredTime" />
 				</td>
-				<td></td>
-				<td></td>
+				
+				<td id="osceCreationType">
+					<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceCreationType">Long Break Required Time : :</div>
+				</td>
+				
+				<td>
+					<g:ValueListBox ui:field="osceCreationType" />
+				</td>
 			</tr>	
 			<tr>
 			 <td  id="spStayInPost">
