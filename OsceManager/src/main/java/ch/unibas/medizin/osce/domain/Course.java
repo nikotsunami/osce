@@ -179,5 +179,28 @@ public class Course {
   	{
   		Course course = Course.findCourse(courseId);
   		course.remove();
-  	}  	
+  	}
+  	
+  	public static Boolean checkAndPersistColorToCourse(Long courseId, String color)
+  	{
+  		Course course = Course.findCourse(courseId);
+  		OsceSequence osceSequence = course.getOsceSequence();
+  		boolean flag = false;
+  		for (Course course1 : osceSequence.getCourses())
+  		{
+  			if (course1.getColor().equals(color))
+  			{
+  				flag = true;
+  				break;
+  			}
+  		}
+  		
+  		if (flag == false)
+  		{
+  			course.setColor(color);
+  			course.persist();
+  			return true;
+  		}
+  		return false;  		
+  	}
 }

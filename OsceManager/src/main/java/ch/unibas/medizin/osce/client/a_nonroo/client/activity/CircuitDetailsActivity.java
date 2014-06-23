@@ -48,7 +48,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScre
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RoomRefreshEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RotationRefreshEvent;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
-import ch.unibas.medizin.osce.client.managed.request.CourseRequest;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayRequest;
 import ch.unibas.medizin.osce.client.managed.request.OscePostBlueprintProxy;
@@ -70,7 +69,6 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.ColorPicker;
 import ch.unibas.medizin.osce.shared.Operation;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.OsceSequences;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PostType;
@@ -1270,7 +1268,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 		public void colorChanged(final HeaderView view,final String color)
 		// E Change in ParcourView
 		{
-			// Change in ParcourView
+			CourseProxy proxy=view.getProxy();
+			/*// Change in ParcourView
 			Log.info("Color Change: " + color);
 						// E Change in ParcourView			
 			CourseProxy proxy=view.getProxy();
@@ -1294,10 +1293,27 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					//((ContentViewImpl)(view.getContentView())).addStyleDependentName("selected"+color);
 					//((ContentViewImpl)(view.getContentView())).addStyleName("accordion-title-selected"+color);	
 					changeContentViewColor(((view.getContentView())),color);
-					/*((ContentViewImpl)(view.getContentView())).getContentPanel().removeStyleName("accordion-title-selected"+color);
-					((ContentViewImpl)(view.getContentView())).getContentPanel().addStyleName("accordion-title-selected"+color);*/
+					((ContentViewImpl)(view.getContentView())).getContentPanel().removeStyleName("accordion-title-selected"+color);
+					((ContentViewImpl)(view.getContentView())).getContentPanel().addStyleName("accordion-title-selected"+color);
 					// E Change in ParcourView
 					
+				}
+			});*/
+			
+			requests.courseRequestNonRoo().checkAndPersistColorToCourse(proxy.getId(), color).fire(new OSCEReceiver<Boolean>() {
+
+				@Override
+				public void onSuccess(Boolean response) {
+					if (Boolean.TRUE.equals(response))
+					{
+						view.changeHeaderColor(ColorPicker.valueOf(color));
+						changeContentViewColor(((view.getContentView())),color);
+					}
+					else if (Boolean.FALSE.equals(response))
+					{
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+						dialogBox.showConfirmationDialog("Color must be unique in all parcour of sequence");
+					}
 				}
 			});
 		}
@@ -5086,7 +5102,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 											if (oscePostRoom.size()<=0)
 											{
 												requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy()).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
-											{												
+												{												
 
 													@Override
 													public void onSuccess(OscePostRoomProxy response) 

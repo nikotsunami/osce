@@ -66,20 +66,20 @@ public class Answer {
 	private static Logger log = Logger.getLogger(Answer.class);
 
 	public static List<Answer> retrieveStudent(Long osceDayId, Long courseId) {
-		log.info("retrieveStudent :");
+		//log.info("retrieveStudent :");
 		EntityManager em = entityManager();
 		String queryString = "SELECT  a FROM Answer as a where  a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.course="
 				+ courseId + " ) order by a.student.name asc";
 
 		TypedQuery<Answer> query = em.createQuery(queryString, Answer.class);
 		List<Answer> assignmentList = query.getResultList();
-		log.info("retrieveStudent query String :" + queryString);
-		log.info("Assignment List Size :" + assignmentList.size());
+		//log.info("retrieveStudent query String :" + queryString);
+		//log.info("Assignment List Size :" + assignmentList.size());
 		return assignmentList;
 	}
 
 	public static List<ChecklistQuestion> retrieveDistinctQuestion(Long postId) {
-		log.info("retrieveDistinctQuestion :");
+		//log.info("retrieveDistinctQuestion :");
 		EntityManager em = entityManager();
 		String queryString = "SELECT  distinct a.checklistQuestion FROM Answer as a where  a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.oscePost="
 				+ postId + " ) order by a.checklistQuestion.checkListTopic.sort_order, a.checklistQuestion.sequenceNumber asc";
@@ -88,13 +88,13 @@ public class Answer {
 				ChecklistQuestion.class);
 		List<ChecklistQuestion> questionList = query.getResultList();
 
-		log.info("retrieveQuestion query String :" + queryString);
-		log.info("Assignment List Size :" + questionList.size());
+		//log.info("retrieveQuestion query String :" + queryString);
+		//log.info("Assignment List Size :" + questionList.size());
 		return questionList;
 	}
 
 	public static List<Doctor> retrieveDistinctExaminer(Long postId) {
-		log.info("retrieveDistinctExaminer :");
+		//log.info("retrieveDistinctExaminer :");
 		EntityManager em = entityManager();
 		String queryString = "SELECT  distinct a.doctor FROM Answer as a where  a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.oscePost="
 				+ postId + " ) order by a.checklistQuestion.sequenceNumber asc";
@@ -102,13 +102,13 @@ public class Answer {
 		TypedQuery<Doctor> query = em.createQuery(queryString, Doctor.class);
 		List<Doctor> questionList = query.getResultList();
 
-		log.info("retrieveQuestion query String :" + queryString);
-		log.info("Assignment List Size :" + questionList.size());
+		//log.info("retrieveQuestion query String :" + queryString);
+		//log.info("Assignment List Size :" + questionList.size());
 		return questionList;
 	}
 	
 	public static List<Student> retrieveDistinctStudent(Long postId) {
-		log.info("retrieveDistinctExaminer :");
+		//log.info("retrieveDistinctExaminer :");
 		EntityManager em = entityManager();
 		String queryString = "SELECT  distinct a.student FROM Answer as a where  a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.oscePost="
 				+ postId + " ) order by a.checklistQuestion.sequenceNumber asc";
@@ -116,14 +116,14 @@ public class Answer {
 		TypedQuery<Student> query = em.createQuery(queryString, Student.class);
 		List<Student> questionList = query.getResultList();
 
-		log.info("retrieveQuestion query String :" + queryString);
-		log.info("Assignment List Size :" + questionList.size());
+		//log.info("retrieveQuestion query String :" + queryString);
+		//log.info("Assignment List Size :" + questionList.size());
 		return questionList;
 	}
 	
 	public static List<Answer> retrieveQuestionPerPostAndItem(Long postId,
 			Long itemId) {
-		log.info("retrieveStudent :");
+		//log.info("retrieveStudent :");
 		EntityManager em = entityManager();
 		String queryString = "SELECT  a FROM Answer as a where a.checklistQuestion.id="
 				+ itemId
@@ -132,28 +132,28 @@ public class Answer {
 
 		TypedQuery<Answer> query = em.createQuery(queryString, Answer.class);
 		List<Answer> assignmentList = query.getResultList();
-		log.info("retrieveQuestion query String :" + queryString);
-		log.info("Assignment List Size :" + assignmentList.size());
+		//log.info("retrieveQuestion query String :" + queryString);
+		//log.info("Assignment List Size :" + assignmentList.size());
 		return assignmentList;
 	}
 
 	// find now of student given in Answer table for particular post
 	public static int countStudent(long dayId) {
-		log.info("countStudent :");
+		//log.info("countStudent :");
 		EntityManager em = entityManager();
 		String queryString = "select count(distinct sequenceNumber) from Assignment where type =0 and osceDay="
 				+ dayId;
 
 		TypedQuery<Long> query = em.createQuery(queryString, Long.class);
 		List<Long> assignmentList = query.getResultList();
-		log.info("retrieveQuestion query String :" + queryString);
-		log.info("Assignment List Size :" + assignmentList.size());
+		//log.info("retrieveQuestion query String :" + queryString);
+		//log.info("Assignment List Size :" + assignmentList.size());
 
 		return assignmentList.get(0).intValue();
 	}
 
 	public static int countAnswerTableRow(long postId, long itemId) {
-		log.info("countAnswerTableRow :");
+		//log.info("countAnswerTableRow :");
 		EntityManager em = entityManager();
 		String queryString = "SELECT  count(a) FROM Answer as a where a.checklistQuestion="
 				+ itemId
@@ -162,14 +162,14 @@ public class Answer {
 
 		TypedQuery<Student> query = em.createQuery(queryString, Student.class);
 		List<Student> assignmentList = query.getResultList();
-		log.info("retrieveQuestion query String :" + queryString);
-		log.info("Assignment List Size :" + assignmentList.size());
+		//log.info("retrieveQuestion query String :" + queryString);
+		//log.info("Assignment List Size :" + assignmentList.size());
 
 		return assignmentList.size();
 	}
 
 	public static int numOfDistinctStudentExamined(Long examinerId, Long postId) {
-		log.info("numOfDistinctStudentExamined :");
+		//log.info("numOfDistinctStudentExamined :");
 		EntityManager em = entityManager();
 		String queryString = "SELECT  count(a) FROM Answer as a where a.doctor="
 				+ examinerId
@@ -178,7 +178,7 @@ public class Answer {
 
 		TypedQuery<Long> query = em.createQuery(queryString, Long.class);
 
-		log.info("numOfDistinctStudentExamined query String :" + queryString);
+		//log.info("numOfDistinctStudentExamined query String :" + queryString);
 		// Log.info("Assignment List Size :" + assignmentList.size());
 
 		return query.getResultList().get(0).intValue();
@@ -186,7 +186,7 @@ public class Answer {
 
 	public static List<Answer> retrieveDistinctStudentExamined(Long examinerId,
 			Long postId) {
-		log.info("retrieveDistinctStudentExamined :");
+		//log.info("retrieveDistinctStudentExamined :");
 		EntityManager em = entityManager();
 		String queryString = "SELECT  a FROM Answer as a where a.doctor="
 				+ examinerId
@@ -195,7 +195,7 @@ public class Answer {
 
 		TypedQuery<Answer> query = em.createQuery(queryString, Answer.class);
 
-		log.info("retrieveDistinctStudentExamined query String :" + queryString);
+		//log.info("retrieveDistinctStudentExamined query String :" + queryString);
 		// Log.info("Assignment List Size :" + assignmentList.size());
 
 		return query.getResultList();
@@ -204,14 +204,14 @@ public class Answer {
 	// [spec
 	public static Long retrieveNumberOfDistinctStudentExamined(
 			Long examinerId, Long postId) {
-		log.info("retrieveDistinctStudentExamined :");
+		//log.info("retrieveDistinctStudentExamined :");
 		EntityManager em = entityManager();
 		String queryString = "SELECT count(DISTINCT a.student) FROM Answer as a where a.doctor="
 				+ examinerId
 				+ " and a.checklistOption!=null and a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.oscePost="
 				+ postId + " ) ";
 		TypedQuery<Long> query = em.createQuery(queryString, Long.class);
-		log.info("numOfDistinctStudentExamined query String :" + queryString);
+		//log.info("numOfDistinctStudentExamined query String :" + queryString);
 		return query.getResultList().get(0);
 	}
 
@@ -282,6 +282,9 @@ public class Answer {
 						fileName = post.getStandardizedRole().getShortName() + "_" + seq.getLabel() +".csv";
 					else
 						fileName = "post" + post.getId() + "_" + seq.getLabel() +".csv";
+					
+					fileName = fileName.replaceAll("\\\\", "");
+					fileName = fileName.replaceAll("\\/", "");
 						
 					List<String> valueList = ExportStatisticData.createOscePostCSV(RequestFactoryServlet.getThreadLocalRequest(),RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext(), post.getId(), fileName, examinerId, addPoints, impressionQueId);
 
@@ -324,6 +327,9 @@ public class Answer {
 							filename = post.getStandardizedRole().getShortName() + "_" + doctor.getName() + "_" + seq.getLabel() + ".csv";
 						else
 							filename = "post" + post.getId() + "_" + doctor.getName() + "_" + seq.getLabel() + ".csv";
+						
+						filename = filename.replaceAll("\\\\", "");
+						filename = filename.replaceAll("\\/", "");
 							
 						Integer addPoint = 0;
 						String key="p"+post.getId()+"e"+doctor.getId();
@@ -697,6 +703,9 @@ public class Answer {
 						else
 							fileName = "Day"+ (dayCtr) + "_" + "post" + post.getId() + "_" + seq.getLabel() + ".csv";
 
+						fileName = fileName.replaceAll("\\\\", "");
+						fileName = fileName.replaceAll("\\/", "");
+						
 						fileName = RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(OsMaFilePathConstant.assignmentHTML + fileName);
 						
 						calculateCronbachValue.countValue(fileName, missingItemId);
@@ -721,7 +730,7 @@ public class Answer {
 
 						// total num of student from assignment table
 						int totalStudent = countStudent(day.getId());
-						log.info("Total number of student :" + totalStudent);
+						//log.info("Total number of student :" + totalStudent);
 
 						// total number of student per post(expected num of rows
 						// in answer table if all student are present)= num of
@@ -781,8 +790,7 @@ public class Answer {
 							
 							// 1. calculate missing at item level
 							int countAnswerTableRow = itemAnswers.size();
-							log.info("number of student answer :"
-									+ countAnswerTableRow);
+							//log.info("number of student answer :" + countAnswerTableRow);
 							int missingAtItemLevel = totalStudent
 									- countAnswerTableRow;
 							missingAtPostLevel = missingAtPostLevel
@@ -828,9 +836,7 @@ public class Answer {
 								Answer itemAnswer = itemAnswers.get(i);
 								// point=point+new
 								// Double(itemAnswer.getChecklistOption().getValue());
-								log.info("Point of item:"
-										+ itemAnswer.getChecklistOption()
-												.getValue());
+								//log.info("Point of item:" + itemAnswer.getChecklistOption().getValue());
 								points[i] = new Double(itemAnswer
 										.getChecklistOption().getValue());
 
@@ -848,7 +854,7 @@ public class Answer {
 
 							// point=point/itemAnswers.size();
 							pointAvg = StatUtils.sum(points);
-							log.info("Avg of point at item level :" + pointAvg);
+							//log.info("Avg of point at item level :" + pointAvg);
 							// sumOfPoinstAtSeqLevel.add(pointAvg);
 							// totalPointsPerItem[k]=pointAvg;
 							
@@ -947,8 +953,7 @@ public class Answer {
 						
 						postLevelList.add(missing);
 
-						log.info("missing :" + "p" + post.getId() + "  "
-								+ missing);
+						//log.info("missing :" + "p" + post.getId() + "  " + missing);
 
 						// 2. Average at post level
 						/*if (pointsPerPostSize > 0)
@@ -1045,8 +1050,7 @@ public class Answer {
 						totalPointsPerSum[i] = sumOfPoinstAtSeqLevel.get(i);
 					}
 
-					log.info("Sum of point per sequence :"
-							+ StatUtils.sum(totalPointsPerSum));
+					//log.info("Sum of point per sequence :" + StatUtils.sum(totalPointsPerSum));
 					
 					//save data at sequence level
 					ItemAnalysis itemAnalysis=new ItemAnalysis();
@@ -1149,8 +1153,7 @@ public class Answer {
 								//postLevelList.add(postData.getMissing().toString() +"/"+postData.getMissingPercentage().intValue());
 								postLevelList.add(postData.getMissing().toString() +"/"+postData.getMissingPercentage());
 
-								log.info("missing :" + "p" + post.getId() + "  "
-										+ postData.getMissing());
+								//log.info("missing :" + "p" + post.getId() + "  " + postData.getMissing());
 
 							
 
@@ -1204,8 +1207,7 @@ public class Answer {
 									//2. create post level list
 									questionList.add(itemData.getMissing().toString() +"/"+itemData.getMissingPercentage().intValue()+"%");
 
-									log.info("missing :" + "p" + post.getId() + "  "
-											+ itemData.getMissing());
+									//log.info("missing :" + "p" + post.getId() + "  "+ itemData.getMissing());
 
 								
 
