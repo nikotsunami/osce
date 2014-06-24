@@ -120,6 +120,7 @@ public class OsMaFilePathConstant {
 	public static String assignmentHTML="/osMaEntry/gwt/unibas/";
 	// Module 8]
 	
+	public static String localSpDataDirectory = getUploadBaseDIRPath() + "/sp/";
 	
 	public static final String appStandardizedPatientPaymentPDF = "/osMaEntry/gwt/unibas/payment/Honorarabrechnung_Form_2011_01.pdf";
 }

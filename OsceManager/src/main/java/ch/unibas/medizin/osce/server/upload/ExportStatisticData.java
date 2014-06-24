@@ -173,7 +173,12 @@ public class ExportStatisticData extends HttpServlet{
 						if (oscePost.getStandardizedRole() != null)
 						{
 							postFileName = oscePost.getStandardizedRole().getShortName() + "_" + osceSeq.getLabel() +".csv";
+							postFileName = postFileName.replaceAll("\\\\", "");
+							postFileName = postFileName.replaceAll("\\/", "");
 							fileName = "Day"+ (i+1) + "_" + oscePost.getStandardizedRole().getShortName() + "_" +osceSeq.getLabel();
+							fileName = fileName.replaceAll("\\\\", "");
+							fileName = fileName.replaceAll("\\/", "");
+							
 							postShortNameList.add(oscePost.getStandardizedRole().getShortName());
 							postLongNameList.add(oscePost.getStandardizedRole().getLongName());
 						}
@@ -456,7 +461,10 @@ public class ExportStatisticData extends HttpServlet{
 									fileName = "Day"+ (i+1) + "_" + oscePost.getStandardizedRole().getShortName() + "_" +osceSeq.getLabel()+"_"+ fileNames.get(k) +".csv";
 								else
 									fileName = "Day"+ (i+1) + "_" + "post" + oscePost.getId() + "_" + osceSeq.getLabel()+"_"+fileNames.get(k) +".csv";
-									
+							
+								fileName = fileName.replaceAll("\\\\", "");
+								fileName = fileName.replaceAll("\\/", "");
+								
 								fileName = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML + fileName);
 								fileNameList.add(fileName);
 								
@@ -889,7 +897,10 @@ public class ExportStatisticData extends HttpServlet{
 								fileName = "Day"+ (i+1) + "_" + oscePost.getStandardizedRole().getShortName() + "_" + osceSeq.getLabel() +".csv";
 							else
 								fileName = "Day"+ (i+1) + "_" + "post" + oscePost.getId() + "_" + osceSeq.getLabel() +".csv";
-								
+							
+							fileName = fileName.replaceAll("\\\\", "");
+							fileName = fileName.replaceAll("\\/", "");
+							
 							fileName = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML + fileName);
 							fileNameList.add(fileName);
 							
