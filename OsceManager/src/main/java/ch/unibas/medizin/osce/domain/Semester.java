@@ -1,8 +1,10 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.io.StringWriter;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,16 +15,22 @@ import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
 
 import org.apache.log4j.Logger;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.google.gwt.requestfactory.shared.Request;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import ch.unibas.medizin.osce.domain.spportal.SPPortalPerson;
 import ch.unibas.medizin.osce.domain.spportal.SpOsceDate;
@@ -31,6 +39,7 @@ import ch.unibas.medizin.osce.domain.spportal.SpSemester;
 import ch.unibas.medizin.osce.domain.spportal.SpStandardizedPatient;
 import ch.unibas.medizin.osce.domain.spportal.SpTrainingBlock;
 import ch.unibas.medizin.osce.domain.spportal.SpTrainingDate;
+import ch.unibas.medizin.osce.server.util.email.impl.EmailServiceImpl;
 import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.SurveyStatus;
@@ -300,7 +309,7 @@ public class Semester {
 						standardizedPatient.persist();
 				}
 				// Un-comment call of following method to send email to all sps as survey is started.
-				//sendEmailToAllActiveSPsInformingServeyIsStart(allActiveSps);
+				sendEmailToAllActiveSPsInformingServeyIsStart(allActiveSps);
 			}
 			
 			
@@ -322,17 +331,17 @@ public class Semester {
 			//semster = Semester.findSemester(semster.getId());
 		
 			//finding list of all patient in sem in spportal
-			List<SpPatientInSemester> spPatientInSemesterList = SpPatientInSemester.findPatientInSemesterBasedOnSemesterId(spSemester.getId());
+			/*List<SpPatientInSemester> spPatientInSemesterList = SpPatientInSemester.findPatientInSemesterBasedOnSemesterId(spSemester.getId());
 			
 			Long lastspPatientInSemId=0L;
-			/*if date is found taking last persisted id as reference based on this id I will find all patient in semester in osce that is persisted after this id for given semester and
+			if date is found taking last persisted id as reference based on this id I will find all patient in semester in osce that is persisted after this id for given semester and
 			 * if found such data than persist that in spportal this also help me that I don't have to check for duplicate entry. 
-			*/
+			
 			if(spPatientInSemesterList!=null && spPatientInSemesterList.size() > 0){
 			
 				 lastspPatientInSemId= spPatientInSemesterList.get(0).getId();
-			}
-			List<PatientInSemester> patientInSemsList =PatientInSemester.findPatientInSemesterBasedOnSemAndId(lastspPatientInSemId,semster.getId());
+			}*/
+			List<PatientInSemester> patientInSemsList =PatientInSemester.findPatientInSemesterBasedOnSemAndId(/*lastspPatientInSemId,*/semster.getId());
 			
 			if(patientInSemsList==null){
 				return;
@@ -395,7 +404,7 @@ public class Semester {
 		
 	}
 
-   /* @Transactional
+    @Transactional
     private void sendEmailToAllActiveSPsInformingServeyIsStart(List<StandardizedPatient> allActiveSps) {
 		try{
 			
@@ -441,7 +450,7 @@ public class Semester {
 			Log.error(e.getMessage(), e);
 		}
     	
-	}*/
+	}
     
     public static Boolean stopSurveyAndPushDateToOsceFromSpPortal(Long semId){
     	Log.info("Pushing data from spportal to osce");
@@ -875,6 +884,40 @@ public class Semester {
 			return null;
 		}
 		
+	}
+	
+	public static Boolean findIsAssignTrainingDateAndOsceDate(Long semId){
+	
+		try{
+
+			Log.info("fininda is atleast one osce date and training date is assigned for sem : " + semId);
+		
+			EntityManager em = Semester.entityManager();
+			
+			Semester sem = Semester.findSemester(semId);
+			Set<OsceDate> setOsceDate = sem.getOsceDates();
+			if(setOsceDate!=null && setOsceDate.size() > 0){
+			
+				String query="select td from TrainingDate as td where td.trainingBlock.semester.id="+semId;
+				Log.info("Query Is :" + query);
+				
+				TypedQuery<TrainingDate> q = em.createQuery(query, TrainingDate.class);
+				
+				List<TrainingDate> resultList = q.getResultList();
+				
+				if(resultList!=null && resultList.size() >0 ){
+					return true;
+				}else{
+					return false;
+				}
+			}else{
+				return false;
+			}
+			
+		}catch (Exception e) {
+			Log.error(e.getMessage(), e);
+			return null;
+		}
 	}
 }
 

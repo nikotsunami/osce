@@ -28,4 +28,6 @@ public interface SemesterRequestNonRoo extends RequestContext
 
 	public abstract Request<List<OscePostProxy>> findTotalPostOfTheSemester(Long semId);
 
+	public abstract Request<Boolean> findIsAssignTrainingDateAndOsceDate(Long id);
+
 }

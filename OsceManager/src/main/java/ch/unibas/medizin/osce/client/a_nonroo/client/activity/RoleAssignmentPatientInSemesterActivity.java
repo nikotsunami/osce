@@ -12,6 +12,7 @@ import ch.unibas.medizin.osce.client.AutoAssignPatientInSemesterServiceAsync;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncException;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncServiceAsync;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.PlanSPTrainingPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -50,7 +51,6 @@ import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterRequest;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
-import ch.unibas.medizin.osce.client.managed.request.TrainingProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.AutoAssignPatientInSemesterEvent;
 import ch.unibas.medizin.osce.shared.AutoAssignPatientInSemesterListener;
@@ -63,6 +63,7 @@ import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.StudyYears;
+import ch.unibas.medizin.osce.shared.SurveyStatus;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
@@ -98,7 +99,6 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.Range;
 
@@ -128,7 +128,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	private OsceDayProxy selectedRolsOsceDayProxy;
 	private StandardizedRoleProxy selectedRoleProxy;
 	/*private String withStatement[] = {"standardizedPatient", "semester","patientInRole", "patientInRole.oscePost.standardizedRole","osceDays", "osceDays.osce"};/*, "trainings","osceDays", "osceDays.osce", "patientInRole.oscePost.standardizedRole"*/
-	private String withStatement[] = {"standardizedPatient","patientInRole.oscePost.standardizedRole","osceDays"};/*, "trainings","osceDays", "osceDays.osce", "patientInRole.oscePost.standardizedRole"*/
+	private String withStatement[] = {"standardizedPatient","patientInRole.oscePost.standardizedRole","osceDays","osceDates"};/*, "trainings","osceDays", "osceDays.osce", "patientInRole.oscePost.standardizedRole"*/
 	private String withStatementTrain[] = {"standardizedPatient", "semester","patientInRole", "patientInRole.oscePost.standardizedRole","trainings","osceDays", "osceDays.osce"};
 //	private String withSelectedEvent[] = {"standardizedPatient", "semester","patientInRole", "patientInRole.oscePost.standardizedRole","osceDays", "osceDays.osce"};
 	
@@ -261,10 +261,11 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	}
 
 	public void setAutoAssignmentBtnProperty(){
-		
+		//fetching patientsInSemester data to check whether any sp assigned in semester this will help to set "start survey" button visibility. Reducing one more server trip 
+		//by just adding patientsInSemester in with clause.
 		isAutogenratedButtonEnabled = false;
 		requests.semesterRequest().findSemester(semesterProxy.getId())
-				.with("osces").fire(new OSCEReceiver<SemesterProxy>() {
+				.with("osces","patientsInSemester").fire(new OSCEReceiver<SemesterProxy>() {
 
 					@Override
 					public void onSuccess(SemesterProxy response) {
@@ -283,6 +284,9 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 
 						view.autoAssignmentBtn
 								.setEnabled(isAutogenratedButtonEnabled);
+						//Calling this to set start/stop survey button visibility.
+						setStartSurverStopSurveyVisibility(response);
+						
 					}
 					@Override
 					public void onFailure(ServerFailure error) {
@@ -3740,4 +3744,181 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		return editedOsceProxy;
 	}
 
+	public void setStartSurverStopSurveyVisibility(SemesterProxy semesterProxy){
+		if(semesterProxy.getSurveyStatus()!=null){
+			if(semesterProxy.getSurveyStatus().ordinal()==SurveyStatus.OPEN.ordinal()){
+				view.getStartSurveyButton().setVisible(false);
+				view.getStopSurveyButton().setVisible(true);
+			}else if(semesterProxy.getSurveyStatus().ordinal()==SurveyStatus.CLOSED.ordinal()){
+				view.getStartSurveyButton().removeFromParent();
+				view.getStopSurveyButton().removeFromParent();
+			}else if(semesterProxy.getSurveyStatus().ordinal()==SurveyStatus.NOT_STARTED.ordinal()){
+				
+				view.getStartSurveyButton().setVisible(true);
+				view.getStopSurveyButton().setVisible(false);
+				
+				if(semesterProxy.getPatientsInSemester()!=null && semesterProxy.getPatientsInSemester().size() > 0){
+					view.getStartSurveyButton().setEnabled(true);
+				}
+				else{
+					view.getStartSurveyButton().setEnabled(false);
+				}
+			}
+		}else{
+			view.getStartSurveyButton().setVisible(true);
+			view.getStartSurveyButton().setEnabled(false);
+			view.getStopSurveyButton().setVisible(false);
+		}
+	}
+
+	@Override
+	public void startSurveyButtonClicked() {
+
+		Log.info("User want to start survey");
+		
+		final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
+		confirmationDialogBox.showYesNoDialog(constants.startSurveyConfirmation());
+		confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+			
+			@SuppressWarnings("deprecation")
+			@Override
+			public void onClick(ClickEvent event) {
+				Log.info("Yes button clicked so user wnat to start survey");
+				confirmationDialogBox.hide();
+				checkUserHasDefinedAtleastBothDate();
+			}
+
+			
+		});
+		
+		
+	}
+
+	@SuppressWarnings("deprecation")
+	private void checkUserHasDefinedAtleastBothDate() {
+		
+		requests.semesterRequestNonRoo().findIsAssignTrainingDateAndOsceDate(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean response) {
+				if(response!=null && response){
+					
+					showApplicationLoading(true);
+				
+					requests.osceDateRequestNonRoo().isThereAnyTrainingDateThatIsAfterOSceDate(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+					@Override
+					public void onSuccess(Boolean response) {
+						
+						showApplicationLoading(false);
+						
+						if(response!=null){
+							
+							if(response){
+								showTrainingDateIsAfterOsceDateConfirmationMsg();
+							}else{
+								//Starting survey as all criteria satisfied.
+								proceedToStartSurvey();		
+							}
+						}
+					}
+
+				});
+					
+				}else{
+					final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
+					confirmationDialogBox.showYesNoDialog(constants.noOsceOrTrainingdateProposed());
+					confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							Log.info("Yes button clicked");
+
+							confirmationDialogBox.hide();
+							
+							//Redirecting user to training view.
+							placeController.goTo(new PlanSPTrainingPlace("PlanSPTraining", handlerManager, semesterProxy));
+						}
+					});
+				}
+				
+			}
+		});
+	}
+
+	private void showTrainingDateIsAfterOsceDateConfirmationMsg(){
+		
+		Log.info("showing training date is after oscedate confirmation");
+		
+		final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
+		confirmationDialogBox.showYesNoDialog(constants.trainingDateIsAfterOsceDate());
+		confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				Log.info("Yes button clicked");
+				confirmationDialogBox.hide();
+				
+				//Starting survey as all criteria satisfied.
+				proceedToStartSurvey();	
+			}
+		});
+	}
+	
+	@SuppressWarnings("deprecation")
+	private void proceedToStartSurvey() {
+		Log.info("Starting survey");
+		
+		showApplicationLoading(true);
+		requests.semesterRequestNonRoo().surveyIsStartedSoPushDataToSpPortal(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean response) {
+				Log.info("Surver started successfully");
+				showApplicationLoading(false);
+				if(response!=null){
+					if(response){
+						view.getStartSurveyButton().setVisible(false);
+						view.getStopSurveyButton().setVisible(true);
+					}
+				}else{
+					showErrorMessageToUser("System could not start survey please try again");
+				}
+				
+			}
+		});
+		
+	}
+	@Override
+	public void stopSurveyButtonClicked() {
+		Log.info("Stop Survey Button clicked");
+		
+		showApplicationLoading(true);
+		
+		requests.semesterRequestNonRoo().stopSurveyAndPushDateToOsceFromSpPortal(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean response) {
+				showApplicationLoading(false);
+				Log.info("Survey stoped and data is pushed from spportal to osce");
+				if(response!=null){
+					if(response){
+						view.getStartSurveyButton().setVisible(true);
+						view.getStartSurveyButton().setEnabled(false);
+						view.getStopSurveyButton().setVisible(false);
+					}
+				}else{
+					showErrorMessageToUser("System could not stop survey please try again");
+				}
+				
+			}
+		});
+		
+	}
+	
+	public void showErrorMessageToUser(String message){
+		final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
+		confirmationDialogBox.showConfirmationDialog(message);
+	}
+	
 }

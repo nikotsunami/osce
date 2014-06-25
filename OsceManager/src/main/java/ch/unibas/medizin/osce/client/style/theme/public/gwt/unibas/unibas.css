@@ -3976,4 +3976,9 @@ color: #f1b532;
  .labelLine {
 	 background:url("images/line.png") 9px 5px repeat-x; width:100%;
  }
- 
+ .leftPadding{
+ 	padding-left: 35px !important;
+ }
+ .spNotAccepted{
+ 	color: #777777;
+ }

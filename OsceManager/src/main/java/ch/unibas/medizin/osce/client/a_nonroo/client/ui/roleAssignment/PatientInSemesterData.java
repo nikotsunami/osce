@@ -56,7 +56,9 @@ public class PatientInSemesterData {
 //		this.patientInSemesterProxy = tempPatientInSemesterProxy;
 		this.setPatientInSemesterProxy(tempPatientInSemesterProxy);
 
-		this.name = ((tempPatientInSemesterProxy.getStandardizedPatient().getPreName() != null) ? tempPatientInSemesterProxy.getStandardizedPatient().getPreName() : "") + ", " + tempPatientInSemesterProxy.getStandardizedPatient().getName();
+		String spName=tempPatientInSemesterProxy.getStandardizedPatient().getName(); 
+		String spPrename=((tempPatientInSemesterProxy.getStandardizedPatient().getPreName() != null) ? tempPatientInSemesterProxy.getStandardizedPatient().getPreName() : "");
+		this.name = spName + "," + spPrename;
 
 		// this.acceptedImage = new Image();
 		// this.acceptedImage.setStyleName("ui-icon-squaresmall-close");

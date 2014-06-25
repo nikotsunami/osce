@@ -1553,7 +1553,8 @@ public interface OsceConstants extends Constants {
 	public String overrideSuggestions();
 	
 	public String scheduledTrainings();
-	
+
+	public String hideUnavilableSps();
 }
 
 

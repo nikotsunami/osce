@@ -18,6 +18,7 @@ import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.ActionCell;
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.cell.client.ValueUpdater;
@@ -43,6 +44,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
@@ -90,10 +92,16 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	@UiField(provided = true)
 	SimplePager pager;
 
-	@UiField
+	/*@UiField
 	Button surveyImpBtn;
 	@UiField
-	Button getImpBtn;
+	Button getImpBtn;*/
+	
+	@UiField
+	IconButton startSurvey;
+	
+	@UiField
+	IconButton stopSurvey;
 	
 	@UiField
 	public Button autoAssignmentBtn;
@@ -107,18 +115,18 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	IconButton exportCsv;
 			
 	@UiField
-	public CheckBox ignoreOsceDaycheckBox;
+	public CheckBox hideUnavilableSps;
 	
-	@UiHandler("ignoreOsceDaycheckBox")
+	@UiHandler("hideUnavilableSps")
 	public void ignoreOsceDayCheckBoxselected(ClickEvent event){
 		delegate.ignoreOsceDayCheckBoxselected();
 	}
 	public CheckBox getIgnoreOsceDaycheckBox() {
-		return ignoreOsceDaycheckBox;
+		return hideUnavilableSps;
 	}
 
 	public void setIgnoreOsceDaycheckBox(CheckBox ignoreOsceDaycheckBox) {
-		this.ignoreOsceDaycheckBox = ignoreOsceDaycheckBox;
+		this.hideUnavilableSps = ignoreOsceDaycheckBox;
 	}
 	
 	private Presenter presenter;
@@ -156,13 +164,13 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 
 		splitLayoutPanel.setWidgetMinSize(splitLayoutPanel.getWidget(0),
 				OsMaConstant.SPLIT_PANEL_MINWIDTH);
-		surveyImpBtn.setText(constants.roleSurveyImport());
-		getImpBtn.setText(constants.roleGetImport());
+		//surveyImpBtn.setText(constants.roleSurveyImport());
+		//getImpBtn.setText(constants.roleGetImport());
 		autoAssignmentBtn.setText(constants.roleAutoAssign());
 		addManuallyBtn.setText(constants.roleAddManually());
 		clearSelectionBtn.setText(constants.clearSelection());
 //		ignoreOsceDaycheckBox.setStyleName("ignoreAcceptedOsceDayPadding");
-		ignoreOsceDaycheckBox.setText(constants.ignoreAcceptedOsceDay());
+		//hideUnavilableSps.setText(constants.ignoreAcceptedOsceDay());
 		
 		exportCsv.setText(constants.exportCsv());
 		
@@ -173,7 +181,7 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 
 	}
 
-	@UiHandler("surveyImpBtn")
+	/*@UiHandler("surveyImpBtn")
 	public void onSurveyImpBtnClicked(ClickEvent event) {
 		// TODO : import patient detail logic
 		delegate.surveyImpBtnClicked();
@@ -183,8 +191,24 @@ public class RoleAssignmentViewImpl extends Composite implements RoleAssignmentV
 	public void onGetImpBtnClicked(ClickEvent event) {
 		// TODO : import patient detail logic
 		delegate.getImpBtnClicked();
-	}
+	}*/
 
+	@UiHandler("startSurvey")
+	public void startSurveyClicked(ClickEvent event)
+	{
+	
+		Log.info("start surver button clicked");
+		delegate.startSurveyButtonClicked();
+	}
+	
+	@UiHandler("stopSurvey")
+	public void stopSurveyClicked(ClickEvent event)
+	{
+	
+		Log.info("stop surver button clicked");
+		delegate.stopSurveyButtonClicked();
+	}
+	
 	@UiHandler("autoAssignmentBtn")
 	public void onAutoAssignmentBtnClicked(ClickEvent event) {
 		// TODO : Auto assignment detail logic
@@ -388,5 +412,11 @@ delegate.showApplicationLoading(true);
 	public void onExportCsvClicked(ClickEvent event) {
 		delegate.exportCsvClicked();
 	}
-
+	public IconButton getStartSurveyButton() {
+		return startSurvey;
+	}
+	public IconButton getStopSurveyButton() {
+		return stopSurvey;
+	}
+	
 }

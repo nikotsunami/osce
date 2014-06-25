@@ -1,7 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment;
 
 import java.util.List;
+import java.util.Set;
 
+import ch.unibas.medizin.osce.client.managed.request.OsceDateProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInSemesterProxy;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -160,8 +162,24 @@ public class PatientInSemesterFlexTable extends FlexTable {
 			// Module 3 Task B
 
 		//	row++;
+				this.getCellFormatter().addStyleName(i+1,1,"leftPadding");
+				
+				PatientInSemesterProxy patientInSemesterProxy = patientInSemesterData.getPatientInSemesterProxy();
+				
+				Set<OsceDateProxy> setOsceDateProxy = patientInSemesterProxy.getOsceDates();
+				
+				boolean isAcceptedOsce=false;
+				
+				if(setOsceDateProxy!=null && setOsceDateProxy.size()>0){
+					isAcceptedOsce=true;
+				}
+				
+				if(patientInSemesterProxy.getAccepted()==false || !isAcceptedOsce){
+					this.getCellFormatter().addStyleName(i+1, 0, "spNotAccepted");
+				}
 		}
 
+		
 	}
 
 	public void setRowData( PatientInSemesterProxy patientInSemesterProxy){
