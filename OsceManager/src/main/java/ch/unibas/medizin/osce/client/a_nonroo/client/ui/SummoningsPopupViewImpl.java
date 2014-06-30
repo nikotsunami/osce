@@ -3,12 +3,10 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.richtext.RichTextToolbar;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
@@ -28,7 +26,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -134,6 +131,18 @@ public class SummoningsPopupViewImpl extends PopupPanel implements SummoningsPop
 	
 	boolean textChanged = false;
 	
+	@UiField
+	Label sendCopyLbl;
+	
+	@UiField
+	Label emailFromLbl;
+	
+	@UiField
+	TextBox sendCopy;
+	
+	@UiField
+	TextBox emailFrom;
+	 
 	@UiHandler("sendMailButton")
 	public void sendMailButtonClicked(ClickEvent event) {
 	}
@@ -186,6 +195,8 @@ public class SummoningsPopupViewImpl extends PopupPanel implements SummoningsPop
 		assignmentFormat.setInnerText(constants.summoningsAssignmentFormat());
 		subjectLbl.setText(constants.subject());
 		
+		sendCopyLbl.setText(constants.sendCopy());
+		emailFromLbl.setText(constants.emailFrom());
 		
 		message.addKeyPressHandler(new KeyPressHandler() {
 			
@@ -201,7 +212,6 @@ public class SummoningsPopupViewImpl extends PopupPanel implements SummoningsPop
 	}
 
 	public void init() {
-		// TODO implement this!
 	}
 
 	@Override
@@ -291,5 +301,21 @@ public class SummoningsPopupViewImpl extends PopupPanel implements SummoningsPop
 
 	public void selectFileName(String templateFilePath) {
 		fileList.setSelected(templateFilePath);
+	}
+	
+	public Label getSendCopyLbl() {
+		return sendCopyLbl;
+	}
+	
+	public TextBox getSendCopy() {
+		return sendCopy;
+	}
+	
+	public TextBox getEmailFrom() {
+		return emailFrom;
+	}
+	
+	public Label getEmailFromLbl() {
+		return emailFromLbl;
 	}
 }

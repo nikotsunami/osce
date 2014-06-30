@@ -27,6 +27,7 @@ import javax.servlet.ServletException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.context.WebApplicationContext;
@@ -467,7 +468,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Boolean sendSPMail(Long semesterId,List<Long> spIds,String templateFile,String subject){
+	public Boolean sendSPMail(Long semesterId,List<Long> spIds,String templateFile,String subject, String sendCopy, String emailFrom){
 		
 		StandardizedPatient patient = null;
 		
@@ -499,7 +500,11 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			//timeFormat = new SimpleDateFormat("hh:mm a");
 			
 			toMailIds = new ArrayList<String>(0);
-			fromMailId = mailId;//OsMaFilePathConstant.FROM_MAIL_ID;
+			if (StringUtils.isNotBlank(emailFrom))
+				fromMailId = emailFrom;
+			else
+				fromMailId = mailId;
+			//OsMaFilePathConstant.FROM_MAIL_ID;
 //			subject = OsMaFilePathConstant.MAIL_SUBJECT;
 			
 			for(Long id : spIds){
@@ -582,6 +587,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 				
 				toNames.add(patient.getName()+" "+patient.getPreName());
 				//fromNames.add(OsMaFilePathConstant.FROM_NAME);
+				
 				fromNames.add(fromName);
 				
 				assignmentList.add(assignments);
@@ -596,6 +602,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			templateVariables.put("toMailIds",toMailIds);
 			templateVariables.put("fromMailId",fromMailId);
 			templateVariables.put("subject",subject);
+			templateVariables.put("sendCopy", sendCopy);
 			
 //Feature : 154 
 			return this.sendMailUsingTemplate(templateFile/*semesterId.toString()*/,false, templateVariables);
@@ -625,7 +632,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 	
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Boolean sendExaminerMail(Long semesterId, List<Long> examinerIds,String templateFile,String subject){
+	public Boolean sendExaminerMail(Long semesterId, List<Long> examinerIds,String templateFile,String subject, String sendCopy, String emailFrom){
 		
 		Doctor examiner = null;
 		
@@ -655,7 +662,10 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			//timeFormat = new SimpleDateFormat("hh:mm a");
 			
 			toMailIds = new ArrayList<String>(0);
-			fromMailId = mailId;//OsMaFilePathConstant.FROM_MAIL_ID;
+			if (StringUtils.isNotBlank(emailFrom))
+				fromMailId = emailFrom;
+			else
+				fromMailId = mailId;//OsMaFilePathConstant.FROM_MAIL_ID;
 			//subject = OsMaFilePathConstant.MAIL_SUBJECT;
 			
 			for(Long id : examinerIds){
@@ -749,6 +759,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			templateVariables.put("toMailIds",toMailIds);
 			templateVariables.put("fromMailId",fromMailId);
 			templateVariables.put("subject",subject);
+			templateVariables.put("sendCopy", sendCopy);
 			
 //Feature : 154 
 			return this.sendMailUsingTemplate(templateFile,/*semesterId.toString(),*/true, templateVariables);
@@ -859,7 +870,6 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 		String subject = null;
 		
 		int index = 0;
-		
 		// SPEC Change
 		boolean success = false;
 		
@@ -867,6 +877,7 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 			toNames = (List<String>) templateVariables.get("toNames");
 			toMailIds = (List<String>) templateVariables.get("toMailIds");
 			fromNames = (List<String>) templateVariables.get("fromNames");
+			String sendCopy = (String) templateVariables.get("sendCopy");
 			
 			fromMailId = (String) templateVariables.get("fromMailId");
 			subject = (String) templateVariables.get("subject");
@@ -900,9 +911,16 @@ public class SummoningsServiceImpl extends RemoteServiceServlet implements Summo
 				
 				log.info("emailService = " + emailService);
 				
-				if(!emailService.sendMail(new String[]{toMailIds.get(index)}, fromMailId, subject, mailMessage))
-					success = false;
-				
+				if (StringUtils.isNotBlank(sendCopy))
+				{
+					if(!emailService.sendMail(new String[]{toMailIds.get(index)}, fromMailId, sendCopy, subject, mailMessage))
+						success = false;
+				}
+				else
+				{
+					if(!emailService.sendMail(new String[]{toMailIds.get(index)}, fromMailId, subject, mailMessage))
+						success = false;
+				}	
 			}
 			
 			return success;

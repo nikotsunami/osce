@@ -28,11 +28,11 @@ public interface SummoningsService extends RemoteService {
 
 	String generateSPMailPDF(Long semesterId, List<Long> spIds,String templateFileName);
 
-	Boolean sendSPMail(Long semesterId, List<Long> spIds,String templateFileName,String subject);
+	Boolean sendSPMail(Long semesterId, List<Long> spIds,String templateFileName,String subject, String sendCopy, String emailFrom);
 
 	String generateExaminerMailPDF(Long semesterId, List<Long> examinerIds,String templateFileName);
 
-	Boolean sendExaminerMail(Long semesterId, List<Long> examinerIds,String templateFileName, String subject);
+	Boolean sendExaminerMail(Long semesterId, List<Long> examinerIds,String templateFileName, String subject, String sendCopy, String emailFrom);
 
 	List<String> getAllTemplateFileNames(Boolean isExaminer, Boolean isEmail);
 	

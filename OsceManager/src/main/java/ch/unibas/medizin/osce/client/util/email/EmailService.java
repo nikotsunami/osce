@@ -14,4 +14,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface EmailService extends RemoteService{
 
 	public Boolean sendMail(final String[] toAddress, final String fromAddress, final String subject, final String message);
+	
+	public Boolean sendMail(final String[] toAddress, final String fromAddress, final String sendCopy, final String subject, final String message);
 }

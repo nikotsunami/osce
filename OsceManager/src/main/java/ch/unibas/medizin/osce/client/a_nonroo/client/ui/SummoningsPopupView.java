@@ -6,7 +6,6 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 
 /**
@@ -22,7 +21,6 @@ public interface SummoningsPopupView extends IsWidget{
 	 * Implemented by the owner of the view.
 	 */
 	interface Delegate {
-		// TODO define methods to be delegated!
 	}
 
     String[] getPaths();
@@ -52,4 +50,12 @@ public interface SummoningsPopupView extends IsWidget{
 	String getSelectedTemplateFile();
 
 	Label getSubjectLbl();
+	
+	public Label getSendCopyLbl();
+	
+	public TextBox getSendCopy();
+	
+	public TextBox getEmailFrom();
+	
+	public Label getEmailFromLbl();
 }

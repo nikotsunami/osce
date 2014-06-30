@@ -1050,6 +1050,10 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			handleLoadTempateEvent(isExaminer,isEmail);
 			popupView.getSubject().removeFromParent();
 			popupView.getSubjectLbl().removeFromParent();
+			popupView.getSendCopyLbl().removeFromParent();
+			popupView.getSendCopy().removeFromParent();
+			popupView.getEmailFrom().removeFromParent();
+			popupView.getEmailFromLbl().removeFromParent();
 			sendMailButton = popupView.getSendMailButton();
 			sendMailButton.setText(constants.summoningsGeneratePdf());
 			handleSendButtonEventForSPPDF(isExaminer,isEmail, spIds);
@@ -1332,6 +1336,10 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			handleLoadTempateEvent(isExaminer,isEmail);
 			popupView.getSubject().removeFromParent();
 			popupView.getSubjectLbl().removeFromParent();
+			popupView.getSendCopyLbl().removeFromParent();
+			popupView.getSendCopy().removeFromParent();
+			popupView.getEmailFrom().removeFromParent();
+			popupView.getEmailFromLbl().removeFromParent();
 			sendMailButton = popupView.getSendMailButton();
 			sendMailButton.setText(constants.summoningsGeneratePdf());
 			handleSendButtonEventForExaminorPDF(isExaminer,isEmail, examinerIds);
@@ -1690,6 +1698,40 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			
 			@Override
 			public void onClick(ClickEvent arg0) {
+				if (popupView != null && popupView.getSendCopy().getText().isEmpty() == false && popupView.getEmailFrom().getValue().isEmpty() == false)
+				{
+					if (validEmailAddress(popupView.getSendCopy().getText()) == false)
+					{
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+						confirmationDialogBox.showConfirmationDialog(constants.sendCopyEmailError());
+						return;
+					}
+					if (validEmailAddress(popupView.getEmailFrom().getValue()) == false)
+					{
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+						confirmationDialogBox.showConfirmationDialog(constants.sendCopyEmailError());
+						return;
+					}
+				}
+				else if (popupView != null && popupView.getSendCopy().getText().isEmpty() == false)
+				{
+					if (validEmailAddress(popupView.getSendCopy().getText()) == false)
+					{
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+						confirmationDialogBox.showConfirmationDialog(constants.sendCopyEmailError());
+						return;
+					}
+				}
+				else if (popupView != null && popupView.getEmailFrom().getValue().isEmpty() == false)
+				{
+					if (validEmailAddress(popupView.getEmailFrom().getValue()) == false)
+					{
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+						confirmationDialogBox.showConfirmationDialog(constants.sendCopyEmailError());
+						return;
+					}
+				}				
+				
 				Log.info("has Text changed : " + popupView.hasTextChanged());
 				final String templateFilePath = getTemplateFileNameForEmail();
 				if(popupView.hasTextChanged()) {
@@ -1723,6 +1765,40 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			
 			@Override
 			public void onClick(ClickEvent arg0) {
+				if (popupView != null && popupView.getSendCopy().getText().isEmpty() == false && popupView.getEmailFrom().getValue().isEmpty() == false)
+				{
+					if (validEmailAddress(popupView.getSendCopy().getText()) == false)
+					{
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+						confirmationDialogBox.showConfirmationDialog(constants.sendCopyEmailError());
+						return;
+					}
+					if (validEmailAddress(popupView.getEmailFrom().getValue()) == false)
+					{
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+						confirmationDialogBox.showConfirmationDialog(constants.sendCopyEmailError());
+						return;
+					}
+				}
+				if (popupView != null && popupView.getSendCopy().getText().isEmpty() == false)
+				{
+					if (validEmailAddress(popupView.getSendCopy().getText()) == false)
+					{
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+						confirmationDialogBox.showConfirmationDialog(constants.sendCopyEmailError());
+						return;
+					}
+				}
+				else if (popupView != null && popupView.getEmailFrom().getValue().isEmpty() == false)
+				{
+					if (validEmailAddress(popupView.getEmailFrom().getValue()) == false)
+					{
+						confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+						confirmationDialogBox.showConfirmationDialog(constants.sendCopyEmailError());
+						return;
+					}
+				}
+				
 				Log.info("has Text changed : " + popupView.hasTextChanged());
 				final String templateFilePath = getTemplateFileNameForEmail();
 				if(popupView.hasTextChanged()) {
@@ -1747,6 +1823,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 				}else {
 					sendMailExaminor(examinerIds, templateFilePath).call();
 				}
+				
 			}
 		});
 	}
@@ -1912,7 +1989,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			@Override
 			public void call() {
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-				summoningsServiceAsync.sendSPMail(semesterProxy.getId(),spIds,templateFilePath,popupView.getSubject().getValue(), new AsyncCallback<Boolean>() {
+				summoningsServiceAsync.sendSPMail(semesterProxy.getId(),spIds,templateFilePath,popupView.getSubject().getValue(), popupView.getSendCopy().getValue(), popupView.getEmailFrom().getValue(), new AsyncCallback<Boolean>() {
 					
 					@Override
 					public void onSuccess(Boolean result) {
@@ -1950,7 +2027,7 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 			@Override
 			public void call() {
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-				summoningsServiceAsync.sendExaminerMail(semesterProxy.getId(),examinerIds,templateFilePath,popupView.getSubject().getValue(), new AsyncCallback<Boolean>() {
+				summoningsServiceAsync.sendExaminerMail(semesterProxy.getId(),examinerIds,templateFilePath,popupView.getSubject().getValue(), popupView.getSendCopy().getValue(), popupView.getEmailFrom().getValue(), new AsyncCallback<Boolean>() {
 					
 					@Override
 					public void onSuccess(Boolean result) {
@@ -2154,5 +2231,12 @@ summoningsServiceAsync.deleteTemplate(semesterProxy.getId().toString(),false,tru
 	}
 	interface Function {
 		void call();
+	}
+	
+	public static boolean validEmailAddress(String value) {
+	    if(value == null) return false;
+        
+        String emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.(?:[a-zA-Z]{2,6})$";
+        return value.matches(emailPattern);
 	}
 }

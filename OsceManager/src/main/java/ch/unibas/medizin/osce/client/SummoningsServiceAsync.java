@@ -26,11 +26,11 @@ public interface SummoningsServiceAsync  {
 	
 	void generateSPMailPDF(Long semesterId, List<Long> spIds,String templateFileName, AsyncCallback<String> asyncCallback);
 	
-	void sendSPMail(Long semesterId, List<Long> spIds,String templateFileName, String subject, AsyncCallback<Boolean> asyncCallback);
+	void sendSPMail(Long semesterId, List<Long> spIds,String templateFileName, String subject, String sendCopy, String emailFrom, AsyncCallback<Boolean> asyncCallback);
 	
 	void generateExaminerMailPDF(Long semesterId, List<Long> examinerIds,String templateFileName, AsyncCallback<String> asyncCallback);
 	
-	void sendExaminerMail(Long semesterId, List<Long> examinerIds,String templateFileName, String subject, AsyncCallback<Boolean> asyncCallback);
+	void sendExaminerMail(Long semesterId, List<Long> examinerIds,String templateFileName, String subject, String sendCopy, String emailFrom, AsyncCallback<Boolean> asyncCallback);
 
 	void getAllTemplateFileNames(Boolean isExaminer, Boolean isEmail, AsyncCallback<List<String>> asyncCallback);
 
