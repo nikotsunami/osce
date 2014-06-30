@@ -3,7 +3,7 @@
 <body> Dear User,<p/>
 
 Please click on the below link with in 4 hours that will redirect you at sp portal and then you can create/change your password.<br/>
-<a href='http://localhost:8080/spportal/#!reset/$randomString'>click here</a>
+<a href='$serverAddress/#!reset/$randomString'>click here</a>
 
 <br/><br/>Thanks,<br/>
 Sp Portal Team.

@@ -2,13 +2,11 @@ package ch.unibas.medizin.osce.client.util;
 /** This class create hash that is used for password hashing
  * @author manishp
  */
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 
 
 public class HashGenerator {
-	public static String generateHash(String randomString){
+	/*public static String generateHash(String randomString){
 		
 		StringBuffer stringBuffer = new StringBuffer();
 		//final Logger log = Logger.getLogger(HashGenerator.class);
@@ -34,6 +32,6 @@ public class HashGenerator {
 		}
 		System.out.println(" returning generating hash of random string");
 	    return stringBuffer.toString();
-	}
+	}*/
 	
 }

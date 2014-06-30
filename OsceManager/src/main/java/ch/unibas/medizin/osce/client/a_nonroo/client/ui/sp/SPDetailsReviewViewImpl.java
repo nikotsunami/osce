@@ -106,8 +106,11 @@ public class SPDetailsReviewViewImpl extends PopupPanel implements  SPDetailsRev
 		// SubViews
 	
 	@UiField
-	StandardizedPatientMediaSubViewImpl standardizedPatientMediaSubViewImpl;
+	StandardizedPatientMediaSubViewImpl standardizedPatientMediaSubViewImplOforOldImage;
 
+	@UiField
+	StandardizedPatientMediaSubViewImpl standardizedPatientMediaSubViewImplOforNewImage;
+	
 	private SPDetailsReviewViewImpl spDetailsReviewViewImpl;
 
 	// Buttons
@@ -418,6 +421,9 @@ public class SPDetailsReviewViewImpl extends PopupPanel implements  SPDetailsRev
 		this.spStandardizedPatientProxy=spStandardizedPatientProxy;
 		
 		displayRenderer.setInnerText(((proxy.getName() == null) ? "" : proxy.getName()) + ((proxy.getPreName() == null) ? "" : " " + proxy.getPreName()));
+		
+		standardizedPatientMediaSubViewImplOforOldImage.setMediaContent(proxy.getImmagePath());
+		standardizedPatientMediaSubViewImplOforNewImage.setMediaContent(spStandardizedPatientProxy.getImmagePath());
 		
 		setContactDetailsValue(proxy,spStandardizedPatientProxy);
 		setParticularsValue(proxy,spStandardizedPatientProxy);

@@ -69,7 +69,10 @@
 							<td><span ui:field="streetOldValue"/></td>
 							<td><span ui:field="streetNewValue" /></td>
 							<td rowspan="7">
-								<n:StandardizedPatientMediaSubViewImpl ui:field="standardizedPatientMediaSubViewImpl"></n:StandardizedPatientMediaSubViewImpl>
+								<n:StandardizedPatientMediaSubViewImpl ui:field="standardizedPatientMediaSubViewImplOforOldImage"></n:StandardizedPatientMediaSubViewImpl>
+							</td>
+							<td rowspan="7">
+								<n:StandardizedPatientMediaSubViewImpl ui:field="standardizedPatientMediaSubViewImplOforNewImage"></n:StandardizedPatientMediaSubViewImpl>
 							</td>
 						</tr>
 						<tr id="city">

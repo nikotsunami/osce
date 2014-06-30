@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain.spportal;
 
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,13 +49,11 @@ import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
 import ch.unibas.medizin.osce.domain.AnamnesisForm;
 import ch.unibas.medizin.osce.domain.Bankaccount;
 import ch.unibas.medizin.osce.domain.Nationality;
-import ch.unibas.medizin.osce.domain.Person;
 import ch.unibas.medizin.osce.domain.Profession;
 import ch.unibas.medizin.osce.domain.Scar;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.server.util.email.impl.EmailServiceImpl;
 import ch.unibas.medizin.osce.shared.EditRequestState;
-import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 
 
@@ -110,7 +109,7 @@ public class SPPortalPerson {
 			log.info("taking sp based on given id from database");
 			StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatinetId);
 			
-			String randomString = RandomStringUtils.randomAlphanumeric(OsMaConstant.RANDOM_STRING_LENGTH);
+			String randomString = RandomStringUtils.randomAlphanumeric(64);
 			
 			spportalUser2.saveStandardizedPatientDetailsInSpPortal(standardizedPatient,randomString);
 			
@@ -237,6 +236,20 @@ public class SPPortalPerson {
 			velocityEngine.init();
 			
 			VelocityContext velocityContext = new VelocityContext();
+			
+			Properties prop = new Properties();
+	    	
+			String serverPath=null;
+			//load a properties file
+			try {
+				prop.load(applicationContext.getResource("classpath:META-INF/spring/serverInfo.properties").getInputStream());
+				serverPath = prop.getProperty("serverAddress");
+			} catch (IOException e) {
+				e.printStackTrace();
+				log.error("Error in loading property file", e);
+			}
+			
+			velocityContext.put("serverAddress",serverPath);
 			
 			velocityContext.put("randomString",randomString);
 			
