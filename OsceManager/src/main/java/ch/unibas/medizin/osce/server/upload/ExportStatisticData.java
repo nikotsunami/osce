@@ -151,7 +151,7 @@ public class ExportStatisticData extends HttpServlet{
 			 List<String> postShortNameList = new ArrayList<String>();
 			 List<String> postLongNameList = new ArrayList<String>();
 			 List<String> postPassMarkList = new ArrayList<String>();
-			 int noOfOscePost = 0;
+			 
 				
 			 for(int i=0;i<osceDays.size();i++)
 			 {
@@ -164,7 +164,7 @@ public class ExportStatisticData extends HttpServlet{
 					
 					List<OscePost> oscePostList = osceSeq.getOscePosts();
 					String fileName = "";
-					
+					int noOfOscePost = 0;
 					for (OscePost oscePost : oscePostList)
 					{
 						noOfOscePost = noOfOscePost + 1;
@@ -175,7 +175,7 @@ public class ExportStatisticData extends HttpServlet{
 							postFileName = oscePost.getStandardizedRole().getShortName() + "_" + osceSeq.getLabel() +".csv";
 							postFileName = postFileName.replaceAll("\\\\", "");
 							postFileName = postFileName.replaceAll("\\/", "");
-							fileName = "Day"+ (i+1) + "_" + oscePost.getStandardizedRole().getShortName() + "_" +osceSeq.getLabel();
+							fileName = "Day"+ (i+1) + "_" + ("P"+noOfOscePost) + "_" + oscePost.getStandardizedRole().getShortName() + "_" +osceSeq.getLabel();
 							fileName = fileName.replaceAll("\\\\", "");
 							fileName = fileName.replaceAll("\\/", "");
 							
@@ -185,7 +185,7 @@ public class ExportStatisticData extends HttpServlet{
 						else
 						{
 							postFileName = "post" + oscePost.getId() + "_" + osceSeq.getLabel() +".csv";
-							fileName = "Day"+ (i+1) + "_" + "post" + oscePost.getId() + "_" + osceSeq.getLabel();
+							fileName = "Day"+ (i+1) + "_" + ("P"+noOfOscePost) + "_" + "post" + oscePost.getId() + "_" + osceSeq.getLabel();
 							postShortNameList.add("");
 							postLongNameList.add("");
 						}
@@ -445,10 +445,10 @@ public class ExportStatisticData extends HttpServlet{
 						OsceSequence osceSeq=osceSequences.get(a);
 						
 						List<OscePost> oscePostList = osceSeq.getOscePosts();
-						
+						int postIndex = 0;
 						for (OscePost oscePost : oscePostList)
 						{
-							
+							postIndex += 1;
 							ArrayList<String> fileNames=new ArrayList<String>();
 							fileNames.add("data");
 							fileNames.add("examiner");
@@ -458,9 +458,9 @@ public class ExportStatisticData extends HttpServlet{
 							for(int k=0;k<5;k++)
 							{
 								if (oscePost.getStandardizedRole() != null)
-									fileName = "Day"+ (i+1) + "_" + oscePost.getStandardizedRole().getShortName() + "_" +osceSeq.getLabel()+"_"+ fileNames.get(k) +".csv";
+									fileName = "Day"+ (i+1) + "_" + ("P"+postIndex) + "_" + oscePost.getStandardizedRole().getShortName() + "_" +osceSeq.getLabel()+"_"+ fileNames.get(k) +".csv";
 								else
-									fileName = "Day"+ (i+1) + "_" + "post" + oscePost.getId() + "_" + osceSeq.getLabel()+"_"+fileNames.get(k) +".csv";
+									fileName = "Day"+ (i+1) + "_" + ("P"+postIndex) + "_" + "post" + oscePost.getId() + "_" + osceSeq.getLabel()+"_"+fileNames.get(k) +".csv";
 							
 								fileName = fileName.replaceAll("\\\\", "");
 								fileName = fileName.replaceAll("\\/", "");
