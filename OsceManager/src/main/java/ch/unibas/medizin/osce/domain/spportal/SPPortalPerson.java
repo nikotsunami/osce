@@ -19,6 +19,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -153,7 +154,7 @@ public class SPPortalPerson {
 				SpStandardizedPatient spStandardizedPatient = initializeStandardizedPatientAndAnamnesisCheckValueDetails(em,standardizedPatient);
 				
 				// now actually saving all sp details in sp portal database.
-				boolean isSaved=saveUserAndSpDetailInSpPortalDatabase(em,spStandardizedPatient,randomString);
+				boolean isSaved=saveUserAndSpDetailInSpPortalDatabase(em,spStandardizedPatient,randomString,standardizedPatient);
 				
 				if(isSaved){
 					//now sending email to sp so sp can now use sp portal.
@@ -167,7 +168,6 @@ public class SPPortalPerson {
 			log.error("Exception occured during persisting patient data in sp portal db." + e.getMessage(),e);
 		}
 		}
-
 		/**
 		 * This method saves user details in sp portal db.
 		 * @param em
@@ -175,7 +175,7 @@ public class SPPortalPerson {
 		 * @param randomString
 		 */
 		@Transactional("spportalTransactionManager")
-		private boolean  saveUserAndSpDetailInSpPortalDatabase(EntityManager em,SpStandardizedPatient spStandardizedPatient,String randomString){
+		private boolean  saveUserAndSpDetailInSpPortalDatabase(EntityManager em,SpStandardizedPatient spStandardizedPatient,String randomString,StandardizedPatient standardizedPatient){
 			log.info("saving sp portal user details");
 			boolean isSaved=true;
 			try{
@@ -200,7 +200,14 @@ public class SPPortalPerson {
 				
 				log.info("user detail that is saving in sp portal db is : " + spportalUser);
 				
-				em.persist(/*spportalUser*/spStandardizedPatient);
+				//em.persist(/*spportalUser*/spStandardizedPatient);
+				
+				spStandardizedPatient.persist();
+
+				em.flush();
+				
+				//Now saving sp anamnesis check values in spportal.
+				saveAnamnesisCheckValueinSpportal(spStandardizedPatient,standardizedPatient);
 				
 				log.info("user and patient details saved in sp portal database successfully");
 				
@@ -211,6 +218,38 @@ public class SPPortalPerson {
 				return isSaved;
 			}
 			return isSaved;
+		}
+		
+		@Transactional
+		private void saveAnamnesisCheckValueinSpportal(SpStandardizedPatient spStandardizedPatient, StandardizedPatient standardizedPatient) {
+			
+			spStandardizedPatient = SpStandardizedPatient.findSpStandardizedPatient(spStandardizedPatient.getId());
+			
+			Set<AnamnesisChecksValue> setOfAnamChecksValues = standardizedPatient.getAnamnesisForm().getAnamnesischecksvalues();
+			
+			EntityManager em = SPPortalPerson.entityManager();
+		
+			Long spFormId=  spStandardizedPatient.getAnamnesisForm().getId();
+			
+			StringBuilder sql = new StringBuilder("INSERT INTO `anamnesis_checks_value` (`anamnesis_checks_value`,`comment`,`truth`,`version`,`anamnesischeck`,`anamnesisform`) VALUES ");
+			
+			for(AnamnesisChecksValue anamnesisChecksValue : setOfAnamChecksValues){
+				
+				sql.append(" (").append(anamnesisChecksValue.getAnamnesisChecksValue()).append(", ").append(anamnesisChecksValue.getComment()).append(", ").append(anamnesisChecksValue.getTruth()).append(", ")
+				.append("0, ").append(anamnesisChecksValue.getAnamnesischeck().getId()).append(", ").append(spFormId).append("),");
+			}
+			String queryString = sql.toString().substring(0, sql.toString().length()-1);
+	
+			log.info("Query is :" + queryString);
+		
+			//em.getTransaction().begin();
+			Query query =  em.createNativeQuery(queryString);
+			//em.getTransaction().commit();
+			
+			int totalEntryCreated =query.executeUpdate();
+			
+			log.info("Total Anamnesis check value inserted in spportal is : " + totalEntryCreated);
+	
 		}
 		/**
 		 * This method is used to send email to patient
@@ -282,18 +321,20 @@ public class SPPortalPerson {
 			
 			SpAnamnesisForm spAnamnesisForm=initializeAnamnesisFormDetailForSpPortal(standardizedPatient);
 			
+			//The following code inside of if condition is commented to solve production entity not found error and separately saving AnamnesisCheckValues. Manish
 			// In case if spAnamnesisForm is null we can not persist setSpAnamnesisChecksValues so making sure that we have anamnesis form and then persisting rest dependent data.
-			if(spAnamnesisForm !=null){
+			/*if(spAnamnesisForm !=null){
 				
 				//If anamnesis form is not null saving dependent data (anamnesis_check_value data).
-				Set<SpScar> spScars = initializeScarDetailForSpPortal(standardizedPatient);
+				//Set<SpScar> spScars = initializeScarDetailForSpPortal(standardizedPatient);
 				
-				Set<SpAnamnesisChecksValue> setSpAnamnesisChecksValues = initializeAnamnesisCheckValuesForSpPortal(em,standardizedPatient,spAnamnesisForm);
+				//Commented By Manish to solve production error of no entity found
+				//Set<SpAnamnesisChecksValue> setSpAnamnesisChecksValues = initializeAnamnesisCheckValuesForSpPortal(em,standardizedPatient,spAnamnesisForm);
 	
-				spAnamnesisForm.setScars(spScars);
+				//spAnamnesisForm.setScars(spScars);
 				
-				spAnamnesisForm.setAnamnesischecksvalues(setSpAnamnesisChecksValues);
-			}
+				//spAnamnesisForm.setAnamnesischecksvalues(setSpAnamnesisChecksValues);
+			}*/
 			SpStandardizedPatient spStandardizedPatient=initializeStandardizedPatientDetailForSpPortal(spNationality,spBankaccount,spProfession,standardizedPatient,spAnamnesisForm);
 			
 			log.info("returning sp standardized patient");
@@ -757,9 +798,9 @@ public class SPPortalPerson {
 		
 			SpStandardizedPatient spStandardizedPatient= sppoPerson.initializeStandardizedPatientAndAnamnesisCheckValueDetails(emOfSPPortal,standardizedPatient);
 			
-			SPPortalPerson spPerson = findSpPortalPersonBasedOnEmailAddress(standardizedPatient.getEmail());
+			//SPPortalPerson spPerson = findSpPortalPersonBasedOnEmailAddress(standardizedPatient.getEmail());
 			
-			spPerson=SPPortalPerson.findSPPortalPerson(spPerson.getId());
+			SPPortalPerson spPerson=SPPortalPerson.findSPPortalPerson(standardizedPatient.getSpPortalPersonId());
 			
 			sppoPerson.setChanged(false);
 			
@@ -768,6 +809,8 @@ public class SPPortalPerson {
 			//pushing all sp data in sp portal.
 			spStandardizedPatient.persist();
 			
+			//Now calling this method to save anamnesis check values in spportal this is to solve production error entity not found.
+			sppoPerson.saveAnamnesisCheckValueinSpportal(spStandardizedPatient, standardizedPatient);
 			//changing sp status to exported.
 			standardizedPatient=StandardizedPatient.findStandardizedPatient(standardizedPatient.getId());
 			standardizedPatient.setStatus(StandardizedPatientStatus.EXPORTED);
@@ -784,6 +827,7 @@ public class SPPortalPerson {
 				 
 				 for(SPPortalPerson person : spPersonsList){
 					 person=SPPortalPerson.findSPPortalPerson(person.getId());
+					 //setting this flag once mail is sent so only sps that received mail can edit request. Because in spportal I allow enit if this flag is true on click of edit button.
 					 //setting sp portal user flag to request approved.
 					 person.setEditRequestState(EditRequestState.APPROVED);
 					 person.persist();
