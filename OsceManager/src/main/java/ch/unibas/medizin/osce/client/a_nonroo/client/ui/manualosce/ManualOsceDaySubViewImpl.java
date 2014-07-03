@@ -112,6 +112,15 @@ public class ManualOsceDaySubViewImpl extends Composite implements ManualOsceDay
 			else
 				lunchBreakValue.setText(constants.manualOsceUnavailable());
 			
+			if (osceDayProxy.getStudentCount() != null)
+				studentValue.setText(osceDayProxy.getStudentCount().toString());
+			
+			if (osceDayProxy.getSpCount() != null)
+				standardizedPatientValue.setText(osceDayProxy.getSpCount().toString());
+			
+			if (osceDayProxy.getRoomCount() != null)
+				roomValue.setText(osceDayProxy.getRoomCount().toString());
+			
 			if (osceDayProxy.getOsceDayRotations() != null)
 			{
 				List<OsceDayRotationProxy> osceDayRotationList = osceDayProxy.getOsceDayRotations();

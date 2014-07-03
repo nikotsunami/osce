@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.manualosce;
 
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgets.IntegerBox;
 
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -11,14 +12,11 @@ public interface ManualOsceChangeBreakView extends IsWidget {
 
 	interface Delegate{
 
-		void addRotationClicked(OsceSequenceProxy osceSequenceProxy);
-
-		void removeRotationClicked(OsceSequenceProxy osceSequenceProxy);
-
 		void breakSoonerClicked(OsceSequenceProxy osceSequenceProxy);
 
 		void breakLaterClicked(OsceSequenceProxy osceSequenceProxy);
 		
+		void changeRotationNumber(OsceSequenceProxy osceSequenceProxy, int noOfRotation, ManualOsceChangeBreakViewImpl manualOsceChangeBreakViewImpl);		
 	}
 	
 	public void setDelegate(Delegate delegate);
@@ -38,4 +36,6 @@ public interface ManualOsceChangeBreakView extends IsWidget {
 	public IconButton getAddRotation();
 	
 	public IconButton getRemoveRotation();
+	
+	public IntegerBox getRotationNumber();
 }

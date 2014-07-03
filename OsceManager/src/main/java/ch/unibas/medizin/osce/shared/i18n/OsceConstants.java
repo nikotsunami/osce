@@ -1511,6 +1511,10 @@ public interface OsceConstants extends Constants {
 	public String emailFrom();
 	
 	public String sendCopyEmailError();
+	
+	public String manualOsceRotErro();
+	
+	public String manualOsceAssign();
 }
 
 

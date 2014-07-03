@@ -99,6 +99,12 @@ public class OsceDay {
 	@OrderBy("timeStart")
 	private List<OsceDayRotation> osceDayRotations = new ArrayList<OsceDayRotation>();
 	
+	private Integer studentCount;
+	
+	private Integer spCount;
+	
+	private Integer roomCount;
+	
 	/**
 	 * Sum up number of rotations of sequences belonging to this OSCE day
 	 * @return
@@ -1056,14 +1062,10 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
  		calendar.add(Calendar.DATE, 1);
  		Date newTimeStart = calendar.getTime(); 		
  		
- 		calendar.setTime(lastOsceDay.getTimeEnd());
- 		calendar.add(Calendar.DATE, 1);
- 		Date newTimeEnd = calendar.getTime();
- 		
 		OsceDay osceDay = new OsceDay();
 		osceDay.setOsceDate(newOsceDate);
 		osceDay.setTimeStart(newTimeStart);
-		osceDay.setTimeEnd(newTimeEnd);
+		osceDay.setTimeEnd(newTimeStart);
 		osceDay.setOsce(osce);
 		osceDay.persist();
 		
@@ -1073,7 +1075,7 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 		//create new osce sequence		
 		OsceSequence osceSequence = new OsceSequence();
 		osceSequence.setLabel(oldOsceSeq.getLabel());
-		osceSequence.setNumberRotation(oldOsceSeq.getNumberRotation());
+		osceSequence.setNumberRotation(1);
 		osceSequence.setOsceDay(osceDay);
 		osceSequence.persist();
 		

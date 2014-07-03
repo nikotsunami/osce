@@ -17,6 +17,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.HeaderView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.HeaderViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.manualosce.ManualOsceChangeBreakView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.manualosce.ManualOsceChangeBreakViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.manualosce.ManualOsceCreateOscePostPopUpView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.manualosce.ManualOsceCreateOscePostPopUpViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.manualosce.ManualOsceDaySubView;
@@ -350,6 +351,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 			{	
 				manualOsceSequenceViewImpl.getAddSequencePanel().getElement().getStyle().setDisplay(Display.NONE);
 				manualOsceSequenceViewImpl.getManualOscelunchBreakViewImpl().getLunchBreakDuration().setReadOnly(true);
+				manualOsceSequenceViewImpl.getManualOscelunchBreakViewImpl().getLunchBreakDuration().setEnabled(false);
 			}
 			
 			manualOsceSequenceViewImpl.setDelegate(this);
@@ -378,6 +380,8 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 					firstManualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getBreakLater().getElement().getStyle().setDisplay(Display.NONE);
 					firstManualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getAddRotation().getElement().getStyle().setDisplay(Display.NONE);
 					firstManualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getRemoveRotation().getElement().getStyle().setDisplay(Display.NONE);
+					firstManualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getRotationNumber().setReadOnly(true);
+					firstManualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getRotationNumber().setEnabled(false);
 				}
 				
 				initParcourView(osceDayProxy.getOsceSequences().get(0), firstManualOsceSequenceParcourViewImpl);
@@ -416,6 +420,8 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 					firstManualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getBreakLater().getElement().getStyle().setDisplay(Display.NONE);
 					firstManualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getAddRotation().getElement().getStyle().setDisplay(Display.NONE);
 					firstManualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getRemoveRotation().getElement().getStyle().setDisplay(Display.NONE);
+					firstManualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getRotationNumber().setReadOnly(true);
+					firstManualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getRotationNumber().setEnabled(false);
 					
 					secondManualOsceSequenceParcourViewImpl.getAddParcourVerticalPanel().getElement().getStyle().setDisplay(Display.NONE);
 					secondManualOsceSequenceParcourViewImpl.getDeleteOsceSeqBtn().getElement().getStyle().setDisplay(Display.NONE);
@@ -424,6 +430,8 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 					secondManualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getBreakLater().getElement().getStyle().setDisplay(Display.NONE);
 					secondManualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getAddRotation().getElement().getStyle().setDisplay(Display.NONE);
 					secondManualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getRemoveRotation().getElement().getStyle().setDisplay(Display.NONE);
+					secondManualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getRotationNumber().setReadOnly(true);
+					secondManualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getRotationNumber().setEnabled(false);
 				}
 				
 				
@@ -744,7 +752,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		final CheckBox verticalCheckbox = new CheckBox(constants.manualOsceVertically());
 		
 		checkBoxHp.add(horizontalCheckbox);
-		checkBoxHp.add(verticalCheckbox);
+		//checkBoxHp.add(verticalCheckbox);
 		
 		okBtn.setIcon("check");
 		cancelBtn.setIcon("closethick");
@@ -752,21 +760,21 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		okBtn.setText(constants.okBtn());
 		cancelBtn.setText(constants.cancel());
 		
-		hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		hp.setSpacing(5);
-		
+		hp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		hp.add(okBtn);
-		hp.add(cancelBtn);
+		hp.add(cancelBtn);		
 				
-		Label msgLbl=new Label();
+		/*Label msgLbl=new Label();
 		msgLbl.setText(constants.manualOsceBreakPostWarning());
 
 		HorizontalPanel msgHp = new HorizontalPanel();
 		msgHp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		msgHp.add(msgLbl);
+		msgHp.add(msgLbl);*/
 		
-		vp.setSpacing(5);
-		vp.add(msgHp);
+		vp.setSpacing(2);
+		vp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		/*vp.add(msgHp);*/
 		vp.add(checkBoxHp);
 		vp.add(hp);
 				
@@ -1186,6 +1194,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 
 	@Override
 	public void saveOsceDayClicked(OsceDayProxy osceDayProxy, Date osceDate, Date osceStartTime) {
+		showApplicationLoading(true);
 		OsceDayRequest osceDayRequest = requests.osceDayRequest();
 		osceDayProxy = osceDayRequest.edit(osceDayProxy);
 		osceDayProxy.setOsceDate(osceDate);
@@ -1194,6 +1203,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 
 			@Override
 			public void onSuccess(Void response) {
+				showApplicationLoading(false);
 			}
 		});
 	}
@@ -1202,6 +1212,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 	public void changeLunchBreak(final String value) {
 		if (this.osceProxy != null)
 		{
+			showApplicationLoading(true);
 			OsceRequest osceRequest = requests.osceRequest();
 			osceProxy = osceRequest.edit(osceProxy);
 			osceProxy.setLunchBreak(Short.parseShort(value));
@@ -1209,6 +1220,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 
 				@Override
 				public void onSuccess(Void response) {
+					showApplicationLoading(false);
 					if (osceSequenceViewMap.keySet().size() > 1)
 					{
 						for (Long key : osceSequenceViewMap.keySet())
@@ -1304,6 +1316,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 					ManualOsceSequenceViewImpl manualOsceSequenceViewImpl = osceSequenceViewMap.get(osceDayProxy.getId());
 					manualOsceSequenceViewImpl.getAddSequencePanel().getElement().getStyle().setDisplay(Display.NONE);
 					manualOsceSequenceViewImpl.getManualOscelunchBreakViewImpl().getLunchBreakDuration().setReadOnly(true);
+					manualOsceSequenceViewImpl.getManualOscelunchBreakViewImpl().getLunchBreakDuration().setEnabled(false);
 				}
 				
 				List<OsceSequenceProxy> osceSeqProxyList = osceDayProxy.getOsceSequences();
@@ -1322,6 +1335,8 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 							manualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getBreakLater().getElement().getStyle().setDisplay(Display.NONE);
 							manualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getAddRotation().getElement().getStyle().setDisplay(Display.NONE);
 							manualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getRemoveRotation().getElement().getStyle().setDisplay(Display.NONE);
+							manualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getRotationNumber().setReadOnly(true);
+							manualOsceSequenceParcourViewImpl.getManualOsceChangeBreakViewImpl().getRotationNumber().setEnabled(false);
 						}
 						
 						List<CourseProxy> courseProxyList = osceSequenceProxy.getCourses();
@@ -1402,8 +1417,6 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 						
 						ManualOsceDetailsActivity.this.osceProxy = response;
 						view.setOsceProxy(response);
-						
-						System.out.println("DAY SIZE : " + response.getOsce_days().size());
 						
 						if (manualOsceSubViewImpl != null)
 						{
@@ -1529,15 +1542,6 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 	}
 
 	@Override
-	public void addRotationClicked(OsceSequenceProxy osceSequenceProxy) {
-		
-	}
-
-	@Override
-	public void removeRotationClicked(OsceSequenceProxy osceSequenceProxy) {
-	}
-
-	@Override
 	public void breakSoonerClicked(final OsceSequenceProxy osceSequenceProxy) {
 		if (osceSequenceProxy != null)
 		{
@@ -1608,6 +1612,28 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 							}
 						});
 					}
+				}
+			});
+		}
+	}
+	
+	@Override
+	public void changeRotationNumber(OsceSequenceProxy osceSequenceProxy, int noOfRotation, final ManualOsceChangeBreakViewImpl manualOsceChangeBreakViewImpl)
+	{
+		if (osceSequenceProxy != null && noOfRotation > 0 && manualOsceChangeBreakViewImpl != null)
+		{
+			showApplicationLoading(true);
+			
+			OsceSequenceRequest osceSequenceRequest = requests.osceSequenceRequest();
+			osceSequenceProxy = osceSequenceRequest.edit(osceSequenceProxy);
+			osceSequenceProxy.setNumberRotation(noOfRotation);
+			final OsceSequenceProxy osceSequenceProxy2 = osceSequenceProxy;
+			osceSequenceRequest.persist().using(osceSequenceProxy).fire(new OSCEReceiver<Void>() {
+
+				@Override
+				public void onSuccess(Void response) {
+					manualOsceChangeBreakViewImpl.setOsceSequenceProxy(osceSequenceProxy2);
+					showApplicationLoading(false);
 				}
 			});
 		}

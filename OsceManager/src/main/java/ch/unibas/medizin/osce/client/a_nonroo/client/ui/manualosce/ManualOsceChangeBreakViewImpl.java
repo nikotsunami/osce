@@ -1,11 +1,17 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.manualosce;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.client.style.widgets.IntegerBox;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -21,6 +27,8 @@ public class ManualOsceChangeBreakViewImpl extends Composite implements ManualOs
 	
 	interface ManualOsceChangeBreakViewImplUiBinder extends UiBinder<Widget, ManualOsceChangeBreakViewImpl> {
 	}
+	
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	private Delegate delegate;
 	
@@ -45,7 +53,7 @@ public class ManualOsceChangeBreakViewImpl extends Composite implements ManualOs
 	Label nameOfSequence;
 	
 	@UiField
-	TextBox rotationNumber;	
+	IntegerBox rotationNumber;	
 	
 	@UiField
 	TextBox editNameOfSequence;
@@ -53,12 +61,26 @@ public class ManualOsceChangeBreakViewImpl extends Composite implements ManualOs
 	@UiField
 	HorizontalPanel sequencePanel;
 	
+	String regex = "\\d+";
+	
 	public ManualOsceChangeBreakViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		
-		rotationNumber.setReadOnly(true);
 		editSequence.setIcon("pencil");
 		editNameOfSequence.getElement().getStyle().setDisplay(Display.NONE);
+		
+		rotationNumber.addValueChangeHandler(new ValueChangeHandler<String>() {
+			
+			@Override
+			public void onValueChange(ValueChangeEvent<String> event) {
+				if (rotationNumber.getValue().matches(regex))
+				{
+					Integer value = tryIntParse(rotationNumber.getValue());
+					if (value != null)
+						delegate.changeRotationNumber(osceSequenceProxy, value, ManualOsceChangeBreakViewImpl.this);
+				}				
+			}
+		});
 	}
 	
 	private void init(){
@@ -71,7 +93,7 @@ public class ManualOsceChangeBreakViewImpl extends Composite implements ManualOs
 			
 			if (osceSequenceProxy.getNumberRotation() != null)
 			{
-				rotationNumber.setText(osceSequenceProxy.getNumberRotation().toString());
+				rotationNumber.setValue(osceSequenceProxy.getNumberRotation().toString());
 			}
 		}
 	}
@@ -99,17 +121,36 @@ public class ManualOsceChangeBreakViewImpl extends Composite implements ManualOs
 	{
 		if (osceSequenceProxy != null && delegate != null)
 		{
-			delegate.addRotationClicked(osceSequenceProxy);
+			Integer value = tryIntParse(rotationNumber.getValue());
+			if (value != null)
+			{
+				Integer noOfRotation = value + 1;
+				delegate.changeRotationNumber(osceSequenceProxy, noOfRotation, this);
+				rotationNumber.setValue(noOfRotation.toString());
+			}
+			
 		}
 	}
 	
 	@UiHandler("removeRotation")
 	public void removeRotationClicked(ClickEvent event)
 	{
-		if (osceSequenceProxy != null && delegate != null)
+		Integer value = tryIntParse(rotationNumber.getValue());
+		if (value != null)
 		{
-			delegate.removeRotationClicked(osceSequenceProxy);
-		}
+			if (value == 1)
+			{
+				MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+				confirmationDialogBox.showConfirmationDialog(constants.manualOsceRotErro());
+				return;
+			}
+			if (osceSequenceProxy != null && delegate != null)
+			{
+				Integer noOfRotation = value - 1;
+				delegate.changeRotationNumber(osceSequenceProxy, noOfRotation, this);
+				rotationNumber.setValue(noOfRotation.toString());
+			}
+		}		
 	}
 		
 	@Override
@@ -164,5 +205,18 @@ public class ManualOsceChangeBreakViewImpl extends Composite implements ManualOs
 	
 	public IconButton getRemoveRotation() {
 		return removeRotation;
+	}
+	
+	public static Integer tryIntParse(String value) {
+		try {
+			return Integer.parseInt(value,10);
+		} catch (Exception e) {
+			Log.error("error in parsing data");
+		}
+		return null;
+	}
+
+	public IntegerBox getRotationNumber() {
+		return rotationNumber;
 	}
 }

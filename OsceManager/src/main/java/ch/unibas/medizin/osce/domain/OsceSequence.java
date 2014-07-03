@@ -277,7 +277,6 @@ public class OsceSequence {
  			newOscePost.setValue(oscePost.getValue());
  			newOscePost.setOscePostBlueprint(oscePost.getOscePostBlueprint());
  			newOscePost.setOsceSequence(osceSequence);
- 			newOscePost.setStandardizedRole(oscePost.getStandardizedRole());
  			newOscePost.persist();
  			oscePostMap.put(oscePost.getId(), newOscePost);
  		}
@@ -297,6 +296,7 @@ public class OsceSequence {
  				OscePostRoom newOscePostRoom = new OscePostRoom();
  				newOscePostRoom.setCourse(newCourse);
  				newOscePostRoom.setOscePost(oscePostMap.get(oscePostRoom.getOscePost().getId()));
+ 				newOscePostRoom.setRoom(oscePostRoom.getRoom());
  				newOscePostRoom.persist();
  			}
 	 			 		

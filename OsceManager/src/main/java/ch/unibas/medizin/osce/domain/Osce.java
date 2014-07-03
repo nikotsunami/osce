@@ -1503,8 +1503,8 @@ public class Osce {
  			Osce osce = Osce.findOsce(osceId);
  	 		
  	 		ManualOsceTimeTableCalculation manualOsceTimeTableCalculation = new ManualOsceTimeTableCalculation(osce);
- 	 		manualOsceTimeTableCalculation.calculateTime();
- 	 		manualOsceTimeTableCalculation.printResult();
+ 	 		manualOsceTimeTableCalculation.calculateTime2();
+ 	 		//manualOsceTimeTableCalculation.printResult();
  	 		manualOsceTimeTableCalculation.saveOsceData();
  		}
  		catch (Exception e) {
@@ -1527,7 +1527,7 @@ public class Osce {
  				if (oscePostRoomList.isEmpty())
  				{
  					ManualOsceTimeTableCalculation manualOsceTimeTableCalculation = new ManualOsceTimeTableCalculation(osce);
- 	 	 	 		manualOsceTimeTableCalculation.calculateTime();
+ 	 	 	 		manualOsceTimeTableCalculation.calculateTime2();
  	 	 	 		manualOsceTimeTableCalculation.createAssignment();
  	 	 	 		
  	 	 	 		osce.setOsceStatus(OsceStatus.OSCE_CLOSED);
@@ -1561,9 +1561,7 @@ public class Osce {
  	 			Date timeStart = oldOsceDay.getTimeStart();
  	 			Date osceDate = oldOsceDay.getOsceDate();
  	 			
- 	 			int osceDayListSize = osceDayList.size();
  	 			List<Long> removeOsceDayIdList = new ArrayList<Long>();
- 	 			
  	 			for (OsceDay osceDay : osceDayList)
  	 			{
  	 				removeOsceDayIdList.add(osceDay.getId());
@@ -1578,9 +1576,15 @@ public class Osce {
  	 			}
  	 			
  	 			List<OscePostBlueprint> oscePostBlueprintList = osce.getOscePostBlueprints();
- 	 			int opbSize = oscePostBlueprintList.size();
+ 	 			List<Long> opbIdList = new ArrayList<Long>();
  	 			for (OscePostBlueprint oscePostBlueprint : oscePostBlueprintList)
  	 			{
+ 	 				opbIdList.add(oscePostBlueprint.getId());
+ 	 			}
+ 	 			
+ 	 			for (int i=0; i<opbIdList.size(); i++)
+ 	 			{
+ 	 				OscePostBlueprint oscePostBlueprint = OscePostBlueprint.findOscePostBlueprint(opbIdList.get(i));
  	 				osce.getOscePostBlueprints().remove(oscePostBlueprint);
  	 				
  	 				if (oscePostBlueprint != null)

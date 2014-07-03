@@ -342,5 +342,13 @@ public class OscePost {
 		String sql = "SELECT op FROM OscePost op WHERE op.oscePostBlueprint.postType = " + PostType.NORMAL.ordinal() + " AND op.standardizedRole IS NULL AND op.osceSequence.osceDay.osce.id = " + osceId;
 		TypedQuery<OscePost> query = em.createQuery(sql, OscePost.class);
 		return query.getResultList();
-	}	
+	}
+	
+	public static Integer findSpByOsceSeqId(Long osceSeqId)
+	 {
+		 EntityManager em = entityManager();
+		 String sql = "SELECT DISTINCT op.standardizedRole.id FROM OscePost op WHERE op.standardizedRole is not null AND op.standardizedRole.roleType != 2 AND op.osceSequence.id = " + osceSeqId;
+		 TypedQuery<Long> query = em.createQuery(sql, Long.class);
+		 return query.getResultList().size();
+	 }
 }

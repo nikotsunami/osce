@@ -715,4 +715,12 @@ public class OscePostRoom {
 		 TypedQuery<OscePost> q = em.createQuery(query, OscePost.class);
 		 return q.getResultList();
 	 }
+	 
+	 public static Integer findRoomByOsceDayId(Long osceDayId)
+	 {
+		EntityManager em = entityManager();
+		String sql = "SELECT DISTINCT o.room.id FROM OscePostRoom o WHERE o.room is not null and o.course.osceSequence.osceDay.id = " + osceDayId;
+		TypedQuery<Long> query = em.createQuery(sql, Long.class);
+		return query.getResultList().size();
+	 }
 }

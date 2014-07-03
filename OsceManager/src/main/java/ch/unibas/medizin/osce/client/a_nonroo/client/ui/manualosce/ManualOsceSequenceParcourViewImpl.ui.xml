@@ -4,6 +4,8 @@
 	<ui:style src="../../styles.css">
 		.verticalButton{
 			-moz-transform: rotate(-90deg);
+			margin-left: -13px;
+			margin-right: -13px;
 		}
 		.addParcourPanel{
 			margin-left: 10px;

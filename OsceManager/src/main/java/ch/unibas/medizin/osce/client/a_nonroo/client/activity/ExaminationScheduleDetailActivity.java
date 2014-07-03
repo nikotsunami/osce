@@ -72,6 +72,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.Widget;
 
+@SuppressWarnings("deprecation")
 public class ExaminationScheduleDetailActivity extends AbstractActivity implements ExaminationScheduleDetailView.Presenter,ExaminationScheduleDetailView.Delegate,AccordianPanelView.Delegate
 ,StudentView.Delegate,SPView.Delegate,ExaminationView.Delegate,ContentView.Delegate,OscePostView.Delegate{
 
@@ -3063,6 +3064,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	}
 
 	//by spec change[
+	
 	@Override
 	public void showExchangeStudentPopup(final PopupView popupView, final AssignmentProxy ass) {
 		requests.studentRequestNonRoo().findStudnetByAssignment(ass.getId()).fire(new OSCEReceiver<List<StudentProxy>>() {
@@ -3074,6 +3076,17 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					popupView.getNameValue().setText(constants.notAssigned());
 				else
 					popupView.getNameValue().setText(ass.getStudent().getName());
+				
+				if (ass.getStudent() == null && response.size() > 0)
+				{
+					popupView.getOkButton().setText(constants.manualOsceAssign());
+					popupView.getOkButton().setIcon("plusthick");
+				}
+				else
+				{
+					popupView.getOkButton().setText(constants.exchange());
+					popupView.getOkButton().setIcon("refresh");					
+				}
 				
 				popupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(ass.getTimeStart()));
 				popupView.getEndTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(ass.getTimeEnd()));

@@ -37,7 +37,7 @@
 		
 			<g:HorizontalPanel spacing="5">
 				<s:IconButton ui:field="removeRotation" icon="circle-minus"></s:IconButton>
-				<g:TextBox ui:field="rotationNumber" styleName="{style.textBoxStyle}"></g:TextBox>
+				<s:IntegerBox ui:field="rotationNumber" styleName="{style.textBoxStyle}"></s:IntegerBox>
 				<s:IconButton ui:field="addRotation" icon="circle-plus"></s:IconButton>
 			</g:HorizontalPanel>
 		</g:VerticalPanel>

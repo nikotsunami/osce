@@ -19,6 +19,7 @@ import ch.unibas.medizin.osce.domain.Course;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.OsceDayRotation;
+import ch.unibas.medizin.osce.domain.OscePost;
 import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.domain.OsceSequence;
 import ch.unibas.medizin.osce.shared.BreakType;
@@ -31,9 +32,7 @@ public class ManualOsceTimeTableCalculation {
 	private static Logger Log = Logger.getLogger(ManualOsceTimeTableCalculation.class);
 	private static int LONG_BREAK_MIDDLE_THRESHOLD = 150;
 	private static int LUNCH_BREAK_MIDDLE_THRESHOLD = 360;
-	private static int MAX_ROTATION = 100;
 	private final Osce osce;
-	private final int totalStudent;
 	Calendar calendar;
 	
 	private static final DateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -43,6 +42,9 @@ public class ManualOsceTimeTableCalculation {
 	
 	//Manage Osce day wise
 	Map<Integer, Integer> logicalBreakMap = new HashMap<Integer, Integer>();
+	
+	//Managet OsceDay wise Student Count
+	Map<Long, Integer> studentOsceDayMap = new HashMap<Long, Integer>();
 	
 	public ManualOsceTimeTableCalculation(Osce osce) {
 		this.osce = osce;
@@ -54,10 +56,283 @@ public class ManualOsceTimeTableCalculation {
 			LUNCH_BREAK_MIDDLE_THRESHOLD = osce.getLunchBreakRequiredTime();
 		
 		calendar = Calendar.getInstance();
-		totalStudent = osce.getMaxNumberStudents();
 	}
 	
-	public void calculateTime(){
+	public void calculateTime2()
+	{
+		List<OsceDay> osceDayList = osce.getOsce_days();
+		for (OsceDay osceDay : osceDayList)
+		{
+			int totalStudentInDay = 0;
+			Date timeStart = osceDay.getTimeStart();			
+				
+			List<OsceSequence> osceSeqList = osceDay.getOsceSequences();
+			
+			if (osceSeqList.size() == 1)
+			{
+				Date startTime = timeStart;
+				int breakValue = 0;
+				OsceSequence osceSeq = osceSeqList.get(0);
+				
+				Map<Integer, RotationData> rotationMap = new HashMap<Integer, RotationData>();
+				Map<Integer, Integer> longBreakMap = new HashMap<Integer, Integer>();
+				
+				int noOfLongBreak = 0;
+				int numberOfRotation = 0;
+				int totalTimeForLongBreak = 0;
+				int totalTimeForLunchBreak = 0;
+				int totalStudentInOneRotation = 0;
+				int lunchBreakRotation = -1;
+				
+				List<Course> courseList = osceSeq.getCourses();
+				
+				for (Course course : courseList)
+				{
+					totalStudentInOneRotation += course.getOscePostRooms().size();
+				}
+				
+				int maxPost = osceSeq.getOscePosts().size();
+				int totalTimeForOneRotation = ((maxPost * osce.getPostLength()) + ((maxPost - 1) * osce.getShortBreak()));
+				
+				for (int i=0; i<osceSeq.getNumberRotation(); i++)
+				{
+					totalStudentInDay += totalStudentInOneRotation;
+					Date rotationEndTime = dateAddMin(startTime, totalTimeForOneRotation);
+					
+					RotationData rotationData = null;
+					totalTimeForLongBreak += totalTimeForOneRotation;
+					totalTimeForLunchBreak += totalTimeForOneRotation;
+					numberOfRotation += 1;
+					
+					if (rotationData == null && totalTimeForLunchBreak > LUNCH_BREAK_MIDDLE_THRESHOLD)
+					{
+						breakValue = osce.getLunchBreak().intValue();
+						rotationData = new RotationData(numberOfRotation, startTime, breakValue, rotationEndTime);
+						totalTimeForLunchBreak = 0;
+						totalTimeForLongBreak = 0;
+						lunchBreakRotation = i;
+					}
+					
+					if (rotationData == null && totalTimeForLongBreak > LONG_BREAK_MIDDLE_THRESHOLD)
+					{
+						breakValue = osce.getLongBreak().intValue();
+						rotationData = new RotationData(numberOfRotation, startTime, breakValue, rotationEndTime);
+						noOfLongBreak += 1;
+						longBreakMap.put(noOfLongBreak, numberOfRotation);
+						totalTimeForLongBreak = 0;
+					}
+					
+					if (rotationData == null)
+					{
+						breakValue =  osce.getMiddleBreak().intValue();
+						rotationData = new RotationData(numberOfRotation, startTime, breakValue, rotationEndTime);
+					}
+					
+					rotationMap.put(numberOfRotation, rotationData);
+					startTime = rotationEndTime;
+					startTime = dateAddMin(startTime, breakValue);
+				}	
+				
+			
+				if (noOfLongBreak > 0)
+				{ 
+					if (lunchBreakRotation < 1)
+						lunchBreakRotation = numberOfRotation;
+					
+					int index = 1;
+					
+					while (noOfLongBreak > 0)
+					{
+						int middleRot = 0;
+						if (index == 1)
+							middleRot = lunchBreakRotation / 2;
+						else
+							middleRot += lunchBreakRotation;
+						
+						Integer longBreakRotation = longBreakMap.get(index);
+						
+						if (middleRot > 0 && middleRot != longBreakRotation)
+						{
+							RotationData longBreakRotData = rotationMap.get(longBreakRotation);
+							longBreakRotData.setBreakValue(osce.getMiddleBreak().intValue());
+							rotationMap.put(longBreakRotation, longBreakRotData);
+							int diff = osce.getLongBreak().intValue() - osce.getMiddleBreak().intValue();
+							
+							for (int i=(longBreakRotation+1); i<=numberOfRotation; i++)
+							{
+								RotationData rotationData = rotationMap.get(i);
+								
+								Date stTime = rotationData.getStartTime();
+								Date endTime = rotationData.getEndTime();
+								
+								stTime = dateSubtractMin(stTime, diff);
+								endTime = dateSubtractMin(endTime, diff);
+								
+								rotationData.setStartTime(stTime);
+								rotationData.setEndTime(endTime);
+								
+								rotationMap.put(i, rotationData);
+							}
+							
+							RotationData longBreakData = rotationMap.get(middleRot);
+							longBreakData.setBreakValue(osce.getLongBreak().intValue());
+							rotationMap.put(middleRot, longBreakData);
+							
+							for (int i=(middleRot+1); i<=numberOfRotation; i++)
+							{
+								RotationData rotationData = rotationMap.get(i);
+								
+								Date stTime = rotationData.getStartTime();
+								Date endTime = rotationData.getEndTime();
+								
+								stTime = dateAddMin(stTime, diff);
+								endTime = dateAddMin(endTime, diff);
+								
+								rotationData.setStartTime(stTime);
+								rotationData.setEndTime(endTime);
+								
+								rotationMap.put(i, rotationData);
+							}
+						}
+						
+						index += 1;
+						noOfLongBreak -= 1;
+					}
+				}
+				
+				sequenceMap.put(osceSeq.getId(), rotationMap);
+			}
+			else if (osceSeqList.size() == 2)
+			{
+				Date startTime = timeStart;
+				int breakValue = -1;
+				
+				for (int seqIndex = 0; seqIndex<osceSeqList.size(); seqIndex++)
+				{	
+					OsceSequence osceSeq = osceSeqList.get(seqIndex);
+					Map<Integer, RotationData> rotationMap = new HashMap<Integer, RotationData>();
+					Map<Integer, Integer> longBreakMap = new HashMap<Integer, Integer>();
+					
+					int noOfLongBreak = 0;
+					int numberOfRotation = 0;
+					int totalTimeForSequence = 0;
+					int totalStudentInOneRotation = 0;
+					
+					List<Course> courseList = osceSeq.getCourses();
+					for (Course course : courseList)
+					{
+						totalStudentInOneRotation += course.getOscePostRooms().size();
+					}
+					
+					int maxPost = osceSeq.getOscePosts().size();
+					int totalTimeForOneRotation = ((maxPost * osce.getPostLength()) + ((maxPost - 1) * osce.getShortBreak()));
+					
+					for (int i=0; i<osceSeq.getNumberRotation(); i++)
+					{
+						totalStudentInDay += totalStudentInOneRotation;
+						Date rotationEndTime = dateAddMin(startTime, totalTimeForOneRotation);
+						
+						RotationData rotationData = null;
+						totalTimeForSequence += totalTimeForOneRotation;
+						numberOfRotation += 1;
+						
+						if (rotationData == null && seqIndex == 0 && i == (osceSeq.getNumberRotation() - 1))
+						{	
+							breakValue = osce.getLunchBreak().intValue();
+							rotationData = new RotationData(numberOfRotation, startTime, breakValue, rotationEndTime);
+						}
+						
+						if (rotationData == null && rotationData == null && totalTimeForSequence > LONG_BREAK_MIDDLE_THRESHOLD)
+						{
+							breakValue = osce.getLongBreak().intValue();
+							rotationData = new RotationData(numberOfRotation, startTime, breakValue, rotationEndTime);
+							noOfLongBreak += 1;
+							longBreakMap.put(noOfLongBreak, numberOfRotation);
+							totalTimeForSequence = 0;
+						}
+						
+						if (rotationData == null)
+						{
+							breakValue =  osce.getMiddleBreak().intValue();
+							rotationData = new RotationData(numberOfRotation, startTime, breakValue, rotationEndTime);
+						}
+						
+						rotationMap.put(numberOfRotation, rotationData);
+						
+						startTime = rotationEndTime;
+						startTime = dateAddMin(startTime, breakValue);
+					}
+					
+					
+					if (noOfLongBreak > 0)
+					{
+						int breakCount = noOfLongBreak + 1;
+						int middleRot = numberOfRotation / breakCount;
+						int longBreakIndex = 0;
+						int longBreakRot = 0;
+						
+						while (noOfLongBreak > 0)
+						{
+							noOfLongBreak -= 1;
+							longBreakRot += middleRot;
+							longBreakIndex += 1;
+							Integer longBreakRotation = longBreakMap.get(longBreakIndex);
+						
+							if (longBreakRot != longBreakRotation)
+							{
+								RotationData longBreakRotData = rotationMap.get(longBreakRotation);
+								longBreakRotData.setBreakValue(osce.getMiddleBreak().intValue());
+								rotationMap.put(longBreakRotation, longBreakRotData);
+								int diff = osce.getLongBreak().intValue() - osce.getMiddleBreak().intValue();
+								
+								for (int i=(longBreakRotation+1); i<=numberOfRotation; i++)
+								{
+									RotationData rotationData = rotationMap.get(i);
+									
+									Date stTime = rotationData.getStartTime();
+									Date endTime = rotationData.getEndTime();
+									
+									stTime = dateSubtractMin(stTime, diff);										
+									endTime = dateSubtractMin(endTime, diff);
+									
+									rotationData.setStartTime(stTime);
+									rotationData.setEndTime(endTime);
+									
+									rotationMap.put(i, rotationData);
+								}
+								
+								RotationData longBreakData = rotationMap.get(longBreakRot);
+								longBreakData.setBreakValue(osce.getLongBreak().intValue());
+								rotationMap.put(longBreakRot, longBreakData);
+								
+								for (int i=(longBreakRot+1); i<=numberOfRotation; i++)
+								{
+									RotationData rotationData = rotationMap.get(i);
+									
+									Date stTime = rotationData.getStartTime();
+									Date endTime = rotationData.getEndTime();
+									
+									stTime = dateAddMin(stTime, diff);
+									endTime = dateAddMin(endTime, diff);
+									
+									rotationData.setStartTime(stTime);
+									rotationData.setEndTime(endTime);
+									
+									rotationMap.put(i, rotationData);
+								}
+							}
+						}
+					}
+					
+					sequenceMap.put(osceSeq.getId(), rotationMap);					
+				}
+			}
+			
+			studentOsceDayMap.put(osceDay.getId(), totalStudentInDay);
+		}
+	}
+	
+	/*public void calculateTime(){
 		List<OsceDay> osceDayList = osce.getOsce_days();
 		
 		int totalRemainingStudent = totalStudent;
@@ -180,7 +455,7 @@ public class ManualOsceTimeTableCalculation {
 					}
 				}	
 				
-				/*List<Integer> keySet = new ArrayList<Integer>(new TreeSet<Integer>(logicalBreakMap.keySet()));
+				List<Integer> keySet = new ArrayList<Integer>(new TreeSet<Integer>(logicalBreakMap.keySet()));
 				int timeForOnePost = osce.getPostLength().intValue() + osce.getShortBreak().intValue();
 				int timeToAdd = 0;
 				for (int i=0; i<keySet.size(); i++)
@@ -230,7 +505,7 @@ public class ManualOsceTimeTableCalculation {
 						}
 						
 					}	
-				}*/		
+				}		
 				
 				if (noOfLongBreak > 0)
 				{ 
@@ -394,7 +669,7 @@ public class ManualOsceTimeTableCalculation {
 							}
 						}
 						
-						/*List<Integer> keySet = new ArrayList<Integer>(new TreeSet<Integer>(logicalBreakMap.keySet()));
+						List<Integer> keySet = new ArrayList<Integer>(new TreeSet<Integer>(logicalBreakMap.keySet()));
 						int timeForOnePost = osce.getPostLength().intValue() + osce.getShortBreak().intValue();
 						int timeToAdd = 0;
 						for (int i=0; i<keySet.size(); i++)
@@ -492,7 +767,7 @@ public class ManualOsceTimeTableCalculation {
 									}
 								}	
 							}
-						}*/			
+						}			
 						
 						if (noOfLongBreak > 0)
 						{
@@ -554,9 +829,9 @@ public class ManualOsceTimeTableCalculation {
 		}
 		
 		updateTimeOfLogicalBreak();
-	}
+	}*/
 	
-	private void updateTimeOfLogicalBreak() {
+	/*private void updateTimeOfLogicalBreak() {
 		Set<Long> keySet = new TreeSet<Long>(sequenceMap.keySet());
 		int totalRotation = 0;
 		int timeForOnePost = osce.getPostLength().intValue() + osce.getShortBreak().intValue();
@@ -626,9 +901,9 @@ public class ManualOsceTimeTableCalculation {
 				previousSeqOsceDayId = osceSequence.getOsceDay().getId();
 			}
 		}
-	}
+	}*/
 
-	private RotationData updateRotationTime(RotationData rotationData, int timeToAdd, int timeForOnePost)
+	/*private RotationData updateRotationTime(RotationData rotationData, int timeToAdd, int timeForOnePost)
 	{
 		Date rotStTime = rotationData.getStartTime();
 		Date rotEndTime = rotationData.getEndTime();
@@ -639,7 +914,7 @@ public class ManualOsceTimeTableCalculation {
 		rotationData.setEndTime(rotEndTime);
 		
 		return rotationData;
-	}
+	}*/
 	
 	public void printResult()
 	{
@@ -673,6 +948,10 @@ public class ManualOsceTimeTableCalculation {
 			List<OsceDay> osceDayList = osce.getOsce_days();
 			for (OsceDay osceDay : osceDayList)
 			{
+				Integer totalSp = 0;				
+				Integer roomCount = 0;
+				Integer studentCount = 0;
+				
 				new OsceDayRotation().deleteOsceRotationDataByOsceDay(osceDay.getId());
 				
 				String rotationStr = "";
@@ -688,9 +967,6 @@ public class ManualOsceTimeTableCalculation {
 					{
 						Map<Integer, RotationData> rotationMap = sequenceMap.get(osceSeq.getId());
 						List<Integer> keySet = new ArrayList<Integer>(new TreeSet<Integer>(rotationMap.keySet()));
-						
-						osceSeq.setNumberRotation(keySet.size());
-						osceSeq.persist();
 						
 						for (Integer key : keySet)
 						{
@@ -723,8 +999,20 @@ public class ManualOsceTimeTableCalculation {
 							latestEndTime = rotationData.getEndTime();						
 						}
 					}
+					
+					Integer spCount = OscePost.findSpByOsceSeqId(osceSeq.getId());
+					totalSp += spCount;
 				}
-								
+				
+				roomCount = OscePostRoom.findRoomByOsceDayId(osceDay.getId());
+				if (studentOsceDayMap.containsKey(osceDay.getId()))
+				{
+					studentCount = studentOsceDayMap.get(osceDay.getId());					
+				}
+				
+				osceDay.setStudentCount(studentCount);
+				osceDay.setRoomCount(roomCount);
+				osceDay.setSpCount(totalSp);
 				osceDay.setLunchBreakAfterRotation(lunchBreakRotation);
 				osceDay.setLunchBreakStart(lunchBreakStartTime);
 				osceDay.setBreakByRotation(rotationStr);
@@ -768,7 +1056,6 @@ public class ManualOsceTimeTableCalculation {
 							int rotationNumber = osceDayRotation.getRotationNumber();
 							List<OscePostRoom> oscePostRoomList = OscePostRoom.findOscePostRoomByCourseIdOrderByOscePostSeqNo(course.getId());
 							int noOfSlot = oscePostRoomList.size();
-							int key = (numberOfRotation + rotationNumber);
 							
 							if (logicalBreakMap.containsKey(assRotNumber))
 							{
@@ -928,7 +1215,7 @@ public class ManualOsceTimeTableCalculation {
 		return null;
 	}
 
-	private void printSPRecord(List<SpAssignment> spAssList) {
+	/*private void printSPRecord(List<SpAssignment> spAssList) {
 		System.out.println("SP DATA");
 		System.out.println("----------------------------------------------------------------------------------------");
 		System.out.println("SEQ NO	TIMESTART		TIMEEND		OPRID");
@@ -950,13 +1237,13 @@ public class ManualOsceTimeTableCalculation {
 			System.out.println(studentAssignment.getSequenceNumber() + "	" + format.format(studentAssignment.getTimeStart()) + "	" + format.format(studentAssignment.getTimeEnd()) + "	" + studentAssignment.getRotationNumber() + "	" + studentAssignment.getOscePostRoomId());
 		}
 		System.out.println("----------------------------------------------------------------------------------------");
-	}
+	}*/
 
 	private Date dateAddMin(Date date, int minToAdd) {
 		return new Date((long) (date.getTime() + minToAdd * 60 * 1000));
 	}
 	
-	private boolean isBetween(Date date, Date minDate, Date maxDate)
+	/*private boolean isBetween(Date date, Date minDate, Date maxDate)
 	{
 		if (date.after(minDate) && date.before(maxDate))
 			return true;
@@ -970,7 +1257,7 @@ public class ManualOsceTimeTableCalculation {
 			return true;
 		
 		return false;
-	}
+	}*/
 	
 	private Date dateSubtractMin(Date date, int minToSubtract) {
 		return new Date((long) (date.getTime() - minToSubtract * 60 * 1000));

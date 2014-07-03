@@ -41,6 +41,8 @@ public class ManualOsceSequenceViewImpl extends Composite implements ManualOsceS
 
 	private OsceDayProxy osceDayProxy;
 	
+	String regex = "\\d+";
+	
 	public ManualOsceSequenceViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		
@@ -48,7 +50,10 @@ public class ManualOsceSequenceViewImpl extends Composite implements ManualOsceS
 			
 			@Override
 			public void onValueChange(ValueChangeEvent<String> event) {
-				delegate.changeLunchBreak(event.getValue());
+				if (manualOscelunchBreakViewImpl.getLunchBreakDuration().getValue().matches(regex))
+				{
+					delegate.changeLunchBreak(event.getValue());
+				}
 			}
 		});
 	}

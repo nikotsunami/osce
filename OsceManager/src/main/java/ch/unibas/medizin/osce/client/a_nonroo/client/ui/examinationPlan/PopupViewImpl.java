@@ -42,7 +42,7 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 	public ValueListBox<Date> getEndTimeListBox() {
 		return endTimeListBox;
 	}
-	public Button getOkButton() {
+	public IconButton getOkButton() {
 		return okButton;
 	}
 	public Button getCancelButton() {

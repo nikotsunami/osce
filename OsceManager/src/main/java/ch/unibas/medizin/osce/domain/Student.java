@@ -19,6 +19,7 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.OsceCreationType;
 import ch.unibas.medizin.osce.shared.Sorting;
 
 @RooJavaBean
@@ -150,10 +151,21 @@ public class Student {
     	
     	EntityManager em = entityManager();
     	String sql = "";
-    	if (ass.getStudent() == null)
-    		sql = "SELECT DISTINCT s FROM Student s, Assignment a WHERE s.id = a.student AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " ORDER BY s.id";
-    	else	
-    		sql = "SELECT DISTINCT s FROM Student s, Assignment a WHERE s.id = a.student AND s.id <> " + ass.getStudent().getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " ORDER BY s.id";
+    	
+    	if (OsceCreationType.Manual.equals(ass.getOsceDay().getOsce().getOsceCreationType()))
+    	{
+    		if (ass.getStudent() == null)
+    			sql = "SELECT DISTINCT so.student FROM StudentOsces so WHERE so.osce.id = " + ass.getOsceDay().getOsce().getId() + " AND so.isEnrolled = 1 ORDER BY so.student.id";
+        	else	
+        		sql = "SELECT DISTINCT so.student FROM StudentOsces so WHERE so.osce.id = " + ass.getOsceDay().getOsce().getId() + " AND so.isEnrolled = 1 AND so.student.id <> " + ass.getStudent().getId() + " ORDER BY so.student.id";
+    	}
+    	else if (OsceCreationType.Automatic.equals(ass.getOsceDay().getOsce().getOsceCreationType()))
+    	{
+    		if (ass.getStudent() == null)
+        		sql = "SELECT DISTINCT s FROM Student s, Assignment a WHERE s.id = a.student AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " ORDER BY s.id";
+        	else	
+        		sql = "SELECT DISTINCT s FROM Student s, Assignment a WHERE s.id = a.student AND s.id <> " + ass.getStudent().getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " ORDER BY s.id";
+    	} 
     	//System.out.println("~~QUERY : " + sql);
     	TypedQuery<Student> q = em.createQuery(sql, Student.class);
     	return q.getResultList();

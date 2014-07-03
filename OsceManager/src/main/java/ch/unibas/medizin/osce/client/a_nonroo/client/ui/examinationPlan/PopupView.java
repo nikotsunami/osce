@@ -35,7 +35,7 @@ public interface PopupView extends IsWidget {
 	
 	public Label getStartTimeValue();
 	
-	public Button getOkButton();
+	public IconButton getOkButton();
 	
 	public Button getCancelButton();
 	
