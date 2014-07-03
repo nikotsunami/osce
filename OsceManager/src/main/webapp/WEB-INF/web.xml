@@ -42,7 +42,7 @@
   	</filter> 
   	<filter-mapping> 
     	<filter-name>NoCache</filter-name> 
-    	<url-pattern>osMaEntry/osMaEntry.nocache.js</url-pattern> 
+    	<url-pattern>/osMaEntry/osMaEntry.nocache.js</url-pattern> 
   	</filter-mapping>
     
     <filter>
@@ -96,7 +96,7 @@
     <!-- Uncomment for production mode 
     <filter-mapping>
 		<filter-name>AuthenticationFilter</filter-name>
-		<url-pattern>/*.html</url-pattern>
+		<url-pattern>*.html</url-pattern>
 	</filter-mapping>
 	
 	
