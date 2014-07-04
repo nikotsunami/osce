@@ -132,6 +132,10 @@ public class SpStandardizedPatient {
     
     private Boolean ignoreSocialInsuranceNo;
     
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(style = "M-")
+    private Date created;
+    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedPatient")
 	private Set<SpPatientInSemester> patientInSemester = new HashSet<SpPatientInSemester>();
 

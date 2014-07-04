@@ -120,6 +120,9 @@ public class SPPortalPerson {
 			
 			standardizedPatient.setSpPortalPersonId(spPortalUser.getId());
 			
+			
+			standardizedPatient.setCreated(new Date());
+			
 			standardizedPatient.persist();
 		}
 
@@ -526,6 +529,7 @@ public class SPPortalPerson {
 			
 						spStandardizedPatient= new SpStandardizedPatient();
 						
+						spStandardizedPatient.setCreated(new Date());
 						spStandardizedPatient.setAnamnesisForm(spAnamnesisForm);
 						spStandardizedPatient.setBankAccount(spBankaccount);
 						spStandardizedPatient.setBirthday(standardizedPatient.getBirthday());
