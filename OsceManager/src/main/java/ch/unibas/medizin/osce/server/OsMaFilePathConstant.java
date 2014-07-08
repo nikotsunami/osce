@@ -1,7 +1,27 @@
 package ch.unibas.medizin.osce.server;
 
+import java.util.Properties;
+
 public class OsMaFilePathConstant {
 
+	 public static String getUploadBaseDIRPath() {
+		  
+		 String  UPLOAD_BASE_DIR_PATH = ""; 
+	
+		  try 
+		  {
+			  Properties properties =  new Properties();
+			  properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/paths.properties")); 
+			  UPLOAD_BASE_DIR_PATH = properties.getProperty("baseDir");
+		  }
+		  catch (Exception e) 
+		  {
+			   e.printStackTrace();
+		  }
+		  
+		  return UPLOAD_BASE_DIR_PATH;
+	 }
+	
 	// Module 9 Start
 
 	public static String DOWNLOAD_DIR_PATH = "Download";
@@ -55,30 +75,31 @@ public class OsMaFilePathConstant {
 	public static String appImageUploadDirectory = "osMaEntry/gwt/unibas/sp/images";
 
 	// Module 9 End
-	public static String DEFAULT_IMPORT_EOSCE_PATH = "/usr/oscemanager/eOSCE/import/";
+	public static String DEFAULT_IMPORT_EOSCE_PATH = getUploadBaseDIRPath() + "/eosce/import/"; //"/usr/oscemanager/eOSCE/import/";
 	// public static String DEFAULT_IMPORT_EOSCE_PATH = "C:\\oscemanager\\eOSCE\\import\\";
 
 	// Role Module
-	public static String ROLE_IMAGE_FILEPATH = "/usr/oscemanager/role/images/";
+	public static String ROLE_IMAGE_FILEPATH = getUploadBaseDIRPath() + "/role/images/"; //"/usr/oscemanager/role/images/";
 	// public static String ROLE_IMAGE_FILEPATH = "c:\\oscemanager\\role\\images\\";
 
 	// Export OSCE File Path
-	public static String EXPORT_OSCE_PROCESSED_FILEPATH = "/usr/oscemanager/eosce/export/processed/";
-	 //public static String EXPORT_OSCE_PROCESSED_FILEPATH = "c:\\oscemanager\\eosce\\export\\processed\\";
-	public static String EXPORT_OSCE_UNPROCESSED_FILEPATH = "/usr/oscemanager/eosce/export/unprocessed/";
+	public static String EXPORT_OSCE_PROCESSED_FILEPATH = getUploadBaseDIRPath() + "/eosce/export/processed/"; //"/usr/oscemanager/eosce/export/processed/";
+	//public static String EXPORT_OSCE_PROCESSED_FILEPATH = "c:\\oscemanager\\eosce\\export\\processed\\";
+	
+	public static String EXPORT_OSCE_UNPROCESSED_FILEPATH = getUploadBaseDIRPath() + "/eosce/export/unprocessed/"; //"/usr/oscemanager/eosce/export/unprocessed/";
 	// public static String EXPORT_OSCE_UNPROCESSED_FILEPATH = "c:\\oscemanager\\eosce\\export\\unprocessed\\";
 
-	public static String DEFAULT_MAIL_TEMPLATE_PATH = "/usr/oscemanager/Templates/mailTemplates/";
+	public static String DEFAULT_MAIL_TEMPLATE_PATH = getUploadBaseDIRPath() + "/Templates/mailTemplates/"; //"/usr/oscemanager/Templates/mailTemplates/";
 	// public static String DEFAULT_MAIL_TEMPLATE_PATH = "C:\\oscemanager\\Templates\\mailTemplates\\";
 
-	public static String PRINT_SCHEDULE_TEMPLATE = "/usr/oscemanager/Templates/";
+	public static String PRINT_SCHEDULE_TEMPLATE = getUploadBaseDIRPath() + "/Templates/"; //"/usr/oscemanager/Templates/";
 	// public static final String PRINT_SCHEDULE_TEMPLATE = "C:\\oscemanager\\Templates\\";
 
 	// Module 8 (Assessment Plan)[
 
 	// path of outside of webapps for parmanent storage of images
 	// linux
-	public static String localImageUploadDirectory = "/usr/oscemanager/sp/images/";
+	public static String localImageUploadDirectory = getUploadBaseDIRPath() + "/sp/images/"; //"/usr/oscemanager/sp/images/";
 	// windows
 	// public static String localImageUploadDirectory = "c:\\oscemanager\\sp\\images\\";
 
@@ -87,7 +108,7 @@ public class OsMaFilePathConstant {
 
 	// path of outside of webapps for parmanent storage of images
 	// linux
-	public static String localVideoUploadDirectory = "/usr/oscemanager/sp/videos/";
+	public static String localVideoUploadDirectory = getUploadBaseDIRPath() + "/sp/videos/"; //"/usr/oscemanager/sp/videos/";
 	// windows
 	// public static String localVideoUploadDirectory = "c://oscemanager//sp//videos//";
 
@@ -98,7 +119,8 @@ public class OsMaFilePathConstant {
 	
 	public static String assignmentHTML="/osMaEntry/gwt/unibas/";
 	// Module 8]
-	
+
+	public static String localSpDataDirectory = getUploadBaseDIRPath() + "/sp/";
 	
 	public static final String appStandardizedPatientPaymentPDF = "/osMaEntry/gwt/unibas/payment/Honorarabrechnung_Form_2011_01.pdf";
 }

@@ -64,4 +64,7 @@ public class OsMaConstant {
 	public static int RANDOM_STRING_LENGTH=64;
 
 	public static int MAX_ROLE_NAME_DURING_SUGGESTION=3;
+	
+	public static String FILE_DOWNLOAD_SERVLET_HIT_PATH="downloadRemoteFile/";
+	
 }

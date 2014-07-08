@@ -14,6 +14,7 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -423,7 +424,18 @@ public class SPDetailsReviewViewImpl extends PopupPanel implements  SPDetailsRev
 		displayRenderer.setInnerText(((proxy.getName() == null) ? "" : proxy.getName()) + ((proxy.getPreName() == null) ? "" : " " + proxy.getPreName()));
 		
 		standardizedPatientMediaSubViewImplOforOldImage.setMediaContent(proxy.getImmagePath());
-		standardizedPatientMediaSubViewImplOforNewImage.setMediaContent(spStandardizedPatientProxy.getImmagePath());
+		
+		if(proxy.getImmagePath()!=null){
+			standardizedPatientMediaSubViewImplOforOldImage.uploadMessage.addStyleName("oldImage");
+		}
+		
+		String imageDownloadHitUrl=GWT.getHostPageBaseURL()+ OsMaConstant.FILE_DOWNLOAD_SERVLET_HIT_PATH;
+		
+		Log.info("Host name : " +GWT.getHostPageBaseURL());
+		
+		if(spStandardizedPatientProxy.getImmagePath()!=null){
+			standardizedPatientMediaSubViewImplOforNewImage.setRemoteImage(imageDownloadHitUrl +spStandardizedPatientProxy.getImmagePath());
+		}
 		
 		setContactDetailsValue(proxy,spStandardizedPatientProxy);
 		setParticularsValue(proxy,spStandardizedPatientProxy);

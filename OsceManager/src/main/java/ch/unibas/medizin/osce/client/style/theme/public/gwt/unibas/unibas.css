@@ -3982,3 +3982,9 @@ color: #f1b532;
  .spNotAccepted{
  	color: #777777;
  }
+ .newImage{
+	border: 3px #12CC12 solid;
+ }
+ .oldImage{
+ 	border:3px #F4E0AB solid;
+ }

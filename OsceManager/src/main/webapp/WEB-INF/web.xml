@@ -370,4 +370,25 @@
 		<filter-name>LoggingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
+	<!-- for get file from external location -->
+    <servlet>
+        <servlet-name>fileServlet</servlet-name>
+        <servlet-class>ch.unibas.medizin.osce.server.download.FileServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>fileServlet</servlet-name>
+        <url-pattern>/osMaEntry/gwt/unibas/sp/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>RemotefileServlet</servlet-name>
+        <servlet-class>ch.unibas.medizin.osce.server.download.RemoteFileDownloadServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RemotefileServlet</servlet-name>
+        <url-pattern>/downloadRemoteFile/*</url-pattern>
+    </servlet-mapping>
 </web-app>

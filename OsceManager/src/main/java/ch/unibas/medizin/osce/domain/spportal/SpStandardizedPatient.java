@@ -1,5 +1,6 @@
 package ch.unibas.medizin.osce.domain.spportal;
 
+import java.io.File;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -10,8 +11,6 @@ import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -26,7 +25,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.apache.log4j.Logger;
-
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -37,6 +35,7 @@ import ch.unibas.medizin.osce.domain.Bankaccount;
 import ch.unibas.medizin.osce.domain.Nationality;
 import ch.unibas.medizin.osce.domain.Profession;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.EditRequestState;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
@@ -260,7 +259,26 @@ public class SpStandardizedPatient {
 				standardizedPatient.setGender(spStandardizedPatient.getGender());
 				standardizedPatient.setHeight(spStandardizedPatient.getHeight());
 				standardizedPatient.setIgnoreSocialInsuranceNo(spStandardizedPatient.getIgnoreSocialInsuranceNo());
-				//standardizedPatient.setImmagePath(spStandardizedPatient.getImmagePath());
+				
+				if(spStandardizedPatient.getImmagePath()!=null){
+					//i.e user has uploded image in spportal
+					if(standardizedPatient.getImmagePath() !=null){
+						//removing old image as it exist.
+						String [] imagepath = standardizedPatient.getImmagePath().split("/");
+						
+						if(imagepath.length > 0){
+							
+							File file = new File(OsMaFilePathConstant.localImageUploadDirectory+ imagepath[imagepath.length-1]);
+							
+							if(file.exists()){
+								file.delete();
+							}
+						}
+					}
+					
+					standardizedPatient.setImmagePath(OsMaFilePathConstant.appImageUploadDirectory +"/" +spStandardizedPatient.getImmagePath());
+				}
+				
 				standardizedPatient.setMaritalStatus(spStandardizedPatient.getMaritalStatus());
 				standardizedPatient.setMobile(spStandardizedPatient.getMobile());
 				standardizedPatient.setName(spStandardizedPatient.getName());

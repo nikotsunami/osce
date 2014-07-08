@@ -31,4 +31,6 @@ public interface StandardizedPatientMediaSubView extends IsWidget {
 	 void setVideoMediaContent(String description);
 	 //spec
 
+	void setRemoteImage(String description);
+
 }

@@ -273,7 +273,20 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 		zoomImage.setUrl(description + "?date=" + new Date().getTime());
 	}
 	
+	@Override
+	public void setRemoteImage(String description){
+		if(description==null || description.equals(""))
+			return;
 	
+		uploadMessage.setUrl(description + "?date=" + new Date().getTime());
+		uploadMessage.addStyleName("newImage");
+		int height = uploadMessage.getHeight();
+		int width = uploadMessage.getWidth();
+		double ratio = (double) width/height;
+		
+		Log.info("width, height, ratio: " + width + ", " + height + ", " + ratio);
+		uploadMessage.setHeight("150px");
+	}
 	//spec video upload
 	@Override 
 	public void setVideoMediaContent(String description) {
@@ -282,7 +295,7 @@ public class StandardizedPatientMediaSubViewImpl extends Composite
 			return;
 		 if(videoPlayer == null)
 		 videoPlayer = new VideoWidget(true, true, "");
-		 
+		
 		 description=description + "?date=" + new Date().getTime();
 		 videoPlayer.addStyleName("videoBorder");
 	        List<VideoSource> sources = new ArrayList<VideoSource>();

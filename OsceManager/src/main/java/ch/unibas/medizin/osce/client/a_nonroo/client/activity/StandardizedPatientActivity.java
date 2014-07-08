@@ -1857,15 +1857,18 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 							resetTabStyle();
 							currentSPIndexWhoseDataIsReviewing+=1;
 							
-							if(spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.getWidgetCount()>=1)
-							spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.selectTab(1);
 							
-							spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.selectTab(0);
 							
 							if(listOfAllStandardizedPatientWhoseDataIsChanged.size()==currentSPIndexWhoseDataIsReviewing){
 								((SPDetailsReviewViewImpl)spDetailsReviewView).setViewVisible(false);
 							}else{
-								showOldAndNewDataOfSPToAdmin();
+								
+								if(spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.getWidgetCount()>=1)
+									spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.selectTab(1);
+									
+									spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.selectTab(0);
+									
+									showOldAndNewDataOfSPToAdmin();
 							}
 						}else{
 						
@@ -1918,15 +1921,17 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 							resetTabStyle();
 							currentSPIndexWhoseDataIsReviewing+=1;
 							
-							if(spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.getWidgetCount()>=1)
-							spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.selectTab(1);
-							
-							spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.selectTab(0);
 							
 							if(listOfAllStandardizedPatientWhoseDataIsChanged.size()==currentSPIndexWhoseDataIsReviewing){
 								((SPDetailsReviewViewImpl)spDetailsReviewView).setViewVisible(false);
 							}else{
-								showOldAndNewDataOfSPToAdmin();
+
+								if(spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.getWidgetCount()>=1)
+									spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.selectTab(1);
+									
+									spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.selectTab(0);
+								
+									showOldAndNewDataOfSPToAdmin();
 							}
 						}else{
 						
