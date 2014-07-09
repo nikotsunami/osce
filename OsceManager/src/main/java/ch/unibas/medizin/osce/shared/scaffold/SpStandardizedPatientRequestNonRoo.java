@@ -25,6 +25,6 @@ public interface SpStandardizedPatientRequestNonRoo extends RequestContext {
 
 	abstract Request<Boolean> moveChangedDetailsOfSPFormSPPortal(Long standardizedPatientId, Long spStandardizedPatientId);
 
-	abstract  Request<Boolean> removeSPDetailsFromSPPortal(Long standardizedPatientId,Long spStandardizedPatientId);
+	abstract  Request<Boolean> removeSPDetailsFromSPPortal(Long standardizedPatientId,Long spStandardizedPatientId,boolean isDeleteNewImage);
 		
 }

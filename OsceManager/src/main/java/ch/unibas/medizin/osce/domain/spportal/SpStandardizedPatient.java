@@ -345,7 +345,7 @@ public class SpStandardizedPatient {
 					
 				}
 				
-				isDataRemovedFromSPPortal=removeSPDataFromSPPortal(spStandardizedPatient,newAnamnesisCheckValuesList);
+				isDataRemovedFromSPPortal=removeSPDataFromSPPortal(spStandardizedPatient,newAnamnesisCheckValuesList,false);
 				
 				isDataSavedInOsce=true;
 				
@@ -363,7 +363,7 @@ public class SpStandardizedPatient {
 	}
 	
 
-	private static Boolean removeSPDataFromSPPortal(SpStandardizedPatient spStandardizedPatient,List<SpAnamnesisChecksValue> newAnamnesisCheckValuesList) {
+	private static Boolean removeSPDataFromSPPortal(SpStandardizedPatient spStandardizedPatient,List<SpAnamnesisChecksValue> newAnamnesisCheckValuesList,boolean isDeleteNewImage) {
 		log.info("Removing sp old details and all associated data from sp portal");
 		Boolean result=false;
 		try{
@@ -381,7 +381,26 @@ public class SpStandardizedPatient {
 				spAnamnesisChecksValue=SpAnamnesisChecksValue.findSpAnamnesisChecksValue(spAnamnesisChecksValue.getId());
 				spAnamnesisChecksValue.remove();
 			}
-			
+			//Added this code to delete sps uploded new image in spportal and we downloded in osce.
+			if(isDeleteNewImage){
+				
+				if(spStandardizedPatient.getImmagePath()!=null){
+					
+						//removing old image as it exist.
+						String [] imagepath = spStandardizedPatient.getImmagePath().split("/");
+						
+						if(imagepath.length > 0){
+							
+							File file = new File(OsMaFilePathConstant.localImageUploadDirectory+ imagepath[imagepath.length-1]);
+							
+							if(file.exists()){
+								file.delete();
+							}
+						}
+					
+					
+				}
+			}
 			spStandardizedPatient.setAnamnesisForm(spStandardizedPatient.getAnamnesisForm());
 			spStandardizedPatient.setBankAccount(spStandardizedPatient.getBankAccount());
 			spStandardizedPatient.setNationality(spStandardizedPatient.getNationality());
@@ -398,7 +417,7 @@ public class SpStandardizedPatient {
 		return result;
 	}
 
-	public static Boolean removeSPDetailsFromSPPortal(Long standardizedPatientId,Long spStandardizedPatientId){
+	public static Boolean removeSPDetailsFromSPPortal(Long standardizedPatientId,Long spStandardizedPatientId,boolean isDeleteNewImage){
 		
 		log.info("Updating osce sp status to active and removing sp details from sp portal");
 		
@@ -409,7 +428,7 @@ public class SpStandardizedPatient {
 		SpStandardizedPatient spStandardizedPatient = SpStandardizedPatient.findSpStandardizedPatient(spStandardizedPatientId);
 		List<SpAnamnesisChecksValue> spAnamnesisChecksValuesList = findNewAnamnesisCheckValuesBasedOnFormId(null);
 		
-		Boolean isRemovedAllData = removeSPDataFromSPPortal(spStandardizedPatient, spAnamnesisChecksValuesList);
+		Boolean isRemovedAllData = removeSPDataFromSPPortal(spStandardizedPatient, spAnamnesisChecksValuesList,isDeleteNewImage);
 	
 		return isRemovedAllData;
 	}

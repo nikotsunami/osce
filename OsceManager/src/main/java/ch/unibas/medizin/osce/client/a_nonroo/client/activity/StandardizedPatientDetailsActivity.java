@@ -1464,7 +1464,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 				
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 				
-				requests.spStandardizedPatientRequestNonRoo().removeSPDetailsFromSPPortal(standardizedPatientProxy.getId(),spStandardizedPatientProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+				requests.spStandardizedPatientRequestNonRoo().removeSPDetailsFromSPPortal(standardizedPatientProxy.getId(),spStandardizedPatientProxy.getId(),true).fire(new OSCEReceiver<Boolean>() {
 
 					@Override
 					public void onSuccess(Boolean response) {

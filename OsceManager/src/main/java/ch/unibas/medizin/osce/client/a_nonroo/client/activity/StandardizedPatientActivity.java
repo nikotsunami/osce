@@ -1908,7 +1908,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				SpStandardizedPatientProxy spStandardizedPatientProxy = listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal.get(currentSPIndexWhoseDataIsReviewing);
 				
 				
-				requests.spStandardizedPatientRequestNonRoo().removeSPDetailsFromSPPortal(standardizedPatientProxy.getId(),spStandardizedPatientProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+				requests.spStandardizedPatientRequestNonRoo().removeSPDetailsFromSPPortal(standardizedPatientProxy.getId(),spStandardizedPatientProxy.getId(),true).fire(new OSCEReceiver<Boolean>() {
 
 					@Override
 					public void onSuccess(Boolean response) {
