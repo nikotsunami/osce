@@ -1205,115 +1205,116 @@ public class ExportAssignment  extends HttpServlet {
 	        					boolean flag=true;
 	        					for(int index=0;index<postDetailList.size();index++)
 	        					{
-	        						
-	        						
-	        						
-	        						PostDetail postDetail=postDetailList.get(index1);
-	        						rowSpan=postDetail.getRowSpan();
-	        						OscePostRoom oscePostRoom=postDetail.getOscePostRoom();
-	        						PatientInRole patientInRole=postDetail.getPatientInRole();
-	        						Row postRow=excelRow.get(index1);
-        							Cell postCell=postRow.createCell(col);
-        							sheet.autoSizeColumn(col, true);
-        							postCell.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
-	        						if(postDetail.isReserve())//logical break
+	        						if (index1 < postDetailList.size())
 	        						{
-	        							
-	        							postCell.setCellValue("Reserve");
-	        							//postIndex++;
-	        							//colorIndex++;
-	        						}
-	        						else if(postDetail.getOscePost().getStandardizedRole().getRoleType()==RoleTypes.Material) //material
-	        						{
-	        							postCell.setCellValue("Notfall");
-	        							Cell cell=excelRow.get(index1+1).createCell(col);
-	        							cell.setCellValue("Phantom");
+	        							PostDetail postDetail=postDetailList.get(index1);
+		        						rowSpan=postDetail.getRowSpan();
+		        						OscePostRoom oscePostRoom=postDetail.getOscePostRoom();
+		        						PatientInRole patientInRole=postDetail.getPatientInRole();
+		        						Row postRow=excelRow.get(index1);
+	        							Cell postCell=postRow.createCell(col);
 	        							sheet.autoSizeColumn(col, true);
-	        							cell.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
-	        							int temp=1;
-	        							for(int postRowIndex=2;postRowIndex<rowSpan;postRowIndex++)
-	        							{
-	        								Cell cell1=excelRow.get(index1+1+temp).createCell(col);
-	            							sheet.autoSizeColumn(col, true);
-	            							cell1.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
-	            							temp++;
-	        							}
-	        							postIndex++;
-	        							colorIndex++;
-	        						}
-	        						else
-	        						{
-	        							OscePost oscePost=postDetail.getOscePost();
-	        							StandardizedRole role=oscePost.getStandardizedRole();
-	        							String roleLongName=role.getLongName();
-	        							
-	        							Cell cell=excelRow.get(index1+1).createCell(col);
-	        							
-	        							String postTypeLbl=role.getRoleType().toString();
-	        							
-	        							
-	        							sheet.autoSizeColumn(col, true);
-	        							cell.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
-	        							
-	        							if(oscePost.getStandardizedRole().getRoleType()==RoleTypes.Material)
-	        							{
-	        								postCell.setCellValue("Notfall");
-	        								cell.setCellValue("Phantom");
-	        							}
-	        							else
-	        							{
-	        								postCell.setCellValue(roleLongName);
-	        								
-	        								String advanceSearchCriteria=AdvancedSearchCriteria.findAdvancedSearchCriteriasByStandardizedRoleIDValue(role);
-	        								
-	        								cell.setCellValue(postTypeLbl+" "+advanceSearchCriteria);
-	        							}
-	        							int temp=1;
-	        							for(int postRowIndex=2;postRowIndex<rowSpan;postRowIndex++)
-	        							{
-	        								Cell cell1=excelRow.get(index1+1+temp).createCell(col);
-	            							sheet.autoSizeColumn(col, true);
-	            							cell1.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
-	            							temp++;
-	        							}
-	        							postIndex++;
-	        							colorIndex++;
+	        							postCell.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
+		        						if(postDetail.isReserve())//logical break
+		        						{
+		        							
+		        							postCell.setCellValue("Reserve");
+		        							//postIndex++;
+		        							//colorIndex++;
+		        						}
+		        						else if(postDetail.getOscePost().getStandardizedRole().getRoleType()==RoleTypes.Material) //material
+		        						{
+		        							postCell.setCellValue("Notfall");
+		        							Cell cell=excelRow.get(index1+1).createCell(col);
+		        							cell.setCellValue("Phantom");
+		        							sheet.autoSizeColumn(col, true);
+		        							cell.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
+		        							int temp=1;
+		        							for(int postRowIndex=2;postRowIndex<rowSpan;postRowIndex++)
+		        							{
+		        								Cell cell1=excelRow.get(index1+1+temp).createCell(col);
+		            							sheet.autoSizeColumn(col, true);
+		            							cell1.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
+		            							temp++;
+		        							}
+		        							postIndex++;
+		        							colorIndex++;
+		        						}
+		        						else
+		        						{
+		        							OscePost oscePost=postDetail.getOscePost();
+		        							StandardizedRole role=oscePost.getStandardizedRole();
+		        							String roleLongName=role.getLongName();
+		        							
+		        							Cell cell=excelRow.get(index1+1).createCell(col);
+		        							
+		        							String postTypeLbl=role.getRoleType().toString();
+		        							
+		        							
+		        							sheet.autoSizeColumn(col, true);
+		        							cell.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
+		        							
+		        							if(oscePost.getStandardizedRole().getRoleType()==RoleTypes.Material)
+		        							{
+		        								postCell.setCellValue("Notfall");
+		        								cell.setCellValue("Phantom");
+		        							}
+		        							else
+		        							{
+		        								postCell.setCellValue(roleLongName);
+		        								
+		        								String advanceSearchCriteria=AdvancedSearchCriteria.findAdvancedSearchCriteriasByStandardizedRoleIDValue(role);
+		        								
+		        								cell.setCellValue(postTypeLbl+" "+advanceSearchCriteria);
+		        							}
+		        							int temp=1;
+		        							for(int postRowIndex=2;postRowIndex<rowSpan;postRowIndex++)
+		        							{
+		        								Cell cell1=excelRow.get(index1+1+temp).createCell(col);
+		            							sheet.autoSizeColumn(col, true);
+		            							cell1.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
+		            							temp++;
+		        							}
+		        							postIndex++;
+		        							colorIndex++;
+			        						
+		        						}
+		        						//index++;
+		        						//if(rowSpan!=1)
+		        						//{
+		        						index1=index1+rowSpan;
+		        						if(rowSpan!=1)
+		        						index=index1;
+		        						/*}
+		        						else
+		        						{
+		        							//index1=index;
+		        							index1=index1+rowSpan;
+		        						}*/
 		        						
-	        						}
-	        						//index++;
-	        						//if(rowSpan!=1)
-	        						//{
-	        						index1=index1+rowSpan;
-	        						if(rowSpan!=1)
-	        						index=index1;
-	        						/*}
-	        						else
-	        						{
-	        							//index1=index;
-	        							index1=index1+rowSpan;
-	        						}*/
+		        						/*else
+		        						{
+		        							index1++;
+		        						}*/
+		        						
+		        						if((index) <= postDetailList.size()-1)
+		        						{
+		        							if(postDetailList.get(index).isReserve())
+		        							{
+		        								
+		        								postIndex=0;
+		        								if(flag)
+		        								{
+		        									index--;
+		        									flag=false;
+		        								}
+		        								//index1--;
+		        								//index--;
+		        								//index1--;
+		        							}
+		        						}
+	        						}	
 	        						
-	        						/*else
-	        						{
-	        							index1++;
-	        						}*/
-	        						
-	        						if((index) <= postDetailList.size()-1)
-	        						{
-	        							if(postDetailList.get(index).isReserve())
-	        							{
-	        								
-	        								postIndex=0;
-	        								if(flag)
-	        								{
-	        									index--;
-	        									flag=false;
-	        								}
-	        								//index1--;
-	        								//index--;
-	        								//index1--;
-	        							}
-	        						}
 	        					}
 	        					
 	        					

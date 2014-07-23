@@ -1029,20 +1029,26 @@ public class Assignment {
     }
     
     
-     public static Date minmumStartTime(Long osceDayId, Long osceSequenceId, Long courseId) {
+     public static List<Date> minmumStartTime(Long osceDayId, Long osceSequenceId, Long courseId) {
     	
     	
     	
         Log.info("retrieveAssignmenstOfTypeStudent :");
         EntityManager em = entityManager();
         //String queryString = "SELECT  a FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.oscePost=" + oscePostId + " and opr.course=" + courseId + " ) order by a.timeStart asc";
-        String queryString = "SELECT  min(a.timeStart) FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where  rm.course= " + courseId + " and rm.version<999) and opr.course=" + courseId + " ) order by a.timeStart asc";
+        String queryString = "SELECT  min(a.timeStart), max(a.timeEnd) FROM Assignment as a where a.osceDay=" + osceDayId + "  and type=0 and a.oscePostRoom in(select opr.id from OscePostRoom as opr where opr.room in (select rm.room from OscePostRoom as rm where  rm.course= " + courseId + " and rm.version<999) and opr.course=" + courseId + " ) order by a.timeStart asc";
         
-        TypedQuery<Date> query = em.createQuery(queryString, Date.class);
-        Date assignmentList = query.getResultList().get(0);
-        Log.info("retrieveAssignmenstOfTypeStudent query String :" + queryString);
-        Log.info("Assignment List Size :" + assignmentList);
-        return assignmentList;
+        List<Date> startEndTimeList = new ArrayList<Date>();
+        List<Object[]> resultList = em.createQuery(queryString).getResultList();
+		 
+		 if (resultList.size() > 0)
+		 {
+			 Object[] result = resultList.get(0);
+			 startEndTimeList.add(((Date)result[0]));
+			 startEndTimeList.add(((Date)result[1]));
+		 }
+        
+        return startEndTimeList;
     }
      
      

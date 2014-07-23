@@ -68,7 +68,7 @@ public abstract Request<List<AssignmentProxy>> retrieveAssignmenstOfTypeStudent(
 	
 	public abstract Request<Void> updateAssignmentByDiff(Long osceDayId, int diff, Date endTimeSlot, boolean isChangeStartTime);
 	
-	public abstract Request<Date> minmumStartTime(Long osceDayId,Long osceSequenceId,Long courseId);
+	public abstract Request<List<Date>> minmumStartTime(Long osceDayId,Long osceSequenceId,Long courseId);
 	
 	//payment 
 	public abstract Request<String> findAssignmentByPatinetInRole(Long semesterId);
