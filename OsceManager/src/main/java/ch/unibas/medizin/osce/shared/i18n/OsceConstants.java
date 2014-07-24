@@ -1515,6 +1515,10 @@ public interface OsceConstants extends Constants {
 	public String manualOsceRotErro();
 	
 	public String manualOsceAssign();
+	
+	public String partialyItemPrint();
+			
+	public String allItemPrint();
 }
 
 

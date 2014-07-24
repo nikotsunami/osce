@@ -1097,7 +1097,7 @@ public class ManualOsceTimeTableCalculation {
 									if (j < (noOfSlot - 1))
 										seqIndex = seqIndex + 1;				
 									
-									if (rotationNumber > 0)
+									if (rotationNumber > 0 && stSeqNo <= osce.getMaxNumberStudents())
 									{
 										StudentAssignment studentAssignment = new StudentAssignment();
 										studentAssignment.setTimeStart(stTimeStart);

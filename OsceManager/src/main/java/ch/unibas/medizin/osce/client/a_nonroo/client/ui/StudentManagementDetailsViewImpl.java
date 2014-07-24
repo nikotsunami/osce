@@ -169,7 +169,7 @@ public class StudentManagementDetailsViewImpl extends Composite implements Stude
 						//showEditPopUp(nation);
 						delegate.printCheckListForMinVal(osceProxy,studentProxy);
 					}
-				}), "", new GetValue<OsceProxy>() {
+				}), constants.partialyItemPrint(), new GetValue<OsceProxy>() {
 			public OsceProxy getValue(OsceProxy osceProxy) {
 				return osceProxy;
 			}
@@ -181,12 +181,12 @@ public class StudentManagementDetailsViewImpl extends Composite implements Stude
 						//showEditPopUp(nation);
 						delegate.printCheckList(osceProxy,studentProxy);
 					}
-				}), "", new GetValue<OsceProxy>() {
+				}), constants.allItemPrint(), new GetValue<OsceProxy>() {
 			public OsceProxy getValue(OsceProxy osceProxy) {
 				return osceProxy;
 			}
 		}, null);
-		}
+	}
 
 	private <C> void addColumn(Cell<C> cell, String headerText,
 			final GetValue<C> getter, FieldUpdater<OsceProxy, C> fieldUpdater) {
@@ -200,7 +200,7 @@ public class StudentManagementDetailsViewImpl extends Composite implements Stude
 		if (cell instanceof AbstractEditableCell<?, ?>) {
 			editableCells.add((AbstractEditableCell<?, ?>) cell);
 		}
-		table.addColumn(column);
+		table.addColumn(column, headerText);
 	}
 	
 	/**
