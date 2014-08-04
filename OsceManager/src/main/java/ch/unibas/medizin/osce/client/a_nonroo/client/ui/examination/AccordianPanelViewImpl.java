@@ -135,7 +135,7 @@ public class AccordianPanelViewImpl extends Composite implements AccordianPanelV
 			@Override
 			public void onClick(ClickEvent event) 
 			{
-				Log.info("Click on Panel");
+				//Log.info("Click on Panel");
 				//Log.info("Source: " + event.getSource());				
 											
 				if(currentlyExpanded!=contentSP && osceDayProxy !=null)

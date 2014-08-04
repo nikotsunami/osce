@@ -1117,7 +1117,9 @@ public class ManualOsceTimeTableCalculation {
 							
 							for (OscePostRoom oscePostRoom : oscePostRoomList)
 							{
-								if (oscePostRoom != null && PostType.NORMAL.equals(oscePostRoom.getOscePost().getOscePostBlueprint().getPostType()))
+								PostType postType = oscePostRoom.getOscePost().getOscePostBlueprint().getPostType();
+								
+								if (oscePostRoom != null && (PostType.NORMAL.equals(postType) || PostType.DUALSP.equals(postType)))
 								{
 									if (oscePostRoom.getOscePost().getStandardizedRole() != null && RoleTypes.Material.equals(oscePostRoom.getOscePost().getStandardizedRole().getRoleType()) == false)
 									{
@@ -1129,6 +1131,18 @@ public class ManualOsceTimeTableCalculation {
 										spAssignment.setOsceDayId(osceDayID);
 										
 										spAssList.add(spAssignment);
+										
+										if (PostType.DUALSP.equals(postType))
+										{
+											SpAssignment spAssignment1 = new SpAssignment();
+											spAssignment1.setTimeStart(osceDayRotation.getTimeStart());
+											spAssignment1.setTimeEnd(rotationEndTime);
+											spAssignment1.setSequenceNumber((numberOfRotation + rotationNumber));
+											spAssignment1.setOscePostRoomId(oscePostRoom.getId());
+											spAssignment1.setOsceDayId(osceDayID);
+											
+											spAssList.add(spAssignment1);
+										}
 									}
 								}
 							}

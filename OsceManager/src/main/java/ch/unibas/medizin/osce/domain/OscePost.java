@@ -63,6 +63,7 @@ public class OscePost {
 	    		case BREAK: return false;
 	    		case PREPARATION: return !this.getOscePostBlueprint().isFirstPart();
 	    		case ANAMNESIS_THERAPY: return true;
+	    		case DUALSP: return true;
 	    	}
 	    }
     	return false;

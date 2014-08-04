@@ -8,6 +8,7 @@ import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.OscePost;
 import ch.unibas.medizin.osce.domain.OsceSequence;
 import ch.unibas.medizin.osce.domain.PatientInRole;
+import ch.unibas.medizin.osce.shared.PostType;
 
 public class SPFederalAllocator {
 
@@ -43,17 +44,35 @@ public class SPFederalAllocator {
 				{
 					/*if (oscePost.getStandardizedRole() != null)
 						System.out.println("OSCE POST NAME : " + oscePost.getStandardizedRole().getShortName());*/
-					
+				
 					patientInRoleModelList.clear();
 					
 					//load all sp for that oscepost and osce day
 					List<PatientInRole> patientInRoleList = PatientInRole.findPatientInRoleByOsceSequenceAndOscePostOrderById(osceSequence.getId(), oscePost.getId(), isAscending);
 					
-					for (PatientInRole pir : patientInRoleList)
+					if (PostType.DUALSP.equals(oscePost.getOscePostBlueprint().getPostType()))
 					{
-						//System.out.println("PIR ID : " + pir.getId() + " SP NAME : " + pir.getPatientInSemester().getStandardizedPatient().getName() + " : " + pir.getPatientInSemester().getStandardizedPatient().getPreName());
-						patientInRoleModelList.add(new SPModel(pir, 0));
+						for (int i=0; i<patientInRoleList.size(); i++)
+						{
+							PatientInRole pir = patientInRoleList.get(i);
+							PatientInRole dualPir = null;
+							i = i + 1;
+							if (i < patientInRoleList.size())
+								dualPir = patientInRoleList.get(i);
+							//System.out.println("PIR ID : " + pir.getId() + " SP NAME : " + pir.getPatientInSemester().getStandardizedPatient().getName() + " : " + pir.getPatientInSemester().getStandardizedPatient().getPreName());
+							patientInRoleModelList.add(new SPModel(pir, dualPir, 0));
+							
+						}
 					}
+					else
+					{
+						for (PatientInRole pir : patientInRoleList)
+						{
+							//System.out.println("PIR ID : " + pir.getId() + " SP NAME : " + pir.getPatientInSemester().getStandardizedPatient().getName() + " : " + pir.getPatientInSemester().getStandardizedPatient().getPreName());
+							patientInRoleModelList.add(new SPModel(pir, null, 0));
+						}
+					}
+					
 					
 					//load assignment of particular oscepost for all rotation
 					List<Assignment> postAssList = Assignment.findAssignmentByOscePostAndOsceDay(osceDay.getId(), oscePost.getId());
@@ -110,9 +129,12 @@ public class SPFederalAllocator {
 							patientInRoleModelList.clear();
 							patientInRoleModelList = tempModel;
 						}
-						
+						List<Assignment> assList = new ArrayList<Assignment>();
 						//load assignment for particular rotation for rotation wise
-						List<Assignment> assList = Assignment.findAssignmentByOscePostAndOsceDayAndTimeStartAndTimeEnd(osceDay.getId(), oscePost.getId(), ass.getTimeStart(), ass.getTimeEnd(), ass.getSequenceNumber(), patientInRoleModelList.size());
+						if (PostType.DUALSP.equals(oscePost.getOscePostBlueprint().getPostType()))
+							assList = Assignment.findAssignmentByOscePostAndOsceDayAndTimeStartAndTimeEnd(osceDay.getId(), oscePost.getId(), ass.getTimeStart(), ass.getTimeEnd(), ass.getSequenceNumber(), (patientInRoleModelList.size() * 2));
+						else
+							assList = Assignment.findAssignmentByOscePostAndOsceDayAndTimeStartAndTimeEnd(osceDay.getId(), oscePost.getId(), ass.getTimeStart(), ass.getTimeEnd(), ass.getSequenceNumber(), patientInRoleModelList.size());
 						//System.out.println("assList SIZE : " + assList.size());
 						
 						int i = 0;
@@ -120,20 +142,22 @@ public class SPFederalAllocator {
 						patientInRoleModelBreakList.clear();
 						patientInRoleModelSlotList.clear();
 						
+						int index = 0;
+						
 						for (i=0; i<assList.size(); i++)
 						{
-							if (i < patientInRoleModelList.size())
+							if (index < patientInRoleModelList.size())
 							{
 								Assignment assignment = assList.get(i);
-								PatientInRole pir = patientInRoleModelList.get(i).getPatientInRole();
+								PatientInRole pir = patientInRoleModelList.get(index).getPatientInRole();
+								PatientInRole dualPir = patientInRoleModelList.get(index).getDualPatientInRole();
 								
 								if (assignment == null)
 									continue;
 								
 								//System.out.println("PIR ID : " + pir.getId() + " SP NAME : " + pir.getPatientInSemester().getStandardizedPatient().getName() + " : " + pir.getPatientInSemester().getStandardizedPatient().getPreName());
 								
-								
-								int value = patientInRoleModelList.get(i).getValue();
+								int value = patientInRoleModelList.get(index).getValue();
 								
 								if(assignment.getOscePostRoom() == null)
 								{	
@@ -144,18 +168,49 @@ public class SPFederalAllocator {
 										assignment.setPatientInRole(breakPir);
 										assignment.persist();
 									}
-									patientInRoleModelBreakList.add(new SPModel(pir, value));
+								
+									if (PostType.DUALSP.equals(oscePost.getOscePostBlueprint().getPostType()) && dualPir != null)
+									{
+										i = i + 1;
+										if (i < assList.size())
+										{
+											PatientInRole dualBreakPir = PatientInRole.findPatientInRoleByPatientInSemesterAndOscePostNull(dualPir.getPatientInSemester().getId());
+											Assignment dualSpAss = assList.get(i);
+											if (assignment.getTimeStart().equals(dualSpAss.getTimeStart()) && assignment.getTimeEnd().equals(dualSpAss.getTimeEnd()) && assignment.getSequenceNumber().equals(dualSpAss.getSequenceNumber()))
+											{
+												dualSpAss.setPatientInRole(dualBreakPir);
+												dualSpAss.persist();
+											}											
+										}
+									}
+									
+									patientInRoleModelBreakList.add(new SPModel(pir, dualPir, value));
 								}
 								else
 								{
 									assignment.setPatientInRole(pir);
 									assignment.persist();
 									
+									if (PostType.DUALSP.equals(oscePost.getOscePostBlueprint().getPostType()) && dualPir != null)
+									{
+										i = i + 1;
+										if (i < assList.size())
+										{
+											Assignment dualSpAss = assList.get(i);
+											if (assignment.getTimeStart().equals(dualSpAss.getTimeStart()) && assignment.getTimeEnd().equals(dualSpAss.getTimeEnd()) && assignment.getSequenceNumber().equals(dualSpAss.getSequenceNumber()))
+											{
+												dualSpAss.setPatientInRole(dualPir);
+												dualSpAss.persist();
+											}											
+										}
+									}
 									value += 1;
-									patientInRoleModelSlotList.add(new SPModel(pir, value));
+									patientInRoleModelSlotList.add(new SPModel(pir, dualPir, value));
 								}
 								
-								patientInRoleModelList.get(i).setValue(value);
+								patientInRoleModelList.get(index).setValue(value);
+								
+								index = index + 1;
 							}
 						}
 					}
@@ -170,11 +225,22 @@ public class SPFederalAllocator {
 		
 		private PatientInRole patientInRole;
 		
+		private PatientInRole dualPatientInRole;
+		
 		private Integer value;
 		
-		public SPModel(PatientInRole pir, Integer val) {
+		public SPModel(PatientInRole pir, PatientInRole dualPir, Integer val) {
 			this.patientInRole = pir;
 			this.value = val;
+			this.dualPatientInRole = dualPir;
+		}
+		
+		public PatientInRole getDualPatientInRole() {
+			return dualPatientInRole;
+		}
+		
+		public void setDualPatientInRole(PatientInRole dualPatientInRole) {
+			this.dualPatientInRole = dualPatientInRole;
 		}
 
 		public PatientInRole getPatientInRole() {

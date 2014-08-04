@@ -516,6 +516,10 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								final boolean  isLastPost1=isLastPost;
 								//create post which contains student,sp and examiners slot.
 								final OscePostView oscePostView=new OscePostViewImpl();
+								if (oscePostProxy != null && oscePostProxy.getOscePostBlueprint() != null && PostType.DUALSP.equals(oscePostProxy.getOscePostBlueprint().getPostType()))
+								{
+									oscePostView.getOscePostPanel().setWidth("118px");
+								}
 								oscePostView.getOscePostLbl().setText(constants.circuitStation() + " " +oscePostProxy.getSequenceNumber());
 								oscePostView.setOscePostProxy(oscePostProxy);
 								oscePostView.setDelegate(activity);
@@ -1273,7 +1277,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 												
 												//create SP View
 												SPView spView=null;
-												
+												SPViewImpl spView1 = null;
 												//If
 												if(oscePostProxy.getOscePostBlueprint().getPostType()==PostType.BREAK )
 												{
@@ -1319,19 +1323,56 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 												}
 												else
 												{
-													 spView=new SPViewImpl();
-													spView.getSpPanel().addStyleName("border-bottom-blue");
-													spView.getSpPanel().addStyleName("sp-bg");
-													spView.setAssignmentProxy(assignmentProxy);
-													spView.setDelegate(activity);
-													if(spSlotLength>=0)
-													spView.getSpPanel().setHeight(spSlotLength+"px");
-													if(assignmentProxy.getSequenceNumber() != null)
+													if (PostType.DUALSP.equals(oscePostProxy.getOscePostBlueprint().getPostType()))
 													{
-														spView.getSpLbl().setText(constants.exaPlanSpShort()+NumberFormat.getFormat("00").format(assignmentProxy.getSequenceNumber()));									
+														HorizontalPanel horizontalPanel = new HorizontalPanel();
+														
+														spView=new SPViewImpl();
+														spView.getSpPanel().addStyleName("border-bottom-blue");
+														spView.getSpPanel().addStyleName("sp-bg");
+														spView.setAssignmentProxy(assignmentProxy);
+														spView.setDelegate(activity);
+														if(spSlotLength>=0)
+														spView.getSpPanel().setHeight(spSlotLength+"px");
+														if(assignmentProxy.getSequenceNumber() != null)
+														{
+															spView.getSpLbl().setText(constants.exaPlanSpShort()+NumberFormat.getFormat("00").format(assignmentProxy.getSequenceNumber()));									
+														}
+														
+														spView1=new SPViewImpl();
+														spView1.getSpPanel().addStyleName("border-bottom-blue");
+														spView1.getSpPanel().addStyleName("sp-bg");
+														spView1.setAssignmentProxy(assignmentProxy);
+														spView1.setDelegate(activity);
+														if(spSlotLength>=0)
+														spView1.getSpPanel().setHeight(spSlotLength+"px");
+														if(assignmentProxy.getSequenceNumber() != null)
+														{
+															spView1.getSpLbl().setText(constants.exaPlanSpShort()+NumberFormat.getFormat("00").format(assignmentProxy.getSequenceNumber()));									
+														}
+														
+														horizontalPanel.add(spView);
+														horizontalPanel.add(spView1);
+														
+														oscePostView.getSpSlotsVP().insert(horizontalPanel, oscePostView.getSpSlotsVP().getWidgetCount());
+														
+														j = j + 1;
 													}
-													
-													oscePostView.getSpSlotsVP().insert(spView, oscePostView.getSpSlotsVP().getWidgetCount());
+													else
+													{
+														spView=new SPViewImpl();
+														spView.getSpPanel().addStyleName("border-bottom-blue");
+														spView.getSpPanel().addStyleName("sp-bg");
+														spView.setAssignmentProxy(assignmentProxy);
+														spView.setDelegate(activity);
+														if(spSlotLength>=0)
+														spView.getSpPanel().setHeight(spSlotLength+"px");
+														if(assignmentProxy.getSequenceNumber() != null)
+														{
+															spView.getSpLbl().setText(constants.exaPlanSpShort()+NumberFormat.getFormat("00").format(assignmentProxy.getSequenceNumber()));									
+														}
+														oscePostView.getSpSlotsVP().insert(spView, oscePostView.getSpSlotsVP().getWidgetCount());
+													}
 												}
 												
 												//create Breaks							
@@ -1358,7 +1399,23 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 													simpatBreak.getSpPanel().setHeight(breakTime.toString()+"px");
 													simpatBreak.getSpPanel().setWidth("30px");
 													
-													oscePostView.getSpSlotsVP().insert(simpatBreak, oscePostView.getSpSlotsVP().getWidgetCount());
+													if (PostType.DUALSP.equals(oscePostProxy.getOscePostBlueprint().getPostType()))
+													{
+														HorizontalPanel horizontalPanel = new HorizontalPanel();
+														SPView simpatBreak1=new SPViewImpl();
+														simpatBreak1.getSpPanel().addStyleName("border-bottom-blue");
+														simpatBreak1.getSpPanel().addStyleName("empty-bg");
+														simpatBreak1.setDelegate(activity);
+														simpatBreak1.getSpPanel().setHeight(breakTime.toString()+"px");
+														simpatBreak1.getSpPanel().setWidth("30px");
+														horizontalPanel.add(simpatBreak);
+														horizontalPanel.add(simpatBreak1);
+														oscePostView.getSpSlotsVP().insert(horizontalPanel, oscePostView.getSpSlotsVP().getWidgetCount());
+													}	
+													else
+													{
+														oscePostView.getSpSlotsVP().insert(simpatBreak, oscePostView.getSpSlotsVP().getWidgetCount());
+													}
 												}
 												
 												//insert lunch/long/middle break
@@ -1376,7 +1433,29 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 													simpatBreak.getSpPanel().setHeight(breakTime.toString()+"px");
 													simpatBreak.getSpPanel().setWidth("30px");
 													
-													oscePostView.getSpSlotsVP().insert(simpatBreak, oscePostView.getSpSlotsVP().getWidgetCount());
+													if (PostType.DUALSP.equals(oscePostProxy.getOscePostBlueprint().getPostType()))
+													{
+														HorizontalPanel horizontalPanel = new HorizontalPanel();
+														SPView simpatBreak1=new SPViewImpl();
+														simpatBreak1.getSpPanel().addStyleName("empty-bg");
+														simpatBreak1.getSpPanel().addStyleName("border-bottom-red");
+														if (spView1 != null)
+														{
+															spView1.getSpPanel().removeStyleName("border-bottom-blue");
+															spView1.getSpPanel().addStyleName("border-bottom-red");															
+														}
+														simpatBreak1.setDelegate(activity);
+														simpatBreak1.getSpPanel().setHeight(breakTime.toString()+"px");
+														simpatBreak1.getSpPanel().setWidth("30px");
+														
+														horizontalPanel.add(simpatBreak);
+														horizontalPanel.add(simpatBreak1);
+														oscePostView.getSpSlotsVP().insert(horizontalPanel, oscePostView.getSpSlotsVP().getWidgetCount());
+													}
+													else
+													{
+														oscePostView.getSpSlotsVP().insert(simpatBreak, oscePostView.getSpSlotsVP().getWidgetCount());
+													}
 												}
 												else if(breakTime>0)
 												{
@@ -1391,7 +1470,28 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 													simpatBreak.getSpPanel().setHeight(breakTime.toString()+"px");
 													simpatBreak.getSpPanel().setWidth("30px");
 													
-													oscePostView.getSpSlotsVP().insert(simpatBreak, oscePostView.getSpSlotsVP().getWidgetCount());
+													if (PostType.DUALSP.equals(oscePostProxy.getOscePostBlueprint().getPostType()))
+													{
+														HorizontalPanel horizontalPanel = new HorizontalPanel();
+														SPView simpatBreak1=new SPViewImpl();
+														simpatBreak1.getSpPanel().addStyleName("empty-bg");
+														simpatBreak1.getSpPanel().addStyleName("border-bottom-red");
+														if (spView1 != null)
+														{
+															spView.getSpPanel().removeStyleName("border-bottom-blue");
+															spView.getSpPanel().addStyleName("border-bottom-red");
+														}														
+														simpatBreak1.setDelegate(activity);
+														simpatBreak1.getSpPanel().setHeight(breakTime.toString()+"px");
+														simpatBreak1.getSpPanel().setWidth("30px");
+														horizontalPanel.add(simpatBreak);
+														horizontalPanel.add(simpatBreak1);
+														oscePostView.getSpSlotsVP().insert(horizontalPanel, oscePostView.getSpSlotsVP().getWidgetCount());
+													}
+													else
+													{
+														oscePostView.getSpSlotsVP().insert(simpatBreak, oscePostView.getSpSlotsVP().getWidgetCount());
+													}
 												}
 												/*else if(j!=response.size()-1 && (long)osceProxy.getLunchBreak()==breakTime)
 												{

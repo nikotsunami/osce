@@ -695,7 +695,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 	@Override
 	public void addOscePost(CourseProxy courseProxy, PostType value, final FocusableValueListBox<PostType> postTypeListBox) {
 		
-		if (PostType.NORMAL.equals(value))
+		if (PostType.NORMAL.equals(value) || PostType.DUALSP.equals(value))
 		{
 			manualOsceCreateOscePostPopUpView = new ManualOsceCreateOscePostPopUpViewImpl();
 			manualOsceCreateOscePostPopUpView.setDelegate(this);

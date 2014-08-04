@@ -192,14 +192,14 @@ public class ExportAssignment  extends HttpServlet {
 						
 						OscePostRoom postRoom=OscePostRoom.findPostRoom(oscePost.getId(), course.getId());
 						if(postRoom !=null && postRoom.getRoom() != null )
-						createChildNode("postRoom", postRoom.getRoom().getRoomNumber(), doc, postElement);
+							createChildNode("postRoom", postRoom.getRoom().getRoomNumber(), doc, postElement);
 						else
 							createChildNode("postRoom", "-", doc, postElement);
 						
 						if(oscePost.getOscePostBlueprint().getPostType() != PostType.BREAK)
-						createChildNode("standardizedRole", oscePost.getStandardizedRole().getLongName(), doc, postElement);
+							createChildNode("standardizedRole", oscePost.getStandardizedRole().getLongName(), doc, postElement);
 						else
-							createChildNode("standardizedRole", "-", doc, postElement);
+							createChildNode("standardizedRole", "-", doc, postElement);						
 					}
 					
 					//student break
@@ -428,6 +428,28 @@ public class ExportAssignment  extends HttpServlet {
 													studentName="SP"+assignment.getSequenceNumber();
 												
 												endTime=assignment.getTimeEnd();
+												
+												if (assignmentPost != null && assignmentPost.getOscePostBlueprint() != null && PostType.DUALSP.equals(assignmentPost.getOscePostBlueprint().getPostType()))
+												{
+													if ((b+1) < assignments.size())
+													{
+														Assignment ass = assignments.get((b+1));
+														PatientInRole patientInRole1=ass.getPatientInRole();
+														
+														if(patientInRole1 != null)
+														{
+															StandardizedPatient standardizedPatient = patientInRole1.getPatientInSemester().getStandardizedPatient();
+															if (standardizedPatient != null)
+															{
+																studentName = studentName + ", " + standardizedPatient.getPreName() + " " + standardizedPatient.getName();
+															}
+														}
+														else
+															studentName = studentName + ", " + "SP" + assignment.getSequenceNumber();
+														
+														b = b + 1;
+													}
+												}
 												
 												createChildNode("studentName", studentName, doc, studentElement);
 												
@@ -852,8 +874,8 @@ public class ExportAssignment  extends HttpServlet {
 			        				//}
 			        				//else
 			        				//{
-			        					postDetail.setRowSpan(osceSeq.getCourses().size());
-			        					postDetail.setOscePost(oscePosts.get(postIndex));
+		        						postDetail.setRowSpan(osceSeq.getCourses().size());
+		        						postDetail.setOscePost(oscePosts.get(postIndex));
 			        				//	postDetail.setOscePostRoom(oscePostRoom);
 			        				//}
 			        				postDetailList.add(postDetail);
@@ -867,7 +889,7 @@ public class ExportAssignment  extends HttpServlet {
 		        		
 		        		for(Assignment a:assignments)
 		        		{
-		        			
+		        			boolean dualSp = false;
 		        			if(j==0)
 		        			{
 		        				PostDetail postDetail=new PostDetail();
@@ -887,18 +909,31 @@ public class ExportAssignment  extends HttpServlet {
 		        			spSlot.setTimeEnd(a.getTimeEnd());
 		        			
 		        			//sp detail
-		        			SPDetail spDetail=new SPDetail();
 		        			
 		        			OscePostRoom oscePostRoom=a.getOscePostRoom();
-		        			spDetail.setOscePostRoom(oscePostRoom);
-		        			spDetail.setPatientInRole(a.getPatientInRole());
-		        			spDetail.setSequenceNumber(a.getSequenceNumber());
-		        			spDetail.setNumOfBreakPost(numOfBreakPost);
-		        			spDetail.setOscePosts(oscePosts);
-		        			spDetail.setCourses(osceSeq.getCourses());
-		        			spDetailsList.add(spDetail);
+		        			SPDetail spDetail = null;
 		        			
-		        			if(j==timeStartList.size()-1 && i==osceSeqs.size()-1)//append room details at end of last sequence
+		        			if (oscePostRoom != null)
+		        				spDetail = checkSPDetailWithOscePostRoomId(spDetailsList, oscePostRoom.getId());
+		        			
+		        			if (spDetail == null)
+		        			{
+		        				spDetail=new SPDetail();
+			        			spDetail.setOscePostRoom(oscePostRoom);
+			        			spDetail.setPatientInRole(a.getPatientInRole());
+			        			spDetail.setSequenceNumber(a.getSequenceNumber());
+			        			spDetail.setNumOfBreakPost(numOfBreakPost);
+			        			spDetail.setOscePosts(oscePosts);
+			        			spDetail.setCourses(osceSeq.getCourses());
+			        			spDetailsList.add(spDetail);
+		        			}
+		        			else
+		        			{
+		        				dualSp = true;
+		        				spDetail.setDualPatientInRole(a.getPatientInRole());
+		        			}
+		        			
+		        			if(j==timeStartList.size()-1 && i==osceSeqs.size()-1 && dualSp == false)//append room details at end of last sequence
 		        			{
 		        				RoomDetail roomDetail=new RoomDetail();
 		        				if(a.getOscePostRoom()==null)//logical break
@@ -1327,11 +1362,12 @@ public class ExportAssignment  extends HttpServlet {
 	        				{
 	        					SPColumn spColumn=(SPColumn) column;
 	        					List<SPDetail> spDetailList=spColumn.getSpDetailList();
+	        						        					
 	        					List<OscePost> oscePosts=null;
 	        					if(spDetailList.size()>0)
 	        					{
 	        						oscePosts=spDetailList.get(0).getOscePosts();
-	        					}
+	        					}	        					
 	        					
 	        					if(oscePosts!=null)
 	        					for(int m=0;m<oscePosts.size();m++)
@@ -1349,7 +1385,23 @@ public class ExportAssignment  extends HttpServlet {
 		        						{	
 		        							Cell spCell=excelRow.get(oscePosts.indexOf(oscePostRoom.getOscePost())*spDetail.getCourses().size()+spIndex).createCell(col);
 		        							StandardizedPatient sp=patientInRole.getPatientInSemester().getStandardizedPatient();
-		        							String name=sp.getPreName()+" "+sp.getName().charAt(0)+".";
+		        							
+		        							String name = "";
+		        							if (PostType.DUALSP.equals(oscePost.getOscePostBlueprint().getPostType()))
+		        							{
+		        								name = sp.getPreName() + " " + sp.getName().charAt(0) + ".";
+		        								PatientInRole dualSp = spDetail.getDualPatientInRole();
+		        								if (dualSp != null)
+		        								{
+		        									StandardizedPatient sp1 = dualSp.getPatientInSemester().getStandardizedPatient();
+		        									name = name + ", " + sp1.getPreName() + " " + sp1.getName().charAt(0) + ".";
+		        								}
+		        							}
+		        							else
+		        							{
+		        								name=sp.getPreName()+" "+sp.getName().charAt(0)+".";
+		        							}
+		        							
 		        							spCell.setCellValue(name);
 		        							sheet.autoSizeColumn(col, true);
 		        							
@@ -1359,10 +1411,19 @@ public class ExportAssignment  extends HttpServlet {
 		        						}
 		        						else if(patientInRole==null && oscePostRoom != null && oscePostRoom.getOscePost().equals(oscePost))
 		        						{
-		        							Cell spCell=excelRow.get(oscePosts.indexOf(oscePostRoom.getOscePost())*spDetail.getCourses().size()+spIndex).createCell(col);
+		        							int index = oscePosts.indexOf(oscePostRoom.getOscePost())*spDetail.getCourses().size()+spIndex;
+		        							Cell spCell=excelRow.get(index).createCell(col);
 		        							//StandardizedPatient sp=patientInRole.getPatientInSemester().getStandardizedPatient();
 		        							//String name=sp.getPreName()+" "+sp.getName();
-		        							spCell.setCellValue("NA");
+		        							if (PostType.DUALSP.equals(oscePost.getOscePostBlueprint().getPostType()))
+		        							{
+		        								spCell.setCellValue("NA, NA");
+		        							}
+		        							else
+		        							{
+		        								spCell.setCellValue("NA");
+		        							}
+		        							
 		        							sheet.autoSizeColumn(col, true);
 		        							
 		        							spCell.setCellStyle(spParcourStyle(wb, oscePostRoom.getCourse().getColor()));
@@ -1507,6 +1568,18 @@ public class ExportAssignment  extends HttpServlet {
          }
 		
 	}
+
+	private SPDetail checkSPDetailWithOscePostRoomId(List<SPDetail> spDetailsList, Long oscePostRoomId) {
+		for (SPDetail spDetail : spDetailsList)
+		{
+			if (spDetail != null && spDetail.getOscePostRoom() != null && spDetail.getOscePostRoom().getId().equals(oscePostRoomId))
+			{
+				return spDetail;
+			}
+		}
+		return null;
+	}
+	
 	public String saveXML(Document doc)
 	{
 		try{
@@ -1800,5 +1873,5 @@ color_16=Black
     
 	private Date dateAddMin(Date date, int minToAdd) {
 		return new Date((long) (date.getTime() + minToAdd * 60 * 1000));
-	}
+	}	
 }

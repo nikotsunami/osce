@@ -66,6 +66,7 @@ public class TimetableGenerator {
 	private List<Integer> timeNeededByDay;	// time need per individual day (required to calculate exact end-time of each day)
 	private Set<Assignment> assignments;	// this set contains all student assignments (after createAssignments() is invoked)
 	private long[] simAssLastId;			// SPs are not created and finalized in one step - therefore it is necessary to keep a record of the SP that still needs to be finalized
+	private long[] dualSpSimAssLastId;		// For dual sp reference 
 	
 	//spec[
 	public List<Integer> breakByRoatation = new ArrayList<Integer>();
@@ -505,8 +506,8 @@ public class TimetableGenerator {
 
 			
 			//log.info("  rotation " + j + " (breakposts: " + numberBreakPostsThisRotation + ") - start: " + timeNeededCurrentDay);
-			System.out.println("==========================================================================================================");
-			System.out.println("  rotation " + j + " (breakposts: " + numberBreakPostsThisRotation + ") - start: " + timeNeededCurrentDay);
+			//System.out.println("==========================================================================================================");
+			//System.out.println("  rotation " + j + " (breakposts: " + numberBreakPostsThisRotation + ") - start: " + timeNeededCurrentDay);
 			
 			// posts
 			for(int k = 0; k < nPostsThisRotation; k++) {
@@ -534,26 +535,26 @@ public class TimetableGenerator {
 			}
 			
 			//log.info("  rotation " + j + " end: " + timeNeededCurrentDay);
-			System.out.println("  rotation " + j + " end: " + timeNeededCurrentDay);
+			//System.out.println("  rotation " + j + " end: " + timeNeededCurrentDay);
 			
 			boolean lastRotation = (j % rotationsMax) == rotationsByDay.get(i) - 1;
 			
 			//spec[
 			boolean isLongBreakBetweenTwoRotation = false;
-			System.out.println("timeNeededCurrentDay : " + timeNeededCurrentDay);
-			System.out.println("BEFORE timeUntilLongORLunchBreak : " + timeUntilLongORLunchBreak);
+			//System.out.println("timeNeededCurrentDay : " + timeNeededCurrentDay);
+			//System.out.println("BEFORE timeUntilLongORLunchBreak : " + timeUntilLongORLunchBreak);
 			//timeUntilLongORLunchBreak += timeNeededCurrentDay;
 			//System.out.println("AFTER timeUntilLongORLunchBreak : " + timeUntilLongORLunchBreak);
 			timeUntilLongORLunchBreak = timeNeededCurrentDay - timeUntilLastLongBreak;
-			System.out.println("timeUntilLastLongBreak : " + timeUntilLastLongBreak);
-			System.out.println("AFTER timeUntilLastLongBreak timeUntilLongORLunchBreak : " + timeUntilLongORLunchBreak);
+			//System.out.println("timeUntilLastLongBreak : " + timeUntilLastLongBreak);
+			//System.out.println("AFTER timeUntilLastLongBreak timeUntilLongORLunchBreak : " + timeUntilLongORLunchBreak);
 			if(!lastRotation)
 			{
 				int nextNumberSlotsTotal = nPostsGeneral + rotations[0].get(j+1);
 				int totalTimeForLongBreak = ((nextNumberSlotsTotal * osce.getPostLength()) +  ((nextNumberSlotsTotal - 1) * osce.getShortBreak()) + osce.getMiddleBreak());
-				System.out.println("BEFORE totalTimeForLongBreak : " + totalTimeForLongBreak);
+				//System.out.println("BEFORE totalTimeForLongBreak : " + totalTimeForLongBreak);
 				totalTimeForLongBreak += timeUntilLongORLunchBreak;
-				System.out.println("AFTER totalTimeForLongBreak : " + totalTimeForLongBreak);
+				//System.out.println("AFTER totalTimeForLongBreak : " + totalTimeForLongBreak);
 				isLongBreakBetweenTwoRotation = totalTimeForLongBreak > LONG_BREAK_MIDDLE_THRESHOLD;
 				
 				if (isLongBreakBetweenTwoRotation)
@@ -575,7 +576,7 @@ public class TimetableGenerator {
 					timeNeededCurrentDay += osce.getLunchBreak();
 					timeUntilLastLongBreak = timeNeededCurrentDay; //Reset time when lunch break added
 					//log.info("  lunch break");
-					System.out.println("LUNCH BREAK");
+					//System.out.println("LUNCH BREAK");
 					breakByRoatation.add(j, (int) osce.getLunchBreak());
 				//SPEC[
 				//} else if(simpatChangeWithinSlots(slotsSinceLastSimpatChange + nPostsGeneral + rotations[0].get(j + 1)) || longBreakInRotationHalf) {
@@ -590,12 +591,12 @@ public class TimetableGenerator {
 							timeNeededCurrentDay += osce.getLongBreak();
 							timeUntilLastLongBreak = timeNeededCurrentDay; //Reset time when long break added 
 							//log.info("  long break");
-							System.out.println("LONG BREAK");
+							//System.out.println("LONG BREAK");
 							breakByRoatation.add(j, (int) osce.getLongBreak());
 						} else {
 							timeNeededCurrentDay += osce.getMiddleBreak();
 							//log.info("  middle break");
-							System.out.println("MIDDLE BREAK");
+							//System.out.println("MIDDLE BREAK");
 							breakByRoatation.add(j, (int) osce.getMiddleBreak());
 						}
 					//SPEC[
@@ -2196,8 +2197,9 @@ public class TimetableGenerator {
 	 * @param osceDay day on which this assignment is put
 	 * @param startTime time when the assignment starts
 	 * @param oscePR OscePostRoom-link
+	 * @param postType 
 	 */
-	private void createSPAssignment(int i, OsceDay osceDay, Date startTime, OscePostRoom oscePR) {
+	private void createSPAssignment(int i, OsceDay osceDay, Date startTime, OscePostRoom oscePR, PostType postType) {
 		Assignment ass = new Assignment();
 		ass.setType(AssignmentTypes.PATIENT);
 		ass.setOsceDay(osceDay);
@@ -2206,19 +2208,42 @@ public class TimetableGenerator {
 		ass.setOscePostRoom(oscePR);
 		ass.persist();
 		
+		if (postType != null && PostType.DUALSP.equals(postType))
+		{
+			Assignment ass1 = new Assignment();
+			ass1.setType(AssignmentTypes.PATIENT);
+			ass1.setOsceDay(osceDay);
+			ass1.setTimeStart(startTime);
+			ass1.setTimeEnd(startTime);
+			ass1.setOscePostRoom(oscePR);
+			ass1.persist();
+			dualSpSimAssLastId[i] = ass1.getId();
+		}
+		
 		simAssLastId[i] = ass.getId();
+		
 	}
 	
 	/**
 	 * Finalize the previously created SP assignment
 	 * @param i index of the post in "posts"
 	 * @param endTime time when the assignment ends
+	 * @param postType 
 	 */
-	private void finalizeSPAssignment(int i, Date endTime) {
+	private void finalizeSPAssignment(int i, Date endTime, PostType postType) {
 		Assignment ass = Assignment.findAssignment(simAssLastId[i]);
 		if(ass != null) {
 			ass.setTimeEnd(endTime);
 			ass.flush();
+		}
+		
+		if (postType != null && PostType.DUALSP.equals(postType))
+		{
+			Assignment ass1 = Assignment.findAssignment(dualSpSimAssLastId[i]);
+			if(ass1 != null) {
+				ass1.setTimeEnd(endTime);
+				ass1.flush();
+			}
 		}
 	}
 	
@@ -2230,10 +2255,11 @@ public class TimetableGenerator {
 	 * @param endTimeOld time when the old assignment ends
 	 * @param startTimeNew time when the assignments starts
 	 * @param oscePR OscePostRoom-link for new assignment
+	 * @param postType 
 	 */
-	private void changeSP(int i, OsceDay osceDay, Date endTimeOld, Date startTimeNew, OscePostRoom oscePR) {
-		finalizeSPAssignment(i, endTimeOld);
-		createSPAssignment(i, osceDay, startTimeNew, oscePR);
+	private void changeSP(int i, OsceDay osceDay, Date endTimeOld, Date startTimeNew, OscePostRoom oscePR, PostType postType) {
+		finalizeSPAssignment(i, endTimeOld, postType);
+		createSPAssignment(i, osceDay, startTimeNew, oscePR, postType);
 	}
 	
 	/**
@@ -2382,6 +2408,7 @@ public class TimetableGenerator {
 					Date rotationStartTime = parcourStartTime;
 					
 					simAssLastId = new long[numberPosts];
+					dualSpSimAssLastId = new long[numberPosts];
 					
 					// flag to define whether the assignments of ANAMNESIS_THERAPY have to be switched in the end (to avoid
 					// time overlapping)
@@ -2600,12 +2627,12 @@ public class TimetableGenerator {
 								if(post != null && post.getStandardizedRole() != null && post.requiresSimpat()) {
 									// create first SP slot
 									if(firstRotation && firstTimeSlot) {
-										createSPAssignment(i, osceDay, startTime, oscePR);
+										createSPAssignment(i, osceDay, startTime, oscePR, postType);
 										//log.info("create SP assignment for post " + i + " " + debugTime(startTime));
 									}
 									// finalize last SP slot
 									if(lastRotation && lastTimeSlot) {
-										finalizeSPAssignment(i, endTime);
+										finalizeSPAssignment(i, endTime, postType);
 										//log.info("finalize SP assignment for post " + i + " " + debugTime(endTime));
 									}
 								}
@@ -2647,9 +2674,9 @@ public class TimetableGenerator {
 										if (post != null && post.getStandardizedRole() != null && post.requiresSimpat())
 										{
 											if (simAssLastId.length > i)
-												changeSP(i, osceDay, endTime, endTimeNew, oscePR);
+												changeSP(i, osceDay, endTime, endTimeNew, oscePR, postType);
 											else
-												changeSP((i-1), osceDay, endTime, endTimeNew, oscePR);
+												changeSP((i-1), osceDay, endTime, endTimeNew, oscePR, postType);
 												
 											//log.info("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(endTimeNew) + " (during rotation)");
 										}
@@ -2669,9 +2696,9 @@ public class TimetableGenerator {
 											if (post != null && post.getStandardizedRole() != null && post.requiresSimpat())
 											{
 												if (simAssLastId.length > i)
-													changeSP(i, osceDay, oldEndTime, endTime, oscePR);
+													changeSP(i, osceDay, oldEndTime, endTime, oscePR, postType);
 												else
-													changeSP((i - 1), osceDay, oldEndTime, endTime, oscePR);
+													changeSP((i - 1), osceDay, oldEndTime, endTime, oscePR, postType);
 											}
 										}
 										//by spec issue change]
@@ -2727,7 +2754,7 @@ public class TimetableGenerator {
 												endTime = dateAddMin(endTime, postLength);
 												//System.out.println("FLAG : " + post.getOscePostBlueprint().getIsFirstPart() + " ~~EARLYSTARTFIRST : " + earlyStartFirst);
 											}
-											changeSP(i, osceDay, endTimeOld, startTimeNew, oscePR);
+											changeSP(i, osceDay, endTimeOld, startTimeNew, oscePR, postType);
 											//log.info("change SP assignment for post " + i + " " + debugTime(endTime) + " / " + debugTime(startTimeNew) + " (after rotation)");
 										}
 									}

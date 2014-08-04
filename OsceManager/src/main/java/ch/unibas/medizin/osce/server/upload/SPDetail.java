@@ -12,6 +12,8 @@ public class SPDetail {
 
 	private PatientInRole patientInRole;
 	
+	private PatientInRole dualPatientInRole;
+	
 	private OscePostRoom oscePostRoom;
 	
 	private List<OscePost> oscePosts;
@@ -106,6 +108,14 @@ public class SPDetail {
 
 	public void setPrename(String prename) {
 		this.prename = prename;
+	}
+	
+	public PatientInRole getDualPatientInRole() {
+		return dualPatientInRole;
+	}
+	
+	public void setDualPatientInRole(PatientInRole dualPatientInRole) {
+		this.dualPatientInRole = dualPatientInRole;
 	}
 
 	private Course course;

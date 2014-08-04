@@ -141,7 +141,7 @@ public class ManualOsceParcourViewImpl extends Composite implements ManualOscePa
 		
 		postTypeListBox = new FocusableValueListBox<PostType>(new EnumRenderer<PostType>());
 		postTypeListBox.setWidth("120px");
-		postTypeListBox.setAcceptableValues(Arrays.asList(PostType.NORMAL, PostType.BREAK));
+		postTypeListBox.setAcceptableValues(Arrays.asList(PostType.NORMAL, PostType.DUALSP, PostType.BREAK));
 		
 		postTypeListBox.addValueChangeHandler(new ValueChangeHandler<PostType>() {
 			

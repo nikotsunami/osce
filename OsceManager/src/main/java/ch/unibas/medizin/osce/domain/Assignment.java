@@ -1206,7 +1206,7 @@ public class Assignment {
     	 if(type ==1)
     	 {
     		 queryString="select a from Assignment as a where type="+type+" and osceDay="+osceDayId+" and  " +
-    	    	 		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.course="+courseId+" ) order by timeStart";
+    	    	 		"a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.course="+courseId+" ) order by timeStart, a.oscePostRoom.id";
     	 }
     	 EntityManager em = entityManager();
     	 TypedQuery<Assignment> query = em.createQuery(queryString, Assignment.class);
@@ -1633,7 +1633,7 @@ public class Assignment {
      {
     	 EntityManager em = entityManager();
     	 //String sql = "SELECT a FROM Assignment a WHERE type = 1 AND osce_day = " + osceDayId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " AND ( (a.timeStart = '" + timeStart + "' AND a.timeEnd = '" + timeEnd + "') OR a.sequenceNumber = " + sequenceNumber + ") ORDER BY a.timeStart";
-    	 String sql = "SELECT a FROM Assignment a WHERE type = 1 AND a.osceDay = " + osceDayId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " AND a.sequenceNumber = " + sequenceNumber + " ORDER BY a.oscePostRoom.course.id";
+    	 String sql = "SELECT a FROM Assignment a WHERE type = 1 AND a.osceDay = " + osceDayId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " AND a.sequenceNumber = " + sequenceNumber + " ORDER BY a.oscePostRoom.course.id, a.id";
     	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
     	 
     	 Assignment assignmentSpBreakSlot = findAssignmentForSPBreak(osceDayId, timeStart, timeEnd);

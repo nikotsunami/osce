@@ -370,5 +370,7 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String manualOsceClostRoomError();
 	
 	public String manualOsceCloseError();
+	
+	public String DUALSP();
 }
 

@@ -133,7 +133,7 @@ public class ManualOscePostSubViewImpl extends Composite implements ManualOscePo
 					oscePostBlueprintProxy = oscePostProxy.getOscePostBlueprint();
 					postTypeLbl.setText(enumConstants.getString(oscePostBlueprintProxy.getPostType().toString()));
 					
-					if (PostType.NORMAL.equals(oscePostBlueprintProxy.getPostType()))
+					if (PostType.NORMAL.equals(oscePostBlueprintProxy.getPostType()) || PostType.DUALSP.equals(oscePostBlueprintProxy.getPostType()))
 					{
 						specialisationProxy = oscePostBlueprintProxy.getSpecialisation();
 						if (specialisationProxy != null)
@@ -172,7 +172,7 @@ public class ManualOscePostSubViewImpl extends Composite implements ManualOscePo
 					
 				}
 				
-				if (PostType.NORMAL.equals(oscePostBlueprintProxy.getPostType()))
+				if (PostType.NORMAL.equals(oscePostBlueprintProxy.getPostType()) || PostType.DUALSP.equals(oscePostBlueprintProxy.getPostType()))
 				{
 					standardizedRoleProxy = oscePostProxy.getStandardizedRole();
 					if (standardizedRoleProxy != null)
@@ -189,7 +189,7 @@ public class ManualOscePostSubViewImpl extends Composite implements ManualOscePo
 				
 			}
 			
-			if (PostType.NORMAL.equals(oscePostBlueprintProxy.getPostType()))
+			if (PostType.NORMAL.equals(oscePostBlueprintProxy.getPostType()) || PostType.DUALSP.equals(oscePostBlueprintProxy.getPostType()))
 			{
 				roomProxy = oscePostRoomProxy.getRoom();		
 				if (roomProxy != null)
