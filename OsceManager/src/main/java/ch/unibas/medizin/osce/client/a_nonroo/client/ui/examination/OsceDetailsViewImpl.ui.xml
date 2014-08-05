@@ -1,284 +1,275 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
- xmlns:b="urn:import:com.google.gwt.user.cellview.client"
-  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client" xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="../../styles.css">
-	.description {	}
-	
-	.padleft5
-	{
-		padding-left: 5px;
-	}
-	
-	.fields {
-      margin-top: 0.5em;
-      margin-left: 1em;
-    }
-    .label {
-      min-height: 25px;
-      font-weight: bold;
-    }
-    .button {
-      margin-right: 1em;
-    }
-    .bar {
-      margin-left: 1em;
-    }
-    .header {
-      margin-left: 1em;
-      color: #4B4A4A;
-      text-shadow: #ddf 1px 1px 0;
-      margin-bottom: 0;
-    }
-   
+		.description {
+			
+		}
+		
+		.padleft5 {
+			padding-left: 5px;
+		}
+		
+		.fields {
+			margin-top: 0.5em;
+			margin-left: 1em;
+		}
+		
+		.label {
+			min-height: 25px;
+			font-weight: bold;
+		}
+		
+		.button {
+			margin-right: 1em;
+		}
+		
+		.bar {
+			margin-left: 1em;
+		}
+		
+		.header {
+			margin-left: 1em;
+			color: #4B4A4A;
+			text-shadow: #ddf 1px 1px 0;
+			margin-bottom: 0;
+		}
 	</ui:style>
 	<g:HTMLPanel>
-	
-	<g:HorizontalPanel styleName="{style.patientControls} {style.tabStyle}">
-				<g:Image ui:field="arrow" styleName="{style.padleft5}"
-					url="/osMaEntry/gwt/unibas/images/arrowdownselect.png"></g:Image>
-				<g:Label addStyleNames="{style.label}" ui:field="labelLongNameHeader"></g:Label>
-				<g:HTMLPanel>
-					<div class="{style.controlsright}">
-						<h3 class="{style.header}" style="display:inline">
-							<span ui:field="displayRenderer"></span>
-						</h3>
-						
-						<my:IconButton ui:field="edit" icon="pencil">Edit</my:IconButton>
-						<my:IconButton ui:field="delete" icon="trash">Delete</my:IconButton>
-						
-					</div>
-				</g:HTMLPanel>
-	</g:HorizontalPanel>
-			
-			
-		 <g:DisclosurePanel animationEnabled="true" open="true"
-				ui:field="osceDisclosurePanel" width="100%" addStyleNames="{style.patientDetails}" >
-			<g:TabPanel ui:field="osceDetailPanel" addStyleNames="gwt-InvertedTabPanel" width="100%">
-	
-			<g:Tab>
-			<g:TabHTML></g:TabHTML>
-			<g:HorizontalPanel >
-			<g:HTMLPanel addStyleNames="{style.patientDetails}">
-		<table  class="{style.fields}" >
-		
-		<tr height="10px"><td><u><b><span ui:field="labelTitleGeneral"></span></b></u></td> <td></td> <td></td> <td></td></tr>
-			<!-- <tr id="name"> -->
-			<tr>
-				<td>
-					<span class="{style.label}" ui:field="labelRemark">Name:</span>
-				</td>
-				<td>
-					<span ui:field="name" />
-				</td>
-			<!-- </tr> -->
-			
-			<!-- <tr id="studyYear"> -->
-			
-				<td>
-					<span class="{style.label}" ui:field="labelStudyYear">Study Year:</span>
-				</td>
-				<td>
-					<span ui:field="studyYear" />
-				</td>
-			</tr>
-			
-			<tr>
-			<!-- <tr id="isRepetion"> -->
-				<td>
-					<span class="{style.label}" ui:field="labelIsRepetion">Is Repetion:</span>
-				</td>
-				<td>
-					<span ui:field="isRepetion" />
-				</td>
-				<!-- <td></td><td></td> -->
-			<!-- </tr> -->
-			
-			
-			 <!-- <tr id="repetitionForOsce"> -->
-				<td>
-					<span class="{style.label}" ui:field="labelRepetitionForOsce">RepetitionForOsce:</span>
-				</td>
-				<td>
-					<span ui:field="repetitionForOsce" />
-				</td>
-			</tr> 
-			
-			<tr height="10px"><td><u><b><span ui:field="labelTitleAttributes"></span></b></u></td> <td></td> <td></td> <td></td></tr>
-			
-			<tr>
-			<!-- <tr id="maxNumberStudents"> -->
-				<td>
-					<span class="{style.label}" ui:field="labelMaxCircuits">max. Parcours:</span>
-				</td>
-				<td>
-					<span ui:field="maxNumberStudents" />
-				</td>
-		<!-- 	</tr> -->
-			
-			<!-- <tr id="maxStud"> -->
-				<td>
-					<span class="{style.label}" ui:field="labelMaxStudents">max. Studenten:</span>
-				</td>
-				<td>
-					<span ui:field="maxStud" />
-				</td>
-			</tr>
-			
-			<tr>
-			<!-- <tr id="maxRooms"> -->
-				<td>
-					<span class="{style.label}" ui:field="labelMaxRooms">MaxRooms:</span>
-				</td>
-				<td>
-					<span ui:field="maxRooms" />
-				</td>
-			<!-- </tr> -->
-			
-			<!-- <tr id="numberCourses"> -->
-				<td>
-					<span class="{style.label}" ui:field="labelStationLength">Postenlänge:</span>
-				</td>
-				<td>
-					<span ui:field="postLength" />
-				</td>
-			</tr>
-			
-			<tr height="10px"><td><u><b><span ui:field="labelTitleBreaks"></span></b></u></td> <td></td> <td></td> <td></td></tr>
-			<tr>
-			<!-- <tr id="shortBreak"> -->
-				<td>
-					<span class="{style.label}" ui:field="labelShortBreak">Short Break:</span>
-				</td>
-				<td>
-					<span ui:field="shortBreak" />
-				</td>
-		<!-- 	</tr> -->
-			
-			<!-- <tr id="shortBreakSPChange"> -->
-				<td>
-					<span class="{style.label}" ui:field="labelShortBreakSPChange">ShortBreakSPChange:</span>
-				</td>
-				<td>
-					<span ui:field="shortBreakSPChange" />
-				</td>
-			 </tr> 
-			
-			
-			<tr>
-			<!-- <tr id="MiddleBreak"> -->
-				<td>
-					<span class="{style.label}" ui:field="labelMediumBreak">Middle Break:</span>
-				</td>
-				<td>
-					<span ui:field="MiddleBreak" />
-				</td>
-		<!-- 	</tr> -->
-			
-		<!-- 	<tr id="LongBreak"> -->
-				<td>
-					<span class="{style.label}" ui:field="labelLongBreak">Long Break:</span>
-				</td>
-				<td>
-					<span ui:field="LongBreak" />
-				</td>
-			</tr>
-			
-			<tr>
-			<!-- <tr id="lunchBreak"> -->
-				<td>
-					<span class="{style.label}" ui:field="labelLunchBreak">lunch Break:</span>
-				</td>
-				<td>
-					<span ui:field="lunchBreak" />
-				</td>
-			
-				<td>
-					<span class="{style.label}" ui:field="labelLunchBreakRequiredTime">lunch Break Required Filed:</span>
-				</td>
-				<td>
-					<span ui:field="lunchBreakRequiredTime" />
-				</td>
-				
-			</tr>
-			
-			<tr>
-			<!-- <tr id="lunchBreak"> -->
-				<td>
-					<span class="{style.label}" ui:field="labelLOngBreakRequiredTime">lunch Break:</span>
-				</td>
-				<td>
-					<span ui:field="longBreakRequiredTime" />
-				</td>
-				<td>
-					<span class="{style.label}" ui:field="labelOsceCreationType">lunch Break:</span>
-				</td>
-				<td>
-					<span ui:field="osceCreationType" />
-				</td>
-			</tr>
-		</table>
-		</g:HTMLPanel>
-		
-				</g:HorizontalPanel>
- 		</g:Tab>
-		</g:TabPanel>
-		
- 	
-		</g:DisclosurePanel>
-		
-	
- 			
+
+		<g:HorizontalPanel styleName="{style.patientControls} {style.tabStyle}">
+			<g:Image ui:field="arrow" styleName="{style.padleft5}"
+				url="/osMaEntry/gwt/unibas/images/arrowdownselect.png"></g:Image>
+			<g:Label addStyleNames="{style.label}" ui:field="labelLongNameHeader"></g:Label>
 			<g:HTMLPanel>
-				<!--  <div class="{style.controls}  {style.controlsleft}">
-					<b:SimplePager display="{table}" ui:field="pager" />
+				<div class="{style.controlsright}">
+					<h3 class="{style.header}" style="display:inline">
+						<span ui:field="displayRenderer"></span>
+					</h3>
+
+					<my:IconButton ui:field="edit" icon="pencil">Edit</my:IconButton>
+					<my:IconButton ui:field="delete" icon="trash">Delete</my:IconButton>
+
 				</div>
-				-->
-				<b:CellTable ui:field="table" addStyleNames="{style.standardTable}"/>
-				<div class="{style.controls}  {style.controlsleft}">
-					
-					<my:IconButton ui:field="newButton" icon="plusthick">Add New</my:IconButton>
-					</div>
-   <!--  <table id='boundElementHolder' class="{style.fields}">
-    <tr id="name">
-				<td>
-					<span class="{style.label}">Name:</span>
-				</td>
-				<td>
-					<g:TextBox ui:field='taskName'/>
-				</td>
-			</tr>
-     
-      <tr id="deadline">
-				<td>
-					<span class="{style.label}">DeadLine:</span>
-				</td>
-				<td>
-					 <d:DateBox ui:field='deadline'/>
-				</td>
-			</tr>
-    
-    <tr id="administrator">
-				<td>
-					<span class="{style.label}">Administrator:</span>
-				</td>
-				<td>
-					 	<g:ValueListBox ui:field="administrator" />
-				</td>
-			</tr>
-			
-			<tr>
-			<td></td>
-			<td><g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button><my:IconButton  ui:field="filterButton">filter</my:IconButton></td>
-			</tr>
-    
-     
-      
-      
-    </table> -->
 			</g:HTMLPanel>
-				
+		</g:HorizontalPanel>
+
+
+		<g:DisclosurePanel animationEnabled="true" open="true"
+			ui:field="osceDisclosurePanel" width="100%" addStyleNames="{style.patientDetails}">
+			<g:TabPanel ui:field="osceDetailPanel" addStyleNames="gwt-InvertedTabPanel"
+				width="100%">
+
+				<g:Tab>
+					<g:TabHTML></g:TabHTML>
+					<g:HorizontalPanel>
+						<g:HTMLPanel addStyleNames="{style.patientDetails}">
+							<table class="{style.fields}">
+
+								<tr height="10px">
+									<td>
+										<u>
+											<b>
+												<span ui:field="labelTitleGeneral"></span>
+											</b>
+										</u>
+									</td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<!-- <tr id="name"> -->
+								<tr>
+									<td>
+										<span class="{style.label}" ui:field="labelRemark">Name:</span>
+									</td>
+									<td>
+										<span ui:field="name" />
+									</td>
+									
+									<td>
+										<span class="{style.label}" ui:field="labelStudyYear">Study Year:</span>
+									</td>
+									<td>
+										<span ui:field="studyYear" />
+									</td>
+								</tr>
+
+								<tr>
+									<!-- <tr id="isRepetion"> -->
+									<td>
+										<span class="{style.label}" ui:field="labelIsRepetion">Is Repetion:</span>
+									</td>
+									<td>
+										<span ui:field="isRepetion" />
+									</td>
+									<td>
+										<span class="{style.label}" ui:field="labelRepetitionForOsce">RepetitionForOsce:</span>
+									</td>
+									<td>
+										<span ui:field="repetitionForOsce" />
+									</td>
+								</tr>
+
+								<tr height="10px">
+									<td>
+										<u>
+											<b>
+												<span ui:field="labelTitleAttributes"></span>
+											</b>
+										</u>
+									</td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+
+								<tr>
+									<td id="maxNumberTd">
+										<span class="{style.label}" ui:field="labelMaxCircuits">max. Parcours:</span>
+									</td>
+									<td id="maxNumber">
+										<span ui:field="maxNumberStudents" />
+									</td>
+									<td id="maxStudentId">
+										<span class="{style.label}" ui:field="labelMaxStudents">max. Studenten:</span>
+									</td>
+									<td id="maxStudent">
+										<span ui:field="maxStud" />
+									</td>
+								</tr>
+
+								<tr>
+									<td id="maxRoomId">
+										<span class="{style.label}" ui:field="labelMaxRooms">MaxRooms:</span>
+									</td>
+									<td id="maxRoom">
+										<span ui:field="maxRooms" />
+									</td>
+									<td>
+										<span class="{style.label}" ui:field="labelStationLength">Postenlänge:</span>
+									</td>
+									<td>
+										<span ui:field="postLength" />
+									</td>
+								</tr>
+
+								<tr height="10px">
+									<td>
+										<u>
+											<b>
+												<span ui:field="labelTitleBreaks"></span>
+											</b>
+										</u>
+									</td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<!-- <tr id="shortBreak"> -->
+									<td>
+										<span class="{style.label}" ui:field="labelShortBreak">Short Break:</span>
+									</td>
+									<td>
+										<span ui:field="shortBreak" />
+									</td>
+									<!-- </tr> -->
+
+									<!-- <tr id="shortBreakSPChange"> -->
+									<td>
+										<span class="{style.label}" ui:field="labelShortBreakSPChange">ShortBreakSPChange:</span>
+									</td>
+									<td>
+										<span ui:field="shortBreakSPChange" />
+									</td>
+								</tr>
+
+
+								<tr>
+									<!-- <tr id="MiddleBreak"> -->
+									<td>
+										<span class="{style.label}" ui:field="labelMediumBreak">Middle Break:</span>
+									</td>
+									<td>
+										<span ui:field="MiddleBreak" />
+									</td>
+									<!-- </tr> -->
+
+									<!-- <tr id="LongBreak"> -->
+									<td>
+										<span class="{style.label}" ui:field="labelLongBreak">Long Break:</span>
+									</td>
+									<td>
+										<span ui:field="LongBreak" />
+									</td>
+								</tr>
+
+								<tr>
+									<!-- <tr id="lunchBreak"> -->
+									<td>
+										<span class="{style.label}" ui:field="labelLunchBreak">lunch Break:</span>
+									</td>
+									<td>
+										<span ui:field="lunchBreak" />
+									</td>
+
+									<td>
+										<span class="{style.label}" ui:field="labelLunchBreakRequiredTime">lunch Break Required
+											Filed:</span>
+									</td>
+									<td>
+										<span ui:field="lunchBreakRequiredTime" />
+									</td>
+
+								</tr>
+
+								<tr>
+									<!-- <tr id="lunchBreak"> -->
+									<td>
+										<span class="{style.label}" ui:field="labelLOngBreakRequiredTime">lunch Break:</span>
+									</td>
+									<td>
+										<span ui:field="longBreakRequiredTime" />
+									</td>
+									<td>
+										<span class="{style.label}" ui:field="labelOsceCreationType">lunch Break:</span>
+									</td>
+									<td>
+										<span ui:field="osceCreationType" />
+									</td>
+								</tr>
+							</table>
+						</g:HTMLPanel>
+
+					</g:HorizontalPanel>
+				</g:Tab>
+			</g:TabPanel>
+
+
+		</g:DisclosurePanel>
+
+
+
+		<g:HTMLPanel>
+			<!-- <div class="{style.controls} {style.controlsleft}"> <b:SimplePager 
+				display="{table}" ui:field="pager" /> </div> -->
+			<b:CellTable ui:field="table" addStyleNames="{style.standardTable}" />
+			<div class="{style.controls}  {style.controlsleft}">
+
+				<my:IconButton ui:field="newButton" icon="plusthick">Add New</my:IconButton>
+			</div>
+			<!-- <table id='boundElementHolder' class="{style.fields}"> <tr id="name"> 
+				<td> <span class="{style.label}">Name:</span> </td> <td> <g:TextBox ui:field='taskName'/> 
+				</td> </tr> <tr id="deadline"> <td> <span class="{style.label}">DeadLine:</span> 
+				</td> <td> <d:DateBox ui:field='deadline'/> </td> </tr> <tr id="administrator"> 
+				<td> <span class="{style.label}">Administrator:</span> </td> <td> <g:ValueListBox 
+				ui:field="administrator" /> </td> </tr> <tr> <td></td> <td><g:Button addStyleNames='{style.button}' 
+				ui:field='save'>Save</g:Button><my:IconButton ui:field="filterButton">filter</my:IconButton></td> 
+				</tr> </table> -->
+		</g:HTMLPanel>
+
 	</g:HTMLPanel>
 </ui:UiBinder> 

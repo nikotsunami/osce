@@ -1097,18 +1097,16 @@ public class ManualOsceTimeTableCalculation {
 									if (j < (noOfSlot - 1))
 										seqIndex = seqIndex + 1;				
 									
-									if (rotationNumber > 0 && stSeqNo <= osce.getMaxNumberStudents())
-									{
-										StudentAssignment studentAssignment = new StudentAssignment();
-										studentAssignment.setTimeStart(stTimeStart);
-										studentAssignment.setTimeEnd(stTimeEnd);
-										studentAssignment.setOscePostRoomId(oprId);
-										studentAssignment.setRotationNumber(assRotNumber);
-										studentAssignment.setSequenceNumber(stSeqNo);
-										studentAssignment.setOsceDayId(osceDayID);
-										
-										studAssList.add(studentAssignment);
-									}
+									
+									StudentAssignment studentAssignment = new StudentAssignment();
+									studentAssignment.setTimeStart(stTimeStart);
+									studentAssignment.setTimeEnd(stTimeEnd);
+									studentAssignment.setOscePostRoomId(oprId);
+									studentAssignment.setRotationNumber(assRotNumber);
+									studentAssignment.setSequenceNumber(stSeqNo);
+									studentAssignment.setOsceDayId(osceDayID);
+									
+									studAssList.add(studentAssignment);									
 									
 									rotationEndTime = stTimeEnd;
 								}

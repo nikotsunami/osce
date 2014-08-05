@@ -23,7 +23,9 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
@@ -132,13 +134,13 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	@UiField
 	public IntegerBox postLength;
 
-	@UiField(provided = true)
+	/*@UiField(provided = true)
 	public CheckBox isRepeOsce = new CheckBox() {
 
 		public void setValue(Boolean value) {
 			super.setValue(value == null ? Boolean.FALSE : value);
 		}
-	};
+	};*/
 	
 	@UiField(provided = true)
 	public CheckBox spStayInPost = new CheckBox() {
@@ -158,8 +160,8 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	DivElement labelStudyYear;
 	@UiField
 	DivElement labelMaxRooms;
-	@UiField
-	DivElement labelIsRepe;
+	/*@UiField
+	DivElement labelIsRepe;*/
 	@UiField
 	DivElement labelOsceRepe;
 	@UiField
@@ -315,7 +317,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		labelMaxStudents.setInnerText(constants.osceMaxStudents());
 		labelStudyYear.setInnerText(constants.studyYears());
 		labelMaxRooms.setInnerText(constants.osceMaxRooms());
-		labelIsRepe.setInnerText(constants.osceIsRepe());
+		//labelIsRepe.setInnerText(constants.osceIsRepe());
 		labelOsceRepe.setInnerText(constants.osceRepe());
 		labelShortBreak.setInnerText(constants.osceShortBreak());
 		labelLongBreak.setInnerText(constants.osceLongBreak());
@@ -343,7 +345,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		osceMap.put("lunchBreak", lunchBreak);
 		osceMap.put("studyYear", studyYear);
 		osceMap.put("postLength", postLength);
-		osceMap.put("isRepeOsce", isRepeOsce);
+		//osceMap.put("isRepeOsce", isRepeOsce);
 		//Issue # 122 : Replace pull down with autocomplete.
 		//osceMap.put("osceValue", osceValue);
 		osceMap.put("osceValue", osceValue.getTextField().advancedTextBox);
@@ -360,10 +362,34 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		osceCreationType.setValue(OsceCreationType.Automatic);
 		osceCreationType.setAcceptableValues(Arrays.asList(OsceCreationType.Automatic, OsceCreationType.Manual));
 		
+		osceCreationType.addValueChangeHandler(new ValueChangeHandler<OsceCreationType>() {
+			
+			@Override
+			public void onValueChange(ValueChangeEvent<OsceCreationType> event) {
+				if (OsceCreationType.Manual.equals(event.getValue()))
+				{
+					Document.get().getElementById("numberCoursesLbl").getStyle().setDisplay(Display.NONE);
+					Document.get().getElementById("numberCourses").getStyle().setDisplay(Display.NONE);
+					Document.get().getElementById("maxNumberStudentsLbl").getStyle().setDisplay(Display.NONE);
+					Document.get().getElementById("maxNumberStudents").getStyle().setDisplay(Display.NONE);
+					Document.get().getElementById("maxNoRoomLbl").getStyle().setDisplay(Display.NONE);
+					Document.get().getElementById("maxNoRoom").getStyle().setDisplay(Display.NONE);
+				}
+				else if (OsceCreationType.Automatic.equals(event.getValue()))
+				{
+					Document.get().getElementById("numberCoursesLbl").getStyle().clearDisplay();
+					Document.get().getElementById("numberCourses").getStyle().clearDisplay();
+					Document.get().getElementById("maxNumberStudentsLbl").getStyle().clearDisplay();
+					Document.get().getElementById("maxNumberStudents").getStyle().clearDisplay();
+					Document.get().getElementById("maxNoRoomLbl").getStyle().clearDisplay();
+					Document.get().getElementById("maxNoRoom").getStyle().clearDisplay();
+				}
+			}
+		});
 		
 		// E Highlight onViolation
 		
-		if(isRepeOsce.isChecked()==true)
+		/*if(isRepeOsce.isChecked()==true)
 		{
 			copiedOsce.setEnabled(true);
 		}
@@ -372,7 +398,6 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 			
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
-				// TODO Auto-generated method stub
 				if(event.getValue()==true)
 				{
 					copiedOsce.setEnabled(true);
@@ -382,7 +407,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 					copiedOsce.setEnabled(false);
 				}
 			}
-		});		
+		});		*/
 		
 		horizontalTabPanel.getElement().getStyle().setMarginTop(5, Unit.PX);
 		//horizontalTabPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);

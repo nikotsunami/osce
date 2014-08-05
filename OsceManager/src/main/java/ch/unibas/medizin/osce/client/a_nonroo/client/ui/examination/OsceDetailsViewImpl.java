@@ -20,6 +20,7 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.client.style.widgets.cell.IconCell;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
+import ch.unibas.medizin.osce.shared.OsceCreationType;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -31,6 +32,7 @@ import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.SpanElement;
@@ -753,39 +755,49 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 			repetitionForOsce.setInnerText(proxy.getCopiedOsce().getName() == null ? "" : proxy.getCopiedOsce().getName());
 		}
 		
-		
-		if(proxy.getMaxNumberStudents()==null)
+		if (OsceCreationType.Automatic.equals(proxy.getOsceCreationType()))
 		{
-			maxStud.setInnerText("");
+			if(proxy.getMaxNumberStudents()==null)
+			{
+				maxStud.setInnerText("");
+				
+			}
+			else
+			{
+				maxStud.setInnerText(proxy.getMaxNumberStudents() == 0 ? "" : String.valueOf(proxy.getMaxNumberStudents()));
+			}
 			
-		}
-		else
-		{
-			maxStud.setInnerText(proxy.getMaxNumberStudents() == 0 ? "" : String.valueOf(proxy.getMaxNumberStudents()));
-		}
-		
-		
-		if(proxy.getNumberCourses()==null)
-		{
-			maxNumberStudents.setInnerText("");
 			
-		}
-		else
-		{
-		maxNumberStudents.setInnerText(proxy.getNumberCourses() == 0 ? "" : String.valueOf(proxy.getNumberCourses()));
-		}
-		
-		
-		if(proxy.getNumberRooms()==null)
-		{
-			maxRooms.setInnerText("");
+			if(proxy.getNumberCourses()==null)
+			{
+				maxNumberStudents.setInnerText("");
+				
+			}
+			else
+			{
+			maxNumberStudents.setInnerText(proxy.getNumberCourses() == 0 ? "" : String.valueOf(proxy.getNumberCourses()));
+			}
 			
+			
+			if(proxy.getNumberRooms()==null)
+			{
+				maxRooms.setInnerText("");
+				
+			}
+			else
+			{
+				maxRooms.setInnerText(proxy.getNumberRooms() == 0 ? "" : String.valueOf(proxy.getNumberRooms()));
+			}
 		}
-		else
+		else if (OsceCreationType.Manual.equals(proxy.getOsceCreationType()))
 		{
-			maxRooms.setInnerText(proxy.getNumberRooms() == 0 ? "" : String.valueOf(proxy.getNumberRooms()));
-		}
-		
+			Document.get().getElementById("maxNumberTd").removeFromParent();
+			Document.get().getElementById("maxNumber").removeFromParent();
+			Document.get().getElementById("maxStudentId").removeFromParent();
+			Document.get().getElementById("maxStudent").removeFromParent();
+			Document.get().getElementById("maxRoomId").removeFromParent();
+			Document.get().getElementById("maxRoom").removeFromParent();
+		}		
 		
 		if(proxy.getPostLength()==null)
 		{

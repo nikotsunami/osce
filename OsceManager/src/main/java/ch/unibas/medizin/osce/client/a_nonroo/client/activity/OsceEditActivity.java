@@ -150,8 +150,12 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 		requests.osceRequest().findAllOsces().with("tasks", "semester").fire(new OSCEReceiver<List<OsceProxy>>() {
 
 			public void onSuccess(List<OsceProxy> response) {
-				
 				view.setOsceValues(response);
+				
+				if (osce != null && osce.getCopiedOsce() != null)
+				{
+					((OsceEditViewImpl)view).copiedOsce.setSelected(osce.getCopiedOsce());
+				}
 			}
 		});
 
@@ -167,7 +171,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 
 		if (this.place.getOperation() == Operation.EDIT) {
 			Log.info("edit");
-			requests.find(place.getProxyId()).with("osce","copiedOsce")
+			requests.find(place.getProxyId()).with("osce","copiedOsce","copiedOsce.semester")
 			.fire(new OSCEReceiver<Object>() {
 
 				
@@ -183,6 +187,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 						osce = (OsceProxy) response;
 						((OsceEditViewImpl)view).osceValue.setVisible(false);
 						((OsceEditViewImpl)view).labelOsceForTask.setInnerText("");
+						
 						
 						if (OsceStatus.OSCE_NEW.equals(osce.getOsceStatus()) == false)
 						{
@@ -260,8 +265,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 		
 		Log.info("flush");
 		editorDriver.flush();
-		
-		
+				
 		Log.debug("Create für: " + osce.getId());
 	}
 
@@ -329,7 +333,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 			
 			osce.setName(((OsceEditViewImpl)view).name.getValue());
 			osce.setMaxNumberStudents(((OsceEditViewImpl)view).maxNumberStudents.getValue());
-			osce.setIsRepeOsce(((OsceEditViewImpl)view).isRepeOsce.isChecked());
+			//osce.setIsRepeOsce(((OsceEditViewImpl)view).isRepeOsce.isChecked());
 			osce.setLongBreak(((OsceEditViewImpl)view).LongBreak.getValue());
 			osce.setShortBreak(((OsceEditViewImpl)view).shortBreak.getValue());
 			osce.setLunchBreak(((OsceEditViewImpl)view).lunchBreak.getValue());
@@ -343,16 +347,18 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 			
 			osce.setSemester(semester);
 			osce.setPostLength(((OsceEditViewImpl)view).postLength.getValue());
-			if(((OsceEditViewImpl)view).isRepeOsce.isChecked())
+			if(((OsceEditViewImpl)view).copiedOsce.getSelected() != null)
 			{
 				Log.info("osce not null");
 				osce.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
+				osce.setIsRepeOsce(true);
 			}
 			else
 			{
 				Log.info("osce null");
 				((OsceEditViewImpl)view).copiedOsce.setSelected(null);
 				osce.setCopiedOsce(null);
+				osce.setIsRepeOsce(false);
 			}
 			Log.info("osce value--"+((OsceEditViewImpl)view).copiedOsce.getSelected());
 			osce.setNumberCourses(((OsceEditViewImpl)view).numberCourses.getValue());
@@ -449,7 +455,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 			
 			osceProxy.setName(((OsceEditViewImpl)view).name.getValue());
 			osceProxy.setMaxNumberStudents(((OsceEditViewImpl)view).maxNumberStudents.getValue());
-			osceProxy.setIsRepeOsce(((OsceEditViewImpl)view).isRepeOsce.isChecked());
+			//osceProxy.setIsRepeOsce(((OsceEditViewImpl)view).isRepeOsce.isChecked());
 			osceProxy.setLongBreak(((OsceEditViewImpl)view).LongBreak.getValue());
 			osceProxy.setShortBreak(((OsceEditViewImpl)view).shortBreak.getValue());
 			osceProxy.setLunchBreak(((OsceEditViewImpl)view).lunchBreak.getValue());
@@ -465,15 +471,25 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 			//osceProxy.setSemester(((OsceEditViewImpl)view).semester.getValue());
 			osceProxy.setSemester(semester);
 			osceProxy.setPostLength(((OsceEditViewImpl)view).postLength.getValue());
-			if(((OsceEditViewImpl)view).isRepeOsce.isChecked())
+			/*if(((OsceEditViewImpl)view).isRepeOsce.isChecked())
 			{
 				osceProxy.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
 			}
 			else
 			{
 				osceProxy.setCopiedOsce(null);
+			}*/
+			if (((OsceEditViewImpl)view).copiedOsce.getSelected() != null)
+			{
+				osceProxy.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
+				osceProxy.setIsRepeOsce(true);
 			}
-			//osceProxy.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
+			else
+			{
+				osceProxy.setCopiedOsce(null);
+				osceProxy.setIsRepeOsce(false);
+			}
+			
 			osceProxy.setNumberCourses(((OsceEditViewImpl)view).numberCourses.getValue());
 			osceProxy.setNumberRooms(((OsceEditViewImpl)view).numberRooms.getValue());
 			osceProxy.setOsceStatus(OsceStatus.OSCE_NEW);
@@ -651,7 +667,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 		final OsceProxy osceProxy=osceRequest.create(OsceProxy.class);		
 		osceProxy.setName(((OsceEditViewImpl)view).name.getValue());
 		osceProxy.setMaxNumberStudents(((OsceEditViewImpl)view).maxNumberStudents.getValue());
-		osceProxy.setIsRepeOsce(((OsceEditViewImpl)view).isRepeOsce.isChecked());
+		//osceProxy.setIsRepeOsce(((OsceEditViewImpl)view).isRepeOsce.isChecked());
 		osceProxy.setLongBreak(((OsceEditViewImpl)view).LongBreak.getValue());
 		osceProxy.setShortBreak(((OsceEditViewImpl)view).shortBreak.getValue());
 		osceProxy.setLunchBreak(((OsceEditViewImpl)view).lunchBreak.getValue());
@@ -663,14 +679,14 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 		osceProxy.setShortBreakSimpatChange(((OsceEditViewImpl)view).shortBreakSimpatChange.getValue());
 		osceProxy.setSemester(semester);
 		osceProxy.setPostLength(((OsceEditViewImpl)view).postLength.getValue());
-		if(((OsceEditViewImpl)view).isRepeOsce.isChecked())
+		/*if(((OsceEditViewImpl)view).isRepeOsce.isChecked())
 		{
 			osceProxy.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
 		}
 		else
 		{
 			osceProxy.setCopiedOsce(null);
-		}
+		}*/
 		osceProxy.setNumberCourses(((OsceEditViewImpl)view).numberCourses.getValue());
 		osceProxy.setNumberRooms(((OsceEditViewImpl)view).numberRooms.getValue());
 		osceProxy.setOsceStatus(OsceStatus.OSCE_NEW);

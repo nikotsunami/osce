@@ -813,7 +813,7 @@ public class ExportAssignment  extends HttpServlet {
 		        	OsceSequenceDetail osceSeqDetail=new OsceSequenceDetail();
 		        	
 		        	List<OscePost> oscePosts=osceSeq.getOscePosts();
-		        	
+		        	List<OscePost> oscePostWithoutBreak = new ArrayList<OscePost>();
 		        	
 		        	int numOfBreakPost=0;
 		        	for(int postIndex=0;postIndex<oscePosts.size();postIndex++)
@@ -821,6 +821,10 @@ public class ExportAssignment  extends HttpServlet {
 		        		if(oscePosts.get(postIndex).getOscePostBlueprint().getPostType()==PostType.BREAK)
 		        		{
 		        			numOfBreakPost++;
+		        		}
+		        		else
+		        		{
+		        			oscePostWithoutBreak.add(oscePosts.get(postIndex));
 		        		}
 		        	}
 		        	
@@ -861,31 +865,30 @@ public class ExportAssignment  extends HttpServlet {
 		        			{
 		        				for(int courseIndex=0;courseIndex<osceSeq.getCourses().size();courseIndex++)
 		        				{
-		        					if(oscePosts.get(postIndex).getOscePostBlueprint().getPostType()!= PostType.BREAK)
+		        					if(oscePosts.get(postIndex).getOscePostBlueprint().getPostType() != PostType.BREAK)
 		        					{
-		        					PostDetail postDetail=new PostDetail();
-			        				//OscePostRoom oscePostRoom=a.getOscePostRoom();
-			        				//postDetail.setPatientInRole(a.getPatientInRole());
-			        				//logical sp break
-			        				//if(oscePostRoom==null)
-			        				//{
-			        				//	postDetail.setRowSpan(1);
-			        				//	postDetail.setOscePostRoom(null);
-			        				//}
-			        				//else
-			        				//{
-		        						postDetail.setRowSpan(osceSeq.getCourses().size());
-		        						postDetail.setOscePost(oscePosts.get(postIndex));
-			        				//	postDetail.setOscePostRoom(oscePostRoom);
-			        				//}
-			        				postDetailList.add(postDetail);
+			        					PostDetail postDetail=new PostDetail();
+				        				//OscePostRoom oscePostRoom=a.getOscePostRoom();
+				        				//postDetail.setPatientInRole(a.getPatientInRole());
+				        				//logical sp break
+				        				//if(oscePostRoom==null)
+				        				//{
+				        				//	postDetail.setRowSpan(1);
+				        				//	postDetail.setOscePostRoom(null);
+				        				//}
+				        				//else
+				        				//{
+			        						postDetail.setRowSpan(osceSeq.getCourses().size());
+			        						postDetail.setOscePost(oscePosts.get(postIndex));
+				        				//	postDetail.setOscePostRoom(oscePostRoom);
+				        				//}
+				        				postDetailList.add(postDetail);
 		        					}
 		        				}
 		        			}
 	        				
 	        				
 	        			}
-		        		
 		        		
 		        		for(Assignment a:assignments)
 		        		{
@@ -914,7 +917,7 @@ public class ExportAssignment  extends HttpServlet {
 		        			SPDetail spDetail = null;
 		        			
 		        			if (oscePostRoom != null)
-		        				spDetail = checkSPDetailWithOscePostRoomId(spDetailsList, oscePostRoom.getId());
+		        				spDetail = checkSPDetailWithOscePostRoomId(spDetailsList, oscePostRoom.getId(), a.getSequenceNumber());
 		        			
 		        			if (spDetail == null)
 		        			{
@@ -923,7 +926,7 @@ public class ExportAssignment  extends HttpServlet {
 			        			spDetail.setPatientInRole(a.getPatientInRole());
 			        			spDetail.setSequenceNumber(a.getSequenceNumber());
 			        			spDetail.setNumOfBreakPost(numOfBreakPost);
-			        			spDetail.setOscePosts(oscePosts);
+			        			spDetail.setOscePosts(oscePostWithoutBreak);
 			        			spDetail.setCourses(osceSeq.getCourses());
 			        			spDetailsList.add(spDetail);
 		        			}
@@ -948,7 +951,7 @@ public class ExportAssignment  extends HttpServlet {
 		        				{
 		        					roomDetail.setRoom(a.getOscePostRoom().getRoom());
 		        				}
-		        				roomDetail.setOscePosts(oscePosts);
+		        				roomDetail.setOscePosts(oscePostWithoutBreak);
 		        				roomDetail.setNumOfBreakPost(numOfBreakPost);
 		        				roomDetail.setOscePostRoom(a.getOscePostRoom());
 		        				roomDetail.setCourses(osceSeq.getCourses());
@@ -1569,10 +1572,12 @@ public class ExportAssignment  extends HttpServlet {
 		
 	}
 
-	private SPDetail checkSPDetailWithOscePostRoomId(List<SPDetail> spDetailsList, Long oscePostRoomId) {
+	private SPDetail checkSPDetailWithOscePostRoomId(List<SPDetail> spDetailsList, Long oscePostRoomId, Integer seqNumber) {
 		for (SPDetail spDetail : spDetailsList)
 		{
-			if (spDetail != null && spDetail.getOscePostRoom() != null && spDetail.getOscePostRoom().getId().equals(oscePostRoomId))
+			if (spDetail != null && spDetail.getOscePostRoom() != null 
+					&& spDetail.getOscePostRoom().getId().equals(oscePostRoomId) 
+					&& seqNumber.equals(spDetail.getSequenceNumber()) )
 			{
 				return spDetail;
 			}

@@ -1,381 +1,291 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
 	xmlns:g='urn:import:com.google.gwt.user.client.ui' xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
-	 xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
-	xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui' xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui' xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
+	xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
+	xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui' xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
+	xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
 
-	<ui:style src="../../styles.css" >
-	.leftpadding10{
-	margin-left: 10px;
-
-	}
-	
+	<ui:style src="../../styles.css">
+		.leftpadding10 {
+			margin-left: 10px;
+		}
 	</ui:style>
 	<g:VerticalPanel addStyleNames="{style.tabStyle}">
-	<g:HTMLPanel styleName="{style.patientControls}">
-	
-	    <div class="{style.controlsright}">
-			<h3 class="{style.header}" style="display:inline"><span ui:field="title"></span></h3>
-			<my:IconButton ui:field="save" icon="disk"></my:IconButton>
-			<my:IconButton ui:field="cancel" icon="closethick"></my:IconButton>
-			<my:IconButton ui:field="preview" icon="calculator"></my:IconButton>
-		</div>
-	</g:HTMLPanel>
-	<g:HTMLPanel>
-    
-		<!-- <g:TabPanel ui:field="oscePanel" addStyleNames="gwt-InvertedTabPanel" width="100%"> -->
-		 <g:TabPanel ui:field="oscePanel"  width="100%"> 
-			<g:Tab>
-				<g:TabHTML></g:TabHTML>
-	<g:HTMLPanel>
-		<!-- <div>
-			<h3 class='{style.header}' ui:field="editTitle">
-				<ui:msg>Edit OSCE</ui:msg>
-			</h3>
-			h3 class='{style.header}' ui:field='createTitle'>
-				<ui:msg>New OSCE</ui:msg>
-			</h3
-		</div> -->
-		<div ui:field='errors' class='{style.errors}'></div>
-		<br></br>
-		<!-- <table class="{style.fields}" id="boundElementHolder"> -->
-		<table >
-		
-		
-		  <tr height="10px"><td><u><b><span ui:field="labelTitleGeneral"></span></b></u></td> <td></td> <td></td> <td></td></tr>  
-			<tr >
-				<td id="name">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelRemark"></div>
-				</td>
-				
-				<td>
-					<g:TextBox ui:field='name'/>
-				</td>
-				
-				<td id="studyYear">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelStudyYear">Study Year :</div>
-				</td>
-				
-				<td>
-					<g:ValueListBox ui:field="studyYear" />			
-				</td>	
-				
-			</tr>
-			
-			<tr >
-				<td  id="isRepeOsce">
-						<div class="{style.label} {style.leftpadding10}" ui:field="labelIsRepe">Is Repe Osce :</div>
-				</td>
-				
-				<td>
-					<g:CheckBox ui:field="isRepeOsce" /> 
-				</td> 
-					
-				<td  id="osceRepe">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceRepe">OSCE Repe </div>
-				</td>
-				<td>
-						<!-- //Issue # 122 : Replace pull down with autocomplete. -->
-						 <!-- <g:ValueListBox ui:field="copiedOsce" /> -->
-				  	<i:DefaultSuggestBox ui:field="copiedOsce"></i:DefaultSuggestBox>
-					  	 <!-- //Issue # 122 : Replace pull down with autocomplete. -->
-					
-				</td>
-			</tr>
-			
-			<tr height="10px"><td><u><b><span ui:field="labelTitleAttributes"></span></b></u></td> <td></td> <td></td> <td></td></tr>
-		 	<!-- <tr><td><b>Attributes :</b></td><td></td><td></td><td></td></tr>  -->
-				
-				 <tr>
-				
-				<td id="numberCourses">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelMaxParcours">max. Parcour :</div>
-				</td>
-				
-				<td>
-					<g:IntegerBox ui:field="numberCourses" />
-				</td>
-				
-				 <td id="maxNumberStudents">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelMaxStudents">Max Students :</div>
-				</td>
-				
-				<td>
-					<g:IntegerBox ui:field="maxNumberStudents" />
-				</td>
-			</tr>
-			<tr>
-				<td id="maxNoRoom">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelMaxRooms">Maximum Rooms :</div>
-				</td>
-				 
-				<td>
-					<g:IntegerBox ui:field="numberRooms"></g:IntegerBox>
-				</td>
-				
-				<td id="postLength">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelStationLength">Post Length :</div>
-				</td>
-				
-				<td>
-					<g:IntegerBox ui:field="postLength" />
-				</td>
-				
-				</tr>
-				
-				<tr height="10px"><td><u><b><span ui:field="labelTitleBreaks"></span></b></u></td> <td></td> <td></td> <td></td></tr>
-				 <!-- <tr><td><b>Breaks : </b></td><td></td><td></td><td></td></tr>  -->
-				
-				
-				<tr>
-				
-					<td id="shortBreak">
-						<div class="{style.label} {style.leftpadding10}" ui:field="labelShortBreak"> Short Break :</div>
-					</td>
-					
-					<td>
-						<r:ShortBox ui:field="shortBreak" />
-					</td>
-					<td  id="isRepeOsce">
-						<div class="{style.label} {style.leftpadding10}" ui:field="labeShortBreakSimpatChange">Short Break Simpat Change :</div>
-					</td>
-					<td>
-						<r:ShortBox ui:field="shortBreakSimpatChange" />
-					</td>
-				</tr>
-				
-			<tr>
-				
-				<td id="middleBreak">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelMiddleBreak">Middle Break :</div>
-				</td>
-				 
-				<td>
-					<r:ShortBox ui:field="middleBreak" /> 
-				</td>
-				<td id="longBreak">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelLongBreak">Long Break :</div>
-				</td>
-				 
-				<td>
-					<r:ShortBox ui:field="LongBreak" /> 
-				</td>
-			</tr>
-				
-			<tr>
-			
-				<td id="lunchBreak">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelLunchBreak">Lunch Break :</div>
-				</td>
-				
-				<td>
-				<r:ShortBox ui:field="lunchBreak" />
-				</td>
-				<td id="lunchBreakRequiredTime">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelLunchBreakRequiredTime">Lunch Break Required Time :</div>
-				</td>
-				
-				<td>
-				<r:ShortBox ui:field="lunchBreakRequiredTime" />
-				</td>
-			</tr>
-			<tr>
-			
-				<td id="longBreakRequiredTime">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelLOngBreakRequiredTime">Long Break Required Time : :</div>
-				</td>
-				
-				<td>
-					<r:ShortBox ui:field="longBreakRequiredTime" />
-				</td>
-				
-				<td id="osceCreationType">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceCreationType">Long Break Required Time : :</div>
-				</td>
-				
-				<td>
-					<g:ValueListBox ui:field="osceCreationType" />
-				</td>
-			</tr>	
-			<tr>
-			 <td  id="spStayInPost">
-						<div class="{style.label} {style.leftpadding10}" ui:field="labelSpStayInPost">SP_Stay_In_Post :</div>
-				</td>
-				<td>
-						<g:CheckBox ui:field="spStayInPost" /> 
-				</td> 
-				
-				<td>
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceForTask">OSCE for Task :</div>
-				</td>
-				<td>
-					
-					  	<!-- //Issue # 122 : Replace pull down with autocomplete. -->
-					  	<!--  <g:ValueListBox ui:field="osceValue" /> -->
-					  	<i:DefaultSuggestBox ui:field="osceValue"></i:DefaultSuggestBox>
-					  	 <!-- //Issue # 122 : Replace pull down with autocomplete. -->
-				</td>
-				 
-				
-			
-			</tr>
-			
-			  <!-- <td  id="isRepeOsce">
-					<div class="{style.label}" ui:field="labelIsRepe">Is Repe Osce :</div>
-				</td>
-				<td>
-					<g:CheckBox ui:field="isRepeOsce" /> 
-				</td>  -->
-				<!-- <td id="shortBreak">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelMiddleBreak">Middle Break :</div>
-				</td> -->
-				<!-- <td  id="osceRepe">
-					<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceRepe">OSCE Repe </div>
-				</td>
-				<td>
-					//Issue # 122 : Replace pull down with autocomplete.
-					 <g:ValueListBox ui:field="copiedOsce" />
-				  	<i:DefaultSuggestBox ui:field="copiedOsce"></i:DefaultSuggestBox>
-				  	 //Issue # 122 : Replace pull down with autocomplete.
-					
-				</td> -->
-			
-			
-		<!--	<tr>
-				
-				<td id="buttonselect">
-					
-				</td>
-				<td>
-			 	<g:Button addStyleNames='{style.button}' ui:field='save'>Save</g:Button>
-			<g:Button addStyleNames='{style.button}' ui:field='cancel'>Cancel</g:Button>
-			 
-				</td>
-			</tr>
-		-->
+		<g:HTMLPanel styleName="{style.patientControls}">
 
- <!--
-			<tr id="studyYear">
-				<td>
-					<div class="{style.label}">Study Year:</div>
-				</td>
-				<td>
-					<g:ValueListBox ui:field="studyYear" />
-				</td>
-			</tr>
-			<tr id="maxNumberStudents">
-				<td>
-					<div class="{style.label}">Max Number Students:</div>
-				</td>
-				<td>
-					<g:IntegerBox ui:field="maxNumberStudents" />
-				</td>
-			</tr>
-			<tr id="numberPosts">
-				<td>
-					<div class="{style.label}">Number Posts:</div>
-				</td>
-				<td>
-					<g:IntegerBox ui:field="numberPosts" />
-				</td>
-			</tr>
-			<tr id="numberCourses">
-				<td>
-					<div class="{style.label}">Number Courses:</div>
-				</td>
-				<td>
-					<g:IntegerBox ui:field="numberCourses" />
-				</td>
-			</tr>
-			<tr id="postLength">
-				<td>
-					<div class="{style.label}">Post Length:</div>
-				</td>
-				<td>
-					<g:IntegerBox ui:field="postLength" />
-				</td>
-			</tr>
-			<tr id="isRepeOsce">
-				<td>
-					<div class="{style.label}">Is Repe Osce:</div>
-				</td>
-				<td>
-					<g:CheckBox ui:field="isRepeOsce" />
-				</td>
-			</tr>
-			<tr id="numberRooms">
-				<td>
-					<div class="{style.label}">Number Rooms:</div>
-				</td>
-				<td>
-					<g:IntegerBox ui:field="numberRooms" />
-				</td>
-			</tr>
-			<tr id="isValid">
-				<td>
-					<div class="{style.label}">Is Valid:</div>
-				</td>
-				<td>
-					<g:CheckBox ui:field="isValid" />
-				</td>
-			</tr>
-			<tr id="semester">
-				<td>
-					<div class="{style.label}">Semester:</div>
-				</td>
-				<td>
-					<g:ValueListBox ui:field="semester" />
-				</td>
-			</tr>
-			<tr id="osce_days">
-				<td>
-					<div class="{style.label}">Osce_days:</div>
-				</td>
-				<td>
-					<a:OsceDaySetEditor ui:field="osce_days" />
-				</td>
-			</tr>
-			<tr id="courses">
-				<td>
-					<div class="{style.label}">Courses:</div>
-				</td>
-				<td>
-					<a:CourseSetEditor ui:field="courses" />
-				</td>
-			</tr>
-			<tr id="tasks">
-				<td>
-					<div class="{style.label}">Tasks:</div>
-				</td>
-				<td>
-					<a:TaskSetEditor ui:field="tasks" />
-				</td>
-			</tr>
-			<tr id="osceStudents">
-				<td>
-					<div class="{style.label}">Osce Students:</div>
-				</td>
-				<td>
-					<a:StudentOscesSetEditor ui:field="osceStudents" />
-				</td>
-			</tr>
-		
--->
-</table>
-		
-	</g:HTMLPanel>
-	
-	</g:Tab>
-		</g:TabPanel>
-		    </g:HTMLPanel>
-		    <g:HTMLPanel ui:field="canvasPanel">
-		    	<g:HorizontalPanel	ui:field="horizontalTabPanel">
-		    	
-				</g:HorizontalPanel>
-		    </g:HTMLPanel>
-		    
-	
-		 </g:VerticalPanel>
-	
+			<div class="{style.controlsright}">
+				<h3 class="{style.header}" style="display:inline">
+					<span ui:field="title"></span>
+				</h3>
+				<my:IconButton ui:field="save" icon="disk"></my:IconButton>
+				<my:IconButton ui:field="cancel" icon="closethick"></my:IconButton>
+				<my:IconButton ui:field="preview" icon="calculator"></my:IconButton>
+			</div>
+		</g:HTMLPanel>
+		<g:HTMLPanel>
+
+			<!-- <g:TabPanel ui:field="oscePanel" addStyleNames="gwt-InvertedTabPanel" 
+				width="100%"> -->
+			<g:TabPanel ui:field="oscePanel" width="100%">
+				<g:Tab>
+					<g:TabHTML></g:TabHTML>
+					<g:HTMLPanel>
+						<!-- <div> <h3 class='{style.header}' ui:field="editTitle"> <ui:msg>Edit 
+							OSCE</ui:msg> </h3> h3 class='{style.header}' ui:field='createTitle'> <ui:msg>New 
+							OSCE</ui:msg> </h3 </div> -->
+						<div ui:field='errors' class='{style.errors}'></div>
+						<br></br>
+						<!-- <table class="{style.fields}" id="boundElementHolder"> -->
+
+						<table>
+							<tr height="10px">
+								<td>
+									<u>
+										<b>
+											<span ui:field="labelTitleGeneral"></span>
+										</b>
+									</u>
+								</td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td id="name">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelRemark"></div>
+								</td>
+
+								<td>
+									<g:TextBox ui:field='name' />
+								</td>
+
+								<td id="studyYear">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelStudyYear">Study Year :</div>
+								</td>
+
+								<td>
+									<g:ValueListBox ui:field="studyYear" />
+								</td>
+
+							</tr>
+
+							<tr>
+								<td id="osceCreationType">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceCreationType"></div>
+								</td>
+
+								<td>
+									<g:ValueListBox ui:field="osceCreationType" />
+								</td>
+
+								<td id="osceRepe">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceRepe">OSCE Repe </div>
+								</td>
+								<td>
+									<i:DefaultSuggestBox ui:field="copiedOsce"></i:DefaultSuggestBox>
+								</td>
+							</tr>
+
+							<tr height="10px">
+								<td>
+									<u>
+										<b>
+											<span ui:field="labelTitleAttributes"></span>
+										</b>
+									</u>
+								</td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							
+							<tr>
+								<td id="numberCoursesLbl">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelMaxParcours">max. Parcour :</div>
+								</td>
+
+								<td id="numberCourses">
+									<g:IntegerBox ui:field="numberCourses" />
+								</td>
+
+								<td id="maxNumberStudentsLbl">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelMaxStudents">Max Students :</div>
+								</td>
+
+								<td id="maxNumberStudents">
+									<g:IntegerBox ui:field="maxNumberStudents" />
+								</td>
+							</tr>
+							<tr>
+								<td id="maxNoRoomLbl">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelMaxRooms">Maximum Rooms :</div>
+								</td>
+
+								<td id="maxNoRoom">
+									<g:IntegerBox ui:field="numberRooms"></g:IntegerBox>
+								</td>
+
+								<td id="postLength">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelStationLength">Post Length :</div>
+								</td>
+
+								<td>
+									<g:IntegerBox ui:field="postLength" />
+								</td>
+
+							</tr>
+
+							<tr height="10px">
+								<td>
+									<u>
+										<b>
+											<span ui:field="labelTitleBreaks"></span>
+										</b>
+									</u>
+								</td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							
+							<tr>
+								<td id="shortBreak">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelShortBreak">
+										Short Break :</div>
+								</td>
+
+								<td>
+									<r:ShortBox ui:field="shortBreak" />
+								</td>
+								<td id="isRepeOsce">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labeShortBreakSimpatChange">Short
+										Break Simpat Change :</div>
+								</td>
+								<td>
+									<r:ShortBox ui:field="shortBreakSimpatChange" />
+								</td>
+							</tr>
+
+							<tr>
+								<td id="middleBreak">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelMiddleBreak">Middle
+										Break :</div>
+								</td>
+
+								<td>
+									<r:ShortBox ui:field="middleBreak" />
+								</td>
+								<td id="longBreak">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelLongBreak">Long
+										Break :</div>
+								</td>
+
+								<td>
+									<r:ShortBox ui:field="LongBreak" />
+								</td>
+							</tr>
+
+							<tr>
+								<td id="lunchBreak">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelLunchBreak">Lunch
+										Break :</div>
+								</td>
+
+								<td>
+									<r:ShortBox ui:field="lunchBreak" />
+								</td>
+								<td id="lunchBreakRequiredTime">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelLunchBreakRequiredTime">Lunch
+										Break Required Time :</div>
+								</td>
+
+								<td>
+									<r:ShortBox ui:field="lunchBreakRequiredTime" />
+								</td>
+							</tr>
+							<tr>
+
+								<td id="longBreakRequiredTime">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelLOngBreakRequiredTime">Long
+										Break Required Time : :</div>
+								</td>
+
+								<td>
+									<r:ShortBox ui:field="longBreakRequiredTime" />
+								</td>
+							</tr>
+							<tr>
+								<td id="spStayInPost">
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelSpStayInPost">SP_Stay_In_Post
+										:</div>
+								</td>
+								<td>
+									<g:CheckBox ui:field="spStayInPost" />
+								</td>
+
+								<td>
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceForTask">OSCE for Task :</div>
+								</td>
+								<td>
+									<i:DefaultSuggestBox ui:field="osceValue"></i:DefaultSuggestBox>
+								</td>
+
+
+
+							</tr>
+
+							<!-- <td id="isRepeOsce"> <div class="{style.label}" ui:field="labelIsRepe">Is 
+								Repe Osce :</div> </td> <td> <g:CheckBox ui:field="isRepeOsce" /> </td> -->
+							<!-- <td id="shortBreak"> <div class="{style.label} {style.leftpadding10}" 
+								ui:field="labelMiddleBreak">Middle Break :</div> </td> -->
+							<!-- <td id="osceRepe"> <div class="{style.label} {style.leftpadding10}" 
+								ui:field="labelOsceRepe">OSCE Repe </div> </td> <td> //Issue # 122 : Replace 
+								pull down with autocomplete. <g:ValueListBox ui:field="copiedOsce" /> <i:DefaultSuggestBox 
+								ui:field="copiedOsce"></i:DefaultSuggestBox> //Issue # 122 : Replace pull 
+								down with autocomplete. </td> -->
+
+
+							<!-- <tr> <td id="buttonselect"> </td> <td> <g:Button addStyleNames='{style.button}' 
+								ui:field='save'>Save</g:Button> <g:Button addStyleNames='{style.button}' 
+								ui:field='cancel'>Cancel</g:Button> </td> </tr> -->
+
+							<!-- <tr id="studyYear"> <td> <div class="{style.label}">Study Year:</div> 
+								</td> <td> <g:ValueListBox ui:field="studyYear" /> </td> </tr> <tr id="maxNumberStudents"> 
+								<td> <div class="{style.label}">Max Number Students:</div> </td> <td> <g:IntegerBox 
+								ui:field="maxNumberStudents" /> </td> </tr> <tr id="numberPosts"> <td> <div 
+								class="{style.label}">Number Posts:</div> </td> <td> <g:IntegerBox ui:field="numberPosts" 
+								/> </td> </tr> <tr id="numberCourses"> <td> <div class="{style.label}">Number 
+								Courses:</div> </td> <td> <g:IntegerBox ui:field="numberCourses" /> </td> 
+								</tr> <tr id="postLength"> <td> <div class="{style.label}">Post Length:</div> 
+								</td> <td> <g:IntegerBox ui:field="postLength" /> </td> </tr> <tr id="isRepeOsce"> 
+								<td> <div class="{style.label}">Is Repe Osce:</div> </td> <td> <g:CheckBox 
+								ui:field="isRepeOsce" /> </td> </tr> <tr id="numberRooms"> <td> <div class="{style.label}">Number 
+								Rooms:</div> </td> <td> <g:IntegerBox ui:field="numberRooms" /> </td> </tr> 
+								<tr id="isValid"> <td> <div class="{style.label}">Is Valid:</div> </td> <td> 
+								<g:CheckBox ui:field="isValid" /> </td> </tr> <tr id="semester"> <td> <div 
+								class="{style.label}">Semester:</div> </td> <td> <g:ValueListBox ui:field="semester" 
+								/> </td> </tr> <tr id="osce_days"> <td> <div class="{style.label}">Osce_days:</div> 
+								</td> <td> <a:OsceDaySetEditor ui:field="osce_days" /> </td> </tr> <tr id="courses"> 
+								<td> <div class="{style.label}">Courses:</div> </td> <td> <a:CourseSetEditor 
+								ui:field="courses" /> </td> </tr> <tr id="tasks"> <td> <div class="{style.label}">Tasks:</div> 
+								</td> <td> <a:TaskSetEditor ui:field="tasks" /> </td> </tr> <tr id="osceStudents"> 
+								<td> <div class="{style.label}">Osce Students:</div> </td> <td> <a:StudentOscesSetEditor 
+								ui:field="osceStudents" /> </td> </tr> -->
+						</table>
+
+					</g:HTMLPanel>
+
+				</g:Tab>
+			</g:TabPanel>
+		</g:HTMLPanel>
+		<g:HTMLPanel ui:field="canvasPanel">
+			<g:HorizontalPanel ui:field="horizontalTabPanel">
+
+			</g:HorizontalPanel>
+		</g:HTMLPanel>
+
+
+	</g:VerticalPanel>
+
 </ui:UiBinder>
 
