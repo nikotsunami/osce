@@ -309,9 +309,10 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 				manualOsceSubViewImpl.getAddOsceDayVerticalPanel().getElement().getStyle().setDisplay(Display.NONE);
 			}
 			
-			int osceDayIndex = 1;
+			int osceDayIndex = 0;
 			for (OsceDayProxy osceDayProxy : osceProxy.getOsce_days())
 			{
+				osceDayIndex += 1;
 				if (osceDayViewMap.containsKey(osceDayProxy.getId()) == false)
 				{
 					ManualOsceDaySubViewImpl manualOsceDaySubViewImpl = new ManualOsceDaySubViewImpl();
@@ -320,7 +321,6 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 					manualOsceDaySubViewImpl.setOsceDayProxy(osceDayProxy);
 					osceDayViewMap.put(osceDayProxy.getId(), manualOsceDaySubViewImpl);
 					manualOsceSubViewImpl.getOsceDayVp().add(manualOsceDaySubViewImpl);
-					osceDayIndex += 1;
 					
 					if (OsceStatus.OSCE_FIXED.equals(osceProxy.getOsceStatus()) || OsceStatus.OSCE_CLOSED.equals(osceProxy.getOsceStatus()))
 					{
