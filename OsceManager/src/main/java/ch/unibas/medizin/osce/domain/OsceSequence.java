@@ -329,72 +329,97 @@ public class OsceSequence {
 		
 		if (osceDayRotationList != null && osceDayRotationList.isEmpty() == false)
 		{
-			int longBreakRotIndex = -1;
-			for (int i=0; i<osceDayRotationList.size(); i++)
+			if (osceSequence.getNumberRotation() == 1 && osceDayRotationList.size() == 2)
 			{
-				OsceDayRotation osceDayRotation = osceDayRotationList.get(i);
-				if (BreakType.LONG_BREAK.equals(osceDayRotation.getBreakType()))
+				OsceDayRotation firstOsceDayRotation = osceDayRotationList.get(0);
+				OsceDayRotation secondOsceDayRotation = osceDayRotationList.get(1);
+				int postLength = osceDay.getOsce().getPostLength() + osceDay.getOsce().getShortBreak();
+				Date latestEndTime = dateSubtractMin(firstOsceDayRotation.getTimeEnd(), postLength);
+				long mins = (latestEndTime.getTime() - firstOsceDayRotation.getTimeStart().getTime()) / (60 * 1000);
+				
+				if (mins < osceDay.getOsce().getPostLength().longValue())
 				{
-					longBreakRotIndex = i;
-					break;
+					return "manualOsceNotAllowedLongBreak";
 				}
+				
+				firstOsceDayRotation.setTimeEnd(latestEndTime);
+				firstOsceDayRotation.persist();
+				
+				Date latestStartTime = dateSubtractMin(secondOsceDayRotation.getTimeStart(), postLength);
+				secondOsceDayRotation.setTimeStart(latestStartTime);
+				secondOsceDayRotation.persist();
+				
+				return "";
 			}
-			
-			if (longBreakRotIndex < 0)
+			else
 			{
-				return "manualOsceNoLongBreak";
-			}
-			
-			if (longBreakRotIndex == 0)
-			{
-				return "manualOsceNotAllowedLongBreak";
-			}
-			
-			OsceDayRotation previousLongBreakOsceDayRot = osceDayRotationList.get((longBreakRotIndex - 1));
-			OsceDayRotation longBreakOsceDayRot = osceDayRotationList.get(longBreakRotIndex);
-			
-			if (BreakType.LUNCH_BREAK.equals(previousLongBreakOsceDayRot.getBreakType()))
-				return "manualOsceNotAllowedLongBreak";
-			
-			int longBreakDuration = longBreakOsceDayRot.getBreakDuration();
-			int previousLongBreakDuration = previousLongBreakOsceDayRot.getBreakDuration();
-			
-			BreakType longBreakType = longBreakOsceDayRot.getBreakType();
-			BreakType previousLongBreakType = previousLongBreakOsceDayRot.getBreakType();
-			
-			int diff = longBreakDuration - previousLongBreakDuration;
-			
-			Date timeStart = longBreakOsceDayRot.getTimeStart();
-			Date timeEnd = longBreakOsceDayRot.getTimeEnd();
-			
-			timeStart = dateAddMin(timeStart, diff);
-			timeEnd = dateAddMin(timeEnd, diff);
-			
-			previousLongBreakOsceDayRot.setBreakDuration(longBreakDuration);
-			previousLongBreakOsceDayRot.setBreakType(longBreakType);
-			previousLongBreakOsceDayRot.persist();
-			
-			longBreakOsceDayRot.setBreakDuration(previousLongBreakDuration);
-			longBreakOsceDayRot.setBreakType(previousLongBreakType);
-			longBreakOsceDayRot.setTimeStart(timeStart);
-			longBreakOsceDayRot.setTimeEnd(timeEnd);
-			longBreakOsceDayRot.persist();
-			
-			int numberRotation = 0;
-			String breakStr = "";
-			for (OsceSequence osceSeq : osceDay.getOsceSequences())
-			{
-				for (OsceDayRotation osceDayRotation : osceSeq.getOsceDayRotations())
+				int longBreakRotIndex = -1;
+				for (int i=0; i<osceDayRotationList.size(); i++)
 				{
-					breakStr = breakStr + numberRotation + ":" + osceDayRotation.getBreakDuration() + "-";
-					numberRotation = numberRotation + 1;
+					OsceDayRotation osceDayRotation = osceDayRotationList.get(i);
+					if (BreakType.LONG_BREAK.equals(osceDayRotation.getBreakType()))
+					{
+						longBreakRotIndex = i;
+						break;
+					}
 				}
+				
+				if (longBreakRotIndex < 0)
+				{
+					return "manualOsceNoLongBreak";
+				}
+				
+				if (longBreakRotIndex == 0)
+				{
+					return "manualOsceNotAllowedLongBreak";
+				}
+				
+				OsceDayRotation previousLongBreakOsceDayRot = osceDayRotationList.get((longBreakRotIndex - 1));
+				OsceDayRotation longBreakOsceDayRot = osceDayRotationList.get(longBreakRotIndex);
+				
+				if (BreakType.LUNCH_BREAK.equals(previousLongBreakOsceDayRot.getBreakType()))
+					return "manualOsceNotAllowedLongBreak";
+				
+				int longBreakDuration = longBreakOsceDayRot.getBreakDuration();
+				int previousLongBreakDuration = previousLongBreakOsceDayRot.getBreakDuration();
+				
+				BreakType longBreakType = longBreakOsceDayRot.getBreakType();
+				BreakType previousLongBreakType = previousLongBreakOsceDayRot.getBreakType();
+				
+				int diff = longBreakDuration - previousLongBreakDuration;
+				
+				Date timeStart = longBreakOsceDayRot.getTimeStart();
+				Date timeEnd = longBreakOsceDayRot.getTimeEnd();
+				
+				timeStart = dateAddMin(timeStart, diff);
+				timeEnd = dateAddMin(timeEnd, diff);
+				
+				previousLongBreakOsceDayRot.setBreakDuration(longBreakDuration);
+				previousLongBreakOsceDayRot.setBreakType(longBreakType);
+				previousLongBreakOsceDayRot.persist();
+				
+				longBreakOsceDayRot.setBreakDuration(previousLongBreakDuration);
+				longBreakOsceDayRot.setBreakType(previousLongBreakType);
+				longBreakOsceDayRot.setTimeStart(timeStart);
+				longBreakOsceDayRot.setTimeEnd(timeEnd);
+				longBreakOsceDayRot.persist();
+				
+				int numberRotation = 0;
+				String breakStr = "";
+				for (OsceSequence osceSeq : osceDay.getOsceSequences())
+				{
+					for (OsceDayRotation osceDayRotation : osceSeq.getOsceDayRotations())
+					{
+						breakStr = breakStr + numberRotation + ":" + osceDayRotation.getBreakDuration() + "-";
+						numberRotation = numberRotation + 1;
+					}
+				}
+				
+				osceDay.setBreakByRotation(breakStr);
+				osceDay.persist();
+				
+				return "";
 			}
-			
-			osceDay.setBreakByRotation(breakStr);
-			osceDay.persist();
-			
-			return "";
 		}
 		
 		return "manualOsceNoRotation";
@@ -408,72 +433,98 @@ public class OsceSequence {
 		
 		if (osceDayRotationList != null && osceDayRotationList.isEmpty() == false)
 		{
-			int longBreakRotIndex = -1;
-			for (int i=0; i<osceDayRotationList.size(); i++)
+			if (osceSequence.getNumberRotation() == 1 && osceDayRotationList.size() == 2)
 			{
-				OsceDayRotation osceDayRotation = osceDayRotationList.get(i);
-				if (BreakType.LONG_BREAK.equals(osceDayRotation.getBreakType()))
+				OsceDayRotation firstOsceDayRotation = osceDayRotationList.get(0);
+				OsceDayRotation secondOsceDayRotation = osceDayRotationList.get(1);
+				int postLength = osceDay.getOsce().getPostLength() + osceDay.getOsce().getShortBreak();
+				Date latestStartTime = dateAddMin(secondOsceDayRotation.getTimeStart(), postLength);
+				long mins = (secondOsceDayRotation.getTimeEnd().getTime() - latestStartTime.getTime()) / (60 * 1000);
+				
+				if (mins < osceDay.getOsce().getPostLength().longValue())
 				{
-					longBreakRotIndex = i;
-					break;
+					return "manualOsceNotAllowedLongBreak";
 				}
+				
+				secondOsceDayRotation.setTimeStart(latestStartTime);
+				secondOsceDayRotation.persist();
+				
+				Date latestEndTime = dateAddMin(firstOsceDayRotation.getTimeEnd(), postLength);
+				firstOsceDayRotation.setTimeEnd(latestEndTime);
+				firstOsceDayRotation.persist();
+				
+				return "";
 			}
-			
-			if (longBreakRotIndex < 0)
+			else
 			{
-				return "manualOsceNoLongBreak";
-			}
-			
-			if (longBreakRotIndex == (osceDayRotationList.size() - 1))
-			{
-				return "manualOsceNotAllowedLongBreak";
-			}
-			
-			OsceDayRotation afterLongBreakOsceDayRot = osceDayRotationList.get((longBreakRotIndex + 1));
-			OsceDayRotation longBreakOsceDayRot = osceDayRotationList.get(longBreakRotIndex);
-			
-			if (BreakType.LUNCH_BREAK.equals(afterLongBreakOsceDayRot.getBreakType()))
-				return "manualOsceNotAllowedLongBreak";
-			
-			int longBreakDuration = longBreakOsceDayRot.getBreakDuration();
-			int afterLongBreakDuration = afterLongBreakOsceDayRot.getBreakDuration();
-			
-			BreakType longBreakType = longBreakOsceDayRot.getBreakType();
-			BreakType afterLongBreakType = afterLongBreakOsceDayRot.getBreakType();
-			
-			int diff = longBreakDuration - afterLongBreakDuration;
-			
-			Date timeStart = afterLongBreakOsceDayRot.getTimeStart();
-			Date timeEnd = afterLongBreakOsceDayRot.getTimeEnd();
-			
-			timeStart = dateSubtractMin(timeStart, diff);
-			timeEnd = dateSubtractMin(timeEnd, diff);
-			
-			afterLongBreakOsceDayRot.setTimeStart(timeStart);
-			afterLongBreakOsceDayRot.setTimeEnd(timeEnd);
-			afterLongBreakOsceDayRot.setBreakDuration(longBreakDuration);
-			afterLongBreakOsceDayRot.setBreakType(longBreakType);
-			afterLongBreakOsceDayRot.persist();
-			
-			longBreakOsceDayRot.setBreakDuration(afterLongBreakDuration);
-			longBreakOsceDayRot.setBreakType(afterLongBreakType);
-			longBreakOsceDayRot.persist();	
-			
-			int numberRotation = 0;
-			String breakStr = "";
-			for (OsceSequence osceSeq : osceDay.getOsceSequences())
-			{
-				for (OsceDayRotation osceDayRotation : osceSeq.getOsceDayRotations())
+				int longBreakRotIndex = -1;
+				for (int i=0; i<osceDayRotationList.size(); i++)
 				{
-					breakStr = breakStr + numberRotation + ":" + osceDayRotation.getBreakDuration() + "-";
-					numberRotation = numberRotation + 1;
+					OsceDayRotation osceDayRotation = osceDayRotationList.get(i);
+					if (BreakType.LONG_BREAK.equals(osceDayRotation.getBreakType()))
+					{
+						longBreakRotIndex = i;
+						break;
+					}
 				}
+				
+				if (longBreakRotIndex < 0)
+				{
+					return "manualOsceNoLongBreak";
+				}
+				
+				if (longBreakRotIndex == (osceDayRotationList.size() - 1))
+				{
+					return "manualOsceNotAllowedLongBreak";
+				}
+				
+				OsceDayRotation afterLongBreakOsceDayRot = osceDayRotationList.get((longBreakRotIndex + 1));
+				OsceDayRotation longBreakOsceDayRot = osceDayRotationList.get(longBreakRotIndex);
+				
+				if (BreakType.LUNCH_BREAK.equals(afterLongBreakOsceDayRot.getBreakType()))
+					return "manualOsceNotAllowedLongBreak";
+				
+				int longBreakDuration = longBreakOsceDayRot.getBreakDuration();
+				int afterLongBreakDuration = afterLongBreakOsceDayRot.getBreakDuration();
+				
+				BreakType longBreakType = longBreakOsceDayRot.getBreakType();
+				BreakType afterLongBreakType = afterLongBreakOsceDayRot.getBreakType();
+				
+				int diff = longBreakDuration - afterLongBreakDuration;
+				
+				Date timeStart = afterLongBreakOsceDayRot.getTimeStart();
+				Date timeEnd = afterLongBreakOsceDayRot.getTimeEnd();
+				
+				timeStart = dateSubtractMin(timeStart, diff);
+				timeEnd = dateSubtractMin(timeEnd, diff);
+				
+				afterLongBreakOsceDayRot.setTimeStart(timeStart);
+				afterLongBreakOsceDayRot.setTimeEnd(timeEnd);
+				afterLongBreakOsceDayRot.setBreakDuration(longBreakDuration);
+				afterLongBreakOsceDayRot.setBreakType(longBreakType);
+				afterLongBreakOsceDayRot.persist();
+				
+				longBreakOsceDayRot.setBreakDuration(afterLongBreakDuration);
+				longBreakOsceDayRot.setBreakType(afterLongBreakType);
+				longBreakOsceDayRot.persist();	
+				
+				int numberRotation = 0;
+				String breakStr = "";
+				for (OsceSequence osceSeq : osceDay.getOsceSequences())
+				{
+					for (OsceDayRotation osceDayRotation : osceSeq.getOsceDayRotations())
+					{
+						breakStr = breakStr + numberRotation + ":" + osceDayRotation.getBreakDuration() + "-";
+						numberRotation = numberRotation + 1;
+					}
+				}
+				
+				osceDay.setBreakByRotation(breakStr);
+				osceDay.persist();
+				
+				return "";
 			}
 			
-			osceDay.setBreakByRotation(breakStr);
-			osceDay.persist();
-			
-			return "";
 		}
 		
 		return "manualOsceNoRotation";

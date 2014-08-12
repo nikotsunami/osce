@@ -6,6 +6,7 @@ import java.util.List;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayRotationProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BreakType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -121,29 +122,61 @@ public class ManualOsceDaySubViewImpl extends Composite implements ManualOsceDay
 			if (osceDayProxy.getRoomCount() != null)
 				roomValue.setText(osceDayProxy.getRoomCount().toString());
 			
-			if (osceDayProxy.getOsceDayRotations() != null)
-			{
-				List<OsceDayRotationProxy> osceDayRotationList = osceDayProxy.getOsceDayRotations();
-				if (osceDayRotationList.size() > 0)
+			if (osceDayProxy.getOsceSequences() != null)
+			{	
+				firstLongBreakValue.setText(constants.manualOsceUnavailable());
+				secondLongBreakValue.setText(constants.manualOsceUnavailable());
+				
+				List<OsceSequenceProxy> osceSeqList = osceDayProxy.getOsceSequences();
+				for (int i=0; i<osceSeqList.size(); i++)
 				{
-					firstLongBreakValue.setText(constants.manualOsceUnavailable());
-					secondLongBreakValue.setText(constants.manualOsceUnavailable());
-				}
-				for (OsceDayRotationProxy osceDayRotationProxy : osceDayRotationList)
-				{
-					if (BreakType.LONG_BREAK.equals(osceDayRotationProxy.getBreakType()))
+					OsceSequenceProxy osceSeq = osceSeqList.get(i);
+					List<OsceDayRotationProxy> osceDayRotationList = osceSeq.getOsceDayRotations();
+					if (osceSeq.getNumberRotation() == 1 && osceDayRotationList.size() == 2)
 					{
-						if (constants.manualOsceUnavailable().equals(firstLongBreakValue.getText()))
+						OsceDayRotationProxy osceDayRotationProxy = osceDayRotationList.get(0);
+						if (BreakType.LONG_BREAK.equals(osceDayRotationProxy.getBreakType()))
 						{
-							firstLongBreakValue.setText(DateTimeFormat.getFormat("HH:mm").format(osceDayRotationProxy.getTimeEnd()).substring(0,5));
+							if (i == 0)
+							{
+								firstLongBreakValue.setText(DateTimeFormat.getFormat("HH:mm").format(osceDayRotationProxy.getTimeEnd()).substring(0,5));
+							}
+							else if (i == 1)
+							{
+								secondLongBreakValue.setText(DateTimeFormat.getFormat("HH:mm").format(osceDayRotationProxy.getTimeEnd()).substring(0,5));
+							}
 						}
-						else if (constants.manualOsceUnavailable().equals(secondLongBreakValue.getText()))
+					}
+					else
+					{
+						if (osceDayRotationList.size() == 0)
 						{
-							secondLongBreakValue.setText(DateTimeFormat.getFormat("HH:mm").format(osceDayRotationProxy.getTimeEnd()).substring(0,5));
+							firstLongBreakValue.setText(constants.manualOsceUnavailable());
+							secondLongBreakValue.setText(constants.manualOsceUnavailable());
+						}
+						else
+						{
+							for (int j=0; j<osceDayRotationList.size(); j++)
+							{
+								OsceDayRotationProxy osceDayRotationProxy = osceDayRotationList.get(j);
+								if (BreakType.LONG_BREAK.equals(osceDayRotationProxy.getBreakType()) && j < (osceDayRotationList.size() - 1))
+								{
+									if (constants.manualOsceUnavailable().equals(firstLongBreakValue.getText()))
+									{
+										firstLongBreakValue.setText(DateTimeFormat.getFormat("HH:mm").format(osceDayRotationProxy.getTimeEnd()).substring(0,5));
+									}
+									else if (constants.manualOsceUnavailable().equals(secondLongBreakValue.getText()))
+									{
+										secondLongBreakValue.setText(DateTimeFormat.getFormat("HH:mm").format(osceDayRotationProxy.getTimeEnd()).substring(0,5));
+									}
+								}
+							}
 						}
 					}
 				}
 			}
+				
+			
 		}
 	}
 	

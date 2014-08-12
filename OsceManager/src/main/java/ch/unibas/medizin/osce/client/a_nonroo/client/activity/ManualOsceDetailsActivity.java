@@ -82,7 +82,6 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -162,7 +161,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		
 		showApplicationLoading(true);
 		
-		requests.find(place.getProxyId()).with("osce_days", "osce_days.osceSequences", "osce_days.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<Object>() {
+		requests.find(place.getProxyId()).with("osce_days", "osce_days.osceSequences", "osce_days.osceSequences.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<Object>() {
 
 			@Override
 			public void onSuccess(Object response) {
@@ -593,7 +592,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		if (osceProxy != null)
 		{
 			showApplicationLoading(true);
-			requests.osceDayRequestNooRoo().createOsceDaySequenceCourseAndOscePost(osceProxy.getId()).with("osce_days", "osce_days.osceSequences", "osce_days.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<OsceProxy>() {
+			requests.osceDayRequestNooRoo().createOsceDaySequenceCourseAndOscePost(osceProxy.getId()).with("osce_days", "osce_days.osceSequences", "osce_days.osceSequences.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<OsceProxy>() {
 
 				@Override
 				public void onSuccess(OsceProxy response) {
@@ -1399,7 +1398,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		if (osceProxy != null)
 		{
 			showApplicationLoading(true);
-			requests.osceRequestNonRoo().clearAllManualOsce(osceProxy.getId()).with("osce_days", "osce_days.osceSequences", "osce_days.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<OsceProxy>() {
+			requests.osceRequestNonRoo().clearAllManualOsce(osceProxy.getId()).with("osce_days", "osce_days.osceSequences", "osce_days.osceSequences.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<OsceProxy>() {
 
 				@Override
 				public void onSuccess(OsceProxy response) {
@@ -1501,7 +1500,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 	
 	private void refreshOsceView(Long osceId) {
 		showApplicationLoading(true);
-		requests.osceRequest().findOsce(osceId).with("osce_days", "osce_days.osceSequences", "osce_days.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<OsceProxy>() {
+		requests.osceRequest().findOsce(osceId).with("osce_days", "osce_days.osceSequences", "osce_days.osceSequences.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<OsceProxy>() {
 
 			@Override
 			public void onSuccess(OsceProxy response) {
@@ -1558,7 +1557,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 					}
 					else 
 					{
-						requests.osceDayRequestNooRoo().findOsceDayByOsceSequenceId(osceSequenceProxy.getId()).with("osceSequences", "osceDayRotations", "osceSequences.courses").fire(new OSCEReceiver<OsceDayProxy>() {
+						requests.osceDayRequestNooRoo().findOsceDayByOsceSequenceId(osceSequenceProxy.getId()).with("osceSequences", "osceSequences.osceDayRotations", "osceSequences.courses").fire(new OSCEReceiver<OsceDayProxy>() {
 
 							@Override
 							public void onSuccess(OsceDayProxy response) {
@@ -1596,7 +1595,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 					}
 					else 
 					{
-						requests.osceDayRequestNooRoo().findOsceDayByOsceSequenceId(osceSequenceProxy.getId()).with("osceSequences", "osceDayRotations", "osceSequences.courses").fire(new OSCEReceiver<OsceDayProxy>() {
+						requests.osceDayRequestNooRoo().findOsceDayByOsceSequenceId(osceSequenceProxy.getId()).with("osceSequences", "osceSequences.osceDayRotations", "osceSequences.courses").fire(new OSCEReceiver<OsceDayProxy>() {
 
 							@Override
 							public void onSuccess(OsceDayProxy response) {
