@@ -348,8 +348,12 @@ public class OscePost {
 	public static Integer findSpByOsceSeqId(Long osceSeqId)
 	 {
 		 EntityManager em = entityManager();
-		 String sql = "SELECT DISTINCT op.standardizedRole.id FROM OscePost op WHERE op.standardizedRole is not null AND op.standardizedRole.roleType != 2 AND op.osceSequence.id = " + osceSeqId;
+		 String sql = "SELECT id FROM OscePost op WHERE op.standardizedRole is not null AND op.standardizedRole.roleType != 2 AND op.osceSequence.id = " + osceSeqId;
 		 TypedQuery<Long> query = em.createQuery(sql, Long.class);
-		 return query.getResultList().size();
+		 
+		 String sql1 = "SELECT id FROM OscePost op WHERE op.oscePostBlueprint.postType = 4 AND op.standardizedRole is not null AND op.standardizedRole.roleType != 2 AND op.osceSequence.id = " + osceSeqId;
+		 TypedQuery<Long> query1 = em.createQuery(sql1, Long.class);
+		 
+		 return (query.getResultList().size() + query1.getResultList().size());
 	 }
 }
