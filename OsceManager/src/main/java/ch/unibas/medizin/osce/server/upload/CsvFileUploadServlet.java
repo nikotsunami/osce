@@ -1,7 +1,9 @@
 package ch.unibas.medizin.osce.server.upload;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,7 +124,7 @@ public class CsvFileUploadServlet extends HttpServlet {
 	     
 		Osce osce = Osce.findOsce(Long.parseLong(osceid));
 		
-		CsvReader student = new CsvReader(path);
+		CsvReader student = new CsvReader(new FileInputStream(path), Charset.forName("UTF-8"));
 		
 		student.readHeaders();
 		
@@ -197,7 +199,7 @@ public class CsvFileUploadServlet extends HttpServlet {
 						s.setCity(student.get(cityCol));
 					
 					if (!genderCol.equals(""))
-						s.setGender(Gender.valueOf(student.get(genderCol)));
+						s.setGender(Gender.valueOf(student.get(genderCol).toUpperCase()));
 				
 					s.persist();
 					
