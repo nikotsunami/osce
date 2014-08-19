@@ -1262,19 +1262,30 @@ public class ExportAssignment  extends HttpServlet {
 		        						}
 		        						else if(postDetail.getOscePost().getStandardizedRole().getRoleType()==RoleTypes.Material) //material
 		        						{
-		        							postCell.setCellValue("Notfall");
-		        							Cell cell=excelRow.get(index1+1).createCell(col);
-		        							cell.setCellValue("Phantom");
-		        							sheet.autoSizeColumn(col, true);
-		        							cell.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
-		        							int temp=1;
-		        							for(int postRowIndex=2;postRowIndex<rowSpan;postRowIndex++)
+		        							
+		        							
+		        							if (postDetail.getOscePost().getOsceSequence().getCourses().size() <= 1)
 		        							{
-		        								Cell cell1=excelRow.get(index1+1+temp).createCell(col);
-		            							sheet.autoSizeColumn(col, true);
-		            							cell1.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
-		            							temp++;
+		        								postCell.getCellStyle().setWrapText(true);
+		        								postCell.setCellValue("Notfall\nPhantom");		        											        							
 		        							}
+		        							else
+		        							{
+		        								postCell.setCellValue("Notfall");
+		        								Cell cell=excelRow.get(index1+1).createCell(col);
+			        							cell.setCellValue("Phantom");
+			        							sheet.autoSizeColumn(col, true);
+			        							cell.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
+			        							int temp=1;
+			        							for(int postRowIndex=2;postRowIndex<rowSpan;postRowIndex++)
+			        							{
+			        								Cell cell1=excelRow.get(index1+1+temp).createCell(col);
+			            							sheet.autoSizeColumn(col, true);
+			            							cell1.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
+			            							temp++;
+			        							}
+		        							}
+		        							
 		        							postIndex++;
 		        							colorIndex++;
 		        						}
@@ -1284,27 +1295,52 @@ public class ExportAssignment  extends HttpServlet {
 		        							StandardizedRole role=oscePost.getStandardizedRole();
 		        							String roleLongName=role.getLongName();
 		        							
-		        							Cell cell=excelRow.get(index1+1).createCell(col);
+		        							Cell cell;
+		        							if (oscePost.getOsceSequence().getCourses().size() > 1)
+		        								cell=excelRow.get(index1+1).createCell(col);
+		        							else
+		        								cell = postCell;
 		        							
 		        							String postTypeLbl=role.getRoleType().toString();
-		        							
 		        							
 		        							sheet.autoSizeColumn(col, true);
 		        							cell.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
 		        							
-		        							if(oscePost.getStandardizedRole().getRoleType()==RoleTypes.Material)
+		        							if (oscePost.getOsceSequence().getCourses().size() <= 1)
 		        							{
-		        								postCell.setCellValue("Notfall");
-		        								cell.setCellValue("Phantom");
+		        								if(oscePost.getStandardizedRole().getRoleType()==RoleTypes.Material)
+			        							{
+		        									postCell.getCellStyle().setWrapText(true);
+			        								postCell.setCellValue("Notfall\nPhantom");			        								
+			        							}
+			        							else
+			        							{
+			        								postCell.getCellStyle().setWrapText(true);
+			        								String advanceSearchCriteria=AdvancedSearchCriteria.findAdvancedSearchCriteriasByStandardizedRoleIDValue(role);
+			        								if (advanceSearchCriteria.isEmpty())
+			        									postCell.setCellValue(roleLongName + "\n" + postTypeLbl);
+			        								else
+			        									postCell.setCellValue(roleLongName + "\n" + postTypeLbl + "\n" + advanceSearchCriteria);
+			        							}
 		        							}
 		        							else
 		        							{
-		        								postCell.setCellValue(roleLongName);
-		        								
-		        								String advanceSearchCriteria=AdvancedSearchCriteria.findAdvancedSearchCriteriasByStandardizedRoleIDValue(role);
-		        								
-		        								cell.setCellValue(postTypeLbl+" "+advanceSearchCriteria);
+		        								if(oscePost.getStandardizedRole().getRoleType()==RoleTypes.Material)
+			        							{
+			        								postCell.setCellValue("Notfall");
+			        								cell.setCellValue("Phantom");
+			        							}
+			        							else
+			        							{
+			        								postCell.setCellValue(roleLongName);
+			        								
+			        								String advanceSearchCriteria=AdvancedSearchCriteria.findAdvancedSearchCriteriasByStandardizedRoleIDValue(role);
+			        								
+			        								cell.setCellValue(postTypeLbl+" "+advanceSearchCriteria);
+			        							}
 		        							}
+		        							
+		        							
 		        							int temp=1;
 		        							for(int postRowIndex=2;postRowIndex<rowSpan;postRowIndex++)
 		        							{
