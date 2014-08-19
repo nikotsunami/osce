@@ -1111,7 +1111,7 @@ public class ManualOsceTimeTableCalculation {
 					
 					if (osceSequence.getNumberRotation() == 1 && osceDayRotationList.size() == 2)
 					{
-						sequenceNumber = createAssignemntForSequenceContainsOneRotation(postLength, shortBreak, osceDayID, courseList, osceDayRotationList, studAssList, spAssList, sequenceNumber, spIndex, numberOfRotation);
+						sequenceNumber = createAssignemntForSequenceContainsOneRotation(postLength, shortBreak, osceDayID, courseList, osceDayRotationList, studAssList, spAssList, sequenceNumber, spIndex, noOfSeqRot);
 						spIndex = spIndex + 2;
 					}
 					else
