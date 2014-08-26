@@ -172,6 +172,12 @@
 						<td><span ui:field="descLunchBreak"></span></td>
 					</tr>
 					<tr>
+						<td><span ui:field="shortRole"></span></td>
+						<td><span ui:field="shortRoleDesc"></span></td>
+						<td><span ui:field="postNumber"></span></td>
+						<td><span ui:field="postNumberDesc"></span></td>
+					</tr>
+					<tr>
 					<td></td>
 					</tr>
 					<tr>

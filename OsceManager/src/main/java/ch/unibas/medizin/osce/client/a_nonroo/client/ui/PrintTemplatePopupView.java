@@ -42,4 +42,6 @@ public interface PrintTemplatePopupView extends IsWidget{
 	Button getLoadTemplateButton();
 	
 	Button getPrintTemplateButton();
+	
+	void displayShortRoleAndPostNumberField();
 }

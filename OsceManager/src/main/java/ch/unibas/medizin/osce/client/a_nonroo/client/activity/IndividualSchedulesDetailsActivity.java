@@ -1243,7 +1243,8 @@ IndividualSchedulesDetailsView.Delegate
 			
 	//		final String templateName="UpdatedTemplateSP"+osceProxy.getId()+".txt";
 						
-			final PrintTemplatePopupViewImpl popupSP=new PrintTemplatePopupViewImpl();							
+			final PrintTemplatePopupViewImpl popupSP=new PrintTemplatePopupViewImpl();			
+			popupSP.displayShortRoleAndPostNumberField();
 			Log.info("getTemplate Content.");
 			
 			requests.osceRequestNonRoo( ).findAllOsceBySemster(IndividualSchedulesActivity.semesterProxyForDetail.getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() 

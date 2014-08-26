@@ -13,6 +13,7 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -147,6 +148,15 @@ public class PrintTemplatePopupViewImpl extends PopupPanel implements PrintTempl
 	@UiField
 	HeadingElement please;
 	
+	@UiField
+	SpanElement shortRole;
+	@UiField
+	SpanElement shortRoleDesc;
+	@UiField
+	SpanElement postNumber;
+	@UiField
+	SpanElement postNumberDesc;
+	
 	/*@UiHandler("sendMailButton")
 	public void sendMailButtonClicked(ClickEvent event) {
 		// TODO export action
@@ -231,6 +241,16 @@ public class PrintTemplatePopupViewImpl extends PopupPanel implements PrintTempl
 		printTemplateButton.setText(constants.tplPrintTemplate());
 		closeButton.setText(constants.close());
 		restoreTemplateButton.setText(constants.tplRestoreTemplate());
+		
+		shortRole.setInnerText(constants.tplShortNameRole());
+		shortRoleDesc.setInnerText(constants.tplShortNameRoleDesc());
+		postNumber.setInnerText(constants.tplPostNumber());
+		postNumberDesc.setInnerText(constants.tplPostNumberDesc());
+		
+		shortRole.getStyle().setDisplay(Display.NONE);
+		shortRoleDesc.getStyle().setDisplay(Display.NONE);
+		postNumber.getStyle().setDisplay(Display.NONE);
+		postNumberDesc.getStyle().setDisplay(Display.NONE);
 	}
 
 	public String[] getPaths() {
@@ -291,5 +311,12 @@ public class PrintTemplatePopupViewImpl extends PopupPanel implements PrintTempl
 	public void setMessageContent(String html){
 		message.setHTML(html);
 	}
-	
+
+	public void displayShortRoleAndPostNumberField()
+	{
+		shortRole.getStyle().setDisplay(Display.BLOCK);
+		shortRoleDesc.getStyle().setDisplay(Display.BLOCK);
+		postNumber.getStyle().setDisplay(Display.BLOCK);
+		postNumberDesc.getStyle().setDisplay(Display.BLOCK);
+	}
 }

@@ -81,7 +81,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		
 		try {
 
-			System.out.println("Finding servlet context");
+			//System.out.println("Finding servlet context");
 			try{
 				Log.info("real Path for template is :" + getServletContext());
 //				Log.info("real Path for template is :" + RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(fileSeparator) + fileSeparator);
@@ -278,7 +278,9 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 					    		//List<Assignment> spAssignment=Assignment.findAssignmentsByOsceDayAndPIRId(osceDay.getId(), patientInRole.getId());
 					    	if(listOfPatientInRole.size()>0)
 					    	{
-					    		List<Assignment> spAssignment=Assignment.findAssignmentsByOsceDayAndPIRId(osceDay.getId(), listOfPatientInRole);
+					    		//List<Assignment> spAssignment=Assignment.findAssignmentsByOsceDayAndPIRId(osceDay.getId(), listOfPatientInRole);
+					    		List<Assignment> spAssignment=new ArrayList<Assignment>();
+					    		spAssignment = Assignment.findAssignmentBySPAndOsceDay(osce.getId(), standardizedPatient.getId());
 					    		Iterator assignmentIterator = spAssignment.iterator();
 					    		
 					    		
@@ -312,13 +314,28 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									String room = checkNotNull(assignmentStandardizedPatient, "getOscePostRoom","getRoom","getRoomNumber")==true?assignmentStandardizedPatient.getOscePostRoom().getRoom().getRoomNumber():"Reserver";
 									
 									if(standardizedRole!="")
+									{
 										tempScheduleContent=tempScheduleContent.replace("[ROLE]", standardizedRole);
+									}
 									else
 									{
 										tempScheduleContent=tempScheduleContent.replace("[ROLE]", "");
 										tempScheduleContent=tempScheduleContent.replace("for ", "");
-									}									
-										tempScheduleContent=tempScheduleContent.replace("[ROOM]", room);
+									}	
+									
+									if (assignmentStandardizedPatient.getOscePostRoom() != null && assignmentStandardizedPatient.getOscePostRoom().getOscePost() != null && assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole() != null)
+									{
+										tempScheduleContent=tempScheduleContent.replace("[SHORT ROLE]", assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole().getShortName());
+										tempScheduleContent=tempScheduleContent.replace("[POST NUMBER]", assignmentStandardizedPatient.getOscePostRoom().getOscePost().getSequenceNumber().toString());
+									}
+									else
+									{
+										tempScheduleContent=tempScheduleContent.replace("[SHORT ROLE]", "");
+										tempScheduleContent=tempScheduleContent.replace("[POST NUMBER]", "");
+										tempScheduleContent=tempScheduleContent.replace("--", "");
+									}
+									
+									tempScheduleContent=tempScheduleContent.replace("[ROOM]", room);
 																		
 									/*}
 									else
@@ -376,7 +393,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									if(nextSpAssignmentIterator.hasNext())
 									{
 										Assignment nextAssignment=(Assignment)nextSpAssignmentIterator.next();
-										System.out.println("Assignment " + spCurrentAssignment.getId());
+										//System.out.println("Assignment " + spCurrentAssignment.getId());
 									/*
 										tempBreakContent=fileContents.substring(fileContents.indexOf("[BREAK SEPARATOR]"), fileContents.indexOf("[BREAK SEPARATOR.]"));
 										tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR]", "");
@@ -387,7 +404,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 										hasLongBreak=getAssignmentLongBreak(nextAssignment.getTimeStart(),spCurrentAssignment.getTimeEnd(),osce.getLongBreak(), newLunchTime);
 										if(hasLongBreak==true)
 										{
-											System.out.println("Assignment has longBreak between : " + spCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
+											//System.out.println("Assignment has longBreak between : " + spCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
 											/*tempBreakContent=tempBreakContent.replace("[LONG BREAK]", String.format("%tT to %tT", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
 											longBreak.add(String.format("%tR to %tR", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
 										}
@@ -401,7 +418,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 										hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),spCurrentAssignment.getTimeEnd(),newLunchTime);
 										if(hasLunchBreak==true)
 										{
-											System.out.println("Assignment has lunchBreak between : " + spCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
+											//System.out.println("Assignment has lunchBreak between : " + spCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
 /*											tempBreakContent=tempBreakContent.replace("[LUNCH BREAK]", String.format("%tT to %tT", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
 											lunchBreak.add(String.format("%tR to %tR", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
 											
@@ -758,8 +775,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 	public String generateStudentPDFUsingTemplate(String osceId, TemplateTypes templateTypes, List<Long> studId, Long semesterId)
 	{
 		Log.info("Call generateStudentPDFUsingTemplate : " + studId.size());
-		System.out.println("Service Osce Proxy Id:" + osceId);
-		System.out.println("Service Student List: " + studId.size());
+		//System.out.println("Service Osce Proxy Id:" + osceId);
+		//System.out.println("Service Student List: " + studId.size());
 		
 		Document document = null;
 		File file = null;
@@ -960,7 +977,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								if(nextAssignmentIterator.hasNext())
 								{
 									Assignment nextAssignment=(Assignment)nextAssignmentIterator.next();
-									System.out.println("Assignment " + assignment.getId());
+									//System.out.println("Assignment " + assignment.getId());
 								/*
 									tempBreakContentStud=fileContents.substring(fileContents.indexOf("[BREAK SEPARATOR]"), fileContents.indexOf("[BREAK SEPARATOR.]"));
 									tempBreakContentStud=tempBreakContentStud.replace("[BREAK SEPARATOR]", "");
@@ -970,7 +987,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									hasLongBreak=getAssignmentLongBreak(nextAssignment.getTimeStart(),assignment.getTimeEnd(),osce.getLongBreak(), newLunchTime);
 									if(hasLongBreak==true)
 									{
-										System.out.println("Assignment has longBreak between : " + assignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
+										//System.out.println("Assignment has longBreak between : " + assignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
 										longBreak.add(String.format("%tR to %tR", assignment.getTimeEnd(),nextAssignment.getTimeStart()));
 										/*tempBreakContentStud=tempBreakContentStud.replace("[LONG BREAK]", String.format("%tT to %tT", assignment.getTimeEnd(),nextAssignment.getTimeStart()));*/									
 									}
@@ -984,7 +1001,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),assignment.getTimeEnd(),newLunchTime);
 									if(hasLunchBreak==true)
 									{
-										System.out.println("Assignment has lunchBreak between : " + assignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
+										//System.out.println("Assignment has lunchBreak between : " + assignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
 										lunchBreak.add(String.format("%tR to %tR", assignment.getTimeEnd(),nextAssignment.getTimeStart()));
 										/*tempBreakContentStud=tempBreakContentStud.replace("[LUNCH BREAK]", String.format("%tT to %tT", assignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
 									}
@@ -1109,13 +1126,13 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 
 	public String setTimeInTwoDigit(java.util.Date date) 
 	{
-		System.out.println("Date : " + date);
+		//System.out.println("Date : " + date);
 						
 		String hour=""+date.getHours();
 		String minute=""+date.getMinutes();
 		/*String second=""+date.getSeconds();*/
 		
-		System.out.println(hour+":"+minute);
+		//System.out.println(hour+":"+minute);
 		
 		String time="";
 		String seperator=":";
@@ -1371,7 +1388,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 							if(nextExaminerAssignmentIterator.hasNext())
 							{
 								Assignment nextAssignment=(Assignment)nextExaminerAssignmentIterator.next();
-								System.out.println("Assignment " + examinerCurrentAssignment.getId());
+								//System.out.println("Assignment " + examinerCurrentAssignment.getId());
 						
 								/*tempBreakContentExaminer=fileContents.substring(fileContents.indexOf("[BREAK SEPARATOR]"), fileContents.indexOf("[BREAK SEPARATOR.]"));
 								tempBreakContentExaminer=tempBreakContentExaminer.replace("[BREAK SEPARATOR]", "");
@@ -1383,7 +1400,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								
 								if(hasLongBreak==true)
 								{
-									System.out.println("Assignment has longBreak between : " + examinerCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
+									//System.out.println("Assignment has longBreak between : " + examinerCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
 									/*tempBreakContentExaminer=tempBreakContentExaminer.replace("[LONG BREAK]", String.format("%tT to %tT", examinerCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
 									longBreak.add(String.format("%tR to %tR", examinerCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
 								}
@@ -1397,7 +1414,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),examinerCurrentAssignment.getTimeEnd(),newLunchTime);
 								if(hasLunchBreak==true)
 								{
-									System.out.println("Assignment has lunchBreak between : " + examinerCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
+									//System.out.println("Assignment has lunchBreak between : " + examinerCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
 									/*tempBreakContentExaminer=tempBreakContentExaminer.replace("[LUNCH BREAK]", String.format("%tT to %tT", examinerCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
 									lunchBreak.add(String.format("%tR to %tR", examinerCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
 								}
@@ -1818,7 +1835,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			file = new File(fileName);
 			
 			if(file.isFile()){
-				System.out.println(file.getAbsolutePath());
+				//System.out.println(file.getAbsolutePath());
 				return new String[]{fileName,FileUtils.readFileToString(file)};
 			}else{
 				fileName =getDefaultTemplatePath(templateTypes);
@@ -1846,29 +1863,29 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 	{
 		String fileSeparator = System.getProperty("file.separator");
 		
-		System.out.println("Get Default Template Content:  Template Type: " + templateTypes);
+		//System.out.println("Get Default Template Content:  Template Type: " + templateTypes);
 		
 		StringBuffer filePath = new StringBuffer(fetchRealPath(false) + OsMaFilePathConstant.TEMPLATE_PATH + OsMaFilePathConstant.DEFAULT_TEMPLATE_PATH + fileSeparator);
 		
 		switch (templateTypes) {
 		case STUDENT: {
-			System.out.println("Student");
+			//System.out.println("Student");
 			filePath.append(OsMaFilePathConstant.DEFAULT_TEMPLATE_STUDENT);
 			break;
 		}
 		case STANDARDIZED_PATIENT: {
-			System.out.println("SP");
+			//System.out.println("SP");
 			filePath.append(OsMaFilePathConstant.DEFAULT_TEMPLATE_SP);
 			break;
 		}
 		case EXAMINER: {
-			System.out.println("Examiner");
+			//System.out.println("Examiner");
 			filePath.append(OsMaFilePathConstant.DEFAULT_TEMPLATE_EXAMINER);
 			break;
 		}
 		}
 		filePath.append(OsMaFilePathConstant.TXT_EXTENTION);
-		System.out.println("Default Template File Path: "+filePath);
+		//System.out.println("Default Template File Path: "+filePath);
 		return filePath.toString();
 	}
 	
@@ -1876,29 +1893,29 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 	{
 		String fileSeparator = System.getProperty("file.separator");
 		
-		System.out.println("Get Updated Template Content Osce Id: " + osceId + "Template Type: " + templateTypes);
+		//System.out.println("Get Updated Template Content Osce Id: " + osceId + "Template Type: " + templateTypes);
 		StringBuffer filePath = new StringBuffer(OsMaFilePathConstant.PRINT_SCHEDULE_TEMPLATE+OsMaFilePathConstant.UPDATED_TEMPLATE_PATH+fileSeparator);
 
 		switch (templateTypes) {
 		case STUDENT: {
-			System.out.println("Student");
+			//System.out.println("Student");
 			filePath.append(OsMaFilePathConstant.UPDATED_TEMPLATE_STUDENT );
 			break;
 		}
 		case STANDARDIZED_PATIENT: {
-			System.out.println("SP");
+			//System.out.println("SP");
 			filePath.append(OsMaFilePathConstant.UPDATED_TEMPLATE_SP );
 			break;
 		}
 		case EXAMINER: {
-			System.out.println("Examiner");
+			//System.out.println("Examiner");
 			filePath.append(OsMaFilePathConstant.UPDATED_TEMPLATE_EXAMINER );
 			break;
 		}
 		}
 
 		filePath.append(osceId + OsMaFilePathConstant.TXT_EXTENTION);
-		System.out.println("Updated Template File Path: "+filePath);
+		//System.out.println("Updated Template File Path: "+filePath);
 		return filePath.toString();
 	}
 	//Feature : 154
@@ -2010,9 +2027,4 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		}
 		return true;
 	}
-	
-
-
-
-	
 }

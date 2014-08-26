@@ -1519,6 +1519,14 @@ public interface OsceConstants extends Constants {
 	public String partialyItemPrint();
 			
 	public String allItemPrint();
+	
+	public String tplShortNameRole();
+	
+	public String tplShortNameRoleDesc();
+	
+	public String tplPostNumber();
+	
+	public String tplPostNumberDesc();
 }
 
 

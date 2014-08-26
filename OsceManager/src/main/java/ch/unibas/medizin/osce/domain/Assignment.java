@@ -3453,4 +3453,12 @@ public class Assignment {
 		 javax.persistence.Query examinerQuery = entityManager().createNativeQuery(examinerSql); 
 		 examinerQuery.executeUpdate();
 	 }
+	 
+	 public static List<Assignment> findAssignmentBySPAndOsceDay(Long osceId, Long spId)
+	 {
+		 EntityManager em = entityManager();
+		 String sql = "select a from Assignment a where a.type = 1 and a.osceDay.osce.id = " + osceId + " and a.patientInRole != null and a.patientInRole.patientInSemester.standardizedPatient.id = " + spId + " order by a.timeStart";
+		 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
+		 return query.getResultList();
+	 }
 } 

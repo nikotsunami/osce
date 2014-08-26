@@ -916,7 +916,7 @@ public class ExportAssignment  extends HttpServlet {
 		        			OscePostRoom oscePostRoom=a.getOscePostRoom();
 		        			SPDetail spDetail = null;
 		        			
-		        			if (oscePostRoom != null)
+		        			if (oscePostRoom != null && PostType.DUALSP.equals(oscePostRoom.getOscePost().getOscePostBlueprint().getPostType()))
 		        				spDetail = checkSPDetailWithOscePostRoomId(spDetailsList, oscePostRoom.getId(), a.getSequenceNumber());
 		        			
 		        			if (spDetail == null)
@@ -1413,6 +1413,7 @@ public class ExportAssignment  extends HttpServlet {
 	        					{
 	        						OscePost oscePost=oscePosts.get(m);
 	        						int spIndex=0;
+	        						
 		        					for(int n=0;n<spDetailList.size();n++)
 		        					{
 		        						SPDetail spDetail=spDetailList.get(n);
@@ -1420,9 +1421,10 @@ public class ExportAssignment  extends HttpServlet {
 		        						PatientInRole patientInRole=spDetail.getPatientInRole();
 		        						OscePostRoom oscePostRoom=spDetail.getOscePostRoom();
 		        						
-		        						if(patientInRole!=null && oscePostRoom != null && oscePostRoom.getOscePost().equals(oscePost))
+		        						if(patientInRole!=null && oscePostRoom != null && oscePostRoom.getOscePost().getId().equals(oscePost.getId()))
 		        						{	
-		        							Cell spCell=excelRow.get(oscePosts.indexOf(oscePostRoom.getOscePost())*spDetail.getCourses().size()+spIndex).createCell(col);
+		        							int index = oscePosts.indexOf(oscePostRoom.getOscePost())*spDetail.getCourses().size()+spIndex;
+		        							Cell spCell=excelRow.get(index).createCell(col);
 		        							StandardizedPatient sp=patientInRole.getPatientInSemester().getStandardizedPatient();
 		        							
 		        							String name = "";
@@ -1448,7 +1450,7 @@ public class ExportAssignment  extends HttpServlet {
 		        							spIndex++;
 			        						
 		        						}
-		        						else if(patientInRole==null && oscePostRoom != null && oscePostRoom.getOscePost().equals(oscePost))
+		        						else if(patientInRole==null && oscePostRoom != null && oscePostRoom.getOscePost().getId().equals(oscePost.getId()))
 		        						{
 		        							int index = oscePosts.indexOf(oscePostRoom.getOscePost())*spDetail.getCourses().size()+spIndex;
 		        							Cell spCell=excelRow.get(index).createCell(col);
@@ -1468,7 +1470,7 @@ public class ExportAssignment  extends HttpServlet {
 		        							spCell.setCellStyle(spParcourStyle(wb, oscePostRoom.getCourse().getColor()));
 		        							spIndex++;
 		        						}
-		        						
+		        								        						
 		        						/*else if(oscePostRoom==null && patientInRole!=null)
 		        						{
 		        							Cell spCell=excelRow.get(n).createCell(col);
@@ -1518,7 +1520,8 @@ public class ExportAssignment  extends HttpServlet {
 	        						if(oscePostRoom==null && patientInRole!=null)
 	        						{
 	        							Cell spCell=null;
-	 	        							 spCell=excelRow.get((oscePosts.size()-spDetail.getNumOfBreakPost())*spDetail.getCourses().size()+rowIndex).createCell(col);
+	        							//spCell=excelRow.get((oscePosts.size()-spDetail.getNumOfBreakPost())*spDetail.getCourses().size()+rowIndex).createCell(col);	
+	        							spCell=excelRow.get((oscePosts.size())*spDetail.getCourses().size()+rowIndex).createCell(col);
 	        							StandardizedPatient sp=patientInRole.getPatientInSemester().getStandardizedPatient();
 	        							String name=sp.getPreName()+" "+sp.getName().charAt(0) +".";
 	        							spCell.setCellValue(name);
