@@ -311,7 +311,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									/*if(assignmentStandardizedPatient.getOscePostRoom()!=null)
 									{	*/
 									String standardizedRole = checkNotNull(assignmentStandardizedPatient, "getOscePostRoom","getOscePost","getStandardizedRole")==true?assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole().getLongName().toString():"";
-									String room = checkNotNull(assignmentStandardizedPatient, "getOscePostRoom","getRoom","getRoomNumber")==true?assignmentStandardizedPatient.getOscePostRoom().getRoom().getRoomNumber():"Reserver";
+									String room = checkNotNull(assignmentStandardizedPatient, "getOscePostRoom","getRoom","getRoomNumber")==true?assignmentStandardizedPatient.getOscePostRoom().getRoom().getRoomNumber():"Reserve";
 									
 									if(standardizedRole!="")
 									{

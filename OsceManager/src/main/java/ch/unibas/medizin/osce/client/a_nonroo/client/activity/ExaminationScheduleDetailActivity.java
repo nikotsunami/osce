@@ -1339,10 +1339,18 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 															spView.getSpLbl().setText(constants.exaPlanSpShort()+NumberFormat.getFormat("00").format(assignmentProxy.getSequenceNumber()));									
 														}
 														
+														j = j + 1;
+														AssignmentProxy dualSPAssProxy = null;
+														if (j < response.size())														
+															dualSPAssProxy = response.get(j);
+														
 														spView1=new SPViewImpl();
 														spView1.getSpPanel().addStyleName("border-bottom-blue");
 														spView1.getSpPanel().addStyleName("sp-bg");
-														spView1.setAssignmentProxy(assignmentProxy);
+														if (dualSPAssProxy == null)
+															spView1.setAssignmentProxy(assignmentProxy);
+														else
+															spView1.setAssignmentProxy(dualSPAssProxy);
 														spView1.setDelegate(activity);
 														if(spSlotLength>=0)
 														spView1.getSpPanel().setHeight(spSlotLength+"px");
@@ -1356,7 +1364,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 														
 														oscePostView.getSpSlotsVP().insert(horizontalPanel, oscePostView.getSpSlotsVP().getWidgetCount());
 														
-														j = j + 1;
+														
 													}
 													else
 													{
