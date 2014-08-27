@@ -1312,41 +1312,142 @@ public class Assignment {
      {
     	 PatientInRole oldSp = ass.getPatientInRole();
     	 EntityManager em = entityManager();
-    	 String sql = "SELECT a FROM Assignment a WHERE a.patientInRole = " + ass.getPatientInRole().getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND a.sequenceNumber = " + ass.getSequenceNumber();
-    	 TypedQuery<Assignment> oldSpQuery = em.createQuery(sql, Assignment.class);
-    	 Iterator<Assignment> oldSpItr = oldSpQuery.getResultList().iterator();
-    	 
-    	 sql = "SELECT a FROM Assignment a WHERE a.patientInRole = " + exchangePir.getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND a.sequenceNumber = " + ass.getSequenceNumber();
-    	 TypedQuery<Assignment> exchangeSpQuery = em.createQuery(sql, Assignment.class);
-    	 Iterator<Assignment> exchangeSpItr = exchangeSpQuery.getResultList().iterator();
-    	 
-    	 while (oldSpItr.hasNext())
-    	 {
-    		 if (ass.getPatientInRole().getOscePost() != null && ass.getPatientInRole().getOscePost().getStandardizedRole() != null)
-    		 {
-    			 String pirSql = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester = " + exchangePir.getPatientInSemester().getId() + " AND pir.oscePost IS NOT NULL AND pir.oscePost.standardizedRole.id = " + ass.getPatientInRole().getOscePost().getStandardizedRole().getId();
-    			 TypedQuery<PatientInRole> pirQuery = em.createQuery(pirSql, PatientInRole.class);
-    			 
-    			 if (pirQuery.getResultList().size() > 0)
-        		 {
-    				 PatientInRole exchangePatientInRole = pirQuery.getResultList().get(0);
-    				 Assignment assignment = oldSpItr.next();
-            		 assignment.setPatientInRole(exchangePatientInRole);
-            		 assignment.persist();
-        		 }
-    		 }
-    	 }
-    	 
-    	 while (exchangeSpItr.hasNext())
-    	 {
-    		 String pirSql = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester = " + oldSp.getPatientInSemester().getId() + " AND pir.oscePost IS NULL";
-    		 TypedQuery<PatientInRole> pirQuery = em.createQuery(pirSql, PatientInRole.class);
-    		 PatientInRole oldPatientInRole = pirQuery.getSingleResult();
     		 
-    		 Assignment assignment = exchangeSpItr.next();
-    		 assignment.setPatientInRole(oldPatientInRole);
-    		 assignment.persist();
+    	 if (PostType.DUALSP.equals(ass.getOscePostRoom().getOscePost().getOscePostBlueprint().getPostType()))
+    	 {
+    		 List<PatientInRole> breakSPList = PatientInRole.findPatientInRoleByRotation(ass);
+    		 
+    		 String sql = "SELECT a FROM Assignment a WHERE a.patientInRole = " + ass.getPatientInRole().getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND a.sequenceNumber = " + ass.getSequenceNumber();
+        	 TypedQuery<Assignment> oldSpQuery = em.createQuery(sql, Assignment.class);
+        	 Iterator<Assignment> oldSpItr = oldSpQuery.getResultList().iterator();
+        	 
+        	 sql = "SELECT a FROM Assignment a WHERE a.patientInRole = " + exchangePir.getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND a.sequenceNumber = " + ass.getSequenceNumber();
+        	 TypedQuery<Assignment> exchangeSpQuery = em.createQuery(sql, Assignment.class);
+        	 Iterator<Assignment> exchangeSpItr = exchangeSpQuery.getResultList().iterator();
+        	 
+    		 while (oldSpItr.hasNext())
+        	 {
+        		 if (ass.getPatientInRole().getOscePost() != null && ass.getPatientInRole().getOscePost().getStandardizedRole() != null)
+        		 {
+        			 String pirSql = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester = " + exchangePir.getPatientInSemester().getId() + " AND pir.oscePost IS NOT NULL AND pir.oscePost.standardizedRole.id = " + ass.getPatientInRole().getOscePost().getStandardizedRole().getId();
+        			 TypedQuery<PatientInRole> pirQuery = em.createQuery(pirSql, PatientInRole.class);
+        			 
+        			 if (pirQuery.getResultList().size() > 0)
+            		 {
+        				 PatientInRole exchangePatientInRole = pirQuery.getResultList().get(0);
+        				 Assignment assignment = oldSpItr.next();
+                		 assignment.setPatientInRole(exchangePatientInRole);
+                		 assignment.persist();
+            		 }
+        		 }
+        	 }
+        	 
+        	 while (exchangeSpItr.hasNext())
+        	 {
+        		 String pirSql = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester = " + oldSp.getPatientInSemester().getId() + " AND pir.oscePost IS NULL";
+        		 TypedQuery<PatientInRole> pirQuery = em.createQuery(pirSql, PatientInRole.class);
+        		 PatientInRole oldPatientInRole = pirQuery.getSingleResult();
+        		 
+        		 Assignment assignment = exchangeSpItr.next();
+        		 assignment.setPatientInRole(oldPatientInRole);
+        		 assignment.persist();
+        	 }
+        	 
+        	 String dualSPsql = "SELECT a FROM Assignment a WHERE a.type = 1 AND a.oscePostRoom.id = " + ass.getOscePostRoom().getId() + " AND a.timeStart = '" + ass.getTimeStart() + "' AND a.timeEnd = '" + ass.getTimeEnd() + "' AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND a.sequenceNumber = " + ass.getSequenceNumber();
+        	 TypedQuery<Assignment> dualOldSpQuery = em.createQuery(dualSPsql, Assignment.class);
+        	 List<Assignment> dualOldSpAssList = dualOldSpQuery.getResultList();
+        	 Assignment dualSpOldAss = null;
+        	 for (Assignment tempAss : dualOldSpAssList)
+        	 {
+        		if (tempAss.getId().equals(ass.getId()) == false)
+        		{
+        			dualSpOldAss = tempAss;
+        			break;
+        		}
+        	 }
+        	 
+        	 if (dualSpOldAss != null)
+        	 {
+        		 PatientInRole dualExchangeSp = null;
+        		 for (PatientInRole pir : breakSPList)
+        		 {
+            		 if (pir.getId().equals(exchangePir.getId()) == false)
+        			 {
+        				 dualExchangeSp = pir;
+        				 break;
+        			 }
+        		 }
+        		 
+        		 if (dualSpOldAss != null && dualExchangeSp != null)
+        		 {
+        			 String dualSpExchangeSql = "SELECT a FROM Assignment a WHERE a.patientInRole = " + dualExchangeSp.getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND a.sequenceNumber = " + ass.getSequenceNumber();
+                	 TypedQuery<Assignment> dualExchangeSpQuery = em.createQuery(dualSpExchangeSql, Assignment.class);
+                	 List<Assignment> dualExchangeSpList = dualExchangeSpQuery.getResultList();
+                	 if (dualExchangeSpList.size() == 1 && dualSpOldAss.getPatientInRole() != null)
+                	 {
+                		 Assignment dualExchageSPAss = dualExchangeSpList.get(0);
+                	
+                		 String pirSql = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester = " + dualSpOldAss.getPatientInRole().getPatientInSemester().getId() + " AND pir.oscePost IS NULL";
+                		 TypedQuery<PatientInRole> pirQuery = em.createQuery(pirSql, PatientInRole.class);
+                		 PatientInRole oldPatientInRole = pirQuery.getSingleResult();
+                		 
+                		 Assignment ass1 = dualExchageSPAss;
+                		 ass1.setPatientInRole(oldPatientInRole);
+                		 ass1.persist();
+                		 
+                		 String pirSql1 = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester = " + dualExchangeSp.getPatientInSemester().getId() + " AND pir.oscePost IS NOT NULL AND pir.oscePost.standardizedRole.id = " + ass.getPatientInRole().getOscePost().getStandardizedRole().getId();
+            			 TypedQuery<PatientInRole> pirQuery1 = em.createQuery(pirSql1, PatientInRole.class);
+            			 
+            			 if (pirQuery1.getResultList().size() > 0)
+                		 {
+            				 PatientInRole exchangePatientInRole = pirQuery1.getResultList().get(0);
+            				 dualSpOldAss.setPatientInRole(exchangePatientInRole);
+            				 dualSpOldAss.persist();
+                		 }
+                	 }
+        		 }
+        	 }
     	 }
+    	 else
+    	 {
+    		 String sql = "SELECT a FROM Assignment a WHERE a.patientInRole = " + ass.getPatientInRole().getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND a.sequenceNumber = " + ass.getSequenceNumber();
+        	 TypedQuery<Assignment> oldSpQuery = em.createQuery(sql, Assignment.class);
+        	 Iterator<Assignment> oldSpItr = oldSpQuery.getResultList().iterator();
+        	 
+        	 sql = "SELECT a FROM Assignment a WHERE a.patientInRole = " + exchangePir.getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND a.sequenceNumber = " + ass.getSequenceNumber();
+        	 TypedQuery<Assignment> exchangeSpQuery = em.createQuery(sql, Assignment.class);
+        	 Iterator<Assignment> exchangeSpItr = exchangeSpQuery.getResultList().iterator();
+        	 
+    		 while (oldSpItr.hasNext())
+        	 {
+        		 if (ass.getPatientInRole().getOscePost() != null && ass.getPatientInRole().getOscePost().getStandardizedRole() != null)
+        		 {
+        			 String pirSql = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester = " + exchangePir.getPatientInSemester().getId() + " AND pir.oscePost IS NOT NULL AND pir.oscePost.standardizedRole.id = " + ass.getPatientInRole().getOscePost().getStandardizedRole().getId();
+        			 TypedQuery<PatientInRole> pirQuery = em.createQuery(pirSql, PatientInRole.class);
+        			 
+        			 if (pirQuery.getResultList().size() > 0)
+            		 {
+        				 PatientInRole exchangePatientInRole = pirQuery.getResultList().get(0);
+        				 Assignment assignment = oldSpItr.next();
+                		 assignment.setPatientInRole(exchangePatientInRole);
+                		 assignment.persist();
+            		 }
+        		 }
+        	 }
+        	 
+        	 while (exchangeSpItr.hasNext())
+        	 {
+        		 String pirSql = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester = " + oldSp.getPatientInSemester().getId() + " AND pir.oscePost IS NULL";
+        		 TypedQuery<PatientInRole> pirQuery = em.createQuery(pirSql, PatientInRole.class);
+        		 PatientInRole oldPatientInRole = pirQuery.getSingleResult();
+        		 
+        		 Assignment assignment = exchangeSpItr.next();
+        		 assignment.setPatientInRole(oldPatientInRole);
+        		 assignment.persist();
+        	 }
+    	 }
+    	 
+    	
     	 
     	 return true;
      }
