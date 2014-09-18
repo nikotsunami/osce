@@ -11,7 +11,9 @@ import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
+import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.util;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.dnd.client.DragEndEvent;
 import com.allen_sauer.gwt.dnd.client.DragHandler;
@@ -201,6 +203,14 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 	@UiField
 	Label backUpLabel;
 	
+	@UiField
+	Label dualPostPatientLbl;
+	
+	@UiField
+	Label dualPostSupportiveLbl;
+	
+	private OsceConstants constants = GWT.create(OsceConstants.class);
+	
 	public Label getBackUpLabel(){
 		return this.backUpLabel;
 	}
@@ -234,6 +244,12 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 	@UiField
 	VerticalPanel backUpVP;
 	
+	@UiField
+	AbsolutePanel patientInRoleAbsolutePanel;
+	
+	@UiField
+	SimplePanel backUpSimplePanel;
+	
 	private static RoleSubViewImplUiBinder uiBinder = GWT
 			.create(RoleSubViewImplUiBinder.class);
 	
@@ -254,7 +270,8 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 		dragController1.registerDropController(dropController2);
 		dragController2.registerDropController(dropController1);
 		
-		
+		dualPostPatientLbl.setText(constants.dualPostPatient());
+		dualPostSupportiveLbl.setText(constants.dualPostSupportive());
 		
 		
 	}
@@ -274,9 +291,9 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 		
 		dragController1.registerDropController(dropController2);
 		dragController2.registerDropController(dropController1);
-		
-		
-		
+				
+		dualPostPatientLbl.setText(constants.dualPostPatient());
+		dualPostSupportiveLbl.setText(constants.dualPostSupportive());
 		
 	}
 
@@ -392,7 +409,18 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 		
 		if(osceSecurityStatus==OSCESecurityStatus.FEDERAL_EXAM){
 			if(osceSequenceProxy.getCourses() !=null)
-			requiredPatient=-(((osceSequenceProxy.getCourses().size()*util.checkInteger(postProxy.getStandardizedRole().getFactor()))+util.checkInteger(postProxy.getStandardizedRole().getSum()))-this.getPatientInRoleVP().getWidgetCount());
+			{
+				if (postProxy != null && postProxy.getOscePostBlueprint() != null && PostType.DUALSP.equals(postProxy.getOscePostBlueprint().getPostType()))
+				{
+					int totalRequiredSP = ((osceSequenceProxy.getCourses().size()*util.checkInteger(postProxy.getStandardizedRole().getFactor()))+util.checkInteger(postProxy.getStandardizedRole().getSum())) * 2;
+					int assignedSP = this.getDualPatientInRoleVP().getWidgetCount() + this.getDualSupportivePatientInRoleVP().getWidgetCount();
+					requiredPatient=-((totalRequiredSP)-assignedSP);					
+				}
+				else 
+				{
+					requiredPatient=-(((osceSequenceProxy.getCourses().size()*util.checkInteger(postProxy.getStandardizedRole().getFactor())))+util.checkInteger(postProxy.getStandardizedRole().getSum())-this.getPatientInRoleVP().getWidgetCount());
+				}
+			}
 		}
 		else{	
 		if(osceSequenceProxy.getCourses() !=null)
@@ -467,6 +495,9 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 	@UiHandler("roleHeader")
 	public void roleHeaderClicked(ClickEvent event)
 	{
+		this.patientFocusPanel.getWidget().removeStyleName("highlight-role");
+		this.supportiveFocusPanel.getWidget().removeStyleName("highlight-role");
+		
 		Log.info("roleHeader Clicked : Is backup" + isBackUpPanel);
 		//modul 3 changes {
 		
@@ -475,6 +506,12 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 		
 		//modul 3 changes }
 		this.roleHeader.getWidget().addStyleName("highlight-role");
+		if (postProxy != null && postProxy.getOscePostBlueprint() != null && PostType.DUALSP.equals(postProxy.getOscePostBlueprint().getPostType()))
+		{
+			this.patientFocusPanel.getWidget().addStyleName("highlight-role");
+			this.supportiveFocusPanel.getWidget().removeStyleName("highlight-role");
+		}
+		
 		delegate.roleSelected(this);
 	}
 
@@ -518,10 +555,14 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 		if(! this.isBackUpPanel && event.getStandardizedRoleProxy().getId()!=roleProxy.getId() ) //&& (event.getOsceDayProxy().getId() != this.getOsceDayProxy().getId()))
 		{
 			this.roleHeader.getWidget().removeStyleName("highlight-role");
+			this.patientFocusPanel.getWidget().removeStyleName("highlight-role");
+			this.supportiveFocusPanel.getWidget().removeStyleName("highlight-role");
 		}
 		else if(! this.isBackUpPanel && event.getStandardizedRoleProxy().getId().longValue()==roleProxy.getId().longValue()  && (event.getOsceDayProxy().getId().longValue() != this.getOsceDayProxy().getId().longValue()))
 		{
 			this.roleHeader.getWidget().removeStyleName("highlight-role");
+			this.patientFocusPanel.getWidget().removeStyleName("highlight-role");
+			this.supportiveFocusPanel.getWidget().removeStyleName("highlight-role");
 		}
 		
 	}
@@ -531,7 +572,72 @@ public class RoleSubViewImpl extends Composite implements DragHandler,RoleFulfil
 		
 		return this.backUpLabel;
 	}
+
+	@UiField
+	AbsolutePanel dualPatientInRoleAbsolutePanel;
+		
+	@UiField
+	VerticalPanel dualPatientInRoleVP;
 	
-
-
+	@UiField
+	VerticalPanel dualSupportivePatientInRoleVP;
+	
+	@UiField
+	VerticalPanel mainPanel;
+	
+	@UiField
+	FocusPanel supportiveFocusPanel;
+	
+	@UiField
+	FocusPanel patientFocusPanel;
+	
+	//true : patient, false : supportive
+	Boolean dualSPPatientSupportive = false;
+	
+	public void removePostWiseField(PostType postType)
+	{
+		if (PostType.DUALSP.equals(postType))
+		{
+			patientInRoleAbsolutePanel.removeFromParent();
+			backUpLabel.removeFromParent();
+			backUpSimplePanel.removeFromParent();
+			mainPanel.setWidth("265px");
+		}
+		else
+		{
+			dualPatientInRoleAbsolutePanel.removeFromParent();
+		}
+	}
+	
+	@UiHandler("patientFocusPanel")
+	public void patientFocusPanelClicked(ClickEvent event)
+	{
+		dualSPPatientSupportive = false;
+		this.roleHeader.getWidget().addStyleName("highlight-role");
+		this.patientFocusPanel.getWidget().addStyleName("highlight-role");
+		this.supportiveFocusPanel.getWidget().removeStyleName("highlight-role");
+		delegate.roleSelected(this);
+	}
+	
+	@UiHandler("supportiveFocusPanel")
+	public void supportiveFocusPanelClicked(ClickEvent event)
+	{
+		dualSPPatientSupportive = true;
+		this.roleHeader.getWidget().addStyleName("highlight-role");
+		this.supportiveFocusPanel.getWidget().addStyleName("highlight-role");
+		this.patientFocusPanel.getWidget().removeStyleName("highlight-role");
+		delegate.roleSelected(this);
+	}
+	
+	public VerticalPanel getDualPatientInRoleVP() {
+		return dualPatientInRoleVP;
+	}
+	
+	public VerticalPanel getDualSupportivePatientInRoleVP() {
+		return dualSupportivePatientInRoleVP;
+	}
+	
+	public Boolean getDualSPPatientSupportive() {
+		return dualSPPatientSupportive;
+	}
 }

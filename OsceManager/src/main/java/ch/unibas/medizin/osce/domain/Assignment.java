@@ -1308,7 +1308,7 @@ public class Assignment {
     	 
      }
      
-     public static Boolean exchangeStandardizedPatient(Assignment ass, PatientInRole exchangePir)
+     /*public static Boolean exchangeStandardizedPatient(Assignment ass, PatientInRole exchangePir)
      {
     	 PatientInRole oldSp = ass.getPatientInRole();
     	 EntityManager em = entityManager();
@@ -1450,8 +1450,50 @@ public class Assignment {
     	
     	 
     	 return true;
-     }
+     }*/
      
+     public static Boolean exchangeStandardizedPatient(Assignment ass, PatientInRole exchangePir)
+     {
+    	 PatientInRole oldSp = ass.getPatientInRole();
+    	 EntityManager em = entityManager();
+    	 String sql = "SELECT a FROM Assignment a WHERE a.patientInRole = " + ass.getPatientInRole().getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND a.sequenceNumber = " + ass.getSequenceNumber();
+    	 TypedQuery<Assignment> oldSpQuery = em.createQuery(sql, Assignment.class);
+    	 Iterator<Assignment> oldSpItr = oldSpQuery.getResultList().iterator();
+    	 
+    	 sql = "SELECT a FROM Assignment a WHERE a.patientInRole = " + exchangePir.getId() + " AND a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND a.sequenceNumber = " + ass.getSequenceNumber();
+    	 TypedQuery<Assignment> exchangeSpQuery = em.createQuery(sql, Assignment.class);
+    	 Iterator<Assignment> exchangeSpItr = exchangeSpQuery.getResultList().iterator();
+    	 
+    	 while (oldSpItr.hasNext())
+    	 {
+    		 if (ass.getPatientInRole().getOscePost() != null && ass.getPatientInRole().getOscePost().getStandardizedRole() != null)
+    		 {
+    			 String pirSql = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester = " + exchangePir.getPatientInSemester().getId() + " AND pir.oscePost IS NOT NULL AND pir.oscePost.standardizedRole.id = " + ass.getPatientInRole().getOscePost().getStandardizedRole().getId();
+    			 TypedQuery<PatientInRole> pirQuery = em.createQuery(pirSql, PatientInRole.class);
+    			 
+    			 if (pirQuery.getResultList().size() > 0)
+        		 {
+    				 PatientInRole exchangePatientInRole = pirQuery.getResultList().get(0);
+    				 Assignment assignment = oldSpItr.next();
+            		 assignment.setPatientInRole(exchangePatientInRole);
+            		 assignment.persist();
+        		 }
+    		 }
+    	 }
+    	 
+    	 while (exchangeSpItr.hasNext())
+    	 {
+    		 String pirSql = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester = " + oldSp.getPatientInSemester().getId() + " AND pir.oscePost IS NULL";
+    		 TypedQuery<PatientInRole> pirQuery = em.createQuery(pirSql, PatientInRole.class);
+    		 PatientInRole oldPatientInRole = pirQuery.getSingleResult();
+    		 
+    		 Assignment assignment = exchangeSpItr.next();
+    		 assignment.setPatientInRole(oldPatientInRole);
+    		 assignment.persist();
+    	 }
+    	 
+    	 return true;
+     }
 
        /*   public static List<List<Assignment>> retrieveLogicalStudentBreak(Long osceDayId, Long courseId, Long oscePostId)
      {

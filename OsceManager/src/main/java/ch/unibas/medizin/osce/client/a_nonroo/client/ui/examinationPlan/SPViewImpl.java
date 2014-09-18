@@ -223,7 +223,7 @@ public class SPViewImpl extends Composite implements SPView, HasMouseDownHandler
 			});
 		}
 		
-		((PopupViewImpl)exchangePopupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-205);
+		((PopupViewImpl)exchangePopupView).setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-230);
 		//setDAta
 		
 		exchangePopupView.getStartTimeValue().setText(DateTimeFormat.getShortDateTimeFormat().format(assignmentProxy.getTimeStart()));

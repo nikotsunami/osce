@@ -4,10 +4,33 @@
 	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
 	 xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" 
 	 xmlns:e="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination" xmlns:r="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.roleAssignment">
-	 <ui:style src="../../styles.css" />
+	 <ui:style src="../../styles.css">
+	 .dualSpHeaderStyle{
+		border-radius: 16px 16px 0px 0px;
+		background-color: #EBEBEB;
+		height: 20px;
+		padding-left: 8px;
+		padding-right: 8px;
+		padding-top: 6px;
+		margin-bottom: 8px;
+		border-color: #808080;
+		border-style: solid;
+		border-top-width: 0px;
+		border-right-width: 0px;
+		border-bottom-width: 1px;
+		border-left-width: 0px;
+		text-align: center;
+		vertical-align: middle;		
+	 }
+	 .dualSpContainerStyle{
+		border: 1px solid #808080;
+    	border-radius: 16px;
+    	width: 130px!importanat;
+	 }
+	 </ui:style>
 
 
-	<g:VerticalPanel addStyleNames="{style.roleContainer}" width="120px" horizontalAlignment="center">
+	<g:VerticalPanel ui:field="mainPanel" addStyleNames="{style.roleContainer}" width="120px" horizontalAlignment="center">
 		
 		<g:AbsolutePanel ui:field="roleAP">
 			<g:FocusPanel ui:field="roleHeader">
@@ -18,24 +41,46 @@
 				</g:HorizontalPanel>
 			</g:FocusPanel>
 			
-		<g:AbsolutePanel>
-			<g:VerticalPanel ui:field="patientInRoleVP" addStyleNames="{style.padTop5}">
-				<!--  <r:PatientInRoleSubViewImpl ></r:PatientInRoleSubViewImpl>
-				<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
-				<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
-				<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>-->
-			</g:VerticalPanel>
-		</g:AbsolutePanel>
-		<g:Label ui:field="backUpLabel" addStyleNames="{style.patientInRoleLbl} {style.label}">Back Up</g:Label>
-		
-		<g:SimplePanel>
-			<g:VerticalPanel ui:field="backUpVP" addStyleNames="{style.padTop5}">
-				<!--  <r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
-				<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
-				<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
-				<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>-->
-			</g:VerticalPanel>
-		</g:SimplePanel>
+			<g:AbsolutePanel ui:field="patientInRoleAbsolutePanel">
+				<g:VerticalPanel ui:field="patientInRoleVP" addStyleNames="{style.padTop5}">
+					<!--  <r:PatientInRoleSubViewImpl ></r:PatientInRoleSubViewImpl>
+					<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
+					<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
+					<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>-->
+				</g:VerticalPanel>
+			</g:AbsolutePanel>
+			<g:Label ui:field="backUpLabel" addStyleNames="{style.patientInRoleLbl} {style.label}">Back Up</g:Label>
+			
+			<g:SimplePanel ui:field="backUpSimplePanel">
+				<g:VerticalPanel ui:field="backUpVP" addStyleNames="{style.padTop5}">
+					<!--  <r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
+					<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
+					<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>
+					<r:PatientInRoleSubViewImpl></r:PatientInRoleSubViewImpl>-->
+				</g:VerticalPanel>
+			</g:SimplePanel>
+			
+			<g:AbsolutePanel ui:field="dualPatientInRoleAbsolutePanel">
+				<g:HorizontalPanel spacing="5">
+					
+						<g:VerticalPanel ui:field="mainDualPatientInRoleVP" width="130px" addStyleNames="{style.dualSpContainerStyle}" horizontalAlignment="center">
+							<g:FocusPanel ui:field="patientFocusPanel">
+								<g:Label addStyleNames="{style.dualSpHeaderStyle} {style.label}" ui:field="dualPostPatientLbl"></g:Label>
+							</g:FocusPanel>
+							<g:VerticalPanel ui:field="dualPatientInRoleVP" horizontalAlignment="center">
+							</g:VerticalPanel>
+						</g:VerticalPanel>
+					
+						<g:VerticalPanel ui:field="mainDualSupportivePatientInRoleVP" width="130px" addStyleNames="{style.dualSpContainerStyle}" horizontalAlignment="center">
+							<g:FocusPanel ui:field="supportiveFocusPanel">
+								<g:Label addStyleNames="{style.dualSpHeaderStyle} {style.label}" ui:field="dualPostSupportiveLbl"></g:Label>
+							</g:FocusPanel>	
+							<g:VerticalPanel ui:field="dualSupportivePatientInRoleVP" horizontalAlignment="center">
+							</g:VerticalPanel>
+						</g:VerticalPanel>
+					
+				</g:HorizontalPanel>				
+			</g:AbsolutePanel>
 		</g:AbsolutePanel>
 	</g:VerticalPanel>	
 	

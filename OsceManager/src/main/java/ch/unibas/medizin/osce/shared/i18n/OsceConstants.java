@@ -1527,6 +1527,10 @@ public interface OsceConstants extends Constants {
 	public String tplPostNumber();
 	
 	public String tplPostNumberDesc();
+	
+	public String dualPostPatient();
+			
+	public String dualPostSupportive();
 }
 
 

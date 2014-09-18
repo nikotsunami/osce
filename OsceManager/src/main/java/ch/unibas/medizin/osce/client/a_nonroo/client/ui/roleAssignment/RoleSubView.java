@@ -5,6 +5,7 @@ import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.shared.PostType;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
@@ -46,7 +47,7 @@ public interface RoleSubView extends IsWidget{
 	 
 	 public void setBoundaryPanel(AbsolutePanel boundaryPanel);
 		
-		public AbsolutePanel getBoundaryPanel();
+	 public AbsolutePanel getBoundaryPanel();
 	 
 	 public Label getRoleLbl();
 	 
@@ -92,4 +93,12 @@ public interface RoleSubView extends IsWidget{
 	 public FocusPanel getRoleHeader();
 	 
 	//modul 3 changes }
+	 
+	 public void removePostWiseField(PostType postType);
+	 
+	 public VerticalPanel getDualPatientInRoleVP();
+	 
+	 public VerticalPanel getDualSupportivePatientInRoleVP();
+	 
+	 public Boolean getDualSPPatientSupportive();
 }

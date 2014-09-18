@@ -1020,7 +1020,11 @@ public class ExportAssignment  extends HttpServlet {
 		        				for(int spIndex=0;spIndex<spDetailList.size();spIndex++)
 		        				{
 		        					SPDetail spDetail=spDetailList.get(spIndex);
-		        					SPDetail nextSlotSP=nextspDetailList.get(spIndex);
+		        					SPDetail nextSlotSP=null;
+		        					if (spIndex < nextspDetailList.size())
+		        					{
+		        						nextSlotSP=nextspDetailList.get(spIndex);
+		        					}
 		        					
 		        					if(!spDetail.equals(nextSlotSP))
 		        					{
@@ -1558,11 +1562,12 @@ public class ExportAssignment  extends HttpServlet {
 		        						
 		        						if(room !=null && oscePostRoom != null && oscePostRoom.getOscePost().equals(oscePost))
 		        						{
-		        							Cell roomCell=excelRow.get(oscePosts.indexOf(oscePostRoom.getOscePost())*roomDetail.getCourses().size()+roomIndex).createCell(col);
-			        							roomCell.setCellValue(room.getRoomNumber());
-			        							roomCell.setCellStyle(spParcourStyle(wb, roomDetail.getOscePostRoom().getCourse().getColor()));
-			        							sheet.autoSizeColumn(col, true);
-			        							roomIndex++;
+		        							int index = oscePosts.indexOf(oscePostRoom.getOscePost())*roomDetail.getCourses().size()+roomIndex;
+		        							Cell roomCell=excelRow.get(index).createCell(col);
+		        							roomCell.setCellValue(room.getRoomNumber());
+		        							roomCell.setCellStyle(spParcourStyle(wb, roomDetail.getOscePostRoom().getCourse().getColor()));
+		        							sheet.autoSizeColumn(col, true);
+		        							roomIndex++;
 		        						}
 		        						
 		        						

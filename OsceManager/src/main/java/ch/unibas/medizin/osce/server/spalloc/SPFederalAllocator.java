@@ -52,14 +52,25 @@ public class SPFederalAllocator {
 					
 					if (PostType.DUALSP.equals(oscePost.getOscePostBlueprint().getPostType()))
 					{
-						for (int i=0; i<patientInRoleList.size(); i++)
+						List<PatientInRole> dualSpPatient = new ArrayList<PatientInRole>();
+						List<PatientInRole> dualSpSupportive = new ArrayList<PatientInRole>();
+						for (PatientInRole pir : patientInRoleList)
 						{
-							PatientInRole pir = patientInRoleList.get(i);
+							if (Boolean.TRUE.equals(pir.getIsSupportive()))
+								dualSpSupportive.add(pir);
+							else
+								dualSpPatient.add(pir);
+						}
+						
+						for (int i=0; i<dualSpPatient.size(); i++)
+						{
+							PatientInRole pir = dualSpPatient.get(i);
 							PatientInRole dualPir = null;
-							i = i + 1;
-							if (i < patientInRoleList.size())
-								dualPir = patientInRoleList.get(i);
-							//System.out.println("PIR ID : " + pir.getId() + " SP NAME : " + pir.getPatientInSemester().getStandardizedPatient().getName() + " : " + pir.getPatientInSemester().getStandardizedPatient().getPreName());
+							if (i < dualSpSupportive.size())
+								dualPir = dualSpSupportive.get(i);
+							
+							String pname = pir.getPatientInSemester().getStandardizedPatient().getName() + " " + pir.getPatientInSemester().getStandardizedPatient().getPreName();
+							String sname = dualPir.getPatientInSemester().getStandardizedPatient().getName() + " " + dualPir.getPatientInSemester().getStandardizedPatient().getPreName();
 							patientInRoleModelList.add(new SPModel(pir, dualPir, 0));
 							
 						}

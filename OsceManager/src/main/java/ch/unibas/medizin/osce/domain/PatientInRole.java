@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -39,6 +40,9 @@ public class PatientInRole {
     Boolean is_backup;
     
     Boolean is_first_in_sequence;
+    
+    @Value("false")
+    Boolean isSupportive;
     
  // Module10 Create plans
  	//@OneToMany(cascade = CascadeType.ALL, mappedBy = "patientInRole")
@@ -402,7 +406,7 @@ public class PatientInRole {
     }
     
     //spec bug sol
-    public static String savePatientInRole(Long osceDayId,Long oscePostId,Long patientInsemesterId,Long standardizedRoleId){
+    public static String savePatientInRole(Long osceDayId,Long oscePostId,Long patientInsemesterId,Long standardizedRoleId, Boolean isSupportive){
     	Log.info("Inside savePatientInRole");
     	
     	boolean isAssigned=false;
@@ -440,12 +444,12 @@ public class PatientInRole {
 				}
 			 }
 
-			onPersistPatientInRole(osceDay,oscePost,patientInSemester,isPatientInSemesterFulfill);
+			onPersistPatientInRole(osceDay,oscePost,patientInSemester,isPatientInSemesterFulfill, isSupportive);
 
 		}
 		else {
 				isPatientInSemesterFulfill = true;
-				onPersistPatientInRole(osceDay,oscePost,patientInSemester,isPatientInSemesterFulfill);
+				onPersistPatientInRole(osceDay,oscePost,patientInSemester,isPatientInSemesterFulfill, isSupportive);
 			}
     	}
     	}catch (Exception e) {
@@ -457,7 +461,7 @@ public class PatientInRole {
     	
     	return isAssigned ? "assigned" : "success";
 }
-    public static void onPersistPatientInRole(OsceDay osceDay,OscePost oscePost,PatientInSemester patientInSemester,boolean isPatientInSemesterFulfill){
+    public static void onPersistPatientInRole(OsceDay osceDay,OscePost oscePost,PatientInSemester patientInSemester,boolean isPatientInSemesterFulfill, Boolean isSupportive){
 
     	Log.info("onPersistPatientInRole Osce Day :" + osceDay.getId());
     	
@@ -470,10 +474,10 @@ public class PatientInRole {
 		Log.info("Total Times Role Assifn Is :" + response);
 						
 		if(response > 0){
-			assignPatientInRoleNormally(osce,oscePost,patientInSemester,isPatientInSemesterFulfill);
+			assignPatientInRoleNormally(osce,oscePost,patientInSemester,isPatientInSemesterFulfill, isSupportive);
 	   	}
 		else if(response==0){
-			assignPatientInRoleWithOnePostNull(osce,oscePost,patientInSemester,isPatientInSemesterFulfill);
+			assignPatientInRoleWithOnePostNull(osce,oscePost,patientInSemester,isPatientInSemesterFulfill, isSupportive);
 		}
 		}catch (Exception e) {
 			Log.info("Error during saving PIR");
@@ -481,7 +485,7 @@ public class PatientInRole {
 		}
 		
     }
-    public static void assignPatientInRoleNormally(Osce osce,OscePost oscePost,PatientInSemester patientInSemester,boolean isPatientInSemesterFulfill){
+    public static void assignPatientInRoleNormally(Osce osce,OscePost oscePost,PatientInSemester patientInSemester,boolean isPatientInSemesterFulfill, Boolean isSupportive){
     	
     	try{
     	
@@ -492,6 +496,7 @@ public class PatientInRole {
         		PIR.setFit_criteria(isPatientInSemesterFulfill);
         		PIR.setIs_backup(false);
         		PIR.setIs_first_in_sequence(false);
+        		PIR.setIsSupportive(isSupportive);
         		PIR.persist();
     		}
     		else{
@@ -531,7 +536,7 @@ public class PatientInRole {
 		}
     	
 }
-    public static void assignPatientInRoleWithOnePostNull(Osce osce,OscePost oscePost,PatientInSemester patientInSemester,boolean isPatientInSemesterFulfill){
+    public static void assignPatientInRoleWithOnePostNull(Osce osce,OscePost oscePost,PatientInSemester patientInSemester,boolean isPatientInSemesterFulfill, Boolean isSupportive){
     	
        	try{
        		
@@ -542,6 +547,7 @@ public class PatientInRole {
         		PIR.setFit_criteria(isPatientInSemesterFulfill);
         		PIR.setIs_backup(false);
         		PIR.setIs_first_in_sequence(false);
+        		PIR.setIsSupportive(isSupportive);
         		PIR.persist();
         		
         		PatientInRole PIR2 = new PatientInRole();
@@ -648,18 +654,39 @@ public class PatientInRole {
  	public static List<PatientInRole> findPatientInRoleByRotation(Assignment ass)
  	{
  		//spec india changes
- 		EntityManager em = entityManager();     
-     	String queryString = "SELECT DISTINCT pir FROM PatientInRole pir, PatientInRole pir1, PatientInSemester pis, StandardizedPatient sp, Assignment a WHERE" +
-     			" a.patientInRole = pir.id AND" +
-     			" pir.id != " + ass.getPatientInRole().getId() + " AND" +
-     			" pir.patientInSemester = pir1.patientInSemester AND" +
-     			" pir1.oscePost.standardizedRole.id = " + ass.getPatientInRole().getOscePost().getStandardizedRole().getId() + " AND" +
-     			" pir.oscePost IS NULL AND" +
-     			" pir.patientInSemester = pis.id AND" +
-     			" pis.standardizedPatient = sp.id AND" +
-     			" a.oscePostRoom IS NULL AND" +
-     			" a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND" +
-     			" a.sequenceNumber = " + ass.getSequenceNumber();
+ 		EntityManager em = entityManager();
+ 		String queryString = "";
+ 		
+ 		if (ass.getPatientInRole() != null && ass.getPatientInRole().getIsSupportive() != null && ass.getPatientInRole().getIsSupportive())
+ 		{
+ 			queryString = "SELECT DISTINCT pir FROM PatientInRole pir, PatientInRole pir1, PatientInSemester pis, StandardizedPatient sp, Assignment a WHERE" +
+ 					" pir1.isSupportive IS NOT NULL AND pir1.isSupportive = 1 AND" +
+ 					" a.patientInRole = pir.id AND" +
+ 	     			" pir.id != " + ass.getPatientInRole().getId() + " AND" + 	     			
+ 	     			" pir.patientInSemester = pir1.patientInSemester AND" +
+ 	     			" pir1.oscePost.standardizedRole.id = " + ass.getPatientInRole().getOscePost().getStandardizedRole().getId() + " AND" +
+ 	     			" pir.oscePost IS NULL AND" +
+ 	     			" pir.patientInSemester = pis.id AND" +
+ 	     			" pis.standardizedPatient = sp.id AND" +
+ 	     			" a.oscePostRoom IS NULL AND" +
+ 	     			" a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND" +
+ 	     			" a.sequenceNumber = " + ass.getSequenceNumber();
+ 		}
+ 		else
+ 		{
+ 			queryString = "SELECT DISTINCT pir FROM PatientInRole pir, PatientInRole pir1, PatientInSemester pis, StandardizedPatient sp, Assignment a WHERE" +
+ 					" (pir1.isSupportive IS NULL OR (pir1.isSupportive IS NOT NULL AND pir1.isSupportive = 0)) AND" +
+ 					" a.patientInRole = pir.id AND" +
+ 	     			" pir.id != " + ass.getPatientInRole().getId() + " AND" + 	     			
+ 	     			" pir.patientInSemester = pir1.patientInSemester AND" +
+ 	     			" pir1.oscePost.standardizedRole.id = " + ass.getPatientInRole().getOscePost().getStandardizedRole().getId() + " AND" +
+ 	     			" pir.oscePost IS NULL AND" +
+ 	     			" pir.patientInSemester = pis.id AND" +
+ 	     			" pis.standardizedPatient = sp.id AND" +
+ 	     			" a.oscePostRoom IS NULL AND" +
+ 	     			" a.osceDay.osce = " + ass.getOsceDay().getOsce().getId() + " AND" +
+ 	     			" a.sequenceNumber = " + ass.getSequenceNumber();
+ 		}
      	
      	Log.info("~~QUERY : " + queryString);
      			

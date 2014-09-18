@@ -59,6 +59,7 @@ import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PatientAveragePerPost;
+import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.Semesters;
@@ -647,7 +648,7 @@ public void createOsceSequences(OsceDayProxy osceDayProxy,final OsceDaySubViewIm
 	
 	osceDaySubViewImpl.getSequenceVP().clear();
 	requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).with("osce","osceSequences","osceSequences.courses","osceSequences.oscePosts","osceSequences.oscePosts.patientInRole",
-			"osceSequences.oscePosts.standardizedRole","osceSequences.oscePosts.standardizedRole.advancedSearchCriteria","osceSequences.oscePosts.patientInRole","osceSequences.oscePosts.patientInRole.patientInSemester","osceSequences.oscePosts.patientInRole.patientInSemester.osceDays","osceSequences.oscePosts.patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<OsceDayProxy>() {
+			"osceSequences.oscePosts.standardizedRole", "osceSequences.oscePosts.oscePostBlueprint", "osceSequences.oscePosts.standardizedRole.advancedSearchCriteria","osceSequences.oscePosts.patientInRole","osceSequences.oscePosts.patientInRole.patientInSemester","osceSequences.oscePosts.patientInRole.patientInSemester.osceDays","osceSequences.oscePosts.patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<OsceDayProxy>() {
 		
 		@Override
 		public void onSuccess(OsceDayProxy response) {
@@ -688,7 +689,7 @@ public void refreshOsceSequences(OsceDayProxy osceDayProxy,final OsceDaySubViewI
 	
 	Log.info("refreshOsceSequences: osceDayProxy " +osceDayProxy.getId());
 	osceDaySubViewImpl.getSequenceVP().clear();
-	requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).with("osce","osceSequences","osceSequences.courses","osceSequences.oscePosts","osceSequences.oscePosts.standardizedRole","osceSequences.oscePosts.patientInRole","osceSequences.oscePosts.patientInRole.patientInSemester","osceSequences.oscePosts.patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<OsceDayProxy>() {
+	requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).with("osce","osceSequences","osceSequences.courses","osceSequences.oscePosts", "osceSequences.oscePosts.oscePostBlueprint", "osceSequences.oscePosts.standardizedRole","osceSequences.oscePosts.patientInRole","osceSequences.oscePosts.patientInRole.patientInSemester","osceSequences.oscePosts.patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<OsceDayProxy>() {
 		
 		@Override
 		public void onSuccess(OsceDayProxy response) {
@@ -768,9 +769,10 @@ public void createSequences(OsceDayProxy osceDayProxy,OsceDaySubViewImpl osceDay
                	HorizontalPanel backUpHp=null;
 		 //module 3 changes[
 
-                if(!isSecurityFederal){
-		 backUpView=new RoleSubViewImpl();
-		 backUpView.setPostProxy(postProxy);
+         if(!isSecurityFederal){
+        	backUpView=new RoleSubViewImpl();
+            backUpView.removePostWiseField(PostType.NORMAL);
+		    backUpView.setPostProxy(postProxy);
 			backUpView.setDelegate(this);
 			backUpView.setOsceDayProxy(osceDayProxy);
 			backUpView.setOsceSequenceProxy(sequenceProxy);
@@ -804,6 +806,11 @@ public void createSequences(OsceDayProxy osceDayProxy,OsceDaySubViewImpl osceDay
 			if((postProxy.getStandardizedRole()!=null && postProxy.getStandardizedRole().getRoleType()!=null) && ( postProxy.getStandardizedRole().getRoleType() == RoleTypes.Simpat || postProxy.getStandardizedRole().getRoleType()==RoleTypes.Statist))
 					{
 				RoleSubView view=new RoleSubViewImpl(roleAp);
+				if (postProxy.getOscePostBlueprint() != null && PostType.DUALSP.equals(postProxy.getOscePostBlueprint().getPostType()))
+					view.removePostWiseField(PostType.DUALSP);
+				else
+					view.removePostWiseField(PostType.NORMAL);
+				
 				view.setBackUpRoleView(backUpView);
 				roleSubViewList.add(view);
 				//RoleFulfilCriteriaEvent.register(requests.getEventBus(), (RoleSubViewImpl)view);
@@ -1003,6 +1010,17 @@ public void createRoleSubView(RoleSubView roleSubView,OscePostProxy postProxy,bo
 		
 		roleSubView.getPatientInRoleVP().clear();
 		roleSubView.getBackUpVP().clear();
+		roleSubView.getDualPatientInRoleVP().clear();
+		roleSubView.getDualSupportivePatientInRoleVP().clear();
+		
+		/*for (int i=1; i<roleSubView.getDualPatientInRoleVP().getWidgetCount(); i++)
+		{
+			roleSubView.getDualPatientInRoleVP().getWidget(i).removeFromParent();
+		}
+		for (int i=1; i<roleSubView.getDualSupportivePatientInRoleVP().getWidgetCount(); i++)
+		{
+			roleSubView.getDualSupportivePatientInRoleVP().getWidget(i).removeFromParent();
+		}*/
 		
 		// module 3 bug {
 		
@@ -1090,7 +1108,15 @@ public void createRoleSubView(RoleSubView roleSubView,OscePostProxy postProxy,bo
 			else
 			{
 				roleSubView.getDragController1().makeDraggable(patientInRoleView.asWidget(), patientInRoleView.getPatientInRoleLbl());
-				roleSubView.getPatientInRoleVP().insert(patientInRoleView, roleSubView.getPatientInRoleVP().getWidgetCount());
+				if (postProxy != null && postProxy.getOscePostBlueprint() != null && PostType.DUALSP.equals(postProxy.getOscePostBlueprint().getPostType()))
+				{
+					if (patientInRoleProxy != null && patientInRoleProxy.getIsSupportive() != null && patientInRoleProxy.getIsSupportive())
+						roleSubView.getDualSupportivePatientInRoleVP().insert(patientInRoleView, roleSubView.getDualSupportivePatientInRoleVP().getWidgetCount());
+					else
+						roleSubView.getDualPatientInRoleVP().insert(patientInRoleView, roleSubView.getDualPatientInRoleVP().getWidgetCount());
+				}
+				else
+					roleSubView.getPatientInRoleVP().insert(patientInRoleView, roleSubView.getPatientInRoleVP().getWidgetCount());
 			}
 		}
 	
@@ -1175,7 +1201,7 @@ public void refreshRoleSubView(final RoleSubView roleSubView,final boolean isLas
 
 	OscePostProxy postProxy=roleSubView.getPostProxy();
 	
-		requests.oscePostRequest().findOscePost(postProxy.getId()).with("patientInRole","standardizedRole","standardizedRole.advancedSearchCriteria","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient","patientInRole.patientInSemester.osceDays").fire(new OSCEReceiver<OscePostProxy>() {
+		requests.oscePostRequest().findOscePost(postProxy.getId()).with("oscePostBlueprint", "patientInRole","standardizedRole","standardizedRole.advancedSearchCriteria","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient","patientInRole.patientInSemester.osceDays").fire(new OSCEReceiver<OscePostProxy>() {
 
 		@Override
 		public void onSuccess(OscePostProxy response) {
@@ -2267,7 +2293,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 								}*/
 //								if (addPatientInRole) {
 									showApplicationLoading(true);
-									requests.patientInRoleRequestNonRoo().savePatientInRole(osceDayProxy.getId(), tempOscePostProxy.getId(), patientInSemesterProxy.getId(), roleSubViewSelected.getRoleProxy().getId()).fire(new OSCEReceiver<String>() {
+									requests.patientInRoleRequestNonRoo().savePatientInRole(osceDayProxy.getId(), tempOscePostProxy.getId(), patientInSemesterProxy.getId(), roleSubViewSelected.getRoleProxy().getId(), roleSubViewSelected.getDualSPPatientSupportive()).fire(new OSCEReceiver<String>() {
 
 										@Override
 										public void onSuccess(String response) {
