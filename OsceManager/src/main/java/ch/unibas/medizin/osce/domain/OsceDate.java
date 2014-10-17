@@ -170,7 +170,7 @@ public class OsceDate {
 			 
 			 List<TrainingDate> trainingDateList = TrainingDate.findTrainingDateOfSemesterOrderByDateDesc(semId);
 			 
-			 if(osceDateList!=null && trainingDateList!=null){
+			 if((osceDateList!=null && osceDateList.size() > 0 ) && (trainingDateList!=null && trainingDateList.size()> 0 )){
 				 TrainingDate tDate =trainingDateList.get(0);
 				 OsceDate oscedate = osceDateList.get(0);
 				 
@@ -180,7 +180,7 @@ public class OsceDate {
 					 return false;
 				 }
 			 }else{
-				 return null;
+				 return true;
 			 }
 		 }catch (Exception e) {
 			 Log.error(e.getMessage(),e);

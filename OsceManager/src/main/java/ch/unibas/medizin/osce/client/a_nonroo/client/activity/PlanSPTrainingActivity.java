@@ -203,11 +203,15 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 				if(response!=null){
 					semesterProxy = response;
 					
+					totalOsceDateCreated=0;
+					
 					if(semesterProxy.getOsceDates()!=null){
 						totalOsceDateCreated=semesterProxy.getOsceDates().size();
 					}
 					Set<TrainingBlockProxy> setTrainingBlockProxy =semesterProxy.getTrainingBlocks();
 				
+					totalTrainingDateCreated=0;
+					
 					if(setTrainingBlockProxy!=null){
 						
 						for (Iterator iterator = setTrainingBlockProxy.iterator(); iterator.hasNext();) {
@@ -274,6 +278,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	private void initializeViewFromGivenDateToEndOfMonth(Date date) {
 		
 		showApplicationLoading(true);
+		firstBlockDate=null;
 		requests.trainingDateRequestNonRoo().findTrainingDatesFromGivenDateToEndOfMonth(date,semesterProxy.getId()).with("trainingBlock").fire(new OSCEReceiver<List<TrainingDateProxy>>() {
 
 			@Override
@@ -1652,6 +1657,8 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	
 	@SuppressWarnings("deprecation")
 	private void checkUserHasDefinedAtleastBothDate() {
+
+		Log.info("sem id is " + semesterProxy.getId());
 		
 		if(totalOsceDateCreated <= 0 && totalTrainingDateCreated <= 0 ){
 			

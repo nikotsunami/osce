@@ -346,7 +346,7 @@ public class Semester {
 			if(patientInSemsList==null){
 				return;
 			}
-			StringBuilder sql = new StringBuilder("INSERT INTO `patient_in_semester` (`id`,`accepted`,`value`,`version`,`person`,`semester`,`standardized_patient`) VALUES ");
+			//StringBuilder sql = new StringBuilder("INSERT INTO `patient_in_semester` (`id`,`accepted`,`value`,`version`,`person`,`semester`,`standardized_patient`) VALUES ");
 			
 			for(PatientInSemester patientInSem : patientInSemsList){
 				

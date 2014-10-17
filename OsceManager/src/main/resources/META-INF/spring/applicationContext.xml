@@ -48,7 +48,7 @@
         <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
     
-     <!-- <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="osceDataSource">
+     <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="osceDataSource">
         <property name="driverClassName" value="${database.driverClassName}"/>
         <property name="url" value="${database.url}"/>
         <property name="username" value="${database.username}"/>
@@ -60,9 +60,9 @@
         <property name="numTestsPerEvictionRun" value="3"/>
         <property name="minEvictableIdleTimeMillis" value="1800000"/>
         <property name="validationQuery" value="SELECT 1"/>
-    </bean> -->
+    </bean>
     
-   <!--   <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="spportalDataSource">
+   <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="spportalDataSource">
         <property name="driverClassName" value="${spportal.database.driverClassName}"/>
         <property name="url" value="${spportal.database.url}"/>
         <property name="username" value="${spportal.database.username}"/>
@@ -74,49 +74,59 @@
         <property name="numTestsPerEvictionRun" value="3"/>
         <property name="minEvictableIdleTimeMillis" value="1800000"/>
         <property name="validationQuery" value="SELECT 1"/>
-    </bean> -->
+    </bean>
     
-  	  <bean id="persistenceUnitManager" class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager" >
+  	 <!--  <bean id="persistenceUnitManager" class="org.springframework.orm.jpa.persistenceunit.DefaultPersistenceUnitManager" >
         <property name="persistenceXmlLocations">
-            <!-- <list value-type="java.lang.String">classpath*:META-INF/persistence.xml</list> -->
+            <list value-type="java.lang.String">classpath*:META-INF/persistence.xml</list>
             <list><value type="java.lang.String">classpath*:META-INF/persistence.xml</value></list>
         </property>
-         <!-- <property name="dataSources">
+         <property name="dataSources">
             <map>
                 <entry key="osceDataSource" value-ref="osceDataSource" />
                 <entry key="spportalDataSource" value-ref="spportalDataSource" />
             </map>
         </property>
         <property name="defaultDataSource" ref="osceDataSource" />
-        <property name="defaultPersistenceUnitRootLocation" value="persistenceUnit"/> -->
-     </bean>
+        <property name="defaultPersistenceUnitRootLocation" value="persistenceUnit"/>
+     </bean> -->
      
    <!--data store  -->
     
      <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
+        <property name="persistenceUnitName" value="persistenceUnit"/>
+        <property name="dataSource" ref="osceDataSource"/>
+    </bean>
+    
+     <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="spportalEntityManagerFactory">
+        <property name="persistenceUnitName" value="spportalPersistenceUnit"/>
+        <property name="dataSource" ref="spportalDataSource"/>
+    </bean>
+    
+     <!-- <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
      <property name="persistenceUnitManager" ref="persistenceUnitManager" />
         <property name="persistenceUnitName" value="persistenceUnit"/>
-        <!-- <property name="dataSource" ref="osceDataSource"/> -->
-        <!-- <property name="persistenceUnitManager" ref="persistenceUnitManager" />
+        <property name="dataSource" ref="osceDataSource"/>
+        <property name="persistenceUnitManager" ref="persistenceUnitManager" />
          <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
                 <property name="showSql" value="true" />
                 <property name="generateDdl" value="false" />
             </bean>    
-        </property>    --> 
+        </property>    
     </bean>
 
  	<bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="spportalEntityManagerFactory">
         <property name="persistenceUnitManager" ref="persistenceUnitManager" />
         <property name="persistenceUnitName" value="spportalPersistenceUnit"/>
-        <!-- <property name="dataSource" ref="spportalDataSource"/> -->
-         <!-- <property name="jpaVendorAdapter">
+        <property name="dataSource" ref="spportalDataSource"/>
+         <property name="jpaVendorAdapter">
             <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
                 <property name="showSql" value="true" />
                 <property name="generateDdl" value="true" />
             </bean>
-        </property> -->
-    </bean>
+        </property>
+    </bean> -->
     
  	<bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>

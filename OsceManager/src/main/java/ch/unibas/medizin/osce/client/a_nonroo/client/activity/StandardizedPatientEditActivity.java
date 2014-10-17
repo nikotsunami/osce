@@ -76,7 +76,8 @@ StandardizedPatientEditView.Delegate {
 	
 	private DMZSyncServiceAsync dmxSyncService = null;
 	
-
+	private StandardizedPatientProxy savedSp;
+	
 	public StandardizedPatientEditActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
 		this.requests = requests;
@@ -394,15 +395,23 @@ requests.professionRequest().findAllProfessions().
 					@Override
 					public void onSuccess(Object response) {
 						if (response instanceof StandardizedPatientProxy) {
+							savedSp = ((StandardizedPatientProxy)response);
 							AnamnesisFormProxy form = ((StandardizedPatientProxy) response).getAnamnesisForm();
 							Long anamnesisFormId = form.getId();
-							requests.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisFormId).fire();
+							requests.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisFormId).fire(new OSCEReceiver<Void>() {
+
+								@Override
+								public void onSuccess(Void response) {
+									//This method insert data for sp in spportal database
+									if(isCreatingSP){
+										insertStandardizedPatientDetailsInSPportal(savedSp);
+									}
+									
+								}
+							});
 							Log.info("StandardizedPatient successfully saved.");
 							save = true;
-							//This method insert data for sp in spportal database
-							if(isCreatingSP){
-								insertStandardizedPatientDetailsInSPportal(((StandardizedPatientProxy) response));
-							}
+							
 							placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.NEW));
 							//saveDescription();
 						} else {

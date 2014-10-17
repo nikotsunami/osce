@@ -57,9 +57,11 @@ public class SpTrainingDate {
 		
 		log.info("finding trainingDate based on date and block id");
 		 
-		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+		/* EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
 
-		 EntityManager em = emFactory.createEntityManager();
+		 EntityManager em = emFactory.createEntityManager();*/
+		 
+		 EntityManager em = entityManager();
 		 
 		 String queryString ="select td from SpTrainingDate td where td.trainingDate= :trainingdate AND td.isAfternoon="+isAfternoon +" AND td.trainingBlock.id="+trainingBlockId;
 		 

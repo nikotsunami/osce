@@ -161,10 +161,10 @@ public class SpStandardizedPatient {
 		
 		 log.info("finding All sps count who edited their data");
 		 
-		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+		/* EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
 
-		 EntityManager em = emFactory.createEntityManager();
-		 
+		 EntityManager em = emFactory.createEntityManager();*/
+		 EntityManager em = entityManager();
 		 String queryString ="select sp from SpStandardizedPatient sp where sp.person.changed=1";
 		 
 		 TypedQuery<SpStandardizedPatient> query =em.createQuery(queryString,SpStandardizedPatient.class);
@@ -179,9 +179,11 @@ public class SpStandardizedPatient {
 			
 		 log.info("finding All sps who edited their data");
 		 
-		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+		/* EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
 
-		 EntityManager em = emFactory.createEntityManager();
+		 EntityManager em = emFactory.createEntityManager();*/
+		 
+		 EntityManager em =entityManager();
 		 
 		 String queryString ="select sp from SpStandardizedPatient sp where sp.person.changed=1";
 		 
@@ -209,9 +211,11 @@ public class SpStandardizedPatient {
 		
 		log.info("finding All AnamnesisChecksValues based on form id : " + anamnesisFormId);
 		 
-		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+		/* EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
 
-		 EntityManager em = emFactory.createEntityManager();
+		 EntityManager em = emFactory.createEntityManager();*/
+		 
+		 EntityManager em =entityManager();
 		 
 		 String queryString ="SELECT a FROM SpAnamnesisChecksValue a WHERE a.anamnesischeck.text in (" + titleText + ") AND a.anamnesisform.id = " + anamnesisFormId + " ORDER BY a.anamnesischeck.text";
 
@@ -451,9 +455,11 @@ public class SpStandardizedPatient {
 		
 		log.info("finding All NEW AnamnesisChecksValues based on form id : " + anamnesisFormId);
 		 
-		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+		/* EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
 
-		 EntityManager em = emFactory.createEntityManager();
+		 EntityManager em = emFactory.createEntityManager();*/
+		 
+		 EntityManager em= entityManager();
 		 
 		 String queryString ="SELECT a FROM SpAnamnesisChecksValue a WHERE a.anamnesisform.id = " + anamnesisFormId + " ORDER BY a.anamnesischeck.text";
 
@@ -468,9 +474,11 @@ public class SpStandardizedPatient {
 		
 		log.info("finding sp based on id : " + id);
 		 
-		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+		/* EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
 
-		 EntityManager em = emFactory.createEntityManager();
+		 EntityManager em = emFactory.createEntityManager();*/
+		 
+		 EntityManager em= entityManager();
 		 
 		 String queryString ="SELECT sp FROM SpStandardizedPatient sp WHERE sp.id="+id;
 

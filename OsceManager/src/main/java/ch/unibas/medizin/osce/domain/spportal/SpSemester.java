@@ -71,10 +71,12 @@ public class SpSemester {
     	
     	log.info("finding semester based on year and semester");
 		 
-		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+		 /*EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
 
-		 EntityManager em = emFactory.createEntityManager();
+		 EntityManager em = emFactory.createEntityManager();*/
 		 
+    	 EntityManager em =entityManager();
+    	 
 		 String queryString ="select s from SpSemester s where s.calYear="+calYear +" AND s.semester="+semester;
 		 
 		 TypedQuery<SpSemester> query =em.createQuery(queryString,SpSemester.class);

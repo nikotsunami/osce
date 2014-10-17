@@ -85,9 +85,9 @@
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy"/>
             <property name="hibernate.connection.charSet" value="UTF-8"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/osce" />
-            <property name="hibernate.connection.username" value="root" />
-            <property name="hibernate.connection.password" value="" />
+           <!--  <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/osce" /> -->
+            <!-- <property name="hibernate.connection.username" value="root" /> -->
+            <!-- <property name="hibernate.connection.password" value="" /> -->
            <!--  <property name="packagesToScan" value="ch.unibas.medizin.osce.domain.*" /> -->
             <!-- <property name="hibernate.generate_statistics" value="true" />
         	<property name="hibernate.cache.use_structured_entries" value="true" />
@@ -139,9 +139,9 @@
             <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy"/>
             <property name="hibernate.connection.charSet" value="UTF-8"/>
              <!-- <property name="packagesToScan" value="ch.unibas.medizin.osce.spportal.domain.*"/> -->
-             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/spportal" />
-            <property name="hibernate.connection.username" value="root" />
-            <property name="hibernate.connection.password" value="" />
+             <!-- <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/spportal" /> -->
+            <!-- <property name="hibernate.connection.username" value="root" /> -->
+            <!-- <property name="hibernate.connection.password" value="" /> -->
              <!-- <property name="hibernate.generate_statistics" value="true" />
        		 <property name="hibernate.cache.use_structured_entries" value="true" />
           	<property name="hibernate.show_sql" value="true" />

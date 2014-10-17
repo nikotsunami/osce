@@ -57,10 +57,12 @@ public class SpOsceDate {
 		
 		log.info("finding osce Date based on date and semster data");
 		 
-		EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+		/*EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
 
-		EntityManager em = emFactory.createEntityManager();
+		EntityManager em = emFactory.createEntityManager();*/
 		 
+		EntityManager em = entityManager();
+		
 		String queryString ="select od from SpOsceDate od where od.osceDate= :oscedate AND od.semester.calYear="+calYear +" AND od.semester.semester="+ordinal;
 		 
 		TypedQuery<SpOsceDate> query =em.createQuery(queryString,SpOsceDate.class);

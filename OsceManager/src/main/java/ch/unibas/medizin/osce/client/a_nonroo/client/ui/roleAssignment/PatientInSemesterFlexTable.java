@@ -106,6 +106,8 @@ public class PatientInSemesterFlexTable extends FlexTable {
 		//		for (int j = 0; j < headers.length; j++) {
 		//				RowFormatter rowFormatter = new RowFormatter();
 		this.getRowFormatter().addStyleName(i + 1, patientInSemesterData.getRowSetColor());
+		this.getCellFormatter().addStyleName(i + 1, 0, "spNotAccepted");
+		this.getCellFormatter().addStyleName(i + 1, 1, "leftPadding");
 		patientInSemesterDatas.add(patientInSemesterData);
 		
 		

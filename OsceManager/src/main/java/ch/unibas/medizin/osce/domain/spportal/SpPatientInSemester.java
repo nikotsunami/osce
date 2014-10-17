@@ -66,10 +66,12 @@ public class SpPatientInSemester {
 		
 		log.info("finding patient in semester based on semester id : " + semId);
 		 
-		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+		 /*EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
 
-		 EntityManager em = emFactory.createEntityManager();
+		 EntityManager em = emFactory.createEntityManager();*/
 		 
+		EntityManager em  =entityManager();
+		
 		 String queryString ="select sp from SpPatientInSemester sp where sp.semester.id="+semId + " ORDER BY id DESC";
 		 
 		 TypedQuery<SpPatientInSemester> query =em.createQuery(queryString,SpPatientInSemester.class);
@@ -89,10 +91,12 @@ public class SpPatientInSemester {
 		try{
 			log.info("finding patient in semester based on sem id : " + semId);
 			 
-			 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+			/* EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
 
-			 EntityManager em = emFactory.createEntityManager();
+			 EntityManager em = emFactory.createEntityManager();*/
 			 
+			EntityManager em =entityManager();
+			
 			 String sql = "SELECT pis FROM SpPatientInSemester AS pis WHERE pis.id >" + lastspPatientInSemId + " AND pis.semester.id="+semId;
 		     
 			 TypedQuery<SpPatientInSemester> query = em.createQuery(sql, SpPatientInSemester.class);

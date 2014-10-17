@@ -2088,6 +2088,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		patientInSemesterProxy.setSemester(semesterProxy);
 		patientInSemesterProxy.setStandardizedPatient(standardizedPatientProxy);
 		patientInSemesterProxy.setAccepted(false);
+		patientInSemesterProxy.setSpPortalPersonId(standardizedPatientProxy.getSpPortalPersonId());
 
 		Log.info("Map Size: " + manualStdPatientInSemesterAssignmentPopupViewImpl.getPatientInSemesterMap().size());
 		patientInSemesterRequest.persist().using(patientInSemesterProxy).fire(new OSCEReceiver<Void>(manualStdPatientInSemesterAssignmentPopupViewImpl.getPatientInSemesterMap()) 
@@ -3820,6 +3821,8 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 								//Starting survey as all criteria satisfied.
 								proceedToStartSurvey();		
 							}
+						}else{
+							showErrorMessageToUser("System could not check whether any training date is after osce date");
 						}
 					}
 

@@ -54,10 +54,12 @@ public class SpTrainingBlock {
 		
 		log.info("finding training block based on year and semester data");
 		 
-		 EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
+		/* EntityManagerFactory emFactory=Persistence.createEntityManagerFactory("spportalPersistenceUnit");
 
-		 EntityManager em = emFactory.createEntityManager();
+		 EntityManager em = emFactory.createEntityManager();*/
 		 
+		EntityManager em = entityManager();
+		
 		 String queryString ="select tb from SpTrainingBlock tb where tb.startDate= :startDate AND tb.semester.calYear="+calYear + " AND tb.semester.semester="+ordinal;
 		 
 		 TypedQuery<SpTrainingBlock> query =em.createQuery(queryString,SpTrainingBlock.class);

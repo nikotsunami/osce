@@ -155,6 +155,7 @@ public class PatientInSemester {
 				patientInSemester.setSemester(semester);
 				patientInSemester.setStandardizedPatient(standardizedPatient);
 				patientInSemester.setAccepted(false);
+				patientInSemester.setSpPortalPersonId(standardizedPatient.getSpPortalPersonId());
 				patientInSemester.persist();
 			}
 			return true;
