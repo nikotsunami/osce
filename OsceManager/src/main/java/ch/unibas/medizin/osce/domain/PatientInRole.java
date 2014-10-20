@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
@@ -26,6 +27,9 @@ import ch.unibas.medizin.osce.shared.OsceSecurityType;
 @RooToString
 @RooEntity
 public class PatientInRole {
+	
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
 	
 	private static Logger Log = Logger.getLogger(PatientInRole.class);
 	
@@ -719,4 +723,20 @@ public class PatientInRole {
  		else
  			return null;
  	}
+
+	public static List<PatientInRole> findPatientInRoleBasedOnPatientInSemId(String idOfPIS) {
+		Log.info("finding Patient in role based on patientInSem Ids");
+		EntityManager em = PatientInRole.entityManager();
+ 		String sql = "SELECT pir FROM PatientInRole pir WHERE pir.patientInSemester.id IN ( "+ idOfPIS + " ) AND pir.oscePost IS NOT NULL";
+ 		TypedQuery<PatientInRole> query = em.createQuery(sql, PatientInRole.class);
+ 		
+ 		List<PatientInRole> resultList = query.getResultList();
+ 		
+ 		Log.info("Query is " + sql);
+ 		
+ 		if (query.getResultList().size()==0)
+ 			return null;
+ 		else
+ 			return resultList;
+	}
 }

@@ -162,4 +162,9 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		this.getElement().getStyle().setZIndex(3);
 		super.show();
 	}
+
+	public HorizontalPanel getHp() {
+		return hp;
+	}
+	
 }

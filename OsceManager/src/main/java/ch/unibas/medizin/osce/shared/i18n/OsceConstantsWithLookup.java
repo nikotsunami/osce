@@ -372,5 +372,59 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String manualOsceCloseError();
 	
 	public String DUALSP();
+	
+	//Month
+	public String JANUARY();
+	
+	public String FEBRUARY();
+	
+	public String MARCH();
+	
+	public String APRIL();
+	
+	public String MAY();
+	
+	public String JUNE();
+	
+	public String JULY();
+	
+	public String AUGUST();
+	
+	public String SEPTEMBER();
+	
+	public String OCTOBER();
+	
+	public String NOVEMBER();
+	
+	public String DECEMBER();
+	
+	//Weekdays
+	public String MONDAY();
+	
+	public String MON(); 
+	
+	public String TUESDAY();
+	
+	public String TUE();
+	
+	public String WEDNESDAY();
+	
+	public String WED();
+	
+	public String THURSDAY();
+	
+	public String THUR();
+	
+	public String FRIDAY(); 
+
+	public String FRI(); 
+	
+	public String SATURDAY(); 
+	
+	public String SAT();
+	
+	public String SUNDAY(); 
+	
+	public String SUN(); 
 }
 

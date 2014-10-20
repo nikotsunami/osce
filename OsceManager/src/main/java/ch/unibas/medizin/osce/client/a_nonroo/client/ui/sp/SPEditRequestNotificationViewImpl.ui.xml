@@ -1,0 +1,51 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
+  xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
+  xmlns:b='urn:import:com.google.gwt.user.cellview.client'
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role' xmlns:resources="urn:import:ch.unibas.medizin.osce.client.style.resources">
+
+<ui:style src="../../styles.css">
+.margin-top
+{
+		margin-top: 5px;				
+}
+.rootPanelStyle
+{
+	padding: 10px;
+	border: 1px solid grey;
+	box-shadow: 2px 2px 2px grey;
+}
+.headerLabelStyle
+{
+	margin-top: 10px;
+	margin-bottom: 5px;
+}
+.tableStyle
+{
+	margin-bottom: 5px;
+	width: 100%;
+}
+	
+</ui:style>
+
+
+ <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>	
+<g:HTMLPanel addStyleNames="{style.rootPanelStyle}">
+		<g:Label ui:field="headerLabel" addStyleNames="{style.headerLabelStyle}"></g:Label>
+		<resources:AdvanceCellTable ui:field="table" addStyleNames="{style.standardTable}"></resources:AdvanceCellTable>
+			<div class="{style.controls} {style.controlsleft}">					
+				<b:SimplePager ui:field="pager" display="{table}" />
+			</div>		
+		<g:Label ui:field="allowEditLabel"></g:Label>
+		<g:HorizontalPanel ui:field="buttonContainer" spacing="5" addStyleNames="{style.margin-top}">
+			<my:IconButton ui:field="allowButton" icon="check"></my:IconButton>
+			<my:IconButton ui:field="denyButton" icon="cancel"></my:IconButton>
+			<my:IconButton ui:field="decideLaterButton" icon="close"></my:IconButton>
+		</g:HorizontalPanel>
+	
+</g:HTMLPanel> 
+</ui:UiBinder>

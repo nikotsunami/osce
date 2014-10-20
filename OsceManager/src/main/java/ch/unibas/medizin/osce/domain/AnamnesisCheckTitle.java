@@ -1,8 +1,13 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
+import javax.persistence.OneToMany;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -12,11 +17,18 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.allen_sauer.gwt.log.client.Log;
+
+import ch.unibas.medizin.osce.domain.spportal.SpAnamnesisCheckTitle;
+
 @RooJavaBean
 @RooToString
 @RooEntity
 public class AnamnesisCheckTitle {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
     @NotNull
     @Size(max = 255)
     private String text;
@@ -24,6 +36,9 @@ public class AnamnesisCheckTitle {
     @NotNull
     private Integer sort_order;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anamnesisCheckTitle")
+   	private Set<AnamnesisCheck> anamnesisChecks = new HashSet<AnamnesisCheck>();
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -179,4 +194,65 @@ public class AnamnesisCheckTitle {
 		TypedQuery<Integer> q = em.createQuery(sql, Integer.class);
 		return q.getSingleResult();
 	}
+	
+	public static Boolean saveAnamnesisCheckTitleInSpPortal(AnamnesisCheckTitle anamnesisCheckTitle){
+		Log.info("saving anamesis check title data in spportal");
+		try{
+			SpAnamnesisCheckTitle spAnamnesisCheckTitle =new SpAnamnesisCheckTitle();
+			spAnamnesisCheckTitle.setSort_order(anamnesisCheckTitle.getSort_order());
+			spAnamnesisCheckTitle.setText(anamnesisCheckTitle.getText());
+			spAnamnesisCheckTitle.setId(anamnesisCheckTitle.getId());
+			spAnamnesisCheckTitle.persist();
+			
+		}catch (Exception e) {
+			Log.error(e.getMessage(), e);
+			return null;
+		}
+		return true;
+	}
+	
+	public static Boolean edittitleInSpportal(Long anamnesisCheckTitleId){
+		Log.info("editing anamesis check title data in spportal");
+		try{
+			
+				AnamnesisCheckTitle anCheckTitle= AnamnesisCheckTitle.findAnamnesisCheckTitle(anamnesisCheckTitleId);
+			
+				SpAnamnesisCheckTitle spAnamnesisCheckTitle= SpAnamnesisCheckTitle.findAnamnisisCheckTitleBasedonId(anamnesisCheckTitleId);
+				
+				if(spAnamnesisCheckTitle!=null){
+				
+					spAnamnesisCheckTitle.setSort_order(anCheckTitle.getSort_order());
+				
+					spAnamnesisCheckTitle.setText(anCheckTitle.getText());
+				
+					spAnamnesisCheckTitle.persist();
+				
+				return true;
+			}else{
+				return null;
+			}
+		}catch (Exception e) {
+			Log.error(e.getMessage(), e);
+			return null;
+		}
+	}
+	
+	public static Boolean deleteTitleFromSpPortal(Long deletedTitleId){
+		Log.info("deleting anamesis check title data in spportal");
+		try{
+			
+			SpAnamnesisCheckTitle spAnamnesisCheckTitle= SpAnamnesisCheckTitle.findAnamnisisCheckTitleBasedonId(deletedTitleId);
+			
+			if(spAnamnesisCheckTitle!=null){
+				spAnamnesisCheckTitle.remove();
+				return true;
+			}else{
+				return false;
+			}
+	}catch (Exception e) {
+		Log.error(e.getMessage(), e);
+		return null;
+	}
+	}
+		
 }

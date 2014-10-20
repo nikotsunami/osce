@@ -32,4 +32,6 @@ public interface PatientInSemesterRequestNonRoo extends RequestContext {
 	abstract Request<PatientInSemesterProxy> findPisBySemesterSp(Long semesterId,Long standardizedPatientId);
 
 	abstract Request<Boolean> updatePatientInSemesterForOsceDay(Long patientInSemsterId, List<Long> osceDayIdList);
+
+	abstract  Request<Boolean>  assignSPToSemester(Long semId);
 }

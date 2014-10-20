@@ -18,4 +18,10 @@ public interface NationalityRequestNonRoo extends RequestContext {
 	abstract Request<List<NationalityProxy>> findNationalitiesByName(String name, int firstResult, int maxResults);
 	
 	abstract Request<Integer> checkNationnality(String name);
+
+	abstract Request<Boolean> saveNationalityInSpPortal(NationalityProxy nation);
+
+	abstract Request<Boolean> editNationalityInSpPortal(NationalityProxy nation,String value);
+
+	abstract Request<Boolean> deleteNatinalityInSpPortal(NationalityProxy nation);
 }

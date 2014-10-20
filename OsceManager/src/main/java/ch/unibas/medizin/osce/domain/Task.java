@@ -2,7 +2,9 @@ package ch.unibas.medizin.osce.domain;
 
 import java.util.Date;
 
+import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -18,6 +20,10 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooEntity
 public class Task {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
+	
     @NotNull
     @Size(min = 3, max = 255)
     private String name;

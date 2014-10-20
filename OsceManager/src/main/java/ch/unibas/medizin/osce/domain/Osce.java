@@ -19,6 +19,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
@@ -55,6 +56,9 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 @RooToString
 @RooEntity
 public class Osce {
+	
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
 	
     @Enumerated
     private StudyYears studyYear;

@@ -61,4 +61,10 @@ public class OsMaConstant {
 	
 	public static final SafeHtml COLOR_PICKER_ICON = new SafeHtmlBuilder().appendHtmlConstant("<span class=\"ui-icon ui-icon-triangle-1-s\"></span>").toSafeHtml();
 	
+	public static int RANDOM_STRING_LENGTH=64;
+
+	public static int MAX_ROLE_NAME_DURING_SUGGESTION=3;
+	
+	public static String FILE_DOWNLOAD_SERVLET_HIT_PATH="downloadRemoteFile/";
+	
 }

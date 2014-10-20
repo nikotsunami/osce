@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 
@@ -19,6 +20,9 @@ import ch.unibas.medizin.osce.shared.LangSkillLevel;
 @RooEntity
 public class LangSkill {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
 	@Enumerated
     @NotNull
     private LangSkillLevel skill;

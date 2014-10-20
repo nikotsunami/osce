@@ -1,20 +1,31 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
+import java.util.List;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckDetailsViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceRequest;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
+import com.google.gwt.requestfactory.shared.BaseProxy;
+import com.google.gwt.requestfactory.shared.InstanceRequest;
 import com.google.gwt.requestfactory.shared.Receiver;
+import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
@@ -34,7 +45,7 @@ AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
 
 	private AnamnesisCheckDetailsPlace place;
 	private AnamnesisCheckProxy anamnesisCheckProxy;
-
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 
 	public AnamnesisCheckDetailsActivity(AnamnesisCheckDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
@@ -155,42 +166,59 @@ AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
 				.confirm("Really delete this entry? You cannot undo this change.")) {
 			return;
 		}
-		requests.anamnesisCheckRequest().remove().using(anamnesisCheckProxy)
-				.fire(new Receiver<Void>() {
+		requests.anamnesisCheckRequestNonRoo().deleteAnamnesisCheckFromSpPortal(anamnesisCheckProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
-					public void onSuccess(Void ignore) {
-						// if (widget == null) {
-						// return;
-						// }
-						// TODO
-						if (anamnesisCheckProxy.getAnamnesisCheckTitle() != null
-								&& anamnesisCheckProxy.getSort_order() != null) {
-							requests.anamnesisCheckRequestNonRoo().reSorting(
-									anamnesisCheckProxy
-											.getAnamnesisCheckTitle(),
-									anamnesisCheckProxy.getSort_order()).fire(
-									new Receiver<Void>() {
+			@Override
+			public void onSuccess(Boolean response) {
+				if(response==false){
+					showErrorMessageToUser("System could not delete AnamnesisCheck value form spportal for id :" + anamnesisCheckProxy.getId());
+				}else{
+					requests.anamnesisCheckRequest().remove().using(anamnesisCheckProxy)
+					.fire(new Receiver<Void>() {
 
-										@Override
-										public void onSuccess(Void response) {
-											if (widget != null) {
-												widget.setWidget(null);
+						public void onSuccess(Void ignore) {
+							// if (widget == null) {
+							// return;
+							// }
+							// TODO
+							if (anamnesisCheckProxy.getAnamnesisCheckTitle() != null
+									&& anamnesisCheckProxy.getSort_order() != null) {
+								requests.anamnesisCheckRequestNonRoo().reSorting(
+										anamnesisCheckProxy
+												.getAnamnesisCheckTitle(),
+										anamnesisCheckProxy.getSort_order()).fire(
+										new Receiver<Void>() {
+
+											@Override
+											public void onSuccess(Void response) {
+												if (widget != null) {
+													widget.setWidget(null);
+												}
+												placeController
+														.goTo(new AnamnesisCheckPlace(
+																"AnamnesisCheckPlace!DELETED"));
 											}
-											placeController
-													.goTo(new AnamnesisCheckPlace(
-															"AnamnesisCheckPlace!DELETED"));
-										}
 
-									});
-						} else {
-							if (widget != null) {
-								widget.setWidget(null);
+										});
+							} else {
+								if (widget != null) {
+									widget.setWidget(null);
+								}
+								placeController.goTo(new AnamnesisCheckPlace(
+										"AnamnesisCheckPlace!DELETED"));
 							}
-							placeController.goTo(new AnamnesisCheckPlace(
-									"AnamnesisCheckPlace!DELETED"));
-						}
 
-					}
-				});
+						}
+					});
+				}
+				
+			}
+		});
+		
+	}
+	
+	public void showErrorMessageToUser(String message){
+		final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
+		confirmationDialogBox.showConfirmationDialog(message);
 	}
 }

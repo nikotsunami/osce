@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
@@ -16,6 +17,10 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooEntity
 public class Topic {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
+	
 	@Size(max = 1024)
 	private String topicDesc;
 	

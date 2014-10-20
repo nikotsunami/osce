@@ -28,13 +28,17 @@ import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
+import ch.unibas.medizin.osce.client.managed.request.SPPortalPersonProxy;
+import ch.unibas.medizin.osce.client.managed.request.SPPortalPersonRequest;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
+import ch.unibas.medizin.osce.shared.EditRequestState;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.scaffold.StandardizedPatientRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -72,7 +76,8 @@ StandardizedPatientEditView.Delegate {
 	
 	private DMZSyncServiceAsync dmxSyncService = null;
 	
-
+	private StandardizedPatientProxy savedSp;
+	
 	public StandardizedPatientEditActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
 		this.requests = requests;
@@ -103,6 +108,7 @@ StandardizedPatientEditView.Delegate {
 	}
 	
 	private DescriptionEditView descriptionView;
+	private boolean isCreatingSP;
 	
 	// use this to check if some value has changed since editing has started
 	private boolean changed() {
@@ -242,6 +248,7 @@ requests.professionRequest().findAllProfessions().
 //		DescriptionRequest descriptionRequest = requests.descriptionRequest();
 
 		if(standardizedPatient == null) {
+			isCreatingSP=true;
 			standardizedPatient = request.create(StandardizedPatientProxy.class);
 			standardizedPatient.setStatus(StandardizedPatientStatus.ACTIVE);
 			
@@ -259,7 +266,7 @@ requests.professionRequest().findAllProfessions().
 			view.setEditTitle(false);
 			Log.info("create");
 		} else {
-			
+			isCreatingSP=false;
 			standardizedPatient = request.edit(standardizedPatient);
 			//editorDriver.edit(standardizedPatient, request);
 			description = standardizedPatient.getDescriptions();
@@ -388,11 +395,23 @@ requests.professionRequest().findAllProfessions().
 					@Override
 					public void onSuccess(Object response) {
 						if (response instanceof StandardizedPatientProxy) {
+							savedSp = ((StandardizedPatientProxy)response);
 							AnamnesisFormProxy form = ((StandardizedPatientProxy) response).getAnamnesisForm();
 							Long anamnesisFormId = form.getId();
-							requests.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisFormId).fire();
+							requests.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisFormId).fire(new OSCEReceiver<Void>() {
+
+								@Override
+								public void onSuccess(Void response) {
+									//This method insert data for sp in spportal database
+									if(isCreatingSP){
+										insertStandardizedPatientDetailsInSPportal(savedSp);
+									}
+									
+								}
+							});
 							Log.info("StandardizedPatient successfully saved.");
 							save = true;
+							
 							placeController.goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.NEW));
 							//saveDescription();
 						} else {
@@ -403,7 +422,38 @@ requests.professionRequest().findAllProfessions().
 			}
 		});
 	}
-	
+	/**
+	 * This method insert data in to sp portal data base for standardized patient <spec-india>
+	 * @param standardizedPatient
+	 */
+	private void insertStandardizedPatientDetailsInSPportal(StandardizedPatientProxy standardizedPatient) {
+
+		/*SPPortalPersonRequest request = requests.sPPortalPersonRequest();
+		
+		SPPortalPersonProxy spportalPerson = request.create(SPPortalPersonProxy.class);
+		spportalPerson.setEmail(standardizedPatient.getEmail());
+		spportalPerson.setActivationUrl("ABCDEFGHIJKL");
+		spportalPerson.setExpiration(new Date());
+		spportalPerson.setIsFirstLogin(true);
+		spportalPerson.setEditRequestState(EditRequestState.NONE);
+		request.persist().using(spportalPerson).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				Log.info("Standardized Patient details perststed in SP portal database");
+				
+			}
+		});*/
+		
+		requests.spPortalPersonRequestNonRoo().insertStandardizedPatientDetailsInSPportal(standardizedPatient.getId()).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				Log.info("Standardized Patient details perststed in SP portal database. Also mail has sent to standardized patient");
+			}
+		});
+		
+	}
 	public void storeDisplaySettings() {
 		int detailsTab = view.getSelectedDetailsTab();
 		userSettings.setValue("detailsTab", detailsTab);

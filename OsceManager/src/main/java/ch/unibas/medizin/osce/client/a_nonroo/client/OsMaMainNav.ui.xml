@@ -115,6 +115,7 @@
 					<g:Anchor ui:field="circuit"  addStyleNames="{style.paddingLeft28px}"></g:Anchor>
 					<g:Anchor ui:field="manualOsce"  addStyleNames="{style.paddingLeft28px}"></g:Anchor>
 					<g:Anchor ui:field="students" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
+					<g:Anchor ui:field="planSPTraining" addStyleNames="{style.paddingLeft28px}"></g:Anchor>
 				</g:VerticalPanel>
 				
 			<g:Label ui:field="osceAssignmentsHeader" addStyleNames="{style.label}">Osce Assignments</g:Label>

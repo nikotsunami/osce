@@ -28,4 +28,9 @@ public interface AnamnesisCheckTitleRequestNonRoo extends RequestContext{
 
 	//issue sol
 	 abstract Request<Integer> findMaxSortOrder();
+	public abstract Request<Boolean> saveAnamnesisCheckTitleInSpPortal(AnamnesisCheckTitleProxy anamnesisCheckTitle);
+	
+	public abstract Request<Boolean> edittitleInSpportal(Long anamnesisCheckTitleId);
+	
+	public abstract Request<Boolean> deleteTitleFromSpPortal(Long deletedTitleId);
 }

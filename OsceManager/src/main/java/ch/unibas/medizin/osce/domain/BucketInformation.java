@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.domain;
 
 import javax.persistence.EntityManager;
 import javax.persistence.OneToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.springframework.roo.addon.entity.RooEntity;
@@ -16,6 +17,9 @@ import ch.unibas.medizin.osce.shared.EosceStatus;
 @RooEntity
 public class BucketInformation {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
 	private String bucketName;
 	
 	private String accessKey;

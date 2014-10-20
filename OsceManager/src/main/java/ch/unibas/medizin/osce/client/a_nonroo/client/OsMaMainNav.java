@@ -21,6 +21,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.ManualOscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.NationalityPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.PaymentPlace;
+import ch.unibas.medizin.osce.client.a_nonroo.client.place.PlanSPTrainingPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ProfessionPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleAssignmentsDetailsPlace;
@@ -288,6 +289,9 @@ public class OsMaMainNav extends Composite {
 	
 	@UiField
 	Anchor exportOSCE;
+
+	@UiField
+	Anchor planSPTraining;
 
 	private static MainNavUiBinder uiBinder = GWT.create(MainNavUiBinder.class);
 
@@ -763,6 +767,7 @@ public class OsMaMainNav extends Composite {
 		circuit.setText(constants.defineCircuit());
 		statisticsEvaluation.setText(constants.statisticsEvaluation());
 		
+		planSPTraining.setText(constants.planSPTraining());
 		students.setText(constants.importStudentData());
 		examinationSchedule.setText(constants.examinationSchedule());
 		summonings.setText(constants.sendSummonings());
@@ -870,6 +875,12 @@ public class OsMaMainNav extends Composite {
 	void manualOsceClicked(ClickEvent event)
 	{
 		placeController.goTo(new ManualOscePlace("ManualOscePlace", handlerManager, lstSemester.getValue()));
+	}
+	
+	@UiHandler("planSPTraining")
+	void planSPTrainingClicked(ClickEvent event)
+	{
+		placeController.goTo(new PlanSPTrainingPlace("PlanSPTraining",handlerManager,lstSemester.getValue()));
 	}
 	
 	@UiHandler("exportOSCE")

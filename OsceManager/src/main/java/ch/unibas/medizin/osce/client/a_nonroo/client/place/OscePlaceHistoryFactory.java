@@ -92,6 +92,7 @@ public class OscePlaceHistoryFactory {
 	
 	private final ManualOscePlace.Tokenizer manualOscePlace;
 	private final ManualOsceDetailsPlace.Tokenizer manualOsceDetailsPlace;
+	private final PlanSPTrainingPlace.Tokenizer planSPTrainingPlace;
 	
 	@Inject
 	public OscePlaceHistoryFactory(ApplicationRequestFactory requestFactory) {
@@ -175,6 +176,12 @@ public class OscePlaceHistoryFactory {
         
         this.manualOscePlace = new ManualOscePlace.Tokenizer(requestFactory);
         this.manualOsceDetailsPlace = new ManualOsceDetailsPlace.Tokenizer(requestFactory);
+        
+        this.planSPTrainingPlace = new PlanSPTrainingPlace.Tokenizer(requestFactory);
+	}
+	
+	public PlaceTokenizer<PlanSPTrainingPlace> getPlanSPTrainingPlace() {
+		return planSPTrainingPlace;
 	}
 	
 	public PlaceTokenizer<ExportOscePlace> getExportOSCETokenizer() {

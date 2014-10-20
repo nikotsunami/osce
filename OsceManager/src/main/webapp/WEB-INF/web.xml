@@ -68,7 +68,19 @@
     <filter>
         <filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
         <filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+        <init-param>
+            <param-name>entityManagerFactoryBeanName</param-name>
+            <param-value>entityManagerFactory</param-value>
+      </init-param>
     </filter>
+    <filter>
+      <filter-name>Spring OpenEntityManagerInViewFilter2</filter-name>
+      <filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
+      <init-param>
+            <param-name>entityManagerFactoryBeanName</param-name>
+            <param-value>spportalEntityManagerFactory</param-value>
+      </init-param>
+</filter>
     
     <!-- For Authorization -->
     <!-- Uncomment for production mode 
@@ -90,6 +102,11 @@
     
     <filter-mapping>
         <filter-name>Spring OpenEntityManagerInViewFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <filter-mapping>
+        <filter-name>Spring OpenEntityManagerInViewFilter2</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
@@ -372,5 +389,14 @@
     <servlet-mapping>
         <servlet-name>fileServlet</servlet-name>
         <url-pattern>/osMaEntry/gwt/unibas/sp/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RemotefileServlet</servlet-name>
+        <servlet-class>ch.unibas.medizin.osce.server.download.RemoteFileDownloadServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RemotefileServlet</servlet-name>
+        <url-pattern>/downloadRemoteFile/*</url-pattern>
     </servlet-mapping>
 </web-app>

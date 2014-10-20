@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:n="urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp"
+	xmlns:b="urn:import:com.google.gwt.user.cellview.client"
+	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" >
+	<ui:style src="../../styles.css">
+	.description {	}
+	
+	.icon
+	{
+		float: left;
+		margin: 4px;
+	}
+	
+	.icon:hover {
+		cursor: pointer;
+	}
+	
+	.maxWidth {
+		margin-bottom: 8px;
+	}
+	
+	.distanceToTop {
+		margin-top: 16px;
+	}
+	.anamnesisTabStyle {
+			min-height: 420px;
+		}
+	.tableStyle{
+		width: 100%;
+	}
+	 
+	</ui:style>
+	<ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons"></ui:with>
+		
+	
+	<g:HTMLPanel>
+		<g:VerticalPanel addStyleNames="{style.tabStyle}" >
+		
+	<g:HTMLPanel styleName="{style.patientControls}">
+		<g:Image ui:field="patientPanelArrow" styleName="{style.icon}" resource="{uiIcons.triangle1South}"></g:Image>
+		<div  class="{style.controlsright}">
+			<h3 class="{style.header}" style="display:inline"><span ui:field="displayRenderer"></span></h3>
+			<my:IconButton ui:field="closeButton" icon="close"></my:IconButton>
+			<my:IconButton ui:field="discardChangesButton" icon="trash"></my:IconButton>
+			<my:IconButton ui:field="acceptChangesButton" icon="check"/>
+		</div>
+	</g:HTMLPanel>
+
+	<g:DisclosurePanel animationEnabled="true" open="true" ui:field="patientDisclosurePanel" width="100%">
+	
+		 <g:HorizontalPanel ui:field="horizontalPatientPanel"> 
+			<g:TabLayoutPanel ui:field="patientPanel"  barHeight="40"  >
+				 <g:tab> 
+					<g:header>                       
+    	             </g:header> 
+				<g:HTMLPanel addStyleNames="{style.patientDetails}">
+					
+					<table class="{style.fields}" addStyleNames="{style.tableStyle}">
+						<colgroup>
+							<col></col>
+							<col></col>
+							<col></col>
+						</colgroup>
+						<tbody>
+						<tr id="street">
+							<td><span class="{style.label}" ui:field="labelStreet"/></td>
+							<td><span ui:field="streetOldValue"/></td>
+							<td><span ui:field="streetNewValue" /></td>
+							<td rowspan="7">
+								<n:StandardizedPatientMediaSubViewImpl ui:field="standardizedPatientMediaSubViewImplOforOldImage"></n:StandardizedPatientMediaSubViewImpl>
+							</td>
+							<td rowspan="7">
+								<n:StandardizedPatientMediaSubViewImpl ui:field="standardizedPatientMediaSubViewImplOforNewImage"></n:StandardizedPatientMediaSubViewImpl>
+							</td>
+						</tr>
+						<tr id="city">
+							<td><span class="{style.label}" ui:field="labelPLZCity" /></td>
+							<td><span ui:field="postalCodeOldValue" /> <span ui:field="cityOldValue" /></td>
+							<td><span ui:field="postalCodeNewValue" /> <span ui:field="cityNewValue" /></td>
+						</tr>
+						<tr id="telephone">
+							<td><span class="{style.label}" ui:field="labelTelephone" /></td>
+							<td><span ui:field="telephoneOldValue" /></td>
+							<td><span ui:field="telephoneNewValue" /></td>
+						</tr>
+						<tr id="mobile">
+							<td><span class="{style.label}" ui:field="labelMobile" /></td>
+							<td><span ui:field="mobileOldValue" /></td>
+							<td><span ui:field="mobileNewValue" /></td>
+						</tr>
+						<tr id="telephone2">
+							<td><span class="{style.label}" ui:field="labelTelephone2" /></td>
+							<td><span ui:field="telephone2OldValue" /></td>
+							<td><span ui:field="telephone2NewValue" /></td>
+						</tr>
+						<tr id="email">
+							<td><span class="{style.label}" ui:field="labelEmail" /></td>
+							<td><g:Anchor ui:field="emailOldValue" /></td>
+							<td><g:Anchor ui:field="emailNewValue" /></td>
+						</tr>
+						</tbody>
+					</table>
+				</g:HTMLPanel>
+			</g:tab>
+	
+				<g:tab>
+					<g:header>                       
+                	 </g:header> 
+                
+					<g:HTMLPanel addStyleNames="{style.patientDetails}">
+						<table class="{style.fields}" addStyleNames="{style.tableStyle}">
+							<colgroup>
+								<col></col>
+								<col></col>
+							</colgroup>
+							<tbody>
+							<tr id="birthday">
+								<td><span class="{style.label}" ui:field="labelBirthdate" /></td>
+								<td><span ui:field="birthdayOldValue" /></td>
+								<td><span ui:field="birthdayNewValue" /></td>
+							</tr>
+							<tr id="gender">
+								<td><span class="{style.label}" ui:field="labelGender"></span></td>
+								<td><span ui:field="genderOldValue" /></td>
+								<td><span ui:field="genderNewValue" /></td>
+							</tr>
+							<tr id="height">
+								<td><span class="{style.label}" ui:field="labelHeight"></span>
+								</td>
+								<td><span ui:field="heightOldValue" /></td>
+								<td><span ui:field="heightNewValue" /></td>
+							</tr>
+							<tr id="weight">
+								<td><span class="{style.label}" ui:field="labelWeight"></span></td>
+								<td><span ui:field="weightOldValue" /></td>
+								<td><span ui:field="weightNewValue" /></td>
+							</tr>
+							<tr id="profession">
+								<td><span class="{style.label}" ui:field="labelProfession"></span></td>
+								<td><span ui:field="professionOldValue" /></td>
+								<td><span ui:field="professionNewValue" /></td>
+							</tr>
+							<tr id="nationality">
+								<td><span class="{style.label}" ui:field="labelNationality"></span></td>
+								<td><span ui:field="nationalityOldValue" /></td>
+								<td><span ui:field="nationalityNewValue" /></td>
+							</tr>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelWorkPermission"></span></td>
+								<td><span ui:field="workPermissionOldValue" /></td>
+								<td><span ui:field="workPermissionNewValue" /></td>
+							</tr>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelMaritalStatus"></span></td>
+								<td><span ui:field="maritalStatusOldValue" /></td>
+								<td><span ui:field="maritalStatusNewValue" /></td>
+							</tr>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelSocialInsuranceNo"></span></td>
+								<td><span ui:field="socialInsuranceNoOldValue" /></td>
+								<td><span ui:field="socialInsuranceNoNewValue" /></td>
+							</tr>
+							</tbody>
+						</table>
+					</g:HTMLPanel>
+				</g:tab>
+				<g:tab>
+					<!-- <g:TabHTML></g:TabHTML> -->
+					<g:header>                       
+                 </g:header> 
+                
+					<g:HTMLPanel addStyleNames="{style.patientDetails}">
+						<table class="{style.fields}" addStyleNames="{style.tableStyle}">
+							<colgroup>
+								<col></col>
+								<col></col>
+							</colgroup>
+							<tbody>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelBankIBAN" /></td>
+								<td><span ui:field="bankIBANOldValue" /></td>
+								<td><span ui:field="bankIBANNewValue" /></td>
+							</tr>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelOwnerName" /></td>
+								<td><span ui:field='bankOwnerNameOldValue' /></td>
+								<td><span ui:field='bankOwnerNameNewValue' /></td>
+							</tr>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelBankName" /></td>
+								<td><span ui:field="bankNameOldValue" /></td>
+								<td><span ui:field="bankNameNewValue" /></td>
+							</tr>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelBankBIC" /></td>
+								<td><span ui:field="bankBICOldValue" /></td>
+								<td><span ui:field="bankBICNewValue" /></td>
+							</tr>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelBankPlz" /></td>
+								<td><span ui:field="bankPostalCodeOldValue" /></td>
+								<td><span ui:field="bankPostalCodeNewValue" /></td>
+							</tr>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelBankCity" /></td>
+								<td><span ui:field="bankCityOldValue" /></td>
+								<td><span ui:field="bankCityNewValue" /></td>
+							</tr>
+							<tr>
+								<td><span class="{style.label}" ui:field="labelBankCountry" /></td>
+								<td><span ui:field="bankCountryOldValue" /></td>
+								<td><span ui:field="bankCountryNewValue" /></td>
+							</tr>
+							</tbody>
+						</table>
+					</g:HTMLPanel>
+				</g:tab>
+			</g:TabLayoutPanel>
+		</g:HorizontalPanel>
+		
+		</g:DisclosurePanel>
+		
+	<g:HTMLPanel styleName="{style.patientControls} {style.distanceToTop}">
+		<g:Image ui:field="anamnesisPanelArrow" styleName="{style.icon}" resource="{uiIcons.triangle1South}"></g:Image>
+		<div  class="{style.controlsright}">
+			<h3 class="{style.header}" style="display:inline"><span ui:field="anamnesisPanelTitle"></span></h3>
+		</div>
+	</g:HTMLPanel>
+	
+	<g:DisclosurePanel animationEnabled="true" open="true" ui:field="anamnesisDisclosurePanel"  width="100%">
+		<n:SPDetailsReviewAnamnesisSubViewImpl ui:field="spDetailsReviewAnamnesisSubViewImpl"></n:SPDetailsReviewAnamnesisSubViewImpl>
+	</g:DisclosurePanel>
+	
+	
+	</g:VerticalPanel>
+     <!--/marquee-->
+</g:HTMLPanel>
+</ui:UiBinder>

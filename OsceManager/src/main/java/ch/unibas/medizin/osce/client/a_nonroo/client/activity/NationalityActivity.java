@@ -285,6 +285,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 
 	private int totalRecords;
 	private boolean isInserted;
+	private NationalityProxy editedNationality;
 	public boolean isInserted() {
 		return isInserted;
 	}
@@ -293,6 +294,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 		this.isInserted = isInserted;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void newClicked(final String name) {
 		Log.debug("Add nationality");
@@ -302,7 +304,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 				if (response == 0)
 				{
 					NationalityRequest nationReq = requests.nationalityRequest();
-					NationalityProxy nation = nationReq.create(NationalityProxy.class);
+					final NationalityProxy nation = nationReq.create(NationalityProxy.class);
 					nation.setNationality(name);
 					// Highlight onViolation
 					Log.info("Map Size: " + view.getNationalityNewMap().size());
@@ -310,9 +312,21 @@ NationalityView.Presenter, NationalityView.Delegate {
 					// E Highlight onViolation
 						@Override
 						public void onSuccess(Void arg0) {
+							
+							requests.nationalityRequestNonRoo().saveNationalityInSpPortal(nation).fire(new OSCEReceiver<Boolean>() {
+
+								@Override
+								public void onSuccess(Boolean response) {
+									if(response==false){
+										showErrorMessageToUser("System could not create new nationality in spportal");
+									}
+									
+								}
+							});
 							setInserted(true);
 							init();
 						}
+					
 					});
 				}
 				else
@@ -324,17 +338,29 @@ NationalityView.Presenter, NationalityView.Delegate {
 		});
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void deleteClicked(NationalityProxy nation) {
+	public void deleteClicked(final NationalityProxy nation) {
 		// Highlight onViolation
-		requests.nationalityRequest().remove().using(nation).fire(new OSCEReceiver<Void>() {
-		// Highlight onViolation
-			public void onSuccess(Void ignore) {
-				Log.debug("Sucessfully deleted");
-				setInserted(false);
-				init();
+		requests.nationalityRequestNonRoo().deleteNatinalityInSpPortal(nation).fire(new OSCEReceiver<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean response) {
+			if(response==false){
+				showErrorMessageToUser("System Could not delete Nationality for spportal");
+			}
+				
+				requests.nationalityRequest().remove().using(nation).fire(new OSCEReceiver<Void>() {
+					// Highlight onViolation
+						public void onSuccess(Void ignore) {
+							Log.debug("Sucessfully deleted");
+							setInserted(false);
+							init();
+						}
+					});
 			}
 		});
+		
 	}
 	
 	@Override
@@ -350,27 +376,43 @@ NationalityView.Presenter, NationalityView.Delegate {
 		
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void updateClicked(NationalityProxy nation, String value) 
+	public void updateClicked(NationalityProxy nation,final String value) 
 	{
-		NationalityRequest nationrequest = requests.nationalityRequest();
-		nation = nationrequest.edit(nation);
-		nation.setNationality(value);
-		// Highlight onViolation
-		Log.info("Map Size: " + view.getNationalityMap().size());
-		nationrequest.persist().using(nation).fire(new OSCEReceiver<Void>(view.getNationalityMap()) 
-		// E Highlight onViolation
-		{
+		editedNationality=nation;
+		requests.nationalityRequestNonRoo().editNationalityInSpPortal(nation,value).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
-			public void onSuccess(Void response) {
-				((EditPopViewImpl)view.getEditPopupView()).hide();
-				setInserted(false);
-				init();
+			public void onSuccess(Boolean response) {
+				if(response==false){
+					showErrorMessageToUser("System could not edit nationality in spportal");
+				}
 				
+				NationalityRequest nationrequest = requests.nationalityRequest();
+				editedNationality = nationrequest.edit(editedNationality);
+				editedNationality.setNationality(value);
+				// Highlight onViolation
+				Log.info("Map Size: " + view.getNationalityMap().size());
+				nationrequest.persist().using(editedNationality).fire(new OSCEReceiver<Void>(view.getNationalityMap()) 
+				// E Highlight onViolation
+				{
+
+					@Override
+					public void onSuccess(Void response) {
+						((EditPopViewImpl)view.getEditPopupView()).hide();
+						setInserted(false);
+						init();
+						
+					}
+				});
 			}
 		});
 		
 		
+	}
+	public void showErrorMessageToUser(String message){
+		final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
+		confirmationDialogBox.showConfirmationDialog(message);
 	}
 }

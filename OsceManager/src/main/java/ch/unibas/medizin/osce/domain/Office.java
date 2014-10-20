@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.domain;
 
+import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
+import javax.persistence.PersistenceContext;
 import javax.validation.constraints.Size;
 
 import org.springframework.roo.addon.entity.RooEntity;
@@ -14,6 +16,9 @@ import ch.unibas.medizin.osce.shared.Gender;
 @RooEntity
 public class Office {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
     @Enumerated
     private Gender gender;
 

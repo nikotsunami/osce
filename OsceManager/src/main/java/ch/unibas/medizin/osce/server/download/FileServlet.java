@@ -1,10 +1,18 @@
 package ch.unibas.medizin.osce.server.download;
+import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +23,10 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 
@@ -117,9 +129,72 @@ public class FileServlet extends HttpServlet {
             return;
         }
 
-        // URL-decode the file name (might contain spaces and on) and prepare file object.
-        File file = new File(basePath, URLDecoder.decode(requestedFile, "UTF-8"));
+        File file = null;
+        String[] requestedFileContent = requestedFile.split("/");
+        
+        if (requestedFileContent.length == 2)
+        {
+        
+        	//String postedVariable1 = request.getParameter("postedVariable1");
+        	//String postedVariable2 = request.getParameter("postedVariable2");
 
+        	//Construct data here... build the string like you would with a GET URL     
+        	String data = URLEncoder.encode("image", "UTF-8") + "=" + URLEncoder.encode(requestedFile, "UTF-8");
+
+        	    try {
+        	       /* URL calculator = new URL("http://localhost:8080/spportal/spImage?");
+        	        URLConnection calcConnection = calculator.openConnection();
+        	        calcConnection.setDoOutput(true);
+        	        OutputStreamWriter outputLine = new OutputStreamWriter(calcConnection.getOutputStream());
+        	        outputLine.write(data);
+        	        outputLine.flush();
+
+
+        	        // Get the response
+        	        BufferedReader streamReader = new BufferedReader(new InputStreamReader(calcConnection.getInputStream()));
+        	        String line;
+        	        OutputStream stream = new ByteArrayOutputStream();
+        	        
+        	        //streamReader = holding the data... can put it through a DOM loader?
+        	        while ((line = streamReader.readLine()) != null) {
+        	            //PrintWriter writer = response.getWriter();
+        	            //writer.print(line);
+        	        	stream.write(line.getBytes());
+        	        }
+        	        outputLine.close();
+        	        streamReader.close();
+        	        stream.flush();
+        	        stream.close();*/
+        	    	file = new File(basePath, URLDecoder.decode(requestedFile, "UTF-8"));
+        	    	if(!file.exists()){
+	        	    	ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+	        	    	
+	        	    	final URL url = new URL("http://localhost:8080/spportal/spImage?image="+requestedFile);
+	                    final BufferedReader reader = new BufferedReader(
+	                            new InputStreamReader(url.openStream()));
+	                    String line;
+	                    while ((line = reader.readLine()) != null) {
+	                       buffer.write(line.getBytes());
+	                    }
+	                    FileUtils.writeByteArrayToFile(new File(OsMaFilePathConstant.localImageUploadDirectory, URLDecoder.decode(requestedFile, "UTF-8")),buffer.toByteArray());
+	                    buffer.flush();
+	                    buffer.close();
+	                    reader.close();
+        	    	}
+
+        	    } catch (MalformedURLException me) {
+        	        System.out.println("MalformedURLException: " + me);
+        	    } catch (IOException ioe) {
+        	        System.out.println("IOException: " + ioe);
+        	    }
+        }
+        else if (requestedFileContent.length > 2)
+        {
+        	// URL-decode the file name (might contain spaces and on) and prepare file object.
+            file = new File(basePath, URLDecoder.decode(requestedFile, "UTF-8"));
+        }
+
+        
         // Check if file actually exists in filesystem.
         if (!file.exists()) {
             // Do your thing if the file appears to be non-existing.

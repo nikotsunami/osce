@@ -5,9 +5,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncException;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncService;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.DMZSyncServiceAsync;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientDetailsPlace;
@@ -15,6 +15,13 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPl
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.IndividualSPDataChangedNotificationView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.IndividualSPEditRequestNotificationView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPDetailsReviewAnamnesisSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPDetailsReviewAnamnesisSubViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPDetailsReviewAnamnesisTableSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPDetailsReviewView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPDetailsReviewViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisTableSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsView;
@@ -22,6 +29,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDe
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientMediaSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientScarSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.util.OSCEReceiverPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.UserPlaceSettings;
@@ -32,13 +40,17 @@ import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormRequest;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillProxy;
 import ch.unibas.medizin.osce.client.managed.request.LangSkillRequest;
+import ch.unibas.medizin.osce.client.managed.request.SPPortalPersonProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpAnamnesisChecksValueProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpAnamnesisFormProxy;
+import ch.unibas.medizin.osce.client.managed.request.SpStandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
-import ch.unibas.medizin.osce.client.style.widgets.SimpleShowErrorDialogBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import ch.unibas.medizin.osce.shared.EditRequestState;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
@@ -55,6 +67,8 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.LocaleInfo;
@@ -65,7 +79,6 @@ import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.view.client.Range;
@@ -79,7 +92,9 @@ StandardizedPatientScarSubView.Delegate,
 StandardizedPatientAnamnesisSubView.Delegate,
 StandardizedPatientLangSkillSubView.Delegate,
 StandardizedPatientMediaSubViewImpl.Delegate,
-StandardizedPatientAnamnesisTableSubView.Delegate {
+StandardizedPatientAnamnesisTableSubView.Delegate,
+IndividualSPEditRequestNotificationView.Delegate,
+IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SPDetailsReviewAnamnesisSubView.Delegate,SPDetailsReviewAnamnesisTableSubView.Delegate{
 	
     private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -118,6 +133,25 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	private static final String stringForAnonymize = constants.anonymisationString();
 	private int intForAnomize = 1000;
 
+	private SPPortalPersonProxy spPersonProxy;
+	
+	private SpStandardizedPatientProxy spStandardizedPatientProxy;
+	
+	private SPDetailsReviewView  spDetailsReviewView;
+	
+	private SPDetailsReviewAnamnesisSubViewImpl spDetailsReviewAnamnesisSubViewImpl;
+	 
+	private SPDetailsReviewAnamnesisTableSubView spDetailsReviewAnamnesisTableSubView;
+	
+	private Map<Integer,Integer> anamnesisTabSelectedIndexMap = new HashMap<Integer, Integer>();
+	
+	protected List<AnamnesisCheckTitleProxy> allAnamnesisCheckTitleProxyList;
+	
+	private Map<AnamnesisCheckTitleProxy,SPDetailsReviewAnamnesisTableSubView>  spDetailsReviewAmnesisTableViewMap = 
+			new HashMap<AnamnesisCheckTitleProxy,SPDetailsReviewAnamnesisTableSubView >();
+	
+	private StandardizedPatientDetailsActivity standardizedPatientDetailsActivity;
+	
 	public StandardizedPatientDetailsActivity(StandardizedPatientDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
     	this.requests = requests;
@@ -159,8 +193,12 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		standardizedPatientMediaSubViewImpl = view.getStandardizedPatientMediaSubViewImpl();
 		
 		widget.setWidget(standardizedPatientDetailsView.asWidget());
-		
+		standardizedPatientDetailsActivity=this;
 		view.setDelegate(this);
+		//setting delegate sp portal related change
+		((StandardizedPatientDetailsViewImpl)view).getIndividualSPEditRequestSendNotificationViewImpl().setDelegate(this);
+		((StandardizedPatientDetailsViewImpl)view).getIndividualSPDataChandedNotificationViewImpl().setDelegate(this);
+		
 		standardizedPatientScarSubView.setDelegate(this);
 		standardizedPatientAnamnesisSubView.setDelegate(this);
 		standardizedPatientLangSkillSubView.setDelegate(this);
@@ -169,6 +207,22 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 		//loadDisplaySettings();
 		//ScrolledTab Changes start
 		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "bankAccount.country", "langskills", "anamnesisForm", "anamnesisForm.scars","patientInSemester").fire(new InitializeActivityReceiver());
+		
+		//spportal related changes start {
+		
+		spDetailsReviewView = new SPDetailsReviewViewImpl();
+		
+		spDetailsReviewView.setDelegate(this);
+		
+		spDetailsReviewAnamnesisSubViewImpl = ((SPDetailsReviewViewImpl)spDetailsReviewView).getSpDetailsReviewAnamnesisSubViewImpl();
+		
+		spDetailsReviewAnamnesisSubViewImpl.setDelegate(this);
+		
+		addAnamnesisCheckTitleTabSelectionHandler();
+		
+		addClickHandlerOfAcceptedAndDiscardButton();
+		
+		//spportal related changes end }
 	}
 	
 	/**
@@ -187,11 +241,69 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 			if(response instanceof StandardizedPatientProxy){
 				Log.info(((StandardizedPatientProxy) response).getName());
 				standardizedPatientProxy = (StandardizedPatientProxy) response;
+				//SP portal related change checking whether this sp has sent edit request.
+				findSPsHasSentEditRequest();
+				findSPsHasChandedData();
 				init();
 			}
 		}
+
 	}
 
+	/**
+	 * Method that is used to check whether sp has sent edit request if yes show view to admin where admin can approve or disapprove sps edit request.
+	 */
+	private void findSPsHasSentEditRequest() {
+		Log.info("finding sp person to check whether he has sent edit Request");
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		
+		requests.spPortalPersonRequestNonRoo().findSPPersonToCheckWhetherHeHasSentEditReqOrChandedData(standardizedPatientProxy.getId()).fire(new OSCEReceiver<SPPortalPersonProxy>() {
+
+			@Override
+			public void onSuccess(SPPortalPersonProxy response) {
+				Log.info("Response received from findSPPersonToCheckWhetherHeHasSentEditReq()");
+
+				if(response!=null){
+					
+					spPersonProxy=response;
+					
+					if(spPersonProxy.getEditRequestState().ordinal()==EditRequestState.REQUEST_SEND.ordinal()){
+						((StandardizedPatientDetailsViewImpl)view).showEditRequestViewToAdmin(true);
+					}
+				}
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+			}
+		});
+		
+	}
+	/**
+	 * Method that is used to check whether sp has changed data if yes show view to admin where admin can review and import data.
+	 */
+	private void findSPsHasChandedData() {
+		
+		Log.info("finding sp person  to check whether he has changed data");
+		
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+
+		requests.spPortalPersonRequestNonRoo().findSPPersonToCheckWhetherHeHasSentEditReqOrChandedData(standardizedPatientProxy.getId()).fire(new OSCEReceiver<SPPortalPersonProxy>() {
+
+			@Override
+			public void onSuccess(SPPortalPersonProxy response) {
+				Log.info("Response received from findSPPersonToCheckWhetherHeHasSentEditReq()");
+
+				if(response!=null){
+					spPersonProxy=response;
+					if(spPersonProxy.getChanged()!=null){
+						if(spPersonProxy.getChanged()){
+							((StandardizedPatientDetailsViewImpl)view).showDataChandedViewToAdmin(true);
+						}
+					}
+				}
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+			}
+		});
+	}
+	
 	  ///////////////////////
 	 /////	LANGSKILL  /////
 	///////////////////////
@@ -846,7 +958,10 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	}
 	@Override
 	public void sendClicked(){
-		String locale = LocaleInfo.getCurrentLocale().getLocaleName();
+		
+		//Following code is commented as now data is push from osce to spportal mail is send to sp and req flag should be cleared. by spec-india.
+		
+		/*String locale = LocaleInfo.getCurrentLocale().getLocaleName();
 		if(standardizedPatientProxy!=null){
 			if(standardizedPatientProxy.getEmail()!=null && !standardizedPatientProxy.getEmail().equals("")){
 					dmxSyncService.pushToDMZ(standardizedPatientProxy.getId(),locale,new AsyncCallback<List<String>>(){
@@ -887,16 +1002,18 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 			}
 			
 			
-		}
+		}*/
 		
-	
-		
+		//pushing sp data to spportal sending email and resetting flags.
+		approveSpsEditRequest();
 	}
 	
 	@Override
 	public void pullClicked(){
 
-		dmxSyncService.pullFromDMZ(standardizedPatientProxy.getId(), new AsyncCallback<Void>(){
+		//Following code is commented as now data is pull in osce from spportal and data is deleted from sp portal. by spec-india.
+		
+		/*dmxSyncService.pullFromDMZ(standardizedPatientProxy.getId(), new AsyncCallback<Void>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
@@ -916,9 +1033,56 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 				Window.alert(messageLookup.importSussessful());
 			}
 			
+		});*/
+		
+		final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
+		confirmationDialogBox.showYesNoDialog(constants.spDataPullNotificationMsg());
+		confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+
+				confirmationDialogBox.hide();
+				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+				
+				requests.spPortalPersonRequestNonRoo().findSpPortalSPBasedOnOsceSPID(standardizedPatientProxy.getId()).fire(new OSCEReceiver<SpStandardizedPatientProxy>() {
+
+					@Override
+					public void onSuccess(SpStandardizedPatientProxy response) {
+						spStandardizedPatientProxy=response;
+						
+						requests.spStandardizedPatientRequestNonRoo().moveChangedDetailsOfSPFormSPPortal(standardizedPatientProxy.getId(),spStandardizedPatientProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+							@Override
+							public void onSuccess(Boolean response) {
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+								if(response){
+									((StandardizedPatientDetailsViewImpl)view).showDataChandedViewToAdmin(false);
+
+									((StandardizedPatientDetailsViewImpl)view).getPull().setEnabled(false);
+								}else{
+									
+									final OSCEReceiverPopupViewImpl errorMsgDisplayView =new OSCEReceiverPopupViewImpl();
+									
+									errorMsgDisplayView.showMessage(constants.dataSaveFailure());
+									
+									errorMsgDisplayView.getBtnOk().addClickHandler(new ClickHandler() {
+										
+										@Override
+										public void onClick(ClickEvent event) {
+											errorMsgDisplayView.hide();
+										}
+									});
+								}
+								
+							}
+						}); 
+					}
+				});
+				
+			}
 		});
-		
-		
 	}
 
 	@Override
@@ -1103,7 +1267,313 @@ StandardizedPatientAnamnesisTableSubView.Delegate {
 	public Long getIdOfStandardizedPatient() {
 		return standardizedPatientProxy.getId();
 	}
-	
 
+	/**
+	 * This method is used to send email to sp as his edit request is denies and to clear edit request flag. 
+	 */
+	@Override
+	public void denySPsEditRequst() {
+		
+		Log.info("deny edit request of sp by sending mail and clearing flag");
+
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+
+		requests.spPortalPersonRequestNonRoo().denyEditRequestOfSP(spPersonProxy.getId()).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				((StandardizedPatientDetailsViewImpl)view).showEditRequestViewToAdmin(false);
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				((StandardizedPatientDetailsViewImpl)view).getSend().setEnabled(false);
+			}
+		});
+	}
+
+
+	/**
+	 * This method is used to send email to sp as his edit request is approved and to push his data to spportal and clear edit request flag. 
+	 */
+	@Override
+	public void approveSpsEditRequest() {
+		
+		Log.info("deny edit request of sp by sending mail and clearing flag");
+		
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+
+			requests.spPortalPersonRequestNonRoo().approveEditRequestOfSP(standardizedPatientProxy.getId(),spPersonProxy.getId()).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				((StandardizedPatientDetailsViewImpl)view).showEditRequestViewToAdmin(false);
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				((StandardizedPatientDetailsViewImpl)view).getSend().setEnabled(false);
+			}
+		});
+	}
+
+	private void addAnamnesisCheckTitleTabSelectionHandler() {
+
+		spDetailsReviewAnamnesisSubViewImpl.anamnesisTabs.addSelectionHandler(new SelectionHandler<Integer>() {
+
+				@Override
+				public void onSelection(SelectionEvent<Integer> event) {
+					Log.info("Selected tab index is : " + event.getSelectedItem());
+					
+					anamnesisTitleTabSelected(event.getSelectedItem());
+				}
+			});
+}
+	@SuppressWarnings("deprecation")
+	public void anamnesisTitleTabSelected(final Integer selectedIndex) {
+		
+		Log.info("finding data if this index is selected first time and initializing view of it");
+		
+		if(anamnesisTabSelectedIndexMap.get(selectedIndex)==null){
+			
+			anamnesisTabSelectedIndexMap.put(selectedIndex, selectedIndex);
+			
+			AnamnesisFormProxy anamnesisFormProxy = standardizedPatientProxy.getAnamnesisForm();
+			
+			final AnamnesisCheckTitleProxy anamnesisCheckTitleProxy = allAnamnesisCheckTitleProxyList.get(selectedIndex);
+			
+			final SpAnamnesisFormProxy spAnamnesisFormProxy = spStandardizedPatientProxy.getAnamnesisForm();
+			
+			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+			
+			requests.anamnesisChecksValueRequestNonRoo().findAnamnesisChecksValuesByAnamnesisFormAndCheckTitle(anamnesisFormProxy.getId(),anamnesisCheckTitleProxy.getId()).with("anamnesischeck").fire(new OSCEReceiver<List<AnamnesisChecksValueProxy>>() {
+
+				@Override
+				public void onSuccess(final List<AnamnesisChecksValueProxy> response1) {
+
+					Log.info("Total osce standardized patient anamnesis check value proxy is : " + response1.size());
+					
+					Log.info("Now finding all anamnesis check value proxy is of sp portal");
+					
+					String anmnesisCheckText = getSPAnamnesisCheckText(response1);
+					
+					requests.spStandardizedPatientRequestNonRoo().findAnamnesisChecksValuesByAnamnesisFormAndCheckTitleText(spAnamnesisFormProxy.getId(),anmnesisCheckText).with("anamnesischeck").fire(new OSCEReceiver<List<SpAnamnesisChecksValueProxy>>() {
+
+						@Override
+						public void onSuccess(List<SpAnamnesisChecksValueProxy> response2) {
+							
+							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+							
+							Log.info("Total sp portal standardized patient anamnesis check value proxy is : " + response2.size());
+							
+							SPDetailsReviewAnamnesisTableSubView tableView = spDetailsReviewAmnesisTableViewMap.get(anamnesisCheckTitleProxy);
+						
+							if(response1.size() != response2.size()){
+								//No proper data found show hiding review view and showing message to user.
+								
+								Log.info("No proper data found for anamnesis check value form sp portal so hiding view");
+								
+								((SPDetailsReviewViewImpl)spDetailsReviewView).setViewVisible(false);
+								
+								final OSCEReceiverPopupViewImpl errorMsgDisplayView =new OSCEReceiverPopupViewImpl();
+								
+								errorMsgDisplayView.showMessage(constants.osceSPPortalDataMismatch());
+								
+								errorMsgDisplayView.getBtnOk().addClickHandler(new ClickHandler() {
+									
+									@Override
+									public void onClick(ClickEvent event) {
+										errorMsgDisplayView.hide();
+									}
+								});
+							}
+							else{
+								
+								boolean isDatachanged=tableView.setValue(response1,response2);
+								if(isDatachanged){
+									if(selectedIndex==(spDetailsReviewAnamnesisSubViewImpl.getAnamnesisTabs().getWidgetCount()-1)){
+										spDetailsReviewAnamnesisSubViewImpl.getAnamnesisTabs().getTabWidget(selectedIndex).addStyleName("lastTabChangedTabSty");
+									}else{
+										spDetailsReviewAnamnesisSubViewImpl.getAnamnesisTabs().getTabWidget(selectedIndex).addStyleName("chnagedTabStyle");
+									}
+								}else{
+									if(selectedIndex==(spDetailsReviewAnamnesisSubViewImpl.getAnamnesisTabs().getWidgetCount()-1)){
+										spDetailsReviewAnamnesisSubViewImpl.getAnamnesisTabs().getTabWidget(selectedIndex).removeStyleName("lastTabChangedTabSty");	
+									}else{
+										spDetailsReviewAnamnesisSubViewImpl.getAnamnesisTabs().getTabWidget(selectedIndex).removeStyleName("chnagedTabStyle");	
+									}
+								}
+							}
+						}
+					});
+				}
+			});
+		}
+	}
+	
+	private void addClickHandlerOfAcceptedAndDiscardButton(){
+
+		((SPDetailsReviewViewImpl)spDetailsReviewView).getAcceptChangesButton().addClickHandler(new ClickHandler() {
+			
+			@SuppressWarnings("deprecation")
+			@Override
+			public void onClick(ClickEvent event) {
+				Log.info("Accepted changes button clicked");
+		
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+				
+				requests.spStandardizedPatientRequestNonRoo().moveChangedDetailsOfSPFormSPPortal(standardizedPatientProxy.getId(), spStandardizedPatientProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+					@Override
+					public void onSuccess(Boolean response) {
+						
+						Log.info("Data moved successfully is" + response);
+						
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+
+						
+						((SPDetailsReviewViewImpl)spDetailsReviewView).setViewVisible(false);
+						
+						((StandardizedPatientDetailsViewImpl)view).getPull().setEnabled(false);
+						
+						((StandardizedPatientDetailsViewImpl)view).showDataChandedViewToAdmin(false);
+						
+						if(!response){
+						
+							((SPDetailsReviewViewImpl)spDetailsReviewView).setViewVisible(false);
+							
+							final OSCEReceiverPopupViewImpl errorMsgDisplayView =new OSCEReceiverPopupViewImpl();
+							
+							errorMsgDisplayView.showMessage(constants.dataSaveFailure());
+							
+							errorMsgDisplayView.getBtnOk().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									errorMsgDisplayView.hide();
+								}
+							});
+						}
+					}
+				});
+				
+				
+			}
+		});
+		
+		((SPDetailsReviewViewImpl)spDetailsReviewView).getDiscardChangesButton().addClickHandler(new ClickHandler() {
+			
+			@SuppressWarnings("deprecation")
+			@Override
+			public void onClick(ClickEvent event) {
+				Log.info("Discard changes button clicked");
+				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+				
+				requests.spStandardizedPatientRequestNonRoo().removeSPDetailsFromSPPortal(standardizedPatientProxy.getId(),spStandardizedPatientProxy.getId(),true).fire(new OSCEReceiver<Boolean>() {
+
+					@Override
+					public void onSuccess(Boolean response) {
+					
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						
+						((SPDetailsReviewViewImpl)spDetailsReviewView).setViewVisible(false);
+						
+						((StandardizedPatientDetailsViewImpl)view).getPull().setEnabled(false);
+						
+						((StandardizedPatientDetailsViewImpl)view).showDataChandedViewToAdmin(false);
+						
+						if(!response){
+							
+							((SPDetailsReviewViewImpl)spDetailsReviewView).setViewVisible(false);
+							
+							final OSCEReceiverPopupViewImpl errorMsgDisplayView =new OSCEReceiverPopupViewImpl();
+							
+							errorMsgDisplayView.showMessage(constants.dataSaveFailure());
+							
+							errorMsgDisplayView.getBtnOk().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									errorMsgDisplayView.hide();
+								}
+							});
+						}
+						
+					}
+				});
+				
+				
+			}
+		});
+	}
+	@Override
+	public void reviewButtonClicked() {
+		
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		
+		requests.spPortalPersonRequestNonRoo().findSpPortalSPBasedOnOsceSPID(standardizedPatientProxy.getId()).with("person","anamnesisForm").fire(new OSCEReceiver<SpStandardizedPatientProxy>() {
+
+			@Override
+			public void onSuccess(SpStandardizedPatientProxy response) {
+				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				
+				spStandardizedPatientProxy=response;
+		
+				showOldAndNewDataOfSPToAdmin();
+				
+				findAllAnamnesisCheckTitle();
+				
+				((SPDetailsReviewViewImpl)spDetailsReviewView).setViewVisible(true);
+			}
+		});
+		
+	}
+	
+	private void showOldAndNewDataOfSPToAdmin() {
+		Log.info("Showing old and new details of sp to admin");
+		spDetailsReviewView.setValue(standardizedPatientProxy, spStandardizedPatientProxy);
+	}
+
+	@SuppressWarnings("deprecation")
+	private void findAllAnamnesisCheckTitle() {
+		
+	requests.spPortalPersonRequestNonRoo().findAllAnamnesisThatIsSendToDMZ().fire(new OSCEReceiver<List<AnamnesisCheckTitleProxy>>() {
+
+		@Override
+		public void onSuccess(List<AnamnesisCheckTitleProxy> response) {
+
+			if (response == null) {
+				return;
+			}
+			Log.info("Total anamnesis check is : " + response.size());
+			
+			allAnamnesisCheckTitleProxyList =response;
+			
+			for (final AnamnesisCheckTitleProxy title : response) {
+				SPDetailsReviewAnamnesisTableSubView subView = spDetailsReviewAnamnesisSubViewImpl.addAnamnesisCheckTitle(title);
+				subView.setDelegate(standardizedPatientDetailsActivity);
+				spDetailsReviewAmnesisTableViewMap.put(title, subView);
+			}
+		}
+	});
+}
+	protected String getSPAnamnesisCheckText(List<AnamnesisChecksValueProxy> anamnesisCheckValueProxyList) {
+		Log.info("Taking anamnisis check text from anmnesisValue proxy");
+		
+		if (anamnesisCheckValueProxyList == null|| anamnesisCheckValueProxyList.size() == 0) {
+			Log.info("Return as null");
+			return "";
+		}
+		Iterator<AnamnesisChecksValueProxy> anamnesisCheckValueIterator = anamnesisCheckValueProxyList.iterator();
+		StringBuilder anamnesisCheckText = new StringBuilder();
+		anamnesisCheckText.append("'',");
+		while (anamnesisCheckValueIterator.hasNext()) {
+			
+			AnamnesisChecksValueProxy anamnesisCheckValueProxy = anamnesisCheckValueIterator.next();
+			//System.out.println("Ana check value is " + anamnesisCheckValueProxy.getId() + " check text is" + anamnesisCheckValueProxy.getAnamnesischeck().getText());
+			anamnesisCheckText.append("'"+anamnesisCheckValueProxy.getAnamnesischeck().getText()+"'");
+			if (anamnesisCheckValueIterator.hasNext()) {
+				anamnesisCheckText.append(" ,");
+			}
+		}
+		
+		return anamnesisCheckText.toString();
+	}
 	
 }

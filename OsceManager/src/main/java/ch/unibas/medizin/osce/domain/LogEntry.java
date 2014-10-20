@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
@@ -19,6 +20,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooEntity
 public class LogEntry {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
     private Integer shibId;
 
     @Temporal(TemporalType.TIMESTAMP)

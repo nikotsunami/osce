@@ -14,6 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
@@ -28,6 +29,9 @@ import ch.unibas.medizin.osce.shared.ItemDefination;
 @RooEntity(table = "role_base_item")
 public class RoleBaseItem {
  
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
 	private static Logger Log = Logger.getLogger(RoleBaseItem.class);
 	
 	@Column(name = "item_defination")

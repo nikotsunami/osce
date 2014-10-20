@@ -1,0 +1,50 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+  xmlns:g='urn:import:com.google.gwt.user.client.ui'
+  xmlns:d='urn:import:com.google.gwt.user.datepicker.client'
+  xmlns:r='urn:import:ch.unibas.medizin.osce.client.scaffold.ui'
+  xmlns:a='urn:import:ch.unibas.medizin.osce.client.managed.ui'
+  xmlns:my='urn:import:ch.unibas.medizin.osce.client.style.widgets'
+  xmlns:b='urn:import:com.google.gwt.user.cellview.client'
+  xmlns:n='urn:import:ch.unibas.medizin.osce.client.a_nonroo.client.ui.role' xmlns:resources="urn:import:ch.unibas.medizin.osce.client.style.resources">
+
+<ui:style src="../../styles.css" >
+
+
+.rootPanelStyle
+{
+	background: none repeat scroll 0 0 #FFC684;
+    border: 1px solid #FFC684;
+    box-shadow: 2px 2px 2px #808080;
+    margin-bottom: 8px;
+    margin-left: 2px;
+    margin-top: -3px;
+    padding: 10px;
+    width: 540px;
+    border-radius: 10px 10px 10px 10px;
+}
+.mainPanelStyle
+{
+	width:100%;
+}
+.margin-right
+{
+	margin-right: 60px;
+}	
+	
+</ui:style>
+
+
+ <ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>	
+<g:HTMLPanel addStyleNames="{style.rootPanelStyle}" >
+	<g:HorizontalPanel addStyleNames="{style.mainPanelStyle}">
+		<!-- <div  class="{style.controlsright}">
+			<h3 class="{style.header}" style="display:inline"><span ui:field="individualSPEditReqHeader"></span></h3>
+		</div> -->
+		<g:Label ui:field="individualSPEditReqHeaderLabel" addStyleNames="{style.margin-right}" ></g:Label>
+		<my:IconButton ui:field="allowEditRequestButton" icon="check"></my:IconButton>
+		<my:IconButton ui:field="deniedEditRequestButton" icon="close"></my:IconButton>
+	</g:HorizontalPanel>
+	
+</g:HTMLPanel> 
+</ui:UiBinder>

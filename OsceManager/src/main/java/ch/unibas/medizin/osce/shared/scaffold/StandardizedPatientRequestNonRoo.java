@@ -62,4 +62,7 @@ public interface StandardizedPatientRequestNonRoo extends RequestContext {
          //SPEC]
 
 		abstract Request<Void> setStandardizedPatientListToSession(List<Long> stdPatIdList, String sortname, Sorting sortorder);
+
+		// This method is used to save standardized patient data in sp portal db.
+		//abstract Request<Void> insertStandardizedPatientDetailsInSPportal(Long id);
 }

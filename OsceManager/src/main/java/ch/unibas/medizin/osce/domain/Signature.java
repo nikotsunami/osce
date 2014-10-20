@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.springframework.roo.addon.entity.RooEntity;
@@ -18,6 +19,10 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooEntity
 public class Signature {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
+	
 	@ManyToOne
 	private Doctor doctor;
 	

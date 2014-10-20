@@ -2,40 +2,150 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 <persistence-unit name="persistenceUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
+         <class>ch.unibas.medizin.osce.domain.Administrator</class>
+        <class>ch.unibas.medizin.osce.domain.AdvancedSearchCriteria</class>
+        <class>ch.unibas.medizin.osce.domain.AnamnesisCheck</class>
+        <class>ch.unibas.medizin.osce.domain.AnamnesisChecksValue</class>
+        <class>ch.unibas.medizin.osce.domain.AnamnesisCheckTitle</class>
+        <class>ch.unibas.medizin.osce.domain.AnamnesisForm</class>
+        <class>ch.unibas.medizin.osce.domain.Answer</class>
+        <class>ch.unibas.medizin.osce.domain.Appliance</class>
+        <class>ch.unibas.medizin.osce.domain.Assignment</class>
+        <class>ch.unibas.medizin.osce.domain.Bankaccount</class>
+        <class>ch.unibas.medizin.osce.domain.BucketInformation</class>
+        <class>ch.unibas.medizin.osce.domain.CheckList</class>
+        <class>ch.unibas.medizin.osce.domain.ChecklistCriteria</class>
+        <class>ch.unibas.medizin.osce.domain.ChecklistOption</class>
+        <class>ch.unibas.medizin.osce.domain.ChecklistQuestion</class>
+        <class>ch.unibas.medizin.osce.domain.ChecklistTopic</class>
+        <class>ch.unibas.medizin.osce.domain.ClassificationTopic</class>
+        <class>ch.unibas.medizin.osce.domain.Clinic</class>
+        <class>ch.unibas.medizin.osce.domain.Course</class>
+        <class>ch.unibas.medizin.osce.domain.Description</class>
+        <class>ch.unibas.medizin.osce.domain.Doctor</class>
+        <class>ch.unibas.medizin.osce.domain.EliminationCriterion</class>
+        <class>ch.unibas.medizin.osce.domain.File</class>
+        <class>ch.unibas.medizin.osce.domain.ItemAnalysis</class>
+        <class>ch.unibas.medizin.osce.domain.Keyword</class>
+        <class>ch.unibas.medizin.osce.domain.LangSkill</class>
+        <class>ch.unibas.medizin.osce.domain.LogEntry</class>
+        <class>ch.unibas.medizin.osce.domain.MainClassification</class>
+        <class>ch.unibas.medizin.osce.domain.MainSkill</class>
+        <class>ch.unibas.medizin.osce.domain.MaterialList</class>
+        <class>ch.unibas.medizin.osce.domain.MediaContent</class>
+        <class>ch.unibas.medizin.osce.domain.MediaContentType</class>
+        <class>ch.unibas.medizin.osce.domain.MinorSkill</class>
+        <class>ch.unibas.medizin.osce.domain.Nationality</class>
+        <class>ch.unibas.medizin.osce.domain.Office</class>
+        <class>ch.unibas.medizin.osce.domain.Osce</class>
+        <class>ch.unibas.medizin.osce.domain.OsceDay</class>
+        <class>ch.unibas.medizin.osce.domain.OscePost</class>
+        <class>ch.unibas.medizin.osce.domain.OscePostBlueprint</class>
+        <class>ch.unibas.medizin.osce.domain.OscePostRoom</class>
+        <class>ch.unibas.medizin.osce.domain.OsceSequence</class>
+        <class>ch.unibas.medizin.osce.domain.PatientInRole</class>
+        <class>ch.unibas.medizin.osce.domain.PatientInSemester</class>
+        <class>ch.unibas.medizin.osce.domain.PostAnalysis</class>
+        <class>ch.unibas.medizin.osce.domain.Profession</class>
+        <class>ch.unibas.medizin.osce.domain.RoleBaseItem</class>
+        <class>ch.unibas.medizin.osce.domain.RoleItemAccess</class>
+        <class>ch.unibas.medizin.osce.domain.RoleParticipant</class>
+        <class>ch.unibas.medizin.osce.domain.RoleSubItemValue</class>
+        <class>ch.unibas.medizin.osce.domain.RoleTableItem</class>
+        <class>ch.unibas.medizin.osce.domain.RoleTableItemValue</class>
+        <class>ch.unibas.medizin.osce.domain.RoleTemplate</class>
+        <class>ch.unibas.medizin.osce.domain.RoleTopic</class>
+        <class>ch.unibas.medizin.osce.domain.Room</class>
+        <class>ch.unibas.medizin.osce.domain.Scar</class>
+        <class>ch.unibas.medizin.osce.domain.Semester</class>
+        <class>ch.unibas.medizin.osce.domain.Signature</class>
+        <class>ch.unibas.medizin.osce.domain.SimpleSearchCriteria</class>
+        <class>ch.unibas.medizin.osce.domain.Skill</class>
+		<class>ch.unibas.medizin.osce.domain.SkillHasAppliance</class>
+		<class>ch.unibas.medizin.osce.domain.SkillLevel</class>
+		<class>ch.unibas.medizin.osce.domain.Specialisation</class>
+		<class>ch.unibas.medizin.osce.domain.SpokenLanguage</class>
+		<class>ch.unibas.medizin.osce.domain.StandardizedPatient</class>
+		<class>ch.unibas.medizin.osce.domain.StandardizedRole</class>
+		<class>ch.unibas.medizin.osce.domain.Student</class>
+		<class>ch.unibas.medizin.osce.domain.StudentOsces</class>
+		<class>ch.unibas.medizin.osce.domain.Task</class>
+		<class>ch.unibas.medizin.osce.domain.Topic</class>
+		<class>ch.unibas.medizin.osce.domain.Training</class>
+		<class>ch.unibas.medizin.osce.domain.UsedMaterial</class>
+		<class>ch.unibas.medizin.osce.domain.TrainingBlock</class>
+		<class>ch.unibas.medizin.osce.domain.TrainingDate</class>
+		<class>ch.unibas.medizin.osce.domain.OsceDate</class>
+		<class>ch.unibas.medizin.osce.domain.TrainingSuggestion</class>
+		<!-- <class>ch.unibas.medizin.osce.domain.SPPortalPerson</class> -->
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
             <!-- value="create" to build a new database on each run; value="update" to modify an existing database; value="create-drop" means the same as "create" but also drops tables when Hibernate closes; value="validate" makes no changes to the database -->
-            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy"/>
             <property name="hibernate.connection.charSet" value="UTF-8"/>
-            
-            <!-- <property name="show_sql">true</property>
-			<property name="format_sql">true</property>
-			<property name="use_sql_comments">true</property> /-->
-            
-            <!-- Uncomment the following two properties for JBoss only -->
-            <!-- property name="hibernate.validator.apply_to_ddl" value="false" /-->
-            <!-- property name="hibernate.validator.autoregister_listeners" value="false" /-->
+           <!--  <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/osce" /> -->
+            <!-- <property name="hibernate.connection.username" value="root" /> -->
+            <!-- <property name="hibernate.connection.password" value="" /> -->
+           <!--  <property name="packagesToScan" value="ch.unibas.medizin.osce.domain.*" /> -->
+            <!-- <property name="hibernate.generate_statistics" value="true" />
+        	<property name="hibernate.cache.use_structured_entries" value="true" />
+          	<property name="hibernate.show_sql" value="true" />
+          	<property name="hibernate.format_sql" value="true" /> -->
         </properties>
     </persistence-unit>
     
-    <persistence-unit name="testPersistenceUnit" transaction-type="RESOURCE_LOCAL">
+   <persistence-unit name="testPersistenceUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
-            <!-- value="create" to build a new database on each run; value="update" to modify an existing database; value="create-drop" means the same as "create" but also drops tables when Hibernate closes; value="validate" makes no changes to the database -->
-            <property name="hibernate.hbm2ddl.auto" value="create"/>
+           <!--  value="create" to build a new database on each run; value="update" to modify an existing database; value="create-drop" means the same as "create" but also drops tables when Hibernate closes; value="validate" makes no changes to the database -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy"/>
             <property name="hibernate.connection.charSet" value="UTF-8"/>
-            <!-- <property name="show_sql">true</property>
+           <!--  <property name="show_sql">true</property>
 			<property name="format_sql">true</property>
-			<property name="use_sql_comments">true</property> /-->
-            
-            <!-- Uncomment the following two properties for JBoss only -->
-            <!-- property name="hibernate.validator.apply_to_ddl" value="false" /-->
-            <!-- property name="hibernate.validator.autoregister_listeners" value="false" /-->
+			<property name="use_sql_comments">true</property> -->
         </properties>
     </persistence-unit>
 
+    <!--sp portal persistance unit  -->
     
+    <persistence-unit name="spportalPersistenceUnit" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpAnamnesisCheck</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpAnamnesisChecksValue</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpAnamnesisCheckTitle</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpAnamnesisForm</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpBankaccount</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpEliminationCriterion</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpNationality</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SPPortalPerson</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpProfession</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpScar</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpStandardizedPatient</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpSemester</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpPatientInSemester</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpOsceDate</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpTrainingBlock</class>
+        <class>ch.unibas.medizin.osce.domain.spportal.SpTrainingDate</class>
+        <!-- <class>ch.unibas.medizin.osce.spportal.domain.SPPortalPerson</class> -->
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+            <!-- value="create" to build a new database on each run; value="update" to modify an existing database; value="create-drop" means the same as "create" but also drops tables when Hibernate closes; value="validate" makes no changes to the database -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy"/>
+            <property name="hibernate.connection.charSet" value="UTF-8"/>
+             <!-- <property name="packagesToScan" value="ch.unibas.medizin.osce.spportal.domain.*"/> -->
+             <!-- <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/spportal" /> -->
+            <!-- <property name="hibernate.connection.username" value="root" /> -->
+            <!-- <property name="hibernate.connection.password" value="" /> -->
+             <!-- <property name="hibernate.generate_statistics" value="true" />
+       		 <property name="hibernate.cache.use_structured_entries" value="true" />
+          	<property name="hibernate.show_sql" value="true" />
+          	<property name="hibernate.format_sql" value="true" /> -->
+        </properties>
+    </persistence-unit>
 </persistence>

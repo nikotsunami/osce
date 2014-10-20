@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -40,6 +41,10 @@ public class Administrator {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "administrator")
     private Set<Task> tasks = new HashSet<Task>();
+    
+    @PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+    
 
     public static Long countAdministratorsByName(String name) {
         return null;

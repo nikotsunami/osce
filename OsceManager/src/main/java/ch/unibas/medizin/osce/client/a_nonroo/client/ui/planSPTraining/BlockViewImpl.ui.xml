@@ -1,0 +1,21 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets">
+	
+	<ui:with type="ch.unibas.medizin.osce.shared.i18n.OsceConstants" field="constants"></ui:with>
+	
+	<ui:style src="../../styles.css">
+	.monthLblStyle{
+		font-weight: bold;
+	}
+	</ui:style>
+	<g:HTMLPanel ui:field="mainHtmlPanel">
+		<g:VerticalPanel width="100%" ui:field="buttonPanel" spacing="3">
+				<s:IconButton ui:field="splitBlocksButton" text="{constants.splitBlock}" icon="scissors"></s:IconButton>
+				<s:IconButton ui:field="joinBlockButton" text="{constants.joinBlock}" icon="link" visible="false"></s:IconButton>
+		</g:VerticalPanel>
+		<g:VerticalPanel ui:field="labelPanel">
+		<g:Label ui:field="blockLabel" visible="false"></g:Label>
+		</g:VerticalPanel>
+	</g:HTMLPanel>	
+</ui:UiBinder> 
