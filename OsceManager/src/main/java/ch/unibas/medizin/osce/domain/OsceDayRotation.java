@@ -2,7 +2,9 @@ package ch.unibas.medizin.osce.domain;
 
 import java.util.Date;
 
+import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -20,6 +22,9 @@ import ch.unibas.medizin.osce.shared.BreakType;
 @RooEntity
 public class OsceDayRotation {
 
+	@PersistenceContext(unitName="persistenceUnit")
+    transient EntityManager entityManager;
+	
 	private static Logger Log = Logger.getLogger(OsceDayRotation.class);
 	
 	private Integer rotationNumber;

@@ -84,11 +84,7 @@ public class OsMaFilePathConstant {
 
 	// Export OSCE File Path
 	public static String EXPORT_OSCE_PROCESSED_FILEPATH = getUploadBaseDIRPath() + "/eosce/export/processed/"; //"/usr/oscemanager/eosce/export/processed/";
-<<<<<<< HEAD
-	 //public static String EXPORT_OSCE_PROCESSED_FILEPATH = "c:\\oscemanager\\eosce\\export\\processed\\";
-=======
 	//public static String EXPORT_OSCE_PROCESSED_FILEPATH = "c:\\oscemanager\\eosce\\export\\processed\\";
->>>>>>> refs/remotes/origin/spportal
 	
 	public static String EXPORT_OSCE_UNPROCESSED_FILEPATH = getUploadBaseDIRPath() + "/eosce/export/unprocessed/"; //"/usr/oscemanager/eosce/export/unprocessed/";
 	// public static String EXPORT_OSCE_UNPROCESSED_FILEPATH = "c:\\oscemanager\\eosce\\export\\unprocessed\\";
@@ -123,11 +119,7 @@ public class OsMaFilePathConstant {
 	
 	public static String assignmentHTML="/osMaEntry/gwt/unibas/";
 	// Module 8]
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> refs/remotes/origin/spportal
 	public static String localSpDataDirectory = getUploadBaseDIRPath() + "/sp/";
 	
 	public static final String appStandardizedPatientPaymentPDF = "/osMaEntry/gwt/unibas/payment/Honorarabrechnung_Form_2011_01.pdf";
