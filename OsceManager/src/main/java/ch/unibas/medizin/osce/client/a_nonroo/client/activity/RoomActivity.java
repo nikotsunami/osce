@@ -324,8 +324,6 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 
 	@Override
 	public void editClicked(RoomProxy proxy, String name, double length, double width) {
-		// TODO Auto-generated method stub
-		
 		RoomRequest roomrequest = requests.roomRequest();
 		proxy = roomrequest.edit(proxy);
 		
