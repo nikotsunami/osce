@@ -28,7 +28,8 @@ public class ChecklistCriteria implements Comparable<ChecklistCriteria> {
 	
 	private Integer sequenceNumber;
 	
-	
+	@ManyToOne
+	private ChecklistItem checklistItem;
 	
 	public static Boolean updateSequence(List<ChecklistCriteria> criterias)
 	{
@@ -70,5 +71,6 @@ public class ChecklistCriteria implements Comparable<ChecklistCriteria> {
 					
 		return null;	
 	}
+	
 	
 }

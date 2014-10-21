@@ -97,4 +97,6 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	TrainingSuggestionRequestNonRoo trainingSuggestionRequestNonRoo();
 	
 	TrainingRequestNonRoo trainingRequestNonRoo();
+	
+	ChecklistItemRequestNonRoo checklistItemRequestNonRoo();
 }

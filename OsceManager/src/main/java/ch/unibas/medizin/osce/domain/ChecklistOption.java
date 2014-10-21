@@ -43,6 +43,9 @@ public class ChecklistOption implements Comparable<ChecklistOption> {
 	
 	private Integer criteriaCount;
 	
+	@ManyToOne
+	private ChecklistItem checklistItem;
+	
 	@Transactional
 	public ChecklistOption save()
 	{
@@ -110,4 +113,5 @@ public class ChecklistOption implements Comparable<ChecklistOption> {
  		
  		return valueList;
  	}
+ 	
 }
