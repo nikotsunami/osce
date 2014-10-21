@@ -1782,7 +1782,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
-		requests.spStandardizedPatientRequestNonRoo().findALlSPWhoEditedDetails().with("anamnesisForm").fire(new OSCEReceiver<List<SpStandardizedPatientProxy>>() {
+		requests.spStandardizedPatientRequestNonRoo().findALlSPWhoEditedDetails().with("person","anamnesisForm","nationality","profession","bankAccount","bankAccount.country").fire(new OSCEReceiver<List<SpStandardizedPatientProxy>>() {
 
 			@Override
 			public void onSuccess(List<SpStandardizedPatientProxy> response) {
@@ -1793,7 +1793,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				
 				Log.info("finding all standar dized patient whoes data is changed at sp portal to get theird old data");
 				
-				requests.spPortalPersonRequestNonRoo().findAllStandardizedPAtientWhoesDataIsChangedAtSPPortal(listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal).with("anamnesisForm").
+				requests.spPortalPersonRequestNonRoo().findAllStandardizedPAtientWhoesDataIsChangedAtSPPortal(listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal).with("anamnesisForm","bankAccount","profession","nationality","bankAccount.country").
 			
 				fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
 

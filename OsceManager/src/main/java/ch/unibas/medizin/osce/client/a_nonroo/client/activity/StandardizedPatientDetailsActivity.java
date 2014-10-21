@@ -1447,6 +1447,18 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 									errorMsgDisplayView.hide();
 								}
 							});
+						}else{
+							requests.standardizedPatientRequest().findStandardizedPatient(standardizedPatientProxy.getId()).with("profession", "descriptions", "nationality", "bankAccount", "bankAccount.country", "langskills", "anamnesisForm", "anamnesisForm.scars","patientInSemester").fire(new OSCEReceiver<StandardizedPatientProxy>(){
+
+								@Override
+								public void onSuccess(StandardizedPatientProxy response) {
+									Log.info("Get refreshed sp ");
+									standardizedPatientProxy=response;
+									view.setValue(standardizedPatientProxy);
+									
+								}
+								
+							});
 						}
 					}
 				});
@@ -1506,7 +1518,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
-		requests.spPortalPersonRequestNonRoo().findSpPortalSPBasedOnOsceSPID(standardizedPatientProxy.getId()).with("person","anamnesisForm").fire(new OSCEReceiver<SpStandardizedPatientProxy>() {
+		requests.spPortalPersonRequestNonRoo().findSpPortalSPBasedOnOsceSPID(standardizedPatientProxy.getId()).with("person","anamnesisForm","nationality","profession","bankAccount","bankAccount.country").fire(new OSCEReceiver<SpStandardizedPatientProxy>() {
 
 			@Override
 			public void onSuccess(SpStandardizedPatientProxy response) {

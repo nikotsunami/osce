@@ -52,6 +52,7 @@ import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterRequest;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.Semesters;
+import ch.unibas.medizin.osce.shared.SurveyStatus;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -1259,7 +1260,8 @@ public class OsMaMainNav extends Composite {
 						if(inflag==0)	// In Create Mode
 						{
 							Log.info("~Create");
-							semesterProxy=semesterRequest.create(SemesterProxy.class);							
+							semesterProxy=semesterRequest.create(SemesterProxy.class);
+							semesterProxy.setSurveyStatus(SurveyStatus.NOT_STARTED);
 						}
 						else	// In Edit Mode
 						{						
@@ -1285,7 +1287,7 @@ public class OsMaMainNav extends Composite {
 							semesterProxy.setSemester(((SemesterPopupViewImpl)semesterPopupView).enumSemester.getValue());
 							semesterProxy.setMaximalYearEarnings(((maxyearear == null) || (maxyearear.compareTo("")== 0)) ? null : Double.parseDouble(maxyearear));						
 							semesterProxy.setPricestatist(((pricestat == null) || (pricestat.compareTo("")== 0)) ? null : Double.parseDouble(pricestat));
-							semesterProxy.setPriceStandardizedPartient(((priceSP == null) || (priceSP.compareTo("")== 0)) ? null : Double.parseDouble(priceSP));															
+							semesterProxy.setPriceStandardizedPartient(((priceSP == null) || (priceSP.compareTo("")== 0)) ? null : Double.parseDouble(priceSP));
 							lstSemester.setValue(semesterProxy);
 							
 							final SemesterProxy insemesterPropxy;
