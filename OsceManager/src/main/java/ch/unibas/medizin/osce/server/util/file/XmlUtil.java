@@ -205,7 +205,7 @@ public class XmlUtil {
 						instTitle.appendChild(doc.createTextNode("Instruction"));
 						optionDict.appendChild(instTitle);
 						Element instTitleValue = doc.createElement("string");
-						instTitleValue.appendChild(doc.createCDATASection(checklistOption.getInstruction() == null ? "" : checklistOption.getInstruction()));
+						instTitleValue.appendChild(doc.createCDATASection(checklistOption.getDescription() == null ? "" : checklistOption.getDescription()));
 						optionDict.appendChild(instTitleValue);
 						
 						Element criCountValue = doc.createElement("key");
