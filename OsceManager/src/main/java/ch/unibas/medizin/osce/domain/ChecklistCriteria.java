@@ -23,6 +23,9 @@ public class ChecklistCriteria implements Comparable<ChecklistCriteria> {
 	@Size(max=255)
 	private String criteria;
 	
+	@Size(max=5000)
+	private String description;
+	
 	@ManyToOne
 	private ChecklistQuestion checklistQuestion;
 	

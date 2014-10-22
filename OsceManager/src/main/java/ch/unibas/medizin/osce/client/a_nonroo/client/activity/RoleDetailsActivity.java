@@ -132,6 +132,7 @@ import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialRequest;
 import ch.unibas.medizin.osce.client.managed.ui.MaterialListProxyRenderer;
 import ch.unibas.medizin.osce.client.style.resources.LearningObjectiveData;
+import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
@@ -139,6 +140,7 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.ItemType;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
@@ -2464,7 +2466,7 @@ final int index2 = index;
 			proxy.setOptionName(option);
 			proxy.setChecklistQuestion(questionView.getProxy());
 			proxy.setValue(value);
-			proxy.setInstruction(description);
+			proxy.setDescription(description);
 			proxy.setSequenceNumber(questionView.optionVerticalPanel.getWidgetCount());
 			proxy.setCriteriaCount(new Integer(questionView.optionPopup.getCriteriaCountLstBox().getValue(questionView.optionPopup.getCriteriaCountLstBox().getSelectedIndex())));
 			// Highlight onViolation
@@ -7321,7 +7323,7 @@ public void onDragStart(DragStartEvent event) {
 		proxy.setOptionName(topic);
 		proxy.setChecklistQuestion(optionView.getProxy().getChecklistQuestion());
 		proxy.setValue(description);
-		proxy.setInstruction(optionDesc);
+		proxy.setDescription(optionDesc);
 		proxy.setCriteriaCount(new Integer(optionView.optionPopup.getCriteriaCountLstBox().getValue(optionView.optionPopup.getCriteriaCountLstBox().getSelectedIndex())));
 		// Highlight onViolation
 		request.persist().using(proxy).fire(new OSCEReceiver<Void>(optionView.getChecklistOptionMap()) 

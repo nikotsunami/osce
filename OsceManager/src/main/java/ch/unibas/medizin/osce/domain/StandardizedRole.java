@@ -287,7 +287,7 @@ public class StandardizedRole {
 					ChecklistOption newOption = new ChecklistOption();
 					newOption.setName(option.getName());
 					newOption.setOptionName(option.getOptionName());
-					newOption.setInstruction(option.getInstruction());
+					newOption.setDescription(option.getDescription());
 					newOption.setSequenceNumber(option.getSequenceNumber());
 					newOption.setValue(option.getValue());
 					newOption.setCriteriaCount(option.getCriteriaCount());
@@ -846,7 +846,7 @@ public class StandardizedRole {
 					
 					checklistoptionBean.setId(option.getId());
 					checklistoptionBean.setTitle(defaultString(option.getOptionName()));
-					checklistoptionBean.setSubtitle(defaultString(option.getInstruction()));
+					checklistoptionBean.setSubtitle(defaultString(option.getDescription()));
 					checklistoptionBean.setVal(defaultString(option.getValue()));
 					
 					if(option.getCriteriaCount() != null) {

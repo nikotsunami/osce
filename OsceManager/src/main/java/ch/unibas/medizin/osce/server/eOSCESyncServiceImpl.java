@@ -2443,7 +2443,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 						
 						checklistoptionBean.setId(option.getId());
 						checklistoptionBean.setTitle(defaultString(option.getOptionName()));
-						checklistoptionBean.setSubtitle(defaultString(option.getInstruction()));
+						checklistoptionBean.setSubtitle(defaultString(option.getDescription()));
 						checklistoptionBean.setVal(defaultString(option.getValue()));
 						
 						if(option.getCriteriaCount() != null) {

@@ -44,7 +44,7 @@ public class ChecklistItem {
 	@Enumerated
     private OptionType optionType;
 	
-	private Boolean isOveralQuestion;
+	private Boolean isRegressionItem;
 	
 	private Integer sequenceNumber;
 	
@@ -61,4 +61,6 @@ public class ChecklistItem {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "checklistItem")
 	@OrderBy("sequenceNumber")
     private List<ChecklistCriteria> checkListCriterias = new ArrayList<ChecklistCriteria>();
+	
+	
 }
