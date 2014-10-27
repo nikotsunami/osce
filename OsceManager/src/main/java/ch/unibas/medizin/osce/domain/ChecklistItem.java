@@ -62,5 +62,17 @@ public class ChecklistItem {
 	@OrderBy("sequenceNumber")
     private List<ChecklistCriteria> checkListCriterias = new ArrayList<ChecklistCriteria>();
 	
+	public static List<ChecklistItem> findChecklistTopicByChecklistId(Long checklistId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem IS NOT NULL AND ci.parentItem.id IN (SELECT ci FROM ChecklistItem ci WHERE ci.checkList IS NOT NULL AND ci.checkList.id = " + checklistId + ") ORDER BY ci.sequenceNumber";
+		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
+		return query.getResultList();
+	}
 	
+	public static List<ChecklistItem> findChecklistQuestionByChecklistTopicId(Long checklistTopicId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem IS NOT NULL AND ci.parentItem.id = " + checklistTopicId + " ORDER BY ci.sequenceNumber";
+		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
+		return query.getResultList();
+	}
 }

@@ -17,6 +17,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -53,6 +55,7 @@ import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.BucketInformation;
 import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.ChecklistCriteria;
+import ch.unibas.medizin.osce.domain.ChecklistItem;
 import ch.unibas.medizin.osce.domain.ChecklistOption;
 import ch.unibas.medizin.osce.domain.ChecklistQuestion;
 import ch.unibas.medizin.osce.domain.ChecklistTopic;
@@ -2275,7 +2278,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				credentials.setPassword(bucketInformation == null ? "" : defaultString(bucketInformation.getSecretKey()));
 				credentials.setEncryptionKey(bucketInformation == null ? "" : defaultString(bucketInformation.getEncryptionKey()));
 				
-				checkList(osceList.get(i).getId(),factory,oscedata);
+				//checkList(osceList.get(i).getId(),factory,oscedata);
+				checkListFromChecklistItem(osceList.get(i).getId(),factory,oscedata);
 				examiners(osceList.get(i).getId(),factory,oscedata);
 				candidates(osceList.get(i).getId(),factory,oscedata);
 				stations(osceList.get(i).getId(),factory,oscedata);
@@ -2456,6 +2460,88 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			}
 		}
 	}
+	
+	private void checkListFromChecklistItem(Long osceId,ObjectFactory factory, Oscedata oscedata) {
+		Checklists checklistsBean = factory.createOscedataChecklists();
+		oscedata.setChecklists(checklistsBean);
+		
+		List<CheckList> checkLists =  CheckList.findAllCheckListforOsce(osceId);
+		
+		for (CheckList checklist : checkLists) {
+			
+			Checklist checklistBean = factory.createOscedataChecklistsChecklist();
+			checklistsBean.getChecklist().add(checklistBean);
+			
+			checklistBean.setId(checklist.getId());
+			checklistBean.setTitle(defaultString(checklist.getTitle()));
+			
+			Checklisttopics checklisttopicsBean = factory.createOscedataChecklistsChecklistChecklisttopics();
+			checklistBean.setChecklisttopics(checklisttopicsBean);
+			
+			List<ChecklistItem> checklistItemTopicList = ChecklistItem.findChecklistTopicByChecklistId(checklist.getId()); 
+			
+			for (ChecklistItem checklistItem : checklistItemTopicList)
+			{
+				Checklisttopic checklisttopicBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopic();
+				checklisttopicsBean.getChecklisttopic().add(checklisttopicBean);
+				
+				checklisttopicBean.setId(checklistItem.getId());
+				checklisttopicBean.setTitle(defaultString(checklistItem.getName()));
+				checklisttopicBean.setInstruction(defaultString(checklistItem.getDescription()));
+				
+				Checklistitems checklistitemsBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitems();
+				checklisttopicBean.setChecklistitems(checklistitemsBean);
+				
+				List<ChecklistItem> checklistItemQuestionId = ChecklistItem.findChecklistQuestionByChecklistTopicId(checklistItem.getId());
+				
+				for (ChecklistItem checklistQuestion : checklistItemQuestionId)
+				{
+					Checklistitem checklistitemBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitemsChecklistitem();
+					checklistitemsBean.getChecklistitem().add(checklistitemBean);
+					
+					checklistitemBean.setId(checklistQuestion.getId());
+					checklistitemBean.setAffectsOverallRating((checklistQuestion.getIsRegressionItem() == null ? "no" : checklistQuestion.getIsRegressionItem() == true ? "yes" : "no"));
+					checklistitemBean.setTitle(defaultString(checklistQuestion.getName()));
+					checklistitemBean.setInstruction(defaultString(checklistQuestion.getDescription()));
+					
+					Checklistcriteria checklistcriteriaBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitemsChecklistitemChecklistcriteria();
+					checklistitemBean.setChecklistcriteria(checklistcriteriaBean);
+					
+					List<ChecklistCriteria> checkListCriteriaList = checklistQuestion.getCheckListCriterias();
+					for (ChecklistCriteria criteria : checkListCriteriaList)
+					{
+						Checklistcriterion checklistcriterionBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitemsChecklistitemChecklistcriteriaChecklistcriterion();
+						checklistcriteriaBean.getChecklistcriterion().add(checklistcriterionBean);
+						checklistcriterionBean.setId(criteria.getId());
+						checklistcriterionBean.setTitle(defaultString(criteria.getCriteria()));
+					}
+					
+					Checklistoptions checklistoptionsBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitemsChecklistitemChecklistoptions();
+					checklistitemBean.setChecklistoptions(checklistoptionsBean);
+					
+					Iterator<ChecklistOption> opitr = checklistQuestion.getCheckListOptions().iterator();
+					while (opitr.hasNext())
+					{
+						ChecklistOption option = opitr.next();
+						
+						Checklistoption checklistoptionBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitemsChecklistitemChecklistoptionsChecklistoption();
+						checklistoptionsBean.getChecklistoption().add(checklistoptionBean);
+						
+						checklistoptionBean.setId(option.getId());
+						checklistoptionBean.setTitle(defaultString(option.getOptionName()));
+						checklistoptionBean.setSubtitle(defaultString(option.getDescription()));
+						checklistoptionBean.setVal(defaultString(option.getValue()));
+						
+						if(option.getCriteriaCount() != null) {
+							checklistoptionBean.setCriteriacount(option.getCriteriaCount());	
+						} else {
+							checklistoptionBean.setCriteriacount(0);
+						}
+					}
+				}
+			}
+		}
+	}
 
 	private void examiners(Long osceId, ObjectFactory factory, Oscedata oscedata) {
 
@@ -2499,8 +2585,16 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		Set<Assignment> assignmentlist = new HashSet<Assignment>();
 		assignmentlist.addAll(Assignment.findAssignmentStudentsByOsce(osceId));
 		assignmentlist.addAll(Assignment.findAssignmentOfLogicalBreakPost(osceId));
+		List<Assignment> assList = new ArrayList<Assignment>(assignmentlist);
+		Collections.sort(assList, new Comparator<Assignment>() {
+
+			@Override
+			public int compare(Assignment o1, Assignment o2) {
+				return o1.getId().compareTo(o2.getId());
+			}
+		});
 		
-		for (Assignment studAss : assignmentlist)
+		for (Assignment studAss : assList)
 		{	
 			String studIdComp = studAss.getStudent() == null ? "" : studAss.getStudent().getId().toString();
 			
