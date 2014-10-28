@@ -88,4 +88,105 @@ public class ChecklistItem {
 		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
 		return query.getResultList();
 	}
+	public static List<ChecklistItem> findAllChecklistItemByChecklistId(Long checklistId) {
+		List<ChecklistItem> checklistItemList = new ArrayList<ChecklistItem>();
+		
+		EntityManager em = entityManager();
+		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.checkList IS NOT NULL AND ci.checkList.id = " + checklistId + " ORDER BY ci.sequenceNumber";
+		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
+		checklistItemList.addAll(query.getResultList());
+		
+		String sql1 = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem IS NOT NULL AND ci.parentItem.id IN (SELECT ci FROM ChecklistItem ci WHERE ci.checkList IS NOT NULL AND ci.checkList.id = " + checklistId + ") ORDER BY ci.sequenceNumber";
+		TypedQuery<ChecklistItem> query1 = em.createQuery(sql1, ChecklistItem.class);
+		checklistItemList.addAll(query1.getResultList());
+		
+		String sql2 = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem IS NOT NULL AND ci.parentItem.id IN (SELECT ci FROM ChecklistItem ci WHERE ci.parentItem IS NOT NULL AND ci.parentItem.id IN (SELECT ci FROM ChecklistItem ci WHERE ci.checkList IS NOT NULL AND ci.checkList.id = " + checklistId + ")) ORDER BY ci.sequenceNumber";
+		TypedQuery<ChecklistItem> query2 = em.createQuery(sql2, ChecklistItem.class);
+		checklistItemList.addAll(query2.getResultList());
+				
+		return checklistItemList;
+	}
+	
+	public static ChecklistItem saveChecklistTabItem(String name, String description, Long standardizedRoleId) {
+		StandardizedRole standardizedRole = StandardizedRole.findStandardizedRole(standardizedRoleId);
+		CheckList checkList = standardizedRole.getCheckList();
+		Integer sequenceNumber = findMaxTabSequenceNumber(checkList.getId());
+		
+		ChecklistItem checklistItem = new ChecklistItem();
+		checklistItem.setName(name);
+		checklistItem.setDescription(description);
+		checklistItem.setItemType(ItemType.TAB);
+		checklistItem.setSequenceNumber(sequenceNumber);
+		checklistItem.setCheckList(checkList);
+		checklistItem.persist();
+		
+		return checklistItem;
+	}
+	
+	public static Integer findMaxTabSequenceNumber(Long checklistId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT MAX(ci.sequenceNumber) FROM ChecklistItem ci WHERE ci.checkList.id = " + checklistId;
+		TypedQuery<Integer> query = em.createQuery(sql, Integer.class);
+		if (query.getResultList() != null && query.getResultList().size() > 0 && query.getResultList().get(0) != null)
+			return (query.getResultList().get(0) + 1);
+		else
+			return 0;
+	}
+	
+	public static ChecklistItem saveChecklistTopicItem(String name, String description, Long parentTabItemId) {
+		ChecklistItem parentItem = ChecklistItem.findChecklistItem(parentTabItemId);
+		Integer seqNumber = findMaxSequenceNumberByParentItem(parentTabItemId);
+		
+		ChecklistItem checklistItem = new ChecklistItem();
+		checklistItem.setName(name);
+		checklistItem.setDescription(description);
+		checklistItem.setItemType(ItemType.TOPIC);
+		checklistItem.setSequenceNumber(seqNumber);
+		checklistItem.setParentItem(parentItem);
+		checklistItem.persist();
+		
+		return checklistItem;
+	}
+	
+	public static ChecklistItem saveChecklistQuestionItem(String name, String description, Boolean isOverallQue, OptionType optionType, Long parentTopicItemId) {
+		ChecklistItem parentItem = ChecklistItem.findChecklistItem(parentTopicItemId);
+		Integer seqNumber = findMaxSequenceNumberByParentItem(parentTopicItemId);
+		
+		ChecklistItem checklistItem = new ChecklistItem();
+		checklistItem.setName(name);
+		checklistItem.setDescription(description);
+		checklistItem.setItemType(ItemType.QUESTION);
+		checklistItem.setIsRegressionItem(isOverallQue);
+		checklistItem.setOptionType(optionType);
+		checklistItem.setSequenceNumber(seqNumber);
+		checklistItem.setParentItem(parentItem);
+		checklistItem.persist();
+		
+		return checklistItem;
+	}
+	
+	public static Integer findMaxSequenceNumberByParentItem(Long parentItemId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT MAX(ci.sequenceNumber) FROM ChecklistItem ci WHERE ci.parentItem.id = " + parentItemId;
+		TypedQuery<Integer> query = em.createQuery(sql, Integer.class);
+		if (query.getResultList() != null && query.getResultList().size() > 0 && query.getResultList().get(0) != null)
+			return (query.getResultList().get(0) + 1);
+		else
+			return 0;
+	}
+	
+	public static List<ChecklistItem> findChecklistItemByParentId(Long parentId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem IS NOT NULL AND ci.parentItem.id = " + parentId;
+		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
+		return query.getResultList();
+	}
+	
+	public static List<ChecklistItem> findChecklistItemByChecklistId(Long checklistId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.checkList IS NOT NULL AND ci.checkList.id = " + checklistId;
+		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
+		return query.getResultList();
+	}
+	
 }

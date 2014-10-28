@@ -156,15 +156,40 @@
 			</g:DisclosurePanel>
 
 			<g:TabPanel ui:field="roleSubPanel" width="100%">
-					<!--  Assignment E		start	-->		
 				<g:Tab>
+					<g:TabHTML></g:TabHTML>
+					<g:HTMLPanel addStyleNames="{style.patientDetails}">
+						<g:VerticalPanel width="100%">
+										
+							<g:HorizontalPanel spacing="6" ui:field="iOsceAddTopicHP">		
+								<my:IconButton icon="plusthick" ui:field="iOsceAddCheckListSectionButton" > </my:IconButton>
+								<my:IconButton icon="arrowthickstop-1-s" ui:field="iOsceImportItemButton" > </my:IconButton>
+								<my:IconButton icon="extlink" ui:field="eosceExportChecklist" ></my:IconButton>
+								<my:IconButton icon="extlink" ui:field="eOsceExport" ></my:IconButton>
+								<my:IconButton icon="extlink" ui:field="iOsceExport" ></my:IconButton>
+							</g:HorizontalPanel>
+							
+							<g:AbsolutePanel ui:field="iOsceCheckListAP">
+								<g:VerticalPanel ui:field="containerVerticalPanel" width="100%" height="100%" spacing="3">
+									
+								</g:VerticalPanel>
+								<!-- <g:HorizontalPanel ui:field="containerVerticalPanel">
+									<my:ScrolledTabLayoutPanel ui:field="checklistTabPanel" barHeight="40" width="100%" height="100%">
+									</my:ScrolledTabLayoutPanel>
+								</g:HorizontalPanel> -->
+							</g:AbsolutePanel>
+						</g:VerticalPanel>
+					</g:HTMLPanel>	
+				</g:Tab>
+					<!--  Assignment E		start	-->		
+				<!-- <g:Tab>
 					
 				<g:TabHTML></g:TabHTML>
 					
 								
 								
 							<g:HTMLPanel addStyleNames="{style.patientDetails}">
-							<!--  Assignment E			-->		
+							 Assignment E					
 								<g:VerticalPanel width="100%"><g:AbsolutePanel ui:field="checkListAP">
 										<g:VerticalPanel ui:field="checkListsVerticalPanel" width="100%">
 										
@@ -173,7 +198,7 @@
 										</g:VerticalPanel></g:AbsolutePanel>
 										
 									<g:HorizontalPanel spacing="3" ui:field="addTopicHP">		
-											<!--  <g:TextBox ui:field="addCheckListTopicTxtBox"></g:TextBox>-->
+											 <g:TextBox ui:field="addCheckListTopicTxtBox"></g:TextBox>
 											
 											<my:IconButton icon="plusthick" ui:field="addCheckListTopicButton" > </my:IconButton>
 											<my:IconButton icon="arrowthickstop-1-s" ui:field="importTopicButton" ></my:IconButton>
@@ -183,7 +208,7 @@
 										</g:HorizontalPanel>
 								</g:VerticalPanel>
 							</g:HTMLPanel>	
-				</g:Tab>
+				</g:Tab> -->
 				<!--  Assignment E		end	-->	
 				<g:Tab>
 					<g:TabHTML></g:TabHTML>

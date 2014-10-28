@@ -1654,6 +1654,30 @@ public interface OsceConstants extends Constants {
 
 	public String exportChecklistQR();
 	
+	public String addOption();
+	
+	public String addCriteria();
+	
+	public String itemType();
+	
+	public String optionType();
+	
+	public String isRegressionItem(); 
+	
+	public String tabErrorMessage();
+	
+	public String exportToeOSCE();
+	
+	public String exportToiOSCE();
+	
+	public String editSection();
+	
+	public String deleteTab();
+	
+	public String optionValueErrMessage();
+	
+	public String optionValueEmptyMessage();
+	
 	public String downloadeOSCE();
 	
 	public String downloadiOSCE();

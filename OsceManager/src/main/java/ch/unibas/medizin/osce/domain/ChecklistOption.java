@@ -114,5 +114,41 @@ public class ChecklistOption implements Comparable<ChecklistOption> {
  		return valueList;
  	}
  	
+ 	public static ChecklistItem saveChecklistOption(String name, String description, String value, Integer criteriaCount, Long parentItemId, Long optionId) {
+ 		
+ 		ChecklistOption checklistOption;
+ 		ChecklistItem checklistItem;
+ 		
+ 		if (optionId != null) {
+ 			checklistOption = ChecklistOption.findChecklistOption(optionId);
+ 			checklistItem = checklistOption.getChecklistItem();
+ 		} else {
+ 			checklistOption = new ChecklistOption();
+ 			checklistItem = ChecklistItem.findChecklistItem(parentItemId);
+ 			Integer seqNumber = findMaxSequenceNumberByQuestionId(parentItemId);
+ 			checklistOption.setSequenceNumber(seqNumber);
+ 	 		checklistOption.setChecklistItem(checklistItem);
+ 		}
+ 		
+ 		checklistOption.setOptionName(name);
+ 		checklistOption.setDescription(description);
+ 		checklistOption.setValue(value);
+ 		checklistOption.setCriteriaCount(criteriaCount);
+ 		
+ 		checklistOption.persist();
+ 		
+ 		return checklistItem;
+ 	}
+ 	
+ 	public static int findMaxSequenceNumberByQuestionId(Long questionId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT MAX(c.sequenceNumber) FROM ChecklistOption c WHERE c.checklistItem.id = " + questionId;
+		TypedQuery<Integer> query = em.createQuery(sql, Integer.class);
+		if (query.getResultList() != null && query.getResultList().size() > 0 && query.getResultList().get(0) != null)
+			return (query.getResultList().get(0) + 1);
+		else
+			return 0;
+	
+ 	}
  	
 }

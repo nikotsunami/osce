@@ -6,6 +6,7 @@ import java.util.Map;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubView;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.shared.ItemType;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -54,6 +55,8 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 		void exportOsceClicked(StandardizedRoleProxy value);
 
 		void exportChecklistQRClicked(StandardizedRoleProxy value);
+
+	void addiOsceChecklistTabClicked(ItemType itemType, String tabName, String tabDescription, StandardizedRoleProxy standardizedRoleProxy);
 	}
 
 	/*
@@ -104,6 +107,8 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 
 	RoleOsceSemesterSubViewImpl getRoleOsceSemesterSubViewImpl();
 	
+	public VerticalPanel getContainerVerticalPanel();
 	
-
+	//public HorizontalPanel getTabPanel();
+	//public ScrolledTabLayoutPanel getChecklistTabPanel();
 }

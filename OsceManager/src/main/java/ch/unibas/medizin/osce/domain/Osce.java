@@ -1671,4 +1671,11 @@ public class Osce {
  		}
  		
  	}
+ 	
+ 	public static List<Osce> findOsceBySemesterId(Long semesterId) {
+ 		EntityManager em = entityManager();
+ 		String sql = "SELECT o FROM Osce o WHERE o.osceStatus = " + OsceStatus.OSCE_CLOSED.ordinal() + " AND o.semester.id = " + semesterId;
+ 		TypedQuery<Osce> query = em.createQuery(sql, Osce.class);
+ 		return query.getResultList();
+ 	}
 }

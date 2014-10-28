@@ -75,5 +75,36 @@ public class ChecklistCriteria implements Comparable<ChecklistCriteria> {
 		return null;	
 	}
 	
+	public static ChecklistItem saveChecklistCriteria(String name, String description, Long checklistItemId, Long checklistCriteriaId) {
+		
+		ChecklistCriteria checklistCriteria;
+		ChecklistItem checklistItem;
+		
+		if (checklistCriteriaId != null) {
+			checklistCriteria = ChecklistCriteria.findChecklistCriteria(checklistCriteriaId);
+			checklistItem = checklistCriteria.getChecklistItem();
+		} else {
+			checklistCriteria = new ChecklistCriteria();
+			checklistItem = ChecklistItem.findChecklistItem(checklistItemId);
+			Integer seqNo = findMaxSequenceNumberByItemId(checklistItemId);
+			checklistCriteria.setSequenceNumber(seqNo);
+			checklistCriteria.setChecklistItem(checklistItem);
+		}
+		
+		checklistCriteria.setCriteria(name);
+		checklistCriteria.setDescription(description);
+		checklistCriteria.persist();
+		
+		return checklistItem;
+	}
 	
+	public static int findMaxSequenceNumberByItemId(Long itemId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT MAX(c.sequenceNumber) FROM ChecklistCriteria c WHERE c.checklistItem.id = " + itemId;
+		TypedQuery<Integer> query = em.createQuery(sql, Integer.class);
+		if (query.getResultList() != null && query.getResultList().size() > 0 && query.getResultList().get(0) != null)
+			return (query.getResultList().get(0) + 1);
+		else
+			return 0;
+	}
 }

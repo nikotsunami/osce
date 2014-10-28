@@ -425,6 +425,22 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	
 	public String SUNDAY(); 
 	
-	public String SUN(); 
+	public String SUN();
+	
+	//Item Type
+	public String TAB();
+	
+	public String TOPIC();
+	
+	public String QUESTION();
+
+	//Option Type
+	public String POPOVER();
+	
+	public String SLIDER();
+	
+	public String TOGGLE_2();
+	
+	public String TOGGLE_3();
 }
 
