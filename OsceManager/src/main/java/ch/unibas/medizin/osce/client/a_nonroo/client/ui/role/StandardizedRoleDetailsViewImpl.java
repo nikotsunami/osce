@@ -426,6 +426,9 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	public IconButton exportOsce;
 	//export osce change
 	
+	@UiField
+	public IconButton exportCheckListQR;
+	
 	public StandardizedRoleDetailsViewImpl() {
 
 		initWidget(uiBinder.createAndBindUi(this));
@@ -480,6 +483,8 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		
 		exportOsce.setText(constants.exportOsce());
 		exportOsce.addStyleName("expTopicButton");
+		exportCheckListQR.setText(constants.exportChecklistQR());
+		exportCheckListQR.addStyleName("expTopicButton");
 		
 	}
 	
@@ -847,5 +852,11 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 			Log.info("Export Osce Clicked role id is ");
 			delegate.exportOsceClicked(this.getValue());
 			
+		}
+		
+		@UiHandler("exportCheckListQR")
+		public void exportChecklistQRCLicked(ClickEvent event)
+		{
+			delegate.exportChecklistQRClicked(this.getValue());	
 		}
 }

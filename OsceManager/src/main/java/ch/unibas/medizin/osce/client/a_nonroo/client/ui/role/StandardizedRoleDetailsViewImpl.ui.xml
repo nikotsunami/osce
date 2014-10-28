@@ -179,6 +179,7 @@
 											<my:IconButton icon="arrowthickstop-1-s" ui:field="importTopicButton" ></my:IconButton>
 											<my:IconButton icon="extlink" ui:field="exportChecklist" ></my:IconButton>
 											<my:IconButton icon="extlink" ui:field="exportOsce" ></my:IconButton>
+											<my:IconButton icon="extlink" ui:field="exportCheckListQR" ></my:IconButton>
 										</g:HorizontalPanel>
 								</g:VerticalPanel>
 							</g:HTMLPanel>	

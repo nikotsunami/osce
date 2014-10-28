@@ -399,4 +399,13 @@
         <servlet-name>RemotefileServlet</servlet-name>
         <url-pattern>/downloadRemoteFile/*</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>iOSCEChecklistService</servlet-name>
+        <servlet-class>ch.unibas.medizin.osce.server.service.IOSCEChecklistService</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>iOSCEChecklistService</servlet-name>
+        <url-pattern>/iOSCEChecklistService</url-pattern>
+    </servlet-mapping>
 </web-app>

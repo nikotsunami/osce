@@ -7959,6 +7959,16 @@ public void onDragStart(DragStartEvent event) {
 				}
 			});*/
 		}
+		@Override
+		public void exportChecklistQRClicked(StandardizedRoleProxy value) {
+			
+			String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.ROLE_CHECKLIST_QR.ordinal()));          
+			String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+					.concat("&").concat(ResourceDownloadProps.ID).concat("=").concat(URL.encodeQueryString(value.getCheckList().getId().toString()));
+			Log.info("--> url is : " +url);
+			Window.open(url, "", "");
+		}
+		
 }
 
 	

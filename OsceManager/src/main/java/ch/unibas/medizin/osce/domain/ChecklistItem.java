@@ -75,4 +75,17 @@ public class ChecklistItem {
 		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
 		return query.getResultList();
 	}
+	public static List<ChecklistItem> findAllChecklistItemsForChecklist(Long checklistId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.checkList IS NOT NULL AND ci.checkList.id = " + checklistId;
+		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
+		return query.getResultList();
+	}
+
+	public static List<ChecklistItem> findAllChecklistItemsChild(Long parentId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem IS NOT NULL AND ci.parentItem.id = " + parentId;
+		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
+		return query.getResultList();
+	}
 }

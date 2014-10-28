@@ -11,7 +11,7 @@ public class OsMaFilePathConstant {
 		  try 
 		  {
 			  Properties properties =  new Properties();
-			  properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/paths.properties")); 
+			  properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/config.properties")); 
 			  UPLOAD_BASE_DIR_PATH = properties.getProperty("baseDir");
 		  }
 		  catch (Exception e) 
@@ -22,6 +22,81 @@ public class OsMaFilePathConstant {
 		  return UPLOAD_BASE_DIR_PATH;
 	 }
 	
+	 public static String getQRCodeURL() {
+		  
+		 String  QR_CODE_URL = ""; 
+		 
+	
+		  try 
+		  {
+			  Properties properties =  new Properties();
+			  properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/config.properties")); 
+			  QR_CODE_URL = properties.getProperty("url");
+		  }
+		  catch (Exception e) 
+		  {
+			   e.printStackTrace();
+		  }
+		  
+		  return QR_CODE_URL;
+	 }
+	 
+	 public static String getSymmetricKey() {
+		  
+		 String  SYMMETRIC_KEY = ""; 
+		 
+	
+		  try 
+		  {
+			  Properties properties =  new Properties();
+			  properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/config.properties")); 
+			  SYMMETRIC_KEY = properties.getProperty("key");
+		  }
+		  catch (Exception e) 
+		  {
+			   e.printStackTrace();
+		  }
+		  
+		  return SYMMETRIC_KEY;
+	 }
+	 
+	 public static String getQRCodeWidth() {
+		  
+		 String  width = ""; 
+		 
+	
+		  try 
+		  {
+			  Properties properties =  new Properties();
+			  properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/config.properties")); 
+			  width = properties.getProperty("qrCodeWidth");
+		  }
+		  catch (Exception e) 
+		  {
+			   e.printStackTrace();
+		  }
+		  
+		  return width;
+	 }
+	 
+	 public static String getQRCodeHeight() {
+		  
+		 String  height = ""; 
+		 
+	
+		  try 
+		  {
+			  Properties properties =  new Properties();
+			  properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/config.properties")); 
+			  height = properties.getProperty("qrCodeHeight");
+		  }
+		  catch (Exception e) 
+		  {
+			   e.printStackTrace();
+		  }
+		  
+		  return height;
+	 }
 	// Module 9 Start
 
 	public static String DOWNLOAD_DIR_PATH = "Download";
@@ -35,6 +110,8 @@ public class OsMaFilePathConstant {
 	public static String STUDENT_FILE_NAME_PDF_FORMAT = "Student.pdf";
 	public static String EXAMINER_FILE_NAME_PDF_FORMAT = "Examiner.pdf";
 	public static String INVITATION_FILE_NAME_PDF_FORMAT = "Invitation.pdf";
+	public static String EXAMINER_QR_PDF_FORMAT="ExaminerQR.pdf";
+	public static final String STUDENT_QR_PDF_FORMAT = "StudentQR.pdf";
 
 	public static String TXT_EXTENTION = ".txt";
 
@@ -123,4 +200,8 @@ public class OsMaFilePathConstant {
 	public static String localSpDataDirectory = getUploadBaseDIRPath() + "/sp/";
 	
 	public static final String appStandardizedPatientPaymentPDF = "/osMaEntry/gwt/unibas/payment/Honorarabrechnung_Form_2011_01.pdf";
+
+	public static final String EXAMINER_LIST_QR = "examinerQR";
+
+	public static final String STUDENT_LIST_QR = "studentQR";
 }

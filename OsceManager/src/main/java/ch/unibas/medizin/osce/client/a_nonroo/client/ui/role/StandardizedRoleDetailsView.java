@@ -52,6 +52,8 @@ public interface StandardizedRoleDetailsView extends IsWidget {
 		//export checklist
 
 		void exportOsceClicked(StandardizedRoleProxy value);
+
+		void exportChecklistQRClicked(StandardizedRoleProxy value);
 	}
 
 	/*

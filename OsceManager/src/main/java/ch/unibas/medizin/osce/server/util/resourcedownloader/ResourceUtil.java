@@ -23,7 +23,9 @@ import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.StandardizedPatientPaymentUtil;
+import ch.unibas.medizin.osce.server.util.qrcode.QRCodeUtil;
 import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.Sorting;
 
@@ -98,6 +100,11 @@ public class ResourceUtil {
 			fileName = setRoleChecklisteOSCE(request,os);
 			break;
 		}
+		case ROLE_CHECKLIST_QR:{
+			
+			fileName=exportChecklistQRCode(request,os);
+			break;
+		}
 		default: {
 			Log.info("Error in entity : " + entity);
 			break;
@@ -107,6 +114,18 @@ public class ResourceUtil {
 		sendFile(response, os.toByteArray(), fileName);
 		os = null;
 	}
+	/*
+	 * This method will pass a hard coded url to generate QR code.
+	 */
+	private static String exportChecklistQRCode(HttpServletRequest request,ByteArrayOutputStream os) {
+		Long checklistId = Long
+				.parseLong(request.getParameter(ResourceDownloadProps.ID));
+		String locale = request.getParameter(ResourceDownloadProps.LOCALE);
+		
+		String url=OsMaFilePathConstant.getQRCodeURL() + checklistId + "                                               ";
+		return QRCodeUtil.generateQRCodeForChecklist(url, locale, os,request.getSession());
+	}
+
 
 	private static String setRoleChecklisteOSCE(HttpServletRequest request,ByteArrayOutputStream os) {
 		Long roleId = Long.parseLong(request.getParameter(ResourceDownloadProps.ID));		
