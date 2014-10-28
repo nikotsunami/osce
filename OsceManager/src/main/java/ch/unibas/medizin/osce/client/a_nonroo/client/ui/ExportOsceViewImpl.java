@@ -12,12 +12,9 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Label;
@@ -48,7 +45,10 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	VerticalPanel fileListPanel;	
 		
 	@UiField
-	Button exportButton;
+	IconButton exporteOSCEButton;
+	
+	@UiField
+	IconButton exportiOSCEButton;
 	
 	@UiField
 	RadioButton processed;
@@ -106,7 +106,8 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 		disclouserPanelFlie.addStyleName("eOsceSchedulePanelStyle");
 		processed.setText(constants.exportProcessed());
 		unprocessed.setText(constants.exportUnprocessed());
-		exportButton.setText(constants.export());
+		exportiOSCEButton.setText(constants.exportiOSCE());
+		exporteOSCEButton.setText(constants.exporteOSCE());
 		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.exportProcessed());
 		disclouserPanelFlie.addCloseHandler(new CloseHandler<DisclosurePanel>() {
 			@Override
@@ -227,7 +228,7 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 			return true;
 	}
 	
-	@UiHandler("exportButton")
+	@UiHandler("exporteOSCEButton")
 	public void exportButtonClicked(ClickEvent event)
 	{
 		if (bucketName.getText().equals("") || accessKey.getText().equals("") || secretKey.getText().equals("") || encryptionKey.getText().equals("") || (ftp.getValue() == true && basePath.getText().equals("")))

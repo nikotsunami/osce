@@ -23,6 +23,7 @@ import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
+import ch.unibas.medizin.osce.server.ExporteOSCEXml;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.StandardizedPatientPaymentUtil;
 import ch.unibas.medizin.osce.server.util.qrcode.QRCodeUtil;
@@ -43,72 +44,76 @@ public class ResourceUtil {
 		String fileName = "default.pdf";
 
 		switch (entity) {
-		case STANDARDIZED_PATIENT: {
-			fileName = setStandardizedPatientResource(request, os);
-			break;
-		}
-
-		case STANDARDIZED_PATIENT_EXPORT: {
-			fileName = setStandardizedPatientExportResource(request, response,
-					os);
-			break;
-		}
-		case STANDARDIZED_ROLE: {
-			fileName = setStandardizedRoleResource(request, os);
-			break;
-		}
-		case SUMMONINGS : {
-			fileName = setSummoningsResouce(request,os);
-			break;
-		}
-
-		case INDIVIDUAL_SCHEDULE : {
-			fileName = setIndividualScheduleResouce(request,os);
-			break;
-		}
-		
-		case STUDENT_MANAGEMENT : {
-			fileName = setStudentManagementResouce(request,os);
-			break;
-		}
-		
-		case CHECKLIST : {
-			fileName = setChecklistResouce(request,os);
-			break;
-		}
-		
-		case STANDARDIZED_PATIENT_PAYMENT : {
-			fileName = setStandardizedPatientPaymentResource(request, response, os);
-			break;
-		}
-		
-		case PATIENT_IN_SEMESTER_CSV : {
-			fileName = setExportPatientInSemesterCsv(request, response, os);
-			break;
-		}
-		
-		case ALARM_SCHEDULE_SUPERVISOR: {
-			fileName = setExportScheduleCsv(request, response, os);
-			break;
-		}
-		
-		case STUDENT_MANAGEMENT_MIN_OPTION_VALUE:{
-			fileName = setStudentManagementResouceMinValue(request,os);
-			break;
-		}
-		case ROLE_CHECKLIST_EOSCE:{
-			fileName = setRoleChecklisteOSCE(request,os);
-			break;
-		}
-		case ROLE_CHECKLIST_QR:{
+			case STANDARDIZED_PATIENT: {
+				fileName = setStandardizedPatientResource(request, os);
+				break;
+			}
+	
+			case STANDARDIZED_PATIENT_EXPORT: {
+				fileName = setStandardizedPatientExportResource(request, response,
+						os);
+				break;
+			}
+			case STANDARDIZED_ROLE: {
+				fileName = setStandardizedRoleResource(request, os);
+				break;
+			}
+			case SUMMONINGS : {
+				fileName = setSummoningsResouce(request,os);
+				break;
+			}
+	
+			case INDIVIDUAL_SCHEDULE : {
+				fileName = setIndividualScheduleResouce(request,os);
+				break;
+			}
 			
-			fileName=exportChecklistQRCode(request,os);
-			break;
-		}
-		default: {
-			Log.info("Error in entity : " + entity);
-			break;
-		}
+			case STUDENT_MANAGEMENT : {
+				fileName = setStudentManagementResouce(request,os);
+				break;
+			}
+			
+			case CHECKLIST : {
+				fileName = setChecklistResouce(request,os);
+				break;
+			}
+			
+			case STANDARDIZED_PATIENT_PAYMENT : {
+				fileName = setStandardizedPatientPaymentResource(request, response, os);
+				break;
+			}
+			
+			case PATIENT_IN_SEMESTER_CSV : {
+				fileName = setExportPatientInSemesterCsv(request, response, os);
+				break;
+			}
+			
+			case ALARM_SCHEDULE_SUPERVISOR: {
+				fileName = setExportScheduleCsv(request, response, os);
+				break;
+			}
+			
+			case STUDENT_MANAGEMENT_MIN_OPTION_VALUE:{
+				fileName = setStudentManagementResouceMinValue(request,os);
+				break;
+			}
+			case ROLE_CHECKLIST_EOSCE:{
+				fileName = setRoleChecklisteOSCE(request,os);
+				break;
+			}
+			case ROLE_CHECKLIST_QR:{
+				
+				fileName=exportChecklistQRCode(request,os);
+				break;
+			}
+			case EOSCE_XML: {
+				fileName = setExporteOSCEXml(request, os);
+				break;
+			}
+			default: {
+				Log.info("Error in entity : " + entity);
+				break;
+			}
 		}
 
 		sendFile(response, os.toByteArray(), fileName);
@@ -126,6 +131,18 @@ public class ResourceUtil {
 		return QRCodeUtil.generateQRCodeForChecklist(url, locale, os,request.getSession());
 	}
 
+	private static String setExporteOSCEXml(HttpServletRequest request, ByteArrayOutputStream os) {
+		String fileName = "";
+		try {
+			Long osceId = Long.parseLong(request.getParameter(ResourceDownloadProps.ID));
+			fileName = ExporteOSCEXml.createeOSCEXmlFile(request, os, osceId);
+			return fileName;
+		}
+		catch (Exception e) {
+			Log.error(e.getMessage(), e);
+		}
+		return fileName;
+	}
 
 	private static String setRoleChecklisteOSCE(HttpServletRequest request,ByteArrayOutputStream os) {
 		Long roleId = Long.parseLong(request.getParameter(ResourceDownloadProps.ID));		

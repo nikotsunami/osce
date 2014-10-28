@@ -1653,6 +1653,14 @@ public interface OsceConstants extends Constants {
 	public String hideUnavilableSps();
 
 	public String exportChecklistQR();
+	
+	public String downloadeOSCE();
+	
+	public String downloadiOSCE();
+	
+	public String exporteOSCE();
+			
+	public String exportiOSCE();
 }
 
 

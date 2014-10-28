@@ -2,6 +2,8 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync;
 
 import java.util.List;
 
+import ch.unibas.medizin.osce.shared.ExportOsceData;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -20,9 +22,9 @@ public interface eOSCESyncService extends RemoteService {
 	//export
 	void exportOsceFile(Long semesterID) throws eOSCESyncException;
 	
-	List<String> exportProcessedFileList(Long semesterId) throws eOSCESyncException;
+	List<ExportOsceData> exportProcessedFileList(Long semesterId) throws eOSCESyncException;
 	
-	List<String> exportUnprocessedFileList(Long semesterId) throws eOSCESyncException;
+	List<ExportOsceData> exportUnprocessedFileList(Long semesterId) throws eOSCESyncException;
 	
 	void putAmazonS3Object(Long semesterId,String bucketName, String accessKey, String secretKey, List<String> fileList, Boolean flag) throws eOSCESyncException;
 	

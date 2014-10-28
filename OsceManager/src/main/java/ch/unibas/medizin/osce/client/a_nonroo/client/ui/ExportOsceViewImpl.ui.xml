@@ -4,7 +4,7 @@
 	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
 <ui:style src="../styles.css">
 		.panelStyle {
-			width: 500px;
+			width: 600px;
 			height: 400px;
 			border-width: thin;
 			border-style: solid;
@@ -16,7 +16,7 @@
 		.scrollpanelStyle
 		{
 			height:400px; 
-			width:500px;			
+			width:600px;			
 		}
 		.dockhtml
 		{
@@ -71,6 +71,9 @@
 			</g:ScrollPanel>
 		</g:DisclosurePanel>		
 		
-		<my:IconButton icon="extlink" ui:field="exportButton"></my:IconButton>		
+		<g:HorizontalPanel spacing="3">
+			<my:IconButton icon="extlink" ui:field="exporteOSCEButton"></my:IconButton>
+			<my:IconButton icon="extlink" ui:field="exportiOSCEButton"></my:IconButton> 
+		</g:HorizontalPanel>	
 	</g:HTMLPanel>
 </ui:UiBinder> 
