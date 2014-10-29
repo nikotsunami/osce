@@ -94,6 +94,7 @@ import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaRequest;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistItemProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistItemRequest;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionRequest;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
@@ -8179,17 +8180,68 @@ public void onDragStart(DragStartEvent event) {
 		@Override
 		public void updateChecklistTab(final ChecklistItemProxy checklistItemProxy, final String name, String description, final RoleDetailsChecklistTabSubViewImpl roleDetailsChecklistTabSubViewImpl, final ScrolledTabLayoutPanel checklistTabPanel) {
 
+			ChecklistItemRequest checklistItemRequest = requests.checklistItemRequest();
+			final ChecklistItemProxy proxy = checklistItemRequest.edit(checklistItemProxy);
+			proxy.setName(name);
+			proxy.setDescription(description);
 			
+			checklistItemRequest.persist().using(checklistItemProxy).fire(new OSCEReceiver<Void>() {
+
+				@Override
+				public void onSuccess(Void response) {
+					roleDetailsChecklistTabSubViewImpl.setChecklistItemProxy(proxy);
+					checklistTabPanel.setTabText(checklistTabPanel.getSelectedIndex(), name);
+				}
+			});
 		}
 
 		@Override
 		public void updateChecklistTopic(ItemType itemType, final String name, final String description, final RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl, ChecklistItemProxy checklistItemProxy) {
+			ChecklistItemRequest checklistItemRequest = requests.checklistItemRequest();
+			final ChecklistItemProxy proxy = checklistItemRequest.edit(checklistItemProxy);
+			proxy.setName(name);
+			proxy.setDescription(description);
 			
+			checklistItemRequest.persist().using(checklistItemProxy).fire(new OSCEReceiver<Void>() {
+
+				@Override
+				public void onSuccess(Void response) {
+					roleDetailsChecklistTopicSubViewImpl.setChecklistItemProxy(proxy);
+					roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);          
+					roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);      
+					
+				}
+			});
 		}
 		
 		@Override
 		public void updateChecklistQuestion(ItemType itemType, final String name, final String description, Boolean isOverallQuestion, OptionType optionType, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl, ChecklistItemProxy checklistQuestionProxy) {
+			ChecklistItemRequest checklistItemRequest = requests.checklistItemRequest();
+			final ChecklistItemProxy proxy = checklistItemRequest.edit(checklistQuestionProxy);
+			proxy.setName(name);
+			proxy.setDescription(description);
+			proxy.setIsRegressionItem(isOverallQuestion);
+			proxy.setOptionType(optionType);
 			
+			checklistItemRequest.persist().using(checklistQuestionProxy).fire(new OSCEReceiver<Void>() {
+
+				@Override
+				public void onSuccess(Void response) {
+					if (name.length() > 60) {
+						roleDetailsChecklistItemSubViewImpl.getQuestionNameLbl().setText(name.substring(0, 60) + "...");
+					} else {
+						roleDetailsChecklistItemSubViewImpl.getQuestionNameLbl().setText(name);
+					}
+					roleDetailsChecklistItemSubViewImpl.getQuestionNameLbl().setTitle(name);
+					
+					if (description.length() > 60) {
+						roleDetailsChecklistItemSubViewImpl.getQuestionDescLbl().setText(description.substring(0, 60) + "...");
+					} else {
+						roleDetailsChecklistItemSubViewImpl.getQuestionDescLbl().setText(description);
+					}
+					roleDetailsChecklistItemSubViewImpl.getQuestionDescLbl().setTitle(description);
+				}
+			});
 		}
 		
 		@Override
@@ -8231,13 +8283,31 @@ public void onDragStart(DragStartEvent event) {
 		
 		@Override
 		public void updateCriteriaClicked(String name, String description, ChecklistItemProxy checklistItemProxy, ChecklistCriteriaProxy criteriaProxy, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
-			
+			requests.checklistCriteriaRequestNonRooo().saveChecklistCriteria(name, description, checklistItemProxy.getId(), criteriaProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+				@Override
+				public void onSuccess(ChecklistItemProxy response) {	
+					if (response != null ) {
+						roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(response);
+						roleDetailsChecklistItemSubViewImpl.getCriteriaTable().setRowData(response.getCheckListCriterias());
+					}
+				}
+			});
 		
 		}
 		
 		@Override
 		public void updateOptionClicked(String name, String description, String value, String criteriaCount, ChecklistItemProxy checklistItemProxy, ChecklistOptionProxy optionProxy, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
-			
+			requests.checklistOptionRequestNonRooo().saveChecklistOption(name, description, value, Integer.parseInt(criteriaCount), checklistItemProxy.getId(), optionProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+				@Override
+				public void onSuccess(ChecklistItemProxy response) {
+					if (response != null) {
+						roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(response);
+						roleDetailsChecklistItemSubViewImpl.getOptionTable().setRowData(response.getCheckListOptions());
+					}
+				}
+			});
 		}
 }
 

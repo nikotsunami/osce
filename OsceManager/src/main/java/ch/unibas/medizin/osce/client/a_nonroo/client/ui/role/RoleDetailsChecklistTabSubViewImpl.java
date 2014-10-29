@@ -70,7 +70,43 @@ public class RoleDetailsChecklistTabSubViewImpl extends Composite implements Rol
 
 	@UiHandler("editChecklistSectionButton")
 	public void editChecklistSectionClicked(ClickEvent e) {
+		final ChecklistiOSCEPopupViewImpl popupViewImpl = new ChecklistiOSCEPopupViewImpl();
+		popupViewImpl.setPopupStyle(ItemType.TAB);
 		
+		if (checklistItemProxy != null) {
+			popupViewImpl.getNameTextBox().setValue(checklistItemProxy.getName());
+			popupViewImpl.getDescriptionTextArea().setValue(checklistItemProxy.getDescription());
+		}
+		
+		popupViewImpl.getSaveBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				popupViewImpl.hide();
+				
+				if (validateField(popupViewImpl.getNameTextBox().getValue())) {
+					delegate.updateChecklistTab(checklistItemProxy, popupViewImpl.getNameTextBox().getValue(), popupViewImpl.getDescriptionTextArea().getValue(), RoleDetailsChecklistTabSubViewImpl.this, checklistTabPanel);
+					popupViewImpl.getNameTextBox().setValue("");
+					popupViewImpl.getDescriptionTextArea().setValue("");
+				} else {
+					MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+					confirmationDialogBox.showConfirmationDialog(constants.tabErrorMessage());
+				}
+			}
+		});
+		
+		popupViewImpl.getCancelBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				popupViewImpl.hide();
+				popupViewImpl.getNameTextBox().setValue("");
+				popupViewImpl.getDescriptionTextArea().setValue("");
+			}
+		});
+		
+		popupViewImpl.showRelativeTo(editChecklistSectionButton);
+		popupViewImpl.setPopupPosition(popupViewImpl.getAbsoluteLeft(), popupViewImpl.getAbsoluteTop() + 8);
 	}
 	
 	@UiHandler("addCheckListSectionButton")

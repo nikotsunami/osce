@@ -143,7 +143,7 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 		addCriteriaColumn(new ActionCell<ChecklistCriteriaProxy>(
 				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<ChecklistCriteriaProxy>() {
 					public void execute(final ChecklistCriteriaProxy criteriaProxy) {
-						
+						editCriteriaPopup(criteriaProxy);
 					}
 				}), "", new GetValueCriteria<ChecklistCriteriaProxy>() {
 			public ChecklistCriteriaProxy getValue(ChecklistCriteriaProxy criteriaProxy) {
@@ -171,6 +171,55 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 		}, null, btnHeader);
 		
 		criteriaTable.addColumnStyleName(2, "iconCol");
+	}
+
+	private void editCriteriaPopup(final ChecklistCriteriaProxy criteriaProxy) {
+		if (criteriaProxy != null) {
+			final ChecklistiOSCEOptionPopupViewImpl criteriaPopupViewImpl = new ChecklistiOSCEOptionPopupViewImpl();
+			criteriaPopupViewImpl.createCriteriaPopup();
+			criteriaPopupViewImpl.getNameTextBox().setValue(criteriaProxy.getCriteria());
+			criteriaPopupViewImpl.getDescriptionTextArea().setValue(criteriaProxy.getDescription());
+			
+			criteriaPopupViewImpl.getSaveBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					criteriaPopupViewImpl.hide();
+					String name = criteriaPopupViewImpl.getNameTextBox().getValue();
+					if (validateField(name)) {
+						String description = criteriaPopupViewImpl.getDescriptionTextArea().getValue();
+						delegate.updateCriteriaClicked(name, description, checklistItemProxy, criteriaProxy, RoleDetailsChecklistItemSubViewImpl.this);
+						criteriaPopupViewImpl.getNameTextBox().setValue("");
+						criteriaPopupViewImpl.getDescriptionTextArea().setValue("");
+					} else {
+						MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+						confirmationDialogBox.showConfirmationDialog(constants.tabErrorMessage());		
+					}
+				}
+			});
+			
+			criteriaPopupViewImpl.getCancelBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					criteriaPopupViewImpl.hide();
+					criteriaPopupViewImpl.getNameTextBox().setValue("");
+					criteriaPopupViewImpl.getDescriptionTextArea().setValue("");
+				}
+			});
+			
+			criteriaPopupViewImpl.showRelativeTo(criteriaTable);
+			int left = criteriaLeft - 260;
+			int height = criteriaPopupViewImpl.getOffsetHeight() + criteriaTop;
+			
+			if (height > (ResolutionSettings.getRightWidgetHeight() + 20)) {
+				int top = criteriaTop - criteriaPopupViewImpl.getOffsetHeight();
+				criteriaPopupViewImpl.setPopupPosition(left, top);
+			}			
+			else {
+				criteriaPopupViewImpl.setPopupPosition(left, criteriaTop);
+			}
+		}
 	}
 
 	private void createCriteriaPopup() {
@@ -254,7 +303,7 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 		addOptionColumn(new ActionCell<ChecklistOptionProxy>(
 				OsMaConstant.EDIT_ICON, new ActionCell.Delegate<ChecklistOptionProxy>() {
 					public void execute(final ChecklistOptionProxy optionProxy) {
-						
+						editOptionPopup(optionProxy);
 					}
 				}), "", new GetValueOption<ChecklistOptionProxy>() {
 			public ChecklistOptionProxy getValue(ChecklistOptionProxy optionProxy) {
@@ -274,7 +323,6 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ChecklistOptionProxy>() {
 					public void execute(final ChecklistOptionProxy optionProxy) {
 						
-						
 					}
 				}), "", new GetValueOption<ChecklistOptionProxy>() {
 			public ChecklistOptionProxy getValue(ChecklistOptionProxy optionProxy) {
@@ -283,6 +331,60 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 		}, null, btnHeader);
 
 		optionTable.addColumnStyleName(2, "iconCol");
+	}
+
+	private void editOptionPopup(final ChecklistOptionProxy optionProxy) {
+		if (optionProxy != null) {
+			final ChecklistiOSCEOptionPopupViewImpl optionPopupViewImpl = new ChecklistiOSCEOptionPopupViewImpl();
+			optionPopupViewImpl.getNameTextBox().setValue(optionProxy.getOptionName());
+			optionPopupViewImpl.getDescriptionTextArea().setValue(optionProxy.getDescription());
+			optionPopupViewImpl.getValueTextBox().setValue(optionProxy.getValue());
+			optionPopupViewImpl.getCriteriaCountBox().setSelectedIndex(optionProxy.getCriteriaCount().intValue());			
+			
+			optionPopupViewImpl.getSaveBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					optionPopupViewImpl.hide();
+					String name = optionPopupViewImpl.getNameTextBox().getValue();
+					if (validateField(name)) {
+						String description = optionPopupViewImpl.getDescriptionTextArea().getValue();
+						String value = optionPopupViewImpl.getValueTextBox().getValue();
+						String criteriaCount = optionPopupViewImpl.getCriteriaCountBox().getValue(optionPopupViewImpl.getCriteriaCountBox().getSelectedIndex());
+						delegate.updateOptionClicked(name, description, value, criteriaCount, checklistItemProxy, optionProxy, RoleDetailsChecklistItemSubViewImpl.this);
+						optionPopupViewImpl.getNameTextBox().setValue("");
+						optionPopupViewImpl.getDescriptionTextArea().setValue("");
+						optionPopupViewImpl.getValueTextBox().setValue("");
+					} else {
+						MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+						confirmationDialogBox.showConfirmationDialog(constants.tabErrorMessage());
+					}
+				}
+			});
+			
+			optionPopupViewImpl.getCancelBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					optionPopupViewImpl.hide();
+					optionPopupViewImpl.getNameTextBox().setValue("");
+					optionPopupViewImpl.getDescriptionTextArea().setValue("");
+					optionPopupViewImpl.getValueTextBox().setValue("");
+				}
+			});
+			
+			optionPopupViewImpl.showRelativeTo(optionTable);
+			int left = optionLeft - 150;
+			int height = optionPopupViewImpl.getOffsetHeight() + optionTop;
+			
+			if (height > (ResolutionSettings.getRightWidgetHeight() + 20)) {
+				int top = optionTop - optionPopupViewImpl.getOffsetHeight();
+				optionPopupViewImpl.setPopupPosition(left, top);
+			}			
+			else {
+				optionPopupViewImpl.setPopupPosition(left, optionTop);
+			}
+		}		
 	}
 
 	private void createOptionPopup() {
@@ -357,12 +459,55 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 	
 	@UiHandler("delete") 
 	public void deleteQuestionClicked(ClickEvent e) {
-			
+		
 	}
 	
 	@UiHandler("edit")
 	public void editQuestionClicked(ClickEvent e) {
+		final ChecklistiOSCEPopupViewImpl popupViewImpl = new ChecklistiOSCEPopupViewImpl();
+		popupViewImpl.setPopupStyle(ItemType.TOPIC);
+		popupViewImpl.createQuestionPopup();
+		if (checklistItemProxy != null) {
+			popupViewImpl.getNameTextBox().setValue(checklistItemProxy.getName());
+			popupViewImpl.getDescriptionTextArea().setValue(checklistItemProxy.getDescription());
+			popupViewImpl.getIsOverallQuestionChkBox().setValue(checklistItemProxy.getIsRegressionItem());
+			popupViewImpl.getOptionTypeBox().setValue(checklistItemProxy.getOptionType());
+		}
+		popupViewImpl.getSaveBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				popupViewImpl.hide();
+				if (validateField(popupViewImpl.getNameTextBox().getValue())) {
+					delegate.updateChecklistQuestion(popupViewImpl.getItemTypeBox().getValue(), popupViewImpl.getNameTextBox().getValue(), popupViewImpl.getDescriptionTextArea().getValue(), popupViewImpl.getIsOverallQuestionChkBox().getValue(), popupViewImpl.getOptionTypeBox().getValue(), RoleDetailsChecklistItemSubViewImpl.this, checklistItemProxy);
+					popupViewImpl.getNameTextBox().setValue("");
+					popupViewImpl.getDescriptionTextArea().setValue("");
+				} else {
+					MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+					confirmationDialogBox.showConfirmationDialog(constants.tabErrorMessage());				
+				}
+			}
+		});
 		
+		popupViewImpl.getCancelBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				popupViewImpl.hide();
+				popupViewImpl.getNameTextBox().setValue("");
+				popupViewImpl.getDescriptionTextArea().setValue("");
+			}
+		});
+		
+		popupViewImpl.showRelativeTo(edit);
+		int height = popupViewImpl.getOffsetHeight() + edit.getAbsoluteTop();
+		if (height > (ResolutionSettings.getRightWidgetHeight() + 20)) {
+			popupViewImpl.setDownArrowStyle();
+			popupViewImpl.setPopupPosition(popupViewImpl.getAbsoluteLeft(), popupViewImpl.getAbsoluteTop() - 6);
+		}			
+		else {
+			popupViewImpl.setPopupPosition(popupViewImpl.getAbsoluteLeft(), popupViewImpl.getAbsoluteTop() + 8);
+		}
 	}
 	
 	private boolean validateField(String name) {

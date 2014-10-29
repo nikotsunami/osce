@@ -167,7 +167,48 @@ public class RoleDetailsChecklistTopicSubViewImpl extends Composite implements R
 	
 	@UiHandler("edit")
 	public void editTopicClicked(ClickEvent e) {
+		final ChecklistiOSCEPopupViewImpl popupViewImpl = new ChecklistiOSCEPopupViewImpl();
+		popupViewImpl.setPopupStyle(ItemType.TOPIC);
+		if (checklistItemProxy != null) {
+			popupViewImpl.getNameTextBox().setValue(checklistItemProxy.getName());
+			popupViewImpl.getDescriptionTextArea().setValue(checklistItemProxy.getDescription());
+		}
 		
+		popupViewImpl.getSaveBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				popupViewImpl.hide();
+				if (validateField(popupViewImpl.getNameTextBox().getValue())) {
+					delegate.updateChecklistTopic(popupViewImpl.getItemTypeBox().getValue(), popupViewImpl.getNameTextBox().getValue(), popupViewImpl.getDescriptionTextArea().getValue(), RoleDetailsChecklistTopicSubViewImpl.this, checklistItemProxy);
+					popupViewImpl.getNameTextBox().setValue("");
+					popupViewImpl.getDescriptionTextArea().setValue("");
+				} else {
+					MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+					confirmationDialogBox.showConfirmationDialog(constants.tabErrorMessage());				
+				}
+			}
+		});
+		
+		popupViewImpl.getCancelBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				popupViewImpl.hide();
+				popupViewImpl.getNameTextBox().setValue("");
+				popupViewImpl.getDescriptionTextArea().setValue("");
+			}
+		});
+		
+		popupViewImpl.showRelativeTo(edit);
+		int height = popupViewImpl.getOffsetHeight() + edit.getAbsoluteTop();
+		if (height > (ResolutionSettings.getRightWidgetHeight() + 20)) {
+			popupViewImpl.setDownArrowStyle();
+			popupViewImpl.setPopupPosition(popupViewImpl.getAbsoluteLeft(), popupViewImpl.getAbsoluteTop() - 6);
+		}			
+		else {
+			popupViewImpl.setPopupPosition(popupViewImpl.getAbsoluteLeft(), popupViewImpl.getAbsoluteTop() + 8);
+		}	
 	}	
 	
 	private boolean validateField(String name) {
