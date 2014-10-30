@@ -99,4 +99,6 @@ public interface ScaffoldRequestFactory extends RequestFactory {
 	TrainingRequestNonRoo trainingRequestNonRoo();
 	
 	ChecklistItemRequestNonRoo checklistItemRequestNonRoo();
+	
+	OsceSettingsRequestNonRoo osceSettingsRequestNonRoo();
 }

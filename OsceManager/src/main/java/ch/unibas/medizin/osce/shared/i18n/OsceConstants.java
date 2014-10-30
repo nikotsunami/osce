@@ -1685,6 +1685,41 @@ public interface OsceConstants extends Constants {
 	public String exporteOSCE();
 			
 	public String exportiOSCE();
+	
+	public String osceScreenSaverText();
+
+	public String exportQRCode();
+
+	public String bucketInformation();
+
+	public String settingPassword();
+
+	public String backUpPeriod();
+
+	public String timeUnit();
+
+	public String encryptionType();
+
+	public String pointNxtExaminee();
+
+	public String examReviewMode();
+
+	public String symmetricKey();
+
+	public String bucketParameters();
+
+	public String osceSettings();
+
+	public String otherInformation();
+
+	public String noSettingsForOsceError();
+
+	public String exportSettingsQRCode();
+
+	public String exportSettingsXml();
+
+	public String bucketType();
+
 }
 
 

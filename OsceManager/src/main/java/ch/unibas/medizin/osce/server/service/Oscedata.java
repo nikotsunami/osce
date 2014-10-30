@@ -1604,6 +1604,16 @@ public class Oscedata {
                             protected String name;
                             @XmlAttribute
                             protected Long id;
+                            @XmlAttribute
+                            protected Integer sequencenumber;
+                            
+                            public Integer getSequencenumber() {
+								return sequencenumber;
+							}
+                            
+                            public void setSequencenumber(Integer sequencenumber) {
+								this.sequencenumber = sequencenumber;
+							}
 
                             /**
                              * Gets the value of the value property.

@@ -24,14 +24,16 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceEditView
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.PreCalculationPopupViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceRequest;
+import ch.unibas.medizin.osce.client.managed.request.OsceSettingsProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSettingsRequest;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskRequest;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
+import ch.unibas.medizin.osce.shared.BucketInfoType;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.Operation;
-import ch.unibas.medizin.osce.shared.OsceCreationType;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.StudyYears;
@@ -49,11 +51,9 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -70,7 +70,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 	private OsceEditView view;
 	private OsceDetailsPlace place;
 
-	private RequestFactoryEditorDriver<OsceProxy, OsceEditViewImpl> editorDriver;
+	//private RequestFactoryEditorDriver<OsceProxy, OsceEditViewImpl> editorDriver;
 	private OsceProxy osce;
 	private TaskProxy taskProxy;
 	private boolean save;
@@ -107,16 +107,16 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 
 	@Override
 	public String mayStop() {
-		if (!save && changed())
+		if (!save/* && changed()*/)
 			return constants.changesDiscarded();
 		else
 			return null;
 	}
 
 	// use this to check if some value has changed since editing has started
-	private boolean changed() {
+	/*private boolean changed() {
 		return editorDriver != null && editorDriver.flush().isChanged();
-	}
+	}*/
 
 	@Override
 	public void start(AcceptsOneWidget panel, EventBus eventBus) {
@@ -124,7 +124,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 		Log.info("start");
 		this.widget = panel;
 		this.view = new OsceEditViewImpl();
-		editorDriver = view.createEditorDriver();
+		//editorDriver = view.createEditorDriver();
 
 		System.out.println("sem found:-"+semester.getCalYear());
 		view.setDelegate(this);
@@ -231,17 +231,20 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 		// change }
 	}
 
+	@SuppressWarnings("deprecation")
 	private void init() {
 
 		OsceRequest request = requests.osceRequest();
 
 		if (osce == null) {
 
-			OsceProxy osce = request.create(OsceProxy.class);
+			view.setOsceProxy(osce);
+			/*OsceProxy osce = request.create(OsceProxy.class);
 			this.osce = osce;
 			this.osce.setOsceCreationType(OsceCreationType.Automatic);
 			view.setEditTitle(false);
-			
+			*/
+			view.setEditTitle(false);
 			requests.roomRequestNonRoo().countTotalRooms().fire(new OSCEReceiver<Integer>() {
 
 				@Override
@@ -253,20 +256,26 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 
 		} else {
 			view.setEditTitle(true);
-			
+			view.setOsceProxy(osce);
+			requests.osceSettingsRequestNonRoo().findOsceSettingsByOsce(osce.getId()).fire(new OSCEReceiver<OsceSettingsProxy>() {
+
+				@Override
+				public void onSuccess(OsceSettingsProxy response) {
+					
+					view.setOsceSttingsProxy(response);
+					view.setValue(osce,response);
+				}
+			});
 		}
 
 		Log.info("edit");
 
 		Log.info("persist");
 		//osce.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
-		request.persist().using(osce);
-		editorDriver.edit(osce, request);
-		
+		//editorDriver.edit(osce, request);
 		Log.info("flush");
-		editorDriver.flush();
-				
-		Log.debug("Create für: " + osce.getId());
+		//editorDriver.flush();
+		//Log.debug("Create für: " + osce.getId());
 	}
 
 	@Override
@@ -315,22 +324,21 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void saveClicked() {
+	public void saveClicked(final OsceProxy oscePrxy,final OsceSettingsProxy osceStngPrxy) {
 		Log.info("saveClicked");
 		// Highlight onViolation
 			Log.info("Map Size: " + view.getOsceMap().size());
 		// E Highlight onViolations
-			Log.info("value of osce--"+osce.getCopiedOsce());
-		if(this.place.getOperation() == Operation.EDIT)
+			//Log.info("value of osce--"+osce.getCopiedOsce());
+		if(oscePrxy != null)
 		{
 			OsceRequest osceRequest=requests.osceRequest();
-			osce = osceRequest.edit(osce);
-			
+			osce= osceRequest.edit(oscePrxy);
+
 			if (OsceStatus.OSCE_NEW.equals(osce.getOsceStatus()) == true)
 			{
 				osce.setOsceCreationType(((OsceEditViewImpl)view).osceCreationType.getValue());
 			}
-			
 			osce.setName(((OsceEditViewImpl)view).name.getValue());
 			osce.setMaxNumberStudents(((OsceEditViewImpl)view).maxNumberStudents.getValue());
 			//osce.setIsRepeOsce(((OsceEditViewImpl)view).isRepeOsce.isChecked());
@@ -389,13 +397,12 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 				public void onSuccess(Void response) {
 
 					save = true;
-					
+					saveAndPersistiOsceSettings(osce, osceStngPrxy);
+					Log.info("succesfull iosce settings data edit");
 					placeController.goTo(new OsceDetailsPlace(osce.stableId(),
 							Operation.DETAILS));
 					osceActivity.init();
 					Log.info("osce edit successfull");
-				
-					
 				}
 			});
 			//osce.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
@@ -563,6 +570,8 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 				public void onSuccess(Void response) {
 					save = true;
 					
+					saveAndPersistiOsceSettings(osceProxy,osceStngPrxy);
+					Log.info("succesfull iosce settings data save");
 					if(((OsceEditViewImpl)view).osceValue.getSelected()!=null)
 					{
 						requests.osceRequestNonRoo().findMaxOsce().fire(new OSCEReceiver<OsceProxy>() {
@@ -603,7 +612,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 								
 								save = true;
 								
-								editorDriver.flush();
+								//editorDriver.flush();
 								
 								if (OsceStatus.OSCE_NEW.equals(response.getOsceStatus()))
 								{
@@ -630,7 +639,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 							}
 						});
 						
-						editorDriver.flush();
+						//editorDriver.flush();
 						osceActivity.init();
 						placeController.goTo(new OsceDetailsPlace(osceProxy.stableId(),
 								Operation.DETAILS));
@@ -643,6 +652,89 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 
 	}	
 	
+	@SuppressWarnings("deprecation")
+	protected void saveAndPersistiOsceSettings(OsceProxy osce,
+		OsceSettingsProxy osceStngPrxy) {
+
+			if (osceStngPrxy != null) {
+				//edit
+				OsceSettingsProxy proxy;
+				 final OsceSettingsRequest osceSettingsRequest=requests.osceSettingsRequest();
+				 proxy=osceSettingsRequest.edit(osceStngPrxy);
+				 proxy.setUsername(((OsceEditViewImpl)view).userName.getValue());
+				 proxy.setPassword(((OsceEditViewImpl)view).password.getValue());
+				 proxy.setBucketName(((OsceEditViewImpl)view).bucketName.getValue());
+				 proxy.setSettingPassword(((OsceEditViewImpl)view).settingPassword.getValue());
+				 proxy.setBackupPeriod(((OsceEditViewImpl)view).backUpPeriod.getValue());
+				 proxy.setTimeunit(((OsceEditViewImpl)view).timeUnit.getValue());
+				 proxy.setNextExaminee(((OsceEditViewImpl)view).pointNextExaminee.getValue());
+				 proxy.setEncryptionType(((OsceEditViewImpl)view).encryptionType.getValue());
+				 proxy.setInfotype(((OsceEditViewImpl)view).bucketInfo.getValue());
+				 proxy.setSymmetricKey(((OsceEditViewImpl)view).symmetricKey.getValue());
+				 proxy.setReviewMode(((OsceEditViewImpl)view).examReviewMode.getValue());
+				 
+				 proxy.setScreenSaverText(((OsceEditViewImpl)view).screenSaverText.getValue());
+				 proxy.setOsce(osce);
+			
+				if(((OsceEditViewImpl)view).bucketInfo.getValue().equals(BucketInfoType.FTP)){
+					proxy.setHost(((OsceEditViewImpl)view).host.getValue());
+				}
+				
+				osceSettingsRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+
+					@Override
+					public void onSuccess(Void response) {
+
+						Log.info("osce settings saved succesfully");
+					}
+				});
+				
+			} else {
+				//create
+				 final OsceSettingsRequest osceSettingsRequest=requests.osceSettingsRequest();
+				OsceSettingsProxy proxy= osceSettingsRequest.create(OsceSettingsProxy.class);
+				
+				if( ((OsceEditViewImpl)view).userName.getValue()=="" &&
+					((OsceEditViewImpl)view).password.getValue()=="" &&
+					((OsceEditViewImpl)view).bucketName.getValue()=="" &&
+					((OsceEditViewImpl)view).symmetricKey.getValue()=="" &&
+					((OsceEditViewImpl)view).settingPassword.getValue()==""  &&
+					((OsceEditViewImpl)view).host.getValue()==""  
+						){
+					Log.info("No data entered");
+				}
+				else{
+					proxy.setUsername(((OsceEditViewImpl)view).userName.getValue());
+					proxy.setPassword(((OsceEditViewImpl)view).password.getValue());
+					proxy.setBucketName(((OsceEditViewImpl)view).bucketName.getValue());
+					proxy.setSettingPassword(((OsceEditViewImpl)view).settingPassword.getValue());
+					proxy.setBackupPeriod(((OsceEditViewImpl)view).backUpPeriod.getValue());
+					proxy.setTimeunit(((OsceEditViewImpl)view).timeUnit.getValue());
+					proxy.setNextExaminee(((OsceEditViewImpl)view).pointNextExaminee.getValue());
+					proxy.setEncryptionType(((OsceEditViewImpl)view).encryptionType.getValue());
+					proxy.setInfotype(((OsceEditViewImpl)view).bucketInfo.getValue());
+					proxy.setSymmetricKey(((OsceEditViewImpl)view).symmetricKey.getValue());
+					proxy.setReviewMode(((OsceEditViewImpl)view).examReviewMode.getValue());
+					proxy.setScreenSaverText(((OsceEditViewImpl)view).screenSaverText.getValue());
+					proxy.setOsce(osce);
+				
+					if(((OsceEditViewImpl)view).bucketInfo.getValue().equals(BucketInfoType.FTP)){
+						proxy.setHost(((OsceEditViewImpl)view).host.getValue());
+					}
+					osceSettingsRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+
+						@Override
+						public void onSuccess(Void response) {
+
+							Log.info("osce settings saved succesfully");
+						}
+					});
+				}
+				
+				
+			}
+	}
+
 	@SuppressWarnings("deprecation")
 	public void createOsceDaySequenceAndParcour(Long osceId) {
 		requests.osceRequestNonRoo().createOsceDaySequeceAndCourse(osceId).fire(new OSCEReceiver<Void>() {

@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceDetailsV
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceTaskPopView;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSettingsProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskRequest;
 import ch.unibas.medizin.osce.shared.Operation;
@@ -137,6 +138,14 @@ public void init()
 				osceProxy=(OsceProxy)response;
 				view.setValue((OsceProxy)response);
 				osceTaskPop.setValue((OsceProxy)response);
+				requests.osceSettingsRequestNonRoo().findOsceSettingsByOsce(osceProxy.getId()).fire(new OSCEReceiver<OsceSettingsProxy>() {
+
+					@Override
+					public void onSuccess(OsceSettingsProxy response) {
+
+						view.setOsceSettings(response);
+					}
+				});
 			}
 
 		}
@@ -530,6 +539,16 @@ public void init()
 				
 			}
 		});
+		
+	}
+
+	@Override
+	public void exportSettingsQRCodeClicked(OsceSettingsProxy osceSettingsProxy) {
+		
+	}
+
+	@Override
+	public void exportXmlClicked(OsceSettingsProxy osceSettingsProxy) {
 		
 	}
 	

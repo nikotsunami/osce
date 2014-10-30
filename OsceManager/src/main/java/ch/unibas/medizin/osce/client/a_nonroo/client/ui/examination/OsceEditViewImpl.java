@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.poi.ss.usermodel.Textbox;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSettingsProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.scaffold.ui.ShortBox;
@@ -16,9 +19,12 @@ import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
+import ch.unibas.medizin.osce.shared.BucketInfoType;
+import ch.unibas.medizin.osce.shared.EncryptionType;
 import ch.unibas.medizin.osce.shared.OsceCreationType;
 import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.StudyYears;
+import ch.unibas.medizin.osce.shared.TimeUnit;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
@@ -27,12 +33,10 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -44,11 +48,12 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<OsceProxy> {
+public class OsceEditViewImpl extends Composite implements OsceEditView {
 	private static final Binder BINDER = GWT.create(Binder.class);
 
 	/*@UiField
@@ -216,7 +221,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	//Issue # 122 : Replace pull down with autocomplete.
 	
 	@UiField
-	@Ignore
+	//@Ignore
 	public DefaultSuggestBox<OsceProxy, EventHandlingValueHolderItem<OsceProxy>> osceValue;
 
 	
@@ -290,6 +295,123 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	@UiField
 	HorizontalPanel horizontalTabPanel;
 	
+	// Settings element starts
+	@UiField
+	DivElement bucketInfoLabel;
+	
+	@UiField
+	SpanElement labelKeySettings;
+	
+	@UiField
+	SpanElement labelGeneralSettings;
+	
+	@UiField(provided = true)
+	public ValueListBox<BucketInfoType> bucketInfo=new ValueListBox<BucketInfoType>(new AbstractRenderer<BucketInfoType>() {
+
+		@Override
+		public String render(BucketInfoType object) {
+			if (object != null)
+				return object.toString();
+			else
+				return "";
+		}
+	});
+	
+	@UiField
+	DivElement lblHost;
+	
+	@UiField
+	public TextBox host;
+	
+	@UiField
+	DivElement lblUserName;
+
+	@UiField
+	public TextBox userName;
+	
+	@UiField
+	DivElement lblPassword;
+	
+	@UiField
+	public TextBox password;
+	
+	@UiField
+	DivElement lblBucketName;
+	
+	@UiField
+	public TextBox bucketName;
+	
+	@UiField
+	DivElement lblSettingPassword;
+	
+	@UiField
+	public TextBox settingPassword;
+	
+	@UiField
+	DivElement lblBackUpPeriod;
+	
+	@UiField
+	public IntegerBox backUpPeriod;
+	
+	@UiField
+	DivElement lblTimeUnit;
+	
+	@UiField
+	DivElement lblPointNxtExaminee;
+	
+	@UiField
+	public CheckBox pointNextExaminee;
+	
+	@UiField
+	DivElement lblSymmetricKey;
+	
+	@UiField
+	public TextBox symmetricKey;
+	
+	
+	@UiField
+	DivElement lblExamReviewMode;
+	
+	@UiField
+	public CheckBox  examReviewMode;
+	
+	@UiField
+	public DivElement lblScreenSaverText;
+	
+	@UiField 
+	public TextArea screenSaverText;
+	
+	@UiField(provided=true)
+	public ValueListBox<TimeUnit> timeUnit =new ValueListBox<TimeUnit>(new AbstractRenderer<TimeUnit>() {
+
+		@Override
+		public String render(TimeUnit object) {
+			if (object != null)
+				return object.toString();
+			else
+				return "";
+		}
+	});
+	
+	@UiField
+	DivElement lblEncryptionType;
+	
+	@UiField(provided = true)
+	public ValueListBox<EncryptionType> encryptionType=new ValueListBox<EncryptionType>(new AbstractRenderer<EncryptionType>() {
+
+		@Override
+		public String render(EncryptionType object) {
+			if (object != null)
+				return object.toString();
+			else
+				return "";
+		}
+	});
+	
+	private OsceProxy osce;
+	private OsceSettingsProxy osceSettingsProxy;
+	
+	
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 	
 	// Highlight onViolation
@@ -303,6 +425,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		oscePanel.selectTab(0);
 		oscePanel.getTabBar().setTabText(0, constants.manageOsces());
 		TabPanelHelper.moveTabBarToBottom(oscePanel);
+		oscePanel.getTabBar().setTabText(1, constants.osceSettings());
 		cancel.setText(constants.cancel());
 		save.setText(constants.save());
 		preview.setText(constants.preview());
@@ -331,6 +454,24 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		labelLOngBreakRequiredTime.setInnerText(constants.osceLongBreakRequiredFiled());
 		labelOsceCreationType.setInnerText(constants.osceCreationType());
 		
+		bucketInfoLabel.setInnerText(constants.bucketInformation());
+		lblSettingPassword.setInnerText(constants.settingPassword());
+		lblBackUpPeriod.setInnerText(constants.backUpPeriod());
+		lblTimeUnit.setInnerText(constants.timeUnit());
+		lblEncryptionType.setInnerText(constants.encryptionType());
+		lblPointNxtExaminee.setInnerText(constants.pointNxtExaminee());
+		lblExamReviewMode.setInnerText(constants.examReviewMode());
+		lblSymmetricKey.setInnerText(constants.symmetricKey());
+		labelKeySettings.setInnerText(constants.bucketParameters());
+		lblUserName.setInnerText(constants.accessKey());
+		lblPassword.setInnerText(constants.secretKey());
+		lblBucketName.setInnerText(constants.bucketName());
+		lblScreenSaverText.setInnerText(constants.osceScreenSaverText());
+		labelGeneralSettings.setInnerText(constants.generalInformation());
+		screenSaverText.setWidth("95%");
+		timeUnit.setWidth("90%");
+		bucketInfo.setWidth("90%");
+		encryptionType.setWidth("90%");
 		//remove number post
 		//numberPost.setInnerText(constants.circuitStation());
 		
@@ -360,7 +501,17 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		osceMap.put("longBreakRequiredTime", longBreakRequiredTime);
 		
 		osceCreationType.setValue(OsceCreationType.Automatic);
-		osceCreationType.setAcceptableValues(Arrays.asList(OsceCreationType.Automatic, OsceCreationType.Manual));
+		osceCreationType.setAcceptableValues(Arrays.asList(OsceCreationType.values()));
+		
+		bucketInfo.setValue(BucketInfoType.S3);
+		bucketInfo.setAcceptableValues(Arrays.asList(BucketInfoType.values()));
+		
+		timeUnit.setValue(TimeUnit.HOUR);
+		timeUnit.setAcceptableValues(Arrays.asList(TimeUnit.values()));
+		
+		encryptionType.setValue(EncryptionType.ASYM);
+		encryptionType.setAcceptableValues(Arrays.asList(EncryptionType.values()));
+		host.getElement().getStyle().setDisplay(Display.NONE);
 		
 		osceCreationType.addValueChangeHandler(new ValueChangeHandler<OsceCreationType>() {
 			
@@ -385,6 +536,37 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 					Document.get().getElementById("maxNoRoom").getStyle().clearDisplay();
 				}
 			}
+		});
+		
+		bucketInfo.addValueChangeHandler(new ValueChangeHandler<BucketInfoType>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<BucketInfoType> event) {
+				userName.setValue("");
+				password.setValue("");
+				host.setValue("");
+				bucketName.setValue("");
+				
+				if(event.getValue().equals(BucketInfoType.S3)){
+					Document.get().getElementById("hostTd").getStyle().setDisplay(Display.NONE);
+					Document.get().getElementById("lblHostTd").getStyle().setDisplay(Display.NONE);
+					lblUserName.setInnerText(constants.accessKey());
+					lblPassword.setInnerText(constants.secretKey());
+					lblBucketName.setInnerText(constants.bucketName());
+					setS3Values();
+				}
+				else if(event.getValue().equals(BucketInfoType.FTP)){
+					Document.get().getElementById("hostTd").getStyle().clearDisplay();
+					Document.get().getElementById("lblHostTd").getStyle().clearDisplay();
+					host.getElement().getStyle().clearDisplay();
+					lblUserName.setInnerText(constants.userName());
+					lblPassword.setInnerText(constants.password());
+					lblBucketName.setInnerText(constants.basePath());
+					lblHost.setInnerText(constants.host());
+					setSFTPValues();
+				}
+			}
+		
 		});
 		
 		// E Highlight onViolation
@@ -413,13 +595,53 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		//horizontalTabPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 	}
 
-	@Override
+	/*@Override
 	public RequestFactoryEditorDriver<OsceProxy, OsceEditViewImpl> createEditorDriver() {
 		RequestFactoryEditorDriver<OsceProxy, OsceEditViewImpl> driver = GWT.create(Driver.class);
 		driver.initialize(this);
 		return driver;
+	}*/
+	
+	private void setS3Values() {
+		
+		if (osceSettingsProxy == null)
+		{
+				lblUserName.setInnerText(constants.accessKey());
+				lblPassword.setInnerText(constants.secretKey());
+				lblBucketName.setInnerText(constants.bucketName());
+				userName.setValue("");
+				password.setValue("");
+				bucketName.setValue("");
+		}
+		else if (osceSettingsProxy.getInfotype().equals(BucketInfoType.S3)) {
+		
+				userName.setValue(osceSettingsProxy.getUsername());
+				password.setValue(osceSettingsProxy.getPassword());
+				bucketName.setValue(osceSettingsProxy.getBucketName());	
+		} 
 	}
-
+	
+	private void setSFTPValues(){
+		
+		if (osceSettingsProxy == null) {
+				userName.setValue("");
+				password.setValue("");
+				bucketName.setValue("");	
+				host.setValue("");
+		}
+		
+		else if (osceSettingsProxy.getInfotype().equals(BucketInfoType.FTP)) {
+				userName.setValue(osceSettingsProxy.getUsername());
+				password.setValue(osceSettingsProxy.getPassword());
+				bucketName.setValue(osceSettingsProxy.getBucketName());	
+				host.setValue(osceSettingsProxy.getHost());
+				lblUserName.setInnerText(constants.userName());
+				lblPassword.setInnerText(constants.password());
+				lblBucketName.setInnerText(constants.basePath());
+				lblHost.setInnerText(constants.host());
+		}	
+	}
+	
 	public void setCreating(boolean creating) {
 		if (creating) {
 			title.setInnerText(constants.addOsce());
@@ -463,14 +685,14 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 		
 		
 		
-		delegate.saveClicked();
+		delegate.saveClicked(osce,osceSettingsProxy);
 	}
 
 	interface Binder extends UiBinder<Widget, OsceEditViewImpl> {
 	}
 
-	interface Driver extends RequestFactoryEditorDriver<OsceProxy, OsceEditViewImpl> {
-	}
+	/*interface Driver extends RequestFactoryEditorDriver<OsceProxy, OsceEditViewImpl> {
+	}*/
 
 	@Override
 	public void setEditTitle(boolean edit) {
@@ -659,4 +881,57 @@ public class OsceEditViewImpl extends Composite implements OsceEditView, Editor<
 	public DivElement getLabelOsceCreationType() {
 		return labelOsceCreationType;
 	}
+
+	@Override
+	public void setOsceProxy(OsceProxy osce) {
+		this.osce=osce;
+	}
+
+	@Override
+	public void setValue(final OsceProxy osce,final OsceSettingsProxy osceSettingsProxy) {
+
+
+		name.setValue(osce.getName());
+		maxNumberStudents.setValue(osce.getMaxNumberStudents());
+		
+		osceCreationType.setValue(osce.getOsceCreationType());
+		
+		LongBreak.setValue(osce.getLongBreak());
+		shortBreak.setValue(osce.getShortBreak());
+		lunchBreak.setValue(osce.getLunchBreak());
+		lunchBreakRequiredTime.setValue(osce.getLunchBreakRequiredTime());
+		longBreakRequiredTime.setValue(osce.getLongBreakRequiredTime());
+		middleBreak.setValue(osce.getMiddleBreak());
+		studyYear.setValue(osce.getStudyYear());
+		shortBreakSimpatChange.setValue(osce.getShortBreakSimpatChange());
+		
+		
+		postLength.setValue(osce.getPostLength());
+		numberCourses.setValue(osce.getNumberCourses());
+		numberRooms.setValue(osce.getNumberRooms());
+		spStayInPost.setValue(osce.getSpStayInPost());
+
+		if(osceSettingsProxy != null){
+			bucketInfo.setValue(osceSettingsProxy.getInfotype(), true);
+			setGeneralInfoValues(osceSettingsProxy);
+		}
+	}
+
+	private void setGeneralInfoValues(OsceSettingsProxy osceSettingsProxy) {
+		settingPassword.setValue(osceSettingsProxy.getSettingPassword());
+		backUpPeriod.setValue(osceSettingsProxy.getBackupPeriod());
+		timeUnit.setValue(osceSettingsProxy.getTimeunit());
+		pointNextExaminee.setValue(osceSettingsProxy.getNextExaminee());
+		encryptionType.setValue(osceSettingsProxy.getEncryptionType());
+		examReviewMode.setValue(osceSettingsProxy.getReviewMode());
+		symmetricKey.setValue(osceSettingsProxy.getSymmetricKey());
+		screenSaverText.setValue(osceSettingsProxy.getScreenSaverText());
+	}
+
+	
+	@Override
+	public void setOsceSttingsProxy(OsceSettingsProxy response) {
+		this.osceSettingsProxy=response;
+	}
+
 }

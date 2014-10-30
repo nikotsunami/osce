@@ -190,6 +190,7 @@ public class IOSCEChecklistService extends HttpServlet {
 				checklistcriteriasBean.getChecklistcriteria().add(checklistcriteriaBean);
 				checklistcriteriaBean.setId(checklistCriteria.getId());
 				checklistcriteriaBean.setName(defaultString(checklistCriteria.getCriteria()));
+				checklistcriteriaBean.setSequencenumber(checklistCriteria.getSequenceNumber());
 			}
 		}
 		
