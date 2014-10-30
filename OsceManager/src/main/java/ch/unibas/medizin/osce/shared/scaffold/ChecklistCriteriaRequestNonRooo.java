@@ -19,4 +19,5 @@ public interface ChecklistCriteriaRequestNonRooo  extends RequestContext{
 
 	public abstract Request<ChecklistItemProxy> saveChecklistCriteria(String name, String description, Long checklistItemId, Long checklistCriteriaId);
 	
+	public abstract Request<ChecklistItemProxy> removeChecklistCriteria(Long criteriaId);
 }

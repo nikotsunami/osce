@@ -151,4 +151,20 @@ public class ChecklistOption implements Comparable<ChecklistOption> {
 	
  	}
  	
+ 	public static ChecklistItem removeChecklistOption(Long optionId) {
+ 		ChecklistOption checklistOption = ChecklistOption.findChecklistOption(optionId);
+ 		ChecklistItem checklistItem = checklistOption.getChecklistItem();
+ 		checklistOption.remove();
+ 		
+ 		if (checklistItem != null && checklistItem.getCheckListOptions() != null && checklistItem.getCheckListOptions().size() > 0) {
+ 			int seqNumber = 0;
+ 			for (ChecklistOption option : checklistItem.getCheckListOptions()) {
+ 				option.setSequenceNumber(seqNumber);
+ 				option.persist();
+ 				seqNumber += 1;
+ 			}
+ 		}
+ 		
+ 		return checklistItem;
+ 	}
 }

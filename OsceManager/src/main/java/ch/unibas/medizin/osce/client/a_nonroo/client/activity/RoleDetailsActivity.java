@@ -8122,18 +8122,42 @@ public void onDragStart(DragStartEvent event) {
 		@Override
 		public void deleteChecklistTabClicked(final ScrolledTabLayoutPanel checklistTabPanel, final ChecklistItemProxy checklistItemProxy) {
 			
-		
+			requests.checklistItemRequestNonRoo().removeChecklistTabItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Void>() {
+
+				@Override
+				public void onSuccess(Void response) {
+					if (checklistTabPanel.getWidgetCount() == 1) {
+						checklistTabPanel.getParent().removeFromParent();
+						checklistTabPanel.removeFromParent();
+					} else {
+						Widget widget = checklistTabPanel.getWidget(checklistTabPanel.getSelectedIndex());
+						checklistTabPanel.remove(widget);
+					}
+				}
+			});
 			
 		}
 
 		@Override
 		public void deleteTopicClicked(final RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl, ChecklistItemProxy checklistItemProxy) {
-			
+			requests.checklistItemRequestNonRoo().removeChecklistTopicItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Void>() {
+
+				@Override
+				public void onSuccess(Void response) {
+					roleDetailsChecklistTopicSubViewImpl.removeFromParent();
+				}
+			});
 		}
 
 		@Override
 		public void deleteChecklistQuestionClicked(final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl, ChecklistItemProxy checklistItemProxy) {
-			
+			requests.checklistItemRequestNonRoo().removeChecklistItemQuestionItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Void>() {
+
+				@Override
+				public void onSuccess(Void response) {
+					roleDetailsChecklistItemSubViewImpl.removeFromParent();
+				}
+			});
 		}
 		
 		private void initiOSCEChecklist(Long checklistId, final StandardizedRoleDetailsViewImpl standardizedRoleDetailsView) {
@@ -8273,12 +8297,26 @@ public void onDragStart(DragStartEvent event) {
 
 		@Override
 		public void deleteCriteriaClicked(ChecklistCriteriaProxy criteriaProxy, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
-			
+			requests.checklistCriteriaRequestNonRooo().removeChecklistCriteria(criteriaProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+				@Override
+				public void onSuccess(ChecklistItemProxy response) {
+					roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(response);
+					roleDetailsChecklistItemSubViewImpl.getCriteriaTable().setRowData(response.getCheckListCriterias());
+				}
+			});
 		}
 
 		@Override
 		public void deleteOptionClicked(ChecklistOptionProxy optionProxy, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
-			
+			requests.checklistOptionRequestNonRooo().removeChecklistOption(optionProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+				@Override
+				public void onSuccess(ChecklistItemProxy response) {
+					roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(response);
+					roleDetailsChecklistItemSubViewImpl.getOptionTable().setRowData(response.getCheckListOptions());
+				}
+			});
 		}
 		
 		@Override

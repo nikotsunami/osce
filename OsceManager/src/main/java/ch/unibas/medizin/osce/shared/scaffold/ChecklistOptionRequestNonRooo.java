@@ -19,5 +19,6 @@ public interface ChecklistOptionRequestNonRooo  extends RequestContext{
 	
 	public abstract Request<ChecklistItemProxy> saveChecklistOption(String name, String description, String value, Integer criteriaCount, Long parentItemId, Long optionId);
 	
+	public abstract Request<ChecklistItemProxy> removeChecklistOption(Long optionId);
 	
 }

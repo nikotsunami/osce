@@ -1606,6 +1606,16 @@ public class Oscedata {
                             protected Long id;
                             @XmlAttribute
                             protected Integer sequencenumber;
+                            @XmlAttribute
+                            protected String description;
+                            
+                            public String getDescription() {
+								return description;
+							}
+                            
+                            public void setDescription(String description) {
+								this.description = description;
+							}
                             
                             public Integer getSequencenumber() {
 								return sequencenumber;
@@ -1797,7 +1807,7 @@ public class Oscedata {
                             protected Integer sequencenumber;
                             @XmlAttribute
                             protected Integer criteriacount;
-                            @XmlAttribute
+                            @XmlAttribute(name = "value")
                             protected String value1;
                             @XmlAttribute
                             protected String description;

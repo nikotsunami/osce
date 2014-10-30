@@ -301,7 +301,6 @@ public class ExporteOSCEXml {
 				candidateBean.setLastname(lastName);
 				String email = studAss.getStudent() == null ? "" : (studAss.getStudent().getEmail() == null ? "" : studAss.getStudent().getEmail());
 				candidateBean.setEmail(email);
-				//candidateBean.setIsBreakCandidate(value) TODO need to remove
 			}
 		}
 	}
@@ -319,7 +318,6 @@ public class ExporteOSCEXml {
 			stationsBean.getStation().add(stationBean);
 			
 			stationBean.setId(oscePostRoom.getId());
-			//stationBean.setTitle("");//TODO need to ask
 			
 			if (oscePostRoom.getRoom() == null)
 				stationBean.setIsBreakStation("yes");
@@ -362,9 +360,6 @@ public class ExporteOSCEXml {
 		oscedata.setCourses(coursesBean);
 		List<OsceDay> osceDayList = OsceDay.findOsceDayByOsce(osceId);
 		
-		int startrotation = 0;
-		int totalrotation = 0;
-		
 		for (int j=0; j<osceDayList.size(); j++)
 		{
 			List<OsceSequence> sequenceList = OsceSequence.findOsceSequenceByOsceDay(osceDayList.get(j).getId());
@@ -378,9 +373,6 @@ public class ExporteOSCEXml {
 			
 			for (int k=0; k<sequenceList.size(); k++)
 			{
-				startrotation = totalrotation;
-				totalrotation = totalrotation + sequenceList.get(k).getNumberRotation();
-				
 				List<Course> courseList = sequenceList.get(k).getCourses();
 				
 				for (Course course : courseList)
@@ -455,7 +447,7 @@ public class ExporteOSCEXml {
 								examinerAssList = Assignment.findAssignmentExamnierByOscePostRoom(oscePostRoom.getId(), osceId, timestart, timeend);
 							}
 							
-							for (Assignment examinerAss : examinerAssList) //TODO need to change logic
+							for (Assignment examinerAss : examinerAssList) 
 							{
 								if (examinerAss.getExaminer() != null)
 								{
@@ -464,7 +456,7 @@ public class ExporteOSCEXml {
 								}
 							}
 							
-							for (Assignment studAss : assignmentlist) //TODO need to change logic
+							for (Assignment studAss : assignmentlist) 
 							{	
 								if(studAss.getStudent() != null) {
 									stationBean.setFirstCandidateId(studAss.getStudent().getId());
@@ -494,11 +486,10 @@ public class ExporteOSCEXml {
 							
 							//stationBean.setIsBreakStation("yes");
 							
-							for (Assignment assignment : logicalBreakAssignment) //TODO need to change logic 
+							for (Assignment assignment : logicalBreakAssignment) 
 							{
 								//stationBean.setIsBreakCandidate("yes");
 								
-								String id = assignment.getStudent() == null ? ("S" + String.format("%03d", assignment.getSequenceNumber())) : assignment.getStudent().getId().toString();
 								if(assignment.getStudent()  != null) {
 									stationBean.setFirstCandidateId(assignment.getStudent().getId());
 								}

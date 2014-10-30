@@ -133,6 +133,55 @@ public class ChecklistItem {
 			return 0;
 	}
 	
+	public static void removeChecklistTabItem(Long checklistItemId) {
+		ChecklistItem item = ChecklistItem.findChecklistItem(checklistItemId);
+		item.removeChecklistTab();
+	}
+	
+	@Transactional
+	private void removeChecklistTab() {
+		List<ChecklistItem> topicList = findChecklistItemByParentId(this.getId());
+		
+		for (int i=0; i<topicList.size(); i++) {
+			ChecklistItem itemTopic = topicList.get(i);
+			
+			List<ChecklistItem> questionItemList = findChecklistItemByParentId(itemTopic.getId());
+			for (int j=0; j<questionItemList.size(); j++) {
+				ChecklistItem questionItem = questionItemList.get(j);
+				
+				List<ChecklistOption> optionList = questionItem.getCheckListOptions();
+				for (int k=0; k<questionItem.getCheckListOptions().size(); k++) {
+					ChecklistOption option = optionList.get(k);
+					option.remove();
+				}
+				
+				List<ChecklistCriteria> criteriaList = questionItem.getCheckListCriterias();
+				for (int k=0; k<questionItem.getCheckListCriterias().size(); k++) {
+					ChecklistCriteria criteria = criteriaList.get(k);
+					criteria.remove();
+				}
+				
+				questionItem.remove();
+			}
+			
+			itemTopic.remove();
+		}
+		
+		Long checklistId = getCheckList().getId();
+		this.remove();
+		
+		EntityManager em = entityManager();
+		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.checkList.id = " + checklistId + " ORDER BY ci.sequenceNumber";
+		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
+		List<ChecklistItem> resultList = query.getResultList();
+		int seqNumber = 0;
+		for (ChecklistItem checklistItem : resultList) {
+			checklistItem.setSequenceNumber(seqNumber);
+			checklistItem.persist();
+			seqNumber += 1;
+		}
+	}
+	
 	public static ChecklistItem saveChecklistTopicItem(String name, String description, Long parentTabItemId) {
 		ChecklistItem parentItem = ChecklistItem.findChecklistItem(parentTabItemId);
 		Integer seqNumber = findMaxSequenceNumberByParentItem(parentTabItemId);
@@ -146,6 +195,45 @@ public class ChecklistItem {
 		checklistItem.persist();
 		
 		return checklistItem;
+	}
+	
+	public static void removeChecklistTopicItem(Long checklistItemId) {
+		ChecklistItem checklistItem = ChecklistItem.findChecklistItem(checklistItemId);
+		checklistItem.removeChecklistTopic();
+	}
+	
+	@Transactional
+	private void removeChecklistTopic() {
+		List<ChecklistItem> questionItemList = findChecklistItemByParentId(this.getId());
+		for (int i=0; i<questionItemList.size(); i++) {
+			ChecklistItem questionItem = questionItemList.get(i);
+			
+			List<ChecklistOption> optionList = questionItem.getCheckListOptions();
+			for (int j=0; j<questionItem.getCheckListOptions().size(); j++) {
+				ChecklistOption option = optionList.get(j);
+				option.remove();
+			}
+			
+			List<ChecklistCriteria> criteriaList = questionItem.getCheckListCriterias();
+			for (int j=0; j<questionItem.getCheckListCriterias().size(); j++) {
+				ChecklistCriteria criteria = criteriaList.get(j);
+				criteria.remove();
+			}
+			
+			questionItem.remove();
+		}
+		
+		Long parentItemId = getParentItem().getId();
+		this.remove();
+		
+		List<ChecklistItem> checklistItemList = findChecklistItemByParentId(parentItemId);
+		
+		int seqNumber = 0;
+		for (ChecklistItem topicItem : checklistItemList) {
+			topicItem.setSequenceNumber(seqNumber);
+			topicItem.persist();
+			seqNumber += 1;
+		}
 	}
 	
 	public static ChecklistItem saveChecklistQuestionItem(String name, String description, Boolean isOverallQue, OptionType optionType, Long parentTopicItemId) {
@@ -163,6 +251,38 @@ public class ChecklistItem {
 		checklistItem.persist();
 		
 		return checklistItem;
+	}
+	
+	public static void removeChecklistItemQuestionItem(Long checklistItemId) {
+		ChecklistItem checklistItem = ChecklistItem.findChecklistItem(checklistItemId);
+		checklistItem.removeChecklistQuestion();		
+	}
+	
+	@Transactional
+	private void removeChecklistQuestion() {
+		List<ChecklistOption> optionList = getCheckListOptions();
+		for (int i=0; i<getCheckListOptions().size(); i++) {
+			ChecklistOption option = optionList.get(i);
+			option.remove();
+		}
+		
+		List<ChecklistCriteria> criteriaList = getCheckListCriterias();
+		for (int i=0; i<getCheckListCriterias().size(); i++) {
+			ChecklistCriteria criteria = criteriaList.get(i);
+			criteria.remove();
+		}
+		
+		Long parentItemId = getParentItem().getId();
+		this.remove();
+		
+		List<ChecklistItem> checklistItemList = findChecklistItemByParentId(parentItemId);
+		
+		int seqNumber = 0;
+		for (ChecklistItem topicItem : checklistItemList) {
+			topicItem.setSequenceNumber(seqNumber);
+			topicItem.persist();
+			seqNumber += 1;
+		}
 	}
 	
 	public static Integer findMaxSequenceNumberByParentItem(Long parentItemId) {

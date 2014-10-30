@@ -1720,6 +1720,11 @@ public interface OsceConstants extends Constants {
 
 	public String bucketType();
 
+	public String eOSCE();
+		
+	public String iOSCE();
+	
+	public String confirmDelete();
 }
 
 

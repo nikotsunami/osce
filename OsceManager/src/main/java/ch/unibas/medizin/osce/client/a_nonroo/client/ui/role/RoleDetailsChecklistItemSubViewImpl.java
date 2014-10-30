@@ -163,6 +163,26 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ChecklistCriteriaProxy>() {
 					public void execute(final ChecklistCriteriaProxy criteriaProxy) {
 						
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+						 dialogBox.showYesNoDialog(constants.roleConfirmCriterionDelete());
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									delegate.deleteCriteriaClicked(criteriaProxy, RoleDetailsChecklistItemSubViewImpl.this);
+									return;
+								}
+							});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									return;									
+								}
+							});
 					}
 				}), "", new GetValueCriteria<ChecklistCriteriaProxy>() {
 			public ChecklistCriteriaProxy getValue(ChecklistCriteriaProxy criteriaProxy) {
@@ -323,6 +343,26 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ChecklistOptionProxy>() {
 					public void execute(final ChecklistOptionProxy optionProxy) {
 						
+						 final MessageConfirmationDialogBox dialogBox=new MessageConfirmationDialogBox(constants.warning());
+						 dialogBox.showYesNoDialog(constants.roleOptionConfirmDelete());
+						 dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									delegate.deleteOptionClicked(optionProxy, RoleDetailsChecklistItemSubViewImpl.this);
+									return;
+								}
+							});
+
+							dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+								
+								@Override
+								public void onClick(ClickEvent event) {
+									dialogBox.hide();
+									return;									
+								}
+							});
 					}
 				}), "", new GetValueOption<ChecklistOptionProxy>() {
 			public ChecklistOptionProxy getValue(ChecklistOptionProxy optionProxy) {
@@ -459,6 +499,16 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 	
 	@UiHandler("delete") 
 	public void deleteQuestionClicked(ClickEvent e) {
+		final MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.confirmation());
+		dialogBox.showYesNoDialog(constants.confirmDelete());
+		dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				dialogBox.hide();
+				delegate.deleteChecklistQuestionClicked(RoleDetailsChecklistItemSubViewImpl.this, checklistItemProxy);
+			}
+		});
 		
 	}
 	

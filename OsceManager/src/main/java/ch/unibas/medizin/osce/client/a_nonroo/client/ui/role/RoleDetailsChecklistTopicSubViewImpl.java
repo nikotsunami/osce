@@ -119,7 +119,16 @@ public class RoleDetailsChecklistTopicSubViewImpl extends Composite implements R
 	
 	@UiHandler("delete") 
 	public void deleteTopicClicked(ClickEvent e) {
-		
+		final MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.confirmation());
+		dialogBox.showYesNoDialog(constants.confirmDelete());
+		dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				dialogBox.hide();
+				delegate.deleteTopicClicked(RoleDetailsChecklistTopicSubViewImpl.this, checklistItemProxy);
+			}
+		});
 	}
 	
 	private void createiOsceTabPopup() {

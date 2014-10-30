@@ -158,7 +158,16 @@ public class RoleDetailsChecklistTabSubViewImpl extends Composite implements Rol
 	
 	@UiHandler("deleteTab")
 	public void deleteTabClicked(ClickEvent e) {
-		
+		final MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.confirmation());
+		dialogBox.showYesNoDialog(constants.confirmDelete());
+		dialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				dialogBox.hide();
+				delegate.deleteChecklistTabClicked(checklistTabPanel, checklistItemProxy);
+			}
+		});
 	}
 	
 	@Override
