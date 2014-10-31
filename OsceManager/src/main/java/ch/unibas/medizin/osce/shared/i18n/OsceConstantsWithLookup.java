@@ -442,5 +442,16 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String TOGGLE_2();
 	
 	public String TOGGLE_3();
+
+	//Time unit and encryption enum values
+	public String SECOND();
+
+	public String MINUTE();
+
+	public String ASYM();
+
+	public String HASH();
+
+	public String NO();
 }
 

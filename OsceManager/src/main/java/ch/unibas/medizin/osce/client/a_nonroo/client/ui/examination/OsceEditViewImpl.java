@@ -381,32 +381,15 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 	@UiField 
 	public TextArea screenSaverText;
 	
+	
 	@UiField(provided=true)
-	public ValueListBox<TimeUnit> timeUnit =new ValueListBox<TimeUnit>(new AbstractRenderer<TimeUnit>() {
-
-		@Override
-		public String render(TimeUnit object) {
-			if (object != null)
-				return object.toString();
-			else
-				return "";
-		}
-	});
+    public ValueListBox<TimeUnit> timeUnit = new ValueListBox<TimeUnit>(new EnumRenderer<TimeUnit>());
 	
 	@UiField
 	DivElement lblEncryptionType;
 	
 	@UiField(provided = true)
-	public ValueListBox<EncryptionType> encryptionType=new ValueListBox<EncryptionType>(new AbstractRenderer<EncryptionType>() {
-
-		@Override
-		public String render(EncryptionType object) {
-			if (object != null)
-				return object.toString();
-			else
-				return "";
-		}
-	});
+    public ValueListBox<EncryptionType> encryptionType = new ValueListBox<EncryptionType>(new EnumRenderer<EncryptionType>());
 	
 	private OsceProxy osce;
 	private OsceSettingsProxy osceSettingsProxy;

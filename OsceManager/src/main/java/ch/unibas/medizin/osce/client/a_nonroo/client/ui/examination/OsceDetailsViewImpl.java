@@ -25,6 +25,7 @@ import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.OsceCreationType;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
@@ -83,6 +84,9 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	private Delegate delegate;
 	
 	OsceSettingsProxy osceSettingsProxy;
+	
+	OsceConstantsWithLookup enumConstants = GWT.create(OsceConstantsWithLookup.class);
+	
 
 	/**
 	 * Because this class has a default constructor, it can
@@ -1186,20 +1190,14 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		host.setInnerText(osceSettingsProxy.getHost());
 		bucketName.setInnerText(osceSettingsProxy.getBucketName());
 		backupPeriod.setInnerText(String.valueOf(osceSettingsProxy.getBackupPeriod() == null?"" :osceSettingsProxy.getBackupPeriod()));
-		unit.setInnerText(osceSettingsProxy.getTimeunit().name());
+		unit.setInnerText(enumConstants.getString(osceSettingsProxy.getTimeunit().toString()));
 		password.setInnerText(osceSettingsProxy.getPassword());
 		settingPassword.setInnerText(osceSettingsProxy.getSettingPassword());
 		pointNxtExaminee.setInnerText(osceSettingsProxy.getNextExaminee().toString());
-		encryptionType.setInnerText(osceSettingsProxy.getEncryptionType().name());
+		encryptionType.setInnerText(enumConstants.getString(osceSettingsProxy.getEncryptionType().toString()));
 		symmetricKey.setInnerText(osceSettingsProxy.getSymmetricKey());
 		screenSaverText.setInnerText(osceSettingsProxy.getScreenSaverText());
-		
-		if(osceSettingsProxy.getReviewMode() == true){
-			examMode.setInnerText("TRUE");
-		}else{
-			examMode.setInnerText("FALSE");	
-		}
-		
+		examMode.setInnerText(osceSettingsProxy.getReviewMode()== null?"" : osceSettingsProxy.getReviewMode().toString());
 	}
 	
 /*	@UiHandler("table")
