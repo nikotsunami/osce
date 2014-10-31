@@ -4,6 +4,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfi
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.BucketInfoType;
+import ch.unibas.medizin.osce.shared.ExportOsceType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -45,11 +46,8 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	VerticalPanel fileListPanel;	
 		
 	@UiField
-	IconButton exporteOSCEButton;
-	
-	@UiField
-	IconButton exportiOSCEButton;
-	
+	IconButton exportOSCEButton;
+		
 	@UiField
 	RadioButton processed;
 	
@@ -100,14 +98,19 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	
 	BucketInformationProxy bucketInformationProxy;
 	
+	@UiField
+	RadioButton eOSCE;
+	
+	@UiField
+	RadioButton iOSCE;
+	
 	public ExportOsceViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		disclouserPanelFlie.addStyleName("eOsceSchedulePanelStyle");
 		processed.setText(constants.exportProcessed());
 		unprocessed.setText(constants.exportUnprocessed());
-		exportiOSCEButton.setText(constants.exportiOSCE());
-		exporteOSCEButton.setText(constants.exporteOSCE());
+		
 		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.exportProcessed());
 		disclouserPanelFlie.addCloseHandler(new CloseHandler<DisclosurePanel>() {
 			@Override
@@ -126,22 +129,50 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 		s3.setText(constants.s3());
 		ftp.setText(constants.ftp());
 		
+		eOSCE.setText(constants.eOSCE());
+		iOSCE.setText(constants.iOSCE());
+		
 		basePath.setVisible(false);
 		basePathLbl.setVisible(false);
+		
+		if (eOSCE.getValue()) {
+			exportOSCEButton.setText(constants.exporteOSCE());
+		}
+		else if (iOSCE.getValue()) {
+			exportOSCEButton.setText(constants.exportiOSCE());
+		}
+	}
+	
+	@UiHandler("eOSCE")
+	public void eOSCESelected(ClickEvent e) {
+		exportOSCEButton.setText(constants.exporteOSCE());
+		delegate.eOsceClicked();
+	}
+	
+	@UiHandler("iOSCE")
+	public void iOSCESelected(ClickEvent e) {
+		exportOSCEButton.setText(constants.exportiOSCE());
+		delegate.iOsceClicked();
 	}
 	
 	@UiHandler("unprocessed")
 	public void unprocessedSelected(ClickEvent event)
 	{
 		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.exportUnprocessed());
-		delegate.unprocessedClicked();
+		if (eOSCE.getValue())
+			delegate.unprocessedClicked(ExportOsceType.EOSCE);
+		else if (iOSCE.getValue())
+			delegate.unprocessedClicked(ExportOsceType.IOSCE);
 	}
 	
 	@UiHandler("processed")
 	public void processedSelected(ClickEvent event)
 	{
 		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.exportProcessed());
-		delegate.processedClicked();
+		if (eOSCE.getValue())
+			delegate.processedClicked(ExportOsceType.EOSCE);
+		else if (iOSCE.getValue())
+			delegate.processedClicked(ExportOsceType.IOSCE);
 	}
 	
 	@UiHandler("s3")
@@ -228,8 +259,8 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 			return true;
 	}
 	
-	@UiHandler("exporteOSCEButton")
-	public void exportButtonClicked(ClickEvent event)
+	@UiHandler("exportOSCEButton")
+	public void exportOSCEButtonClicked(ClickEvent event)
 	{
 		if (bucketName.getText().equals("") || accessKey.getText().equals("") || secretKey.getText().equals("") || encryptionKey.getText().equals("") || (ftp.getValue() == true && basePath.getText().equals("")))
 		{
@@ -250,7 +281,12 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 						@Override
 						public void onClick(ClickEvent event) {
 							messageConfirmationDialogBox.hide();
-							delegate.exportButtonClicked(unprocessed.getValue());				
+							if (eOSCE.getValue()) {
+								delegate.exporteOSCEButtonClicked(unprocessed.getValue());
+							}
+							else if (iOSCE.getValue()) {
+								delegate.exportiOSCEButtonClicked(unprocessed.getValue());
+							}		
 						}
 					});
 					
@@ -263,7 +299,12 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 				}
 				else
 				{
-					delegate.exportButtonClicked(unprocessed.getValue());
+					if (eOSCE.getValue()) {
+						delegate.exporteOSCEButtonClicked(unprocessed.getValue());
+					}
+					else if (iOSCE.getValue()) {
+						delegate.exportiOSCEButtonClicked(unprocessed.getValue());
+					}
 				}
 			}
 			else 
@@ -273,6 +314,52 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 			}
 		}
 	}
+	
+	/*@UiHandler("exportiOSCEButton")
+	public void exportiOSCEButtonClicked(ClickEvent event)
+	{
+		if (bucketName.getText().equals("") || accessKey.getText().equals("") || secretKey.getText().equals("") || encryptionKey.getText().equals("") || (ftp.getValue() == true && basePath.getText().equals("")))
+		{
+			final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+			messageConfirmationDialogBox.showConfirmationDialog(constants.bucketInfoError());
+		}
+		else
+		{
+			Boolean flag = delegate.checkSelectedValue();
+			if (flag)
+			{
+				if (unprocessed.getValue() == false)
+				{
+					final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+					messageConfirmationDialogBox.showYesNoDialog(constants.exportWarningAlreadyExported());
+					
+					messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {					
+						@Override
+						public void onClick(ClickEvent event) {
+							messageConfirmationDialogBox.hide();
+							delegate.exportiOSCEButtonClicked(unprocessed.getValue());				
+						}
+					});
+					
+					messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {					
+						@Override
+						public void onClick(ClickEvent event) {
+											
+						}
+					});
+				}
+				else
+				{
+					delegate.exportiOSCEButtonClicked(unprocessed.getValue());
+				}
+			}
+			else 
+			{
+				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+				messageConfirmationDialogBox.showConfirmationDialog(constants.exportError());
+			}
+		}
+	}*/
 
 	public VerticalPanel getFileListPanel() {
 		return fileListPanel;
@@ -463,5 +550,14 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 		}else {
 			s3Selected(null);
 		}
-	} 
+	}
+
+	public RadioButton geteOSCE() {
+		return eOSCE;
+	}
+	
+	public RadioButton getiOSCE() {
+		return iOSCE;
+	}
+	
 }

@@ -190,8 +190,23 @@ public class StandardizedRole {
 		   
 		   newStandardizedRole.setRoleScript(oldStandardizedRole.getRoleScript());
 		   
-		   CheckList newChecklist = copyChecklistFromOldRole(oldStandardizedRole.getCheckList());
-		   newStandardizedRole.setCheckList(newChecklist);		   
+		   /*try {
+			   CheckList newChecklist = new StandardizedRole().copyChecklistItemFromOldRole(oldStandardizedRole.getCheckList());
+			   newChecklist = CheckList.findCheckList(newChecklist.getId());
+			   newStandardizedRole.setCheckList(newChecklist);
+		   }
+		   catch (Exception e) {
+			   e.printStackTrace();
+		   }*/
+		   try {
+			   CheckList newChecklist = copyChecklistItemFromOldRole(oldStandardizedRole.getCheckList());
+			   newStandardizedRole.setCheckList(newChecklist);
+		   } catch (Exception e) {
+			   e.printStackTrace();
+		   }
+		   
+		   //CheckList newChecklist = copyChecklistFromOldRole(oldStandardizedRole.getCheckList());
+		   		   
 		   //newStandardizedRole.setCheckList(oldStandardizedRole.getCheckList());//spec
 		   
 		   newStandardizedRole.setRoleTopic(oldStandardizedRole.getRoleTopic());
@@ -247,6 +262,75 @@ public class StandardizedRole {
 		   }
 		   
 		   return flag;
+	}
+	
+	private static CheckList copyChecklistItemFromOldRole(CheckList checkList) {
+		
+		CheckList newChecklist = new CheckList();
+		newChecklist.setTitle(checkList.getTitle());
+		newChecklist.setVersion(checkList.getVersion());
+		newChecklist.persist();
+		
+		List<ChecklistItem> checklistItems = ChecklistItem.findAllChecklistItemsForChecklist(checkList.getId());
+		
+		for (ChecklistItem checklistItem : checklistItems) {
+			ChecklistItem newChecklistItem = new ChecklistItem();
+			newChecklistItem.setCheckList(newChecklist);
+			exportChecklistItemBean(checklistItem, newChecklistItem);
+		
+			List<ChecklistItem> checklistItemChilds = ChecklistItem.findAllChecklistItemsChild(checklistItem.getId());
+			exportChecklistItemsChild(checklistItemChilds,newChecklistItem);
+		}
+		return newChecklist;
+	}
+	
+	private static void exportChecklistItemsChild(List<ChecklistItem> checklistItemChilds, ChecklistItem parentChecklistItem) {
+		for (ChecklistItem checklistItem : checklistItemChilds) {
+			ChecklistItem newChecklistItem = new ChecklistItem();
+			newChecklistItem.setParentItem(parentChecklistItem);
+			exportChecklistItemBean(checklistItem, newChecklistItem);
+		
+			List<ChecklistItem> checklistItemChildList = ChecklistItem.findAllChecklistItemsChild(checklistItem.getId());
+			exportChecklistItemsChild(checklistItemChildList,newChecklistItem);
+		}		
+	}
+	
+	private static void exportChecklistItemBean(ChecklistItem checklistItem, ChecklistItem newChecklistItem) {
+		newChecklistItem.setName(checklistItem.getName());
+		newChecklistItem.setItemType(checklistItem.getItemType());
+		newChecklistItem.setOptionType(checklistItem.getOptionType());	
+		newChecklistItem.setIsRegressionItem(checklistItem.getIsRegressionItem());
+		newChecklistItem.setSequenceNumber(checklistItem.getSequenceNumber());	
+		newChecklistItem.setDescription(checklistItem.getDescription());
+		newChecklistItem.setVersion(checklistItem.getVersion());
+		newChecklistItem.persist();
+		
+		if(checklistItem.getCheckListCriterias() != null && checklistItem.getCheckListCriterias().isEmpty() == false) {
+			for (ChecklistCriteria checklistCriteria : checklistItem.getCheckListCriterias()) {
+				ChecklistCriteria newChecklistCriteria = new ChecklistCriteria();
+				newChecklistCriteria.setCriteria(checklistCriteria.getCriteria());
+				newChecklistCriteria.setSequenceNumber(checklistCriteria.getSequenceNumber());
+				newChecklistCriteria.setDescription(checklistCriteria.getDescription());
+				newChecklistCriteria.setVersion(checklistCriteria.getVersion());
+				newChecklistCriteria.setChecklistItem(newChecklistItem);
+				newChecklistCriteria.persist();
+			}
+		}
+		
+		if(checklistItem.getCheckListOptions() != null && checklistItem.getCheckListOptions().isEmpty() == false) {
+			for (ChecklistOption option : checklistItem.getCheckListOptions()) {
+				ChecklistOption newChecklistOption = new ChecklistOption();
+				newChecklistOption.setOptionName(option.getOptionName());
+				newChecklistOption.setDescription(option.getDescription());
+				newChecklistOption.setValue(option.getValue());
+				newChecklistOption.setSequenceNumber(option.getSequenceNumber());
+				newChecklistOption.setCriteriaCount(option.getCriteriaCount());
+				newChecklistOption.setVersion(option.getVersion());
+				newChecklistOption.setChecklistItem(newChecklistItem);
+				newChecklistOption.persist();
+			}
+		}
+		
 	}
 	
 	private static CheckList copyChecklistFromOldRole(CheckList checkList) {

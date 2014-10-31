@@ -8,19 +8,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Marshaller;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import ch.unibas.medizin.osce.server.util.settingsbean.Settings;
-import ch.unibas.medizin.osce.server.util.settingsbean.Settings.Credentials;
-import ch.unibas.medizin.osce.server.util.settingsbean.Settings.OtherInformation;
-import ch.unibas.medizin.osce.server.util.settingsbean.Settings.OtherInformation.BackupPeriod;
 import ch.unibas.medizin.osce.shared.BucketInfoType;
 import ch.unibas.medizin.osce.shared.EncryptionType;
 import ch.unibas.medizin.osce.shared.TimeUnit;

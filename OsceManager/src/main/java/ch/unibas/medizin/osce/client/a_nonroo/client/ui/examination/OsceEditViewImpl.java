@@ -507,7 +507,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 		bucketInfo.setValue(BucketInfoType.S3);
 		bucketInfo.setAcceptableValues(Arrays.asList(BucketInfoType.values()));
 		
-		timeUnit.setValue(TimeUnit.HOUR);
+		timeUnit.setValue(TimeUnit.SECOND);
 		timeUnit.setAcceptableValues(Arrays.asList(TimeUnit.values()));
 		
 		encryptionType.setValue(EncryptionType.ASYM);

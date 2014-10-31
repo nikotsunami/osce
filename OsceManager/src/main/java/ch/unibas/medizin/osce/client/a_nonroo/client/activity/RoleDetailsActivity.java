@@ -7987,47 +7987,83 @@ public void onDragStart(DragStartEvent event) {
 		}
 		
 		private RoleDetailsChecklistItemSubView createiOSCEQuestionView(VerticalPanel containerVerticalPanel, String name, String description, ChecklistItemProxy questionProxy) {
-			RoleDetailsChecklistItemSubView checklistItemSubView = new RoleDetailsChecklistItemSubViewImpl();
-			checklistItemSubView.setChecklistItemProxy(questionProxy);
-			checklistItemSubView.setDelegate(this);
-			if (name.length() > 50) {
-				checklistItemSubView.getQuestionNameLbl().setText(name.substring(0, 50) + "...");
-			} else {
-				checklistItemSubView.getQuestionNameLbl().setText(name);
-			}
-			checklistItemSubView.getQuestionNameLbl().setTitle(name);
+			RoleDetailsChecklistItemSubView checklistItemSubView = null;
 			
-			if (description.length() > 50) {
-				checklistItemSubView.getQuestionDescLbl().setText(description.substring(0, 50) + "...");
-			} else {
-				checklistItemSubView.getQuestionDescLbl().setText(description);
-			}
-			checklistItemSubView.getQuestionDescLbl().setTitle(description);
-			
-			containerVerticalPanel.add(checklistItemSubView);
-			
-			if (questionProxy.getCheckListOptions() != null && questionProxy.getCheckListOptions().size() > 0) {
-				checklistItemSubView.getOptionTable().setRowData(questionProxy.getCheckListOptions());
-			} else {
-				checklistItemSubView.getOptionTable().setRowData(new ArrayList<ChecklistOptionProxy>());
+			int widgetCount = containerVerticalPanel.getWidgetCount();
+			for (int i=0; i<widgetCount; i++) {
+				Widget widget = containerVerticalPanel.getWidget(i);
+				
+				if (widget instanceof RoleDetailsChecklistItemSubView) {
+					RoleDetailsChecklistItemSubView itemSubView = (RoleDetailsChecklistItemSubView) widget;
+					
+					if (itemSubView.getChecklistItemProxy() != null && itemSubView.getChecklistItemProxy().getId().equals(questionProxy.getId())) {
+						checklistItemSubView = itemSubView;
+						break;
+					}
+				}
 			}
 			
-			if (questionProxy.getCheckListCriterias() != null && questionProxy.getCheckListCriterias().size() > 0) {
-				checklistItemSubView.getCriteriaTable().setRowData(questionProxy.getCheckListCriterias());
-			} else {
-				checklistItemSubView.getCriteriaTable().setRowData(new ArrayList<ChecklistCriteriaProxy>());
+			if (checklistItemSubView == null) {
+				checklistItemSubView = new RoleDetailsChecklistItemSubViewImpl();
+				checklistItemSubView.setChecklistItemProxy(questionProxy);
+				checklistItemSubView.setDelegate(this);
+				if (name.length() > 50) {
+					checklistItemSubView.getQuestionNameLbl().setText(name.substring(0, 50) + "...");
+				} else {
+					checklistItemSubView.getQuestionNameLbl().setText(name);
+				}
+				checklistItemSubView.getQuestionNameLbl().setTitle(name);
+				
+				if (description.length() > 50) {
+					checklistItemSubView.getQuestionDescLbl().setText(description.substring(0, 50) + "...");
+				} else {
+					checklistItemSubView.getQuestionDescLbl().setText(description);
+				}
+				checklistItemSubView.getQuestionDescLbl().setTitle(description);
+				
+				containerVerticalPanel.add(checklistItemSubView);
+				
+				if (questionProxy.getCheckListOptions() != null && questionProxy.getCheckListOptions().size() > 0) {
+					checklistItemSubView.getOptionTable().setRowData(questionProxy.getCheckListOptions());
+				} else {
+					checklistItemSubView.getOptionTable().setRowData(new ArrayList<ChecklistOptionProxy>());
+				}
+				
+				if (questionProxy.getCheckListCriterias() != null && questionProxy.getCheckListCriterias().size() > 0) {
+					checklistItemSubView.getCriteriaTable().setRowData(questionProxy.getCheckListCriterias());
+				} else {
+					checklistItemSubView.getCriteriaTable().setRowData(new ArrayList<ChecklistCriteriaProxy>());
+				}
 			}
 			
 			return checklistItemSubView;
 		}
 
 		private RoleDetailsChecklistTopicSubView createTopicView(VerticalPanel containerVerticalPanel, String name, String description, ChecklistItemProxy topicProxy) {
-			RoleDetailsChecklistTopicSubView checklistTopicSubView = new RoleDetailsChecklistTopicSubViewImpl();
-			checklistTopicSubView.setChecklistItemProxy(topicProxy);
-			checklistTopicSubView.setDelegate(this);
-			checklistTopicSubView.getCheckListTopicLbl().setText(name);
-			checklistTopicSubView.getDescriptionLbl().setText(description);
-			containerVerticalPanel.add(checklistTopicSubView);
+			RoleDetailsChecklistTopicSubView checklistTopicSubView = null;
+			int widgetCount = containerVerticalPanel.getWidgetCount();
+			
+			for (int i=0; i<widgetCount; i++) {
+				Widget widget = containerVerticalPanel.getWidget(i);
+				
+				if (widget instanceof RoleDetailsChecklistTopicSubView) {
+					RoleDetailsChecklistTopicSubView topicView = (RoleDetailsChecklistTopicSubView) widget;
+					
+					if (topicView.getChecklistItemProxy() != null && topicView.getChecklistItemProxy().getId().equals(topicProxy.getId())) {
+						checklistTopicSubView = topicView;
+						break;
+					}
+				}
+			}
+			
+			if (checklistTopicSubView == null) {
+				checklistTopicSubView = new RoleDetailsChecklistTopicSubViewImpl();
+				checklistTopicSubView.setChecklistItemProxy(topicProxy);
+				checklistTopicSubView.setDelegate(this);
+				checklistTopicSubView.getCheckListTopicLbl().setText(name);
+				checklistTopicSubView.getDescriptionLbl().setText(description);
+				containerVerticalPanel.add(checklistTopicSubView);
+			}
 			
 			return checklistTopicSubView;
 		}
@@ -8063,17 +8099,34 @@ public void onDragStart(DragStartEvent event) {
 				verticalPanel.add(tabPanel);
 			}
 			
-			RoleDetailsChecklistTabSubView roleDetailsChecklistTabSubView = new RoleDetailsChecklistTabSubViewImpl();		
-			roleDetailsChecklistTabSubView.setChecklistItemProxy(tabProxy);
-			roleDetailsChecklistTabSubView.setDelegate(this);
-			roleDetailsChecklistTabSubView.setTabPanel(checklistTabPanel);
+			RoleDetailsChecklistTabSubView roleDetailsChecklistTabSubView = null;
+			for (int i=0; i<checklistTabPanel.getWidgetCount(); i++) {
+				Widget widget = checklistTabPanel.getWidget(i);
+				
+				if (widget instanceof RoleDetailsChecklistTabSubView) {
+					RoleDetailsChecklistTabSubView checklistTabSubView = (RoleDetailsChecklistTabSubView) widget;
+					
+					if (checklistTabSubView.getChecklistItemProxy() != null && checklistTabSubView.getChecklistItemProxy().getId().equals(tabProxy.getId())) {
+						roleDetailsChecklistTabSubView = checklistTabSubView;
+						break;
+					}
+					
+				}
+			}
 			
-			if (tabProxy != null && tabProxy.getName() != null)
-				checklistTabPanel.add(roleDetailsChecklistTabSubView, tabProxy.getName());
-			else
-				checklistTabPanel.add(roleDetailsChecklistTabSubView, "");
-			
-			checklistTabPanel.selectTab(roleDetailsChecklistTabSubView);
+			if (roleDetailsChecklistTabSubView == null) {
+				roleDetailsChecklistTabSubView = new RoleDetailsChecklistTabSubViewImpl();		
+				roleDetailsChecklistTabSubView.setChecklistItemProxy(tabProxy);
+				roleDetailsChecklistTabSubView.setDelegate(this);
+				roleDetailsChecklistTabSubView.setTabPanel(checklistTabPanel);
+				
+				if (tabProxy != null && tabProxy.getName() != null)
+					checklistTabPanel.add(roleDetailsChecklistTabSubView, tabProxy.getName());
+				else
+					checklistTabPanel.add(roleDetailsChecklistTabSubView, "");
+				
+				checklistTabPanel.selectTab(roleDetailsChecklistTabSubView);
+			}
 			
 			return roleDetailsChecklistTabSubView;
 		}

@@ -25,6 +25,7 @@ import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.server.ExportSettingsXml;
 import ch.unibas.medizin.osce.server.ExporteOSCEXml;
+import ch.unibas.medizin.osce.server.ExportiOSCEXml;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.StandardizedPatientPaymentUtil;
 import ch.unibas.medizin.osce.server.util.qrcode.QRCodeUtil;
@@ -112,13 +113,17 @@ public class ResourceUtil {
 				break;
 			}
             case OSCE_SETTINGS:{
-            	fileName=exportSettingsQRCode(request,os);
-			break;
-		}
+	            fileName=exportSettingsQRCode(request,os);
+				break;
+			}
             case OSCE_SETTINGS_XML:{
             	fileName=exportOsceSettingsXml(request,os);
-			break;
-		}
+            	break;
+            }
+            case IOSCE_XML : {
+            	fileName = setExportiOSCEXml(request, os);
+				break;
+            }
 			default: {
 				Log.info("Error in entity : " + entity);
 				break;
@@ -128,6 +133,20 @@ public class ResourceUtil {
 		sendFile(response, os.toByteArray(), fileName);
 		os = null;
 	}
+	
+	private static String setExportiOSCEXml(HttpServletRequest request, ByteArrayOutputStream os) {
+		String fileName = "";
+		try {
+			Long osceId = Long.parseLong(request.getParameter(ResourceDownloadProps.ID));
+			fileName = ExportiOSCEXml.createiOSCEXmlFile(request, os, osceId);
+			return fileName;
+		}
+		catch (Exception e) {
+			Log.error(e.getMessage(), e);
+		}
+		return fileName;
+	}
+	
 	private static String exportSettingsQRCode(HttpServletRequest request,ByteArrayOutputStream os) {
 
 		Long settingsId = Long

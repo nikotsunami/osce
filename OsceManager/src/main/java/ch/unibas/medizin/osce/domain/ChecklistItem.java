@@ -62,6 +62,10 @@ public class ChecklistItem {
 	@OrderBy("sequenceNumber")
     private List<ChecklistCriteria> checkListCriterias = new ArrayList<ChecklistCriteria>();
 	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "parentItem")
+	@OrderBy("sequenceNumber")
+	private List<ChecklistItem> childChecklistItems = new ArrayList<ChecklistItem>();	
+	
 	public static List<ChecklistItem> findChecklistTopicByChecklistId(Long checklistId) {
 		EntityManager em = entityManager();
 		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem IS NOT NULL AND ci.parentItem.id IN (SELECT ci FROM ChecklistItem ci WHERE ci.checkList IS NOT NULL AND ci.checkList.id = " + checklistId + ") ORDER BY ci.sequenceNumber";

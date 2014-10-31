@@ -202,4 +202,12 @@ public class OsMaFilePathConstant {
 	public static final String appStandardizedPatientPaymentPDF = "/osMaEntry/gwt/unibas/payment/Honorarabrechnung_Form_2011_01.pdf";
 
 	public static final String EXTRA_SPACE_QR="                                       ";
+	
+	public static final String EXPORT_EOSCE = "/eosce";
+	
+	public static final String EXPORT_IOSCE = "/iosce";
+	
+	public static final String EOSCE_FILE_EXTENSION = ".osceexchange";
+	
+	public static final String IOSCE_FILE_EXTENSION = ".exam";
 }

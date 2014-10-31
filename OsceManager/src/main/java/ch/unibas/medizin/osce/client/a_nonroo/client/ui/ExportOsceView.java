@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.ExportOsceType;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -16,12 +17,15 @@ public interface ExportOsceView extends IsWidget {
 	}
 
 	public interface Delegate {
-		public void exportButtonClicked(Boolean flag);
-		public void processedClicked();
-		public void unprocessedClicked();
+		public void exporteOSCEButtonClicked(Boolean flag);
+		public void processedClicked(ExportOsceType osceType);
+		public void unprocessedClicked(ExportOsceType osceType);
 		public Boolean checkSelectedValue();
 		
 		public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey, String encryptionKey, String basePath, Boolean isFTP);
+		public void exportiOSCEButtonClicked(Boolean value);
+		public void eOsceClicked();
+		public void iOsceClicked();
 	}
 
 	public VerticalPanel getFileListPanel();
@@ -55,4 +59,12 @@ public interface ExportOsceView extends IsWidget {
 	RadioButton getFtp();
 
 	void typeValueChanged(boolean isFTP);
+	
+	public RadioButton getProcessed();
+	
+	public RadioButton getUnprocessed();
+	
+	public RadioButton geteOSCE();
+	
+	public RadioButton getiOSCE();
 }
