@@ -201,7 +201,5 @@ public class OsMaFilePathConstant {
 	
 	public static final String appStandardizedPatientPaymentPDF = "/osMaEntry/gwt/unibas/payment/Honorarabrechnung_Form_2011_01.pdf";
 
-	public static final String EXAMINER_LIST_QR = "examinerQR";
-
-	public static final String STUDENT_LIST_QR = "studentQR";
+	public static final String EXTRA_SPACE_QR="                                       ";
 }

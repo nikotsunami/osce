@@ -324,19 +324,18 @@
 								</tr>
 
 								<tr>
-									<td id="lblSettingPaaswordTd">
-										<span class="{style.label}" ui:field="lblSettingPaasword"></span>
+								<td>
+									<span class="{style.label}" ui:field="lblScreenSaverText"></span>
 									</td>
-									<td id="settingPasswordTd">
-										<span ui:field="settingPassword" />
+									<td>
+										<span ui:field="screenSaverText" />
 									</td>
-									<td id="lblBackUpPeriodTd">
+										<td id="lblBackUpPeriodTd">
 										<span class="{style.label}" ui:field="lblBackUpPeriod"></span>
 									</td>
 									<td id="backupPeriodTd">
 										<span ui:field="backupPeriod" />
 									</td>
-									
 								</tr>
 								<tr>
 									<td>
@@ -345,47 +344,44 @@
 									<td>
 										<span ui:field="unit" />
 									</td>
-									
-									<td>
-										<span class="{style.label}" ui:field="lblPointNxtExaminee"></span>
-									</td>
-									<td>
-										<span ui:field="pointNxtExaminee" />
-									</td>
-								</tr>
-								<tr>
-									<!-- <tr id="shortBreak"> -->
 									<td>
 										<span class="{style.label}" ui:field="lblEncryptionType"></span>
 									</td>
 									<td>
 										<span ui:field="encryptionType" />
 									</td>
-									<td>
-										<span class="{style.label}" ui:field="lblSymmetricKey"></span>
-									</td>
-									<td>
+								</tr>
+								<tr>
+								<td>
+									<span class="{style.label}" ui:field="lblSymmetricKey"></span>
+								</td>
+								<td>
 										<span ui:field="symmetricKey" />
-									</td>
-									
-									<!-- </tr> -->
-									<!-- <tr id="shortBreakSPChange"> -->
+								</td>
+								<td id="lblSettingPaaswordTd">
+										
+										<span class="{style.label}" ui:field="lblSettingPaasword"></span>
+								</td>
 								
+								<td id="settingPasswordTd">
+									
+										<span ui:field="settingPassword" />
+								</td>
 								</tr>
 								
-									<tr>
-									<td>
+								<tr>
+								<td>
+										<span class="{style.label}" ui:field="lblPointNxtExaminee"></span>
+								</td>
+								<td>
+										<span ui:field="pointNxtExaminee" />
+								</td>
+								<td>
 										<span class="{style.label}" ui:field="lblExamReviewMode"></span>
-									</td>
-									<td>
+								</td>
+								<td>
 										<span ui:field="examMode" />
-									</td>
-									<td>
-										<span class="{style.label}" ui:field="lblScreenSaverText"></span>
-									</td>
-									<td>
-										<span ui:field="screenSaverText" />
-									</td>
+								</td>
 								</tr>
 							
 							</table>

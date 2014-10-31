@@ -19,6 +19,7 @@ import ch.unibas.medizin.osce.client.managed.request.OsceSettingsProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskRequest;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -28,11 +29,13 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.http.client.URL;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.SingleSelectionModel;
 
@@ -544,11 +547,32 @@ public void init()
 
 	@Override
 	public void exportSettingsQRCodeClicked(OsceSettingsProxy osceSettingsProxy) {
-		
+	
+		if(osceSettingsProxy != null){
+			String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.OSCE_SETTINGS.ordinal()));          
+			String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+					.concat("&").concat(ResourceDownloadProps.ID).concat("=").concat(URL.encodeQueryString(osceSettingsProxy.getId().toString()));
+			Log.info("--> url is : " +url);
+			Window.open(url, "", "");
+			}else{
+				final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.error());
+				confirmationDialogBox.showConfirmationDialog(constants.noSettingsForOsceError());
+			}
 	}
 
 	@Override
 	public void exportXmlClicked(OsceSettingsProxy osceSettingsProxy) {
+		if(osceSettingsProxy != null){
+			String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.OSCE_SETTINGS_XML.ordinal()));          
+			String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+					.concat("&").concat(ResourceDownloadProps.ID).concat("=").concat(URL.encodeQueryString(osceSettingsProxy.getId().toString()));
+			Log.info("--> url is : " +url);
+			Window.open(url, "", "");
+	
+		}else{
+			final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.error());
+			confirmationDialogBox.showConfirmationDialog(constants.noSettingsForOsceError());
+		}
 		
 	}
 	

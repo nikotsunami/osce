@@ -416,6 +416,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 	
 	// Highlight onViolation
 		Map<String, Widget> osceMap;
+		
 	// E Highlight onViolation
 
 		
@@ -680,12 +681,49 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 
 	@UiHandler("save")
 	void onSave(ClickEvent event) {
+		if (validateSettingFields()) {
+			delegate.saveClicked(osce,osceSettingsProxy);
+		} else {
+			MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+			confirmationDialogBox.showConfirmationDialog(constants.credentialsMustNotBeEmpty());
+		}
+	}
+
+	private boolean validateSettingFields() {
+		boolean flag = false;
+		if (userName.getValue() != null && userName.getValue().isEmpty() == false && userName.getValue() != "") {
+			flag = true;
+			userName.removeStyleName("higlight_onViolation");
+		} else {
+			flag = false;
+			userName.addStyleName("higlight_onViolation");
+		}
 		
-		  
+		if (password.getValue() != null && password.getValue().isEmpty() == false && password.getValue() != "") {
+			flag = true;
+			password.removeStyleName("higlight_onViolation");
+		} else {
+			flag = false;
+			password.addStyleName("higlight_onViolation");
+		}
 		
+		if (bucketName.getValue() != null && bucketName.getValue().isEmpty() == false && bucketName.getValue() != "") {
+			flag = true;
+			bucketName.removeStyleName("higlight_onViolation");
+		} else {
+			flag = false;
+			bucketName.addStyleName("higlight_onViolation");
+		}
 		
+		if (BucketInfoType.FTP.equals(bucketInfo.getValue()) && host.getValue() != null && host.getValue().isEmpty() == false && host.getValue() != "") {
+			flag = true;
+			host.removeStyleName("higlight_onViolation");
+		} else if (BucketInfoType.FTP.equals(bucketInfo.getValue())) {
+			flag = false;
+			host.addStyleName("higlight_onViolation");
+		}
 		
-		delegate.saveClicked(osce,osceSettingsProxy);
+		return flag;
 	}
 
 	interface Binder extends UiBinder<Widget, OsceEditViewImpl> {
@@ -913,6 +951,8 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 
 		if(osceSettingsProxy != null){
 			bucketInfo.setValue(osceSettingsProxy.getInfotype(), true);
+			setS3Values();
+			setSFTPValues();
 			setGeneralInfoValues(osceSettingsProxy);
 		}
 	}

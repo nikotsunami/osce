@@ -691,19 +691,9 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 				
 			} else {
 				//create
-				 final OsceSettingsRequest osceSettingsRequest=requests.osceSettingsRequest();
-				OsceSettingsProxy proxy= osceSettingsRequest.create(OsceSettingsProxy.class);
-				
-				if( ((OsceEditViewImpl)view).userName.getValue()=="" &&
-					((OsceEditViewImpl)view).password.getValue()=="" &&
-					((OsceEditViewImpl)view).bucketName.getValue()=="" &&
-					((OsceEditViewImpl)view).symmetricKey.getValue()=="" &&
-					((OsceEditViewImpl)view).settingPassword.getValue()==""  &&
-					((OsceEditViewImpl)view).host.getValue()==""  
-						){
-					Log.info("No data entered");
-				}
-				else{
+					final OsceSettingsRequest osceSettingsRequest=requests.osceSettingsRequest();
+					OsceSettingsProxy proxy= osceSettingsRequest.create(OsceSettingsProxy.class);
+			
 					proxy.setUsername(((OsceEditViewImpl)view).userName.getValue());
 					proxy.setPassword(((OsceEditViewImpl)view).password.getValue());
 					proxy.setBucketName(((OsceEditViewImpl)view).bucketName.getValue());
@@ -729,9 +719,6 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 							Log.info("osce settings saved succesfully");
 						}
 					});
-				}
-				
-				
 			}
 	}
 

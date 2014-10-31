@@ -1725,6 +1725,8 @@ public interface OsceConstants extends Constants {
 	public String iOSCE();
 	
 	public String confirmDelete();
+
+	public String credentialsMustNotBeEmpty();
 }
 
 

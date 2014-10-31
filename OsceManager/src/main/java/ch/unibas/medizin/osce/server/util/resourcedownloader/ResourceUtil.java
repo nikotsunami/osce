@@ -23,6 +23,7 @@ import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
+import ch.unibas.medizin.osce.server.ExportSettingsXml;
 import ch.unibas.medizin.osce.server.ExporteOSCEXml;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.StandardizedPatientPaymentUtil;
@@ -110,6 +111,14 @@ public class ResourceUtil {
 				fileName = setExporteOSCEXml(request, os);
 				break;
 			}
+            case OSCE_SETTINGS:{
+            	fileName=exportSettingsQRCode(request,os);
+			break;
+		}
+            case OSCE_SETTINGS_XML:{
+            	fileName=exportOsceSettingsXml(request,os);
+			break;
+		}
 			default: {
 				Log.info("Error in entity : " + entity);
 				break;
@@ -119,6 +128,16 @@ public class ResourceUtil {
 		sendFile(response, os.toByteArray(), fileName);
 		os = null;
 	}
+	private static String exportSettingsQRCode(HttpServletRequest request,ByteArrayOutputStream os) {
+
+		Long settingsId = Long
+				.parseLong(request.getParameter(ResourceDownloadProps.ID));
+		String locale = request.getParameter(ResourceDownloadProps.LOCALE);
+		ByteArrayOutputStream newOs = new ByteArrayOutputStream();
+		ExportSettingsXml.createSettingsXmlFile(request, newOs, settingsId);
+		String xml = new String(newOs.toByteArray());
+		return QRCodeUtil.generateQRCodeForSettings(xml, locale, os,request.getSession());
+	}
 	/*
 	 * This method will pass a hard coded url to generate QR code.
 	 */
@@ -127,7 +146,7 @@ public class ResourceUtil {
 				.parseLong(request.getParameter(ResourceDownloadProps.ID));
 		String locale = request.getParameter(ResourceDownloadProps.LOCALE);
 		
-		String url=OsMaFilePathConstant.getQRCodeURL() + checklistId + "                                               ";
+		String url=OsMaFilePathConstant.getQRCodeURL() + checklistId;
 		return QRCodeUtil.generateQRCodeForChecklist(url, locale, os,request.getSession());
 	}
 
@@ -424,4 +443,17 @@ public class ResourceUtil {
 		stream.close();
 	}
 
+	private static String exportOsceSettingsXml(HttpServletRequest request,ByteArrayOutputStream os) {
+
+		String fileName="";
+		try{
+		Long osceSettingsId = Long.parseLong(request.getParameter(ResourceDownloadProps.ID));
+		fileName = ExportSettingsXml.createSettingsXmlFile(request, os, osceSettingsId);
+		return fileName;
+		}
+		catch (Exception e) {
+			Log.error(e.getMessage(), e);
+		}
+		return fileName;
+	}
 }
