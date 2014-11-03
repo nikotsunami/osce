@@ -1025,12 +1025,18 @@ public class Semester {
 		
 			List<OscePost> resultList = q.getResultList();
 			
-			for(OscePost op : resultList){
+			if(resultList!=null && resultList.size()>0){
 				
-				if(op.getPatientInRole().size()==0){
-					result=false;
-					break;
+				
+				for(OscePost op : resultList){
+					
+					if(op.getPatientInRole().size()==0){
+						result=false;
+						break;
+					}
 				}
+			}else{
+				result=false;
 			}
 			return result;
 				

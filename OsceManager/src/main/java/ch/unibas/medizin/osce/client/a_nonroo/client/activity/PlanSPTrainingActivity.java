@@ -1865,9 +1865,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		
 		Log.info("creating suggestion");
 		
-		fetchAndShowSuggestion();
-		
-		/*showApplicationLoading(true);
+		showApplicationLoading(true);
 		 requests.trainingSuggestionRequestNonRoo().createSuggestion(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
@@ -1882,7 +1880,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 				}
 				
 			}
-		});*/
+		});
 		
 	}
 	
@@ -1901,8 +1899,8 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 					isShowingSuggestions=true;
 					showSuggestion();
 				}else{
-					Log.info("System could not get training suggestions");
-					showErrorMessageToUser("System could not get training suggestions");
+					Log.info("System could not find training suggestions");
+					showErrorMessageToUser("System could not find training suggestions");
 				}
 				
 				showApplicationLoading(false);
