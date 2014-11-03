@@ -13,11 +13,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.Table;
@@ -525,9 +522,20 @@ public class SPPortalPerson {
 					
 					if(standardizedPatient !=null ) {
 			
-						spStandardizedPatient= new SpStandardizedPatient();
-						
-						spStandardizedPatient.setCreated(standardizedPatient.getCreated());
+						//following code is to get spportal "standardized patient" based on osce "standardizedPatient" id to solve issue SPP-10
+						SpStandardizedPatient spportalPatient = getPatientFromSpportalBasedOnId(standardizedPatient.getId());
+						if(spportalPatient==null){
+						// "spportal standardized patient" id is null i.e there is no any data of sp so we are exporting all data of sp to spportal.
+							spStandardizedPatient= new SpStandardizedPatient();
+						}else{
+							//There exist "standardized patient" data so we are copying remaining data (ana form and ana check values) of sp and exporting that to spportal.
+							spStandardizedPatient=spportalPatient;
+						}
+						if(standardizedPatient.getCreated()==null){
+							spStandardizedPatient.setCreated(new Date());
+						}else{
+							spStandardizedPatient.setCreated(standardizedPatient.getCreated());
+						}
 						spStandardizedPatient.setAnamnesisForm(spAnamnesisForm);
 						spStandardizedPatient.setBankAccount(spBankaccount);
 						spStandardizedPatient.setBirthday(standardizedPatient.getBirthday());
@@ -561,6 +569,26 @@ public class SPPortalPerson {
 				return null;
 			}
 		}
+		private SpStandardizedPatient getPatientFromSpportalBasedOnId(Long id) {
+			
+			log.info("finding spportal person based on standardized patient id :  " + id);
+			
+			EntityManager em = SpStandardizedPatient.entityManager();
+			
+			String queryString ="select sp from SpStandardizedPatient sp where sp.id="+id;
+			 
+			 TypedQuery<SpStandardizedPatient> query =em.createQuery(queryString,SpStandardizedPatient.class);
+			 
+			 List<SpStandardizedPatient> listOfSp = query.getResultList();
+			 
+			 if(listOfSp!=null && listOfSp.size()==1){
+				 return listOfSp.get(0);
+			 }else{
+				 return null;
+			 }
+			 
+		}
+
 		/**
 		 * This method is used to copy Anamnesis ChecksValue detail of standardized patient and initialize sp-poratal Anamnesis ChecksValue detail.
 		 * @param em
@@ -819,7 +847,18 @@ public class SPPortalPerson {
 			
 			//changing sp status to exported.
 			standardizedPatient=StandardizedPatient.findStandardizedPatient(standardizedPatient.getId());
-			standardizedPatient.setStatus(StandardizedPatientStatus.EXPORTED);
+			
+			//Following code is to solve issue SPP-10.(when survey is open we exported sp as he was in semester. Now sp makes edit request and admin approves it from osce)
+			//first up all checking sp is exist in spportal
+			SpStandardizedPatient patientFromSpportalBasedOnId = sppoPerson.getPatientFromSpportalBasedOnId(standardizedPatient.getId());
+			
+			//SP is null that means there is no any data of sp at spportal (Normal edit request is approved) so we are updating his status as exported. 
+			if(patientFromSpportalBasedOnId==null){
+				standardizedPatient.setStatus(StandardizedPatientStatus.EXPORTED);
+			}else{
+				//"standardized patient" data is already in spportal (sp is exported when survey is started) so we are updating his status as EXPORTED_AND_SURVEY as we are copying sps data to spportal.
+				standardizedPatient.setStatus(StandardizedPatientStatus.EXPORTED_AND_SURVEY);
+			}
 			standardizedPatient.persist();
 			
 			//pushing all sp data in sp portal.

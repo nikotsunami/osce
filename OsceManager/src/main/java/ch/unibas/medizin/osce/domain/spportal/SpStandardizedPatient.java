@@ -135,7 +135,7 @@ public class SpStandardizedPatient {
     @DateTimeFormat(style = "M-")
     private Date created;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedPatient")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "standardizedPatient")
 	private Set<SpPatientInSemester> patientInSemester = new HashSet<SpPatientInSemester>();
 
     

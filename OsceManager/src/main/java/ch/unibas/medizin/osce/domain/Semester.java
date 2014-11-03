@@ -456,10 +456,10 @@ public class Semester {
     	Log.info("Pushing data from spportal to osce");
     	try{
     		
-    		Semester semester = Semester.findSemester(semId);
+    		/*Semester semester = Semester.findSemester(semId);
     		
     		semester.setSurveyStatus(SurveyStatus.CLOSED);
-    		semester.persist();
+    		semester.persist();*/
 
     		Semester semester2 = new Semester();
     		return semester2.pushDateToOsceFromSPPortal(semId);
@@ -471,7 +471,7 @@ public class Semester {
     	
     }
 
-   @Transactional
+   //@Transactional
    private Boolean pushDateToOsceFromSPPortal(Long semId) {
 	
 	try{
@@ -484,25 +484,67 @@ public class Semester {
 			
 			//spSemester.setSurveyStatus(SurveyStatus.CLOSED);
 			//spSemester.persist();
+			//following method updating status of semester of Osce
+			this.updateOsceSemStatus(semId);
 			
+			//following method updating pis status to accepted for accepted users in osce.
 			this.pushPatientInSemesterDataToOsce(semId,spSemester.getId());
+			
+			//following method push accepted osce date data from spportal to osce.
 			this.pushAcceptedOsceDataToOsce(spSemester.getId());
+			
+			//following method push accepted training date data from spportal to osce.
 			this.pushAcceptedTrainingDateToOsce(spSemester.getId());
 
 			/*spSemester.setSurveyStatus(SurveyStatus.CLOSED);
 			spSemester.persist();*/
+			
+			//following method updating semester status in spportal.
 			this.updateSemesterStatus(spSemester.getId());
+			
+			//following method creaing accepted osce day entry in osce.
 			this.createAcceptedOsceDayInOsce(spSemester.getId());
+			
+			//following method deletes accepted training, accepted osce, training block, training date, osce date data from spportal.
+			this.deleteAcceptedOsceDateTrainingDateAndPISFromSpportal(spSemester.getId());
+			
+			//following method deleted pis and sp with status INSURVEY.
 			this.deleteSpFromSpPortalWithStatusInSurvey(semId);
+			
+			//following method changes sp status from EXPORTED_IN_SURVEY to EXPORTED in osce.
 			this.setSpStatusFromExportedInServeyToExported(semId);
+			
+			//following method chnages sp status from INSURVEY to ACTIVE in osce.
+			this.setSpStatusFromInSurveyToActive(semester.getId());
 		}
 		return true;
 	}catch (Exception e) {
+		e.printStackTrace();
 		Log.error(e.getMessage(), e);
 		return null;
 	}
 }
-	@Transactional
+
+   @Transactional(propagation=Propagation.REQUIRED)
+	private void updateOsceSemStatus(Long semId) {
+
+		EntityManager em = Semester.entityManager();
+		
+		StringBuilder sql = new StringBuilder("UPDATE `semester` set `survey_status`=2 where id="+semId);
+		
+		String queryString = sql.toString();
+		
+		Log.info("Query is :" + queryString);
+	
+		Query query =  em.createNativeQuery(queryString);
+		
+		query.executeUpdate();
+		
+		Log.info("Semester status updated in osce");
+	
+}
+
+	@Transactional(propagation=Propagation.REQUIRED)
 	private void pushPatientInSemesterDataToOsce(Long semId,Long spSemesterId)throws Exception {
 	
 		try{
@@ -513,16 +555,16 @@ public class Semester {
 			
 			SpSemester spSemester = SpSemester.findSpSemester(spSemesterId);
 			
-			List<PatientInSemester> patientInSemList = PatientInSemester.findPatientInSemesterBasedOnSemesterId(semester.getId());
+			//List<PatientInSemester> patientInSemList = PatientInSemester.findPatientInSemesterBasedOnSemesterId(semester.getId());
 			
-			Long lastspPatientInSemId=0L;
+			//Long lastspPatientInSemId=0L;
 			/*if date is found taking last persisted id as reference based on this id I will find all patient in semester in osce that is persisted after this id for given semester and
 			 * if found such data than persist that in spportal this also help me that I don't have to check for duplicate entry. 
 			*/
-			if(patientInSemList!=null && patientInSemList.size() > 0){
+			/*if(patientInSemList!=null && patientInSemList.size() > 0){
 			
 				 lastspPatientInSemId= patientInSemList.get(0).getId();
-			}
+			}*/
 			
 			Set<SpPatientInSemester> setPatientInSemes= spSemester.getPatientsInSemester();
 		
@@ -573,7 +615,7 @@ public class Semester {
 		}
 	
 	}
-	@Transactional
+	@Transactional(propagation=Propagation.REQUIRED)
 	private void pushAcceptedOsceDataToOsce(Long spSemesterId) {
 		
 		SpSemester spSemester = SpSemester.findSpSemester(spSemesterId);
@@ -600,7 +642,7 @@ public class Semester {
 	}
 
 
-	@Transactional
+	//@Transactional
 	private void deleteOldAcceptedOsceDateBasedOnPatientInSemId(Long patientInSemId) {
 		Log.info("Deleting old data from accepted_osce");
 		EntityManager em = Semester.entityManager();
@@ -615,7 +657,7 @@ public class Semester {
 		
 	}
 	
-	@Transactional
+	//@Transactional
 	private void createAccptedOsceDateInOsce(Long patientInSemId,Set<SpOsceDate> osceDateSet) {
 		Log.info("creating data for accepted_osce");
 		EntityManager em = Semester.entityManager();
@@ -638,7 +680,7 @@ public class Semester {
 		Log.info(totalEntryDeleted +" accepted_osce are created in osce");
 	}
 	
-	@Transactional
+	@Transactional(propagation=Propagation.REQUIRED)
 	private void pushAcceptedTrainingDateToOsce(Long spSemesterId) {
 		
 		SpSemester spSemester = SpSemester.findSpSemester(spSemesterId);
@@ -663,7 +705,7 @@ public class Semester {
 		}
 		
 	}
-	@Transactional
+	//@Transactional
 	private void deleteOldAcceptedTrainingDataBasedOnPatientInSemId(Long patientInSemId) {
 		Log.info("Deleting old data from accepted_trainings");
 		EntityManager em = Semester.entityManager();
@@ -677,7 +719,7 @@ public class Semester {
 		Log.info(totalEntryDeleted +"  accepted_trainings are deleted from osce");
 		
 	}
-	@Transactional
+	//@Transactional
 	private void createAccptedTrainingDateInOsce(Long patientInSemId,Set<SpTrainingDate> trainingDateSet) {
 		
 		Log.info("creating data for accepted_trainings");
@@ -702,7 +744,7 @@ public class Semester {
 		Log.info(totalEntryDeleted +" accepted_trainings are created in osce");
 	}
 
-	@Transactional
+	@Transactional(propagation=Propagation.REQUIRED)
 	private void updateSemesterStatus(Long spSemId){
 		
 		EntityManager em = SpSemester.entityManager();
@@ -720,7 +762,7 @@ public class Semester {
 		Log.info("Semester status updated in sp portal");
 	}
 	
-	@Transactional
+	@Transactional(propagation=Propagation.REQUIRED)
 	private void createAcceptedOsceDayInOsce(Long spSemesterId) {
 		Log.info("creating osce day with same date as accepted osce dates");
 		
@@ -763,6 +805,131 @@ public class Semester {
 		deleteSPFormSpPortal(allInSurveySps);
 	}
 
+	//@Transactional(propagation=Propagation.REQUIRED)
+	private void deleteAcceptedOsceDateTrainingDateAndPISFromSpportal(Long semId) {
+		
+		Log.info("Deleting accepted osce and accepted training date of all patient in semester of sem  : " +semId + "from spportal");
+		
+		SpSemester spSemester = SpSemester.findSpSemester(semId);
+		
+		//Set<SpPatientInSemester> setPatientsInSemesters = spSemester.getPatientsInSemester();
+		//folllwing code delete data from accpeted_osce date and acceped_training date but not from tD and osce date
+		/*for(SpPatientInSemester pis : setPatientsInSemesters){
+			//pis.setOsceDates(null);
+			//pis.setTrainingDates(null);
+			
+			pis.persist();
+			
+		}*/
+		
+		//removing all pis of sem This code causing deleted entity pass to persist error so commented it. Manish
+		/*for(SpPatientInSemester pis : setPatientsInSemesters){
+			SpStandardizedPatient standardizedPatient = pis.getStandardizedPatient();
+			System.out.println("pis is :" + pis.getId());
+			System.out.println("Acc osce is :" + pis.getOsceDates());
+			System.out.println("Acc training is :" + pis.getTrainingDates());
+			pis.remove();
+			standardizedPatient.remove();
+		}*/
+		
+		
+		deleteAcceptedOsceDateFromSpportal(spSemester.getId());
+		deleteAcceptedTrainingDateFromSpportal(spSemester.getId());
+		
+		deleteOsceDateFromSpportal(spSemester.getId());
+		
+		Set<SpTrainingBlock> spTrainingBlocks = spSemester.getTrainingBlocks();
+		
+		for(SpTrainingBlock trainingblock : spTrainingBlocks){
+			Long blockId = trainingblock.getId();
+			deletTrainingDateSpportal(blockId);
+		}
+		
+		deletTrainingBlockFromSpportal(spSemester.getId());
+		
+		
+	}
+
+	@Transactional
+	private void deleteAcceptedOsceDateFromSpportal(Long semId){
+		
+		EntityManager em = SpSemester.entityManager();
+		
+		StringBuilder sql = new StringBuilder("delete from accepted_osce where patient_in_semesters in (select id from patient_in_semester where semester =" + semId +" ) and patient_in_semesters>0;");
+		
+		Log.info("Query is" + sql.toString());
+		
+		Query query =  em.createNativeQuery(sql.toString());
+		
+		int totalEntryDeleted =query.executeUpdate();
+		
+		Log.info(totalEntryDeleted +"  of accepted osce ");
+	}
+	
+	@Transactional
+	private void deleteAcceptedTrainingDateFromSpportal(Long semId){
+		
+		EntityManager em = SpSemester.entityManager();
+		
+		StringBuilder sql = new StringBuilder("delete from accepted_trainings where patient_in_semesters in (select id from patient_in_semester where semester ="+ semId + ") and patient_in_semesters>0;");
+		
+		Log.info("Query is" + sql.toString());
+		
+		Query query =  em.createNativeQuery(sql.toString());
+		
+		int totalEntryDeleted =query.executeUpdate();
+		
+		Log.info(totalEntryDeleted +"  of accepted training ");
+	}
+	
+	@Transactional
+	private void deleteOsceDateFromSpportal(Long semId){
+		
+		EntityManager em = SpSemester.entityManager();
+		
+		StringBuilder sql = new StringBuilder("delete from osce_date where semester="+ semId +";");
+		
+		Log.info("Query is" + sql.toString());
+		
+		Query query =  em.createNativeQuery(sql.toString());
+		
+		int totalEntryDeleted =query.executeUpdate();
+		
+		Log.info(totalEntryDeleted +"  of osce dates ");
+	}
+	
+	@Transactional
+	private void deletTrainingDateSpportal(Long blockId){
+		
+		EntityManager em = SpSemester.entityManager();
+		
+		StringBuilder sql = new StringBuilder("delete from training_date where training_block="+ blockId +";");
+		
+		Log.info("Query is" + sql.toString());
+		
+		Query query =  em.createNativeQuery(sql.toString());
+		
+		int totalEntryDeleted =query.executeUpdate();
+		
+		Log.info(totalEntryDeleted +"  of osce dates ");
+	}
+	
+	@Transactional
+	private void deletTrainingBlockFromSpportal(Long semId){
+		
+		EntityManager em = SpSemester.entityManager();
+		
+		StringBuilder sql = new StringBuilder("delete from training_block where semester="+ semId +";");
+		
+		Log.info("Query is" + sql.toString());
+		
+		Query query =  em.createNativeQuery(sql.toString());
+		
+		int totalEntryDeleted =query.executeUpdate();
+		
+		Log.info(totalEntryDeleted +"  of osce dates ");
+	}
+	
 	@Transactional
 	private void deletePatientInSemester(List<StandardizedPatient> allInSurveySps) {
 		
@@ -770,7 +937,7 @@ public class Semester {
 		
 		StringBuilder sql = new StringBuilder("DELETE FROM `patient_in_semester` WHERE `standardized_patient` IN ( "+getIdOfSP(allInSurveySps) + " )");
 		
-		System.out.println("Query is" + sql.toString());
+		Log.info("Query is" + sql.toString());
 		
 		Query query =  em.createNativeQuery(sql.toString());
 		
@@ -786,7 +953,7 @@ public class Semester {
 		
 		StringBuilder sql = new StringBuilder("DELETE FROM `standardized_patient` WHERE `id` IN ( "+getIdOfSP(allInSurveySps) + " )");
 		
-		System.out.println("Query is" + sql.toString());
+		Log.info("Query is" + sql.toString());
 		
 		Query query =  em.createNativeQuery(sql.toString());
 		
@@ -817,7 +984,7 @@ public class Semester {
 		return spIds.toString();
 	}
 	
-	@Transactional
+	@Transactional(propagation=Propagation.REQUIRED)
 	private void setSpStatusFromExportedInServeyToExported(Long semId) {
 		Log.info("Changeing status of sp from EXPORTED_AND_SURVEY TO EXPORTED");
 		
@@ -828,6 +995,20 @@ public class Semester {
 				sp.persist();
 			}
 		}
+	}
+	
+		@Transactional(propagation=Propagation.REQUIRED)
+	   private void setSpStatusFromInSurveyToActive(Long semId) {
+		   Log.info("Changeing status of sp from IN_SURVEY TO ACTIVE");
+			
+			List<StandardizedPatient> allInSurveyStatusSp = StandardizedPatient.findAllSPWithStatusInSurvey(semId);
+			if(allInSurveyStatusSp !=null){
+				for(StandardizedPatient sp : allInSurveyStatusSp){
+					sp.setStatus(StandardizedPatientStatus.ACTIVE);
+					sp.persist();
+				}
+			}
+		
 	}
 	
 	public static Boolean checkAllSpIsAssignInRole(Long semId){
