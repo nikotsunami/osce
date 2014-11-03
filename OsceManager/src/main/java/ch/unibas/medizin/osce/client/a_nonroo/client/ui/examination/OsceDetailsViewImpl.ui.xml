@@ -36,6 +36,10 @@
 			text-shadow: #ddf 1px 1px 0;
 			margin-bottom: 0;
 		}
+		.wrapLine{
+	 		white-space: normal;
+    		word-wrap: break-word;
+		}
 	</ui:style>
 	<g:HTMLPanel>
 
@@ -328,7 +332,7 @@
 									<span class="{style.label}" ui:field="lblScreenSaverText"></span>
 									</td>
 									<td>
-										<span ui:field="screenSaverText" />
+										<span class="{style.wrapLine}" ui:field="screenSaverText" />
 									</td>
 										<td id="lblBackUpPeriodTd">
 										<span class="{style.label}" ui:field="lblBackUpPeriod"></span>

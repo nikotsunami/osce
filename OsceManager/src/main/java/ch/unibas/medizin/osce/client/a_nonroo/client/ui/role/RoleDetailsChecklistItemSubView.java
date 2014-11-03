@@ -49,4 +49,6 @@ public interface RoleDetailsChecklistItemSubView extends IsWidget {
 	public CellTable<ChecklistOptionProxy> getOptionTable();
 	
 	public CellTable<ChecklistCriteriaProxy> getCriteriaTable();
+	
+	public void setQuestionNameDescription(String name, String description);
 }

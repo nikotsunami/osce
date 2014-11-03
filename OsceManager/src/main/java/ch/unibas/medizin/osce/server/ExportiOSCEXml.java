@@ -95,27 +95,6 @@ public class ExportiOSCEXml {
 			Oscedata oscedata = factory.createOscedata();
 			oscedata.setVersion(1.1f);
 			
-			BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForExport(osce.getSemester().getId());
-			Credentials credentials = factory.createOscedataCredentials();
-			oscedata.setCredentials(credentials);
-			
-			if(bucketInformation == null || bucketInformation.getType() == null) {
-				credentials.setType(BucketInfoType.S3.getStringValue());
-			}else {
-				credentials.setType(bucketInformation.getType().getStringValue());	
-			}
-			
-			Host host = factory.createOscedataCredentialsHost();
-			credentials.setHost(host);
-			if(bucketInformation != null && BucketInfoType.FTP.equals(bucketInformation.getType())) {
-				host.setBasepath(bucketInformation.getBasePath());
-			}
-			
-			host.setValue(bucketInformation == null ? "" : defaultString(bucketInformation.getBucketName()));
-			credentials.setUser(bucketInformation == null ? "" : defaultString(bucketInformation.getAccessKey()));
-			credentials.setPassword(bucketInformation == null ? "" : defaultString(bucketInformation.getSecretKey()));
-			credentials.setEncryptionKey(bucketInformation == null ? "" : defaultString(bucketInformation.getEncryptionKey()));
-
 			exportChecklist(factory, oscedata, osceId);
 			exportExaminers(osceId, factory, oscedata);
 			exportCandidates(osceId, factory, oscedata);

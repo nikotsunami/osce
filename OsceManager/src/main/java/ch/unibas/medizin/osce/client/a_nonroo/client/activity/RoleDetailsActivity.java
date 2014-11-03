@@ -8007,19 +8007,7 @@ public void onDragStart(DragStartEvent event) {
 				checklistItemSubView = new RoleDetailsChecklistItemSubViewImpl();
 				checklistItemSubView.setChecklistItemProxy(questionProxy);
 				checklistItemSubView.setDelegate(this);
-				if (name.length() > 50) {
-					checklistItemSubView.getQuestionNameLbl().setText(name.substring(0, 50) + "...");
-				} else {
-					checklistItemSubView.getQuestionNameLbl().setText(name);
-				}
-				checklistItemSubView.getQuestionNameLbl().setTitle(name);
-				
-				if (description.length() > 50) {
-					checklistItemSubView.getQuestionDescLbl().setText(description.substring(0, 50) + "...");
-				} else {
-					checklistItemSubView.getQuestionDescLbl().setText(description);
-				}
-				checklistItemSubView.getQuestionDescLbl().setTitle(description);
+				checklistItemSubView.setQuestionNameDescription(name, description);
 				
 				containerVerticalPanel.add(checklistItemSubView);
 				
@@ -8091,7 +8079,7 @@ public void onDragStart(DragStartEvent event) {
 				tabPanel.setHeight("100%");
 				
 				checklistTabPanel = new ScrolledTabLayoutPanel(40L, u, icon1, icon2);
-				checklistTabPanel.setHeight((ResolutionSettings.getRightWidgetHeight() / 2) - 25 + "px");
+				checklistTabPanel.setHeight((ResolutionSettings.getRightWidgetHeight() / 2) - 50 + "px");
 				
 				tabPanel.add(checklistTabPanel);
 				tabPanel.addStyleName("horizontalPanelStyle");
@@ -8304,19 +8292,8 @@ public void onDragStart(DragStartEvent event) {
 
 				@Override
 				public void onSuccess(Void response) {
-					if (name.length() > 60) {
-						roleDetailsChecklistItemSubViewImpl.getQuestionNameLbl().setText(name.substring(0, 60) + "...");
-					} else {
-						roleDetailsChecklistItemSubViewImpl.getQuestionNameLbl().setText(name);
-					}
-					roleDetailsChecklistItemSubViewImpl.getQuestionNameLbl().setTitle(name);
-					
-					if (description.length() > 60) {
-						roleDetailsChecklistItemSubViewImpl.getQuestionDescLbl().setText(description.substring(0, 60) + "...");
-					} else {
-						roleDetailsChecklistItemSubViewImpl.getQuestionDescLbl().setText(description);
-					}
-					roleDetailsChecklistItemSubViewImpl.getQuestionDescLbl().setTitle(description);
+					roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(proxy);
+					roleDetailsChecklistItemSubViewImpl.setQuestionNameDescription(name, description);
 				}
 			});
 		}

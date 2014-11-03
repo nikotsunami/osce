@@ -27,6 +27,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -122,20 +123,24 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 		
 		TextColumn<ChecklistCriteriaProxy> nameCol = new TextColumn<ChecklistCriteriaProxy>() 
 		{
-			
-			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() 
-			{
-				public String render(java.lang.String obj) 
-				{
-					return obj == null ? "" : String.valueOf(obj);
-				}
-			};
-
 			@Override
 			public String getValue(ChecklistCriteriaProxy object) 
 			{
-				return renderer.render(object.getCriteria());
+				return "";
 			}
+			
+			@Override
+			public void render(Context context, ChecklistCriteriaProxy object, SafeHtmlBuilder sb) {
+				
+				if (object.getCriteria().length() > 40) {
+					String criteriaTitleStr = object.getCriteria();
+					String criteriaDisplayStr = object.getCriteria().substring(0, 40) + "...";
+					sb.appendHtmlConstant("<div title=\"" + criteriaTitleStr + "\">" + criteriaDisplayStr + "..." + "</div>");
+				} else {
+					String criteriaDisplayStr = object.getCriteria();
+					sb.appendHtmlConstant("<div title=\"" + criteriaDisplayStr + "\">" + criteriaDisplayStr + "</div>");
+				}
+			}			
 		};
 		
 		criteriaTable.addColumn(nameCol, constants.roleCriteriaLabel());		
@@ -302,19 +307,23 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 		
 		TextColumn<ChecklistOptionProxy> nameCol = new TextColumn<ChecklistOptionProxy>() 
 		{
-			
-			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() 
-			{
-				public String render(java.lang.String obj) 
-				{
-					return obj == null ? "" : String.valueOf(obj);
+			@Override
+			public void render(Context context, ChecklistOptionProxy object, SafeHtmlBuilder sb) {
+				super.render(context, object, sb);				
+				if (object.getOptionName().length() > 25) {
+					String optionTitleStr = object.getOptionName() + "(" + object.getValue() + ")";
+					String optionDisplayStr = object.getOptionName().substring(0, 25) + "..." + "(" + object.getValue() + ")";
+					sb.appendHtmlConstant("<div title=\"" + optionTitleStr + "\">" + optionDisplayStr + "</div>");
+				} else {
+					String optionDisplayStr = object.getOptionName() + "(" + object.getValue() + ")";
+					sb.appendHtmlConstant("<div title=\"" + optionDisplayStr + "\">" + optionDisplayStr + "</div>");
 				}
-			};
+				
+			}
 
 			@Override
-			public String getValue(ChecklistOptionProxy object) 
-			{
-				return renderer.render(object.getOptionName() + "(" + object.getValue() + ")");
+			public String getValue(ChecklistOptionProxy object) {
+				return "";
 			}
 		};
 		
@@ -387,9 +396,9 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 				public void onClick(ClickEvent event) {
 					optionPopupViewImpl.hide();
 					String name = optionPopupViewImpl.getNameTextBox().getValue();
-					if (validateField(name)) {
+					String value = optionPopupViewImpl.getValueTextBox().getValue();
+					if (validateOptionField(name, value)) {
 						String description = optionPopupViewImpl.getDescriptionTextArea().getValue();
-						String value = optionPopupViewImpl.getValueTextBox().getValue();
 						String criteriaCount = optionPopupViewImpl.getCriteriaCountBox().getValue(optionPopupViewImpl.getCriteriaCountBox().getSelectedIndex());
 						delegate.updateOptionClicked(name, description, value, criteriaCount, checklistItemProxy, optionProxy, RoleDetailsChecklistItemSubViewImpl.this);
 						optionPopupViewImpl.getNameTextBox().setValue("");
@@ -572,6 +581,12 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 			
 			String regex = "\\d+";
 			
+			if (name.length() > 50) {
+				MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+				confirmationDialogBox.showConfirmationDialog(constants.optionNameSizeError());
+				return false;
+			}
+			
 			if (optionValue != null && optionValue.isEmpty() == false && optionValue.length() > 0) {
 				if (optionValue.matches(regex) == false) {
 					MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
@@ -701,5 +716,21 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 		public String getValue() {
 			return "";
 		}
+	}
+	
+	public void setQuestionNameDescription(String name, String description) {
+		if (name.length() > 50) {
+			questionNameLbl.setText(name.substring(0, 50) + "...");
+		} else {
+			questionNameLbl.setText(name);
+		}
+		questionNameLbl.setTitle(name);
+		
+		if (description.length() > 50) {
+			questionDescLbl.setText(description.substring(0, 50) + "...");
+		} else {
+			questionDescLbl.setText(description);
+		}
+		questionDescLbl.setTitle(description);
 	}
 }

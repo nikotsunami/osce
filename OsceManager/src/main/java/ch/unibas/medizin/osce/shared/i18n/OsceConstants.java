@@ -1727,6 +1727,8 @@ public interface OsceConstants extends Constants {
 	public String confirmDelete();
 
 	public String credentialsMustNotBeEmpty();
+	
+	public String optionNameSizeError();
 }
 
 

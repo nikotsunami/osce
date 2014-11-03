@@ -177,6 +177,7 @@ public class RoleDetailsChecklistTopicSubViewImpl extends Composite implements R
 	@UiHandler("edit")
 	public void editTopicClicked(ClickEvent e) {
 		final ChecklistiOSCEPopupViewImpl popupViewImpl = new ChecklistiOSCEPopupViewImpl();
+		popupViewImpl.getItemTypeBox().setValue(ItemType.TOPIC);
 		popupViewImpl.setPopupStyle(ItemType.TOPIC);
 		if (checklistItemProxy != null) {
 			popupViewImpl.getNameTextBox().setValue(checklistItemProxy.getName());
