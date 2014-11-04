@@ -166,6 +166,8 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		labelOtherInfo.setInnerText(constants.otherInformation());
 		lblUsername.setInnerText(constants.userName());
 		lblHost.setInnerText(constants.host());
+		lblScreenSaverText.setInnerText(constants.osceScreenSaverText());
+		labelBucketType.setInnerText(constants.bucketType());
 		exportSettingsQRCode.setText(constants.exportSettingsQRCode());
 		exportXml.setText(constants.exportSettingsXml());
 		newButton.setText(constants.osceAddTask());
@@ -1169,8 +1171,6 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		if(osceSettingsProxy == null){
 			return;
 		}
-		labelBucketType.setInnerText(constants.bucketType());
-		lblScreenSaverText.setInnerText(constants.osceScreenSaverText());
 		
 		if(osceSettingsProxy.getInfotype().equals(BucketInfoType.FTP)){
 		bucketType.setInnerText(response.getInfotype().name());	
