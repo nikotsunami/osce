@@ -9,14 +9,13 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,6 +28,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.transaction.annotation.Transactional;
 
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
 import ch.unibas.medizin.osce.domain.Bankaccount;
@@ -230,9 +230,20 @@ public class SpStandardizedPatient {
 		
 		Boolean isDataSavedInOsce =false;
 		Boolean isDataRemovedFromSPPortal=false;
+		boolean isStatusExportedAndSurvey=false;
 		try{
 				StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
 				
+				//Added following code to solve issue SPP-10. 
+				/*Scenario is that survey is opened, sp still sent edit request, admin has approved it so we exports all sps data to spportal & 
+				change sp's status to EXPORTED_AND_SURVEY. Now if sp updates its detail from spportal and admin approves changes from osce.
+				Here we are considering two cases either survey is still open or closed. If survey is open then we have sp's status as EXPORTED_AND_SURVEY in this case
+				We are removing all sp's data except its id is remain in spportal database and changing its status as INSURVEY (like we have sp in survey). 
+				On the other hand if survey is closed then status of this sp is changed to EXPORTED, so we remove all data from spportal after upfating changes in osce. */
+				
+				if(standardizedPatient.getStatus().ordinal()==StandardizedPatientStatus.EXPORTED_AND_SURVEY.ordinal()){
+					isStatusExportedAndSurvey=true;
+				}
 				SpStandardizedPatient spStandardizedPatient = SpStandardizedPatient.findSpStandardizedPatient(spStandardizedPatientId);
 				
 				SpBankaccount spBankaccount = spStandardizedPatient.getBankAccount();
@@ -320,7 +331,12 @@ public class SpStandardizedPatient {
 				standardizedPatient.setProfession(profession);
 				
 				standardizedPatient.setSocialInsuranceNo(spStandardizedPatient.getSocialInsuranceNo());
-				standardizedPatient.setStatus(StandardizedPatientStatus.ACTIVE);
+				//For issue SPP-10
+				if(isStatusExportedAndSurvey){
+					standardizedPatient.setStatus(StandardizedPatientStatus.INSURVEY);
+				}else{
+					standardizedPatient.setStatus(StandardizedPatientStatus.ACTIVE);
+				}
 				standardizedPatient.setStreet(spStandardizedPatient.getStreet());
 				standardizedPatient.setTelephone(spStandardizedPatient.getTelephone());
 				standardizedPatient.setTelephone2(spStandardizedPatient.getTelephone2());
@@ -349,7 +365,7 @@ public class SpStandardizedPatient {
 					
 				}
 				
-				isDataRemovedFromSPPortal=removeSPDataFromSPPortal(spStandardizedPatient,newAnamnesisCheckValuesList,false);
+				isDataRemovedFromSPPortal=removeSPDataFromSPPortal(spStandardizedPatient,newAnamnesisCheckValuesList,false,isStatusExportedAndSurvey);
 				
 				isDataSavedInOsce=true;
 				
@@ -367,7 +383,8 @@ public class SpStandardizedPatient {
 	}
 	
 
-	private static Boolean removeSPDataFromSPPortal(SpStandardizedPatient spStandardizedPatient,List<SpAnamnesisChecksValue> newAnamnesisCheckValuesList,boolean isDeleteNewImage) {
+	private static Boolean removeSPDataFromSPPortal(SpStandardizedPatient spStandardizedPatient,List<SpAnamnesisChecksValue> newAnamnesisCheckValuesList,boolean isDeleteNewImage,
+			boolean isStatusExportedAndSurvey) {
 		log.info("Removing sp old details and all associated data from sp portal");
 		Boolean result=false;
 		try{
@@ -405,11 +422,58 @@ public class SpStandardizedPatient {
 					
 				}
 			}
-			spStandardizedPatient.setAnamnesisForm(spStandardizedPatient.getAnamnesisForm());
-			spStandardizedPatient.setBankAccount(spStandardizedPatient.getBankAccount());
-			spStandardizedPatient.setNationality(spStandardizedPatient.getNationality());
-			spStandardizedPatient.setProfession(spStandardizedPatient.getProfession());
-			spStandardizedPatient.remove();
+			
+			//Added following code to solve issue SPP-10. 
+			/*Scenario is that survey is opened, sp still sent edit request, admin has approved it so we exports all sps data to spportal & 
+			change sp's status to EXPORTED_AND_SURVEY. Now if sp updates its detail from spportal and admin approves changes from osce.
+			Here we are considering two cases either survey is still open or closed. If survey is open then we have sp's status as EXPORTED_AND_SURVEY in this case
+			We are removing all sp's data except its id is remain in spportal database and changing its status as INSURVEY (like we have sp in survey). 
+			On the other hand if survey is closed then status of this sp is changed to EXPORTED, so we remove all data from spportal after upfating changes in osce. */
+			if(isStatusExportedAndSurvey){
+				
+				Long spAnamnesisFromId = spStandardizedPatient.getAnamnesisForm().getId();
+				Long spBankAccountId = spStandardizedPatient.getBankAccount().getId();
+				
+				//clearing all personal data.
+				spStandardizedPatient.setAnamnesisForm(null);
+				spStandardizedPatient.setBankAccount(null);
+				spStandardizedPatient.setNationality(null);
+				spStandardizedPatient.setProfession(null);
+				spStandardizedPatient.setBirthday(null);
+				spStandardizedPatient.setCity(null);
+				spStandardizedPatient.setEmail(null);
+				spStandardizedPatient.setGender(null);
+				spStandardizedPatient.setHeight(null);
+				spStandardizedPatient.setIgnoreSocialInsuranceNo(null);
+				spStandardizedPatient.setImmagePath(null);
+				spStandardizedPatient.setMaritalStatus(null);
+				spStandardizedPatient.setMobile(null);
+				spStandardizedPatient.setName(null);
+				spStandardizedPatient.setPostalCode(null);
+				spStandardizedPatient.setPreName(null);
+				spStandardizedPatient.setSocialInsuranceNo(null);
+				spStandardizedPatient.setStatus(null);
+				spStandardizedPatient.setStreet(null);
+				spStandardizedPatient.setTelephone(null);
+				spStandardizedPatient.setTelephone2(null);
+				spStandardizedPatient.setVideoPath(null);
+				spStandardizedPatient.setWeight(null);
+				spStandardizedPatient.setWorkPermission(null);
+				spStandardizedPatient.setCreated(null);
+				spStandardizedPatient.persist();
+				
+				
+				//Removing sp's anamnesis form, bank account.
+				spStandardizedPatient.deleteAnamnesisFormFromSpportal(spAnamnesisFromId);
+				spStandardizedPatient.deleteBankAccountFromSpportal(spBankAccountId);
+				
+				
+				
+			}else{
+				spStandardizedPatient.setAnamnesisForm(spStandardizedPatient.getAnamnesisForm());
+				spStandardizedPatient.setBankAccount(spStandardizedPatient.getBankAccount());
+				spStandardizedPatient.remove();
+			}
 			
 			
 		}catch (Exception e) {
@@ -421,18 +485,69 @@ public class SpStandardizedPatient {
 		return result;
 	}
 
+	@Transactional
+	private  void deleteAnamnesisFormFromSpportal(Long anamnesisFormId) {
+
+		EntityManager em = SpAnamnesisForm.entityManager();
+		
+		StringBuilder sql = new StringBuilder("DELETE FROM `anamnesis_form` WHERE `id` ="+ anamnesisFormId);
+		
+		log.info("Query is" + sql.toString());
+		
+		Query query =  em.createNativeQuery(sql.toString());
+		
+		int totalEntryDeleted =query.executeUpdate();
+		
+		log.info(totalEntryDeleted +" Anamesis From deleted from spportal");
+	}
+	
+	@Transactional
+	private void deleteBankAccountFromSpportal(Long bankAccountId) {
+
+		EntityManager em = SpAnamnesisForm.entityManager();
+		
+		StringBuilder sql = new StringBuilder("DELETE FROM `bankaccount` WHERE `id` ="+ bankAccountId);
+		
+		log.info("Query is" + sql.toString());
+		
+		Query query =  em.createNativeQuery(sql.toString());
+		
+		int totalEntryDeleted =query.executeUpdate();
+		
+		log.info(totalEntryDeleted +" bank account From deleted from spportal");
+	}
+	
 	public static Boolean removeSPDetailsFromSPPortal(Long standardizedPatientId,Long spStandardizedPatientId,boolean isDeleteNewImage){
 		
 		log.info("Updating osce sp status to active and removing sp details from sp portal");
 		
+		boolean  isStatusExportedAndSurvey=false;
+		
 		StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(standardizedPatientId);
-		standardizedPatient.setStatus(StandardizedPatientStatus.ACTIVE);
+		
+		//Added following code to solve issue SPP-10. 
+		/*Scenario is that survey is opened, sp still sent edit request, admin has approved it so we exports all sps data to spportal & 
+		change sp's status to EXPORTED_AND_SURVEY. Now if sp updates its detail from spportal and admin approves changes from osce.
+		Here we are considering two cases either survey is still open or closed. If survey is open then we have sp's status as EXPORTED_AND_SURVEY in this case
+		We are removing all sp's data except its id is remain in spportal database and changing its status as INSURVEY (like we have sp in survey). 
+		On the other hand if survey is closed then status of this sp is changed to EXPORTED, so we remove all data from spportal after upfating changes in osce. */
+		
+		if(standardizedPatient.getStatus().ordinal()==StandardizedPatientStatus.EXPORTED_AND_SURVEY.ordinal()){
+			isStatusExportedAndSurvey=true;
+		}
+		
+		//For issue SPP-10
+		if(isStatusExportedAndSurvey){
+			standardizedPatient.setStatus(StandardizedPatientStatus.INSURVEY);
+		}else{
+			standardizedPatient.setStatus(StandardizedPatientStatus.ACTIVE);
+		}
 		standardizedPatient.persist();
 		
 		SpStandardizedPatient spStandardizedPatient = SpStandardizedPatient.findSpStandardizedPatient(spStandardizedPatientId);
 		List<SpAnamnesisChecksValue> spAnamnesisChecksValuesList = findNewAnamnesisCheckValuesBasedOnFormId(null);
 		
-		Boolean isRemovedAllData = removeSPDataFromSPPortal(spStandardizedPatient, spAnamnesisChecksValuesList,isDeleteNewImage);
+		Boolean isRemovedAllData = removeSPDataFromSPPortal(spStandardizedPatient, spAnamnesisChecksValuesList,isDeleteNewImage,isStatusExportedAndSurvey);
 	
 		return isRemovedAllData;
 	}

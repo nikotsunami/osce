@@ -542,6 +542,11 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 			edit.setEnabled(true);
 			send.setEnabled(false);
 			pull.setEnabled(false);
+			
+		case EXPORTED_AND_SURVEY:
+			edit.setEnabled(false);
+			send.setEnabled(false);
+			pull.setEnabled(true);
 		}
 //		boolean isEnable= (standardizedPatientStatus != null &&  standardizedPatientStatus == StandardizedPatientStatus.ACTIVE);			
 //			edit.setEnabled(isEnable);

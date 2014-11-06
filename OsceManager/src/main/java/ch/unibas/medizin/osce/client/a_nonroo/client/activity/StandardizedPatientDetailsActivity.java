@@ -1296,7 +1296,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 	@Override
 	public void approveSpsEditRequest() {
 		
-		Log.info("deny edit request of sp by sending mail and clearing flag");
+		Log.info("Approve edit request of sp");
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 

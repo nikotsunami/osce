@@ -509,7 +509,7 @@ public class Semester {
 			this.deleteAcceptedOsceDateTrainingDateAndPISFromSpportal(spSemester.getId());
 			
 			//following method deleted pis and sp with status INSURVEY.
-			this.deleteSpFromSpPortalWithStatusInSurvey(semId);
+			this.deleteSpFromSpPortalWithStatusInSurvey(semId,spSemester.getId());
 			
 			//following method changes sp status from EXPORTED_IN_SURVEY to EXPORTED in osce.
 			this.setSpStatusFromExportedInServeyToExported(semId);
@@ -794,13 +794,13 @@ public class Semester {
 		}
 	}
 	@Transactional
-	private void deleteSpFromSpPortalWithStatusInSurvey(Long semId){
+	private void deleteSpFromSpPortalWithStatusInSurvey(Long semId,Long spPortalSemId){
 		
 		Log.info("Deleting sp from spportal whose status is insurvey");
 		
 		List<StandardizedPatient> allInSurveySps=StandardizedPatient.findAllSPWithStatusInSurvey(semId);
 		
-		deletePatientInSemester(allInSurveySps);
+		deletePatientInSemester(spPortalSemId);
 		
 		deleteSPFormSpPortal(allInSurveySps);
 	}
@@ -931,11 +931,11 @@ public class Semester {
 	}
 	
 	@Transactional
-	private void deletePatientInSemester(List<StandardizedPatient> allInSurveySps) {
+	private void deletePatientInSemester(Long spPortalSemId) {
 		
 		EntityManager em = SpSemester.entityManager();
 		
-		StringBuilder sql = new StringBuilder("DELETE FROM `patient_in_semester` WHERE `standardized_patient` IN ( "+getIdOfSP(allInSurveySps) + " )");
+		StringBuilder sql = new StringBuilder("DELETE FROM `patient_in_semester` WHERE `semester` = " + spPortalSemId);
 		
 		Log.info("Query is" + sql.toString());
 		
@@ -966,7 +966,7 @@ public class Semester {
 
 		if (spList == null|| spList.size() == 0) {
 			Log.info("Return as null");
-			return "";
+			return "''";
 		}
 		Iterator<StandardizedPatient> splistIterator = spList.iterator();
 		StringBuilder spIds = new StringBuilder();
