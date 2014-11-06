@@ -152,7 +152,9 @@ public class OsMaFilePathConstant {
 	public static String appImageUploadDirectory = "osMaEntry/gwt/unibas/sp/images";
 
 	// Module 9 End
-	public static String DEFAULT_IMPORT_EOSCE_PATH = getUploadBaseDIRPath() + "/eosce/import/"; //"/usr/oscemanager/eOSCE/import/";
+	public static String IMPORT_UNPROCESSED_EOSCE_PATH = getUploadBaseDIRPath() + "/eosce/import/unprocessed/"; //"/usr/oscemanager/eOSCE/import/";
+	
+	public static String IMPORT_PROCESSED_EOSCE_PATH = getUploadBaseDIRPath() + "/eosce/import/processed/";
 	// public static String DEFAULT_IMPORT_EOSCE_PATH = "C:\\oscemanager\\eOSCE\\import\\";
 
 	// Role Module

@@ -45,6 +45,11 @@
 		</g:HorizontalPanel>
 	
 		<g:HorizontalPanel>
+			<g:RadioButton ui:field="eOSCE" name="osceType" checked="true"></g:RadioButton>
+			<g:RadioButton ui:field="iOSCE" name="osceType"></g:RadioButton>
+		</g:HorizontalPanel>	
+	
+		<g:HorizontalPanel>
 			<g:RadioButton ui:field="processed" name="status" checked="true"></g:RadioButton>
 			<g:RadioButton ui:field="unprocessed" name="status"></g:RadioButton>
 		</g:HorizontalPanel>	

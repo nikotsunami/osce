@@ -18,6 +18,7 @@ import ch.unibas.medizin.osce.client.managed.request.BucketInformationProxy;
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationRequest;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.shared.EosceStatus;
+import ch.unibas.medizin.osce.shared.ExportOsceType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -32,6 +33,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
@@ -74,17 +76,17 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 				loadBucketInformation(semesterProxy);
 				if (view.getProcessed().getValue() == true)
 				{
-					init();					
+					init(view.selectedOsceType());					
 				}
 				else if (view.getUnprocessed().getValue() == true)
 				{
-					unprocessedClicked();
+					unprocessedClicked(view.selectedOsceType());
 				}
 			}
 		});
 		
 		loadBucketInformation(semesterProxy);
-		init();
+		init(view.selectedOsceType());
 		view.setDelegate(this);
 	}
 	
@@ -146,60 +148,67 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 		});
 	}
 	
-	public void init()
+	public void init(ExportOsceType osceType)
 	{
 		try
 		{
-			showApplicationLoading(true);
-			
-			checkBoxList.clear();
-			view.getFileListPanel().clear();
-					
-			eOsceServiceAsync.processedFileList(semesterProxy.getId(), new AsyncCallback<List<String>>() {
+			if (ExportOsceType.EOSCE.equals(osceType)) {
+				showApplicationLoading(true);
 				
-				@Override
-				public void onSuccess(List<String> result) {
+				checkBoxList.clear();
+				view.getFileListPanel().clear();
+						
+				eOsceServiceAsync.processedFileList(osceType, semesterProxy.getId(), new AsyncCallback<List<String>>() {
 					
-					if (result.size() == 0)
-					{
-						Label label = new Label();
-						label.setText(constants.importProcessedFilesDeleted());
-						label.addStyleName("eOSCElable");
-						HorizontalPanel horizontalPanel = new HorizontalPanel();
-						horizontalPanel.add(label);
-						horizontalPanel.addStyleName("eOSCEHorizontalPanel");
-						view.getFileListPanel().add(horizontalPanel);										
+					@Override
+					public void onSuccess(List<String> result) {
+						
+						if (result.size() == 0)
+						{
+							Label label = new Label();
+							label.setText(constants.importProcessedFilesDeleted());
+							//label.addStyleName("eOSCElable");
+							HorizontalPanel horizontalPanel = new HorizontalPanel();
+							horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+							horizontalPanel.add(label);
+							horizontalPanel.addStyleName("eOSCEHorizontalPanel");
+							view.getFileListPanel().add(horizontalPanel);										
+						}
+						
+						for (int i=0; i<result.size(); i++)
+						{
+							CheckBox checkBox = new CheckBox();
+							Label label = new Label();
+							label.setText(result.get(i));
+							checkBox.setFormValue(result.get(i));
+							
+							checkBoxList.add(checkBox);
+							
+							HorizontalPanel horizontalPanel = new HorizontalPanel();
+							horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+							horizontalPanel.add(checkBox);
+							horizontalPanel.add(label);
+							
+							//label.addStyleName("eOSCElable");
+							horizontalPanel.addStyleName("eOSCEHorizontalPanel");
+							//view.getFileListPanel().insert(horizontalPanel, view.getFileListPanel().getWidgetCount() + 1);
+							view.getFileListPanel().add(horizontalPanel);
+						}					
+						
+						showApplicationLoading(false);
 					}
 					
-					for (int i=0; i<result.size(); i++)
-					{
-						CheckBox checkBox = new CheckBox();
-						Label label = new Label();
-						label.setText(result.get(i));
-						checkBox.setFormValue(result.get(i));
-						
-						checkBoxList.add(checkBox);
-						
-						HorizontalPanel horizontalPanel = new HorizontalPanel();
-						horizontalPanel.add(checkBox);
-						horizontalPanel.add(label);
-						
-						label.addStyleName("eOSCElable");
-						horizontalPanel.addStyleName("eOSCEHorizontalPanel");
-						//view.getFileListPanel().insert(horizontalPanel, view.getFileListPanel().getWidgetCount() + 1);
-						view.getFileListPanel().add(horizontalPanel);
-					}					
-					
-					showApplicationLoading(false);
-				}
-				
-				@Override
-				public void onFailure(Throwable caught) {
-					showApplicationLoading(false);
-					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-					messageConfirmationDialogBox.showConfirmationDialog(constants.errorImportFetch());
-				}
-			});			
+					@Override
+					public void onFailure(Throwable caught) {
+						showApplicationLoading(false);
+						MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+						messageConfirmationDialogBox.showConfirmationDialog(constants.errorImportFetch());
+					}
+				});			
+			}
+			else if (ExportOsceType.IOSCE.equals(osceType)) {
+				view.getFileListPanel().clear();
+			}
 		}
 		catch(Exception e)
 		{
@@ -214,7 +223,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 	}
 
 	@Override
-	public void importButtonClicked(Boolean flag) {
+	public void importButtonClicked(final ExportOsceType osceType, Boolean flag) {
 		showApplicationLoading(true);
 		
 		List<String> fileList = new ArrayList<String>();
@@ -229,86 +238,102 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 		
 		System.out.println("IMPORT FILELIST SIZE : " + fileList.size());
 		
-		eOsceServiceAsync.importFileList(fileList, flag, view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(), view.getEncryptionKey().getText(), new AsyncCallback<Void>() {
-			@Override
-			public void onFailure(Throwable caught) {
-				showApplicationLoading(false);
-				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-				messageConfirmationDialogBox.showConfirmationDialog(constants.importFileError());
-			}
-
-			@Override
-			public void onSuccess(Void result) {
-				showApplicationLoading(false);
-				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-				messageConfirmationDialogBox.showConfirmationDialog(constants.importSuccess());
-				messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
-					
-					@Override
-					public void onClick(ClickEvent event) {
-						unprocessedClicked();
-					}
-				});
-				
-			//	init();
-			}
-		});
-	}
-
-	@Override
-	public void unprocessedClicked() {
-		try
-		{
-			showApplicationLoading(true);
-			
-			checkBoxList.clear();
-			view.getFileListPanel().clear();
-			
-			eOsceServiceAsync.unprocessedFileList(semesterProxy.getId(), new AsyncCallback<List<String>>() {
-				
-				@Override
-				public void onSuccess(List<String> result) {
-					
-					if (result.size() == 0)
-					{
-						Label label = new Label();
-						label.setText(constants.importProcessedMsg());
-						label.addStyleName("eOSCElable");
-						HorizontalPanel horizontalPanel = new HorizontalPanel();
-						horizontalPanel.add(label);
-						horizontalPanel.addStyleName("eOSCEHorizontalPanel");
-						view.getFileListPanel().add(horizontalPanel);
-					}
-					
-					for (int i=0; i<result.size(); i++)
-					{
-						CheckBox checkBox = new CheckBox();
-						Label label = new Label();
-						label.setText(result.get(i));
-						checkBox.setFormValue(result.get(i));
-						
-						checkBoxList.add(checkBox);
-						
-						HorizontalPanel horizontalPanel = new HorizontalPanel();
-						horizontalPanel.add(checkBox);
-						horizontalPanel.add(label);
-						label.addStyleName("eOSCElable");
-						horizontalPanel.addStyleName("eOSCEHorizontalPanel");
-						//view.getFileListPanel().insert(horizontalPanel, view.getFileListPanel().getWidgetCount() + 1);
-						view.getFileListPanel().add(horizontalPanel);
-					}
-					
-					showApplicationLoading(false);
-				}
-				
-				
+		if (ExportOsceType.EOSCE.equals(osceType)) {
+			eOsceServiceAsync.importFileList(osceType, semesterProxy.getId(), fileList, flag, new AsyncCallback<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					showApplicationLoading(false);
 					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-					messageConfirmationDialogBox.showConfirmationDialog(constants.errorImportFetch());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.importFileError());
 				}
-			});			
+
+				@Override
+				public void onSuccess(Void result) {
+					showApplicationLoading(false);
+					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.importSuccess());
+					messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							if (view.getUnprocessed().getValue())
+								unprocessedClicked(osceType);
+							else if (view.getProcessed().getValue()) 
+								init(osceType);
+						}
+					});
+					
+				//	init();
+				}
+			});
+		}
+		else if (ExportOsceType.IOSCE.equals(osceType)) {
+			
+		}
+	}
+
+	@Override
+	public void unprocessedClicked(ExportOsceType osceType) {
+		try
+		{
+			if (ExportOsceType.EOSCE.equals(osceType)) {
+				showApplicationLoading(true);
+				
+				checkBoxList.clear();
+				view.getFileListPanel().clear();
+				
+				eOsceServiceAsync.unprocessedFileList(osceType, semesterProxy.getId(), new AsyncCallback<List<String>>() {
+					
+					@Override
+					public void onSuccess(List<String> result) {
+						
+						if (result.size() == 0)
+						{
+							Label label = new Label();
+							label.setText(constants.importProcessedMsg());
+							//label.addStyleName("eOSCElable");
+							HorizontalPanel horizontalPanel = new HorizontalPanel();
+							horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+							horizontalPanel.add(label);
+							horizontalPanel.addStyleName("eOSCEHorizontalPanel");
+							view.getFileListPanel().add(horizontalPanel);
+						}
+						
+						for (int i=0; i<result.size(); i++)
+						{
+							CheckBox checkBox = new CheckBox();
+							Label label = new Label();
+							label.setText(result.get(i));
+							checkBox.setFormValue(result.get(i));
+							
+							checkBoxList.add(checkBox);
+							
+							HorizontalPanel horizontalPanel = new HorizontalPanel();
+							horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+							horizontalPanel.add(checkBox);
+							horizontalPanel.add(label);
+							//label.addStyleName("eOSCElable");
+							horizontalPanel.addStyleName("eOSCEHorizontalPanel");
+							//view.getFileListPanel().insert(horizontalPanel, view.getFileListPanel().getWidgetCount() + 1);
+							view.getFileListPanel().add(horizontalPanel);
+						}
+						
+						showApplicationLoading(false);
+					}
+					
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						showApplicationLoading(false);
+						MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+						messageConfirmationDialogBox.showConfirmationDialog(constants.errorImportFetch());
+					}
+				});			
+			}
+			else if (ExportOsceType.IOSCE.equals(osceType)) {
+				view.getFileListPanel().clear();
+			}
+			
 		}
 		catch(Exception e)
 		{
@@ -318,12 +343,12 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 	}
 
 	@Override
-	public void processedClicked() {
-		init();
+	public void processedClicked(ExportOsceType osceType) {
+		init(osceType);
 	}
 
 	@Override
-	public void deleteButtonClicked() {
+	public void deleteButtonClicked(ExportOsceType osceType) {
 		showApplicationLoading(true);
 		
 		List<String> fileList = new ArrayList<String>();
@@ -338,7 +363,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 		
 		System.out.println("DELETE FILELIST SIZE : " + fileList.size());
 		
-		eOsceServiceAsync.deleteAmzonS3Object(fileList, view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(), new AsyncCallback<Void>() {
+		eOsceServiceAsync.deleteAmzonS3Object(osceType, semesterProxy.getId(), fileList, view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(), new AsyncCallback<Void>() {
 			@Override
 			public void onFailure(Throwable caught) {	
 				showApplicationLoading(false);
@@ -355,7 +380,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					
 					@Override
 					public void onClick(ClickEvent event) {
-						processedClicked();
+						processedClicked(view.selectedOsceType());
 					}
 				});
 				
@@ -420,11 +445,11 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 				
 				if (view.getProcessed().getValue() == true)
 				{
-					init();					
+					init(view.selectedOsceType());					
 				}
 				else if (view.getUnprocessed().getValue() == true)
 				{
-					unprocessedClicked();
+					unprocessedClicked(view.selectedOsceType());
 				}
 			}
 		});
@@ -438,5 +463,23 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 	public void onStop() {	
 		super.onStop();
 		handlerManager.removeHandler(SelectChangeEvent.getType(), removeHandler);	
+	}
+	
+	public void eOsceClicked() {
+		if (view.getProcessed().getValue()) {
+			init(ExportOsceType.EOSCE);
+		} 
+		else if (view.getUnprocessed().getValue()) {
+			unprocessedClicked(ExportOsceType.EOSCE);
+		}
+	}
+	 
+	public void iOsceClicked() {
+		if (view.getProcessed().getValue()) {
+			init(ExportOsceType.IOSCE);
+		} 
+		else if (view.getUnprocessed().getValue()) {
+			unprocessedClicked(ExportOsceType.IOSCE);
+		} 
 	}
 }

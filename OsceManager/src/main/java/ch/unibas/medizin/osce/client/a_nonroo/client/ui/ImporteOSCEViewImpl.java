@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.ExportOsceType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
@@ -86,6 +87,14 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	IconButton cancelButton;
 	
 	BucketInformationProxy bucketInformationProxy;
+	
+	@UiField
+	RadioButton eOSCE;
+	
+	@UiField
+	RadioButton iOSCE;
+	
+	ExportOsceType osceType = null;
 		
 	public ImporteOSCEViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -109,7 +118,20 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		secretKeyLbl.setInnerText(constants.secretKey());
 		encryptionKeyLbl.setInnerText(constants.encryptionKey());
 		cancelButton.setText(constants.cancel());
+		
+		eOSCE.setText(constants.eOSCE());
+		iOSCE.setText(constants.iOSCE());
 	}	
+	
+	@UiHandler("eOSCE")
+	public void eOSCESelected(ClickEvent e) {
+		delegate.eOsceClicked();
+	}
+	
+	@UiHandler("iOSCE")
+	public void iOSCESelected(ClickEvent e) {
+		delegate.iOsceClicked();
+	}
 	
 	@UiHandler("unprocessed")
 	public void unprocessedSelected(ClickEvent event)
@@ -117,7 +139,11 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.importUnprocessed());
 		delButton.setEnabled(false);
 		//importButton.setEnabled(true);
-		delegate.unprocessedClicked();
+		if (eOSCE.getValue())
+			delegate.unprocessedClicked(ExportOsceType.EOSCE);
+		else if (iOSCE.getValue())
+			delegate.unprocessedClicked(ExportOsceType.IOSCE);
+		
 	}
 	
 	@UiHandler("processed")
@@ -126,7 +152,11 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.importProcessed());
 		delButton.setEnabled(true);
 		//importButton.setEnabled(false);
-		delegate.processedClicked();
+		if (eOSCE.getValue())
+			delegate.processedClicked(ExportOsceType.EOSCE);
+		else if (iOSCE.getValue())
+			delegate.processedClicked(ExportOsceType.IOSCE);
+		
 	}
 	
 	@UiHandler("importButton")
@@ -134,6 +164,12 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	{
 		//delegate.importButtonClicked(true);
 		Boolean test = delegate.checkSelectedValue();
+		
+		if (eOSCE.getValue())
+			osceType = ExportOsceType.EOSCE;
+		else if (iOSCE.getValue())
+			osceType = ExportOsceType.IOSCE;
+			
 		
 		if (test)
 		{
@@ -143,14 +179,14 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 				@Override
 				public void onClick(ClickEvent event) {
 					messageConfirmationDialogBox.hide();
-					delegate.importButtonClicked(true);
+					delegate.importButtonClicked(osceType, true);
 				}
 			});
 			messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
 					messageConfirmationDialogBox.hide();
-					delegate.importButtonClicked(false);
+					delegate.importButtonClicked(osceType, false);
 				}
 			});
 		}
@@ -169,7 +205,7 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		
 		if (test)
 		{
-			delegate.deleteButtonClicked();
+			delegate.deleteButtonClicked(selectedOsceType());
 		}
 		else
 		{
@@ -301,6 +337,13 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	public void setUnprocessed(RadioButton unprocessed) {
 		this.unprocessed = unprocessed;
 	}
-	
-	
+
+	public ExportOsceType selectedOsceType() {
+		if (eOSCE.getValue())
+			return ExportOsceType.EOSCE;
+		else if (iOSCE.getValue())
+			return ExportOsceType.IOSCE;
+		
+		return null;
+	}
 }

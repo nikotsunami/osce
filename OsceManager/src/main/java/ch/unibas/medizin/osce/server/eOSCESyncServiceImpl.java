@@ -39,6 +39,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.net.ftp.FTPClient;
@@ -126,17 +127,26 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	 */
 	private static final long serialVersionUID = 1L;
 	private static Logger Log = Logger.getLogger(eOSCESyncServiceImpl.class);
-	private static String appUploadDirectory= OsMaFilePathConstant.DEFAULT_IMPORT_EOSCE_PATH;
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static final String IMPORT_FILE_EXATENSION = "crumble";
 	private String folderSeparatorLocal="\\";
 	private String folderSeparatorProduction="/";
 	private boolean isLocal=false; // To put folder separator for local test set true during development otherwise false
 	
-	public List<String> processedFileList(Long semesterID) throws eOSCESyncException
+	public List<String> processedFileList(ExportOsceType osceType, Long semesterID) throws eOSCESyncException
 	{
 		List<String> fileList = new ArrayList<String>();
 		try
 		{
+			Semester semester = Semester.findSemester(semesterID);
+			String path = OsMaFilePathConstant.IMPORT_PROCESSED_EOSCE_PATH + semester.getSemester() + semester.getCalYear();
+	    	if (ExportOsceType.EOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
+	    	}
+	    	else if (ExportOsceType.IOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+	    	}
+	    	
 			String accessKey = "";
 			String secretKey = "";
 			String bucketName = "";
@@ -179,10 +189,11 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				 
 				/*if (fileName.substring(0, 1).matches("[0-9]"))
 				{*/
-					if (StringUtils.startsWith(fileName, "00") == false)
-					{
+					if (StringUtils.startsWith(fileName, "00") == false && FilenameUtils.getExtension(fileName).equals(IMPORT_FILE_EXATENSION))
+					{	
 						fileName = fileName.replaceAll(" ", "_");
-						if (fileExist(fileName))
+						String fullFilename = path + fileName;
+						if (new File(fullFilename).exists() == true)
 						{
 							fileList.add(objectSummary.getKey());					
 						}
@@ -211,11 +222,20 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		return fileList;
 	}
 	
-	public List<String> unprocessedFileList(Long semesterID) throws eOSCESyncException
+	public List<String> unprocessedFileList(ExportOsceType osceType, Long semesterID) throws eOSCESyncException
 	{
 		List<String> fileList = new ArrayList<String>();
 		try
 		{
+			Semester semester = Semester.findSemester(semesterID);
+			String path = OsMaFilePathConstant.IMPORT_PROCESSED_EOSCE_PATH + semester.getSemester() + semester.getCalYear();
+	    	if (ExportOsceType.EOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
+	    	}
+	    	else if (ExportOsceType.IOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+	    	}
+			
 			String accessKey = "";
 			String secretKey = "";
 			String bucketName = "";
@@ -257,10 +277,11 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				String fileName = objectSummary.getKey();
 				/*if (fileName.substring(0, 1).matches("[0-9]"))
 				{*/
-					if (StringUtils.startsWith(fileName, "00") == false)
+					if (StringUtils.startsWith(fileName, "00") == false && FilenameUtils.getExtension(fileName).equals(IMPORT_FILE_EXATENSION))
 					{
 						fileName = fileName.replaceAll(" ", "_");
-						if (!fileExist(fileName))
+						String fullFilename = path + fileName;
+						if (new File(fullFilename).exists() == false)
 						{
 							fileList.add(objectSummary.getKey());					
 						}
@@ -289,10 +310,19 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	}
 
 	@Override
-	public void deleteAmzonS3Object(List<String> fileList, String bucketName, String accessKey, String secretKey)
+	public void deleteAmzonS3Object(ExportOsceType osceType, Long semesterID, List<String> fileList, String bucketName, String accessKey, String secretKey)
 			throws eOSCESyncException {
 		try
 		{
+			Semester semester = Semester.findSemester(semesterID);
+			String path = OsMaFilePathConstant.IMPORT_PROCESSED_EOSCE_PATH + semester.getSemester() + semester.getCalYear();
+	    	if (ExportOsceType.EOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
+	    	}
+	    	else if (ExportOsceType.IOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+	    	}
+	    	
 			//write access and secret key
 			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
 			AmazonS3Client client;
@@ -319,11 +349,12 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			{
 				String fileName = fileList.get(i);
 				fileName = fileName.replaceAll(" ", "_");
-				fileName = OsMaFilePathConstant.DEFAULT_IMPORT_EOSCE_PATH + fileName;
+				fileName = path + fileName;
+				File file = new File(fileName);
 				
-				if (new File(fileName).exists() == true)
+				if (file.exists() == true)
 				{
-					new File(fileName).delete();
+					file.delete();
 				}
 				//System.out.println("DELETED : " + fileName);
 				//write bucket name
@@ -347,14 +378,12 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 	}
 	
-	public boolean addFile(String filename, InputStream input, String secretKey, String encryptionKey)
+	public boolean addFile(ExportOsceType osceType, String filePath, String filename, InputStream input, String secretKey, String encryptionKey)
 	{
 		
 		String file_name = filename.replaceAll(" ", "_");
 		
-		String path = appUploadDirectory;
-		
-		filename = path + file_name;
+		filename = filePath + file_name;
 		
 		try
 		{
@@ -380,7 +409,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			else
 				symmetricKey = secretKey.substring(0, 16);
 			
-			String decFileName = S3Decryptor.decrypt(symmetricKey, file_name);
+			String decFileName = S3Decryptor.decrypt(symmetricKey, file_name, filePath);
 			
 			return importEOSCE(decFileName);
 			
@@ -393,7 +422,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		
 	}
 	
-	public Boolean fileExist(String fileName)
+	/*public Boolean fileExist(String fileName)
 	{
 		String cntxt = appUploadDirectory;
 		cntxt = cntxt + fileName;
@@ -401,13 +430,35 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		File folder = new File(cntxt);
 		
 		return folder.exists();
-	}
+	}*/
 	
-	public void importFileList(List<String> fileList, Boolean flag, String bucketName, String accessKey, String secretKey, String encryptionKey) throws eOSCESyncException
+	public void importFileList(ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag) throws eOSCESyncException
 	{
 		try
 		{
-			bucketName = bucketName.toLowerCase();
+			Semester semester = Semester.findSemester(semesterID);
+			String path = OsMaFilePathConstant.IMPORT_PROCESSED_EOSCE_PATH + semester.getSemester() + semester.getCalYear();
+	    	if (ExportOsceType.EOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
+	    	}
+	    	else if (ExportOsceType.IOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+	    	}
+	    	
+			String accessKey = "";
+			String secretKey = "";
+			String bucketName = "";
+			String encryptionKey = "";
+			
+			BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
+			
+			if (bucketInformation != null)
+			{
+				accessKey = bucketInformation.getAccessKey() == null ? "" : bucketInformation.getAccessKey();
+				secretKey = bucketInformation.getSecretKey() == null ? "" : bucketInformation.getSecretKey();
+				bucketName = bucketInformation.getBucketName() == null ? "" : bucketInformation.getBucketName();
+				encryptionKey = bucketInformation.getEncryptionKey() == null ? "" : bucketInformation.getEncryptionKey();
+			}
 			
 			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
 			AmazonS3Client client;
@@ -433,16 +484,26 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			S3Object object = null;			
 			boolean deleteFlag = true;
 			
+			
+			
 			for (int i=0; i<fileList.size(); i++)
 			{
 				object = client.getObject(new GetObjectRequest(bucketName, fileList.get(i)));
-				//import in answer table is dont from add file
-				deleteFlag = deleteFlag & addFile(object.getKey(), object.getObjectContent(), secretKey, encryptionKey);				
+				
+				 if (FilenameUtils.getExtension(object.getKey()).equals(IMPORT_FILE_EXATENSION)) {
+					 if (ExportOsceType.EOSCE.equals(osceType)) {
+						//import in answer table is done from add file
+						deleteFlag = deleteFlag & addFile(osceType, path, object.getKey(), object.getObjectContent(), secretKey, encryptionKey);
+					 }
+					 else if (ExportOsceType.IOSCE.equals(osceType)) {
+						 
+					 }		
+				 }		
 			}
 		
 			if (flag == true && deleteFlag == true)
 			{
-				deleteAmzonS3Object(fileList, bucketName, accessKey, secretKey);
+				deleteAmzonS3Object(osceType, semesterID, fileList, bucketName, accessKey, secretKey);
 			}
 		}
 		catch(AmazonServiceException ase)
