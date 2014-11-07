@@ -53,6 +53,9 @@ public class Answer {
 
 	/*@ManyToOne
 	ChecklistCriteria checklistCriteria;*/
+	
+	@ManyToOne
+	ChecklistItem checklistItem;
 
 	@ManyToOne
 	Doctor doctor;

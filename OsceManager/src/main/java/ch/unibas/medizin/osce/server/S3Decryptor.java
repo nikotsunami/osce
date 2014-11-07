@@ -32,13 +32,13 @@ public class S3Decryptor {
 	private static final String EXAM_DATA_PLIST_KEY = "body";
 	private static final int KEY_STRING_LENGTH = 32;
 
-	public static String decrypt(String symmetricKey, String fileName) {
+	public static String decrypt(String symmetricKey, String fileName, String filePath) {
 		
 		if (FilenameUtils.getExtension(fileName).equalsIgnoreCase("crumble"))
 		{
-			String outputPath = OsMaFilePathConstant.DEFAULT_IMPORT_EOSCE_PATH + FilenameUtils.getBaseName(fileName) + "_dec.oscexam";
+			String outputPath = filePath + FilenameUtils.getBaseName(fileName) + "_dec.oscexam";
 			File outputFilePath = new File(outputPath);
-			File inputFilePath = new File((OsMaFilePathConstant.DEFAULT_IMPORT_EOSCE_PATH + fileName));
+			File inputFilePath = new File((filePath + fileName));
 			
 			try {
 				FileUtils.touch(outputFilePath);

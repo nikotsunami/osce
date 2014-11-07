@@ -689,7 +689,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				roomid = Long.parseLong(oprId);
 				
 				Student stud = Student.findStudent(candidateId);
-				ChecklistQuestion checklistQuestion = ChecklistQuestion.findChecklistQuestion(questionId);
+				//ChecklistQuestion checklistQuestion = ChecklistQuestion.findChecklistQuestion(questionId);
+				ChecklistItem checklistItem = ChecklistItem.findChecklistItem(questionId);
 				
 				//OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoomByRoomAndStudent(candidateId, roomid);
 				OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoom(roomid);
@@ -699,7 +700,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				answerTable = new Answer();
 				answerTable.setAnswer(String.valueOf(optionvalue));
 				answerTable.setStudent(stud);
-				answerTable.setChecklistQuestion(checklistQuestion);
+				//answerTable.setChecklistQuestion(checklistQuestion);
+				answerTable.setChecklistItem(checklistItem);
 				answerTable.setChecklistOption(checklistOption);							
 				answerTable.setOscePostRoom(oscePostRoom);
 				answerTable.setDoctor(doctor);
@@ -730,7 +732,11 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			statement.close();
 			connection.close();
 			
-			new File(filename).delete();
+			//FileUtils.deleteQuietly(new File(filename));
+			File file = new File(filename);
+			if (file.exists() == true) { 
+				file.delete();
+			}
 			
 			return true;
 		}
