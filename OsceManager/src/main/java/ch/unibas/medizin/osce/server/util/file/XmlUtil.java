@@ -119,7 +119,7 @@ public class XmlUtil {
 				Element queArray = doc.createElement("array");
 				topicDict.appendChild(queArray);
 				
-				List<ChecklistItem> checklistQuestionList = ChecklistItem.findChecklistQuestionByChecklistTopicId(checklistTopic.getId());
+				List<ChecklistItem> checklistQuestionList = ChecklistItem.findChecklistQuestionByChecklistId(checklistTopic.getId());
 				//Iterator<ChecklistQuestion> queItr = checklistTopic.getCheckListQuestions().iterator();
 				
 				//while (queItr.hasNext())
