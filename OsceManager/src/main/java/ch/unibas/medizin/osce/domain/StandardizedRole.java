@@ -842,6 +842,8 @@ public class StandardizedRole {
 				
 				String roleTopicName=StandardizedRole.findStandardizedRole(standardizedRoleId).getRoleTopic().getName();
 				
+				roleTopicName = roleTopicName.replaceAll(" ", "");
+				
 				fileName ="Checklist-" +toCamelCase(roleTopicName.replaceAll("[^A-Za-z0-9]"," ")); 
 										
 				fileName = fileName + ".osceexchange";

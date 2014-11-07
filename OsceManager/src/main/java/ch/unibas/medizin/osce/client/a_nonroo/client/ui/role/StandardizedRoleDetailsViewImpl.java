@@ -969,7 +969,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	
 		@UiHandler("eosceExportChecklist")
 		public void eOsceExportChecklist(ClickEvent e) {
-			
+			delegate.exportChecklistClicked(homeRole);
 		}
 		
 		@UiHandler("iOsceImportItemButton")

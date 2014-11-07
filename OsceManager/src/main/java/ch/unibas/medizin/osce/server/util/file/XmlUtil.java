@@ -1,9 +1,9 @@
 package ch.unibas.medizin.osce.server.util.file;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.OutputStream;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -15,18 +15,15 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.ChecklistCriteria;
+import ch.unibas.medizin.osce.domain.ChecklistItem;
 import ch.unibas.medizin.osce.domain.ChecklistOption;
-import ch.unibas.medizin.osce.domain.ChecklistQuestion;
-import ch.unibas.medizin.osce.domain.ChecklistTopic;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
-import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.bean.Oscedata;
 
 public class XmlUtil {
@@ -77,25 +74,28 @@ public class XmlUtil {
 			topicKey.appendChild(doc.createTextNode("Topics"));
 			rootElement.appendChild(topicKey);	
 			
-			Iterator<ChecklistTopic> checklistTopicItr = checkList.getCheckListTopics().iterator();
+			List<ChecklistItem> checklistTopicList = ChecklistItem.findChecklistTopicByChecklist(checkList.getId());
+			
+			//Iterator<ChecklistTopic> checklistTopicItr = checkList.getCheckListTopics().iterator();
 			
 			Element topicArray = doc.createElement("array");
 			rootElement.appendChild(topicArray);
 			
 			int ctr = 1;
 			
-			while (checklistTopicItr.hasNext())
+			//while (checklistTopicItr.hasNext())
+			for (ChecklistItem checklistTopic : checklistTopicList)
 			{
 				Element topicDict = doc.createElement("dict");
 				topicArray.appendChild(topicDict);
 				
-				ChecklistTopic checklistTopic = checklistTopicItr.next();
+				//ChecklistTopic checklistTopic = checklistTopicItr.next();
 				
 				Element topicTitle = doc.createElement("key");
 				topicTitle.appendChild(doc.createTextNode("Title"));
 				topicDict.appendChild(topicTitle);
 				Element topicTitleVal = doc.createElement("string");
-				topicTitleVal.appendChild(doc.createCDATASection(checklistTopic.getTitle()));
+				topicTitleVal.appendChild(doc.createCDATASection(checklistTopic.getName()));
 				topicDict.appendChild(topicTitleVal);
 				
 				Element topicDesc = doc.createElement("key");
@@ -109,7 +109,7 @@ public class XmlUtil {
 				topicSeqNo.appendChild(doc.createTextNode("SequenceNumber"));
 				topicDict.appendChild(topicSeqNo);
 				Element topicSeqNoVal = doc.createElement("string");
-				topicSeqNoVal.appendChild(doc.createCDATASection(checklistTopic.getSort_order().toString()));
+				topicSeqNoVal.appendChild(doc.createCDATASection(checklistTopic.getSequenceNumber().toString()));
 				topicDict.appendChild(topicSeqNoVal);
 				
 				Element queKey = doc.createElement("key");
@@ -119,12 +119,14 @@ public class XmlUtil {
 				Element queArray = doc.createElement("array");
 				topicDict.appendChild(queArray);
 				
-				Iterator<ChecklistQuestion> queItr = checklistTopic.getCheckListQuestions().iterator();
+				List<ChecklistItem> checklistQuestionList = ChecklistItem.findChecklistQuestionByChecklistTopicId(checklistTopic.getId());
+				//Iterator<ChecklistQuestion> queItr = checklistTopic.getCheckListQuestions().iterator();
 				
-				while (queItr.hasNext())
+				//while (queItr.hasNext())
+				for (ChecklistItem checklistQuestion : checklistQuestionList)
 				{
 					
-					ChecklistQuestion checklistQuestion = queItr.next();
+					//ChecklistQuestion checklistQuestion = queItr.next();
 					
 					Element queDict = doc.createElement("dict");
 					queArray.appendChild(queDict);
@@ -133,20 +135,20 @@ public class XmlUtil {
 					queProblem.appendChild(doc.createTextNode("Problem"));
 					queDict.appendChild(queProblem);
 					Element queProblemVal = doc.createElement("string");
-					queProblemVal.appendChild(doc.createCDATASection(checklistQuestion.getQuestion()));
+					queProblemVal.appendChild(doc.createCDATASection(checklistQuestion.getName()));
 					queDict.appendChild(queProblemVal);
 					
 					Element queInst = doc.createElement("key");
 					queInst.appendChild(doc.createTextNode("Instruction"));
 					queDict.appendChild(queInst);
 					Element queInstVal = doc.createElement("string");
-					queInstVal.appendChild(doc.createCDATASection(checklistQuestion.getInstruction()));
+					queInstVal.appendChild(doc.createCDATASection(checklistQuestion.getDescription()));
 					queDict.appendChild(queInstVal);
 					
 					Element queIsOverall = doc.createElement("key");
 					queIsOverall.appendChild(doc.createTextNode("isOverallQuestion"));
 					queDict.appendChild(queIsOverall);
-					Element queIsOverallVal = doc.createElement((checklistQuestion.getIsOveralQuestion() == null ? "false" : checklistQuestion.getIsOveralQuestion().toString()));					
+					Element queIsOverallVal = doc.createElement((checklistQuestion.getIsRegressionItem() == null ? "false" : checklistQuestion.getIsRegressionItem().toString()));					
 					queDict.appendChild(queIsOverallVal);
 					
 					Element hasAttachment = doc.createElement("key");

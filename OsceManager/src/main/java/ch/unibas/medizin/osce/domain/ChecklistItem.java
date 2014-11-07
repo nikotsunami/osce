@@ -313,4 +313,40 @@ public class ChecklistItem {
 		return query.getResultList();
 	}
 	
+	public static List<ChecklistItem> findChecklistTopicByChecklist(Long checklistId) {
+		List<ChecklistItem> topicList = new ArrayList<ChecklistItem>();
+		
+		EntityManager em = entityManager();
+		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem IS NOT NULL AND ci.parentItem.id IN (SELECT ci FROM ChecklistItem ci WHERE ci.checkList IS NOT NULL AND ci.checkList.id = " + checklistId +  ") ORDER BY ci.sequenceNumber";
+		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
+		topicList.addAll(query.getResultList());
+		
+		String sql1 = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem IS NULL AND ci.checkList IS NOT NULL AND ci.checkList.id = " + checklistId + " AND ci.itemType = " + ItemType.TOPIC.ordinal() + " ORDER BY ci.sequenceNumber";
+		TypedQuery<ChecklistItem> query1 = em.createQuery(sql1, ChecklistItem.class);
+		topicList.addAll(query1.getResultList());
+		
+		return topicList;
+	}
+	
+	public static List<ChecklistItem> findChecklistQuestionByChecklistId(Long checklistTopicId) {
+		List<ChecklistItem> questionList = new ArrayList<ChecklistItem>();
+		
+		List<ChecklistItem> itemList = ChecklistItem.findAllChecklistItemsChild(checklistTopicId);
+		exportChecklistItemsChild(itemList, questionList);
+		
+		return questionList;
+	}
+	
+	private static void exportChecklistItemsChild(List<ChecklistItem> checklistItems, List<ChecklistItem> questionList) {
+		for (ChecklistItem checklistItem : checklistItems) {
+			
+			if (ItemType.QUESTION.equals(checklistItem.getItemType())) {
+				questionList.add(checklistItem);				
+			}
+			else {
+				List<ChecklistItem> checklistItemChilds = ChecklistItem.findAllChecklistItemsChild(checklistItem.getId());
+				exportChecklistItemsChild(checklistItemChilds, questionList);
+			}	
+		}
+	}
 }
