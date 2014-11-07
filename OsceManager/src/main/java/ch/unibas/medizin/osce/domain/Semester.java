@@ -434,6 +434,8 @@ public class Semester {
 			
 			String subjec=prop.getProperty("spportal.surveyStarted.subject");
 			
+			String isDemo = prop.getProperty("spportal.osce.demo");
+			
 			for(StandardizedPatient sp : allActiveSps){
 
 				StringWriter writer =new StringWriter();
@@ -443,8 +445,12 @@ public class Semester {
 				String emailContent = writer.toString(); //VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,"/templates/emailTemplate.vm", "UTF-8",null);
 				Log.info("email that is sening to sp is" + emailContent);
 				
-				//sending email to user
-				emailServiceImpl.sendMail( new String [] {sp.getEmail()},subjec,emailContent);
+				if(isDemo !=null && isDemo.equals("true")){
+					emailServiceImpl.sendMail( new String [] {prop.getProperty("spportal.osce.demo.mail.id")},subjec,emailContent);
+				}else{
+					//sending email to user
+					emailServiceImpl.sendMail( new String [] {sp.getEmail()},subjec,emailContent);
+				}
 			}
 		}catch (Exception e) {
 			Log.error(e.getMessage(), e);

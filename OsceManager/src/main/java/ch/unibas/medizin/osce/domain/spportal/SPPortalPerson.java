@@ -280,11 +280,18 @@ public class SPPortalPerson {
 			
 			Properties prop = new Properties();
 	    	
+			Properties prop2 = new Properties();
+			
 			String serverPath=null;
+			String isDemo=null;
 			//load a properties file
 			try {
 				prop.load(applicationContext.getResource("classpath:META-INF/spring/serverInfo.properties").getInputStream());
 				serverPath = prop.getProperty("serverAddress");
+				
+				prop2.load(applicationContext.getResource("classpath:META-INF/spring/smtp.properties").getInputStream());
+				isDemo = prop2.getProperty("spportal.osce.demo");
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 				log.error("Error in loading property file", e);
@@ -303,8 +310,12 @@ public class SPPortalPerson {
 			String emailContent = writer.toString(); //VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,"/templates/emailTemplate.vm", "UTF-8",null);
 			log.info("email that is sening to sp is" + emailContent);
 			
-			//sending email to user
-			emailServiceImpl.sendMail( new String [] {standardizedPatient.getEmail()},emailContent);
+			if(isDemo!=null && isDemo.equals("true")){
+				emailServiceImpl.sendMail( new String [] {prop2.getProperty("spportal.osce.demo.mail.id")},emailContent);
+			}else{
+				//sending email to user
+				emailServiceImpl.sendMail( new String [] {standardizedPatient.getEmail()},emailContent);
+			}
 		}
 		/**
 		 * This method is used to save standardized patient data including anamnesis check value in sp portal database.
@@ -923,6 +934,8 @@ public class SPPortalPerson {
 				emailSubject= prop.getProperty("spportal.editRequestDeniedEmail.subject");
 			}
 			
+			String isDemo = prop.getProperty("spportal.osce.demo");
+			
 			Template template;
 			
 			for (SPPortalPerson person : spPersonsList) {
@@ -940,8 +953,12 @@ public class SPPortalPerson {
 				
 				String emailContent = writer.toString(); //VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,"/templates/emailTemplate.vm", "UTF-8",null);
 				
-				//sending email to user
-				emailServiceImpl.sendMail( new String [] {person.getEmail()},emailSubject,emailContent);
+				if(isDemo!=null && isDemo.equals("true")){
+					emailServiceImpl.sendMail( new String [] {prop.getProperty("spportal.osce.demo.mail.id")},emailSubject,emailContent);
+				}else{
+					//sending email to user
+					emailServiceImpl.sendMail( new String [] {person.getEmail()},emailSubject,emailContent);
+				}
 			}
 			
 			isMailSendToAllSPs=true;
