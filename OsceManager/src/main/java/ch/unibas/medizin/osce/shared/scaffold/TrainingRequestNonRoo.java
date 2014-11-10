@@ -28,4 +28,6 @@ public interface TrainingRequestNonRoo extends RequestContext{
 	public abstract Request<Boolean> deleteTrainingOfGivenId(Long trainingId);
 
 	public abstract Request<TrainingProxy> findIsTrainingOverLapsWithAnyTraining(Date startTimeDate,Date endTimedate, Long semId,Long roleId);
+
+	public abstract Request<Boolean> findSelectedDateISTrainingDate(Date currentlySelectedDate, Long semesterProxyId);
 }

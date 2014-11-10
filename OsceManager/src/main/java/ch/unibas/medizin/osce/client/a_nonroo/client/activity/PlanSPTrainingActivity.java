@@ -485,6 +485,17 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 				vpanel.add(singleDaySelectionview);
 				return;
 			//}
+		}else{
+			//Checking if semester status is closed then showing only schedule training button for normal scheduling
+			if(semesterProxy.getSurveyStatus().ordinal()==SurveyStatus.CLOSED.ordinal()){
+				
+				singleDaySelectionview.getProposedTrainingDayButton().setVisible(false);
+				singleDaySelectionview.getRemoveProposedTrainingDaButton().setVisible(false);
+				singleDaySelectionview.getProposedOsceDayButton().setVisible(false);
+				singleDaySelectionview.getRemoveProposedOsceDaybutton().setVisible(false);
+				vpanel.add(singleDaySelectionview);
+				return;
+			}
 		}
 		showApplicationLoading(true);
 		requests.osceDateRequestNonRoo().dateIsDefinedAsOSceOrTrainingDate(semesterProxy.getId(),dateOnWidget).fire(new OSCEReceiver<String>() {
@@ -2044,6 +2055,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		allSuggestedViewTrainingDates.clear();
 		trainingSuggestionAfterNoonMap.clear();
 		trainingSuggestionMorningMap.clear();
+		init();
 	}
 	
 	public Label setRoleNameText(String roleName)
@@ -2478,6 +2490,31 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 								
 								if(isShowingSuggestions){
 									checkForMoreSuggestionsAndSetSuggestionButtonVisibility();
+								}else{
+									//For normal scheduling when all training are removed so finding whether selected date is training date and setting style of the selected date.
+									showApplicationLoading(true);
+									requests.trainingRequestNonRoo().findSelectedDateISTrainingDate(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+										@Override
+										public void onSuccess(Boolean response) {
+											
+											showApplicationLoading(false);
+											
+											if(response!=null){
+												
+												if(response){
+													Log.info("Selected date is training date");
+													currentlySelectdDatePanel.setStyleName("dayIsProposedDay");
+													
+													Label proposedTrainingDateLbl =new Label(constants.proposeTrainingDay());
+													
+													proposedTrainingDateLbl.setStyleName("proposedDayLabel");
+													
+													currentlySelectdDatePanel.add(proposedTrainingDateLbl);
+												}
+											}
+										}
+									});
 								}
 								
 							}else{
@@ -2499,26 +2536,71 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 			});
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void ignoreTrainingBlock() {
-		Log.info("Ignoring training block and showing all roles");
+	public void ignoreTrainingBlock(boolean isChecked) {
 		
-		showApplicationLoading(true);
-		
-		List<StandardizedRoleProxy> roleList = new ArrayList<StandardizedRoleProxy>();
-		
-		for(OscePostProxy oscePost : allOscePostOfSemList){
-		
-			roleList.add(oscePost.getStandardizedRole());
+		if(isChecked){
+			
+			Log.info("Ignoring training block and showing all roles");
+			
+			showApplicationLoading(true);
+			
+			List<StandardizedRoleProxy> roleList = new ArrayList<StandardizedRoleProxy>();
+			
+			for(OscePostProxy oscePost : allOscePostOfSemList){
+			
+				roleList.add(oscePost.getStandardizedRole());
+			}
+			
+			DefaultSuggestOracle<StandardizedRoleProxy> suggestOracle1 = (DefaultSuggestOracle<StandardizedRoleProxy>)scheduleTrainingView.getStandardizedRoleSuggestionBox().getSuggestOracle();
+			
+			suggestOracle1.setPossiblilities(roleList);
+			
+			scheduleTrainingView.getStandardizedRoleSuggestionBox().setSuggestOracle(suggestOracle1);
+			
+			showApplicationLoading(false);
+		}else{
+			Log.info("Showing only roles that is not assinged in training block");
+			
+			final List<StandardizedRoleProxy> roleList = new ArrayList<StandardizedRoleProxy>();
+			
+			for(OscePostProxy oscePost : allOscePostOfSemList){
+			
+				roleList.add(oscePost.getStandardizedRole());
+			}
+			
+			showApplicationLoading(true);
+			requests.trainingRequestNonRoo().findAllRolesAssignInBlock(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
+
+				@Override
+				public void onSuccess(List<StandardizedRoleProxy> response) {
+				
+					Log.info("found roles asign in block");
+				
+					showApplicationLoading(false);
+					
+					if(response!=null){
+						
+						for(StandardizedRoleProxy standardizedRoleProxy : response){
+						
+						if(roleList !=null && roleList.size() > 0 ){
+							
+							if(roleList.contains(standardizedRoleProxy)){
+								roleList.remove(standardizedRoleProxy);
+							}
+						}
+					  }
+						DefaultSuggestOracle<StandardizedRoleProxy> suggestOracle1 = (DefaultSuggestOracle<StandardizedRoleProxy>)scheduleTrainingView.getStandardizedRoleSuggestionBox().getSuggestOracle();
+						
+						suggestOracle1.setPossiblilities(roleList);
+						
+						scheduleTrainingView.getStandardizedRoleSuggestionBox().setSuggestOracle(suggestOracle1);					
+					}
+				}
+				
+			});
 		}
-		
-		DefaultSuggestOracle<StandardizedRoleProxy> suggestOracle1 = (DefaultSuggestOracle<StandardizedRoleProxy>)scheduleTrainingView.getStandardizedRoleSuggestionBox().getSuggestOracle();
-		
-		suggestOracle1.setPossiblilities(roleList);
-		
-		scheduleTrainingView.getStandardizedRoleSuggestionBox().setSuggestOracle(suggestOracle1);
-		
-		showApplicationLoading(false);
 		
 	}
 
@@ -2578,7 +2660,9 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	public void cancelButtonClickedOfPopup() {
 		Log.info("cancel button of popup is clicked");
 		currentlySelectdDatePanel.remove(currentlySelectdDatePanel.getWidgetCount()-1);
-		
+		if(currentlySelectdDatePanel.getWidgetCount()==0){
+			currentlySelectdDatePanel.removeStyleName("dayCellLabel-selected");
+		}
 	}
 
 	@Override

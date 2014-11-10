@@ -105,7 +105,7 @@ public class ScheduleTrainingViewImpl extends PopupPanel implements ScheduleTrai
 	
 	@UiHandler("ignoreTrainingBlock")
 	public void ignoreTrainingBlockCheckBoxClicked(ClickEvent event){
-		delegate.ignoreTrainingBlock();
+		delegate.ignoreTrainingBlock(ignoreTrainingBlock.getValue());
 	}
 	@Override
 	public void setDelegate(Delegate delegate) {

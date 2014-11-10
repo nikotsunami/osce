@@ -25,8 +25,6 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import com.google.gwt.requestfactory.shared.Request;
-
 @RooJavaBean
 @RooToString
 @RooEntity
@@ -370,6 +368,26 @@ public class Training {
 				 Log.error(e.getMessage(), e);
 					return null;
 			}
+	 }
+	 
+	 public static Boolean findSelectedDateISTrainingDate(Date currentlySelectedDate, Long semesterID){
+		 
+		 Log.info("checking date  :" + currentlySelectedDate  +" is training date of semester " + semesterID + "");
+		 
+		 try{
+			 
+			 List<TrainingDate> listOfTrainingDate = TrainingDate.findTrainingDateBasedOnDateAndSemesterId(semesterID, currentlySelectedDate);
+			 
+			 if(listOfTrainingDate!=null && listOfTrainingDate.size() > 0 ){
+				 return true;
+			 }else{
+				 return false;
+			 }
+			 
+		 }catch (Exception e) {
+			 Log.error("Error while searching date is trainingdate or osce date " + e.getMessage());
+			return null;
+		}
 	 }
 }
 

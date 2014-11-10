@@ -15,7 +15,7 @@ public interface ScheduleTrainingView extends IsWidget {
 
 		void schedultTrainingWithGivenData(String startTime, String endTime,StandardizedRoleProxy selected, boolean isBindTrainingTosuggestion);
 
-		void ignoreTrainingBlock();
+		void ignoreTrainingBlock(boolean isIgnoreTrainingBlock);
 
 		void cancelButtonClickedOfPopup();
 
