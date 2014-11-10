@@ -18,6 +18,7 @@ import org.joda.time.DateTime;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @RooJavaBean
@@ -43,6 +44,11 @@ public class TrainingSuggestion {
 	 public static Boolean createSuggestion(Long semesterId){
 		
 		 Log.info("Creating suggestion that is shown to user");
+		 
+		 //deleting past suggestions
+		 //For native query we need transaction that is why we create method with @Transaction annotation and call it as shown below.
+		 TrainingSuggestion ts = new TrainingSuggestion();
+		 ts.deletePastStuggestionOfSemester(semesterId);
 		 
 		 try{
 			 
@@ -82,7 +88,53 @@ public class TrainingSuggestion {
 		 
 	 }
 	 
-	 private static String getIdOfPIS(Set<PatientInSemester> pisList) {
+	 @Transactional
+	 private void deletePastStuggestionOfSemester(Long semesterId) {
+		 
+		 List<TrainingDate> allTrainingDatesOfSemester = TrainingDate.findAllTrainingDatesOfSemester(semesterId);
+		 
+		 String trainingDateIdsOfSem = getIdOfTrainingDate(allTrainingDatesOfSemester);
+		
+		Log.info("Deleting all past suggestions");
+		
+		EntityManager em = Semester.entityManager();
+				
+		StringBuilder sql = new StringBuilder("DELETE FROM `training_suggestion` WHERE `training_date` IN ( "+trainingDateIdsOfSem + " )");
+				
+		Log.info("Query is : " + sql);
+		
+		javax.persistence.Query query =  em.createNativeQuery(sql.toString());
+				
+		int totalEntryDeleted =query.executeUpdate();
+				
+		Log.info(totalEntryDeleted +" training suggestions are deleted from osce");
+				
+		 
+	}
+
+	 private static String getIdOfTrainingDate(List<TrainingDate> trainingDateList) {
+
+		 Log.info("extracting ids from list");
+			if (trainingDateList == null|| trainingDateList.size() == 0) {
+				Log.info("Return as null");
+				return "''";
+			}
+			Iterator<TrainingDate> trainingDatelistIterator = trainingDateList.iterator();
+			StringBuilder trainingDateIds = new StringBuilder();
+			//trainingDateIds.append(",");
+			while (trainingDatelistIterator.hasNext()) {
+				
+				TrainingDate trainingDate = trainingDatelistIterator.next();
+
+				trainingDateIds.append("'"+trainingDate.getId()+"'");
+				if (trainingDatelistIterator.hasNext()) {
+					trainingDateIds.append(" ,");
+				}
+			}
+			
+			return trainingDateIds.toString();
+		}
+	private static String getIdOfPIS(Set<PatientInSemester> pisList) {
 
 		/*	if (pisList == null|| pisList.size() == 0) {
 				Log.info("Return as null");

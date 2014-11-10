@@ -203,7 +203,7 @@ public class SPPortalPerson {
 				log.info("user detail that is saving in sp portal db is : " + spportalUser);
 				
 				//em.persist(/*spportalUser*/spStandardizedPatient);
-				
+				spStandardizedPatient.setStatus(StandardizedPatientStatus.EXPORTED);
 				spStandardizedPatient.persist();
 
 				//em.flush();
@@ -237,8 +237,22 @@ public class SPPortalPerson {
 			
 			for(AnamnesisChecksValue anamnesisChecksValue : setOfAnamChecksValues){
 				
-				sql.append(" (").append(anamnesisChecksValue.getAnamnesisChecksValue()).append(", ").append(anamnesisChecksValue.getComment()).append(", ").append(anamnesisChecksValue.getTruth()).append(", ")
-				.append("0, ").append(anamnesisChecksValue.getAnamnesischeck().getId()).append(", ").append(spFormId).append("),");
+				sql.append(" (");
+				
+				if(anamnesisChecksValue.getAnamnesisChecksValue()==null){
+					sql.append(anamnesisChecksValue.getAnamnesisChecksValue());
+				}else{
+					sql.append("'").append(anamnesisChecksValue.getAnamnesisChecksValue()).append("'");
+				}
+				sql.append(", ");
+				
+				if(anamnesisChecksValue.getComment()==null){
+					sql.append(anamnesisChecksValue.getComment());
+				}else{
+					sql.append("'").append(anamnesisChecksValue.getComment()).append("'");	
+				}
+				sql.append(", ").append(anamnesisChecksValue.getTruth()).append(", ").append("0, ")
+				.append(anamnesisChecksValue.getAnamnesischeck().getId()).append(", ").append(spFormId).append("),");
 			}
 			String queryString = sql.toString().substring(0, sql.toString().length()-1);
 	
@@ -866,9 +880,11 @@ public class SPPortalPerson {
 			//SP is null that means there is no any data of sp at spportal (Normal edit request is approved) so we are updating his status as exported. 
 			if(patientFromSpportalBasedOnId==null){
 				standardizedPatient.setStatus(StandardizedPatientStatus.EXPORTED);
+				spStandardizedPatient.setStatus(StandardizedPatientStatus.EXPORTED);
 			}else{
 				//"standardized patient" data is already in spportal (sp is exported when survey is started) so we are updating his status as EXPORTED_AND_SURVEY as we are copying sps data to spportal.
 				standardizedPatient.setStatus(StandardizedPatientStatus.EXPORTED_AND_SURVEY);
+				spStandardizedPatient.setStatus(StandardizedPatientStatus.EXPORTED_AND_SURVEY);
 			}
 			standardizedPatient.persist();
 			
