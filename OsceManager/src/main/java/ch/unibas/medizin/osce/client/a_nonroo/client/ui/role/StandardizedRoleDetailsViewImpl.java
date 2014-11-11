@@ -979,7 +979,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		
 		@UiHandler("eOsceExport")
 		public void iOsceExportToeOsceButtonClicked(ClickEvent e) {
-			
+			delegate.exportOsceClicked(homeRole);
 		}
 		
 		@UiHandler("iOsceExport")

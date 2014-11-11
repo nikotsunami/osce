@@ -877,31 +877,35 @@ public class StandardizedRole {
 		Checklisttopics checklisttopicsBean = factory.createOscedataChecklistsChecklistChecklisttopics();
 		checklistBean.setChecklisttopics(checklisttopicsBean);
 		
-		List<ChecklistTopic> checklistTopicList = checklist.getCheckListTopics();
+		List<ChecklistItem> checklistTopicList = ChecklistItem.findChecklistTopicByChecklist(checklist.getId());
 		
-		for (ChecklistTopic checklistTopic : checklistTopicList)
+		//List<ChecklistTopic> checklistTopicList = checklist.getCheckListTopics();
+		
+		for (ChecklistItem checklistTopic : checklistTopicList)
 		{
 			Checklisttopic checklisttopicBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopic();
 			checklisttopicsBean.getChecklisttopic().add(checklisttopicBean);
 			
 			checklisttopicBean.setId(checklistTopic.getId());
-			checklisttopicBean.setTitle(defaultString(checklistTopic.getTitle()));
+			checklisttopicBean.setTitle(defaultString(checklistTopic.getName()));
 			checklisttopicBean.setInstruction(defaultString(checklistTopic.getDescription()));
 			
 			Checklistitems checklistitemsBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitems();
 			checklisttopicBean.setChecklistitems(checklistitemsBean);
 			
-			List<ChecklistQuestion> checklistQuestionsList = checklistTopic.getCheckListQuestions();
+			List<ChecklistItem> checklistQuestionList = ChecklistItem.findChecklistQuestionByChecklistId(checklistTopic.getId());
 			
-			for (ChecklistQuestion checklistQuestion : checklistQuestionsList)
+			//List<ChecklistQuestion> checklistQuestionsList = checklistTopic.getCheckListQuestions();
+			
+			for (ChecklistItem checklistQuestion : checklistQuestionList)
 			{
 				Checklistitem checklistitemBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitemsChecklistitem();
 				checklistitemsBean.getChecklistitem().add(checklistitemBean);
 				
 				checklistitemBean.setId(checklistQuestion.getId());
-				checklistitemBean.setAffectsOverallRating((checklistQuestion.getIsOveralQuestion() == null ? "no" : checklistQuestion.getIsOveralQuestion() == true ? "yes" : "no"));
-				checklistitemBean.setTitle(defaultString(checklistQuestion.getQuestion()));
-				checklistitemBean.setInstruction(defaultString(checklistQuestion.getInstruction()));
+				checklistitemBean.setAffectsOverallRating((checklistQuestion.getIsRegressionItem() == null ? "no" : checklistQuestion.getIsRegressionItem() == true ? "yes" : "no"));
+				checklistitemBean.setTitle(defaultString(checklistQuestion.getName()));
+				checklistitemBean.setInstruction(defaultString(checklistQuestion.getDescription()));
 				
 				Checklistcriteria checklistcriteriaBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitemsChecklistitemChecklistcriteria();
 				checklistitemBean.setChecklistcriteria(checklistcriteriaBean);
