@@ -1,6 +1,5 @@
 package ch.unibas.medizin.osce.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -53,6 +52,9 @@ public class PostAnalysis {
 	
 	@ManyToOne
 	ChecklistQuestion checklistQuestion;
+	
+	@ManyToOne
+	ChecklistItem checklistItem;
 	
 	public static PostAnalysis findExaminerLevelData(Osce osce, OscePost oscePost,Doctor examiner)
 	{

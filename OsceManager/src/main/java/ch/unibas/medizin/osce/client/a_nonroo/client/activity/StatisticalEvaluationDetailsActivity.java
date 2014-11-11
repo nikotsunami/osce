@@ -2,12 +2,16 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.MapEnvelopProxy;
+import ch.unibas.medizin.osce.client.a_nonroo.client.OscePostWiseQuestionProxy;
+import ch.unibas.medizin.osce.client.a_nonroo.client.StatisticalEvaluationQuestionProxy;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StatisticalEvaluationDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -25,9 +29,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScre
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.managed.request.AnswerProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionProxy;
-import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
-import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
@@ -59,6 +62,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 
@@ -96,6 +100,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 		private StatisticalEvaluationDetailSequenceViewImpl postStatisticalEvaluationDetailSequenceViewImpl;
 		private List<String> postId = new ArrayList<String>();
 		private List<Long> impressionQueId = new ArrayList<Long>();
+		List<String> postValues = new ArrayList<String>();
 		//by spec
 		
 		public StatisticalEvaluationDetailsActivity(StatisticalEvaluationDetailsPlace place, OsMaRequestFactory requests, PlaceController placeController) 
@@ -499,7 +504,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 						for(OscePostProxy oscePostProxy:OscePostProxies)
 						{
 							if (!oscePostProxy.getOscePostBlueprint().getPostType().equals(PostType.BREAK))
-								createPostPanel(oscePostProxy, statisticalEvaluationDetailSequenceViewImpl);
+								createPostPanel(oscePostProxy, statisticalEvaluationDetailSequenceViewImpl, null);
 						}
 						
 					}
@@ -508,7 +513,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			else if(analysisType.equals(AnalysisType.item_analysis) && statisticalEvaluationDetailSequenceViewImpl.isPostPanel())
 			{
 				Log.info("create all item panel");
-				requests.answerRequestNonRoo().retrieveDistinctQuestion(statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy().getId()).with("checkListOptions").fire(new OSCEReceiver<List<ChecklistQuestionProxy>>() {
+				/*requests.answerRequestNonRoo().retrieveDistinctQuestion(statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy().getId()).with("checkListOptions").fire(new OSCEReceiver<List<ChecklistQuestionProxy>>() {
 
 					@Override
 					public void onSuccess(List<ChecklistQuestionProxy> response) {
@@ -519,23 +524,52 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 							createQuestionPanel(answerProxy, statisticalEvaluationDetailSequenceViewImpl);
 						}
 					}
+				});*/
+				
+				requests.answerRequestNonRoo().retrieveDistinctQuestionItem(statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy().getId()).with("checkListOptions").fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+
+					@Override
+					public void onSuccess(List<ChecklistItemProxy> response) {
+						Log.info("create all item panel success :" +response.size());
+						statisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().clear();
+						for(ChecklistItemProxy answerProxy:response)
+						{
+							createItemQuestionPanel(answerProxy, statisticalEvaluationDetailSequenceViewImpl);
+						}
+					}
 				});
 			}
 			else if(analysisType.equals(AnalysisType.post_analysys) && statisticalEvaluationDetailSequenceViewImpl.isSequencePanel())
 			{
 				Log.info("create all post panel");
-				requests.osceSequenceRequest().findOsceSequence(sequenceProxy.getId()).with("oscePosts","oscePosts.oscePostBlueprint","oscePosts.standardizedRole","oscePosts.standardizedRole","oscePosts.standardizedRole","oscePosts.standardizedRole.checkList","oscePosts.standardizedRole.checkList.checkListTopics","oscePosts.standardizedRole.checkList.checkListTopics.checkListQuestions").fire(new OSCEReceiver<OsceSequenceProxy>() {
+				//requests.osceSequenceRequest().findOsceSequence(sequenceProxy.getId()).with("oscePosts","oscePosts.oscePostBlueprint","oscePosts.standardizedRole","oscePosts.standardizedRole","oscePosts.standardizedRole","oscePosts.standardizedRole.checkList","oscePosts.standardizedRole.checkList.checkListTopics","oscePosts.standardizedRole.checkList.checkListTopics.checkListQuestions").fire(new OSCEReceiver<OsceSequenceProxy>() {
+				requests.osceSequenceRequest().findOsceSequence(sequenceProxy.getId()).with("oscePosts","oscePosts.oscePostBlueprint","oscePosts.standardizedRole","oscePosts.standardizedRole","oscePosts.standardizedRole","oscePosts.standardizedRole.checkList").fire(new OSCEReceiver<OsceSequenceProxy>() {
 
 					@Override
 					public void onSuccess(OsceSequenceProxy response) {
 						Log.info("sequenceDisclosurePanelOpen success courses size" + response.getOscePosts().size());
-						List<OscePostProxy> OscePostProxies=response.getOscePosts();
+						final List<OscePostProxy> OscePostProxies=response.getOscePosts();
 						statisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().clear();
-						for(OscePostProxy oscePostProxy:OscePostProxies)
-						{
-							if (!oscePostProxy.getOscePostBlueprint().getPostType().equals(PostType.BREAK))
-							createPostPanel(oscePostProxy, statisticalEvaluationDetailSequenceViewImpl);
-						}
+						
+						requests.checklistItemRequestNonRoo().findChecklistQuestionByOscePost(response.getId()).fire(new OSCEReceiver<List<OscePostWiseQuestionProxy>>() {
+
+							@Override
+							public void onSuccess(List<OscePostWiseQuestionProxy> questionProxyList) {
+							
+								for(final OscePostProxy oscePostProxy : OscePostProxies)
+								{
+									if (!oscePostProxy.getOscePostBlueprint().getPostType().equals(PostType.BREAK)) {
+										for (OscePostWiseQuestionProxy questionProxy : questionProxyList) {
+											if (questionProxy.getOscePostId().equals(oscePostProxy.getId())) {
+												createPostPanel(oscePostProxy, statisticalEvaluationDetailSequenceViewImpl, questionProxy.getQuestionList());
+												break;
+											}
+										}
+									}
+								}
+							}
+						});
+						
 						
 					}
 				});
@@ -547,7 +581,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				//by spec
 				
 				Log.info("create all item panel");
-				requests.answerRequestNonRoo().retrieveDistinctExaminer(statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy().getId()).with("checkListOptions").fire(new OSCEReceiver<List<DoctorProxy>>() {
+				requests.answerRequestNonRoo().retrieveDistinctExaminerByItem(statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy().getId()).with("checkListOptions").fire(new OSCEReceiver<List<DoctorProxy>>() {
 
 					@Override
 					public void onSuccess(List<DoctorProxy> response) {
@@ -636,7 +670,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 		}
 		
 		
-		//create question/item panel
+		/*//create question/item panel
 		public void createQuestionPanel(ChecklistQuestionProxy checklistQuestionProxy,StatisticalEvaluationDetailSequenceViewImpl statisticalEvaluationDetailSequenceViewImpl)
 		{
 			Log.info("createQuestionPanel");
@@ -729,14 +763,110 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 					((Label)questionView.getPostDataHP().getWidget(l-1)).setText(itemValue);
 				}
 			}
+		}*/
+		
+		//create question/item panel
+		public void createItemQuestionPanel(ChecklistItemProxy answerProxy,StatisticalEvaluationDetailSequenceViewImpl statisticalEvaluationDetailSequenceViewImpl)
+		{
+			Log.info("createQuestionPanel");
+			
+			StatisticalEvaluationDetailsItemView questionView=new StatisticalEvaluationDetailsItemViewImpl();
+			questionView.setDelegate(this);
+			questionView.getSequenceLbl().getElement().getParentElement().getStyle().setWidth(388, Unit.PX);
+			questionView.getSequenceLbl().getElement().getStyle().setFontSize(12, Unit.PX);
+			questionView.getSequenceLbl().setWidth("388px");
+			
+			//questionView.setChecklistQuestionProxy(answerProxy);
+			questionView.setChecklistItemProxy(answerProxy);
+			String question=answerProxy.getName();
+			if(question.length() > 60)
+			{
+				question=question.substring(0, 60);
+				question=question+"...";
+			}
+			questionView.getSequenceLbl().setText(question);
+			questionView.getSequenceLbl().setTitle(answerProxy.getName());
+			questionView.getSumPerSequenceLbl().setText("");
+			//questionView.getSequenceHeader().addClassName("parcourHeader");
+			
+			
+				if(missingItemId.contains(answerProxy.getId()))
+				{
+					questionView.getOnOffButton().setDown(true);
+				}
+			
+			
+			statisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().add(questionView.asWidget());
+			
+			questionView.getPostDataHP().clear();
+			for(int i=0;i<statisticalEvaluationDetailSequenceViewImpl.getPostDataHP().getWidgetCount();i++)
+			{
+				//points/option values
+				if(i==3)
+				{
+					List<ChecklistOptionProxy> options=questionView.getChecklistItemProxy().getCheckListOptions();
+					String optionValues="";
+					for(ChecklistOptionProxy option:options)
+					{
+						if(optionValues.equals(""))
+							optionValues=option.getValue();
+						else
+							optionValues=optionValues +" / " + option.getValue();
+					}
+					createPostDataLabel(questionView, optionValues);
+				}
+				else
+					createPostDataLabel(questionView, "-");
+			}
+			
+			if(analysisType.equals(AnalysisType.item_analysis) && itemAnalysisData != null)
+			{
+				String itemKey="q"+statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy().getId()+questionView.getChecklistItemProxy().getId();
+				
+				Log.info("key :" +itemKey);
+				
+				List<String> itemValues=getValue(itemAnalysisData, itemKey);
+				
+				for(int l=0;l<itemValues.size();l++)
+				{
+					String itemValue=itemValues.get(l);
+					
+					if(l==0)//disable item / not
+					{
+						if(itemValue.equals("true"))
+						{
+							questionView.getOnOffButton().setDown(true);
+							missingItemId.add(questionView.getChecklistItemProxy().getId());
+						}
+						else
+						{
+							questionView.getOnOffButton().setDown(false);
+							missingItemId.remove(questionView.getChecklistItemProxy().getId());
+						}
+						continue;
+					}
+					
+					if(l==1)
+					{
+						
+						String temp[]=itemValue.split("/");
+						if(new Double(temp[0]) != 0)
+						{
+							((Label)questionView.getPostDataHP().getWidget(l-1)).getElement().getStyle().setColor("red");
+						}
+					}
+					
+					((Label)questionView.getPostDataHP().getWidget(l-1)).setText(itemValue);
+				}
+			}
 		}
 		
 		
 		//create post panel
-		public void createPostPanel(final OscePostProxy oscePostProxy,StatisticalEvaluationDetailSequenceViewImpl statisticalEvaluationDetailSequenceViewImpl)
+		public void createPostPanel(final OscePostProxy oscePostProxy,StatisticalEvaluationDetailSequenceViewImpl statisticalEvaluationDetailSequenceViewImpl, List<StatisticalEvaluationQuestionProxy> questionProxyList)
 		{
 			Log.info("createPostPanel");
-			
+			Map<Long, StatisticalEvaluationQuestionProxy> questionItemMap = new HashMap<Long, StatisticalEvaluationQuestionProxy>();
 			final StatisticalEvaluationDetailSequenceView postView=new StatisticalEvaluationDetailSequenceViewImpl();
 			
 			//if(analysisType.equals(AnalysisType.post_analysys))
@@ -780,75 +910,58 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				
 				
 				
-				final FocusableValueListBox<ChecklistQuestionProxy> itemList=new FocusableValueListBox<ChecklistQuestionProxy>(new Renderer<ChecklistQuestionProxy>() {
+				final FocusableValueListBox<StatisticalEvaluationQuestionProxy> itemList=new FocusableValueListBox<StatisticalEvaluationQuestionProxy>(new Renderer<StatisticalEvaluationQuestionProxy>() {
 
 					@Override
-					public String render(ChecklistQuestionProxy object) {
-						// TODO Auto-generated method stub
+					public String render(StatisticalEvaluationQuestionProxy object) {
 						if(object==null)
 							return "";
 									
-						String question=object.getQuestion();
-						if(question.length() >40)
-						{
+						String question=object.getQuestionText();
+						if(question.length() > 40) {
 							question=question.substring(0, 40) + "...";
 						}
 						return question;
 					}
 
 					@Override
-					public void render(ChecklistQuestionProxy object,
-							Appendable appendable) throws IOException {
-						// TODO Auto-generated method stub
-						
+					public void render(StatisticalEvaluationQuestionProxy object, Appendable appendable) throws IOException {
 					}
 				});
 				
 				itemList.addStyleName("impressionItemListBox");
+				StatisticalEvaluationQuestionProxy impressionItem=null;
 				
-				List<ChecklistTopicProxy> topicProxies=oscePostProxy.getStandardizedRole().getCheckList().getCheckListTopics();
-				List<ChecklistQuestionProxy> questions=new ArrayList<ChecklistQuestionProxy>();
-				
-				
-				ChecklistQuestionProxy impressionItem=null;
-				
-				for(ChecklistTopicProxy topicProxy:topicProxies)
+				for(StatisticalEvaluationQuestionProxy itemProxy : questionProxyList)
 				{
-					questions.addAll(topicProxy.getCheckListQuestions());
-					
-					List<ChecklistQuestionProxy> questionProxies=topicProxy.getCheckListQuestions();
-					for(ChecklistQuestionProxy questionProxy:questionProxies)
-					{
-						if(questionProxy.getIsOveralQuestion())
-						{
-							impressionItem=questionProxy;
-							break;
-						}
+					questionItemMap.put(itemProxy.getQuestionId(), itemProxy);
+					if(itemProxy.getIsRegressionItem()) {
+						impressionItem = itemProxy;
 					}
 				}
-				itemList.setAcceptableValues(questions);
+				
+				itemList.setAcceptableValues(questionProxyList);
 				
 				if (postAnalysisData == null)
 				{
 					if(impressionItem!=null)
 					{
 						itemList.setValue(impressionItem);
-						addImpressionQuestion(oscePostProxy.getId(), impressionItem.getId());
+						addImpressionQuestion(oscePostProxy.getId(), impressionItem.getQuestionId());
 					}					
 				}
 				
-				itemList.addValueChangeHandler(new ValueChangeHandler<ChecklistQuestionProxy>() {
+				itemList.addValueChangeHandler(new ValueChangeHandler<StatisticalEvaluationQuestionProxy>() {
 					
 					@Override
-					public void onValueChange(ValueChangeEvent<ChecklistQuestionProxy> event) {
-						if (oscePostProxy != null)
-						{
-							addImpressionQuestion(oscePostProxy.getId(), event.getValue().getId());
+					public void onValueChange(ValueChangeEvent<StatisticalEvaluationQuestionProxy> event) {
+						if (oscePostProxy != null) {
+							addImpressionQuestion(oscePostProxy.getId(), event.getValue().getQuestionId());
 						}
 					}
 				});
 				
-					clearBtn.addClickHandler(new ClickHandler() {
+				clearBtn.addClickHandler(new ClickHandler() {
 					
 					@Override
 					public void onClick(ClickEvent event) {
@@ -901,25 +1014,16 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				
 				if (postValues.size() > 0 && postView.getFourthColumnHP().getWidget(1) != null && postView.getFourthColumnHP().getWidget(1) instanceof FocusableValueListBox)
 				{
-					requests.checklistQuestionRequest().findChecklistQuestion(Long.parseLong(postValues.get(postValues.size() - 1))).fire(new OSCEReceiver<ChecklistQuestionProxy>() {
-						@Override
-						public void onFailure(ServerFailure error) {
-							
-						}
-						
-						@Override
-						public void onSuccess(ChecklistQuestionProxy question) {							
-							if (oscePostProxy != null && question != null)
-							{
-								addImpressionQuestion(oscePostProxy.getId(), question.getId());
-								((FocusableValueListBox)postView.getFourthColumnHP().getWidget(1)).setValue(question);
-							}
-						}
-					});
-					
+					Long questionItemId = Long.parseLong(postValues.get(postValues.size() - 1));
+					if (oscePostProxy != null && questionItemMap.containsKey(questionItemId)) {
+						StatisticalEvaluationQuestionProxy questionProxy = questionItemMap.get(questionItemId);
+						addImpressionQuestion(oscePostProxy.getId(), questionProxy.getQuestionId());
+						((FocusableValueListBox)postView.getFourthColumnHP().getWidget(1)).setValue(questionProxy);
+					}
 				}
 			}
 		}
+		
 		@Override
 		public void parcourDisclosurePanelOpen(final StatisticalEvaluationDetailSequenceViewImpl statisticalEvaluationDetailSequenceViewImpl) {
 			Log.info("parcourDisclosurePanelOpen");
@@ -1063,7 +1167,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 										{
 											StatisticalEvaluationDetailsItemViewImpl itemView=(StatisticalEvaluationDetailsItemViewImpl)itemVP.getWidget(k);
 											
-											String itemKey="q"+postView.getOscePostProxy().getId()+itemView.getChecklistQuestionProxy().getId();
+											String itemKey="q"+postView.getOscePostProxy().getId()+itemView.getChecklistItemProxy().getId();
 											
 											Log.info("key :" +itemKey);
 											
@@ -1079,12 +1183,12 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 													if(itemValue.equals("true"))
 													{
 														itemView.getOnOffButton().setDown(true);
-														missingItemId.add(itemView.getChecklistQuestionProxy().getId());
+														missingItemId.add(itemView.getChecklistItemProxy().getId());
 													}
 													else
 													{
 														itemView.getOnOffButton().setDown(false);
-														missingItemId.remove(itemView.getChecklistQuestionProxy().getId());
+														missingItemId.remove(itemView.getChecklistItemProxy().getId());
 													}
 													continue;
 												}
@@ -1187,10 +1291,30 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 											((Label)postView.getPostDataHP().getWidget(k)).setText(postValues.get(k));
 										}
 										
-										//abhay
 										if (postValues.size() > 0 && postView.getFourthColumnHP().getWidget(1) != null && postView.getFourthColumnHP().getWidget(1) instanceof FocusableValueListBox)
 										{
-											requests.checklistQuestionRequest().findChecklistQuestion(Long.parseLong(postValues.get(postValues.size() - 1))).fire(new OSCEReceiver<ChecklistQuestionProxy>() {
+											/*requests.checklistItemRequest().findChecklistItem(Long.parseLong(postValues.get(postValues.size() - 1))).fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+												@Override
+												public void onSuccess(ChecklistItemProxy response) {
+													addImpressionQuestion(postView.getOscePostProxy().getId(), response.getId());
+													
+													((FocusableValueListBox)postView.getFourthColumnHP().getWidget(1)).setValue(response);
+												}
+											});*/
+											
+											Long questionItemId = Long.parseLong(postValues.get(postValues.size() - 1));
+											FocusableValueListBox<StatisticalEvaluationQuestionProxy> questionfocusableValueListBox = (FocusableValueListBox)postView.getFourthColumnHP().getWidget(1);
+											ListBox questionListBox = questionfocusableValueListBox.getListBox();
+											
+											for (int k=0; k<questionListBox.getItemCount(); k++) {
+												if (questionListBox.getValue(k).equals(questionItemId)) {
+													questionListBox.setSelectedIndex(k);
+													break;
+												}
+											}
+											
+											/*requests.checklistQuestionRequest().findChecklistQuestion(Long.parseLong(postValues.get(postValues.size() - 1))).fire(new OSCEReceiver<ChecklistQuestionProxy>() {
 												@Override
 												public void onFailure(ServerFailure error) {
 													
@@ -1204,7 +1328,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 														((FocusableValueListBox)postView.getFourthColumnHP().getWidget(1)).setValue(question);
 													}
 												}
-											});
+											});*/
 											
 										}
 										
@@ -1262,11 +1386,12 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 					{
 						StatisticalEvaluationDetailSequenceViewImpl postView=((StatisticalEvaluationDetailSequenceViewImpl)(postVP.getWidget(j)));
 						Long postId=postView.getOscePostProxy().getId();
-						ChecklistQuestionProxy questionProxy=(ChecklistQuestionProxy)((FocusableValueListBox)postView.getFourthColumnHP().getWidget(1)).getValue();
+						/*ChecklistQuestionProxy questionProxy=(ChecklistQuestionProxy)((FocusableValueListBox)postView.getFourthColumnHP().getWidget(1)).getValue();*/
+						StatisticalEvaluationQuestionProxy questionProxy=(StatisticalEvaluationQuestionProxy)((FocusableValueListBox)postView.getFourthColumnHP().getWidget(1)).getValue();
 						
 						Long questionId=0l;
 						if(questionProxy!=null)
-						  questionId=questionProxy.getId();
+						  questionId=questionProxy.getQuestionId();
 						
 						url=url+"&p"+postId.toString()+"="+questionId.toString();
 						
@@ -1294,11 +1419,12 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 					{
 						StatisticalEvaluationDetailSequenceViewImpl postView=((StatisticalEvaluationDetailSequenceViewImpl)(postVP.getWidget(j)));
 						Long postId=postView.getOscePostProxy().getId();
-						ChecklistQuestionProxy questionProxy=(ChecklistQuestionProxy)((FocusableValueListBox)postView.getFourthColumnHP().getWidget(1)).getValue();
+						/*ChecklistQuestionProxy questionProxy=(ChecklistQuestionProxy)((FocusableValueListBox)postView.getFourthColumnHP().getWidget(1)).getValue();*/
+						StatisticalEvaluationQuestionProxy questionProxy=(StatisticalEvaluationQuestionProxy)((FocusableValueListBox)postView.getFourthColumnHP().getWidget(1)).getValue();
 						
 						Long questionId=0l;
 						if(questionProxy!=null)
-						  questionId=questionProxy.getId();
+						  questionId=questionProxy.getQuestionId();
 						
 						url=url+"&p"+postId.toString()+"="+questionId.toString();
 						

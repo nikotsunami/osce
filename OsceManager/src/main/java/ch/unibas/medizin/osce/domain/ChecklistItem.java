@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import ch.unibas.medizin.osce.shared.ItemType;
 import ch.unibas.medizin.osce.shared.OptionType;
+import ch.unibas.medizin.osce.shared.OscePostWiseQuestion;
+import ch.unibas.medizin.osce.shared.StatisticalEvaluationQuestion;
 
 @RooJavaBean
 @RooToString
@@ -66,6 +68,12 @@ public class ChecklistItem {
 	@OrderBy("sequenceNumber")
 	private List<ChecklistItem> childChecklistItems = new ArrayList<ChecklistItem>();	
 	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "checklistItem")
+	private List<ItemAnalysis> itemAnalysis = new ArrayList<ItemAnalysis>();
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "checklistItem")
+	private List<PostAnalysis> postAnalysis = new ArrayList<PostAnalysis>();
+	
 	public static List<ChecklistItem> findChecklistTopicByChecklistId(Long checklistId) {
 		EntityManager em = entityManager();
 		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem IS NOT NULL AND ci.parentItem.id IN (SELECT ci FROM ChecklistItem ci WHERE ci.checkList IS NOT NULL AND ci.checkList.id = " + checklistId + ") ORDER BY ci.sequenceNumber";
@@ -88,7 +96,7 @@ public class ChecklistItem {
 
 	public static List<ChecklistItem> findAllChecklistItemsChild(Long parentId) {
 		EntityManager em = entityManager();
-		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem IS NOT NULL AND ci.parentItem.id = " + parentId;
+		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem IS NOT NULL AND ci.parentItem.id = " + parentId + " ORDER BY ci.sequenceNumber";
 		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
 		return query.getResultList();
 	}
@@ -328,7 +336,7 @@ public class ChecklistItem {
 		return topicList;
 	}
 	
-	public static List<ChecklistItem> findChecklistQuestionByChecklistId(Long checklistTopicId) {
+	public static List<ChecklistItem> findChecklistQuestionByChecklistTopic(Long checklistTopicId) {
 		List<ChecklistItem> questionList = new ArrayList<ChecklistItem>();
 		
 		List<ChecklistItem> itemList = ChecklistItem.findAllChecklistItemsChild(checklistTopicId);
@@ -348,5 +356,47 @@ public class ChecklistItem {
 				exportChecklistItemsChild(checklistItemChilds, questionList);
 			}	
 		}
+	}
+	
+	public static List<ChecklistItem> findChecklistQuestionByChecklistId(Long checklistId) {
+		List<ChecklistItem> questionList = new ArrayList<ChecklistItem>();
+		
+		List<ChecklistItem> topicList = findChecklistTopicByChecklist(checklistId);
+		for (ChecklistItem checklistTopic : topicList) {
+			questionList.addAll(findChecklistQuestionByChecklistTopic(checklistTopic.getId()));
+		}
+		
+		return questionList;
+	}
+	
+	public static List<OscePostWiseQuestion> findChecklistQuestionByOscePost(Long osceSequenceId) {
+		List<OscePostWiseQuestion> oscePostQueList = new ArrayList<OscePostWiseQuestion>();
+		OsceSequence osceSequence = OsceSequence.findOsceSequence(osceSequenceId);
+		List<OscePost> oscePostList = osceSequence.getOscePosts();
+		
+		for (OscePost oscePost : oscePostList) {
+			List<StatisticalEvaluationQuestion> stEvaQueList = new ArrayList<StatisticalEvaluationQuestion>();
+			if (oscePost.getStandardizedRole() != null && oscePost.getStandardizedRole().getCheckList() != null) {
+				List<ChecklistItem> questionList = findChecklistQuestionByChecklistId(oscePost.getStandardizedRole().getCheckList().getId());
+				
+				
+				for (ChecklistItem checklistItem : questionList) {
+					StatisticalEvaluationQuestion stEvaQue = new StatisticalEvaluationQuestion();
+					stEvaQue.setQuestionId(checklistItem.getId());
+					stEvaQue.setQuestionText(checklistItem.getName());
+					stEvaQue.setIsRegressionItem(checklistItem.getIsRegressionItem());
+					
+					stEvaQueList.add(stEvaQue);
+				}
+			}
+			
+			OscePostWiseQuestion postWiseQuestion = new OscePostWiseQuestion();
+			postWiseQuestion.setOscePostId(oscePost.getId());
+			postWiseQuestion.setQuestionList(stEvaQueList);
+			
+			oscePostQueList.add(postWiseQuestion);
+		}
+		
+		return oscePostQueList;
 	}
 }

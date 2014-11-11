@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.AnswerProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
@@ -49,6 +50,8 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 	private ChecklistQuestionProxy checklistQuestionProxy;
 	
 	private DoctorProxy doctorProxy;
+	
+	private ChecklistItemProxy checklistItemProxy;
 	
 	@UiField
 	 ToggleButton onOffButton;
@@ -116,14 +119,14 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 		return sequenceHeader;
 	}
 
-	public ChecklistQuestionProxy getChecklistQuestionProxy() {
+	/*public ChecklistQuestionProxy getChecklistQuestionProxy() {
 		return checklistQuestionProxy;
 	}
 
 	public void setChecklistQuestionProxy(
 			ChecklistQuestionProxy checklistQuestionProxy) {
 		this.checklistQuestionProxy = checklistQuestionProxy;
-	}
+	}*/
 
 	public StatisticalEvaluationDetailsItemViewImpl() 
 	{
@@ -161,7 +164,8 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 	{
 		Log.info("onOffButtonClickHandler");
 		
-		delegate.onOffButtonClicked(checklistQuestionProxy.getId(),onOffButton.isDown());
+		//delegate.onOffButtonClicked(checklistQuestionProxy.getId(),onOffButton.isDown());
+		delegate.onOffButtonClicked(checklistItemProxy.getId(),onOffButton.isDown());
 	}
 	
 	public NumberSpinner createAddPointButton()
@@ -290,6 +294,13 @@ public class StatisticalEvaluationDetailsItemViewImpl  extends Composite impleme
 	public void setAddPoint(NumberSpinner addPoint) {
 		this.addPoint = addPoint;
 	}
+
+	public ChecklistItemProxy getChecklistItemProxy() {
+		return checklistItemProxy;
+	}
 	
+	public void setChecklistItemProxy(ChecklistItemProxy checklistItemProxy) {
+		this.checklistItemProxy = checklistItemProxy;
+	}
 	
 }

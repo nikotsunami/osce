@@ -114,6 +114,21 @@ public class ChecklistOption implements Comparable<ChecklistOption> {
  		return valueList;
  	}
  	
+ 	public static List<Long> findCheckListOptionValueByQuestionItem(Long questionId)
+ 	{
+ 		List<Long> valueList = new ArrayList<Long>(); 
+ 		EntityManager em = entityManager();
+ 		String sql = "SELECT c FROM ChecklistOption c WHERE c.checklistItem.id = " + questionId;
+ 		TypedQuery<ChecklistOption> query = em.createQuery(sql, ChecklistOption.class);
+ 		
+ 		for (ChecklistOption option : query.getResultList())
+ 		{
+ 			valueList.add(Long.parseLong(option.getValue()));
+ 		}
+ 		
+ 		return valueList;
+ 	}
+ 	
  	public static ChecklistItem saveChecklistOption(String name, String description, String value, Integer criteriaCount, Long parentItemId, Long optionId) {
  		
  		ChecklistOption checklistOption;

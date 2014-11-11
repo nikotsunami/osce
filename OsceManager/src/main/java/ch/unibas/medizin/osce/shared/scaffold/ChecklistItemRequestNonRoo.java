@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.shared.scaffold;
 
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OscePostWiseQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistItemProxy;
 import ch.unibas.medizin.osce.domain.ChecklistItem;
 import ch.unibas.medizin.osce.shared.OptionType;
@@ -31,5 +32,9 @@ public interface ChecklistItemRequestNonRoo  extends RequestContext{
 	public abstract Request<Void> removeChecklistTopicItem(Long checklistItemId);
 	
 	public abstract Request<Void> removeChecklistItemQuestionItem(Long checklistItemId);
+	
+	public abstract Request<List<ChecklistItemProxy>> findChecklistQuestionByChecklistId(Long checklistId);
+	
+	public abstract Request<List<OscePostWiseQuestionProxy>> findChecklistQuestionByOscePost(Long osceSequenceId);
 	
 }

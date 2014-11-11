@@ -99,6 +99,20 @@ public class Answer {
 		//log.info("Assignment List Size :" + questionList.size());
 		return questionList;
 	}
+	
+	public static List<ChecklistItem> retrieveDistinctQuestionItem(Long postId) {
+		EntityManager em = entityManager();
+		String queryString = "SELECT  distinct a.checklistItem FROM Answer as a where a.checklistItem.parentItem IS NOT NULL AND a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.oscePost="
+				+ postId + " ) order by a.checklistItem.parentItem.sequenceNumber, a.checklistItem.sequenceNumber asc";
+
+		TypedQuery<ChecklistItem> query = em.createQuery(queryString,
+				ChecklistItem.class);
+		List<ChecklistItem> questionList = query.getResultList();
+
+		//log.info("retrieveQuestion query String :" + queryString);
+		//log.info("Assignment List Size :" + questionList.size());
+		return questionList;
+	}
 
 	public static List<Doctor> retrieveDistinctExaminer(Long postId) {
 		//log.info("retrieveDistinctExaminer :");
@@ -111,6 +125,15 @@ public class Answer {
 
 		//log.info("retrieveQuestion query String :" + queryString);
 		//log.info("Assignment List Size :" + questionList.size());
+		return questionList;
+	}
+	
+	public static List<Doctor> retrieveDistinctExaminerByItem(Long postId) {
+		EntityManager em = entityManager();
+		String queryString = "SELECT  distinct a.doctor FROM Answer as a where  a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.oscePost="
+				+ postId + " ) order by a.checklistItem.sequenceNumber asc";
+		TypedQuery<Doctor> query = em.createQuery(queryString, Doctor.class);
+		List<Doctor> questionList = query.getResultList();
 		return questionList;
 	}
 	
@@ -128,6 +151,15 @@ public class Answer {
 		return questionList;
 	}
 	
+	public static List<Student> retrieveDistinctStudentByItem(Long postId) {
+		EntityManager em = entityManager();
+		String queryString = "SELECT  distinct a.student FROM Answer as a where  a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.oscePost="
+				+ postId + " ) order by a.checklistItem.sequenceNumber asc";
+		TypedQuery<Student> query = em.createQuery(queryString, Student.class);
+		List<Student> questionList = query.getResultList();
+		return questionList;
+	}
+	
 	public static List<Answer> retrieveQuestionPerPostAndItem(Long postId,
 			Long itemId) {
 		//log.info("retrieveStudent :");
@@ -141,6 +173,18 @@ public class Answer {
 		List<Answer> assignmentList = query.getResultList();
 		//log.info("retrieveQuestion query String :" + queryString);
 		//log.info("Assignment List Size :" + assignmentList.size());
+		return assignmentList;
+	}
+	
+	public static List<Answer> retrieveQuestionPerPostAndQuestionItem(Long postId,Long itemId) {
+		EntityManager em = entityManager();
+		String queryString = "SELECT  a FROM Answer as a where a.checklistItem.id="
+				+ itemId
+				+ " and a.checklistOption!=null and  a.oscePostRoom in(select opr.id from OscePostRoom as opr where  opr.oscePost="
+				+ postId + " ) order by a.checklistItem.sequenceNumber asc";
+
+		TypedQuery<Answer> query = em.createQuery(queryString, Answer.class);
+		List<Answer> assignmentList = query.getResultList();
 		return assignmentList;
 	}
 
@@ -306,14 +350,16 @@ public class Answer {
 					
 					String postPassingStr = postResultMap.get("passMark") == null ? "0" : postResultMap.get("passMark");
 					
-					List<Doctor> doctors = retrieveDistinctExaminer(post
-							.getId());
+					//List<Doctor> doctors = retrieveDistinctExaminer(post.getId());
+					
+					List<Doctor> doctors = retrieveDistinctExaminerByItem(post.getId());
 
 					List<String> postLevelList = new ArrayList<String>();
 
 					Integer numOfStudentPerPost = 0;
 					
-					Integer maxCountValue = OscePost.findMaxValueOfCheckListQuestionByOscePost(post.getId());
+					//Integer maxCountValue = OscePost.findMaxValueOfCheckListQuestionByOscePost(post.getId());
+					Integer maxCountValue = OscePost.findMaxValueOfCheckListQuestionItemByOscePost(post.getId());
 
 					Double averagePerPost = 0.0;
 					int pointsPerPostLength=0;
@@ -377,17 +423,13 @@ public class Answer {
 						}
 						
 						// student count
-						List<Answer> answers = retrieveDistinctStudentExamined(
-								doctor.getId(), post.getId());
+						//List<Answer> answers = retrieveDistinctStudentExamined(doctor.getId(), post.getId());
 
-						Long countOfStudentList = retrieveNumberOfDistinctStudentExamined(
-								doctor.getId(), post.getId());
+						Long countOfStudentList = retrieveNumberOfDistinctStudentExamined(doctor.getId(), post.getId());
 
-						numOfStudentPerPost = numOfStudentPerPost
-								+ countOfStudentList.intValue();
+						numOfStudentPerPost = numOfStudentPerPost + countOfStudentList.intValue();
 
-						examinerLevelList.add(new Integer(
-								countOfStudentList.intValue()).toString());
+						examinerLevelList.add(new Integer(countOfStudentList.intValue()).toString());
 
 						postAnalysis.setNumOfStudents(countOfStudentList.intValue());
 						
@@ -500,9 +542,7 @@ public class Answer {
 						postAnalysis.setMaxOrignal(max);					
 						
 						MapEnvelop examinerMap = new MapEnvelop();
-						examinerMap.put(
-								"e" + post.getId() + doctor.getId(),
-								examinerLevelList);
+						examinerMap.put("e" + post.getId() + doctor.getId(), examinerLevelList);
 						data.add(examinerMap);
 						
 						postAnalysis.setOsce(osce);
@@ -642,7 +682,8 @@ public class Answer {
 					//impression question
 					if(impressionQueId != null)
 					{
-						postAnalysis.setChecklistQuestion(ChecklistQuestion.findChecklistQuestion(impressionQueId));
+						//postAnalysis.setChecklistQuestion(ChecklistQuestion.findChecklistQuestion(impressionQueId));
+						postAnalysis.setChecklistItem(ChecklistItem.findChecklistItem(impressionQueId));
 						postLevelList.add(impressionQueId.toString());
 					}
 					else
@@ -732,8 +773,9 @@ public class Answer {
 						List<String> postLevelList = new ArrayList<String>();
 
 						// retrieve distict item for this post
-						List<ChecklistQuestion> items = retrieveDistinctQuestion(post
-								.getId());
+						//List<ChecklistQuestion> items = retrieveDistinctQuestion(post.getId());
+						
+						List<ChecklistItem> items = retrieveDistinctQuestionItem(post.getId());
 
 						// total num of student from assignment table
 						int totalStudent = countStudent(day.getId());
@@ -755,7 +797,8 @@ public class Answer {
 						// loop through distinct item/question for particular
 						// post
 						for (int k = 0; k < items.size(); k++) {
-							ChecklistQuestion item = items.get(k);
+							//ChecklistQuestion item = items.get(k);
+							ChecklistItem item = items.get(k);
 							// question/item wise calculation
 							// Map<String,List<String>> questionMap=new
 							// HashMap<String, List<String>>();
@@ -765,13 +808,11 @@ public class Answer {
 							// list of answer table data for particular post and
 							// item. Number of row should be equal to total num
 							// of student.
-							List<Answer> itemAnswers = retrieveQuestionPerPostAndItem(
-									post.getId(), item.getId());
-							
+							//List<Answer> itemAnswers = retrieveQuestionPerPostAndItem(post.getId(), item.getId());
+							List<Answer> itemAnswers = retrieveQuestionPerPostAndQuestionItem(post.getId(), item.getId());
 							
 							//save data at question level
 							ItemAnalysis itemAnalysis=new ItemAnalysis();
-							
 							
 							double[] points = null;
 							boolean isMissing = false;
@@ -786,7 +827,6 @@ public class Answer {
 							questionList.add(new Boolean(isMissing).toString());
 							if (isMissing)
 							{
-								
 								points = new double[itemAnswers.size()];
 							}
 							else
@@ -798,14 +838,11 @@ public class Answer {
 							// 1. calculate missing at item level
 							int countAnswerTableRow = itemAnswers.size();
 							//log.info("number of student answer :" + countAnswerTableRow);
-							int missingAtItemLevel = totalStudent
-									- countAnswerTableRow;
-							missingAtPostLevel = missingAtPostLevel
-									+ missingAtItemLevel;
+							int missingAtItemLevel = totalStudent - countAnswerTableRow;
+							missingAtPostLevel = missingAtPostLevel + missingAtItemLevel;
 							double missingPercentageAtItemLevel = 0;
 							if (totalStudent != 0)
-								missingPercentageAtItemLevel = percentage(
-										missingAtItemLevel, totalStudent);
+								missingPercentageAtItemLevel = percentage(missingAtItemLevel, totalStudent);
 
 							missingPercentageAtItemLevel = roundTwoDecimals(missingPercentageAtItemLevel);
 
@@ -823,35 +860,30 @@ public class Answer {
 							String optionValues = "";
 							String frequency = "";
 							
-							int[] optionCounts = new int[item
-									.getCheckListOptions().size()];
+							int[] optionCounts = new int[item.getCheckListOptions().size()];
 							List<String> optionValuesList = new ArrayList<String>();
-							for (int i = 0; i < item.getCheckListOptions()
-									.size(); i++) {
-								ChecklistOption option = item
-										.getCheckListOptions().get(i);
+							for (int i = 0; i < item.getCheckListOptions().size(); i++) {
+								
+								ChecklistOption option = item.getCheckListOptions().get(i);
 
 								if (optionValues.equals(""))
 									optionValues = option.getValue();
 								else
-									optionValues = optionValues + "/"
-											+ option.getValue();
+									optionValues = optionValues + "/" + option.getValue();
 
 								optionValuesList.add(option.getValue());
 							}
+							
 							for (int i = 0; i < itemAnswers.size(); i++) {
 								Answer itemAnswer = itemAnswers.get(i);
 								// point=point+new
 								// Double(itemAnswer.getChecklistOption().getValue());
 								//log.info("Point of item:" + itemAnswer.getChecklistOption().getValue());
-								points[i] = new Double(itemAnswer
-										.getChecklistOption().getValue());
+								points[i] = new Double(itemAnswer.getChecklistOption().getValue());
 
 								for (int j = 0; j < optionValuesList.size(); j++) {
 
-									if (itemAnswer.getChecklistOption()
-											.getValue()
-											.equals(optionValuesList.get(j))) {
+									if (itemAnswer.getChecklistOption().getValue().equals(optionValuesList.get(j))) {
 										optionCounts[j]++;
 										break;
 									}
@@ -901,18 +933,11 @@ public class Answer {
 							// 5. frequency
 							for (int j = 0; j < optionValuesList.size(); j++) {
 								if (frequency.equals(""))
-									frequency = frequency
-											+ Math.round(roundTwoDecimals(percentage(
-													optionCounts[j],
-													itemAnswers.size())));
+									frequency = frequency + Math.round(roundTwoDecimals(percentage(optionCounts[j], itemAnswers.size())));
 								else
-									frequency = frequency
-											+ "/"
-											+ Math.round(roundTwoDecimals(percentage(
-													optionCounts[j],
-													itemAnswers.size())));
-
+									frequency = frequency + "/" + Math.round(roundTwoDecimals(percentage(optionCounts[j], itemAnswers.size())));
 							}
+							
 							questionList.add(frequency);
 							
 							itemAnalysis.setFrequency(frequency);
@@ -931,13 +956,12 @@ public class Answer {
 							}
 
 							MapEnvelop questionMap = new MapEnvelop();
-							questionMap.put("q" + post.getId() + item.getId(),
-									questionList);
+							questionMap.put("q" + post.getId() + item.getId(), questionList);
 							data.add(questionMap);
 							
 							//save data at item level
 							itemAnalysis.setOsce(osce);
-							itemAnalysis.setQuestion(item);
+							itemAnalysis.setChecklistItem(item);
 							itemAnalysis.setOscePost(post);
 							itemAnalysis.setOsceSequence(seq);
 							itemAnalysis.persist();
@@ -950,13 +974,11 @@ public class Answer {
 						// 1. Missing at post level
 						double missingPercentageAtPostLevel = 0;
 						if (totalPerPost != 0)
-							missingPercentageAtPostLevel = percentage(
-									missingAtPostLevel, totalPerPost);
+							missingPercentageAtPostLevel = percentage(missingAtPostLevel, totalPerPost);
 
 						// missingPercentageAtPostLevel=roundTwoDecimals(missingPercentageAtPostLevel);
 
-						String missing = missingAtPostLevel + "/"
-								+ totalPerPost;
+						String missing = missingAtPostLevel + "/" + totalPerPost;
 						
 						postLevelList.add(missing);
 
@@ -1089,10 +1111,7 @@ public class Answer {
 			{
 				e.printStackTrace();
 			}
-			
-			
 		}
-		
 		return data;
 	}
 	
@@ -1107,8 +1126,6 @@ public class Answer {
 			
 			if(ItemAnalysis.countItemAnalysesByOsce(osce) > 0)
 			{
-			
-				
 				List<OsceDay> days = osce.getOsce_days();
 				
 				for(int i=0;i<days.size();i++)
@@ -1117,8 +1134,7 @@ public class Answer {
 					List<OsceSequence> seqs=day.getOsceSequences();
 					
 					for(int j=0;j<seqs.size();j++)
-					{
-						
+					{	
 						OsceSequence seq=seqs.get(j);
 						
 						//1. find seq level Data
@@ -1126,14 +1142,11 @@ public class Answer {
 						
 						List<String> seqLevelList = new ArrayList<String>();
 						
-						
 						for(int k=0;k<seqDatas.size();k++)
 						{
 							ItemAnalysis seqData=seqDatas.get(k);
-							
 							//create seq level list
 							seqLevelList.add(seqData.getStandardDeviation().toString());
-				
 						}
 						
 						//add seq level list to MAP
@@ -1145,8 +1158,6 @@ public class Answer {
 						
 						for(int l=0;l<posts.size();l++)
 						{
-							
-							
 							OscePost post=posts.get(l);
 							//2. find post level Data
 							List<ItemAnalysis> postDatas=ItemAnalysis.findPostLevelData(osce, seq,post);
@@ -1161,14 +1172,8 @@ public class Answer {
 								postLevelList.add(postData.getMissing().toString() +"/"+postData.getMissingPercentage());
 
 								//log.info("missing :" + "p" + post.getId() + "  " + postData.getMissing());
-
-							
-
-									postLevelList.add(postData.getMean().toString());
-									postLevelList.add(postData.getStandardDeviation().toString());
-							
-							
-
+								postLevelList.add(postData.getMean().toString());
+								postLevelList.add(postData.getStandardDeviation().toString());
 								
 								//4.points at post level
 								postLevelList.add("-");
@@ -1179,14 +1184,7 @@ public class Answer {
 								//6. Crohbach's alpha at post level
 								
 								postLevelList.add(postData.getCronbach().toString());
-								
-								
-								
-								
-					
 							}
-							
-							
 							
 							//add post level list to MAP
 							MapEnvelop postMap = new MapEnvelop();
@@ -1194,15 +1192,17 @@ public class Answer {
 							data.add(postMap);
 							
 							// retrieve distict item for this post
-							List<ChecklistQuestion> items = retrieveDistinctQuestion(post
-									.getId());
+							//List<ChecklistQuestion> items = retrieveDistinctQuestion(post.getId());
+							
+							List<ChecklistItem> items = retrieveDistinctQuestionItem(post.getId());
 							
 							for(int n=0;n<items.size();n++)
 							{
-								ChecklistQuestion item=items.get(n);
+								//ChecklistQuestion item=items.get(n);
+								ChecklistItem item=items.get(n);
 								
 								//2. find post level Data
-								List<ItemAnalysis> itemDatas=ItemAnalysis.findItemLevelData(osce, seq,post,item);
+								List<ItemAnalysis> itemDatas=ItemAnalysis.findQuestionItemLevelData(osce, seq,post,item);
 								List<String> questionList = new ArrayList<String>();
 								
 								for(int p=0;p<itemDatas.size();p++)
@@ -1216,13 +1216,8 @@ public class Answer {
 
 									//log.info("missing :" + "p" + post.getId() + "  "+ itemData.getMissing());
 
-								
-
 									questionList.add(itemData.getMean().toString());
 									questionList.add(itemData.getStandardDeviation().toString());
-								
-								
-
 									
 									//4.points at post level
 									questionList.add(itemData.getPoints());
@@ -1231,36 +1226,21 @@ public class Answer {
 									questionList.add(itemData.getFrequency());
 									
 									//6. Crohbach's alpha at post level
-									
 									questionList.add(itemData.getCronbach().toString());
-									
-									
-									
-									
-						
 								}
 								
 								MapEnvelop questionMap = new MapEnvelop();
-								questionMap.put("q" + post.getId() + item.getId(),
-										questionList);
+								questionMap.put("q" + post.getId() + item.getId(), questionList);
 								data.add(questionMap);
 							}
-							
-							
-							
 						}
-						
-						
-						
 					}
 				}
-				
 				
 				return data;
 			}
 			else //no data exist, than calculate with all item enable
 			{
-				
 				return calculate(osceId, analyticType, new HashSet<Long>(),null,null,null,null);
 			}
 		}
@@ -1280,23 +1260,19 @@ public class Answer {
 				
 					OscePost oscePost=postAnalysis.getOscePost();
 					
-					Integer maxCountValue = OscePost.findMaxValueOfCheckListQuestionByOscePost(oscePost.getId());
+					//Integer maxCountValue = OscePost.findMaxValueOfCheckListQuestionByOscePost(oscePost.getId());
+					Integer maxCountValue = OscePost.findMaxValueOfCheckListQuestionItemByOscePost(oscePost.getId());
 					
 					postLevelList.add(postAnalysis.getNumOfStudents().toString());
 					
-					
 					// pass
 					postLevelList.add(postAnalysis.getPassOrignal().toString()+"("+postAnalysis.getPassCorrected()+")");		
-				
-					
 					
 					// fail
 					postLevelList.add(postAnalysis.getFailOrignal()+"("+postAnalysis.getFailCorrected()+")");
 					
-					
 					// passing grade
 					postLevelList.add(postAnalysis.getBoundary().toString());
-				
 					
 					// average
 					Double postMeanPer = postAnalysis.getMean();
@@ -1309,7 +1285,6 @@ public class Answer {
 					if (maxCountValue > 0)
 						postSdPer = (postSdPer * 100) / maxCountValue;
 					postLevelList.add(String.format("%.2f", postSdPer));
-					
 					
 					// min
 					Integer postMinPer = postAnalysis.getMinOrignal();
@@ -1330,10 +1305,10 @@ public class Answer {
 						postLevelList.add("0");
 					
 					MapEnvelop postMap = new MapEnvelop();
-					postMap.put("p" + oscePost.getId(), postLevelList);
+					String postKey = "p" + oscePost.getId();
+					log.info("POST KEY : " + postKey);
+					postMap.put(postKey, postLevelList);
 					data.add(postMap);
-					
-					
 					
 					List<PostAnalysis> examinerLevelDatas=PostAnalysis.findExaminerLevelDatas(osce,oscePost);
 					
@@ -1345,23 +1320,17 @@ public class Answer {
 						//num of student
 						examinerLevelList.add(examinerPostAnalysis.getNumOfStudents().toString());
 						
-						
-						
 						// pass
-						examinerLevelList.add(examinerPostAnalysis.getPassOrignal().toString()+"("+examinerPostAnalysis.getPassCorrected()+")");		
-					
-						
+						examinerLevelList.add(examinerPostAnalysis.getPassOrignal().toString()+"("+examinerPostAnalysis.getPassCorrected()+")");	
 						
 						// fail
 						examinerLevelList.add(examinerPostAnalysis.getFailOrignal()+"("+examinerPostAnalysis.getFailCorrected()+")");
-						
 						
 						// passing grade
 						if (examinerPostAnalysis.getBoundary() != null)
 							examinerLevelList.add( examinerPostAnalysis.getBoundary().equals(Double.valueOf(0)) ? "-" : examinerPostAnalysis.getBoundary().toString());
 						else
 							examinerLevelList.add("-");
-					
 						
 						// average
 						Double meanPer = examinerPostAnalysis.getMean();
@@ -1401,21 +1370,14 @@ public class Answer {
 						data.add(examinerMap);
 						
 					}
-					
 				}
-				
-
 				return data;
-				
 			}
 			else //no data exist return null
 			{
 				return null;
 			}
 		}
-		
-		
-		
 		
 		return null;
 	}
@@ -1513,6 +1475,13 @@ public class Answer {
 		return q.getResultList();
 	}
 	
+	public static List<Answer> retrieveExportCsvDataByItemAndOscePost(Long osceDayId, Long oscePostId) {
+		EntityManager em = entityManager();
+		String queryString = "SELECT a FROM Answer a WHERE a.checklistItem.parentItem IS NOT NULL AND a.oscePostRoom.oscePost.id = " + oscePostId + " ORDER BY a.doctor, a.student, a.checklistItem.parentItem.sequenceNumber, a.checklistItem.sequenceNumber, a.checklistItem.id";
+		TypedQuery<Answer> q = em.createQuery(queryString, Answer.class);
+		return q.getResultList();
+	}
+	
 	public static List<Answer> retrieveExportCsvDataByOscePostAndStudent(Long oscePostId, Long studentId) {
 		EntityManager em = entityManager();
 		// String
@@ -1521,6 +1490,15 @@ public class Answer {
 		String queryString = "SELECT a FROM Answer a join a.checklistQuestion c join c.checkListTopic t WHERE a.oscePostRoom.oscePost.id = "
 				+ oscePostId + " AND a.student.id = " + studentId 
 				+ " ORDER BY a.doctor, a.student, t.sort_order, c.sequenceNumber, c.id";
+		TypedQuery<Answer> q = em.createQuery(queryString, Answer.class);
+		return q.getResultList();
+	}
+	
+	public static List<Answer> retrieveExportCsvDataByItemOscePostAndStudent(Long oscePostId, Long studentId) {
+		EntityManager em = entityManager();
+		String queryString = "SELECT a FROM Answer a WHERE a.checklistItem.parentItem IS NOT NULL " +
+				"AND a.oscePostRoom.oscePost.id = " + oscePostId + " AND a.student.id = " + studentId + 
+				" ORDER BY a.doctor, a.student, a.checklistItem.parentItem.sequenceNumber, a.checklistItem.sequenceNumber, a.checklistItem.id";
 		TypedQuery<Answer> q = em.createQuery(queryString, Answer.class);
 		return q.getResultList();
 	}
@@ -1546,6 +1524,25 @@ public class Answer {
 				+ questionId
 				+ " and a.oscePostRoom in (select distinct (oscePostRoom) from Assignment where osceDay.id = "
 				+ osceDayId + ") order by a.doctor,a.student";
+		TypedQuery<Answer> q = em.createQuery(queryString, Answer.class);
+		List<Answer> a = q.getResultList();
+		if (a.size() > 0)
+			return q.getResultList().get(0);
+		else
+			return null;
+
+	}
+	
+	public static Answer findItemAnswer(Long studentId, Long questionId, Long osceDayId) {
+		EntityManager em = entityManager();
+		
+		String queryString = "SELECT a FROM Answer a where a.student="
+				+ studentId
+				+ " and a.checklistItem.id ="
+				+ questionId
+				+ " and a.oscePostRoom in (select distinct (oscePostRoom) from Assignment where osceDay.id = "
+				+ osceDayId + ") order by a.doctor,a.student";
+		
 		TypedQuery<Answer> q = em.createQuery(queryString, Answer.class);
 		List<Answer> a = q.getResultList();
 		if (a.size() > 0)

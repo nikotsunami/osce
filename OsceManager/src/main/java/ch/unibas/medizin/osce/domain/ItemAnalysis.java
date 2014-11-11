@@ -1,12 +1,10 @@
 package ch.unibas.medizin.osce.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang.StringUtils;
@@ -50,6 +48,8 @@ public class ItemAnalysis {
 	
 	Boolean deActivate;
 	
+	@ManyToOne
+	ChecklistItem checklistItem;
 	
 	public static void clearData(Osce osce)
 	{
@@ -68,7 +68,7 @@ public class ItemAnalysis {
 		
 	}
 	
-	public static List<ItemAnalysis> findSeqLevelData(Osce osce, OsceSequence osceSequence)
+	/*public static List<ItemAnalysis> findSeqLevelData(Osce osce, OsceSequence osceSequence)
 	{
 		EntityManager em = entityManager();
 		
@@ -78,9 +78,21 @@ public class ItemAnalysis {
 		q.setParameter("osceSequence", osceSequence);
 		List<ItemAnalysis> items=q.getResultList();
 		return items;
+	}*/
+	
+	public static List<ItemAnalysis> findSeqLevelData(Osce osce, OsceSequence osceSequence)
+	{
+		EntityManager em = entityManager();
+		
+		String qlString="select i from ItemAnalysis i where i.checklistItem is null and oscePost is null and osce=:osce and osceSequence=:osceSequence";
+		TypedQuery<ItemAnalysis> q=em.createQuery(qlString, ItemAnalysis.class);
+		q.setParameter("osce", osce);
+		q.setParameter("osceSequence", osceSequence);
+		List<ItemAnalysis> items=q.getResultList();
+		return items;
 	}
 	
-	public static List<ItemAnalysis> findPostLevelData(Osce osce, OsceSequence osceSequence,OscePost oscePost)
+	/*public static List<ItemAnalysis> findPostLevelData(Osce osce, OsceSequence osceSequence,OscePost oscePost)
 	{
 		EntityManager em = entityManager();
 		
@@ -91,13 +103,40 @@ public class ItemAnalysis {
 		q.setParameter("oscePost", oscePost);
 		List<ItemAnalysis> items=q.getResultList();
 		return items;
+	}*/
+	
+	public static List<ItemAnalysis> findPostLevelData(Osce osce, OsceSequence osceSequence,OscePost oscePost)
+	{
+		EntityManager em = entityManager();
+		
+		String qlString="select i from ItemAnalysis i where i.checklistItem is null  and osce=:osce and osceSequence=:osceSequence and oscePost=:oscePost";
+		TypedQuery<ItemAnalysis> q=em.createQuery(qlString, ItemAnalysis.class);
+		q.setParameter("osce", osce);
+		q.setParameter("osceSequence", osceSequence);
+		q.setParameter("oscePost", oscePost);
+		List<ItemAnalysis> items=q.getResultList();
+		return items;
 	}
 	
-	public static List<ItemAnalysis> findItemLevelData(Osce osce, OsceSequence osceSequence,OscePost oscePost,ChecklistQuestion question)
+	/*public static List<ItemAnalysis> findItemLevelData(Osce osce, OsceSequence osceSequence,OscePost oscePost,ChecklistQuestion question)
 	{
 		EntityManager em = entityManager();
 		
 		String qlString="select i from ItemAnalysis i where  osce=:osce and osceSequence=:osceSequence and oscePost=:oscePost  and question=:question";
+		TypedQuery<ItemAnalysis> q=em.createQuery(qlString, ItemAnalysis.class);
+		q.setParameter("osce", osce);
+		q.setParameter("osceSequence", osceSequence);
+		q.setParameter("oscePost", oscePost);
+		q.setParameter("question", question);
+		List<ItemAnalysis> items=q.getResultList();
+		return items;
+	}*/
+	
+	public static List<ItemAnalysis> findQuestionItemLevelData(Osce osce, OsceSequence osceSequence,OscePost oscePost,ChecklistItem question)
+	{
+		EntityManager em = entityManager();
+		
+		String qlString="select i from ItemAnalysis i where i.osce=:osce and i.osceSequence=:osceSequence and i.oscePost=:oscePost and i.checklistItem=:question";
 		TypedQuery<ItemAnalysis> q=em.createQuery(qlString, ItemAnalysis.class);
 		q.setParameter("osce", osce);
 		q.setParameter("osceSequence", osceSequence);
@@ -156,6 +195,14 @@ public class ItemAnalysis {
 	{
 		EntityManager em = entityManager();
 		String sql = "SELECT ia.question.id FROM ItemAnalysis ia WHERE ia.osceSequence.id = " + osceSeqId + " AND ia.oscePost.id = " + oscePostId + " AND ia.question IS NOT NULL AND ia.deActivate = 1";
+		TypedQuery<Long> q = em.createQuery(sql, Long.class);
+		return q.getResultList();
+	}
+	
+	public static List<Long> findDeactivatedChecklistItemByOscePostAndOsceSeq(Long oscePostId, Long osceSeqId)
+	{
+		EntityManager em = entityManager();
+		String sql = "SELECT ia.checklistItem.id FROM ItemAnalysis ia WHERE ia.osceSequence.id = " + osceSeqId + " AND ia.oscePost.id = " + oscePostId + " AND ia.checklistItem IS NOT NULL AND ia.deActivate = 1";
 		TypedQuery<Long> q = em.createQuery(sql, Long.class);
 		return q.getResultList();
 	}

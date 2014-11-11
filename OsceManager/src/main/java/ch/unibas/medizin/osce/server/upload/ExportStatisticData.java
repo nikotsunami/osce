@@ -27,6 +27,8 @@ import org.apache.commons.math.stat.StatUtils;
 import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.Answer;
+import ch.unibas.medizin.osce.domain.CheckList;
+import ch.unibas.medizin.osce.domain.ChecklistItem;
 import ch.unibas.medizin.osce.domain.ChecklistOption;
 import ch.unibas.medizin.osce.domain.ChecklistQuestion;
 import ch.unibas.medizin.osce.domain.ChecklistTopic;
@@ -479,13 +481,19 @@ public class ExportStatisticData extends HttpServlet{
 									writer.append("students");
 									writer.append('|');
 									
-									List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
+									//List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
+									List<Long> postMissingItemQueList = ItemAnalysis.findDeactivatedChecklistItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId()); 
 									String missingQue = "";
 									
-									List<ChecklistTopic> checklistTopicList = new ArrayList<ChecklistTopic>();
+									//List<ChecklistTopic> checklistTopicList = new ArrayList<ChecklistTopic>();
+									List<ChecklistItem> checklistItemTopicList = new ArrayList<ChecklistItem>();
+									
+									if (oscePost.getStandardizedRole() != null && oscePost.getStandardizedRole().getCheckList() != null) {
+										checklistItemTopicList = ChecklistItem.findChecklistTopicByChecklist(oscePost.getStandardizedRole().getCheckList().getId());
+									}
 
-									if (oscePost.getStandardizedRole() != null)
-										checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
+									/*if (oscePost.getStandardizedRole() != null)
+										checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();*/
 									
 									alphaSeq = 'A';
 									
@@ -493,24 +501,27 @@ public class ExportStatisticData extends HttpServlet{
 									impressionQuestion.clear();
 									
 									
-									for (ChecklistTopic checklistTopic : checklistTopicList)
+									//for (ChecklistTopic checklistTopic : checklistTopicList)
+									for (ChecklistItem checklistItemTopic : checklistItemTopicList)
 									{
-										List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
+										//List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
+										List<ChecklistItem> itemQuestionList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistItemTopic.getId());
 										
 										int count = 1;
-										for (ChecklistQuestion question : questionList)
+										//for (ChecklistQuestion question : questionList)
+										for (ChecklistItem question : itemQuestionList)
 										{
-											if ((impressionQueId == null || impressionQueId == 0)  && question.getIsOveralQuestion() != null && question.getIsOveralQuestion())
+											if ((impressionQueId == null || impressionQueId == 0)  && question.getIsRegressionItem() != null && question.getIsRegressionItem())
 											{
 												impressionQueId = question.getId();
 											}
 											
-											if(question.getIsOveralQuestion() != null && question.getIsOveralQuestion())
+											if(question.getIsRegressionItem() != null && question.getIsRegressionItem())
 											{
 												impressionQuestion.add(question.getId());
 											}
 											
-											if (postMissingQueList.contains(question.getId()) == false)
+											if (postMissingItemQueList.contains(question.getId()) == false)
 											{
 												if (flag)
 													writer.append(question.getId().toString());
@@ -520,7 +531,7 @@ public class ExportStatisticData extends HttpServlet{
 												writer.append('|');
 											}
 											
-											if (flag == true && postMissingQueList.contains(question.getId()))
+											if (flag == true && postMissingItemQueList.contains(question.getId()))
 											{
 												if (missingQue == null || missingQue.isEmpty())
 													missingQue = String.valueOf(alphaSeq) + count;
@@ -530,9 +541,6 @@ public class ExportStatisticData extends HttpServlet{
 											
 											count += 1;
 											//writer.append(question.getId().toString());
-											
-											
-											
 										}
 										alphaSeq++;
 									}
@@ -551,10 +559,10 @@ public class ExportStatisticData extends HttpServlet{
 									if (flag)
 									{
 										writer.append("Bonus Point");
-										
 									}
 									
-								    List<Answer> answerList = Answer.retrieveExportCsvDataByOscePost(osceDay.getId(), oscePost.getId());
+								    //List<Answer> answerList = Answer.retrieveExportCsvDataByOscePost(osceDay.getId(), oscePost.getId());
+								    List<Answer> answerList = Answer.retrieveExportCsvDataByItemAndOscePost(osceDay.getId(), oscePost.getId());
 								    Long lastCandidateId = null;
 								    Answer answer = null;
 								    
@@ -569,11 +577,13 @@ public class ExportStatisticData extends HttpServlet{
 								    		{
 								    			for(int l=0;l<impressionQuestion.size();l++)
 								    			{
-								    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
+								    				//Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
+								    				Answer impressionItem1=Answer.findItemAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
 								    				if(impressionItem1.getChecklistOption()!=null)
-								    				writer.append(impressionItem1.getChecklistOption().getValue());
+								    					writer.append(impressionItem1.getChecklistOption().getValue());
 								    				else
 								    					writer.append("0");
+								    				
 								    				writer.append('|');
 								    			}
 									    		/*else
@@ -607,7 +617,7 @@ public class ExportStatisticData extends HttpServlet{
 								    		lastCandidateId = answer.getStudent().getId();
 								    	}
 							    		
-							    		if (postMissingQueList.contains(answer.getChecklistQuestion().getId()) == false)
+							    		if (postMissingItemQueList.contains(answer.getChecklistItem().getId()) == false)
 								    	{
 							    			if(answer.getChecklistOption()!=null)
 									    		writer.append(answer.getChecklistOption().getValue());
@@ -626,9 +636,8 @@ public class ExportStatisticData extends HttpServlet{
 								    	
 								    	for(int l=0;l<impressionQuestion.size();l++)
 						    			{
-						    				
-						    				
-						    				Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
+						    				//Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
+						    				Answer impressionItem1=Answer.findItemAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
 						    				if(impressionItem1.getChecklistOption() !=null)
 						    					writer.append(impressionItem1.getChecklistOption().getValue());
 						    				else
@@ -643,7 +652,11 @@ public class ExportStatisticData extends HttpServlet{
 								    	
 								    	if (flag)
 						    			{	
-						    				Integer addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), answerList.get(answerList.size()-1).getDoctor().getId());
+								    		Long examinerId = answerList.get(answerList.size()-1).getDoctor().getId();
+								    		if (examinerId.equals(53l) || examinerId.equals(99l)) {
+								    			System.out.println("ID : " + examinerId);
+								    		}
+						    				Integer addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), examinerId);
 						    				writer.append(addPoint.toString());
 						    				
 						    			}
@@ -678,7 +691,8 @@ public class ExportStatisticData extends HttpServlet{
 									writer.append("\n");
 									
 									//data
-									List<Doctor> examiner=Answer.retrieveDistinctExaminer(oscePost.getId());
+									//List<Doctor> examiner=Answer.retrieveDistinctExaminer(oscePost.getId());
+									List<Doctor> examiner = Answer.retrieveDistinctExaminerByItem(oscePost.getId());
 									
 									for(Doctor d:examiner)
 									{
@@ -712,9 +726,11 @@ public class ExportStatisticData extends HttpServlet{
 									//writer.append('|');
 									writer.append("\n");
 									//data
-									List<Student> examiner=Answer.retrieveDistinctStudent(oscePost.getId());
+									//List<Student> examiner=Answer.retrieveDistinctStudent(oscePost.getId());
+									List<Student> student = Answer.retrieveDistinctStudentByItem(oscePost.getId());
 									
-									for(Student d:examiner)
+									
+									for(Student d:student)
 									{
 										writer.append(d.getId().toString());
 										writer.append('|');
@@ -778,18 +794,21 @@ public class ExportStatisticData extends HttpServlet{
 									//writer.append('|');
 									writer.append("\n");
 									
-									List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
+									//List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
+									List<Long> postMissingQueList = ItemAnalysis.findDeactivatedChecklistItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
 									
-									List<ChecklistQuestion> items=Answer.retrieveDistinctQuestion(oscePost.getId());
-									for(ChecklistQuestion d:items)
+									//List<ChecklistQuestion> items=Answer.retrieveDistinctQuestion(oscePost.getId());
+									List<ChecklistItem> items=Answer.retrieveDistinctQuestionItem(oscePost.getId());
+									//for(ChecklistQuestion d:items)
+									for(ChecklistItem d:items)
 									{
 										if (postMissingQueList.contains(d.getId()) == false)
 										{
 											writer.append(d.getId().toString());
 											writer.append('|');
-											writer.append(d.getCheckListTopic().getId().toString());
+											writer.append(d.getParentItem().getId().toString());
 											writer.append('|');
-											writer.append(d.getQuestion());
+											writer.append(d.getName());
 											writer.append('|');
 											
 											List<ChecklistOption> options=d.getCheckListOptions();
@@ -821,7 +840,7 @@ public class ExportStatisticData extends HttpServlet{
 											
 											writer.append(points);
 											writer.append('|');
-											writer.append(d.getIsOveralQuestion().toString());
+											writer.append(d.getIsRegressionItem().toString());
 											writer.append('|');
 											writer.append(""+weight);
 											//writer.append('|');
@@ -833,12 +852,7 @@ public class ExportStatisticData extends HttpServlet{
 								    writer.close();
 								}
 								
-								
 							}
-							
-							
-							
-
 						}
 					}
 				}
@@ -917,13 +931,20 @@ public class ExportStatisticData extends HttpServlet{
 							writer.append('|');
 							
 							
-							List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
+							//List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
+							List<Long> postMissingQueList = ItemAnalysis.findDeactivatedChecklistItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
 							String missingQue = "";
 							
-							List<ChecklistTopic> checklistTopicList = new ArrayList<ChecklistTopic>();
+							/*List<ChecklistTopic> checklistTopicList = new ArrayList<ChecklistTopic>();
 
 							if (oscePost.getStandardizedRole() != null)
-								checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
+								checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();*/
+							
+							List<ChecklistItem> checklistItemTopicList = new ArrayList<ChecklistItem>();
+							
+							if (oscePost.getStandardizedRole() != null && oscePost.getStandardizedRole().getCheckList() != null) {
+								checklistItemTopicList = ChecklistItem.findChecklistTopicByChecklist(oscePost.getStandardizedRole().getCheckList().getId());
+							}
 							
 							alphaSeq = 'A';
 							
@@ -931,26 +952,30 @@ public class ExportStatisticData extends HttpServlet{
 							
 							List<Long> questionIdList = new ArrayList<Long>();
 														
-							for (ChecklistTopic checklistTopic : checklistTopicList)
+							//for (ChecklistTopic checklistTopic : checklistTopicList)
+							for (ChecklistItem checklistItemTopic : checklistItemTopicList)
 							{
-								List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
+								//List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
+								List<ChecklistItem> itemQuestionList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistItemTopic.getId());
+								
 								
 								int count = 1;
-								for (ChecklistQuestion question : questionList)
+								//for (ChecklistQuestion question : questionList)
+								for (ChecklistItem questionItem : itemQuestionList)
 								{
-									if ((impressionQueId == null || impressionQueId == 0)  && question.getIsOveralQuestion() != null && question.getIsOveralQuestion())
+									if ((impressionQueId == null || impressionQueId == 0)  && questionItem.getIsRegressionItem() != null && questionItem.getIsRegressionItem())
 									{
-										impressionQueId = question.getId();
+										impressionQueId = questionItem.getId();
 									}
 									
-									questionIdList.add(question.getId());
+									questionIdList.add(questionItem.getId());
 									
 									if (flag)
 										writer.append(String.valueOf(alphaSeq) + count);
 									else
-										writer.append("Q" + String.valueOf(question.getId()));
+										writer.append("Q" + String.valueOf(questionItem.getId()));
 									
-									if (flag == true && postMissingQueList.contains(question.getId()))
+									if (flag == true && postMissingQueList.contains(questionItem.getId()))
 									{
 										if (missingQue == null || missingQue.isEmpty())
 											missingQue = String.valueOf(alphaSeq) + count;
@@ -986,7 +1011,8 @@ public class ExportStatisticData extends HttpServlet{
 							
 							for (Student student : studentList) {
 								
-								List<Answer> answerList = Answer.retrieveExportCsvDataByOscePostAndStudent(oscePost.getId(), student.getId());
+								//List<Answer> answerList = Answer.retrieveExportCsvDataByOscePostAndStudent(oscePost.getId(), student.getId());
+								List<Answer> answerList = Answer.retrieveExportCsvDataByItemOscePostAndStudent(oscePost.getId(), student.getId());
 								
 								if (answerList.size() > 0 && answerList.size() <= questionIdList.size())
 								{
@@ -1003,8 +1029,11 @@ public class ExportStatisticData extends HttpServlet{
 						    		Map<Long, ChecklistOption> answerMap = new HashMap<Long, ChecklistOption>();
 						    		
 						    		for (Answer ans : answerList) {
-						    			if (ans.getChecklistQuestion() != null)
-						    				answerMap.put(ans.getChecklistQuestion().getId(), ans.getChecklistOption());
+						    			/*if (ans.getChecklistQuestion() != null)
+						    				answerMap.put(ans.getChecklistQuestion().getId(), ans.getChecklistOption());*/
+						    			
+						    			if (ans.getChecklistItem() != null)
+						    				answerMap.put(ans.getChecklistItem().getId(), ans.getChecklistOption());
 									}
 						    		
 						    		for (Long queId : questionIdList)
@@ -1026,7 +1055,8 @@ public class ExportStatisticData extends HttpServlet{
 					    			
 					    			if (impressionQueId != null && impressionQueId != 0)
 					    			{
-					    				Answer impressionItem1=Answer.findAnswer(student.getId(), impressionQueId, osceDay.getId());
+					    				//Answer impressionItem1=Answer.findAnswer(student.getId(), impressionQueId, osceDay.getId());
+					    				Answer impressionItem1=Answer.findItemAnswer(student.getId(), impressionQueId, osceDay.getId());
 					    				//writer.append(impressionItem1.getChecklistOption().getValue());
 					    				if (impressionItem1 != null)
 					    					writer.append(impressionItem1.getChecklistOption().getValue());
@@ -1224,10 +1254,16 @@ writer.append(answer.getStudent().getId() );
 				OscePost oscePost = OscePost.findOscePost(oscePostId);
 
 				
-				List<ChecklistTopic> checklistTopicList = new ArrayList<ChecklistTopic>();
+				/*List<ChecklistTopic> checklistTopicList = new ArrayList<ChecklistTopic>();
 				
 				if (oscePost.getStandardizedRole() != null)
-					checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
+					checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();*/
+				
+				List<ChecklistItem> checklistItemTopicList = new ArrayList<ChecklistItem>();
+				
+				if (oscePost.getStandardizedRole() != null && oscePost.getStandardizedRole().getCheckList() != null) {
+					checklistItemTopicList = ChecklistItem.findChecklistTopicByChecklist(oscePost.getStandardizedRole().getCheckList().getId());
+				}
 				
 				//impressionQueId = null;
 				
@@ -1238,21 +1274,24 @@ writer.append(answer.getStudent().getId() );
 				
 				List<Long> questionIdList = new ArrayList<Long>();
 				
-				for (ChecklistTopic checklistTopic : checklistTopicList)
+				//for (ChecklistTopic checklistTopic : checklistTopicList)
+				for (ChecklistItem checklistItemTopic : checklistItemTopicList)
 				{
-					List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
+					//List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
+					List<ChecklistItem> itemQuestionList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistItemTopic.getId());
 					
 					int count = 1;
-					for (ChecklistQuestion question : questionList)
+					//for (ChecklistQuestion question : questionList)
+					for (ChecklistItem questionItem : itemQuestionList)
 					{
-						if ((impressionQueId == null || impressionQueId.equals(0))  && question.getIsOveralQuestion() != null && question.getIsOveralQuestion())
+						if ((impressionQueId == null || impressionQueId.equals(0))  && questionItem.getIsRegressionItem() != null && questionItem.getIsRegressionItem())
 						{
-							impressionQueId = question.getId();
+							impressionQueId = questionItem.getId();
 						}
 						
-						questionIdList.add(question.getId());
+						questionIdList.add(questionItem.getId());
 						
-						writer.append("Q" + String.valueOf(question.getId()));					
+						writer.append("Q" + String.valueOf(questionItem.getId()));					
 						writer.append('|');
 					}
 				}
@@ -1265,7 +1304,8 @@ writer.append(answer.getStudent().getId() );
 				
 				for (Student student : studentList) {
 					
-					List<Answer> answerList = Answer.retrieveExportCsvDataByOscePostAndStudent(oscePost.getId(), student.getId());
+					//List<Answer> answerList = Answer.retrieveExportCsvDataByOscePostAndStudent(oscePost.getId(), student.getId());
+					List<Answer> answerList = Answer.retrieveExportCsvDataByItemOscePostAndStudent(oscePost.getId(), student.getId());
 					
 					if (answerList.size() > 0 && answerList.size() <= questionIdList.size())
 					{
@@ -1279,7 +1319,7 @@ writer.append(answer.getStudent().getId() );
 			    		
 			    		for (Answer ans : answerList) {
 			    			if (ans.getChecklistQuestion() != null)
-			    				answerMap.put(ans.getChecklistQuestion().getId(), ans.getChecklistOption());
+			    				answerMap.put(ans.getChecklistItem().getId(), ans.getChecklistOption());
 						}
 			    		
 			    		for (Long queId : questionIdList)
@@ -1297,7 +1337,8 @@ writer.append(answer.getStudent().getId() );
 			    			writer.append(addPoint.toString());
 		    				writer.append('|');
 		    				
-		    				Answer impressionItem1=Answer.findAnswer(student.getId(), impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
+		    				//Answer impressionItem1=Answer.findAnswer(student.getId(), impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
+		    				Answer impressionItem1=Answer.findItemAnswer(student.getId(), impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
 		    				
 		    				if (impressionItem1 != null)
 		    					writer.append(impressionItem1.getChecklistOption().getValue());
@@ -1415,10 +1456,16 @@ writer.append(answer.getStudent().getId() );
 				
 				OscePost oscePost = OscePost.findOscePost(oscePostId);
 				
-				List<ChecklistTopic> checklistTopicList = new ArrayList<ChecklistTopic>();
+				/*List<ChecklistTopic> checklistTopicList = new ArrayList<ChecklistTopic>();
 				
 				if (oscePost.getStandardizedRole() != null)
-					checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
+					checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();*/
+				
+				List<ChecklistItem> checklistItemTopicList = new ArrayList<ChecklistItem>();
+				
+				if (oscePost.getStandardizedRole() != null && oscePost.getStandardizedRole().getCheckList() != null) {
+					checklistItemTopicList = ChecklistItem.findChecklistTopicByChecklist(oscePost.getStandardizedRole().getCheckList().getId());
+				}
 				
 				//impressionQueId = null;
 				
@@ -1428,23 +1475,26 @@ writer.append(answer.getStudent().getId() );
 				
 				List<Long> questionIdList = new ArrayList<Long>();
 				
-				for (ChecklistTopic checklistTopic : checklistTopicList)
+				//for (ChecklistTopic checklistTopic : checklistTopicList)
+				for (ChecklistItem checklistItemTopic : checklistItemTopicList)
 				{
-					List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
+					//List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
+					List<ChecklistItem> itemQuestionList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistItemTopic.getId());
 					
 					int count = 1;
-					for (ChecklistQuestion question : questionList)
+					//for (ChecklistQuestion question : questionList)
+					for (ChecklistItem questionItem : itemQuestionList)
 					{
-						if ((impressionQueId == null || impressionQueId == 0)  && question.getIsOveralQuestion() != null && question.getIsOveralQuestion())
+						if ((impressionQueId == null || impressionQueId == 0)  && questionItem.getIsRegressionItem() != null && questionItem.getIsRegressionItem())
 						{
-							impressionQueId = question.getId();
+							impressionQueId = questionItem.getId();
 						}
 						
-						writer.append("Q" + String.valueOf(question.getId()));
+						writer.append("Q" + String.valueOf(questionItem.getId()));
 						
 						writer.append('|');
 						
-						questionIdList.add(question.getId());
+						questionIdList.add(questionItem.getId());
 					}
 					
 				}
@@ -1457,7 +1507,8 @@ writer.append(answer.getStudent().getId() );
 				
 				for (Student student : studentList) {
 					
-					List<Answer> answerList = Answer.retrieveExportCsvDataByOscePostAndStudent(oscePost.getId(), student.getId());
+					//List<Answer> answerList = Answer.retrieveExportCsvDataByOscePostAndStudent(oscePost.getId(), student.getId());
+					List<Answer> answerList = Answer.retrieveExportCsvDataByItemOscePostAndStudent(oscePost.getId(), student.getId());
 					
 					if (answerList.size() > 0 && answerList.size() <= questionIdList.size())
 					{
@@ -1470,8 +1521,11 @@ writer.append(answer.getStudent().getId() );
 			    		Map<Long, ChecklistOption> answerMap = new HashMap<Long, ChecklistOption>();
 			    		
 			    		for (Answer ans : answerList) {
-			    			if (ans.getChecklistQuestion() != null)
-			    				answerMap.put(ans.getChecklistQuestion().getId(), ans.getChecklistOption());
+			    			/*if (ans.getChecklistQuestion() != null)
+			    				answerMap.put(ans.getChecklistQuestion().getId(), ans.getChecklistOption());*/
+			    			
+			    			if (ans.getChecklistItem() != null)
+			    				answerMap.put(ans.getChecklistItem().getId(), ans.getChecklistOption());
 						}
 			    		
 			    		for (Long queId : questionIdList)
@@ -1501,7 +1555,8 @@ writer.append(answer.getStudent().getId() );
 		    				writer.append(addPoint.toString());
 		    				writer.append('|');
 		    				
-		    				Answer impressionItem1=Answer.findAnswer(student.getId(), impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
+		    				//Answer impressionItem1=Answer.findAnswer(student.getId(), impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
+		    				Answer impressionItem1=Answer.findItemAnswer(student.getId(), impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
 		    				//writer.append(impressionItem1.getChecklistOption().getValue());
 		    				if (impressionItem1 != null)
 		    					writer.append(impressionItem1.getChecklistOption().getValue());
@@ -1651,45 +1706,55 @@ writer.append(answer.getStudent().getId() );
 				writer.append("students");
 				writer.append('|');
 				
-				List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), oscePost.getOsceSequence().getId());
+				//List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), oscePost.getOsceSequence().getId());
+				List<Long> postMissingQueList = ItemAnalysis.findDeactivatedChecklistItemByOscePostAndOsceSeq(oscePost.getId(), oscePost.getOsceSequence().getId());
 				String missingQue = "";
 				
-				List<ChecklistTopic> checklistTopicList = new ArrayList<ChecklistTopic>();
+				/*List<ChecklistTopic> checklistTopicList = new ArrayList<ChecklistTopic>();
 				
 				if (oscePost.getStandardizedRole() != null)
-					checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();
+					checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();*/
 				alphaSeq = 'A';
 				
 				impressionQueId = PostAnalysis.findImpressionQuestionByOscePostAndOsce(oscePost.getId(), oscePost.getOsceSequence().getOsceDay().getOsce().getId());
 				
+				List<ChecklistItem> checklistItemTopicList = new ArrayList<ChecklistItem>();
+				
+				if (oscePost.getStandardizedRole() != null && oscePost.getStandardizedRole().getCheckList() != null) {
+					checklistItemTopicList = ChecklistItem.findChecklistTopicByChecklist(oscePost.getStandardizedRole().getCheckList().getId());
+				}
 				/*String impressionItemString=request.getParameter("p"+oscePost.getId().toString());							
 				if (impressionItemString != null)
 					impressionQueId=Long.parseLong(impressionItemString);*/
 				
 				List<Long> questionIdList = new ArrayList<Long>();
 				
-				for (ChecklistTopic checklistTopic : checklistTopicList)
+				//for (ChecklistTopic checklistTopic : checklistTopicList)
+				for (ChecklistItem checklistTopicItem : checklistItemTopicList)
 				{
-					List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
+					//List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
+					List<ChecklistItem> itemQuestionList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistTopicItem.getId());
+					
 					
 					int count = 1;
-					for (ChecklistQuestion question : questionList)
+					//for (ChecklistQuestion question : questionList)
+					for (ChecklistItem questionItem : itemQuestionList)
 					{
-						if ((impressionQueId == null || impressionQueId == 0)  && question.getIsOveralQuestion() != null && question.getIsOveralQuestion())
+						if ((impressionQueId == null || impressionQueId == 0)  && questionItem.getIsRegressionItem() != null && questionItem.getIsRegressionItem())
 						{
-							impressionQueId = question.getId();
+							impressionQueId = questionItem.getId();
 						}
 						
-						questionIdList.add(question.getId());
+						questionIdList.add(questionItem.getId());
 						
-						writer.append("Q" + String.valueOf(question.getId()));
+						writer.append("Q" + String.valueOf(questionItem.getId()));
 						
-						if (postMissingQueList.contains(question.getId()))
+						if (postMissingQueList.contains(questionItem.getId()))
 						{
 							if (missingQue == null || missingQue.isEmpty())
-								missingQue = "Q" + String.valueOf(question.getId());
+								missingQue = "Q" + String.valueOf(questionItem.getId());
 							else
-								missingQue = missingQue + "," + "Q" + String.valueOf(question.getId());
+								missingQue = missingQue + "," + "Q" + String.valueOf(questionItem.getId());
 						}
 						
 						count += 1;
@@ -1707,7 +1772,8 @@ writer.append(answer.getStudent().getId() );
 				
 				for (Student student : studentList) {
 					
-					List<Answer> answerList = Answer.retrieveExportCsvDataByOscePostAndStudent(oscePost.getId(), student.getId());
+					//List<Answer> answerList = Answer.retrieveExportCsvDataByOscePostAndStudent(oscePost.getId(), student.getId());
+					List<Answer> answerList = Answer.retrieveExportCsvDataByItemOscePostAndStudent(oscePost.getId(), student.getId());
 					
 					if (answerList.size() > 0 && answerList.size() <= questionIdList.size())
 					{
@@ -1720,8 +1786,10 @@ writer.append(answer.getStudent().getId() );
 			    		Map<Long, ChecklistOption> answerMap = new HashMap<Long, ChecklistOption>();
 			    		
 			    		for (Answer ans : answerList) {
-			    			if (ans.getChecklistQuestion() != null)
-			    				answerMap.put(ans.getChecklistQuestion().getId(), ans.getChecklistOption());
+			    			/*if (ans.getChecklistQuestion() != null)
+			    				answerMap.put(ans.getChecklistQuestion().getId(), ans.getChecklistOption());*/
+			    			if (ans.getChecklistItem() != null)
+			    				answerMap.put(ans.getChecklistItem().getId(), ans.getChecklistOption());
 						}
 			    		
 			    		for (Long queId : questionIdList)
@@ -1740,7 +1808,8 @@ writer.append(answer.getStudent().getId() );
 		    			
 		    			if (impressionQueId != null && impressionQueId != 0)
 		    			{
-		    				Answer impressionItem1=Answer.findAnswer(student.getId(), impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
+		    				//Answer impressionItem1=Answer.findAnswer(student.getId(), impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
+		    				Answer impressionItem1=Answer.findItemAnswer(student.getId(), impressionQueId, oscePost.getOsceSequence().getOsceDay().getId());
 		    				if (impressionItem1 != null)
 		    					writer.append(impressionItem1.getChecklistOption().getValue());
 		    				else

@@ -1,13 +1,12 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.StatisticalEvaluation;
 
 import ch.unibas.medizin.osce.client.managed.request.AnswerProxy;
-import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistItemProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.style.widgets.NumberSpinner;
 
 import com.google.gwt.dom.client.TableElement;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ToggleButton;
@@ -27,10 +26,10 @@ public interface StatisticalEvaluationDetailsItemView {
 	    
 	    void setDelegate(Delegate delegate);
 	    
-	    public ChecklistQuestionProxy getChecklistQuestionProxy();
+	   /* public ChecklistQuestionProxy getChecklistQuestionProxy();
 	    
 	    public void setChecklistQuestionProxy(
-				ChecklistQuestionProxy checklistQuestionProxy);
+				ChecklistQuestionProxy checklistQuestionProxy);*/
 	    
 	    public Widget asWidget();
 	    
@@ -65,4 +64,8 @@ public interface StatisticalEvaluationDetailsItemView {
 		public void setOscePostProxy(OscePostProxy oscePostProxy) ;
 		
 		public NumberSpinner getAddPoint();
+		
+		public ChecklistItemProxy getChecklistItemProxy();
+		
+		public void setChecklistItemProxy(ChecklistItemProxy checklistItemProxy);
 }
