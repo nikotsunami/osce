@@ -177,9 +177,12 @@ public class ExportStatisticData extends HttpServlet{
 							postFileName = oscePost.getStandardizedRole().getShortName() + "_" + osceSeq.getLabel() +".csv";
 							postFileName = postFileName.replaceAll("\\\\", "");
 							postFileName = postFileName.replaceAll("\\/", "");
+							postFileName = postFileName.replaceAll(" ", "");
+							
 							fileName = "Day"+ (i+1) + "_" + ("P"+noOfOscePost) + "_" + oscePost.getStandardizedRole().getShortName() + "_" +osceSeq.getLabel();
 							fileName = fileName.replaceAll("\\\\", "");
 							fileName = fileName.replaceAll("\\/", "");
+							fileName = fileName.replaceAll(" ", "");
 							
 							postShortNameList.add(oscePost.getStandardizedRole().getShortName());
 							postLongNameList.add(oscePost.getStandardizedRole().getLongName());
@@ -466,6 +469,7 @@ public class ExportStatisticData extends HttpServlet{
 							
 								fileName = fileName.replaceAll("\\\\", "");
 								fileName = fileName.replaceAll("\\/", "");
+								fileName = fileName.replaceAll(" ", "");
 								
 								fileName = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML + fileName);
 								fileNameList.add(fileName);
@@ -653,10 +657,7 @@ public class ExportStatisticData extends HttpServlet{
 								    	if (flag)
 						    			{	
 								    		Long examinerId = answerList.get(answerList.size()-1).getDoctor().getId();
-								    		if (examinerId.equals(53l) || examinerId.equals(99l)) {
-								    			System.out.println("ID : " + examinerId);
-								    		}
-						    				Integer addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), examinerId);
+								    		Integer addPoint = PostAnalysis.findAddPointByExaminerAndOscePost(oscePost.getId(), examinerId);
 						    				writer.append(addPoint.toString());
 						    				
 						    			}
@@ -914,6 +915,7 @@ public class ExportStatisticData extends HttpServlet{
 							
 							fileName = fileName.replaceAll("\\\\", "");
 							fileName = fileName.replaceAll("\\/", "");
+							fileName = fileName.replaceAll(" ", "");
 							
 							fileName = servletContext.getRealPath(OsMaFilePathConstant.assignmentHTML + fileName);
 							fileNameList.add(fileName);
@@ -1318,7 +1320,7 @@ writer.append(answer.getStudent().getId() );
 			    		Map<Long, ChecklistOption> answerMap = new HashMap<Long, ChecklistOption>();
 			    		
 			    		for (Answer ans : answerList) {
-			    			if (ans.getChecklistQuestion() != null)
+			    			if (ans.getChecklistItem() != null)
 			    				answerMap.put(ans.getChecklistItem().getId(), ans.getChecklistOption());
 						}
 			    		
@@ -1766,7 +1768,7 @@ writer.append(answer.getStudent().getId() );
 				writer.append("AddPoint");
 				writer.append('|');
 				writer.append("impression ");
-			    //writer.append('\n');
+			    writer.append('\n');
 			    
 				List<Student> studentList = Answer.findDistinctStudentByOscePost(oscePost.getId());
 				
@@ -1894,7 +1896,7 @@ writer.append(answer.getStudent().getId() );
 			    writer.close();
 			    
 			    List<Long> valueList = new ArrayList<Long>();
-			    valueList = ChecklistOption.findCheckListOptionValueByQuestion(impressionQueId);
+			    valueList = ChecklistOption.findCheckListOptionValueByQuestionItem(impressionQueId);
 			    
 			    Collections.sort(valueList);
 			    

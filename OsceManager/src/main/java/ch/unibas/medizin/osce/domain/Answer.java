@@ -336,6 +336,7 @@ public class Answer {
 					
 					fileName = fileName.replaceAll("\\\\", "");
 					fileName = fileName.replaceAll("\\/", "");
+					fileName = fileName.replaceAll(" ", "");
 						
 					List<String> valueList = ExportStatisticData.createOscePostCSV(RequestFactoryServlet.getThreadLocalRequest(),RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext(), post.getId(), fileName, examinerId, addPoints, impressionQueId);
 
@@ -383,6 +384,7 @@ public class Answer {
 						
 						filename = filename.replaceAll("\\\\", "");
 						filename = filename.replaceAll("\\/", "");
+						fileName = fileName.replaceAll(" ", "");
 							
 						Integer addPoint = 0;
 						String key="p"+post.getId()+"e"+doctor.getId();
@@ -753,6 +755,7 @@ public class Answer {
 
 						fileName = fileName.replaceAll("\\\\", "");
 						fileName = fileName.replaceAll("\\/", "");
+						fileName = fileName.replaceAll(" ", "");
 						
 						fileName = RequestFactoryServlet.getThreadLocalRequest().getSession().getServletContext().getRealPath(OsMaFilePathConstant.assignmentHTML + fileName);
 						
