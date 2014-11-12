@@ -212,4 +212,8 @@ public class OsMaFilePathConstant {
 	public static final String EOSCE_FILE_EXTENSION = ".osceexchange";
 	
 	public static final String IOSCE_FILE_EXTENSION = ".exam";
+
+	public static final String EXAMINER_LIST_QR = "ExaminerQr";
+
+	public static final String STUDENT_LIST_QR = "StudentQR";
 }

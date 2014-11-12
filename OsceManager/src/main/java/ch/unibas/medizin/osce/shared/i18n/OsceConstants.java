@@ -1729,6 +1729,14 @@ public interface OsceConstants extends Constants {
 	public String credentialsMustNotBeEmpty();
 	
 	public String optionNameSizeError();
+
+	public String autoSelection();
+
+	public String screenSaverTime();
+
+	public String backUpPeriodMustBeInt();
+
+	public String screenSaverTimeMustBeInt();
 }
 
 

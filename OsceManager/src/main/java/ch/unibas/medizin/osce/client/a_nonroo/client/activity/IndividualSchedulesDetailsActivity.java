@@ -37,6 +37,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.http.client.URL;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.requestfactory.shared.ServerFailure;
@@ -1804,6 +1805,106 @@ IndividualSchedulesDetailsView.Delegate
 			});
 			
 		}
+
+		@Override
+		public void exportQRCodeForExaminer(ClickEvent event) {
+			
+			Log.info("Call exportQRCodeForExaminer()");	
+			examinorId=new ArrayList<Long>();
+			if(lstChkExaminor.size()>0 && lstExaminerProxy.size()>0) // Check that SP is Checked Or Not
+			{
+				Log.info("Total Examiner : " + lstChkExaminor.size());										
+				int i=0;
+				
+				for (CheckBox examniner : lstChkExaminor) {
+					
+					if(examniner.isChecked() == true){
+						
+						Log.info("~~Selected Checkbox Id: " + i);
+						Log.info("~~Print Plan for Examiner: " + lstExaminerProxy.get(i).getName());
+						examinorId.add(lstExaminerProxy.get(i).getId());
+					}
+					i++;
+				}
+				if(examinorId.size()>0)
+				{
+					requests.doctorRequestNonRoo().updateExaminerIdToSession(examinorId).fire(new OSCEReceiver<Void>() {
+
+						@Override
+						public void onSuccess(Void response) {
+				
+							String locale = LocaleInfo.getCurrentLocale().getLocaleName();	
+								StringBuilder requestData = new StringBuilder();
+								String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.EXAMINER_QR.ordinal()));
+								requestData.append(ResourceDownloadProps.ENTITY).append("=").append(ordinal).append("&")
+								.append(ResourceDownloadProps.OSCE_ID).append("=").append(URL.encodeQueryString(osceProxy.getId().toString())).append("&");
+											
+								requestData.append(ResourceDownloadProps.LOCALE).append("=").append(URL.encodeQueryString(locale));
+								
+								String url = GWT.getHostPageBaseURL() + "downloadFile?" + requestData.toString(); 
+								Log.info("--> url is : " +url);
+								Window.open(url, "", "");
+						}
+					});
+				
+				}
+				else
+				{
+					MessageConfirmationDialogBox dialogExaminer=new MessageConfirmationDialogBox(constants.warning());
+					dialogExaminer.showConfirmationDialog(constants.warningSelectExaminer());
+				}
+			}
+			
+		}
+
+		@Override
+		public void exportQRCodeForStudent(ClickEvent event) {
+			
+			Log.info("Call exportQRCodeForStudent()");	
+			studId=new ArrayList<Long>();
+			if(lstChkStud.size()>0 && lstStudentProxy.size()>0) // Check that SP is Checked Or Not
+			{
+				Log.info("Total Stud : " + lstChkStud.size());	
+				int i=0;
+				for (CheckBox student : lstChkStud) {
+					
+					if(student.isChecked() == true){
+						Log.info("~~Selected Checkbox Id: " + i);
+						Log.info("~~Print Plan for student: " + lstStudentProxy.get(i).getName());
+						studId.add(lstStudentProxy.get(i).getId());
+					}
+					i++;
+				}
+			}
+				
+				if(studId.size()>0)
+				{
+					requests.studentRequestNonRoo().updateStudentToSession(studId).fire(new OSCEReceiver<Void>() {
+
+						@Override
+						public void onSuccess(Void response) {
+				
+								String locale = LocaleInfo.getCurrentLocale().getLocaleName();	
+								StringBuilder requestData = new StringBuilder();
+								String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.STUDENT_QR.ordinal()));
+								requestData.append(ResourceDownloadProps.ENTITY).append("=").append(ordinal).append("&")
+								.append(ResourceDownloadProps.OSCE_ID).append("=").append(URL.encodeQueryString(osceProxy.getId().toString())).append("&");
+											
+								requestData.append(ResourceDownloadProps.LOCALE).append("=").append(URL.encodeQueryString(locale));
+								String url = GWT.getHostPageBaseURL() + "downloadFile?" + requestData.toString(); 
+								Log.info("--> url is : " +url);
+								Window.open(url, "", "");
+						}
+					});
+				}
+				else
+				{
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				MessageConfirmationDialogBox dialog=new MessageConfirmationDialogBox(constants.warning());
+				dialog.showConfirmationDialog(constants.warningSelectStudent());
+			}
+		}
+
 		
 		
 }

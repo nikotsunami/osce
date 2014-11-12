@@ -387,6 +387,21 @@
 										<span ui:field="examMode" />
 								</td>
 								</tr>
+								
+								<tr>
+								<td>
+										<span class="{style.label}" ui:field="lblScreenSaverTime"></span>
+								</td>
+								<td>
+										<span ui:field="screenSaverTime" />
+								</td>
+								<td>
+										<span class="{style.label}" ui:field="lblAutoSelection"></span>
+								</td>
+								<td>
+										<span ui:field="autoSelection" />
+								</td>
+								</tr>
 							
 							</table>
 						</g:HTMLPanel>

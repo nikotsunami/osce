@@ -665,15 +665,26 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 				 proxy.setPassword(((OsceEditViewImpl)view).password.getValue());
 				 proxy.setBucketName(((OsceEditViewImpl)view).bucketName.getValue());
 				 proxy.setSettingPassword(((OsceEditViewImpl)view).settingPassword.getValue());
-				 proxy.setBackupPeriod(((OsceEditViewImpl)view).backUpPeriod.getValue());
+				 if(((OsceEditViewImpl)view).backUpPeriod.getValue().equals("") == false){
+						Integer backUpPeriod = Integer.parseInt(((OsceEditViewImpl)view).backUpPeriod.getValue());
+						proxy.setBackupPeriod(backUpPeriod);			
+				 }else{
+					 proxy.setBackupPeriod(null);
+				 }
 				 proxy.setTimeunit(((OsceEditViewImpl)view).timeUnit.getValue());
 				 proxy.setNextExaminee(((OsceEditViewImpl)view).pointNextExaminee.getValue());
 				 proxy.setEncryptionType(((OsceEditViewImpl)view).encryptionType.getValue());
 				 proxy.setInfotype(((OsceEditViewImpl)view).bucketInfo.getValue());
 				 proxy.setSymmetricKey(((OsceEditViewImpl)view).symmetricKey.getValue());
 				 proxy.setReviewMode(((OsceEditViewImpl)view).examReviewMode.getValue());
-				 
+				 proxy.setAutoSelection(((OsceEditViewImpl)view).autoSelection.getValue());
 				 proxy.setScreenSaverText(((OsceEditViewImpl)view).screenSaverText.getValue());
+				 if(((OsceEditViewImpl)view).screenSaverTime.getValue().equals("") == false){
+						Integer screenSaverTime= Integer.parseInt(((OsceEditViewImpl)view).screenSaverTime.getValue());
+						proxy.setScreenSaverTime(screenSaverTime);		
+				 }else{
+					 proxy.setScreenSaverTime(null);
+				 }
 				 proxy.setOsce(osce);
 			
 				if(((OsceEditViewImpl)view).bucketInfo.getValue().equals(BucketInfoType.FTP)){
@@ -698,7 +709,10 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 					proxy.setPassword(((OsceEditViewImpl)view).password.getValue());
 					proxy.setBucketName(((OsceEditViewImpl)view).bucketName.getValue());
 					proxy.setSettingPassword(((OsceEditViewImpl)view).settingPassword.getValue());
-					proxy.setBackupPeriod(((OsceEditViewImpl)view).backUpPeriod.getValue());
+					if(((OsceEditViewImpl)view).backUpPeriod.getValue().equals("") == false){
+						Integer backUpPeriod = Integer.parseInt(((OsceEditViewImpl)view).backUpPeriod.getValue());
+						proxy.setBackupPeriod(backUpPeriod);			
+					}
 					proxy.setTimeunit(((OsceEditViewImpl)view).timeUnit.getValue());
 					proxy.setNextExaminee(((OsceEditViewImpl)view).pointNextExaminee.getValue());
 					proxy.setEncryptionType(((OsceEditViewImpl)view).encryptionType.getValue());
@@ -706,6 +720,11 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 					proxy.setSymmetricKey(((OsceEditViewImpl)view).symmetricKey.getValue());
 					proxy.setReviewMode(((OsceEditViewImpl)view).examReviewMode.getValue());
 					proxy.setScreenSaverText(((OsceEditViewImpl)view).screenSaverText.getValue());
+					if(((OsceEditViewImpl)view).screenSaverTime.getValue().equals("") == false){
+						Integer screenSaverTime= Integer.parseInt(((OsceEditViewImpl)view).screenSaverTime.getValue());
+						proxy.setScreenSaverTime(screenSaverTime);		
+					 }
+					proxy.setAutoSelection(((OsceEditViewImpl)view).autoSelection.getValue());
 					proxy.setOsce(osce);
 				
 					if(((OsceEditViewImpl)view).bucketInfo.getValue().equals(BucketInfoType.FTP)){

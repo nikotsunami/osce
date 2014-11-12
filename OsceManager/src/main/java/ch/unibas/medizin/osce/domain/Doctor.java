@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -21,8 +22,11 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.Sorting;
+
+import com.google.gwt.requestfactory.server.RequestFactoryServlet;
 
 @RooJavaBean
 @RooToString
@@ -203,4 +207,9 @@ public class Doctor {
     	return q.getResultList();
     }
     
+    public static void updateExaminerIdToSession(List<Long> examinerIdList)
+    {
+    	HttpSession session = RequestFactoryServlet.getThreadLocalRequest().getSession();
+		session.setAttribute(OsMaFilePathConstant.EXAMINER_LIST_QR, examinerIdList);
+    }
 }

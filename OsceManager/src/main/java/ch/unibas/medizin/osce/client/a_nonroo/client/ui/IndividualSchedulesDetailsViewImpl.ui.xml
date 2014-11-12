@@ -31,7 +31,10 @@
 			margin-top: 7px;			
 			margin-left: 100px;			
 		}
-		
+		.btnExpotStyle{
+		margin: 5px 10px 5px 1px;
+		}
+	
 	</ui:style>
 
 
@@ -61,6 +64,7 @@
 								<g:HorizontalPanel>
 									<!-- <my:IconButton ui:field="btnSendMailStudent" addStyleNames="{style.commonStyle}">Send Email to Student</my:IconButton> -->
 									<my:IconButton icon="print" ui:field="btnPrintCopyStudent" addStyleNames="{style.commonStyle}" />
+									<my:IconButton icon="extlink" ui:field="btnPrintStudentIndividualCopy" width="101px"  addStyleNames="{style.btnExpotStyle}"/>
 								</g:HorizontalPanel>										
 						</g:VerticalPanel> 												
 		 	<!-- </g:west>
@@ -107,6 +111,7 @@
 							<!-- <my:IconButton ui:field="btnSendMailExaminor" addStyleNames="{style.commonStyle}">Send
 								Email to Examinor</my:IconButton> -->
 							<my:IconButton icon="print" ui:field="btnPrintCopyExaminor" addStyleNames="{style.commonStyle}" />
+							<my:IconButton icon="extlink" ui:field="btnPrintExaminerIndividualCopy" width="101px"  addStyleNames="{style.btnExpotStyle}"/>
 						</g:HorizontalPanel>
 					</g:VerticalPanel>		
 		<!-- 	</g:east>

@@ -124,6 +124,14 @@ public class ResourceUtil {
             	fileName = setExportiOSCEXml(request, os);
 				break;
             }
+            case EXAMINER_QR:{
+            	fileName=exportExaminerQRCode(request,os);
+            	break;
+            }
+            case STUDENT_QR:{
+            	fileName=exportStudentQR(request,os);
+            	break;
+            }
 			default: {
 				Log.info("Error in entity : " + entity);
 				break;
@@ -134,6 +142,48 @@ public class ResourceUtil {
 		os = null;
 	}
 	
+	@SuppressWarnings("unchecked")
+	private static String exportStudentQR(HttpServletRequest request,ByteArrayOutputStream os) {
+		List<Long> studentList = new java.util.ArrayList<Long>();
+
+		 HttpSession session = request.getSession();
+		Object object = request.getSession().getAttribute(OsMaFilePathConstant.STUDENT_LIST_QR);
+		if (object != null &&  object instanceof List){
+			studentList = (List<Long>) object;		
+		}		
+		session.removeAttribute(OsMaFilePathConstant.STUDENT_LIST_QR);
+		
+		Long osceId = Long.parseLong(request.getParameter(ResourceDownloadProps.OSCE_ID));
+		String locale = request.getParameter(ResourceDownloadProps.LOCALE);
+		
+		String fileName =QRCodeUtil.generateStudentQRCode(osceId,studentList, locale, os,session);
+		
+		return fileName;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static String exportExaminerQRCode(HttpServletRequest request,ByteArrayOutputStream os) {
+		
+		List<Long> examinersList = new java.util.ArrayList<Long>();
+
+		 HttpSession session = request.getSession();
+		Object object = request.getSession().getAttribute(OsMaFilePathConstant.EXAMINER_LIST_QR);
+		if (object != null &&  object instanceof List){
+			examinersList = (List<Long>) object;		
+		}		
+		session.removeAttribute(OsMaFilePathConstant.EXAMINER_LIST_QR);
+		
+		//String fileName = OsMaFilePathConstant.EXAMINER_QR_PDF_FORMAT;
+		
+		Long osceId = Long.parseLong(request.getParameter(ResourceDownloadProps.OSCE_ID));
+		String locale = request.getParameter(ResourceDownloadProps.LOCALE);
+		
+		String fileName =QRCodeUtil.generateExaminerQRCode(osceId,examinersList, locale, os,session);
+		
+		
+		return fileName;
+	}
+
 	private static String setExportiOSCEXml(HttpServletRequest request, ByteArrayOutputStream os) {
 		String fileName = "";
 		try {

@@ -72,7 +72,12 @@ public class ExportSettingsXml {
 			settingsData.setOtherInformation(otherInformation);
 			otherInformation.setSettingPassword(osceSettings.getSettingPassword());
 			otherInformation.setScreenSaverText(osceSettings.getScreenSaverText() == null ? "" : defaultString(osceSettings.getScreenSaverText()));
-			
+			if(osceSettings.getScreenSaverTime() != null){
+				otherInformation.setScreenSaverTime(osceSettings.getScreenSaverTime());
+			}
+			if(osceSettings.getAutoSelection() != null){
+				otherInformation.setAutoSelection(osceSettings.getAutoSelection().toString());
+			}
 			BackupPeriod backupPeriod=objectFactory.createSettingsOtherInformationBackupPeriod();
 			if(osceSettings.getBackupPeriod() != null){
 				backupPeriod.setTime(osceSettings.getBackupPeriod());

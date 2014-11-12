@@ -167,6 +167,8 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		lblUsername.setInnerText(constants.userName());
 		lblHost.setInnerText(constants.host());
 		lblScreenSaverText.setInnerText(constants.osceScreenSaverText());
+		lblScreenSaverTime.setInnerText(constants.screenSaverTime());
+		lblAutoSelection.setInnerText(constants.autoSelection());
 		labelBucketType.setInnerText(constants.bucketType());
 		exportSettingsQRCode.setText(constants.exportSettingsQRCode());
 		exportXml.setText(constants.exportSettingsXml());
@@ -430,6 +432,18 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	
 	@UiField
 	SpanElement screenSaverText;
+	
+	@UiField
+	SpanElement lblScreenSaverTime;
+	
+	@UiField
+	SpanElement screenSaverTime;
+	
+	@UiField
+	SpanElement lblAutoSelection;
+	
+	@UiField
+	SpanElement autoSelection;
 	
 	/* @UiField
 	    DateBox deadline;
@@ -1193,11 +1207,27 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		unit.setInnerText(enumConstants.getString(osceSettingsProxy.getTimeunit().toString()));
 		password.setInnerText(osceSettingsProxy.getPassword());
 		settingPassword.setInnerText(osceSettingsProxy.getSettingPassword());
-		pointNxtExaminee.setInnerText(osceSettingsProxy.getNextExaminee().toString());
+		
+		if(osceSettingsProxy.getNextExaminee()==null || !osceSettingsProxy.getNextExaminee()) {
+			pointNxtExaminee.setInnerHTML(OsMaConstant.UNCHECK_ICON.asString());
+		} else {
+			pointNxtExaminee.setInnerHTML(OsMaConstant.CHECK_ICON.asString());
+		}
 		encryptionType.setInnerText(enumConstants.getString(osceSettingsProxy.getEncryptionType().toString()));
 		symmetricKey.setInnerText(osceSettingsProxy.getSymmetricKey());
 		screenSaverText.setInnerText(osceSettingsProxy.getScreenSaverText());
-		examMode.setInnerText(osceSettingsProxy.getReviewMode()== null?"" : osceSettingsProxy.getReviewMode().toString());
+		if(osceSettingsProxy.getReviewMode()==null || !osceSettingsProxy.getReviewMode()) {
+			examMode.setInnerHTML(OsMaConstant.UNCHECK_ICON.asString());
+		} else {
+			examMode.setInnerHTML(OsMaConstant.CHECK_ICON.asString());
+		}
+		screenSaverTime.setInnerText(String.valueOf(osceSettingsProxy.getScreenSaverTime() == null?"" :osceSettingsProxy.getScreenSaverTime()));
+
+		if(osceSettingsProxy.getAutoSelection()==null || !osceSettingsProxy.getAutoSelection()) {
+			autoSelection.setInnerHTML(OsMaConstant.UNCHECK_ICON.asString());
+		} else {
+			autoSelection.setInnerHTML(OsMaConstant.CHECK_ICON.asString());
+		}
 	}
 	
 /*	@UiHandler("table")

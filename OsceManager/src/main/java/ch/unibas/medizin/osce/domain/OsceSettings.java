@@ -60,6 +60,12 @@ public class OsceSettings {
 	@Column(columnDefinition="BIT", length = 1)
 	private Boolean reviewMode;  
 	
+	private Integer screenSaverTime;
+	
+	@Value("false")
+	@Column(columnDefinition="BIT", length = 1)
+	private Boolean autoSelection;  
+	
 	public static OsceSettings findOsceSettingsByOsce(Long osceId) {
 		EntityManager em = entityManager();
 		String sql = "SELECT os from OsceSettings os where os.osce.id = " + osceId;

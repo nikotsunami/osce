@@ -403,7 +403,9 @@ public class Settings {
         "signMechanism",
         "symmetricKey",
         "reviewmode",
-        "screenSaverText"
+        "screenSaverText",
+        "screenSaverTime",
+        "autoSelection"
     })
     public static class OtherInformation {
 
@@ -420,6 +422,10 @@ public class Settings {
         protected String reviewmode;
         @XmlElement(required = true)
         protected String screenSaverText;
+        @XmlElement(required = true)
+        protected int screenSaverTime;
+        @XmlElement(required = true)
+        protected String autoSelection;
         
         public String getScreenSaverText() {
 			return screenSaverText;
@@ -564,7 +570,21 @@ public class Settings {
             this.reviewmode = value;
         }
 
+        public String getAutoSelection() {
+			return autoSelection;
+		}
 
+        public void setAutoSelection(String autoSelection) {
+			this.autoSelection = autoSelection;
+		}
+        
+        public int getScreenSaverTime() {
+			return screenSaverTime;
+		}
+        
+        public void setScreenSaverTime(int screenSaverTime) {
+			this.screenSaverTime = screenSaverTime;
+		}
         /**
          * <p>Java class for anonymous complex type.
          * 

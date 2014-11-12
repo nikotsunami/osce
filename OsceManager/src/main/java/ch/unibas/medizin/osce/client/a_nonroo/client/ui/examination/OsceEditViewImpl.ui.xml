@@ -9,6 +9,9 @@
 		.leftpadding10 {
 			margin-left: 10px;
 		}
+		.checkBoxlabel{
+			font-weight: bold;	
+		}
 	</ui:style>
 	<g:VerticalPanel addStyleNames="{style.tabStyle}">
 		<g:HTMLPanel styleName="{style.patientControls}">
@@ -336,7 +339,7 @@
 							</tr>
 							<tr height="10px">
 								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblBackUpPeriod"></div> </td>
-								<td><g:IntegerBox ui:field="backUpPeriod"></g:IntegerBox></td>
+								<td><g:TextBox ui:field="backUpPeriod"></g:TextBox></td>
 								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblTimeUnit"></div> </td>
 								<td><g:ValueListBox ui:field="timeUnit"></g:ValueListBox></td>
 							</tr>
@@ -352,17 +355,21 @@
 							
 								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblSettingPassword"></div> </td>
 								<td><g:TextBox ui:field="settingPassword"></g:TextBox></td>
-								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblPointNxtExaminee"></div></td>
+								<td><div class="{style.checkBoxlabel} {style.leftpadding10}" ui:field="lblPointNxtExaminee"></div></td>
 								<td><g:CheckBox ui:field="pointNextExaminee"></g:CheckBox></td>
 							</tr>
 							
 							<tr height="10px">
-								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblExamReviewMode"></div></td>
+								<td><div class="{style.checkBoxlabel} {style.leftpadding10}" ui:field="lblExamReviewMode"></div></td>
 								<td><g:CheckBox ui:field="examReviewMode"></g:CheckBox></td>
-								<td></td>
-								<td></td>
-								
+								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblScreenSaverTime"></div></td>
+								<td><g:TextBox ui:field="screenSaverTime"></g:TextBox></td>
 							</tr>
+							<tr height="10px">
+								<td><div class="{style.checkBoxlabel} {style.leftpadding10}" ui:field="lblAutoSelection"></div></td>
+								<td><g:CheckBox ui:field="autoSelection"></g:CheckBox></td>
+							</tr>
+							
 					</table>
 					</g:HTMLPanel>
 				

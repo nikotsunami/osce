@@ -351,7 +351,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 	DivElement lblBackUpPeriod;
 	
 	@UiField
-	public IntegerBox backUpPeriod;
+	public TextBox backUpPeriod;
 	
 	@UiField
 	DivElement lblTimeUnit;
@@ -381,6 +381,17 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 	@UiField 
 	public TextArea screenSaverText;
 	
+	@UiField
+	DivElement lblScreenSaverTime;
+	
+	@UiField
+	public TextBox screenSaverTime;
+	
+	@UiField
+	public DivElement lblAutoSelection;
+	
+	@UiField
+	public CheckBox  autoSelection;
 	
 	@UiField(provided=true)
     public ValueListBox<TimeUnit> timeUnit = new ValueListBox<TimeUnit>(new EnumRenderer<TimeUnit>());
@@ -446,6 +457,8 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 		lblPointNxtExaminee.setInnerText(constants.pointNxtExaminee());
 		lblExamReviewMode.setInnerText(constants.examReviewMode());
 		lblSymmetricKey.setInnerText(constants.symmetricKey());
+		lblAutoSelection.setInnerText(constants.autoSelection());
+		lblScreenSaverTime.setInnerText(constants.screenSaverTime());
 		labelKeySettings.setInnerText(constants.bucketParameters());
 		lblUserName.setInnerText(constants.accessKey());
 		lblPassword.setInnerText(constants.secretKey());
@@ -664,49 +677,73 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 
 	@UiHandler("save")
 	void onSave(ClickEvent event) {
-		if (validateSettingFields()) {
+		String errorMsg = validateSettingFields();
+		if (errorMsg.isEmpty()) {
 			delegate.saveClicked(osce,osceSettingsProxy);
 		} else {
 			MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-			confirmationDialogBox.showConfirmationDialog(constants.credentialsMustNotBeEmpty());
+			confirmationDialogBox.showConfirmationDialog(errorMsg);
 		}
 	}
 
-	private boolean validateSettingFields() {
-		boolean flag = false;
+	private String validateSettingFields() {
+		String errorMessage = "";
+		String regex = "\\d+";
+		backUpPeriod.removeStyleName("higlight_onViolation");
+		screenSaverTime.removeStyleName("higlight_onViolation");
 		if (userName.getValue() != null && userName.getValue().isEmpty() == false && userName.getValue() != "") {
-			flag = true;
 			userName.removeStyleName("higlight_onViolation");
 		} else {
-			flag = false;
+			errorMessage = constants.credentialsMustNotBeEmpty();
 			userName.addStyleName("higlight_onViolation");
 		}
 		
 		if (password.getValue() != null && password.getValue().isEmpty() == false && password.getValue() != "") {
-			flag = true;
 			password.removeStyleName("higlight_onViolation");
 		} else {
-			flag = false;
+			errorMessage = constants.credentialsMustNotBeEmpty();
 			password.addStyleName("higlight_onViolation");
 		}
 		
 		if (bucketName.getValue() != null && bucketName.getValue().isEmpty() == false && bucketName.getValue() != "") {
-			flag = true;
 			bucketName.removeStyleName("higlight_onViolation");
 		} else {
-			flag = false;
+			errorMessage = constants.credentialsMustNotBeEmpty();
 			bucketName.addStyleName("higlight_onViolation");
 		}
 		
 		if (BucketInfoType.FTP.equals(bucketInfo.getValue()) && host.getValue() != null && host.getValue().isEmpty() == false && host.getValue() != "") {
-			flag = true;
 			host.removeStyleName("higlight_onViolation");
 		} else if (BucketInfoType.FTP.equals(bucketInfo.getValue())) {
-			flag = false;
+			errorMessage = constants.credentialsMustNotBeEmpty();
 			host.addStyleName("higlight_onViolation");
 		}
 		
-		return flag;
+		if (errorMessage.isEmpty() && backUpPeriod.getValue() != null && backUpPeriod.getValue().isEmpty() == false && backUpPeriod.getValue().length() > 0) {
+			
+			if (backUpPeriod.getValue().matches(regex) == false) {
+				backUpPeriod.addStyleName("higlight_onViolation");
+				errorMessage = constants.backUpPeriodMustBeInt();
+			} 
+			else {
+				backUpPeriod.removeStyleName("higlight_onViolation");
+			}
+			
+		} 
+		
+		if (errorMessage.isEmpty() && screenSaverTime.getValue() != null && screenSaverTime.getValue().isEmpty() == false && screenSaverTime.getValue().length() > 0) {
+			
+			if (screenSaverTime.getValue().matches(regex) == false) {
+				screenSaverTime.addStyleName("higlight_onViolation");
+				errorMessage = constants.screenSaverTimeMustBeInt();
+			} 
+			else {
+				screenSaverTime.removeStyleName("higlight_onViolation");
+			}
+		
+		}
+		
+		return errorMessage;
 	}
 
 	interface Binder extends UiBinder<Widget, OsceEditViewImpl> {
@@ -942,13 +979,15 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 
 	private void setGeneralInfoValues(OsceSettingsProxy osceSettingsProxy) {
 		settingPassword.setValue(osceSettingsProxy.getSettingPassword());
-		backUpPeriod.setValue(osceSettingsProxy.getBackupPeriod());
+		backUpPeriod.setValue(osceSettingsProxy.getBackupPeriod()==null?"" : String.valueOf(osceSettingsProxy.getBackupPeriod()));
 		timeUnit.setValue(osceSettingsProxy.getTimeunit());
 		pointNextExaminee.setValue(osceSettingsProxy.getNextExaminee());
 		encryptionType.setValue(osceSettingsProxy.getEncryptionType());
 		examReviewMode.setValue(osceSettingsProxy.getReviewMode());
 		symmetricKey.setValue(osceSettingsProxy.getSymmetricKey());
 		screenSaverText.setValue(osceSettingsProxy.getScreenSaverText());
+		screenSaverTime.setValue(osceSettingsProxy.getScreenSaverTime()==null?"" :String.valueOf(osceSettingsProxy.getScreenSaverTime()));
+		autoSelection.setValue(osceSettingsProxy.getAutoSelection());
 	}
 
 	
