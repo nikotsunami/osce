@@ -7,14 +7,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import javax.print.Doc;
-
 import ch.unibas.medizin.osce.domain.Answer;
 import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.ChecklistCriteria;
+import ch.unibas.medizin.osce.domain.ChecklistItem;
 import ch.unibas.medizin.osce.domain.ChecklistOption;
-import ch.unibas.medizin.osce.domain.ChecklistQuestion;
-import ch.unibas.medizin.osce.domain.ChecklistTopic;
 import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.domain.File;
 import ch.unibas.medizin.osce.domain.Signature;
@@ -22,7 +19,6 @@ import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.shared.util;
 
-import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -39,6 +35,8 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 	private StandardizedRole standardizedRole;
 	
 	private boolean isValueAvailable[];
+	
+	protected Font tabFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
 	
 	public StudentManagementPrintPdfUtil() {
 		super();		
@@ -80,7 +78,7 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 				this.standardizedRole = standardizedRole;			
 				//document.add(new Chunk("Hello World"));		
 				addStudentName(studId);
-				addCheckListDetails(studId);
+				addCheckListDetails(studId,standardizedRole.getCheckList().getId());
 				addSignature(standardizedRole, osceId, studId);
 				document.newPage();
 			}
@@ -224,7 +222,7 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 		}
 	}
 
-	private void addCheckListDetails(long studId) {
+	private void addCheckListDetails(long studId, Long checklistId) {
 		Paragraph titleDetails = new Paragraph();
 		Font roleTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 15,Font.BOLD);
 		titleDetails.add(new Chunk(constants.standardizedRole()+": "+ util.getEmptyIfNull(standardizedRole.getLongName()), roleTitleFont));
@@ -245,6 +243,8 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 			
 			String checkListTitle = (standardizedRole.getCheckList().getTitle() != null)? " " + standardizedRole.getCheckList().getTitle() : "";					
 			details.add(new Chunk(constants.checkList() +": "+ checkListTitle, paragraphTitleFont));
+			addEmptyLine(details, 1);
+			
 			//details.add(new Chunk(checkListTitle, paragraphTitleFont));			
 			// addEmptyLine(details, 1);
 
@@ -255,9 +255,27 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 			} catch (DocumentException e) {
 				log.error("in PdfUtil.addDetails(): " + e.getMessage());
 			}
-			createCheckListDetailsTable(studId);
+			createCheckListTabDetails(studId,checklistId);
+			//createCheckListDetailsTable(studId);
 		}	
 		
+	}
+
+	private void createCheckListTabDetails(long studId, Long checklistId) {
+
+		List<ChecklistItem> checklistTabs = ChecklistItem.findAllChecklistTabsByChecklistId(checklistId);
+		for(ChecklistItem checklistTab: checklistTabs){
+			String tabText=checklistTab.getName();
+			Paragraph tabParagraph = new Paragraph(new Chunk(tabText,tabFont));
+			try {
+				addEmptyLine(tabParagraph, 1);
+				document.add(tabParagraph);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+			}
+			createCheckListDetailsTable(studId,checklistTab.getId());
+
+		}
 	}
 
 	private Paragraph createPara(PdfPTable pdfPTable, String header) {
@@ -364,21 +382,21 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 		
 	}
 	
-	private PdfPTable createCheckListQuestionTable(List<ChecklistQuestion> questions,long studId) {
+	private PdfPTable createCheckListQuestionTable(List<ChecklistItem> questions,long studId) {
 		if (questions != null && questions.size() > 0) {
 		PdfPTable table = new PdfPTable(new float[] { 0.7f, 0.3f });
 			
 			int i = 0;
 			int j=0;
-			for (ChecklistQuestion question: questions) {
-				String questionText = question.getQuestion();
+			for (ChecklistItem question: questions) {
+				String questionText = question.getName();
 				if (questionText != null) {
 					Chunk questionChunk = new Chunk(questionText, boldFont);					
 					Chunk criteriaChunk = null;
 					Chunk instructionChunk = null;
 					
-					if (question.getInstruction() != null) {
-						instructionChunk = new Chunk(question.getInstruction(), italicFont);						
+					if (question.getDescription() != null) {
+						instructionChunk = new Chunk(question.getDescription(), italicFont);						
 					}
 
 					if (question.getCheckListCriterias().size() > 0) {
@@ -442,18 +460,19 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 	}
 
 	
-	private void createCheckListDetailsTable(long studId) {
+	private void createCheckListDetailsTable(long studId, Long checklistTabId) {
 		isValueAvailable[3] = true;
 		CheckList checkList = standardizedRole.getCheckList();
 
-		List<ChecklistTopic> checklistTopics = checkList.getCheckListTopics();
+		//List<ChecklistTopic> checklistTopics = checkList.getCheckListTopics();
+		List<ChecklistItem> checklistTopics = ChecklistItem.findChecklistTopicByChecklistTab(checklistTabId);
 
 		log.info("CheckList size " + checklistTopics.size());
 		
 		Paragraph checklistDetails = new Paragraph();
 
-		for (ChecklistTopic checklistTopic : checklistTopics) {
-			String chkListTitle = checklistTopic.getTitle();
+		for (ChecklistItem checklistTopic : checklistTopics) {
+			String chkListTitle = checklistTopic.getName();
 			if (chkListTitle != null) {
 				Paragraph titleParagraph = new Paragraph(new Chunk(chkListTitle, subTitleFont));
 				try {
@@ -476,7 +495,9 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 			//select distinct chkque.* from checklist_question chkque,answer ans where chkque.id=ans.checklist_question and  chkque.check_list_topic=1;
 			//List<ChecklistQuestion> checkListQuestionList=ChecklistQuestion.findCheckListQuestionByCheckListTopic(checklistTopic.getId());
 			//System.out.println("Total Question Size: " + checkListQuestionList.size());
-			PdfPTable table = createCheckListQuestionTable(checklistTopic.getCheckListQuestions(),studId);			
+			List<ChecklistItem> checklistQuestionList = ChecklistItem.findChecklistQuestionByChecklistId(checklistTopic.getId());
+			
+			PdfPTable table = createCheckListQuestionTable(checklistQuestionList,studId);			
 			//PdfPTable table = createCheckListQuestionTable(checkListQuestionList,studId);
 			table.setSpacingBefore(05.0f);
 			table.setSpacingAfter(20.0f);

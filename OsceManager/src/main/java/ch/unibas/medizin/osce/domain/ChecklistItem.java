@@ -399,4 +399,27 @@ public class ChecklistItem {
 		
 		return oscePostQueList;
 	}
+	
+	public static List<ChecklistItem> findChecklistTopicByChecklistTab(Long checklistTabId) {
+		List<ChecklistItem> topicList = new ArrayList<ChecklistItem>();
+		
+		EntityManager em = entityManager();
+		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem  =" + checklistTabId + " and ci.itemType=" +ItemType.TOPIC.ordinal() +  ") ORDER BY ci.sequenceNumber";
+		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
+		topicList.addAll(query.getResultList());
+		
+		return topicList;
+	}
+	
+	public static List<ChecklistItem> findAllChecklistTabsByChecklistId(Long checkistId){
+	List<ChecklistItem> checklistItemList = new ArrayList<ChecklistItem>();
+		
+		EntityManager em = entityManager();
+		String sql = "SELECT ci FROM ChecklistItem ci WHERE  ci.checkList  IS NOT NULL AND ci.checkList.id = " + checkistId + " and ci.itemType="  + ItemType.TAB.ordinal() +" ORDER BY ci.sequenceNumber";
+		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
+		checklistItemList.addAll(query.getResultList());
+		
+				
+		return checklistItemList;		
+	}
 }

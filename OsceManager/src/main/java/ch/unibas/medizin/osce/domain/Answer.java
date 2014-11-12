@@ -1412,9 +1412,12 @@ public class Answer {
 			long studId, Long questionId) {
 		EntityManager em = entityManager();
 		log.info("~QUERY findCheckListOptionsByStudentIdAndQuestionId()");
-		String queryString = "select ans.checklistOption.id from Answer as ans where ans.student="
-				+ studId + " and ans.checklistQuestion=" + questionId;
-		log.info("~QUERY String: " + queryString);
+		/*String queryString = "select ans.checklistOption.id from Answer as ans where ans.student="
+				+ studId + " and ans.checklistQuestion=" + questionId;*/
+         String queryString = "select ans.checklistOption.id from Answer as ans where ans.student="
+				+ studId + " and ans.checklistItem=" + questionId;
+				
+                log.info("~QUERY String: " + queryString);
 		TypedQuery<Long> q = em.createQuery(queryString, Long.class);
 		List<Long> result = q.getResultList();
 		log.info("~QUERY Result : " + result);
@@ -1424,11 +1427,14 @@ public class Answer {
 	public static List<Long> findCheckListOptionsByStudentIdAndQuestionIdMinOption(long studId, Long questionId) {
 		EntityManager em = entityManager();
 		List<Long> result = new ArrayList<Long>();
-		String queryString = "select ans.checklistOption.id from Answer as ans where ans.student=" + studId + " and ans.checklistQuestion=" + questionId;
-		TypedQuery<Long> q = em.createQuery(queryString, Long.class);
-		result = q.getResultList();
+		/*String queryString = "select ans.checklistOption.id from Answer as ans where ans.student=" + studId + " and ans.checklistQuestion=" + questionId;*/
 		
-		String sql = "SELECT co FROM ChecklistOption co WHERE co.checklistQuestion.id = " + questionId + " ORDER BY co.value DESC";
+	    String queryString = "select ans.checklistOption.id from Answer as ans where ans.student=" + studId + " and ans.checklistItem=" + questionId;
+        TypedQuery<Long> q = em.createQuery(queryString, Long.class);
+		result = q.getResultList();
+		String sql = "SELECT co FROM ChecklistOption co WHERE co.checklistItem.id = " + questionId + " ORDER BY co.value DESC";
+		
+		/*String sql = "SELECT co FROM ChecklistOption co WHERE co.checklistQuestion.id = " + questionId + " ORDER BY co.value DESC";*/
 		TypedQuery<ChecklistOption> query = em.createQuery(sql, ChecklistOption.class);
 		
 		if (query.getResultList() != null && query.getResultList().size() > 0)
