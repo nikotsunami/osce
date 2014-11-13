@@ -495,7 +495,7 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 			//select distinct chkque.* from checklist_question chkque,answer ans where chkque.id=ans.checklist_question and  chkque.check_list_topic=1;
 			//List<ChecklistQuestion> checkListQuestionList=ChecklistQuestion.findCheckListQuestionByCheckListTopic(checklistTopic.getId());
 			//System.out.println("Total Question Size: " + checkListQuestionList.size());
-			List<ChecklistItem> checklistQuestionList = ChecklistItem.findChecklistQuestionByChecklistId(checklistTopic.getId());
+			List<ChecklistItem> checklistQuestionList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistTopic.getId());
 			
 			PdfPTable table = createCheckListQuestionTable(checklistQuestionList,studId);			
 			//PdfPTable table = createCheckListQuestionTable(checkListQuestionList,studId);

@@ -480,7 +480,7 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 		for (ChecklistItem checklistTopic : checklistTopics) {
 			String chkListTitle = checklistTopic.getName();
 			
-			List<ChecklistItem> checklistQuestionList = ChecklistItem.findChecklistQuestionByChecklistId(checklistTopic.getId());
+			List<ChecklistItem> checklistQuestionList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistTopic.getId());
 			
 			PdfPTable table = createCheckListQuestionTable(checklistQuestionList,studId);
 			
