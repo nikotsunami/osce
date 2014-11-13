@@ -1737,6 +1737,12 @@ public interface OsceConstants extends Constants {
 	public String backUpPeriodMustBeInt();
 
 	public String screenSaverTimeMustBeInt();
+	
+	public String formativeStudentAssignError();
+	
+	public String isFormativeOsce();
+	
+	public String exportFormativeOsceError();
 }
 
 

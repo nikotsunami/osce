@@ -17,6 +17,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationProxy;
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationRequest;
+import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.shared.BucketInfoType;
 import ch.unibas.medizin.osce.shared.EosceStatus;
@@ -628,16 +629,27 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 	}
 	
 	//issue change
-	public void downloadeOSCEFile(String osceId, Boolean flag)
+	public void downloadeOSCEFile(final String osceId, Boolean flag)
 	{
 		/*final String url=GWT.getHostPageBaseURL() + "downloadExportOsceFile?path="+filename+"&flag="+flag+"&semester=" + semesterProxy.getId();
 		Window.open(url, filename, "enabled");*/
-		
-		String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.EOSCE_XML.ordinal()));          
-		String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
-				.concat("&").concat(ResourceDownloadProps.ID).concat("=").concat(URL.encodeQueryString(osceId));
-		Log.info("--> url is : " +url);
-		Window.open(url, "", "");
+		requests.osceRequest().findOsce(Long.parseLong(osceId)).fire(new OSCEReceiver<OsceProxy>() {
+
+			@Override
+			public void onSuccess(OsceProxy osceProxy) {
+				if (osceProxy.getIsFormativeOsce() != null && osceProxy.getIsFormativeOsce()) {
+					MessageConfirmationDialogBox confirmDialogBox = new MessageConfirmationDialogBox(constants.error());
+					confirmDialogBox.showConfirmationDialog(constants.exportFormativeOsceError());
+				} 
+				else {
+					String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.EOSCE_XML.ordinal()));          
+					String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+							.concat("&").concat(ResourceDownloadProps.ID).concat("=").concat(URL.encodeQueryString(osceId));
+					Log.info("--> url is : " +url);
+					Window.open(url, "", "");
+				}
+			}
+		});
 	}
 	
 	private void downloadiOSCEFile(String osceId, Boolean flag) {

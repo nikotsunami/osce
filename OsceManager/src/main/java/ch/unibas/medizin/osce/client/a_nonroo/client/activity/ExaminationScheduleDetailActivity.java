@@ -3473,18 +3473,24 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	@SuppressWarnings("deprecation")
 	@Override
 	public void countOsceWiseStudent(final OsceProxy osceProxy) {
-		requests.studentOsceRequestNonRoo().countStudentByOsce(osceProxy.getId()).fire(new OSCEReceiver<Integer>() {
+		if (osceProxy.getIsFormativeOsce() != null && osceProxy.getIsFormativeOsce()) {
+			MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+			confirmationDialogBox.showConfirmationDialog(constants.formativeStudentAssignError());
+		}
+		else {
+			requests.studentOsceRequestNonRoo().countStudentByOsce(osceProxy.getId()).fire(new OSCEReceiver<Integer>() {
 
-			@Override
-			public void onSuccess(Integer response) {
-				if (response == 0 || response.equals(osceProxy.getMaxNumberStudents()))
-					view.showStudentAssignPopup(false);					
-				else if (response < osceProxy.getMaxNumberStudents())
-					view.showStudentAssignPopup(true);	
-				else if (response > osceProxy.getMaxNumberStudents())
-					view.showStudentAssignPopup(true);	
-			}
-		});
+				@Override
+				public void onSuccess(Integer response) {
+					if (response == 0 || response.equals(osceProxy.getMaxNumberStudents()))
+						view.showStudentAssignPopup(false);					
+					else if (response < osceProxy.getMaxNumberStudents())
+						view.showStudentAssignPopup(true);	
+					else if (response > osceProxy.getMaxNumberStudents())
+						view.showStudentAssignPopup(true);	
+				}
+			});
+		}
 	}
 	
 	private void insertEarlyStudentStartSlot(OscePostView oscePostView, long earlyStart) {

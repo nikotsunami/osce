@@ -3608,4 +3608,21 @@ public class Assignment {
 		 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
 		 return query.getResultList();
 	 }
+	 
+	 public static List<Date> findMinTimeStartAndMaxTimeEndByOsceDayAndRotationNumber(Long osceDayId, int rotationNumber)
+	 {
+		 List<Date> timeList = new ArrayList<Date>();
+		 EntityManager em = entityManager();
+		 String sql = "SELECT MIN(a.timeStart), MAX(a.timeEnd) FROM Assignment a WHERE a.type = 0 AND a.osceDay.id = " + osceDayId + " AND a.rotationNumber = " + rotationNumber + " ORDER BY a.timeStart";
+		 List<Object[]> resultList = em.createQuery(sql).getResultList();
+		 
+		 if (resultList.size() > 0)
+		 {
+			 Object[] result = resultList.get(0);
+			 timeList.add(((Date)result[0]));
+			 timeList.add(((Date)result[1]));
+		 }
+		 
+		 return timeList;
+	 }
 } 

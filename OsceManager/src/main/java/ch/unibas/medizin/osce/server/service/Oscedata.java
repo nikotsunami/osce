@@ -293,6 +293,7 @@ import javax.xml.bind.annotation.XmlValue;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
+	"exam",
     "credentials",
     "checklists",
     "examiners",
@@ -304,6 +305,7 @@ import javax.xml.bind.annotation.XmlValue;
 @XmlRootElement(name = "oscedata", namespace="http://www.w3.org/2001/XMLSchema-instance")
 public class Oscedata {
 
+	protected Oscedata.Exam exam;
     protected Oscedata.Credentials credentials;
     protected Oscedata.Checklists checklists;
     protected Oscedata.Examiners examiners;
@@ -322,6 +324,15 @@ public class Oscedata {
      *     {@link Oscedata.Credentials }
      *     
      */
+    
+    public Oscedata.Exam getExam() {
+		return exam;
+	}
+    
+    public void setExam(Oscedata.Exam exam) {
+		this.exam = exam;
+	}
+    
     public Oscedata.Credentials getCredentials() {
         return credentials;
     }
@@ -2787,7 +2798,10 @@ public class Oscedata {
             protected String title;
             @XmlAttribute(required = true)
             protected long courseId;
-
+            @XmlAttribute
+            protected String startTime;
+            @XmlAttribute
+            protected String endTime;
             /**
              * Gets the value of the stations property.
              * 
@@ -2875,6 +2889,22 @@ public class Oscedata {
             public void setCourseId(long value) {
                 this.courseId = value;
             }
+            
+            public String getStartTime() {
+				return startTime;
+			}
+            
+            public void setStartTime(String startTime) {
+				this.startTime = startTime;
+			}
+            
+            public String getEndTime() {
+				return endTime;
+			}
+            
+            public void setEndTime(String endTime) {
+				this.endTime = endTime;
+			}
 
 
             /**
@@ -3298,4 +3328,88 @@ public class Oscedata {
 
     }
 
+    @XmlAccessorType(XmlAccessType.FIELD)
+    @XmlType(name = "", propOrder = {
+        "id",
+        "postLength",
+        "shortBreak",
+        "isFormativeOsce"
+    })
+    public static class Exam {
+
+        @XmlValue
+        protected String value;
+        @XmlAttribute(required = true)
+        protected long id;
+        @XmlAttribute
+        protected int postLength;
+        @XmlAttribute
+        protected int shortBreak;
+        @XmlAttribute
+        protected String isFormativeOsce;
+
+        /**
+         * Gets the value of the value property.
+         * 
+         * @return
+         *     possible object is
+         *     {@link String }
+         *     
+         */
+        public String getValue() {
+            return value;
+        }
+
+        /**
+         * Sets the value of the value property.
+         * 
+         * @param value
+         *     allowed object is
+         *     {@link String }
+         *     
+         */
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        /**
+         * Gets the value of the id property.
+         * 
+         */
+        public long getId() {
+            return id;
+        }
+
+        /**
+         * Sets the value of the id property.
+         * 
+         */
+        public void setId(long value) {
+            this.id = value;
+        }
+
+		public int getPostLength() {
+			return postLength;
+		}
+
+		public void setPostLength(int postLength) {
+			this.postLength = postLength;
+		}
+
+		public int getShortBreak() {
+			return shortBreak;
+		}
+
+		public void setShortBreak(int shortBreak) {
+			this.shortBreak = shortBreak;
+		}
+		
+		public String getIsFormativeOsce() {
+			return isFormativeOsce;
+		}
+		
+		public void setIsFormativeOsce(String isFormativeOsce) {
+			this.isFormativeOsce = isFormativeOsce;
+		}
+    }
 }

@@ -4,13 +4,11 @@ import static org.apache.commons.lang.StringUtils.defaultString;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBContext;
@@ -20,7 +18,6 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.Assignment;
-import ch.unibas.medizin.osce.domain.BucketInformation;
 import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.ChecklistCriteria;
 import ch.unibas.medizin.osce.domain.ChecklistItem;
@@ -32,6 +29,7 @@ import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.domain.OsceSequence;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
+import ch.unibas.medizin.osce.domain.StudentOsces;
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
 import ch.unibas.medizin.osce.server.service.ObjectFactory;
 import ch.unibas.medizin.osce.server.service.Oscedata;
@@ -45,19 +43,18 @@ import ch.unibas.medizin.osce.server.service.Oscedata.Checklists.Checklist.Check
 import ch.unibas.medizin.osce.server.service.Oscedata.Checklists.Checklist.Checklistitems.Checklistitem.Checklistoptions;
 import ch.unibas.medizin.osce.server.service.Oscedata.Checklists.Checklist.Checklistitems.Checklistitem.Checklistoptions.Checklistoption;
 import ch.unibas.medizin.osce.server.service.Oscedata.Courses;
-import ch.unibas.medizin.osce.server.service.Oscedata.Credentials;
-import ch.unibas.medizin.osce.server.service.Oscedata.Credentials.Host;
+import ch.unibas.medizin.osce.server.service.Oscedata.Exam;
 import ch.unibas.medizin.osce.server.service.Oscedata.Examiners;
 import ch.unibas.medizin.osce.server.service.Oscedata.Examiners.Examiner;
 import ch.unibas.medizin.osce.server.service.Oscedata.Rotations;
 import ch.unibas.medizin.osce.server.service.Oscedata.Rotations.Rotation;
 import ch.unibas.medizin.osce.server.service.Oscedata.Stations;
 import ch.unibas.medizin.osce.server.service.Oscedata.Stations.Station;
-import ch.unibas.medizin.osce.shared.BucketInfoType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 public class ExportiOSCEXml {
 	private static Logger Log = Logger.getLogger(ExportiOSCEXml.class);
+	private static DateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm");
 	
 	public ExportiOSCEXml() {
 	}
@@ -95,6 +92,7 @@ public class ExportiOSCEXml {
 			Oscedata oscedata = factory.createOscedata();
 			oscedata.setVersion(1.1f);
 			
+			exportExam(factory, oscedata, osce);
 			exportChecklist(factory, oscedata, osceId);
 			exportExaminers(osceId, factory, oscedata);
 			exportCandidates(osceId, factory, oscedata);
@@ -122,6 +120,16 @@ public class ExportiOSCEXml {
 		return null;
 	}
 	
+	private void exportExam(ObjectFactory factory, Oscedata oscedata, Osce osce) {
+		Exam examBean = factory.createOscedataExam();
+		oscedata.setExam(examBean);
+		
+		examBean.setId(osce.getId());
+		examBean.setPostLength(osce.getPostLength() == null ? 0 : osce.getPostLength());
+		examBean.setShortBreak(osce.getShortBreak() == null ? 0 : osce.getShortBreak().intValue());
+		examBean.setIsFormativeOsce(osce.getIsFormativeOsce() == null ? Boolean.FALSE.toString() : osce.getIsFormativeOsce().toString());
+	}
+
 	private void exportChecklist(ObjectFactory factory, Oscedata oscedata, Long osceId) {
 
 		Log.info("export exportChecklist at : StandardizedRole");
@@ -256,7 +264,7 @@ public class ExportiOSCEXml {
 		}
 	}
 
-	private void exportCandidates(Long osceId, ObjectFactory factory, Oscedata oscedata) {
+	/*private void exportCandidates(Long osceId, ObjectFactory factory, Oscedata oscedata) {
 
 		Log.info("export exportCandidates at : StandardizedRole");
 
@@ -299,8 +307,32 @@ public class ExportiOSCEXml {
 				candidateBean.setEmail(email);
 			}
 		}
-	}
+	}*/
 
+	private void exportCandidates(Long osceId, ObjectFactory factory, Oscedata oscedata) {
+
+		Log.info("export exportCandidates at : StandardizedRole");
+
+		Candidates candidatesBean = factory.createOscedataCandidates();
+		oscedata.setCandidates(candidatesBean);
+		
+		List<StudentOsces> studentOsceList = StudentOsces.findStudentByIsEnrolledAndOsceId(osceId);
+		
+		for (StudentOsces studentOsce : studentOsceList) {
+			Candidate candidateBean = factory.createOscedataCandidatesCandidate();
+			candidatesBean.getCandidate().add(candidateBean);
+
+			candidateBean.setId(studentOsce.getStudent() == null ? 0l : studentOsce.getStudent().getId());	
+			
+			String firstName = studentOsce.getStudent() == null ? "" : (studentOsce.getStudent().getPreName() == null ? "" : studentOsce.getStudent().getPreName());
+			candidateBean.setFirstname(firstName);
+			String lastName = studentOsce.getStudent() == null ? "" : (studentOsce.getStudent().getName() == null ? "" : studentOsce.getStudent().getName());
+			candidateBean.setLastname(lastName);
+			String email = studentOsce.getStudent() == null ? "" : (studentOsce.getStudent().getEmail() == null ? "" : studentOsce.getStudent().getEmail());
+			candidateBean.setEmail(email);
+		}	
+	}
+	
 	private void exportStations(Long osceId, ObjectFactory factory, Oscedata oscedata) {
 
 		Log.info("export exportStations at : StandardizedRole");
@@ -397,7 +429,8 @@ public class ExportiOSCEXml {
 		
 		for (int j=0; j<osceDayList.size(); j++)
 		{
-			List<OsceSequence> sequenceList = OsceSequence.findOsceSequenceByOsceDay(osceDayList.get(j).getId());
+			OsceDay osceDay =  osceDayList.get(j);
+			List<OsceSequence> sequenceList = OsceSequence.findOsceSequenceByOsceDay(osceDay.getId());
 			
 			for (int k=0; k<sequenceList.size(); k++)
 			{
@@ -416,6 +449,30 @@ public class ExportiOSCEXml {
 						rotationBean.setId(Long.parseLong((l+1) + "" + course.getId()));
 						rotationBean.setTitle(("Rotation " + String.format("%02d", (l+1)) + " " + constants.getString(course.getColor())));
 						rotationBean.setCourseId(course.getId());
+						
+						List<Date> timeList = Assignment.findMinTimeStartAndMaxTimeEndByOsceDayAndRotationNumber(osceDay.getId(), l);
+						
+						if (timeList.size() == 2) {
+							if (timeList.get(0) != null) {
+								String timeStart = DATE_FORMAT.format(timeList.get(0));
+								rotationBean.setStartTime(timeStart);
+							}
+							else {
+								rotationBean.setStartTime("");
+							}
+							
+							if (timeList.get(1) != null) {
+								String timeEnd = DATE_FORMAT.format(timeList.get(1));
+								rotationBean.setEndTime(timeEnd);
+							} 
+							else {
+								rotationBean.setEndTime("");
+							}
+						}
+						else {
+							rotationBean.setStartTime("");
+							rotationBean.setEndTime("");
+						}
 						
 						ch.unibas.medizin.osce.server.service.Oscedata.Rotations.Rotation.Stations stationsBean = factory.createOscedataRotationsRotationStations();
 						rotationBean.setStations(stationsBean);

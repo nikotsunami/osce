@@ -375,6 +375,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 			//osce.setSecurity(OSCESecurityStatus.FEDERAL_EXAM);
 			//osce.setOsceSecurityTypes(OsceSecurityType.federal);
 			osce.setSpStayInPost(((OsceEditViewImpl)view).spStayInPost.isChecked());
+			osce.setIsFormativeOsce(((OsceEditViewImpl)view).isFormativeOsce.getValue());
 			
 			osceRequest.persist().using(osce).fire(new OSCEReceiver<Void>(view.getOsceMap()) {
 				// E Highlight onViolation
@@ -504,7 +505,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 			osceProxy.setOsceSecurityTypes(OsceSecurityType.federal);
 			osceProxy.setSpStayInPost(((OsceEditViewImpl)view).spStayInPost.isChecked());
 			osceProxy.setOsceCreationType(((OsceEditViewImpl)view).osceCreationType.getValue());
-			
+			osceProxy.setIsFormativeOsce(((OsceEditViewImpl)view).isFormativeOsce.getValue());
 			//Set<TaskProxy> setTaskProxy = new HashSet<TaskProxy>();
 			//setTaskProxy=((OsceEditViewImpl)view).osceValue.getValue().getTasks();
 			//osceProxy.setTasks(setTaskProxy);

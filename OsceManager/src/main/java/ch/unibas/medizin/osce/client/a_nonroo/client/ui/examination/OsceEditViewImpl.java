@@ -408,6 +408,12 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 	
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 	
+	@UiField
+	public DivElement labelIsFormativeOsce;
+	
+	@UiField
+	public CheckBox isFormativeOsce;
+	
 	// Highlight onViolation
 		Map<String, Widget> osceMap;
 		
@@ -469,6 +475,8 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 		timeUnit.setWidth("90%");
 		bucketInfo.setWidth("90%");
 		encryptionType.setWidth("90%");
+		
+		labelIsFormativeOsce.setInnerText(constants.isFormativeOsce());
 		//remove number post
 		//numberPost.setInnerText(constants.circuitStation());
 		
@@ -968,6 +976,8 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 		numberCourses.setValue(osce.getNumberCourses());
 		numberRooms.setValue(osce.getNumberRooms());
 		spStayInPost.setValue(osce.getSpStayInPost());
+
+		isFormativeOsce.setValue(osce.getIsFormativeOsce() == null ? false : osce.getIsFormativeOsce());
 
 		if(osceSettingsProxy != null){
 			bucketInfo.setValue(osceSettingsProxy.getInfotype(), true);

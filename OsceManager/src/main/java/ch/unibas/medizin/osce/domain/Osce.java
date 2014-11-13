@@ -149,6 +149,8 @@ public class Osce {
     private List<PostAnalysis> postAnalysis = new ArrayList<PostAnalysis>();
     
     private OsceCreationType osceCreationType;
+    
+    private Boolean isFormativeOsce;
     /**
 	 * Get number of slots until a SP change is necessary (lowest number of consecutive slots
 	 * is defined by the most difficult role)

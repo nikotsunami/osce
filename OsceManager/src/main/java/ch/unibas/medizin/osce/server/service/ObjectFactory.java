@@ -35,6 +35,15 @@ public class ObjectFactory {
      */
     public ObjectFactory() {
     }
+    
+    /**
+     * Create an instance of {@link Oscedata.Exam }
+     * 
+     */
+    public Oscedata.Exam createOscedataExam() {
+        return new Oscedata.Exam();
+    }
+
 
     /**
      * Create an instance of {@link Oscedata.Rotations }

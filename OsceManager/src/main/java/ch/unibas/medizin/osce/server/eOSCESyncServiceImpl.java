@@ -2058,29 +2058,32 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				}
 			}
 			
-			List<Osce> osceList = Osce.findAllOsceBySemster(semesterId);
+			//List<Osce> osceList = Osce.findAllOsceBySemster(semesterId);
+			List<Osce> osceList = Osce.findOsceBySemesterId(semesterId);
 			
 			for (Osce osce : osceList)
 			{
-				ExportOsceData exportOsceData = new ExportOsceData();
-				
-				String fileName = osce.getSemester().getSemester().toString() 
-						+ osce.getSemester().getCalYear().toString().substring(2, osce.getSemester().getCalYear().toString().length()) 
-						+ "-" + (constants.getString(osce.getStudyYear().toString()).replace(".", "")); 
-				
-				if (ExportOsceType.EOSCE.equals(osceType)) {
-					fileName = fileName + OsMaFilePathConstant.EOSCE_FILE_EXTENSION;
-				} 
-				else if (ExportOsceType.IOSCE.equals(osceType)) {
-					fileName = fileName + OsMaFilePathConstant.IOSCE_FILE_EXTENSION;
-				}
-				
-				if (processedList.contains(fileName)) {
-					processedOsceIdList.add(osce.getId().toString());
-					exportOsceData.setOsceId(osce.getId());
-					exportOsceData.setFilename(fileName);
+				if ((ExportOsceType.EOSCE.equals(osceType) && osce.getIsFormativeOsce() != null && osce.getIsFormativeOsce()) == false) {
+					ExportOsceData exportOsceData = new ExportOsceData();
 					
-					exportOsceDataList.add(exportOsceData);
+					String fileName = osce.getSemester().getSemester().toString() 
+							+ osce.getSemester().getCalYear().toString().substring(2, osce.getSemester().getCalYear().toString().length()) 
+							+ "-" + (constants.getString(osce.getStudyYear().toString()).replace(".", "")); 
+					
+					if (ExportOsceType.EOSCE.equals(osceType)) {
+						fileName = fileName + OsMaFilePathConstant.EOSCE_FILE_EXTENSION;
+					} 
+					else if (ExportOsceType.IOSCE.equals(osceType)) {
+						fileName = fileName + OsMaFilePathConstant.IOSCE_FILE_EXTENSION;
+					}
+					
+					if (processedList.contains(fileName)) {
+						processedOsceIdList.add(osce.getId().toString());
+						exportOsceData.setOsceId(osce.getId());
+						exportOsceData.setFilename(fileName);
+						
+						exportOsceDataList.add(exportOsceData);
+					}
 				}
 			}
 		} 
@@ -2118,28 +2121,31 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				}
 			}
 			
-			List<Osce> osceList = Osce.findAllOsceBySemster(semesterId);
+			//List<Osce> osceList = Osce.findAllOsceBySemster(semesterId);
+			List<Osce> osceList = Osce.findOsceBySemesterId(semesterId);
 			
 			for (Osce osce : osceList)
 			{
-				ExportOsceData exportOsceData = new ExportOsceData();
-				String fileName = osce.getSemester().getSemester().toString() 
-						+ osce.getSemester().getCalYear().toString().substring(2, osce.getSemester().getCalYear().toString().length()) 
-						+ "-" + (constants.getString(osce.getStudyYear().toString()).replace(".", "")); 
-										
-				if (ExportOsceType.EOSCE.equals(osceType)) {
-					fileName = fileName + OsMaFilePathConstant.EOSCE_FILE_EXTENSION;
-				} 
-				else if (ExportOsceType.IOSCE.equals(osceType)) {
-					fileName = fileName + OsMaFilePathConstant.IOSCE_FILE_EXTENSION;
-				}
-				
-				if (processedList.contains(fileName) == false) {
-					unprocessedOsceIdList.add(osce.getId().toString());
-					exportOsceData.setOsceId(osce.getId());
-					exportOsceData.setFilename(fileName);
+				if ((ExportOsceType.EOSCE.equals(osceType) && osce.getIsFormativeOsce() != null && osce.getIsFormativeOsce()) == false) {
+					ExportOsceData exportOsceData = new ExportOsceData();
+					String fileName = osce.getSemester().getSemester().toString() 
+							+ osce.getSemester().getCalYear().toString().substring(2, osce.getSemester().getCalYear().toString().length()) 
+							+ "-" + (constants.getString(osce.getStudyYear().toString()).replace(".", "")); 
+											
+					if (ExportOsceType.EOSCE.equals(osceType)) {
+						fileName = fileName + OsMaFilePathConstant.EOSCE_FILE_EXTENSION;
+					} 
+					else if (ExportOsceType.IOSCE.equals(osceType)) {
+						fileName = fileName + OsMaFilePathConstant.IOSCE_FILE_EXTENSION;
+					}
 					
-					exportOsceDataList.add(exportOsceData);
+					if (processedList.contains(fileName) == false) {
+						unprocessedOsceIdList.add(osce.getId().toString());
+						exportOsceData.setOsceId(osce.getId());
+						exportOsceData.setFilename(fileName);
+						
+						exportOsceDataList.add(exportOsceData);
+					}
 				}
 			}
 		}
@@ -2219,20 +2225,21 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				for (String osceId : osceIdList)
 				{
 					Osce osce = Osce.findOsce(Long.parseLong(osceId));
-					String fileName = osce.getSemester().getSemester().toString() 
-							+ osce.getSemester().getCalYear().toString().substring(2, osce.getSemester().getCalYear().toString().length()) 
-							+ "-" + (constants.getString(osce.getStudyYear().toString()).replace(".", ""));
-					
-					if (ExportOsceType.EOSCE.equals(osceType)) {
-						fileName = path + fileName + OsMaFilePathConstant.EOSCE_FILE_EXTENSION;	
-	            	}
-	            	else if (ExportOsceType.IOSCE.equals(osceType)) {
-	            		fileName = path + fileName + OsMaFilePathConstant.IOSCE_FILE_EXTENSION;;
-	            	}
-					
-					File file = new File(fileName);
-					
-					if (file.exists() == false) {
+					if ((ExportOsceType.EOSCE.equals(osceType) && osce.getIsFormativeOsce() != null && osce.getIsFormativeOsce()) == false) {
+						String fileName = osce.getSemester().getSemester().toString() 
+								+ osce.getSemester().getCalYear().toString().substring(2, osce.getSemester().getCalYear().toString().length()) 
+								+ "-" + (constants.getString(osce.getStudyYear().toString()).replace(".", ""));
+						
+						if (ExportOsceType.EOSCE.equals(osceType)) {
+							fileName = path + fileName + OsMaFilePathConstant.EOSCE_FILE_EXTENSION;	
+		            	}
+		            	else if (ExportOsceType.IOSCE.equals(osceType)) {
+		            		fileName = path + fileName + OsMaFilePathConstant.IOSCE_FILE_EXTENSION;;
+		            	}
+						
+						File file = new File(fileName);
+						
+						//if (file.exists() == false) {
 						if (ExportOsceType.EOSCE.equals(osceType)) {
 							byte[] bytes = new ExporteOSCEXml().generateXmlFileByOsceId(Long.parseLong(osceId), osce);
 							FileUtils.touch(file);
@@ -2243,32 +2250,33 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 							FileUtils.touch(file);
 							FileUtils.writeByteArrayToFile(file, bytes);
 						}
-					}
+						//}
+						
+						client.putObject(bucketName, file.getName(), file);
 					
-					client.putObject(bucketName, file.getName(), file);
-				
-					//move file to processed		
-					String processedFilePath = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
-					if (ExportOsceType.EOSCE.equals(osceType)) {
-						processedFilePath = processedFilePath + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
-	            	}
-	            	else if (ExportOsceType.IOSCE.equals(osceType)) {
-	            		processedFilePath = processedFilePath + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
-	            	}
-					
-					File dir = new File(processedFilePath);
-					if (dir.exists())
-					{
-						//file.renameTo(new File(dir, file.getName()));
-						FileUtils.copyFile(file, new File(dir, file.getName()));
-						file.delete();
-					}
-					else
-					{	
-						dir.mkdirs();
-						//file.renameTo(new File(dir, file.getName()));
-						FileUtils.copyFile(file, new File(dir, file.getName()));
-						file.delete();
+						//move file to processed		
+						String processedFilePath = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+						if (ExportOsceType.EOSCE.equals(osceType)) {
+							processedFilePath = processedFilePath + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
+		            	}
+		            	else if (ExportOsceType.IOSCE.equals(osceType)) {
+		            		processedFilePath = processedFilePath + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+		            	}
+						
+						File dir = new File(processedFilePath);
+						if (dir.exists())
+						{
+							//file.renameTo(new File(dir, file.getName()));
+							FileUtils.copyFile(file, new File(dir, file.getName()));
+							file.delete();
+						}
+						else
+						{	
+							dir.mkdirs();
+							//file.renameTo(new File(dir, file.getName()));
+							FileUtils.copyFile(file, new File(dir, file.getName()));
+							file.delete();
+						}
 					}
 				}	
 			}			
@@ -2297,18 +2305,18 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	            	}
 					
 					File file = new File(path);
-					if (file.exists() == false) {
-						if (ExportOsceType.EOSCE.equals(osceType)) {
-							byte[] bytes = new ExporteOSCEXml().generateXmlFileByOsceId(Long.parseLong(osceId), osce);
-							FileUtils.touch(file);
-							FileUtils.writeByteArrayToFile(file, bytes);
-						} 
-						else if (ExportOsceType.IOSCE.equals(osceType)) {
-							byte[] bytes = new ExportiOSCEXml().generateXmlFileByOsceId(Long.parseLong(osceId), osce);
-							FileUtils.touch(file);
-							FileUtils.writeByteArrayToFile(file, bytes);
-						}
+					//if (file.exists() == false) {
+					if (ExportOsceType.EOSCE.equals(osceType)) {
+						byte[] bytes = new ExporteOSCEXml().generateXmlFileByOsceId(Long.parseLong(osceId), osce);
+						FileUtils.touch(file);
+						FileUtils.writeByteArrayToFile(file, bytes);
+					} 
+					else if (ExportOsceType.IOSCE.equals(osceType)) {
+						byte[] bytes = new ExportiOSCEXml().generateXmlFileByOsceId(Long.parseLong(osceId), osce);
+						FileUtils.touch(file);
+						FileUtils.writeByteArrayToFile(file, bytes);
 					}
+					//}
 					
 					client.putObject(bucketName, file.getName(), file);
 				}
@@ -2383,20 +2391,21 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	            	for (String osceId : osceIdList)
 					{
 	            		Osce osce = Osce.findOsce(Long.parseLong(osceId));
-						String fileName = osce.getSemester().getSemester().toString() 
-								+ osce.getSemester().getCalYear().toString().substring(2, osce.getSemester().getCalYear().toString().length()) 
-								+ "-" + (constants.getString(osce.getStudyYear().toString()).replace(".", ""));
-						
-						if (ExportOsceType.EOSCE.equals(osceType)) {
-							fileName = path + fileName + OsMaFilePathConstant.EOSCE_FILE_EXTENSION;	
-		            	}
-		            	else if (ExportOsceType.IOSCE.equals(osceType)) {
-		            		fileName = path + fileName + OsMaFilePathConstant.IOSCE_FILE_EXTENSION;;
-		            	}
-						
-						File file = new File(fileName);
-						
-						if (file.exists() == false) {
+	            		if ((ExportOsceType.EOSCE.equals(osceType) && osce.getIsFormativeOsce() != null && osce.getIsFormativeOsce()) == false) {
+	            			String fileName = osce.getSemester().getSemester().toString() 
+									+ osce.getSemester().getCalYear().toString().substring(2, osce.getSemester().getCalYear().toString().length()) 
+									+ "-" + (constants.getString(osce.getStudyYear().toString()).replace(".", ""));
+							
+							if (ExportOsceType.EOSCE.equals(osceType)) {
+								fileName = path + fileName + OsMaFilePathConstant.EOSCE_FILE_EXTENSION;	
+			            	}
+			            	else if (ExportOsceType.IOSCE.equals(osceType)) {
+			            		fileName = path + fileName + OsMaFilePathConstant.IOSCE_FILE_EXTENSION;;
+			            	}
+							
+							File file = new File(fileName);
+							
+							//if (file.exists() == false) {
 							if (ExportOsceType.EOSCE.equals(osceType)) {
 								byte[] bytes = new ExporteOSCEXml().generateXmlFileByOsceId(Long.parseLong(osceId), osce);
 								FileUtils.touch(file);
@@ -2407,36 +2416,37 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 								FileUtils.touch(file);
 								FileUtils.writeByteArrayToFile(file, bytes);
 							}
-						}
+							//}
+							
+							//fis = new FileInputStream(file);
+							//client.storeFile(basePath + fileName, fis);
+							channelSftp.put(new FileInputStream(file), file.getName());
 						
-						//fis = new FileInputStream(file);
-						//client.storeFile(basePath + fileName, fis);
-						channelSftp.put(new FileInputStream(file), file.getName());
-					
-						//move file to processed
-						String processedFilePath = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + semester.getSemester() + semester.getCalYear();
-						if (ExportOsceType.EOSCE.equals(osceType)) {
-							processedFilePath = processedFilePath + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
-		            	}
-		            	else if (ExportOsceType.IOSCE.equals(osceType)) {
-		            		processedFilePath = processedFilePath + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
-		            	}
-						File dir = new File(processedFilePath);
-						if (dir.exists())
-						{
-							//file.renameTo(new File(dir, file.getName()));
-							FileUtils.copyFile(file, new File(dir, file.getName()));
-							//fis.close();
-							file.delete();
-						}
-						else
-						{	
-							dir.mkdirs();
-							//file.renameTo(new File(dir, file.getName()));
-							FileUtils.copyFile(file, new File(dir, file.getName()));
-							//fis.close();
-							file.delete();
-						}
+							//move file to processed
+							String processedFilePath = OsMaFilePathConstant.EXPORT_OSCE_PROCESSED_FILEPATH + semester.getSemester() + semester.getCalYear();
+							if (ExportOsceType.EOSCE.equals(osceType)) {
+								processedFilePath = processedFilePath + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
+			            	}
+			            	else if (ExportOsceType.IOSCE.equals(osceType)) {
+			            		processedFilePath = processedFilePath + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+			            	}
+							File dir = new File(processedFilePath);
+							if (dir.exists())
+							{
+								//file.renameTo(new File(dir, file.getName()));
+								FileUtils.copyFile(file, new File(dir, file.getName()));
+								//fis.close();
+								file.delete();
+							}
+							else
+							{	
+								dir.mkdirs();
+								//file.renameTo(new File(dir, file.getName()));
+								FileUtils.copyFile(file, new File(dir, file.getName()));
+								//fis.close();
+								file.delete();
+							}
+	            		}
 					}	
 				}			
 				else
@@ -2466,18 +2476,18 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 						
 						File file = new File(fileName);
 						
-						if (file.exists() == false) {
-							if (ExportOsceType.EOSCE.equals(osceType)) {
-								byte[] bytes = new ExporteOSCEXml().generateXmlFileByOsceId(Long.parseLong(osceId), osce);
-								FileUtils.touch(file);
-								FileUtils.writeByteArrayToFile(file, bytes);
-							} 
-							else if (ExportOsceType.IOSCE.equals(osceType)) {
-								byte[] bytes = new ExportiOSCEXml().generateXmlFileByOsceId(Long.parseLong(osceId), osce);
-								FileUtils.touch(file);
-								FileUtils.writeByteArrayToFile(file, bytes);
-							}
+						//if (file.exists() == false) {
+						if (ExportOsceType.EOSCE.equals(osceType)) {
+							byte[] bytes = new ExporteOSCEXml().generateXmlFileByOsceId(Long.parseLong(osceId), osce);
+							FileUtils.touch(file);
+							FileUtils.writeByteArrayToFile(file, bytes);
+						} 
+						else if (ExportOsceType.IOSCE.equals(osceType)) {
+							byte[] bytes = new ExportiOSCEXml().generateXmlFileByOsceId(Long.parseLong(osceId), osce);
+							FileUtils.touch(file);
+							FileUtils.writeByteArrayToFile(file, bytes);
 						}
+						//}
 						channelSftp.put(new FileInputStream(file), file.getName());
 						//fis = new FileInputStream(file);
 						//client.storeFile(basePath + fileName, fis);

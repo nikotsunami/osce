@@ -216,6 +216,13 @@
 								<td>
 									<r:ShortBox ui:field="longBreakRequiredTime" />
 								</td>
+								
+								<td>
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceForTask">OSCE for Task :</div>
+								</td>
+								<td>
+									<i:DefaultSuggestBox ui:field="osceValue"></i:DefaultSuggestBox>
+								</td>
 							</tr>
 							<tr>
 								<td id="spStayInPost">
@@ -227,10 +234,10 @@
 								</td>
 
 								<td>
-									<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceForTask">OSCE for Task :</div>
+									<div class="{style.checkBoxlabel} {style.leftpadding10}" ui:field="labelIsFormativeOsce"></div>
 								</td>
 								<td>
-									<i:DefaultSuggestBox ui:field="osceValue"></i:DefaultSuggestBox>
+									<g:CheckBox ui:field="isFormativeOsce"></g:CheckBox>
 								</td>
 
 

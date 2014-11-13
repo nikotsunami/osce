@@ -247,6 +247,19 @@
 										<span ui:field="osceCreationType" />
 									</td>
 								</tr>
+								
+								<tr>
+									<td>
+										<span class="{style.label}" ui:field="labelIsFormativeOsce"></span>
+									</td>
+									<td>
+										<span ui:field="isFormativeOsce" />
+									</td>
+									<td>
+									</td>
+									<td>
+									</td>
+								</tr>
 							</table>
 						</g:HTMLPanel>
 

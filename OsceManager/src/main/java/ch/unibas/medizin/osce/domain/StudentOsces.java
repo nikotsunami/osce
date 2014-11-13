@@ -112,4 +112,11 @@ public class StudentOsces {
     	TypedQuery<StudentOsces> q = em.createQuery(queryString, StudentOsces.class);
     	return q.getResultList().size();
     }
+    
+    public static List<StudentOsces> findStudentByIsEnrolledAndOsceId(Long osceId) {
+    	EntityManager em = entityManager();
+    	String sql = "SELECT o FROM StudentOsces as o where o.osce.id = " + osceId + " AND o.isEnrolled = true";
+    	TypedQuery<StudentOsces> query = em.createQuery(sql, StudentOsces.class);
+    	return query.getResultList();
+    }
 }

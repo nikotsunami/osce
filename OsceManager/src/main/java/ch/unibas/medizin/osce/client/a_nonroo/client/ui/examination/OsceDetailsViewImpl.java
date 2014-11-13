@@ -173,6 +173,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		exportSettingsQRCode.setText(constants.exportSettingsQRCode());
 		exportXml.setText(constants.exportSettingsXml());
 		newButton.setText(constants.osceAddTask());
+		labelIsFormativeOsce.setInnerText(constants.isFormativeOsce());
 		
 		init();
 		
@@ -445,6 +446,11 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	@UiField
 	SpanElement autoSelection;
 	
+	@UiField
+	SpanElement labelIsFormativeOsce;
+	
+	@UiField
+	SpanElement isFormativeOsce;
 	/* @UiField
 	    DateBox deadline;
 
@@ -1018,6 +1024,12 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		else
 		{
 			osceCreationType.setInnerText(proxy.getOsceCreationType().toString());
+		}
+		
+		if(proxy.getIsFormativeOsce() == null || proxy.getIsFormativeOsce() == false) {
+			isFormativeOsce.setInnerHTML(OsMaConstant.UNCHECK_ICON.asString());
+		} else {
+			isFormativeOsce.setInnerHTML(OsMaConstant.CHECK_ICON.asString());
 		}
 		
 		System.out.println("total task"+ proxy.getTasks().size());
