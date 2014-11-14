@@ -99,20 +99,26 @@ public class ChecklistCriteria implements Comparable<ChecklistCriteria> {
 	}
 	
 	public static ChecklistItem removeChecklistCriteria(Long criteriaId) {
-		ChecklistCriteria checklistCriteria = ChecklistCriteria.findChecklistCriteria(criteriaId);
-		ChecklistItem checklistItem = checklistCriteria.getChecklistItem();
-		checklistCriteria.remove();
+		List<Answer> answerList = Answer.findAnswerByChecklistCriteria(criteriaId);
 		
-		if (checklistCriteria != null && checklistItem.getCheckListCriterias() != null && checklistItem.getCheckListCriterias().size() > 0) {
-			int seqNumber = 0;
-			for (ChecklistCriteria criteria : checklistItem.getCheckListCriterias()) {
-				criteria.setSequenceNumber(seqNumber);
-				criteria.persist();
-				seqNumber += 1;
+		if (answerList == null || answerList.isEmpty()) {
+			ChecklistCriteria checklistCriteria = ChecklistCriteria.findChecklistCriteria(criteriaId);
+			ChecklistItem checklistItem = checklistCriteria.getChecklistItem();
+			checklistCriteria.remove();
+			
+			if (checklistCriteria != null && checklistItem.getCheckListCriterias() != null && checklistItem.getCheckListCriterias().size() > 0) {
+				int seqNumber = 0;
+				for (ChecklistCriteria criteria : checklistItem.getCheckListCriterias()) {
+					criteria.setSequenceNumber(seqNumber);
+					criteria.persist();
+					seqNumber += 1;
+				}
 			}
+			
+			return checklistItem;
 		}
 		
-		return checklistItem;
+		return null;
 	}
 	
 	public static int findMaxSequenceNumberByItemId(Long itemId) {

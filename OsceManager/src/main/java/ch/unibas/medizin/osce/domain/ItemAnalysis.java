@@ -206,4 +206,12 @@ public class ItemAnalysis {
 		TypedQuery<Long> q = em.createQuery(sql, Long.class);
 		return q.getResultList();
 	}
+	
+	public static List<ItemAnalysis> findItemAnalysisByChecklistItem(Long checklistItemId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT a FROM ItemAnalysis a WHERE a.checklistItem is not null AND a.checklistItem.id = " + checklistItemId;
+		TypedQuery<ItemAnalysis> query = em.createQuery(sql, ItemAnalysis.class);
+		return query.getResultList();
+	}
 }
+

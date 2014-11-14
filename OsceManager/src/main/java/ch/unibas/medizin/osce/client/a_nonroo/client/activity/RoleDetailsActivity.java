@@ -8163,17 +8163,24 @@ public void onDragStart(DragStartEvent event) {
 		@Override
 		public void deleteChecklistTabClicked(final ScrolledTabLayoutPanel checklistTabPanel, final ChecklistItemProxy checklistItemProxy) {
 			
-			requests.checklistItemRequestNonRoo().removeChecklistTabItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Void>() {
+			requests.checklistItemRequestNonRoo().removeChecklistTabItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
-				public void onSuccess(Void response) {
-					if (checklistTabPanel.getWidgetCount() == 1) {
-						checklistTabPanel.getParent().removeFromParent();
-						checklistTabPanel.removeFromParent();
-					} else {
-						Widget widget = checklistTabPanel.getWidget(checklistTabPanel.getSelectedIndex());
-						checklistTabPanel.remove(widget);
+				public void onSuccess(Boolean response) {
+					if (response) {
+						if (checklistTabPanel.getWidgetCount() == 1) {
+							checklistTabPanel.getParent().removeFromParent();
+							checklistTabPanel.removeFromParent();
+						} else {
+							Widget widget = checklistTabPanel.getWidget(checklistTabPanel.getSelectedIndex());
+							checklistTabPanel.remove(widget);
+						}
 					}
+					else {
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+						dialogBox.showConfirmationDialog(constants.deleteTabError());
+					}
+					
 				}
 			});
 			
@@ -8181,22 +8188,34 @@ public void onDragStart(DragStartEvent event) {
 
 		@Override
 		public void deleteTopicClicked(final RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl, ChecklistItemProxy checklistItemProxy) {
-			requests.checklistItemRequestNonRoo().removeChecklistTopicItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Void>() {
+			requests.checklistItemRequestNonRoo().removeChecklistTopicItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
-				public void onSuccess(Void response) {
-					roleDetailsChecklistTopicSubViewImpl.removeFromParent();
+				public void onSuccess(Boolean response) {
+					if (response) {
+						roleDetailsChecklistTopicSubViewImpl.removeFromParent();
+					}
+					else {
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+						dialogBox.showConfirmationDialog(constants.deleteTopicError());
+					}
 				}
 			});
 		}
 
 		@Override
 		public void deleteChecklistQuestionClicked(final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl, ChecklistItemProxy checklistItemProxy) {
-			requests.checklistItemRequestNonRoo().removeChecklistItemQuestionItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Void>() {
+			requests.checklistItemRequestNonRoo().removeChecklistItemQuestionItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
-				public void onSuccess(Void response) {
-					roleDetailsChecklistItemSubViewImpl.removeFromParent();
+				public void onSuccess(Boolean response) {
+					if (response) {
+						roleDetailsChecklistItemSubViewImpl.removeFromParent();
+					}
+					else {
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+						dialogBox.showConfirmationDialog(constants.deleteQuestionError());
+					}
 				}
 			});
 		}
@@ -8331,8 +8350,14 @@ public void onDragStart(DragStartEvent event) {
 
 				@Override
 				public void onSuccess(ChecklistItemProxy response) {
-					roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(response);
-					roleDetailsChecklistItemSubViewImpl.getCriteriaTable().setRowData(response.getCheckListCriterias());
+					if (response == null) {
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+						dialogBox.showConfirmationDialog(constants.deleteCriteriaError());
+					} 
+					else {
+						roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(response);
+						roleDetailsChecklistItemSubViewImpl.getCriteriaTable().setRowData(response.getCheckListCriterias());
+					}
 				}
 			});
 		}
@@ -8343,8 +8368,14 @@ public void onDragStart(DragStartEvent event) {
 
 				@Override
 				public void onSuccess(ChecklistItemProxy response) {
-					roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(response);
-					roleDetailsChecklistItemSubViewImpl.getOptionTable().setRowData(response.getCheckListOptions());
+					if (response == null) {
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+						dialogBox.showConfirmationDialog(constants.deleteOptionError());
+					} 
+					else {
+						roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(response);
+						roleDetailsChecklistItemSubViewImpl.getOptionTable().setRowData(response.getCheckListOptions());
+					}
 				}
 			});
 		}

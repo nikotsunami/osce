@@ -16,6 +16,12 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.SetJoin;
 
 import org.apache.commons.math.stat.StatUtils;
 import org.apache.log4j.Logger;
@@ -1603,5 +1609,34 @@ public class Answer {
 			return query.getResultList().get(0);
 		else
 			return null;
+	}
+	
+	public static List<Answer> findAnswerByChecklistOption(Long optionId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT a FROM Answer a WHERE a.checklistOption is not null AND a.checklistOption.id = " + optionId;
+		TypedQuery<Answer> query = em.createQuery(sql, Answer.class);
+		return query.getResultList();
+	}
+	
+	public static List<Answer> findAnswerByChecklistCriteria(Long criteriaId) {
+		CriteriaBuilder criteriaBuilder = entityManager().getCriteriaBuilder();
+		CriteriaQuery<Answer> criteriaQuery = criteriaBuilder.createQuery(Answer.class);
+		Root<Answer> from = criteriaQuery.from(Answer.class);
+		
+		SetJoin<Answer, ChecklistCriteria> joinSet = from.joinSet("checklistCriteria", JoinType.LEFT);
+		Predicate predicate = criteriaBuilder.equal(joinSet.get("id"), criteriaId);
+		
+		criteriaQuery.where(predicate);
+		
+		TypedQuery<Answer> query = entityManager().createQuery(criteriaQuery);
+		
+		return query.getResultList();
+	}
+	
+	public static List<Answer> findAnswerByChecklistItem(Long checklistItemId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT a FROM Answer a WHERE a.checklistItem is not null AND a.checklistItem.id = " + checklistItemId;
+		TypedQuery<Answer> query = em.createQuery(sql, Answer.class);
+		return query.getResultList();
 	}
 }

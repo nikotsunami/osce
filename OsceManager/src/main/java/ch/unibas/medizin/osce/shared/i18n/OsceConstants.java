@@ -1743,6 +1743,16 @@ public interface OsceConstants extends Constants {
 	public String isFormativeOsce();
 	
 	public String exportFormativeOsceError();
+	
+	public String deleteOptionError();
+	
+	public String deleteCriteriaError();
+	
+	public String deleteQuestionError();
+	
+	public String deleteTopicError(); 
+	
+	public String deleteTabError();
 }
 
 

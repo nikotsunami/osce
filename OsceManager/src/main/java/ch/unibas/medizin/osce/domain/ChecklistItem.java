@@ -145,14 +145,33 @@ public class ChecklistItem {
 			return 0;
 	}
 	
-	public static void removeChecklistTabItem(Long checklistItemId) {
+	public static Boolean removeChecklistTabItem(Long checklistItemId) {
 		ChecklistItem item = ChecklistItem.findChecklistItem(checklistItemId);
-		item.removeChecklistTab();
+		if (checkCriteriaForRemoveChecklistQuestionItem(item)) {
+			return item.removeChecklistTab();
+		}
+		return false;
+		
 	}
 	
 	@Transactional
-	private void removeChecklistTab() {
+	private Boolean removeChecklistTab() {
 		List<ChecklistItem> topicList = findChecklistItemByParentId(this.getId());
+		
+		for (ChecklistItem topic : topicList) {
+			if (checkCriteriaForRemoveChecklistQuestionItem(topic)) {
+				List<ChecklistItem> questionItemList = findChecklistItemByParentId(topic.getId());
+				
+				for (ChecklistItem question : questionItemList) {
+					if (checkCriteriaForRemoveChecklistQuestionItem(question) == false) {
+						return false;
+					}
+				}
+			}
+			else {
+				return false;
+			}
+		}
 		
 		for (int i=0; i<topicList.size(); i++) {
 			ChecklistItem itemTopic = topicList.get(i);
@@ -192,6 +211,8 @@ public class ChecklistItem {
 			checklistItem.persist();
 			seqNumber += 1;
 		}
+		
+		return true;
 	}
 	
 	public static ChecklistItem saveChecklistTopicItem(String name, String description, Long parentTabItemId) {
@@ -209,14 +230,23 @@ public class ChecklistItem {
 		return checklistItem;
 	}
 	
-	public static void removeChecklistTopicItem(Long checklistItemId) {
+	public static Boolean removeChecklistTopicItem(Long checklistItemId) {
 		ChecklistItem checklistItem = ChecklistItem.findChecklistItem(checklistItemId);
-		checklistItem.removeChecklistTopic();
+		if (checkCriteriaForRemoveChecklistQuestionItem(checklistItem)) {
+			return checklistItem.removeChecklistTopic();
+		}
+		return false;
 	}
 	
 	@Transactional
-	private void removeChecklistTopic() {
+	private Boolean removeChecklistTopic() {
 		List<ChecklistItem> questionItemList = findChecklistItemByParentId(this.getId());
+		for (ChecklistItem question : questionItemList) {
+			if (checkCriteriaForRemoveChecklistQuestionItem(question) == false) {
+				return false;
+			}
+		}
+		
 		for (int i=0; i<questionItemList.size(); i++) {
 			ChecklistItem questionItem = questionItemList.get(i);
 			
@@ -246,6 +276,8 @@ public class ChecklistItem {
 			topicItem.persist();
 			seqNumber += 1;
 		}
+		
+		return true;
 	}
 	
 	public static ChecklistItem saveChecklistQuestionItem(String name, String description, Boolean isOverallQue, OptionType optionType, Long parentTopicItemId) {
@@ -265,9 +297,13 @@ public class ChecklistItem {
 		return checklistItem;
 	}
 	
-	public static void removeChecklistItemQuestionItem(Long checklistItemId) {
+	public static Boolean removeChecklistItemQuestionItem(Long checklistItemId) {
 		ChecklistItem checklistItem = ChecklistItem.findChecklistItem(checklistItemId);
-		checklistItem.removeChecklistQuestion();		
+		if (checkCriteriaForRemoveChecklistQuestionItem(checklistItem)) {
+			checklistItem.removeChecklistQuestion();
+			return true;
+		}
+		return false;	
 	}
 	
 	@Transactional
@@ -412,7 +448,7 @@ public class ChecklistItem {
 	}
 	
 	public static List<ChecklistItem> findAllChecklistTabsByChecklistId(Long checkistId){
-	List<ChecklistItem> checklistItemList = new ArrayList<ChecklistItem>();
+		List<ChecklistItem> checklistItemList = new ArrayList<ChecklistItem>();
 		
 		EntityManager em = entityManager();
 		String sql = "SELECT ci FROM ChecklistItem ci WHERE  ci.checkList  IS NOT NULL AND ci.checkList.id = " + checkistId + " and ci.itemType="  + ItemType.TAB.ordinal() +" ORDER BY ci.sequenceNumber";
@@ -421,5 +457,23 @@ public class ChecklistItem {
 		
 				
 		return checklistItemList;		
+	}
+	
+	public static boolean checkCriteriaForRemoveChecklistQuestionItem(ChecklistItem checklistItem) {
+		List<Answer> answerList = Answer.findAnswerByChecklistItem(checklistItem.getId());
+		
+		if (answerList != null && answerList.isEmpty() == false) {
+			return false;
+		}
+		
+		if (checklistItem.getItemAnalysis() != null && checklistItem.getItemAnalysis().isEmpty() == false) {
+			return false;
+		}
+		
+		if (checklistItem.getPostAnalysis() != null && checklistItem.getPostAnalysis().isEmpty() == false) {
+			return false;
+		}
+		
+		return true;
 	}
 }
