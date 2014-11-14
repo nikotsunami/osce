@@ -19,7 +19,9 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
@@ -70,6 +72,12 @@ public class PlanSPTrainingViewImpl extends Composite implements PlanSPTrainingV
 	
 	CustomCalendar customCalendar;
 
+	@UiField
+	HorizontalPanel todayBtnContainer;
+	
+	@UiField
+	ScrollPanel scrollPanel;
+	
 	public PlanSPTrainingViewImpl() {
 	
 		initWidget(uiBinder.createAndBindUi(this));
@@ -112,7 +120,8 @@ public class PlanSPTrainingViewImpl extends Composite implements PlanSPTrainingV
 				}
 			}
 		});
-		
+		scrollPanel.setStyleName("calenderScrollPanel");
+		todayBtnContainer.setStyleName("todayBtnContainer");
 		calendarPanel.add(customCalendar);
 		monthValue.setText(getMonthYearValue(new Date()));
 	}

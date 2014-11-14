@@ -250,6 +250,42 @@ public class TrainingSuggestion {
 			}
 	}
 
+	public static List<TrainingSuggestion> findTrainingSuggestionFromGivenDateToEndOfMonthForSem(Date startDate,Long semId) {
+
+		 Log.info("finding training suggestion from training date :"+ startDate +" to end of month Not assigned to training");
+		 
+			try{
+				
+				DateTime trainingSuggestionDateTime = new DateTime(startDate);
+				 
+				DateTime endOfMonth = trainingSuggestionDateTime.dayOfMonth().withMaximumValue();
+				 
+				 EntityManager em = TrainingSuggestion.entityManager();
+				 
+				 String queryString="SELECT ts FROM TrainingSuggestion AS ts WHERE ts.trainingDate.trainingDate >= :startDate  AND ts.trainingDate.trainingDate <= :monthEndDate" +
+				 		" AND ts.trainingDate.trainingBlock.semester.id="+semId  +" AND ts.training IS NULL ORDER BY ts.trainingDate.trainingDate ASC";
+				
+				 TypedQuery<TrainingSuggestion> query = em.createQuery(queryString, TrainingSuggestion.class);
+					
+				 query.setParameter("startDate", startDate);
+				 
+				 query.setParameter("monthEndDate",endOfMonth.toDate());
+				 
+				 Log.info("Query : " + query.unwrap(Query.class).getQueryString());
+				 
+				 List<TrainingSuggestion> resultList = query.getResultList();
+			       
+				 if (resultList == null || resultList.size() == 0){
+					 return null;
+			        }else{
+			        	return resultList;
+			       }
+			}catch (Exception e) {
+				Log.error(e.getMessage(), e);
+				return null;
+			}
+	}
+	
 	public static TrainingSuggestion findTrainingSueestionBasedOnTrainingAndRoleId(Long trainingId,Long trainigDateId,Long roleId) {
 
 		try{

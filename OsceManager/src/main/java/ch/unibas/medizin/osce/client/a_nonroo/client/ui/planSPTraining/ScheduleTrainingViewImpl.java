@@ -10,6 +10,7 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -66,7 +67,17 @@ public class ScheduleTrainingViewImpl extends PopupPanel implements ScheduleTrai
 	CheckBox ignoreTrainingBlock;
 	
 	@UiField
-	Image bottomAttow;
+	Image bottomArrow;
+	
+	@UiField
+	Image upperArrow;
+	
+	@UiField
+	SpanElement bottomArrowSpan;
+	
+	@UiField
+	SpanElement upperArrowSpan;
+	
 	
 	private OsceConstants constants = GWT.create(OsceConstants.class);
 		
@@ -78,7 +89,8 @@ public class ScheduleTrainingViewImpl extends PopupPanel implements ScheduleTrai
 		this.setAnimationEnabled(true);
 		this.setAutoHideEnabled(true);
 		
-		this.bottomAttow.setUrl("osMaEntry/gwt/unibas/images/bottomarrow.png");
+		this.bottomArrow.setUrl("osMaEntry/gwt/unibas/images/bottomarrow.png");
+		this.upperArrow.setUrl("osMaEntry/gwt/unibas/images/upArrow.png");
 	}
 
 	@UiHandler("cancelButton")
@@ -156,4 +168,21 @@ public class ScheduleTrainingViewImpl extends PopupPanel implements ScheduleTrai
 	public HTMLPanel getTrainingHtmlPanel() {
 		return trainingHtmlPanel;
 	}
+
+	public Image getBottomAttow() {
+		return bottomArrow;
+	}
+
+	public Image getBottomArrow() {
+		return bottomArrow;
+	}
+
+	public SpanElement getBottomArrowSpan() {
+		return bottomArrowSpan;
+	}
+
+	public SpanElement getUpperArrowSpan() {
+		return upperArrowSpan;
+	}
+	
 }

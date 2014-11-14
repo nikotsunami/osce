@@ -16,6 +16,7 @@
 	}
 	.roleNameLabelStyle{
 	    padding: 10px 5px 1px 4px;
+	    width:160px;
 	}
 	.editButtonStyle{
 		margin-top: 4px;
@@ -32,7 +33,7 @@
 	}
 	.labelMargin{
 		margin: 10px 25px 0 0;
-
+		
 	}
 	.cellStyle{
 		float:right;

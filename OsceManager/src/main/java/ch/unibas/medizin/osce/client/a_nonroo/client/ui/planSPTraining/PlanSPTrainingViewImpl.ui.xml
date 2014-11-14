@@ -12,31 +12,39 @@
 		line-height: 20px;
 
 	}
+	.scrollPanelStyle{
+		overflow: hidden;
+	}
+	.floatLeft{
+		float: left;
+		display: block;
+	}
 	
 	</ui:style>
 		
-	<g:ScrollPanel width="100%" height="100%">	
-		<g:VerticalPanel width="100%">
-			<g:HorizontalPanel spacing="5">
-				<s:IconButton ui:field="startSurvey" text="{constants.startSurvey}" icon="clipboard"></s:IconButton>
-				<s:IconButton ui:field="stopSurvey" text="{constants.stopSurvey}" icon="close" visible="false"></s:IconButton>
-				<s:IconButton ui:field="showSuggestion" text="{constants.showSuggestion}" icon="lightbulb"></s:IconButton>
-				<s:IconButton ui:field="hideSuggestion" text="{constants.hideSuggestion}" icon="lightbulb" visible="false"></s:IconButton>
-			</g:HorizontalPanel>
+	<g:ScrollPanel width="100%" height="100%" addStyleNames="{style.scrollPanelStyle}" ui:field="scrollPanel">	
+		<g:VerticalPanel width="100%" addStyleNames="{style.scrollPanelStyle}">
+			<g:HorizontalPanel width="65%">
+				<g:HorizontalPanel spacing="5">
+					<s:IconButton addStyleNames="{style.floatLeft}" ui:field="startSurvey" text="{constants.startSurvey}" icon="clipboard"></s:IconButton>
+					<s:IconButton addStyleNames="{style.floatLeft}" ui:field="stopSurvey" text="{constants.stopSurvey}" icon="close" visible="false"></s:IconButton>
+					<s:IconButton addStyleNames="{style.floatLeft}" ui:field="showSuggestion" text="{constants.showSuggestion}" icon="lightbulb"></s:IconButton>
+					<s:IconButton addStyleNames="{style.floatLeft}" ui:field="hideSuggestion" text="{constants.hideSuggestion}" icon="lightbulb" visible="false"></s:IconButton>
+				</g:HorizontalPanel>
 			
-			<g:HorizontalPanel spacing="5" width="100%" addStyleNames="{style.line_height}">
-				<g:cell horizontalAlignment="ALIGN_CENTER" verticalAlignment="ALIGN_MIDDLE">
-					<g:HorizontalPanel spacing="5">
-						<s:IconButton ui:field="todayDate" text="{constants.today}" icon="calendar"></s:IconButton>
-						<s:IconButton ui:field="previousMonth" icon="triangle-1-w"></s:IconButton>
-						<g:cell verticalAlignment="ALIGN_MIDDLE">
-							<g:Label ui:field="monthValue" text="January 2014" addStyleNames="{style.monthLblStyle}"></g:Label>
-						</g:cell>
-						<s:IconButton ui:field="nextMonth" icon="triangle-1-e"></s:IconButton>
-					</g:HorizontalPanel>				
-				</g:cell>	
+				<g:HorizontalPanel spacing="5"  horizontalAlignment="ALIGN_RIGHT" addStyleNames="{style.line_height}" ui:field="todayBtnContainer">
+					<g:cell horizontalAlignment="ALIGN_RIGHT" verticalAlignment="ALIGN_MIDDLE">
+						<g:HorizontalPanel spacing="5">
+							<s:IconButton ui:field="todayDate" text="{constants.today}" icon="calendar"></s:IconButton>
+							<s:IconButton ui:field="previousMonth" icon="triangle-1-w"></s:IconButton>
+							<g:cell verticalAlignment="ALIGN_MIDDLE">
+								<g:Label ui:field="monthValue" text="January 2014" addStyleNames="{style.monthLblStyle}"></g:Label>
+							</g:cell>
+							<s:IconButton ui:field="nextMonth" icon="triangle-1-e"></s:IconButton>
+						</g:HorizontalPanel>				
+					</g:cell>	
+				</g:HorizontalPanel>
 			</g:HorizontalPanel>
-			
 			<g:VerticalPanel ui:field="calendarPanel">
 			</g:VerticalPanel>
 		</g:VerticalPanel>

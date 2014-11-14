@@ -9,8 +9,10 @@
 	.timeBoxWidth{
 	}
 	.mainPanelStyle{
-	
-		background: #EEEEEE; 
+		background: #EEEEEE;
+		max-height: 430px;
+    	overflow-x: hidden;
+    	overflow-y: auto; 
 	}
 	.dateLabelStyle{
 		font-size: 13px;
@@ -36,11 +38,14 @@
 	}
 	.buttonHp{
 		float: right;
-
+		background: #EEEEEE; 
 	}
-	
 	</ui:style>
 	<g:HTMLPanel ui:field="trainingHtmlPanel" addStyleNames="{style.mainPanelStyle}" width="100%">
+		
+		<span  style="position: absolute; height: 1em; margin:-10px 0 0 48%; width:100%; clear:both;" ui:field="upperArrowSpan">
+		<g:Image ui:field="upperArrow"></g:Image>
+		<span  style="margin:0 45%; width:100%; position: absolute; width: 1em; height: 3em; display: inline-block;"></span></span>
 		
 		<g:Label ui:field="dateLabel" addStyleNames="{style.dateLabelStyle}"></g:Label>
 		
@@ -61,13 +66,13 @@
 		<g:Label ui:field="suggestedTrainingAfternoonLbl" text="{constants.suggestedTraining}" addStyleNames="{style.scheduledSugestonLbelStyle}"></g:Label>
 		</g:HorizontalPanel>
 		<g:VerticalPanel ui:field="suggestedTrainingForAfternoonPanel"  width="100%"></g:VerticalPanel>
-		<s:IconButton ui:field="showSuggestionForAfternoon" icon="lightbulb" visible="false" text="{constants.showSuggestion}" addStyleNames="{style.buttonStyle}"></s:IconButton>
-		<s:IconButton ui:field="hideSuggestionForAfternoon" icon="lightbulb" visible="false" text="{constants.hideSuggestion}" addStyleNames="{style.buttonStyle}"></s:IconButton>
+		<s:IconButton ui:field="showSuggestionForAfternoon" icon="lightbulb" visible="false" text="{constants.showSuggestion}" addStyleNames="{style.buttonStyle}"></s:IconButton><br class="clear"></br>
+		<s:IconButton ui:field="hideSuggestionForAfternoon" icon="lightbulb" visible="false" text="{constants.hideSuggestion}" addStyleNames="{style.buttonStyle}"></s:IconButton><br class="clear"></br>
 		
 		<!-- <g:Label ui:field="overrideTrainingLbl" text="{constants.overrideSuggestions}"></g:Label>
 		<g:VerticalPanel ui:field="overrideSuggestionsPanel"></g:VerticalPanel> -->
 		
-		<g:HorizontalPanel ui:field="scheduleTrainingHP" spacing="5">
+		<g:HorizontalPanel ui:field="scheduleTrainingHP" spacing="5" width="45%">
 		<g:cell>
 			<g:TextBox ui:field="startTimeBox" addStyleNames="{style.timeBoxWidth}"></g:TextBox>
 		</g:cell>	
@@ -80,7 +85,7 @@
 			<i:DefaultSuggestBox ui:field="standardizedRoleSuggestionBox"></i:DefaultSuggestBox>
 		</g:HorizontalPanel>
 		
-		<g:HorizontalPanel ui:field="buttonHP" horizontalAlignment="ALIGN_RIGHT" spacing="5" width="100%" addStyleNames="{style.buttonHp}">
+		<g:HorizontalPanel ui:field="buttonHP" horizontalAlignment="ALIGN_RIGHT" spacing="5" width="30%" addStyleNames="{style.buttonHp}">
 			<g:Cell>
 				<s:IconButton ui:field="cancelButton" icon="close" text="{constants.cancel}"></s:IconButton>
 			</g:Cell>
@@ -88,8 +93,8 @@
 				<s:IconButton ui:field="schedultButton" icon="clock" text="{constants.schedule}"></s:IconButton>
 			</g:Cell>
 		</g:HorizontalPanel>
-		<span  style="position: absolute; height: 1em; margin:0 45%; width:100%; clear:both;">
-		<g:Image ui:field="bottomAttow"></g:Image>
+		<span  style="position: absolute; height: 1em; margin:33px 0 0 48%; width:100%; clear:both;" ui:field="bottomArrowSpan">
+		<g:Image ui:field="bottomArrow"></g:Image>
 		<span  style="margin:0 45%; width:100%; position: absolute; width: 1em; height: 3em; display: inline-block;"></span></span>
 	</g:HTMLPanel>	
 </ui:UiBinder> 

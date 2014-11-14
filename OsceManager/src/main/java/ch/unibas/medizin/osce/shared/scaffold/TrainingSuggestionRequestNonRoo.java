@@ -20,4 +20,5 @@ public interface TrainingSuggestionRequestNonRoo extends RequestContext
 
 	public abstract Request<List<TrainingSuggestionProxy>> getSuggestionsFromGivenDate(Date date, Long semId);
 
+	public abstract Request<List<TrainingSuggestionProxy>> findTrainingSuggestionFromGivenDateToEndOfMonthForSem(Date startDate, Long id);
 }

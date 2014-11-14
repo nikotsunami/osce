@@ -57,6 +57,8 @@ import ch.unibas.medizin.osce.shared.i18n.OsceMessages;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.StyleInjector;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
@@ -64,6 +66,7 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.text.shared.AbstractRenderer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -275,7 +278,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		}
 	}
 	@SuppressWarnings("deprecation")
-	private void initializeViewFromGivenDateToEndOfMonth(Date date) {
+	private void initializeViewFromGivenDateToEndOfMonth(final Date date) {
 		
 		showApplicationLoading(true);
 		firstBlockDate=null;
@@ -346,8 +349,18 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 				setBlockTitle(2);
 				showApplicationLoading(false);
 				}
-				
-				initializeViewForAllReadyScheduledTrainings();
+				//This condition is added to show suggestions when user clicks previos,next month button and suggestions are already generated.
+				if(isShowingSuggestions){
+					
+					allSuggestedViewTrainingDates.clear();
+					trainingSuggestionAfterNoonMap.clear();
+					trainingSuggestionMorningMap.clear();
+					
+					showAlreadyGeneratedSuggestions(date);
+					
+				}else{
+					initializeViewForAllReadyScheduledTrainings();
+				}
 			}
 			
 		});
@@ -373,6 +386,16 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 				showApplicationLoading(false);
 			}
 		});
+		
+	}
+
+	/**
+	 * This method is used to show already generated suggestions for previous,next months
+	 */
+	protected void showAlreadyGeneratedSuggestions(Date date) {
+		//Now calling following method that will fetch suggestions from the given date to end of the month and show it in view.
+		boolean isPreNextBtnClicked=true;
+		fetchAndShowSuggestion(date,isPreNextBtnClicked);
 		
 	}
 
@@ -1237,7 +1260,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 					
 					Date currentlySelectedTime = trainingProxy.getTimeStart();
 				
-					 if(currentlySelectedTime.getTime() < lastEndDateTime.getTime()){
+					 if(currentlySelectedTime.getTime() <= lastEndDateTime.getTime()){
 						 setTrainingView(trainingProxy,currentlySelectdDatePanel,true);
 					 }else{
 						 setTrainingView(trainingProxy,currentlySelectdDatePanel,false);
@@ -1373,12 +1396,72 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		});
 		
 		
+		
+		((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).showRelativeTo(singleDaySelectionview.getRemoveProposedTrainingDaButton());
+		
 		((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).show();
 		
-		int height = ((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).getTrainingHtmlPanel().getOffsetHeight();
-		height+=22;
+		//int height = ((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).getTrainingHtmlPanel().getOffsetHeight();
+		//height+=0;
 		
-		((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).setPopupPosition(xPosition-250,yPosition-height);	
+		((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).setPopupPosition(xPosition-240,yPosition);	
+		
+		int windowHeight= Window.getClientHeight();
+		
+		int upperBottomValue = windowHeight-(yPosition-25);
+		
+		int lowerBottomValue = yPosition+20;
+		
+		int windowHalfHeight = (windowHeight/2);
+		
+		Log.info("btn width  : " + xPosition + "btn height : " + yPosition  + "window height : " + windowHeight);
+		
+		if(yPosition >= windowHalfHeight)
+		{
+			//When button y position is more or equal to window height then showing popup on upper side of button.
+			
+			Log.info("showing popup on upper side");
+			
+			((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).removeStyleName("lowerPopupStyle");
+			
+			((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).addStyleName("upperPopupStyle");
+		
+			if(currentlySelectdDatePanel.getWidgetCount() >=2){
+				if(currentlySelectdDatePanel.getWidget(currentlySelectdDatePanel.getWidgetCount()-2) instanceof TrainingView){
+					TrainingView tView =(TrainingView)currentlySelectdDatePanel.getWidget(currentlySelectdDatePanel.getWidgetCount()-2);
+					if(tView.getShowSuggestionsBtn().isVisible()){
+						upperBottomValue+=10;
+					}
+				}
+			}
+			
+			StyleInjector.inject(".upperPopupStyle{bottom :" + upperBottomValue +"px !important;}");
+			//Hiding upper arrow
+			((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).getUpperArrowSpan().getStyle().setDisplay(Display.NONE);
+			
+			//showing lower arrow
+			((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).getBottomArrowSpan().getStyle().clearDisplay();
+			
+		}else{
+
+			//When button y position is less then window height then showing popup on lower side of button.
+			
+			Log.info("showing popup on lower side");
+			
+			((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).removeStyleName("upperPopupStyle");
+			
+			((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).addStyleName("lowerPopupStyle");
+		
+			StyleInjector.inject(".lowerPopupStyle{top :" + lowerBottomValue +"px !important;}");
+			
+			//Hiding lower arrow
+			((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).getBottomArrowSpan().getStyle().setDisplay(Display.NONE);
+			
+			//showing upper arrow
+			((ScheduleTrainingForSuggestionViewImpl)scheduleTrainingForSuggestionView).getUpperArrowSpan().getStyle().clearDisplay();
+			
+			
+		}
 		
 	}
 	
@@ -1409,6 +1492,53 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		height+=22;
 		
 		((ScheduleTrainingViewImpl)scheduleTrainingView).setPopupPosition(xPosition-250,yPosition-height);	
+		
+		int windowHeight= Window.getClientHeight();
+		
+		int upperBottomValue = windowHeight-(yPosition-20);
+		
+		int lowerBottomValue = yPosition+20;
+		
+		int windowHalfHeight = (windowHeight/2);
+		
+		Log.info("btn width  " +xPosition + "btn height" + yPosition  + "window height " + windowHeight);
+		
+		if(yPosition >= windowHalfHeight)
+		{
+			//When button y position is more or equal to window height then showing popup on upper side of button.
+			
+			Log.info("showing popup on upper side");
+			
+			((ScheduleTrainingViewImpl)scheduleTrainingView).removeStyleName("lowerPopupStyle");
+			
+			((ScheduleTrainingViewImpl)scheduleTrainingView).addStyleName("upperPopupStyle");
+		
+			StyleInjector.inject(".upperPopupStyle{bottom :" + upperBottomValue +"px !important;}");
+			
+			//Hiding upper arrow
+			((ScheduleTrainingViewImpl)scheduleTrainingView).getUpperArrowSpan().getStyle().setDisplay(Display.NONE);
+			
+			//showing lower arrow
+			((ScheduleTrainingViewImpl)scheduleTrainingView).getBottomArrowSpan().getStyle().clearDisplay();
+			
+		}else{
+		
+			//When button y position is less then window height then showing popup on lower side of button.
+			
+			Log.info("showing popup on lower side");
+			
+			((ScheduleTrainingViewImpl)scheduleTrainingView).removeStyleName("upperPopupStyle");
+			
+			((ScheduleTrainingViewImpl)scheduleTrainingView).addStyleName("lowerPopupStyle");
+		
+			StyleInjector.inject(".lowerPopupStyle{top :" + lowerBottomValue +"px !important;}");
+			
+			//Hiding lower arrow
+			((ScheduleTrainingViewImpl)scheduleTrainingView).getBottomArrowSpan().getStyle().setDisplay(Display.NONE);
+			
+			//showing upper arrow
+			((ScheduleTrainingViewImpl)scheduleTrainingView).getUpperArrowSpan().getStyle().clearDisplay();
+		}
 		
 	}
 	private String getCommaSeperatedOsceDayDates(){
@@ -1884,7 +2014,8 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 				showApplicationLoading(false);
 				if(response!=null){
 					if(response){
-						fetchAndShowSuggestion();
+						boolean isPreNextBtnClicked=false;
+						fetchAndShowSuggestion(new Date(),isPreNextBtnClicked);
 					}
 				}else{
 					Log.info("System could not create training suggestions");
@@ -1896,10 +2027,10 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	}
 	
 	@SuppressWarnings("deprecation")
-	private void fetchAndShowSuggestion() {
+	private void fetchAndShowSuggestion(final Date date,final boolean isPreNextBtnClicked) {
 		Log.info("fetching suggestions data");
 		showApplicationLoading(true);
-		requests.trainingSuggestionRequestNonRoo().getSuggestionsFromGivenDate(new Date(),semesterProxy.getId()).with("trainingDate","standardizedRole").fire(new OSCEReceiver<List<TrainingSuggestionProxy>>() {
+		requests.trainingSuggestionRequestNonRoo().getSuggestionsFromGivenDate(date,semesterProxy.getId()).with("trainingDate","standardizedRole").fire(new OSCEReceiver<List<TrainingSuggestionProxy>>() {
 
 			@Override
 			public void onSuccess(List<TrainingSuggestionProxy> response) {
@@ -1908,10 +2039,10 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 					view.getShowSuggestionButton().setVisible(false);
 					view.getHideSuggestionButton().setVisible(true);
 					isShowingSuggestions=true;
-					showSuggestion();
+					showSuggestion(date,isPreNextBtnClicked);
 				}else{
-					Log.info("System could not find training suggestions");
-					showErrorMessageToUser("System could not find training suggestions");
+					Log.info("No suggestions are found for the given month");
+					showErrorMessageToUser(constants.noSuggestionsFound());
 				}
 				
 				showApplicationLoading(false);
@@ -1922,7 +2053,12 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		});
 	}
 	
-	private void showSuggestion() {
+	/**
+	 * This method is used to generated suggestions.(it shows remaining suggestions when isPreNextBtnClicked is true). 
+	 * @param isPreNextBtnClicked
+	 */
+	@SuppressWarnings("deprecation")
+	private void showSuggestion(final Date startDate,boolean isPreNextBtnClicked) {
 		Log.info("showing suggestions");
 		
 		boolean isFirst=true;
@@ -2004,35 +2140,89 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 				trainingSuggestionAfterNoonMap.get(allSuggestedViewTrainingDates.get(allSuggestedViewTrainingDates.size()-1)).setAfterNoonRoleList(afterNoonRolesList);
 			}
 		//}
-		//Now putting widget on view.
-		for(Date date : allSuggestedViewTrainingDates){
+			//Following condition is added to show suggestions/remaining suggestions when previous or next button is clicked.
 			
-			Widget widget =view.getCustomCalenger().getPanelOfDate(date);
-			
-			VerticalPanel vpanel =((VerticalPanel)widget);
-			
-			boolean suggestionIsExistForMorning =false;
-			boolean suggestionIsExistForAfterNoo=false;
-			
-			if(vpanel!=null){
-				vpanel.clear();
-				vpanel.removeStyleName("dayIsProposedDay");
-				vpanel.removeStyleName("dayCellLabel-selected");
-				vpanel.removeStyleName("greenBackGround");
-				//vpanel.addStyleName("yellowBackGround");
-				if(trainingSuggestionMorningMap.get(date)!=null){
-					vpanel.add(trainingSuggestionMorningMap.get(date));
-					suggestionIsExistForMorning=true;
+			/*Scenario is that 	when user generates suggestions and then clicks next/previous button to see suggestion of the previous/next month then I need to show suggestion
+			of that month and when user come back on current month I need to show all remaining suggestion (if he has scheduled training of some suggestions before going on
+		    previous/next month) */	
+
+			if(isPreNextBtnClicked){
+
+				requests.trainingSuggestionRequestNonRoo().findTrainingSuggestionFromGivenDateToEndOfMonthForSem(startDate,semesterProxy.getId()).with("standardizedRole","trainingDate").fire(new OSCEReceiver<List<TrainingSuggestionProxy>>() {
+
+					@Override
+					public void onSuccess(List<TrainingSuggestionProxy> response) {
+						if(response!=null){
+							
+							List<TrainingSuggestionProxy> morningRoleList = new ArrayList<TrainingSuggestionProxy>();
+							List<TrainingSuggestionProxy> afterNoonRolesList = new ArrayList<TrainingSuggestionProxy>();
+							
+							Date cDate =startDate;
+							
+							for(TrainingSuggestionProxy trainingSuggestionProxy : response){
+								System.out.println("T dats is : " + trainingSuggestionProxy.getId() + "Dt id : " +trainingSuggestionProxy.getId() + " Date : "
+							+ trainingSuggestionProxy.getTrainingDate().getTrainingDate());
+								if(CalendarUtil.getDaysBetween(cDate,trainingSuggestionProxy.getTrainingDate().getTrainingDate())!=0){
+									
+									moreSuggestionForMorningMap.put(cDate,morningRoleList);
+									moreSuggestionForAfterNoonMap.put(cDate, afterNoonRolesList);
+									
+									cDate=trainingSuggestionProxy.getTrainingDate().getTrainingDate();
+									
+									morningRoleList = new ArrayList<TrainingSuggestionProxy>();
+									afterNoonRolesList = new ArrayList<TrainingSuggestionProxy>();
+								}
+								
+								if(trainingSuggestionProxy.getTrainingDate().getIsAfternoon()){
+									afterNoonRolesList.add(trainingSuggestionProxy);
+								}else{
+									morningRoleList.add(trainingSuggestionProxy);
+								}
+							}
+							moreSuggestionForMorningMap.put(response.get(response.size()-1).getTrainingDate().getTrainingDate(),morningRoleList);
+							moreSuggestionForAfterNoonMap.put(response.get(response.size()-1).getTrainingDate().getTrainingDate(),afterNoonRolesList);
+							
+							for(Date date : allSuggestedViewTrainingDates){
+								showRemainingSuggestions(date);
+							}
+							
+						}
+					}
+				});
+				
+			}else{
+				//For Normal scenario showing suggestions to user.
+				//Now putting widget on view.
+				for(Date date : allSuggestedViewTrainingDates){
+					
+					Widget widget =view.getCustomCalenger().getPanelOfDate(date);
+					
+					VerticalPanel vpanel =((VerticalPanel)widget);
+					
+					boolean suggestionIsExistForMorning =false;
+					boolean suggestionIsExistForAfterNoo=false;
+					
+					if(vpanel!=null){
+						vpanel.clear();
+						vpanel.removeStyleName("dayIsProposedDay");
+						vpanel.removeStyleName("dayCellLabel-selected");
+						vpanel.removeStyleName("greenBackGround");
+						//vpanel.addStyleName("yellowBackGround");
+						if(trainingSuggestionMorningMap.get(date)!=null){
+							vpanel.add(trainingSuggestionMorningMap.get(date));
+							suggestionIsExistForMorning=true;
+						}
+						if(trainingSuggestionAfterNoonMap.get(date)!=null){
+							vpanel.add(trainingSuggestionAfterNoonMap.get(date));
+							suggestionIsExistForAfterNoo=true;
+						}
+					}
+					if(!suggestionIsExistForMorning && suggestionIsExistForAfterNoo){
+						((TrainingSuggestionViewImpl)trainingSuggestionAfterNoonMap.get(date)).setStyleName("afterNoonStyle");
+					}
 				}
-				if(trainingSuggestionAfterNoonMap.get(date)!=null){
-					vpanel.add(trainingSuggestionAfterNoonMap.get(date));
-					suggestionIsExistForAfterNoo=true;
-				}
-			}
-			if(!suggestionIsExistForMorning && suggestionIsExistForAfterNoo){
-				((TrainingSuggestionViewImpl)trainingSuggestionAfterNoonMap.get(date)).setStyleName("afterNoonStyle");
-			}
 		}
+		
 	}
 
 	@Override
@@ -2112,7 +2302,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 			final String endMinutes=endTime.substring(startTime.indexOf(":")+1,startTime.length());
 			
 			if(startHour.length() < 2 || startMinutes.length() < 2 || endHour.length() < 2 || endMinutes.length() < 2 || Integer.parseInt(startHour) >= 24 || Integer.parseInt(endHour) >= 24
-					|| Integer.parseInt(startMinutes) >= 60 | Integer.parseInt(endMinutes) >= 60){
+					|| Integer.parseInt(startMinutes) >= 60 || Integer.parseInt(endMinutes) >= 60 || Integer.parseInt(endHour) < Integer.parseInt(startHour)){
 				MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
 				confirmationDialogBox.showConfirmationDialog(constants.inValidTimeProvided());
 			}else{
@@ -2384,7 +2574,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 					
 					Date currentlySelectedTime = trainingProxy.getTimeStart();
 				
-					 if(currentlySelectedTime.getTime() < lastEndDateTime.getTime()){
+					 if(currentlySelectedTime.getTime() <= lastEndDateTime.getTime()){
 						 setTrainingView(trainingProxy,vpanel,true);
 					 }else{
 						 setTrainingView(trainingProxy,vpanel,false);
@@ -2670,6 +2860,16 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		Log.info("cancel button of popup is clicked when suggestion is showing");
 		isUpDateButtonClicked=false;
 		currentlySelectdDatePanel.remove(currentlySelectdDatePanel.getWidgetCount()-1);
+		if(currentlySelectdDatePanel.getWidgetCount()==1){
+			currentlySelectdDatePanel.removeStyleName("dayCellLabel-selected");
+			//Now if we have not assigned any training for selected date and clicked cancel button after just
+			//opening popup so there exist label (proposed training day or proposed osce day) so setting its style.
+			if(currentlySelectdDatePanel.getWidget(0) instanceof Label){
+				currentlySelectdDatePanel.addStyleName("dayIsProposedDay");
+			}
+		}else if(currentlySelectdDatePanel.getWidgetCount()==0){
+			currentlySelectdDatePanel.removeStyleName("dayCellLabel-selected");
+		}
 	}
 
 	@Override

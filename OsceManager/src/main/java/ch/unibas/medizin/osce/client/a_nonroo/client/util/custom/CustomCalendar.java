@@ -103,7 +103,8 @@ public class CustomCalendar extends Composite implements MouseDownHandler, Mouse
 		for (int i = 0; i < DAYS_IN_A_WEEK; i++) {
 			if (i == 7)
 			{
-				table.setText(0, i, "");
+				table.setText(0, i, "Block");
+				table.getCellFormatter().setStyleName(0, i, WEEKDAY_LABEL_STYLE);
 			}
 			else	
 			{

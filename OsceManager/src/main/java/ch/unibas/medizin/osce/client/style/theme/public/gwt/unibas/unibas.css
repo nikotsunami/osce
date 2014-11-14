@@ -3896,6 +3896,10 @@ color: #f1b532;
     height: 15px;    
    	text-align: right;   	
 }
+.blockCell:last-child{
+	border-right:1px solid #C3D9FF;
+}
+
 
 .lastBlockCell
 {
@@ -3906,6 +3910,10 @@ color: #f1b532;
    	text-align: right;   	
 }
 
+.lastBlockCell:last-child{
+	border-right:1px solid #C3D9FF;
+	border-bottom:1px solid #C3D9FF;
+}
 .dayCellLabel-enabled
 {
 	background-color: #E8EEF7;
@@ -4012,3 +4020,17 @@ color: #f1b532;
  .oldImage{
  	border:3px #F4E0AB solid;
  }
+ .upperPopupStyle{
+ 	top:auto !important;
+ }
+ .lowerPopupStyle{
+ 	bottom:auto !important;
+ }
+ .calenderScrollPanel{
+ 	overflow: hidden !important;
+ }
+.todayBtnContainer{
+	float: left;
+	margin-top: -5px;
+	
+}

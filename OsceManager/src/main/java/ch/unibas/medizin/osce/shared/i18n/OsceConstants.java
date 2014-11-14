@@ -1651,6 +1651,8 @@ public interface OsceConstants extends Constants {
 	public String scheduledTrainings();
 
 	public String hideUnavilableSps();
+	
+	public String noSuggestionsFound();
 }
 
 
