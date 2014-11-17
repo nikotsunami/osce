@@ -170,12 +170,12 @@
 			<g:DisclosurePanel animationEnabled="true" open="true" styleName="{style.borderDP}" ui:field="checkListQuestionDisclosurePanel" width="100%">
 				<g:VerticalPanel width="100%">
 					<g:HorizontalPanel width="100%" styleName="{style.marginQue}" spacing="5">
-						<g:cell width="30%">
-							<c:CellTable ui:field="optionTable" width="100%" addStyleNames="{style.standardTable}"></c:CellTable>
-						</g:cell>
-						
 						<g:cell width="70%">
 							<c:CellTable ui:field="criteriaTable" width="100%" addStyleNames="{style.standardTable}"></c:CellTable>
+						</g:cell>
+						
+						<g:cell width="30%">
+							<c:CellTable ui:field="optionTable" width="100%" addStyleNames="{style.standardTable}"></c:CellTable>
 						</g:cell>
 					</g:HorizontalPanel>
 				</g:VerticalPanel>

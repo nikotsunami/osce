@@ -214,9 +214,9 @@ public class ResourceUtil {
 		Long checklistId = Long
 				.parseLong(request.getParameter(ResourceDownloadProps.ID));
 		String locale = request.getParameter(ResourceDownloadProps.LOCALE);
-		
+	
 		String url=OsMaFilePathConstant.getQRCodeURL() + checklistId;
-		return QRCodeUtil.generateQRCodeForChecklist(url, locale, os,request.getSession());
+		return QRCodeUtil.generateQRCodeForChecklist(url,checklistId,locale, os,request.getSession());
 	}
 
 	private static String setExporteOSCEXml(HttpServletRequest request, ByteArrayOutputStream os) {

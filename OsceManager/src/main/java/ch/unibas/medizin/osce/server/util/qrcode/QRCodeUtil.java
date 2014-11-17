@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
 
+import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.PdfUtil;
@@ -18,8 +19,11 @@ import ch.unibas.medizin.osce.shared.QRCodeType;
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
 import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.itextpdf.text.pdf.PdfWriter;
 
@@ -55,16 +59,17 @@ public class QRCodeUtil extends PdfUtil  {
 	
 	public static final String STUDENT_ID_END_TAG="</student-id>";
 	
+	protected static Font paraFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
 	
 	/*
 	 * This method will do symmetric encryption of url and pass the encrypted url to generate QR code
 	 */
-	public static String generateQRCodeForChecklist(String  url, String locale,ByteArrayOutputStream os, HttpSession session) {
+	public static String generateQRCodeForChecklist(String  url, Long checklistId, String locale,ByteArrayOutputStream os, HttpSession session) {
 	
+		CheckList checkList = CheckList.findCheckList(checklistId);
 		try {
 			//Save the propery list
 			QRCodePlist qrCodePlist=new QRCodePlist();
-			
 			url = url + OsMaFilePathConstant.EXTRA_SPACE_QR;
 			java.io.ByteArrayOutputStream encryptedBytes = Encryptor.encryptFile(OsMaFilePathConstant.getSymmetricKey(),url.getBytes());
 			String base64String = Base64.encodeBase64String(encryptedBytes.toByteArray());
@@ -78,9 +83,14 @@ public class QRCodeUtil extends PdfUtil  {
 				
 				Image checklistQRImage = generateQRCode(plistString);
 				Document qrCodeChecklist = new Document();
-				
+				Paragraph checklistName = new Paragraph();
+				checklistName.add(OsMaFilePathConstant.EXTRA_SPACE_QR);
+				checklistName.add(new Chunk(checkList.getTitle(),paraFont));
+	
 				PdfWriter.getInstance(qrCodeChecklist, os);
 				qrCodeChecklist.open();
+
+				qrCodeChecklist.add(checklistName);
 				qrCodeChecklist.add(checklistQRImage);
 				qrCodeChecklist.close();
 			}
@@ -88,7 +98,9 @@ public class QRCodeUtil extends PdfUtil  {
 		} catch (Exception e) {
 			Log.error(e.getMessage(),e);
 		}
-		return "ChecklistQRCode.pdf";
+		String fileName = checkList.getTitle() + "_QR.pdf";
+		fileName = fileName.replaceAll(" ", "");
+		return fileName;
 	}
 	/*
 	 * This method will generate plist for data passed
