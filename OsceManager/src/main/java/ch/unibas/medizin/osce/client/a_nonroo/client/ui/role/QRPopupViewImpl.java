@@ -59,7 +59,7 @@ public class QRPopupViewImpl extends DialogBox implements QRPopupView {
 		if (popUpTitle.equals(constants.checklistQRCode())) {
 			delegate.exportChecklistQRCodePopUp(id);
 		}
-		else if (popUpTitle.equals(constants.exportSettingsQRCode())) {
+		else if (popUpTitle.equals(constants.exportSettingsQR())) {
 			delegate.exportSettingsQRCodePopUp(id);
 		}
 	}
