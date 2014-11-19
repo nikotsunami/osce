@@ -30,7 +30,10 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BarcodeQRCode;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 
@@ -90,13 +93,21 @@ public class QRCodeUtil extends PdfUtil  {
 				Image checklistQRImage = generateQRCode(plistString);
 				Document qrCodeChecklist = new Document();
 				Paragraph checklistName = new Paragraph();
-				checklistName.add(new Chunk(checkList.getTitle(),paraFont));
+				
+				PdfPTable table = new PdfPTable(1); //1 columns.
+				PdfPCell cell1 = new PdfPCell(new Paragraph(new Chunk(checkList.getTitle(),paraFont)));
+				cell1.setPaddingLeft(24);
+		        PdfPCell cell2 = new PdfPCell(checklistQRImage, true);
+
+		        cell1.setBorder(Rectangle.NO_BORDER);
+		        cell2.setBorder(Rectangle.NO_BORDER);
+		        table.addCell(cell1);
+		        table.addCell(cell2);
 	
 				PdfWriter.getInstance(qrCodeChecklist, os);
 				qrCodeChecklist.open();
 
-				qrCodeChecklist.add(checklistName);
-				qrCodeChecklist.add(checklistQRImage);
+				qrCodeChecklist.add(table);
 				qrCodeChecklist.close();
 			}
 	
@@ -164,23 +175,32 @@ public class QRCodeUtil extends PdfUtil  {
 			qrCodePlist.setData(base64String);
 			
 			String plistString = generatePlistFile(qrCodePlist);
+			
 			//put data into plist
 			if(plistString != null){
 
 				OsceConstantsWithLookup constants = GWTI18N.create(OsceConstantsWithLookup.class);
 				Image settingsQRImage = generateQRCode(plistString);
 				Document qrCodeSettings = new Document();
-				Paragraph settingsFileName = new Paragraph();
+				
 				String fileName = osce.getSemester().getSemester().toString() 
 						+ osce.getSemester().getCalYear().toString().substring(2, osce.getSemester().getCalYear().toString().length()) 
 						+ "-" + (constants.getString(osce.getStudyYear().toString()).replace(".", "")); 
-			
-				settingsFileName.add(new Chunk(fileName,paraFont));
-				PdfWriter.getInstance(qrCodeSettings, os);
-				qrCodeSettings.open();
-				qrCodeSettings.add(settingsFileName);
-				qrCodeSettings.add(settingsQRImage);
-				qrCodeSettings.close();
+				
+				 PdfPTable table = new PdfPTable(1); //1 columns.
+				 PdfPCell cell1 = new PdfPCell(new Paragraph(new Chunk(fileName,paraFont)));
+				 cell1.setPaddingLeft(15);
+		         PdfPCell cell2 = new PdfPCell(settingsQRImage, true);
+
+		         cell1.setBorder(Rectangle.NO_BORDER);
+		         cell2.setBorder(Rectangle.NO_BORDER);
+		         table.addCell(cell1);
+		         table.addCell(cell2);
+				 PdfWriter.getInstance(qrCodeSettings, os);
+
+				 qrCodeSettings.open();
+				 qrCodeSettings.add(table);
+				 qrCodeSettings.close();
 			}  
 		}catch (Exception e) {
 			Log.error(e.getMessage(),e);

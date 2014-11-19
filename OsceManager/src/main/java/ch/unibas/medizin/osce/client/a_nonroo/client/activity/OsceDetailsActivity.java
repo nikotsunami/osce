@@ -553,8 +553,6 @@ public void init()
 	@Override
 	public void exportSettingsQRCodeClicked(final OsceSettingsProxy osceSettingsProxy) {
 	
-		final OsceProxy osceProxyStng = osceSettingsProxy.getOsce();
-		System.out.println("osce settings id" + osceSettingsProxy.getId());
 		if(osceSettingsProxy != null){
 			try {
 				requests.osceSettingsRequestNonRoo().createSettingsQRImageById(osceSettingsProxy.getId()).fire(new OSCEReceiver<String>() {
@@ -566,6 +564,7 @@ public void init()
 						if(response != null) {
 							settingsQRPopupViewImpl.setBase64ImgStr(response);
 						}
+						final OsceProxy osceProxyStng = osceSettingsProxy.getOsce();
 						settingsQRPopupViewImpl.setId(osceSettingsProxy.getId());
 							if(osceProxyStng != null) {
 								String fileName = osceProxyStng.getSemester().getSemester().toString() 
