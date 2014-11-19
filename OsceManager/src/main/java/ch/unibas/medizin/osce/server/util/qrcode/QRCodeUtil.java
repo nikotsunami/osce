@@ -90,7 +90,6 @@ public class QRCodeUtil extends PdfUtil  {
 				Image checklistQRImage = generateQRCode(plistString);
 				Document qrCodeChecklist = new Document();
 				Paragraph checklistName = new Paragraph();
-				checklistName.add(new Chunk(OsMaFilePathConstant.EXTRA_SPACE_TITLE));
 				checklistName.add(new Chunk(checkList.getTitle(),paraFont));
 	
 				PdfWriter.getInstance(qrCodeChecklist, os);
@@ -176,7 +175,6 @@ public class QRCodeUtil extends PdfUtil  {
 						+ osce.getSemester().getCalYear().toString().substring(2, osce.getSemester().getCalYear().toString().length()) 
 						+ "-" + (constants.getString(osce.getStudyYear().toString()).replace(".", "")); 
 			
-				settingsFileName.add(new Chunk(OsMaFilePathConstant.EXTRA_SPACE_TITLE));
 				settingsFileName.add(new Chunk(fileName,paraFont));
 				PdfWriter.getInstance(qrCodeSettings, os);
 				qrCodeSettings.open();
