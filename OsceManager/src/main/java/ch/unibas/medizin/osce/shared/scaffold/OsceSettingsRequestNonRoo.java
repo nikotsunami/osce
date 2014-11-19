@@ -13,4 +13,6 @@ public interface OsceSettingsRequestNonRoo extends RequestContext {
 
 
 	public abstract Request<OsceSettingsProxy> findOsceSettingsByOsce(Long id);
+	
+	public abstract Request<String> createSettingsQRImageById(Long osceSttingsId);
 }

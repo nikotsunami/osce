@@ -2,6 +2,8 @@ package ch.unibas.medizin.osce.domain;
 
 import static org.apache.commons.lang.StringUtils.defaultString;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
@@ -22,6 +25,7 @@ import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
@@ -55,11 +59,16 @@ import ch.unibas.medizin.osce.server.util.file.RolePrintPdfUtil;
 import ch.unibas.medizin.osce.server.util.file.StudentManagementPrintMinOptionPdfUtil;
 import ch.unibas.medizin.osce.server.util.file.StudentManagementPrintPdfUtil;
 import ch.unibas.medizin.osce.server.util.file.XmlUtil;
+import ch.unibas.medizin.osce.server.util.qrcode.Encryptor;
+import ch.unibas.medizin.osce.server.util.qrcode.QRCodePlist;
+import ch.unibas.medizin.osce.server.util.qrcode.QRCodeUtil;
+import ch.unibas.medizin.osce.shared.QRCodeType;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.google.gwt.requestfactory.server.RequestFactoryServlet;
+import com.itextpdf.text.pdf.BarcodeQRCode;
 
 @RooJavaBean
 @RooToString
@@ -1073,5 +1082,44 @@ public class StandardizedRole {
 		  return standardizedRoleList;
 	}
 	
+	public static String createChecklistQRImageByChecklistId(Long checklistId){
+		String qrCodeBase64="";
+		try {
+			//Save the propery list
+			QRCodePlist qrCodePlist = new QRCodePlist();
+			QRCodeUtil qrCodeUtil=new QRCodeUtil();
+			String url=OsMaFilePathConstant.getQRCodeURL() +checklistId;
+			url = url + OsMaFilePathConstant.EXTRA_SPACE_QR;
+			java.io.ByteArrayOutputStream encryptedBytes = Encryptor.encryptFile(OsMaFilePathConstant.getSymmetricKey(),url.getBytes());
+			String base64String = Base64.encodeBase64String(encryptedBytes.toByteArray());
+			
+			qrCodePlist.setQrCodeType(QRCodeType.CHECKLIST_URL_QR_CODE);
+			qrCodePlist.setData(base64String);
+			
+			String plistString = qrCodeUtil.generatePlistFile(qrCodePlist);
+			//put data into plist
+			if(plistString != null){
+				
+				int qrCodeWidth = Integer.parseInt(OsMaFilePathConstant.getQRCodeWidth());
+				int qrCodeHeight = Integer.parseInt(OsMaFilePathConstant.getQRCodeHeight());
+				BarcodeQRCode qrBarCode = new  BarcodeQRCode(plistString,qrCodeWidth,qrCodeHeight, null);
+				java.awt.Image awtImage = qrBarCode.createAwtImage(Color.BLACK, Color.WHITE);
+				BufferedImage bufferedImage = qrCodeUtil.toBufferedImage(awtImage);
+				
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write( bufferedImage, "png", baos );
+				byte[] imageInByte = baos.toByteArray();
+				
+				qrCodeBase64 = Base64.encodeBase64String(imageInByte);
+				System.out.println("image in bytes: " + imageInByte.length);
+				baos.flush();
+				baos.close();
+				return qrCodeBase64;
+			}
+		} catch (Exception e) {
+			Log.error(e.getMessage(),e);
+		}
+		return qrCodeBase64;
+	}
 }
 

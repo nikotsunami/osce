@@ -1753,6 +1753,10 @@ public interface OsceConstants extends Constants {
 	public String deleteTopicError(); 
 	
 	public String deleteTabError();
+
+	public String checklistQRCode();
+
+	public String exportSettingsQR();
 }
 
 

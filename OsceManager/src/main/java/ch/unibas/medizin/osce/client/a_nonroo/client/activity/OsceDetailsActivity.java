@@ -13,6 +13,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfi
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.OsceTaskPopView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.QRPopupView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.QRPopupViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSettingsProxy;
@@ -21,6 +23,7 @@ import ch.unibas.medizin.osce.client.managed.request.TaskRequest;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -44,7 +47,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
  *
  */
 public class OsceDetailsActivity extends AbstractActivity implements
-OsceDetailsView.Presenter, OsceDetailsView.Delegate, OsceTaskPopView.Delegate {
+OsceDetailsView.Presenter, OsceDetailsView.Delegate, OsceTaskPopView.Delegate,QRPopupView.Delegate {
 
 	private OsMaRequestFactory requests;
 	private PlaceController placeController;
@@ -59,6 +62,7 @@ OsceDetailsView.Presenter, OsceDetailsView.Delegate, OsceTaskPopView.Delegate {
 	private OsceProxy osceProxy;
 	private OsceDetailsPlace place;
 	private OsceDetailsActivity osceDetailsActivity;
+	OsceConstantsWithLookup lookUpConstants = GWT.create(OsceConstantsWithLookup.class);
 
 	public OsceDetailsActivity(OsceDetailsPlace place,
 			OsMaRequestFactory requests, PlaceController placeController) {
@@ -141,7 +145,7 @@ public void init()
 				osceProxy=(OsceProxy)response;
 				view.setValue((OsceProxy)response);
 				osceTaskPop.setValue((OsceProxy)response);
-				requests.osceSettingsRequestNonRoo().findOsceSettingsByOsce(osceProxy.getId()).fire(new OSCEReceiver<OsceSettingsProxy>() {
+				requests.osceSettingsRequestNonRoo().findOsceSettingsByOsce(osceProxy.getId()).with("osce","osce.semester","osce.semester.calYear","osce.studyYear").fire(new OSCEReceiver<OsceSettingsProxy>() {
 
 					@Override
 					public void onSuccess(OsceSettingsProxy response) {
@@ -545,16 +549,37 @@ public void init()
 		
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void exportSettingsQRCodeClicked(OsceSettingsProxy osceSettingsProxy) {
+	public void exportSettingsQRCodeClicked(final OsceSettingsProxy osceSettingsProxy) {
 	
+		final OsceProxy osceProxyStng = osceSettingsProxy.getOsce();
+		System.out.println("osce settings id" + osceSettingsProxy.getId());
 		if(osceSettingsProxy != null){
-			String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.OSCE_SETTINGS.ordinal()));          
-			String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
-					.concat("&").concat(ResourceDownloadProps.ID).concat("=").concat(URL.encodeQueryString(osceSettingsProxy.getId().toString()));
-			Log.info("--> url is : " +url);
-			Window.open(url, "", "");
-			}else{
+			try {
+				requests.osceSettingsRequestNonRoo().createSettingsQRImageById(osceSettingsProxy.getId()).fire(new OSCEReceiver<String>() {
+					@Override
+					public void onSuccess(String response) {
+						
+						QRPopupViewImpl settingsQRPopupViewImpl = new QRPopupViewImpl(constants.exportSettingsQR());
+						settingsQRPopupViewImpl.setDelegate(OsceDetailsActivity.this);
+						if(response != null) {
+							settingsQRPopupViewImpl.setBase64ImgStr(response);
+						}
+						settingsQRPopupViewImpl.setId(osceSettingsProxy.getId());
+							if(osceProxyStng != null) {
+								String fileName = osceProxyStng.getSemester().getSemester().toString() 
+										+ osceProxyStng.getSemester().getCalYear().toString().substring(2, osceProxyStng.getSemester().getCalYear().toString().length()) 
+										+ "-" + (lookUpConstants.getString(osceProxyStng.getStudyYear().toString()).replace(".", "")); 
+								settingsQRPopupViewImpl.setQRCodeName(fileName);
+							}
+						settingsQRPopupViewImpl.center();
+					}
+				});
+				
+			} catch (Exception e) {
+		 }
+		}else{
 				final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.error());
 				confirmationDialogBox.showConfirmationDialog(constants.noSettingsForOsceError());
 			}
@@ -575,5 +600,17 @@ public void init()
 		}
 		
 	}
+
+	@Override
+	public void exportSettingsQRCodePopUp(Long osceSettingsId) {
+		String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.OSCE_SETTINGS.ordinal()));          
+		String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+				.concat("&").concat(ResourceDownloadProps.ID).concat("=").concat(URL.encodeQueryString(osceSettingsId.toString()));
+		Log.info("--> url is : " +url);
+		Window.open(url, "", "");
+	}
+
+	@Override
+	public void exportChecklistQRCodePopUp(Long checklistId) {}
 	
 }

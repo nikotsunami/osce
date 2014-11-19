@@ -24,6 +24,8 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CheckListTopicPopup
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CriteriaPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.ImportTopicPopupView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.ImportTopicPopupViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.QRPopupView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.QRPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableAccessViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableItemValueView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableItemValueViewImpl;
@@ -247,7 +249,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		StandardizedPatientAdvancedSearchWorkPermissionPopup.Delegate,
 		StandardizedPatientAdvancedSearchMaritialStatusPopupView.Delegate,
 		LearningObjectiveView.Delegate,RoleOsceSemesterSubView.Delegate,
-		RoleDetailsChecklistTabSubView.Delegate, RoleDetailsChecklistTopicSubView.Delegate, RoleDetailsChecklistItemSubView.Delegate
+		RoleDetailsChecklistTabSubView.Delegate, RoleDetailsChecklistTopicSubView.Delegate, RoleDetailsChecklistItemSubView.Delegate,
+		QRPopupView.Delegate
 
 {
 
@@ -269,8 +272,6 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	//try 
 	int arrayIndx = 0;
 	public StandardizedRoleDetailsView[] standardizedRoleDetailsView_sample;
-	
-	
 	List<Long> standardizedRoleList;
 	
 	public StandardizedRoleDetailsViewImpl[] standardizedRoleDetailsView;
@@ -7977,13 +7978,25 @@ public void onDragStart(DragStartEvent event) {
 			});*/
 		}
 		@Override
-		public void exportChecklistQRClicked(StandardizedRoleProxy value) {
+		public void exportChecklistQRClicked(final StandardizedRoleProxy value) {
 			
-			String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.ROLE_CHECKLIST_QR.ordinal()));          
-			String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
-					.concat("&").concat(ResourceDownloadProps.ID).concat("=").concat(URL.encodeQueryString(value.getCheckList().getId().toString()));
-			Log.info("--> url is : " +url);
-			Window.open(url, "", "");
+			requests.standardizedRoleRequestNonRoo().createChecklistQRImageByChecklistId(value.getCheckList().getId()).fire(new OSCEReceiver<String>() {
+
+				@Override
+				public void onSuccess(String response) {
+					QRPopupViewImpl checklistQRPopupViewImpl = new QRPopupViewImpl(constants.checklistQRCode());
+					checklistQRPopupViewImpl.setDelegate(RoleDetailsActivity.this);
+					if(response != null) {
+						checklistQRPopupViewImpl.setBase64ImgStr(response);
+					}
+					
+					if(value.getCheckList() != null && value.getCheckList().getTitle() != null){
+						checklistQRPopupViewImpl.setId(value.getCheckList().getId());
+						checklistQRPopupViewImpl.setQRCodeName(value.getCheckList().getTitle());
+					}
+					checklistQRPopupViewImpl.center();
+				}
+			});
 		}
 		
 		private RoleDetailsChecklistItemSubView createiOSCEQuestionView(VerticalPanel containerVerticalPanel, String name, String description, ChecklistItemProxy questionProxy) {
@@ -8408,6 +8421,18 @@ public void onDragStart(DragStartEvent event) {
 				}
 			});
 		}
+
+		@Override
+		public void exportChecklistQRCodePopUp(Long checklistId) {
+			String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.ROLE_CHECKLIST_QR.ordinal()));          
+			String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+					.concat("&").concat(ResourceDownloadProps.ID).concat("=").concat(URL.encodeQueryString(checklistId.toString()));
+			Log.info("--> url is : " +url);
+			Window.open(url, "", "");
+		}
+
+		@Override
+		public void exportSettingsQRCodePopUp(Long osceSettingsId) {}
 }
 
 	

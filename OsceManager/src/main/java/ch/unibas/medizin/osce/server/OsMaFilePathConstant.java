@@ -216,4 +216,6 @@ public class OsMaFilePathConstant {
 	public static final String EXAMINER_LIST_QR = "ExaminerQr";
 
 	public static final String STUDENT_LIST_QR = "StudentQR";
+
+	public static final String EXTRA_SPACE_TITLE = "                    ";
 }

@@ -203,9 +203,9 @@ public class ResourceUtil {
 				.parseLong(request.getParameter(ResourceDownloadProps.ID));
 		String locale = request.getParameter(ResourceDownloadProps.LOCALE);
 		ByteArrayOutputStream newOs = new ByteArrayOutputStream();
-		ExportSettingsXml.createSettingsXmlFile(request, newOs, settingsId);
+		ExportSettingsXml.createSettingsXmlFile(newOs, settingsId);
 		String xml = new String(newOs.toByteArray());
-		return QRCodeUtil.generateQRCodeForSettings(xml, locale, os,request.getSession());
+		return QRCodeUtil.generateQRCodeForSettings(xml, settingsId,locale, os,request.getSession());
 	}
 	/*
 	 * This method will pass a hard coded url to generate QR code.
@@ -517,7 +517,7 @@ public class ResourceUtil {
 		String fileName="";
 		try{
 		Long osceSettingsId = Long.parseLong(request.getParameter(ResourceDownloadProps.ID));
-		fileName = ExportSettingsXml.createSettingsXmlFile(request, os, osceSettingsId);
+		fileName = ExportSettingsXml.createSettingsXmlFile(os, osceSettingsId);
 		return fileName;
 		}
 		catch (Exception e) {

@@ -2,7 +2,6 @@ package ch.unibas.medizin.osce.server;
 
 import static org.apache.commons.lang.StringUtils.defaultString;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
@@ -24,7 +23,7 @@ public class ExportSettingsXml {
 	}
 
 
-	public static String createSettingsXmlFile(HttpServletRequest request, ByteArrayOutputStream os, Long osceSettingsId) {
+	public static String createSettingsXmlFile(ByteArrayOutputStream os, Long osceSettingsId) {
 		String fileName = "";
 		try {
 			OsceSettings oscesettings = OsceSettings.findOsceSttingsForId(osceSettingsId);

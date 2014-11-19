@@ -66,5 +66,8 @@ public class OsMaConstant {
 	public static int MAX_ROLE_NAME_DURING_SUGGESTION=3;
 	
 	public static String FILE_DOWNLOAD_SERVLET_HIT_PATH="downloadRemoteFile/";
+
+	public static final int  QR_CODE_WIDTH = 400;
 	
+	public static final int  QR_CODE_HEIGHT = 400;
 }

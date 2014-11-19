@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.server.util.qrcode;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
 
@@ -11,10 +13,14 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.CheckList;
+import ch.unibas.medizin.osce.domain.Osce;
+import ch.unibas.medizin.osce.domain.OsceSettings;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
+import ch.unibas.medizin.osce.server.i18n.GWTI18N;
 import ch.unibas.medizin.osce.server.util.file.PdfUtil;
 import ch.unibas.medizin.osce.shared.QRCodeType;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
@@ -84,7 +90,7 @@ public class QRCodeUtil extends PdfUtil  {
 				Image checklistQRImage = generateQRCode(plistString);
 				Document qrCodeChecklist = new Document();
 				Paragraph checklistName = new Paragraph();
-				checklistName.add(OsMaFilePathConstant.EXTRA_SPACE_QR);
+				checklistName.add(new Chunk(OsMaFilePathConstant.EXTRA_SPACE_TITLE));
 				checklistName.add(new Chunk(checkList.getTitle(),paraFont));
 	
 				PdfWriter.getInstance(qrCodeChecklist, os);
@@ -135,11 +141,10 @@ public class QRCodeUtil extends PdfUtil  {
 	/*
 	 *This method will generate QR code of encrypted URL and will return the image. 
 	 */
-	private static Image generateQRCode(String symmetricUrl) throws BadElementException {
+	public static Image generateQRCode(String symmetricUrl) throws BadElementException {
 		int qrCodeWidth = Integer.parseInt(OsMaFilePathConstant.getQRCodeWidth());
 		int qrCodeHeight = Integer.parseInt(OsMaFilePathConstant.getQRCodeHeight());
 		BarcodeQRCode qrBarCode = new  BarcodeQRCode(symmetricUrl,qrCodeWidth,qrCodeHeight, null);
-		
 		Image qr_image = qrBarCode.getImage();
 		return qr_image;
 	}
@@ -147,9 +152,11 @@ public class QRCodeUtil extends PdfUtil  {
 	/*
 	 *This method will generate QR code for settings xml  
 	 */
-	public static String generateQRCodeForSettings(String settingsXml,String locale, ByteArrayOutputStream os, HttpSession session) {
+	public static String generateQRCodeForSettings(String settingsXml,Long settingsId, String locale, ByteArrayOutputStream os, HttpSession session) {
 		try {
 			QRCodePlist qrCodePlist=new QRCodePlist();
+			OsceSettings osceSettings=OsceSettings.findOsceSettings(settingsId);
+			Osce osce = osceSettings.getOsce();
 			
 			qrCodePlist.setQrCodeType(QRCodeType.SETTING_QR_CODE);
 			settingsXml = settingsXml + OsMaFilePathConstant.EXTRA_SPACE_QR;
@@ -160,12 +167,20 @@ public class QRCodeUtil extends PdfUtil  {
 			String plistString = generatePlistFile(qrCodePlist);
 			//put data into plist
 			if(plistString != null){
-				
+
+				OsceConstantsWithLookup constants = GWTI18N.create(OsceConstantsWithLookup.class);
 				Image settingsQRImage = generateQRCode(plistString);
 				Document qrCodeSettings = new Document();
-				
+				Paragraph settingsFileName = new Paragraph();
+				String fileName = osce.getSemester().getSemester().toString() 
+						+ osce.getSemester().getCalYear().toString().substring(2, osce.getSemester().getCalYear().toString().length()) 
+						+ "-" + (constants.getString(osce.getStudyYear().toString()).replace(".", "")); 
+			
+				settingsFileName.add(new Chunk(OsMaFilePathConstant.EXTRA_SPACE_TITLE));
+				settingsFileName.add(new Chunk(fileName,paraFont));
 				PdfWriter.getInstance(qrCodeSettings, os);
 				qrCodeSettings.open();
+				qrCodeSettings.add(settingsFileName);
 				qrCodeSettings.add(settingsQRImage);
 				qrCodeSettings.close();
 			}  
@@ -251,4 +266,20 @@ public class QRCodeUtil extends PdfUtil  {
 		data+=  STUDENT_END_TAG;
 		return data;
 	}*/
+
+		public static BufferedImage toBufferedImage(java.awt.Image img) {
+		if (img instanceof BufferedImage) {
+	        return (BufferedImage) img;
+	    }
+		int qrCodeWidth = Integer.parseInt(OsMaFilePathConstant.getQRCodeWidth());
+		int qrCodeHeight = Integer.parseInt(OsMaFilePathConstant.getQRCodeHeight());
+		 // Create a buffered image with transparency
+	    BufferedImage bimage = new BufferedImage(qrCodeWidth, qrCodeHeight, BufferedImage.TYPE_INT_ARGB);
+	    // Draw the image on to the buffered image
+	    Graphics2D bGr = bimage.createGraphics();
+	    bGr.drawImage(img, 0, 0,qrCodeWidth,qrCodeHeight, null);
+	    bGr.dispose();
+	    // Return the buffered image
+	    return bimage;
+	}
 }
