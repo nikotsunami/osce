@@ -355,6 +355,13 @@ public class ExportiOSCEXml {
 			else 
 				stationBean.setIsBreakStation("no");
 			
+			if (oscePostRoom.getRoom() != null && oscePostRoom.getRoom().getRoomNumber() != null) {
+				stationBean.setRoomNumber(oscePostRoom.getRoom().getRoomNumber());
+			}
+			else {
+				stationBean.setRoomNumber("");
+			}
+			
 			if (oscePostRoom.getOscePost() != null && oscePostRoom.getOscePost().getStandardizedRole() != null) {
 				StandardizedRole standardizedRole = oscePostRoom.getOscePost().getStandardizedRole();
 				

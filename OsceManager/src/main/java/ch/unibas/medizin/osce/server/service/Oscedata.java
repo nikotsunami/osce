@@ -3211,7 +3211,16 @@ public class Oscedata {
             protected String isBreakStation;
             @XmlAttribute
             protected Long checklistId;
-
+            @XmlAttribute
+            protected String roomNumber;
+            
+            public String getRoomNumber() {
+				return roomNumber;
+			}
+            
+            public void setRoomNumber(String roomNumber) {
+				this.roomNumber = roomNumber;
+			}
             /**
              * Gets the value of the value property.
              * 
