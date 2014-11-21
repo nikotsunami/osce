@@ -758,11 +758,15 @@ public class RolePrintPdfUtil extends PdfUtil {
 		String studyYear = (standardizedRole.getStudyYear() != null) ? enumConstants
 				.getString(standardizedRole.getStudyYear().toString()) : "-";
 
-		String factor = (standardizedRole.getFactor() != null) ? enumConstants
+		/*String factor = (standardizedRole.getFactor() != null) ? enumConstants
 				.getString(standardizedRole.getFactor().toString()) : "-";
 				
 		String sum = (standardizedRole.getSum() != null) ? enumConstants
 				.getString(standardizedRole.getSum().toString()) : "-";
+		*/		
+		String factor = (standardizedRole.getFactor() != null) ? standardizedRole.getFactor().toString() : "-";
+						
+		String sum = (standardizedRole.getSum() != null) ? standardizedRole.getSum().toString(): "-";
 
 		table.addCell(getPdfCellBold(constants.roleAcronym() + ":"));
 		// TODO format date
