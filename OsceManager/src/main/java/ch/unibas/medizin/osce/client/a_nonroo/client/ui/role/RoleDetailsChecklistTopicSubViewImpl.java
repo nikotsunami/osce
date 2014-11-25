@@ -114,7 +114,9 @@ public class RoleDetailsChecklistTopicSubViewImpl extends Composite implements R
 	
 	@UiHandler("importSectionButton")
 	public void importTopicButtonClicked(ClickEvent e) {
-		
+		if(checklistItemProxy.getId() != null){
+			delegate.createImportQuestionPopUp(importSectionButton,checklistItemProxy.getId());
+		}
 	}
 	
 	@UiHandler("delete") 

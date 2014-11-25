@@ -153,7 +153,9 @@ public class RoleDetailsChecklistTabSubViewImpl extends Composite implements Rol
 	
 	@UiHandler("importSectionButton")
 	public void importTopicButtonClicked(ClickEvent e) {
-		
+		if(checklistItemProxy.getId() != null){
+			delegate.createImportTopicPopUp(importSectionButton,checklistItemProxy.getId());
+		}
 	}
 	
 	@UiHandler("deleteTab")

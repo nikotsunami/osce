@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import ch.unibas.medizin.osce.client.managed.request.ChecklistItemProxy;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import ch.unibas.medizin.osce.shared.ItemType;
 
@@ -18,6 +19,7 @@ public interface RoleDetailsChecklistTabSubView extends IsWidget {
 
 		void updateChecklistTab(ChecklistItemProxy checklistItemProxy, String name, String description, RoleDetailsChecklistTabSubViewImpl roleDetailsChecklistTabSubViewImpl, ScrolledTabLayoutPanel checklistTabPanel);
 		
+		void createImportTopicPopUp(IconButton importSectionButton, Long tabId);
 	}
 	
 	public void setDelegate(Delegate delegate);

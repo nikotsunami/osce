@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.shared.scaffold;
 
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ChecklistImportPojoValueProxy;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OscePostWiseQuestionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistItemProxy;
 import ch.unibas.medizin.osce.domain.ChecklistItem;
@@ -37,4 +38,17 @@ public interface ChecklistItemRequestNonRoo  extends RequestContext{
 	
 	public abstract Request<List<OscePostWiseQuestionProxy>> findChecklistQuestionByOscePost(Long osceSequenceId);
 	
+	public abstract Request<List<ChecklistImportPojoValueProxy>> findAllChecklistTabsByRoles(Long roleId);
+
+	public abstract Request<List<ChecklistImportPojoValueProxy>> findAllChecklistTopicsByRoles(Long roleId);
+	
+	public abstract Request<List<ChecklistItemProxy>> findAllChecklistTopicsByChecklist(Long checklistId);
+
+	public abstract Request<List<ChecklistItemProxy>> importChecklistTabsForTab(Long currentRoleId, Long toCopyRoleId ,Long tabId);
+	
+	public abstract Request<List<ChecklistItemProxy>> importChecklistTopicsForRole(Long currentRoleId, Long toCopyRoleId, Long topicId,Long tabId);
+	
+	public abstract Request<List<ChecklistImportPojoValueProxy>> findChecklistQuestionByTopicId(Long topicId);
+	
+	public abstract Request<List<ChecklistItemProxy>> importChecklistQuestionsForTopic(Long selectedTopicId, Long selectedRole, Long questionId, Long topicId);
 }

@@ -1757,6 +1757,8 @@ public interface OsceConstants extends Constants {
 	public String checklistQRCode();
 
 	public String exportSettingsQR();
+
+	public String checklistQuestions();
 }
 
 

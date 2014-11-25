@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:s="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:i="urn:import:ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl">
+	<ui:style src="../../styles.css" >
+		
+	</ui:style>
+	
+	<g:VerticalPanel spacing="3">
+		<g:HTMLPanel>
+			<div ui:field="arrowBorder"></div>
+			<div ui:field="arrow"></div>
+		</g:HTMLPanel>
+		
+		<g:HorizontalPanel ui:field="rolePanel" spacing="3" verticalAlignment="ALIGN_MIDDLE">
+			<g:Label ui:field="roleLbl" width="75px"></g:Label>
+			<i:DefaultSuggestBox ui:field="standardizedRoleSuggestionBox"></i:DefaultSuggestBox>
+		</g:HorizontalPanel>
+	
+		<g:HorizontalPanel ui:field="checklistTopicPanel" spacing="3" verticalAlignment="ALIGN_MIDDLE">
+			<g:Label ui:field="checklistTopicLbl" width="75px"></g:Label>
+			<i:DefaultSuggestBox ui:field="topicSuggestionBox"></i:DefaultSuggestBox>
+		</g:HorizontalPanel>
+	
+		<g:VerticalPanel width="100%" horizontalAlignment="ALIGN_CENTER">
+			<g:HorizontalPanel spacing="3">
+				<s:IconButton ui:field="okBtn" icon="disk"></s:IconButton>
+				<s:IconButton ui:field="cancelBtn" icon="closethick"></s:IconButton>
+			</g:HorizontalPanel>
+		</g:VerticalPanel>
+	</g:VerticalPanel>
+</ui:UiBinder> 

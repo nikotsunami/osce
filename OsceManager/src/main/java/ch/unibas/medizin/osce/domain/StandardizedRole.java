@@ -1121,5 +1121,25 @@ public class StandardizedRole {
 		}
 		return qrCodeBase64;
 	}
+	
+	public static List<StandardizedRole> findRolesFromSpecialisationId(Long specialisationid, Long currentStandardizedRoleId){
+
+		EntityManager em = entityManager();
+		String sqlQuery = "SELECT sr FROM StandardizedRole AS sr where sr.id != " + currentStandardizedRoleId + " AND  sr.roleTopic.specialisation.id = " + specialisationid + " and active = 1";
+        TypedQuery<StandardizedRole> q = em.createQuery(sqlQuery, StandardizedRole.class);
+        
+        return q.getResultList();
+	}
+	
+	public static List<StandardizedRole> findRolesExceptCurrentRole(Long currentRoleId){
+		StandardizedRole standardizedRole = StandardizedRole.findStandardizedRole(currentRoleId);
+		EntityManager em = entityManager();
+		if(standardizedRole != null &&  standardizedRole.getRoleTopic() != null) {
+			String sqlQuery = "SELECT sr FROM StandardizedRole AS sr where sr.id != " + currentRoleId + " AND  sr.roleTopic.id = " + standardizedRole.getRoleTopic().getId() + " and active = 1";
+	        TypedQuery<StandardizedRole> q = em.createQuery(sqlQuery, StandardizedRole.class);
+	        return q.getResultList();    
+		}
+		return null;
+	}
 }
 

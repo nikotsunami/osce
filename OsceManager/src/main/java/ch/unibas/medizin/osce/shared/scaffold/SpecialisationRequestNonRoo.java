@@ -21,4 +21,6 @@ public interface SpecialisationRequestNonRoo extends RequestContext {
 	
 	//abstract Request<List<SpecialisationProxy>> findSpecialisationSortByName();
 	abstract Request<List<SpecialisationProxy>> findSpecialisationSortByName(StudyYears studyYear);
+
+	abstract  Request<List<SpecialisationProxy>> findSpecialisations();
 }

@@ -31,6 +31,10 @@ public interface StandardizedRoleRequestNonRoo extends RequestContext
 	abstract Request<String> createChecklistQRImageByChecklistId(Long checklistId);
 	//export checklist
 	//abstract Request<String> exportOsce(Long id);
+
+	abstract Request<List<StandardizedRoleProxy>> findRolesFromSpecialisationId(Long specialisationId, Long currentStandardizedRoleId);
+
+	abstract Request<List<StandardizedRoleProxy>> findRolesExceptCurrentRole(Long currentRoleId);
 }
 
 

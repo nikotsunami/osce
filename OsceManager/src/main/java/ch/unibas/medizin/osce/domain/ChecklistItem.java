@@ -19,6 +19,7 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
+import ch.unibas.medizin.osce.shared.ChecklistImportPojo;
 import ch.unibas.medizin.osce.shared.ItemType;
 import ch.unibas.medizin.osce.shared.OptionType;
 import ch.unibas.medizin.osce.shared.OscePostWiseQuestion;
@@ -475,5 +476,276 @@ public class ChecklistItem {
 		}
 		
 		return true;
+	}
+	
+	public static List<ChecklistImportPojo> findAllChecklistTabsByRoles(Long checklistId){
+		
+		List<ChecklistImportPojo> checklistImportPojoList = new ArrayList<ChecklistImportPojo>();
+		List<ChecklistItem> tabs = findAllChecklistTabsByChecklistId(checklistId);
+		
+		if(tabs.size() > 0){
+			ChecklistImportPojo checklistImportPojo = new ChecklistImportPojo();
+			checklistImportPojo.setId(-1l);
+			checklistImportPojo.setName("All");
+			checklistImportPojoList.add(checklistImportPojo);
+			
+			for (ChecklistItem checklistItem : tabs) {
+				checklistImportPojo = new ChecklistImportPojo();
+				checklistImportPojo.setId(checklistItem.getId());
+				checklistImportPojo.setName(checklistItem.getName());
+				checklistImportPojoList.add(checklistImportPojo);
+			}
+		}
+		return checklistImportPojoList;
+	}
+	
+	public static List<ChecklistItem> importChecklistTabsForTab(Long currentRoleId, Long selectedRoleId, Long checklistTabId){
+		
+		List<ChecklistItem> newChecklistTabItemList = new ArrayList<ChecklistItem>();
+		StandardizedRole currentRole = StandardizedRole.findStandardizedRole(currentRoleId);
+		
+		if(checklistTabId.equals(-1L)) {
+			StandardizedRole selectedRole = StandardizedRole.findStandardizedRole(selectedRoleId);
+			
+			if (selectedRole != null && selectedRole.getCheckList() != null && selectedRole.getCheckList().getChecklistItems() != null) {
+				List<ChecklistItem> oldChecklistItemList = selectedRole.getCheckList().getChecklistItems();
+				Integer seqNumber = findMaxTabSequenceNumber(currentRole.getCheckList().getId());
+				
+				for (ChecklistItem oldChecklistItem : oldChecklistItemList) {
+					ChecklistItem newChecklistTabItem = new ChecklistItem().copyChecklistTabItemFromOld(oldChecklistItem, seqNumber, currentRole.getCheckList());
+					newChecklistTabItemList.add(newChecklistTabItem);
+					new ChecklistItem().copyChecklistItemFromAnotherItem(newChecklistTabItem, oldChecklistItem);
+					
+					seqNumber += 1;
+				}
+			}
+		}
+		else {
+			if (currentRole != null && currentRole.getCheckList() != null) {
+				ChecklistItem tab = ChecklistItem.findChecklistItem(checklistTabId);
+				Integer seqNumber = findMaxTabSequenceNumber(currentRole.getCheckList().getId());
+				ChecklistItem newChecklistTabItem = new ChecklistItem().copyChecklistTabItemFromOld(tab, seqNumber, currentRole.getCheckList());
+				newChecklistTabItemList.add(newChecklistTabItem);
+				new ChecklistItem().copyChecklistItemFromAnotherItem(newChecklistTabItem, tab);
+			}
+		}
+		return newChecklistTabItemList;
+	}
+	
+	public ChecklistItem copyChecklistTabItemFromOld(ChecklistItem oldChecklistItem, Integer seqNumber, CheckList newChecklist) {
+		ChecklistItem newChecklistItem = new ChecklistItem();
+		newChecklistItem.setName(oldChecklistItem.getName());
+		newChecklistItem.setDescription(oldChecklistItem.getDescription());
+		newChecklistItem.setItemType(oldChecklistItem.getItemType());
+		newChecklistItem.setSequenceNumber(seqNumber);
+		newChecklistItem.setCheckList(newChecklist);
+		newChecklistItem.persist();
+		
+		return newChecklistItem;
+	}
+
+	@Transactional
+	public void copyChecklistItemFromAnotherItem(ChecklistItem newChecklistItem, ChecklistItem oldChecklistItem) {
+		
+		if (oldChecklistItem.getChildChecklistItems() != null) {
+			
+			for (ChecklistItem oldItem : oldChecklistItem.getChildChecklistItems()) {
+				ChecklistItem newItem = copyChecklistItem(oldItem,newChecklistItem);
+				if (newItem != null && oldItem.getCheckListOptions() != null) {
+					copyOptions(newItem, oldItem);
+				}
+				
+				if (newItem != null && oldItem.getCheckListCriterias() != null) {
+					copyCriterias(newItem, oldItem);
+				}
+				copyChecklistItemFromAnotherItem(newItem, oldItem);
+			}
+		}
+		
+	}
+	
+	@Transactional
+	public ChecklistItem copyChecklistItem(ChecklistItem oldChecklistItem, ChecklistItem newItem) {
+		ChecklistItem newChecklistItem = new ChecklistItem();
+		newChecklistItem.setName(oldChecklistItem.getName());
+		newChecklistItem.setDescription(oldChecklistItem.getDescription());
+		newChecklistItem.setItemType(oldChecklistItem.getItemType());
+		newChecklistItem.setSequenceNumber(oldChecklistItem.getSequenceNumber());
+		newChecklistItem.setParentItem(newItem);
+		newChecklistItem.setOptionType(oldChecklistItem.getOptionType());
+		newChecklistItem.setIsRegressionItem(oldChecklistItem.getIsRegressionItem());
+		newChecklistItem.persist();
+		
+		return newChecklistItem;
+	}
+	
+	@Transactional
+	public static void copyOptions(ChecklistItem newChecklistItem, ChecklistItem oldChecklistItem) {
+		
+		for (ChecklistOption oldChecklistOption : oldChecklistItem.getCheckListOptions()) {
+			ChecklistOption newChecklistOption = new ChecklistOption();
+			newChecklistOption.setOptionName(oldChecklistOption.getOptionName());
+			newChecklistOption.setDescription(oldChecklistOption.getDescription());
+			newChecklistOption.setChecklistItem(newChecklistItem);
+			newChecklistOption.setValue(oldChecklistOption.getValue());
+			newChecklistOption.setCriteriaCount(oldChecklistOption.getCriteriaCount());
+			newChecklistOption.setSequenceNumber(oldChecklistOption.getSequenceNumber());
+		
+			newChecklistOption.persist();
+		}
+	}
+	
+	@Transactional
+	public static void copyCriterias(ChecklistItem newChecklistItem, ChecklistItem oldChecklistItem) {
+		
+		for (ChecklistCriteria oldChecklistCriteria : oldChecklistItem.getCheckListCriterias()) {
+			ChecklistCriteria newChecklistCriteria = new ChecklistCriteria();
+			newChecklistCriteria.setCriteria(oldChecklistCriteria.getCriteria());
+			newChecklistCriteria.setDescription(oldChecklistCriteria.getDescription());
+			newChecklistCriteria.setSequenceNumber(oldChecklistCriteria.getSequenceNumber());
+			newChecklistCriteria.setChecklistItem(newChecklistItem);
+			newChecklistCriteria.persist();
+		}
+	}
+
+	public static List<ChecklistItem> importChecklistTopicsForRole(Long currentRoleId, Long selectedRoleId, Long topicId, Long tabId){
+		List<ChecklistItem> newChecklistTopicItemList = new ArrayList<ChecklistItem>();
+		ChecklistItem tab = ChecklistItem.findChecklistItem(tabId);
+		
+		if(topicId.equals(-1L)) {
+			StandardizedRole selectedRole = StandardizedRole.findStandardizedRole(selectedRoleId);
+			
+			if (selectedRole != null && selectedRole.getCheckList() != null && selectedRole.getCheckList().getChecklistItems() != null) {
+				List<ChecklistItem> oldChecklistItemList = findChecklistTopicByChecklist(selectedRole.getCheckList().getId());
+				Integer seqNumber = findMaxSequenceNumberByParentItem(tabId);
+				for (ChecklistItem oldChecklistItem : oldChecklistItemList) {
+					ChecklistItem newChecklistTopicItem = new ChecklistItem().copyChecklistTopicItemFromOld(oldChecklistItem, seqNumber,tab);
+					newChecklistTopicItemList.add(newChecklistTopicItem);
+					new ChecklistItem().copyChecklistItemFromAnotherItem(newChecklistTopicItem, oldChecklistItem);
+					
+					seqNumber += 1;
+				}
+			}
+		}
+		else {
+			if (tab != null && tab.getId() != null && topicId != null) {
+				ChecklistItem topic = ChecklistItem.findChecklistItem(topicId);
+				Integer seqNumber = findMaxSequenceNumberByParentItem(tabId);
+				ChecklistItem newChecklistTopicItem = new ChecklistItem().copyChecklistTopicItemFromOld(topic, seqNumber,tab);
+				newChecklistTopicItemList.add(newChecklistTopicItem);
+				new ChecklistItem().copyChecklistItemFromAnotherItem(newChecklistTopicItem, topic);
+			}
+		}
+		return newChecklistTopicItemList;
+	}
+
+	private ChecklistItem copyChecklistTopicItemFromOld(ChecklistItem oldChecklistItem, Integer seqNumber, ChecklistItem currentTab) {
+
+		ChecklistItem newChecklistItem = new ChecklistItem();
+		newChecklistItem.setName(oldChecklistItem.getName());
+		newChecklistItem.setDescription(oldChecklistItem.getDescription());
+		newChecklistItem.setItemType(oldChecklistItem.getItemType());
+		newChecklistItem.setSequenceNumber(seqNumber);
+		newChecklistItem.setParentItem(currentTab);
+		newChecklistItem.persist();
+		
+		return newChecklistItem;
+	}
+
+	public static List<ChecklistImportPojo> findAllChecklistTopicsByRoles(Long checklistId) {
+		List<ChecklistImportPojo> checklistImportPojoList = new ArrayList<ChecklistImportPojo>();
+		List<ChecklistItem> topics = findChecklistTopicByChecklist(checklistId);
+		
+		if(topics.size() > 0){
+			ChecklistImportPojo checklistImportPojo = new ChecklistImportPojo();
+			checklistImportPojo.setId(-1l);
+			checklistImportPojo.setName("All");
+			checklistImportPojoList.add(checklistImportPojo);
+			
+			for (ChecklistItem checklistItem : topics) {
+				checklistImportPojo = new ChecklistImportPojo();
+				checklistImportPojo.setId(checklistItem.getId());
+				checklistImportPojo.setName(checklistItem.getName());
+				checklistImportPojoList.add(checklistImportPojo);
+			}
+		}
+		return checklistImportPojoList;
+	}
+	
+	public static List<ChecklistItem> findAllChecklistTopicsByChecklist(Long checklistId){
+
+		List<ChecklistItem> checklistTopics = findChecklistTopicByChecklist(checklistId);
+		return checklistTopics;
+	}
+	
+	public static List<ChecklistItem> importChecklistQuestionsForTopic(Long selectedtopicId, Long selectedRoleId, Long questionId, Long currentTopicId){
+		
+		List<ChecklistItem> newChecklistQuestionItemList = new ArrayList<ChecklistItem>();
+		ChecklistItem topic = ChecklistItem.findChecklistItem(currentTopicId);
+		
+		if(questionId.equals(-1L)) {
+			if (selectedtopicId != null) {
+
+				List<ChecklistItem> oldChecklistItemList = findChecklistQuestionByChecklistTopicId(selectedtopicId);
+				Integer seqNumber = findMaxSequenceNumberByParentItem(currentTopicId);
+				for (ChecklistItem oldChecklistItem : oldChecklistItemList) {
+					ChecklistItem newChecklistQuestionItem=copyChecklistQuestionItemFromOld(oldChecklistItem,seqNumber,topic);
+					newChecklistQuestionItemList.add(newChecklistQuestionItem);
+					seqNumber += 1;
+				}
+			}
+		}
+		else {
+			if (questionId != null && topic != null) {
+				ChecklistItem questionItem = ChecklistItem.findChecklistItem(questionId);
+				Integer seqNumber = findMaxSequenceNumberByParentItem(currentTopicId);
+				ChecklistItem newChecklistQuestionItem=copyChecklistQuestionItemFromOld(questionItem,seqNumber,topic);
+				newChecklistQuestionItemList.add(newChecklistQuestionItem);
+			}
+		}
+		return newChecklistQuestionItemList;
+	}
+	
+	private static ChecklistItem copyChecklistQuestionItemFromOld(ChecklistItem questionItem, Integer seqNumber, ChecklistItem currentTopic) {
+
+		ChecklistItem newChecklistItem = new ChecklistItem();
+		newChecklistItem.setName(questionItem.getName());
+		newChecklistItem.setDescription(questionItem.getDescription());
+		newChecklistItem.setItemType(questionItem.getItemType());
+		newChecklistItem.setSequenceNumber(seqNumber);
+		newChecklistItem.setParentItem(currentTopic);
+		newChecklistItem.setIsRegressionItem(questionItem.getIsRegressionItem());
+		newChecklistItem.setOptionType(questionItem.getOptionType());
+		newChecklistItem.persist();
+		
+		if(questionItem.getCheckListOptions() != null){
+			copyOptions(newChecklistItem,questionItem);
+		}
+		if(questionItem.getCheckListCriterias() != null) {
+			copyCriterias(newChecklistItem, questionItem);
+		}
+		return newChecklistItem;
+	}
+
+	public static List<ChecklistImportPojo> findChecklistQuestionByTopicId(Long topicId){
+		
+		List<ChecklistImportPojo> checklistImportPojoList = new ArrayList<ChecklistImportPojo>();
+		List<ChecklistItem> topics = findChecklistQuestionByChecklistTopic(topicId);
+		
+		if(topics.size() > 0){
+			ChecklistImportPojo checklistImportPojo = new ChecklistImportPojo();
+			checklistImportPojo.setId(-1l);
+			checklistImportPojo.setName("All");
+			checklistImportPojoList.add(checklistImportPojo);
+			
+			for (ChecklistItem checklistItem : topics) {
+				checklistImportPojo = new ChecklistImportPojo();
+				checklistImportPojo.setId(checklistItem.getId());
+				checklistImportPojo.setName(checklistItem.getName());
+				checklistImportPojoList.add(checklistImportPojo);
+			}
+		}
+		return checklistImportPojoList;
+		
 	}
 }
