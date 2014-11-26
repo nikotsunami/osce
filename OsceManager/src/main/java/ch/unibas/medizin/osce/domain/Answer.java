@@ -10,8 +10,8 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,6 +29,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.transaction.annotation.Transactional;
 
 import ch.unibas.medizin.osce.server.CalculateCronbachValue;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
@@ -73,8 +74,12 @@ public class Answer {
     @DateTimeFormat(style = "M-")
     private Date answerTimestamp;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
-	private Set<ChecklistCriteria> checklistCriteria = new HashSet<ChecklistCriteria>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "checklistCriteria")
+	private List<AnswerCheckListCriteria> itemAnalysis = new ArrayList<AnswerCheckListCriteria>();
+	
+	
+	/*@ManyToMany(cascade = CascadeType.ALL)
+	private Set<ChecklistCriteria> checklistCriteria = new HashSet<ChecklistCriteria>();*/
 	
 	private static Logger log = Logger.getLogger(Answer.class);
 
@@ -1638,5 +1643,25 @@ public class Answer {
 		String sql = "SELECT a FROM Answer a WHERE a.checklistItem is not null AND a.checklistItem.id = " + checklistItemId;
 		TypedQuery<Answer> query = em.createQuery(sql, Answer.class);
 		return query.getResultList();
+	}
+
+	@Transactional
+	public void deleteNoteAnswerCriteria(Long doctorId, Long oprId, Long studentId) {
+		try 
+    	{
+			OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoom(oprId);
+			if (oscePostRoom != null && oscePostRoom.getOscePost() != null) {
+				String noteSql = "delete from notes where osce_post_room = " + oprId + " and doctor = " + doctorId + " and student = " + studentId;
+	    		int notesDeletedCount = entityManager().createNativeQuery(noteSql).executeUpdate();
+	    		
+	    		String criteriaSql = "delete from answer_check_list_criteria where answer in (select id from answer where osce_post_room = " + oprId + " and doctor = " + doctorId + " and student = " + studentId +")";
+	    		int criteriaDeletedCount = entityManager().createNativeQuery(criteriaSql).executeUpdate();
+	    		
+	    		String answerSql = "delete from answer where osce_post_room = " + oprId + " and doctor = " + doctorId + " and student = " + studentId;
+	    		int answerDeletedCount = entityManager().createNativeQuery(answerSql).executeUpdate();
+			}
+    	} catch(Exception e) {
+    		e.printStackTrace();    		
+    	}
 	}
 }

@@ -17,6 +17,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationProxy;
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationRequest;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
+import ch.unibas.medizin.osce.shared.BucketInfoType;
 import ch.unibas.medizin.osce.shared.EosceStatus;
 import ch.unibas.medizin.osce.shared.ExportOsceType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -74,19 +75,25 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 			public void onSelectionChange(SelectChangeEvent event) {
 				semesterProxy = event.getSemesterProxy();
 				loadBucketInformation(semesterProxy);
-				if (view.getProcessed().getValue() == true)
-				{
-					init(view.selectedOsceType());					
+				if (view.getProcessed().getValue() == true) {
+					//init(view.selectedOsceType());				
+					fetchProcessedFileFromLocal(view.selectedOsceType());
 				}
-				else if (view.getUnprocessed().getValue() == true)
-				{
-					unprocessedClicked(view.selectedOsceType());
+				else if (view.getUnprocessed().getValue() == true) {
+					//unprocessedClicked(view.selectedOsceType());
+					fetchUnProcessedFileFromLocal(view.selectedOsceType());
 				}
 			}
 		});
 		
 		loadBucketInformation(semesterProxy);
-		init(view.selectedOsceType());
+		if (view.getProcessed().getValue()) {
+			fetchProcessedFileFromLocal(view.selectedOsceType());
+		}
+		else if (view.getUnprocessed().getValue()) {
+			fetchUnProcessedFileFromLocal(view.selectedOsceType());
+		}
+		//init(view.selectedOsceType());
 		view.setDelegate(this);
 	}
 	
@@ -105,8 +112,19 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 			public void onSuccess(BucketInformationProxy response) {
 				if (response != null)
 				{
+					view.setBucketInformationProxy(response);
 					//System.out.println("RESPONSE FOUND");
-					view.getBucketName().setText(response.getBucketName());
+					if(BucketInfoType.FTP.equals(response.getType())) {
+						/*view.getBasePath().setText(response.getBasePath());
+						view.getBasePath().setEnabled(false);*/
+						view.getFtp().setValue(true, true);
+						view.typeValueChanged(true);
+					} else {
+						view.getS3().setValue(true,true);
+						view.typeValueChanged(false);
+					}
+					//System.out.println("RESPONSE FOUND");
+					/*view.getBucketName().setText(response.getBucketName());
 					view.getAccessKey().setText(response.getAccessKey());
 					view.getSecretKey().setText(response.getSecretKey());
 					if (response.getEncryptionKey() != null)
@@ -123,11 +141,38 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					view.getCancelButton().setVisible(false);
 					view.setBucketInformationProxy(response);
 					
-					view.getBucketName().setFocus(true);
+					view.getBucketName().setFocus(true);*/
 				}
 				else
 				{
+					view.setBucketInformationProxy(response);
+					view.getFtp().setValue(view.getFtp().getValue(),true);
+					view.getS3().setValue(view.getS3().getValue(),true);
+					
 					view.getBucketName().setEnabled(true);
+					view.getAccessKey().setEnabled(true);
+					view.getSecretKey().setEnabled(true);
+					view.getEncryptionKey().setEnabled(true);
+					
+					if(view.getFtp().getValue()) {
+						view.getBasePath().setEnabled(true);	
+					} else {
+						view.getBasePath().setVisible(false);
+					}
+					
+					view.getBucketName().setText("");
+					view.getAccessKey().setText("");
+					view.getSecretKey().setText("");
+					view.getEncryptionKey().setText("");
+					view.getBasePath().setText("");
+					//System.out.println("RESPONSE NOT FOUND");
+					view.getSaveEditButton().setText(constants.save());
+					
+					view.getCancelButton().setVisible(true);
+					
+					view.getBucketName().setFocus(true);
+					
+					/*view.getBucketName().setEnabled(true);
 					view.getAccessKey().setEnabled(true);
 					view.getSecretKey().setEnabled(true);
 					view.getEncryptionKey().setEnabled(true);
@@ -142,13 +187,125 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					view.getCancelButton().setVisible(true);
 					view.setBucketInformationProxy(response);
 					
-					view.getBucketName().setFocus(true);
+					view.getBucketName().setFocus(true);*/
 				}
 			}
 		});
 	}
 	
-	public void init(ExportOsceType osceType)
+	public void fetchProcessedFileFromLocal(ExportOsceType osceType) {
+		try {
+			showApplicationLoading(true);
+			
+			checkBoxList.clear();
+			view.getFileListPanel().clear();
+			
+			eOsceServiceAsync.findProcessedFileNameFromLocal(osceType, semesterProxy.getId(), new AsyncCallback<List<String>>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					showApplicationLoading(false);
+					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.errorImportFetch());
+				}
+
+				@Override
+				public void onSuccess(List<String> result) {
+					if (result.size() == 0) {
+						Label label = new Label();
+						label.setText(constants.importFilesProcessed());
+						HorizontalPanel horizontalPanel = new HorizontalPanel();
+						horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+						horizontalPanel.add(label);
+						horizontalPanel.addStyleName("eOSCEHorizontalPanel");
+						view.getFileListPanel().add(horizontalPanel);										
+					}
+					
+					for (int i=0; i<result.size(); i++)
+					{
+						CheckBox checkBox = new CheckBox();
+						Label label = new Label();
+						label.setText(result.get(i));
+						checkBox.setFormValue(result.get(i));
+						
+						checkBoxList.add(checkBox);
+						
+						HorizontalPanel horizontalPanel = new HorizontalPanel();
+						horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+						horizontalPanel.add(checkBox);
+						horizontalPanel.add(label);
+						
+						horizontalPanel.addStyleName("eOSCEHorizontalPanel");
+						view.getFileListPanel().add(horizontalPanel);
+					}					
+					
+					showApplicationLoading(false);
+				}
+			});
+		}
+		catch (Exception e) {
+			showApplicationLoading(false);
+			Log.error(e.getMessage(), e);
+		}
+	}
+	
+	public void fetchUnProcessedFileFromLocal(ExportOsceType osceType) {
+		try {
+			showApplicationLoading(true);
+			
+			checkBoxList.clear();
+			view.getFileListPanel().clear();
+			
+			eOsceServiceAsync.findUnProcessedFileNameFromLocal(osceType, semesterProxy.getId(), new AsyncCallback<List<String>>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					showApplicationLoading(false);
+					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.errorImportFetch());
+				}
+
+				@Override
+				public void onSuccess(List<String> result) {
+					if (result.size() == 0) {
+						Label label = new Label();
+						label.setText(constants.importFilesProcessed());
+						HorizontalPanel horizontalPanel = new HorizontalPanel();
+						horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+						horizontalPanel.add(label);
+						horizontalPanel.addStyleName("eOSCEHorizontalPanel");
+						view.getFileListPanel().add(horizontalPanel);										
+					}
+					
+					for (int i=0; i<result.size(); i++)
+					{
+						CheckBox checkBox = new CheckBox();
+						Label label = new Label();
+						label.setText(result.get(i));
+						checkBox.setFormValue(result.get(i));
+						
+						checkBoxList.add(checkBox);
+						
+						HorizontalPanel horizontalPanel = new HorizontalPanel();
+						horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+						horizontalPanel.add(checkBox);
+						horizontalPanel.add(label);
+						
+						horizontalPanel.addStyleName("eOSCEHorizontalPanel");
+						view.getFileListPanel().add(horizontalPanel);
+					}					
+					
+					showApplicationLoading(false);
+				}
+			});
+		}
+		catch (Exception e) {
+			showApplicationLoading(false);
+			Log.error(e.getMessage(), e);
+		}
+	}
+	
+	/*public void init(ExportOsceType osceType)
 	{
 		try
 		{
@@ -215,7 +372,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 			showApplicationLoading(false);
 			e.printStackTrace();
 		}					
-	}
+	}*/
 
 	@Override
 	public void goTo(Place place) {
@@ -223,7 +380,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 	}
 
 	@Override
-	public void importButtonClicked(final ExportOsceType osceType, Boolean flag) {
+	public void importButtonClicked(final ExportOsceType osceType, Boolean flag, BucketInfoType bucketInfoType) {
 		showApplicationLoading(true);
 		
 		List<String> fileList = new ArrayList<String>();
@@ -238,8 +395,34 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 		
 		System.out.println("IMPORT FILELIST SIZE : " + fileList.size());
 		
-		if (ExportOsceType.EOSCE.equals(osceType)) {
-			eOsceServiceAsync.importFileList(osceType, semesterProxy.getId(), fileList, flag, new AsyncCallback<Void>() {
+		eOsceServiceAsync.importFileFromCloud(bucketInfoType, osceType, semesterProxy.getId(), fileList, flag, new AsyncCallback<Void>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				showApplicationLoading(false);
+				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+				messageConfirmationDialogBox.showConfirmationDialog(constants.importFileError());
+			}
+
+			@Override
+			public void onSuccess(Void result) {
+				showApplicationLoading(false);
+				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
+				messageConfirmationDialogBox.showConfirmationDialog(constants.importSuccess());
+				messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						if (view.getUnprocessed().getValue())
+							fetchUnProcessedFileFromLocal(osceType);
+						else if (view.getProcessed().getValue()) 
+							fetchProcessedFileFromLocal(osceType);
+					}
+				});
+			}
+		});
+			
+			/*eOsceServiceAsync.importFileList(osceType, semesterProxy.getId(), fileList, flag, new AsyncCallback<Void>() {
 				@Override
 				public void onFailure(Throwable caught) {
 					showApplicationLoading(false);
@@ -265,16 +448,14 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					
 				//	init();
 				}
-			});
-		}
-		else if (ExportOsceType.IOSCE.equals(osceType)) {
-			
-		}
+			});*/
+		
 	}
 
 	@Override
 	public void unprocessedClicked(ExportOsceType osceType) {
-		try
+		fetchUnProcessedFileFromLocal(osceType);
+		/*try
 		{
 			if (ExportOsceType.EOSCE.equals(osceType)) {
 				showApplicationLoading(true);
@@ -339,16 +520,17 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 		{
 			showApplicationLoading(false);
 			e.printStackTrace();
-		}					
+		}*/					
 	}
 
 	@Override
 	public void processedClicked(ExportOsceType osceType) {
-		init(osceType);
+		//init(osceType);
+		fetchProcessedFileFromLocal(osceType);
 	}
 
 	@Override
-	public void deleteButtonClicked(ExportOsceType osceType) {
+	public void deleteButtonClicked(ExportOsceType osceType, BucketInfoType bucketInfoType) {
 		showApplicationLoading(true);
 		
 		List<String> fileList = new ArrayList<String>();
@@ -363,7 +545,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 		
 		System.out.println("DELETE FILELIST SIZE : " + fileList.size());
 		
-		eOsceServiceAsync.deleteAmzonS3Object(osceType, semesterProxy.getId(), fileList, view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(), new AsyncCallback<Void>() {
+		eOsceServiceAsync.deleteFileFromCloud(osceType, bucketInfoType, semesterProxy.getId(), fileList, new AsyncCallback<Void>() {
 			@Override
 			public void onFailure(Throwable caught) {	
 				showApplicationLoading(false);
@@ -380,15 +562,13 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					
 					@Override
 					public void onClick(ClickEvent event) {
-						processedClicked(view.selectedOsceType());
+						fetchProcessedFileFromLocal(view.selectedOsceType());
 					}
 				});
 				
 			//	init();
 			}
 		});
-			
-		
 	}
 
 	@Override
@@ -409,8 +589,48 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey, String encryptionKey) {
+	public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey, String encryptionKey, String basePath, Boolean isFTP) {
 		BucketInformationRequest request = requests.bucketInformationRequest();
+		final BucketInformationProxy bucketInformationProxy;
+		
+		if (proxy == null)
+		{	
+			bucketInformationProxy = request.create(BucketInformationProxy.class);
+			bucketInformationProxy.setSemester(semesterProxy);
+		}
+		else
+		{
+			bucketInformationProxy = request.edit(proxy);
+			bucketInformationProxy.setSemester(proxy.getSemester());
+		}
+		
+		bucketInformationProxy.setEosceStatusType(EosceStatus.Import);	
+		bucketInformationProxy.setBucketName(bucketName);
+		bucketInformationProxy.setAccessKey(accessKey);
+		bucketInformationProxy.setSecretKey(secretKey);
+		bucketInformationProxy.setEncryptionKey(encryptionKey);
+		if(isFTP == true) {
+			bucketInformationProxy.setBasePath(basePath);
+			bucketInformationProxy.setType(BucketInfoType.FTP);
+		} else {
+			bucketInformationProxy.setType(BucketInfoType.S3);
+		}
+		
+		request.persist().using(bucketInformationProxy).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				view.getBucketName().setEnabled(false);
+				view.getAccessKey().setEnabled(false);
+				view.getSecretKey().setEnabled(false);
+				view.getEncryptionKey().setEnabled(false);
+				view.getBasePath().setEnabled(false);
+				
+				view.getSaveEditButton().setText(constants.edit());
+				view.setBucketInformationProxy(bucketInformationProxy);
+			}
+		});
+		/*BucketInformationRequest request = requests.bucketInformationRequest();
 		final BucketInformationProxy bucketInformationProxy;
 		
 		if (proxy == null)
@@ -452,7 +672,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					unprocessedClicked(view.selectedOsceType());
 				}
 			}
-		});
+		});*/
 	}
 
 	public void showApplicationLoading(Boolean show) {
@@ -467,19 +687,141 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 	
 	public void eOsceClicked() {
 		if (view.getProcessed().getValue()) {
-			init(ExportOsceType.EOSCE);
+			//init(ExportOsceType.EOSCE);
+			fetchProcessedFileFromLocal(ExportOsceType.EOSCE);
 		} 
 		else if (view.getUnprocessed().getValue()) {
-			unprocessedClicked(ExportOsceType.EOSCE);
+			//unprocessedClicked(ExportOsceType.EOSCE);
+			fetchUnProcessedFileFromLocal(ExportOsceType.EOSCE);
 		}
 	}
 	 
 	public void iOsceClicked() {
 		if (view.getProcessed().getValue()) {
-			init(ExportOsceType.IOSCE);
+			//init(ExportOsceType.IOSCE);
+			fetchProcessedFileFromLocal(ExportOsceType.IOSCE);
 		} 
 		else if (view.getUnprocessed().getValue()) {
-			unprocessedClicked(ExportOsceType.IOSCE);
+			//unprocessedClicked(ExportOsceType.IOSCE);
+			fetchUnProcessedFileFromLocal(ExportOsceType.IOSCE);
 		} 
+	}
+
+	@Override
+	public void fetchUnprocessedFilesFromCloud(ExportOsceType osceType, BucketInfoType bucketInfoType) {
+
+		try {
+			showApplicationLoading(true);
+			
+			checkBoxList.clear();
+			view.getFileListPanel().clear();
+			
+			eOsceServiceAsync.findUnProcessedFilesFromCloud(bucketInfoType, osceType, semesterProxy.getId(), new AsyncCallback<List<String>>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					showApplicationLoading(false);
+					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.errorImportFetch());
+				}
+
+				@Override
+				public void onSuccess(List<String> result) {
+					if (result.size() == 0) {
+						Label label = new Label();
+						label.setText(constants.importFilesProcessed());
+						HorizontalPanel horizontalPanel = new HorizontalPanel();
+						horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+						horizontalPanel.add(label);
+						horizontalPanel.addStyleName("eOSCEHorizontalPanel");
+						view.getFileListPanel().add(horizontalPanel);										
+					}
+					
+					for (int i=0; i<result.size(); i++)
+					{
+						CheckBox checkBox = new CheckBox();
+						Label label = new Label();
+						label.setText(result.get(i));
+						checkBox.setFormValue(result.get(i));
+						
+						checkBoxList.add(checkBox);
+						
+						HorizontalPanel horizontalPanel = new HorizontalPanel();
+						horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+						horizontalPanel.add(checkBox);
+						horizontalPanel.add(label);
+						
+						horizontalPanel.addStyleName("eOSCEHorizontalPanel");
+						view.getFileListPanel().add(horizontalPanel);
+					}					
+					
+					showApplicationLoading(false);
+				}
+			});
+		}
+		catch (Exception e) {
+			showApplicationLoading(false);
+			Log.error(e.getMessage(), e);
+		}
+	
+	}
+
+	@Override
+	public void fetchProcessedFilesFromCloud(ExportOsceType osceType, BucketInfoType bucketInfoType) {
+		try {
+			showApplicationLoading(true);
+			
+			checkBoxList.clear();
+			view.getFileListPanel().clear();
+			
+			eOsceServiceAsync.findProcessedFilesFromCloud(bucketInfoType, osceType, semesterProxy.getId(), new AsyncCallback<List<String>>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					showApplicationLoading(false);
+					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.errorImportFetch());
+				}
+
+				@Override
+				public void onSuccess(List<String> result) {
+					if (result.size() == 0) {
+						Label label = new Label();
+						label.setText(constants.importFilesProcessed());
+						HorizontalPanel horizontalPanel = new HorizontalPanel();
+						horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+						horizontalPanel.add(label);
+						horizontalPanel.addStyleName("eOSCEHorizontalPanel");
+						view.getFileListPanel().add(horizontalPanel);										
+					}
+					
+					for (int i=0; i<result.size(); i++)
+					{
+						CheckBox checkBox = new CheckBox();
+						Label label = new Label();
+						label.setText(result.get(i));
+						checkBox.setFormValue(result.get(i));
+						
+						checkBoxList.add(checkBox);
+						
+						HorizontalPanel horizontalPanel = new HorizontalPanel();
+						horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+						horizontalPanel.add(checkBox);
+						horizontalPanel.add(label);
+						
+						horizontalPanel.addStyleName("eOSCEHorizontalPanel");
+						view.getFileListPanel().add(horizontalPanel);
+					}					
+					
+					showApplicationLoading(false);
+				}
+			});
+		}
+		catch (Exception e) {
+			showApplicationLoading(false);
+			Log.error(e.getMessage(), e);
+		}
+	
+	
 	}
 }

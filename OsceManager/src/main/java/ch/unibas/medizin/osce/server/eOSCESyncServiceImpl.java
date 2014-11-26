@@ -4,12 +4,15 @@ import static org.apache.commons.lang.StringUtils.defaultString;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,6 +20,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -27,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.UUID;
+import java.util.Vector;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
@@ -40,18 +46,22 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
 import org.apache.xml.serialize.OutputFormat;
 import org.apache.xml.serialize.XMLSerializer;
+import org.omg.CORBA.OMGVMCID;
+import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncException;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncService;
 import ch.unibas.medizin.osce.domain.Answer;
+import ch.unibas.medizin.osce.domain.AnswerCheckListCriteria;
 import ch.unibas.medizin.osce.domain.Assignment;
 import ch.unibas.medizin.osce.domain.BucketInformation;
 import ch.unibas.medizin.osce.domain.CheckList;
@@ -96,9 +106,15 @@ import ch.unibas.medizin.osce.server.bean.Oscedata.Rotations.Rotation;
 import ch.unibas.medizin.osce.server.bean.Oscedata.Stations;
 import ch.unibas.medizin.osce.server.bean.Oscedata.Stations.Station;
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
+import ch.unibas.medizin.osce.server.importanswer.AnswerOption;
+import ch.unibas.medizin.osce.server.importanswer.AudioNote;
+import ch.unibas.medizin.osce.server.importanswer.Criteria;
+import ch.unibas.medizin.osce.server.importanswer.Examanswers;
+import ch.unibas.medizin.osce.server.importanswer.StudentAnswer;
 import ch.unibas.medizin.osce.shared.BucketInfoType;
 import ch.unibas.medizin.osce.shared.ExportOsceData;
 import ch.unibas.medizin.osce.shared.ExportOsceType;
+import ch.unibas.medizin.osce.shared.NoteType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.amazonaws.AmazonClientException;
@@ -114,11 +130,19 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.Region;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.dd.plist.NSDictionary;
+import com.dd.plist.NSObject;
+import com.dd.plist.NSString;
+import com.dd.plist.PropertyListParser;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import com.jcraft.jsch.SftpException;
+
+import flexjson.JSONDeserializer;
 
 public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCESyncService {
 
@@ -128,10 +152,19 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	private static final long serialVersionUID = 1L;
 	private static Logger Log = Logger.getLogger(eOSCESyncServiceImpl.class);
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private static final String IMPORT_FILE_EXATENSION = "crumble";
+	private final SimpleDateFormat jsonsdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); 
+	private static final String IMPORT_EOSCE_FILE_EXTENSION = "crumble";
+	private static final String IMPORT_IOSCE_FILE_EXTENSION = "plist";
+	private static final String AUDIO_FILE_EXTENSION = ".mp3";
 	private String folderSeparatorLocal="\\";
 	private String folderSeparatorProduction="/";
 	private boolean isLocal=false; // To put folder separator for local test set true during development otherwise false
+
+	private static final String IMPORT_ANSWER_PLIST_SHA_CODE = "DigitalSignature";
+	private static final String IMPORT_ANSWER_PLIST_DATA = "Encrypteddata";
+	private static final String IMPORT_ANSWER_PLIST_SUBMIT = "submit";
+	private static final String IMPORT_ANSWER_PLIST_SIGN_MECHANISM = "signingMechanism";
+	private static final String IMPORT_ANSWER_EXAMINER_DATA = "examinerId";
 	
 	public List<String> processedFileList(ExportOsceType osceType, Long semesterID) throws eOSCESyncException
 	{
@@ -189,7 +222,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				 
 				/*if (fileName.substring(0, 1).matches("[0-9]"))
 				{*/
-					if (StringUtils.startsWith(fileName, "00") == false && FilenameUtils.getExtension(fileName).equals(IMPORT_FILE_EXATENSION))
+					if (StringUtils.startsWith(fileName, "00") == false && FilenameUtils.getExtension(fileName).equals(IMPORT_EOSCE_FILE_EXTENSION))
 					{	
 						fileName = fileName.replaceAll(" ", "_");
 						String fullFilename = path + fileName;
@@ -218,7 +251,6 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			throw new eOSCESyncException("",e.getMessage());
 		}
 		
-		//System.out.println("~~PROCESSED FILE SIZE : " + fileList.size());
 		return fileList;
 	}
 	
@@ -277,7 +309,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				String fileName = objectSummary.getKey();
 				/*if (fileName.substring(0, 1).matches("[0-9]"))
 				{*/
-					if (StringUtils.startsWith(fileName, "00") == false && FilenameUtils.getExtension(fileName).equals(IMPORT_FILE_EXATENSION))
+					if (StringUtils.startsWith(fileName, "00") == false && FilenameUtils.getExtension(fileName).equals(IMPORT_EOSCE_FILE_EXTENSION))
 					{
 						fileName = fileName.replaceAll(" ", "_");
 						String fullFilename = path + fileName;
@@ -309,9 +341,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		return fileList;
 	}
 
-	@Override
-	public void deleteAmzonS3Object(ExportOsceType osceType, Long semesterID, List<String> fileList, String bucketName, String accessKey, String secretKey)
-			throws eOSCESyncException {
+	public void deleteAmzonS3Object(ExportOsceType osceType, Long semesterID, List<String> fileList, String bucketName, String accessKey, String secretKey) throws eOSCESyncException {
 		try
 		{
 			Semester semester = Semester.findSemester(semesterID);
@@ -378,9 +408,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 	}
 	
-	public boolean addFile(ExportOsceType osceType, String filePath, String filename, InputStream input, String secretKey, String encryptionKey)
+	public boolean addFile(ExportOsceType osceType, String filePath, String filename, byte[] byteArray, String secretKey, String encryptionKey, Long semesterID) throws eOSCESyncException
 	{
-		
 		String file_name = filename.replaceAll(" ", "_");
 		
 		filename = filePath + file_name;
@@ -389,9 +418,10 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		{
 			File file = new File(filename);
 			FileUtils.touch(file);
+			FileUtils.writeByteArrayToFile(file, byteArray);
 			
-			byte[] buffer = new byte[1024];
-			BufferedInputStream bis = new BufferedInputStream(input);					   
+			/*byte[] buffer = new byte[1024];
+			BufferedInputStream bis = new BufferedInputStream(byteArray);					   
 			OutputStream os = new FileOutputStream(file);
 			BufferedOutputStream bos = new BufferedOutputStream(os);
 			int readCount;
@@ -401,27 +431,449 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			}
 			
 			bis.close();
-			bos.close();
-		
-			String symmetricKey = "";
-			if (StringUtils.isNotBlank(encryptionKey) && encryptionKey.length() >= 16)
-				symmetricKey = encryptionKey.substring(0, 16);
-			else
-				symmetricKey = secretKey.substring(0, 16);
+			bos.close();*/
 			
-			String decFileName = S3Decryptor.decrypt(symmetricKey, file_name, filePath);
-			
-			return importEOSCE(decFileName);
-			
+			if (ExportOsceType.EOSCE.equals(osceType)) {
+				String symmetricKey = "";
+				if (StringUtils.isNotBlank(encryptionKey) && encryptionKey.length() >= 16)
+					symmetricKey = encryptionKey.substring(0, 16);
+				else
+					symmetricKey = secretKey.substring(0, 16);
+				
+				String decFileName = S3Decryptor.decrypt(symmetricKey, file_name, filePath);
+				
+				return importEOSCE(decFileName);
+			}
+			else if (ExportOsceType.IOSCE.equals(osceType)) {
+				//write decryption logic
+				return importIOSCE(filename, semesterID);
+			}
+				
+			return false;
 		}
 		catch(Exception e)
 		{
 			Log.error(e.getMessage());
-			return false;
+			throw new eOSCESyncException("",e.getMessage());
 		} 
 		
 	}
 	
+	@Transactional
+	private boolean importIOSCE(String filename, Long semesterID) throws eOSCESyncException {
+		try {
+			//decrypted code
+			byte[] bytes = FileUtils.readFileToByteArray(new File(filename));
+			NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(bytes);
+			NSObject encrypted = rootDict.objectForKey(IMPORT_ANSWER_PLIST_DATA);
+			NSString encryptedData = (NSString) encrypted;
+			
+			NSObject examiner = rootDict.objectForKey(IMPORT_ANSWER_EXAMINER_DATA);
+			NSString examinerData = (NSString) examiner;
+			
+			JSONDeserializer<StudentAnswer> deserializer = new JSONDeserializer<StudentAnswer>().use("values", StudentAnswer.class);				
+			StudentAnswer studentAnswer = new StudentAnswer();
+			studentAnswer = deserializer.deserializeInto(new InputStreamReader(new ByteArrayInputStream(encryptedData.getContent().getBytes())), studentAnswer);
+			
+			if (studentAnswer != null && StringUtils.isNotBlank(examinerData.getContent()))
+			{
+				Doctor doctor = Doctor.findDoctor(Long.parseLong(examinerData.getContent()));				
+				Examanswers examanswer = studentAnswer.getExamanswers();
+				
+				for (ch.unibas.medizin.osce.server.importanswer.Rotation rotation : examanswer.getRotations()) {
+					if (StringUtils.isNotBlank(rotation.getStationId())) {
+						OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoom(Long.parseLong(rotation.getStationId()));
+						
+						new Signature().deleteSignature(doctor.getId(), oscePostRoom.getId());
+						importiOSCESignature(rotation.getSignature(), doctor, oscePostRoom, semesterID);
+						
+						List<ch.unibas.medizin.osce.server.importanswer.Student> studentList = rotation.getStudents();
+						
+						for (ch.unibas.medizin.osce.server.importanswer.Student student : studentList) {
+							String studentId = student.getId();
+							if (StringUtils.isNotBlank(studentId)) {
+								Student osceStudent = Student.findStudent(Long.parseLong(studentId));
+								
+								new Answer().deleteNoteAnswerCriteria(doctor.getId(), oscePostRoom.getId(), osceStudent.getId());
+								
+								importTextualNotes(student.getNotes(), osceStudent, doctor, oscePostRoom);
+								importAudioNotes(student.getAudioNotes(), osceStudent, doctor, oscePostRoom, semesterID);
+								
+								List<ch.unibas.medizin.osce.server.importanswer.Answer> answerList = student.getAnswers();
+								
+								for (ch.unibas.medizin.osce.server.importanswer.Answer jsonAnswer : answerList) {
+									String questionId = jsonAnswer.getQuestionId();
+									if (StringUtils.isNotBlank(questionId)) {
+										ChecklistItem checklistItem = ChecklistItem.findChecklistItem(Long.parseLong(questionId));
+										AnswerOption answerOption = jsonAnswer.getAnswerOption();
+										String checklistOptionId = answerOption.getChecklistOptionId();
+										if (StringUtils.isNotBlank(checklistOptionId)) {
+											ChecklistOption checklistOption = ChecklistOption.findChecklistOption(Long.parseLong(checklistOptionId));
+											
+											Answer osceAnswer = new Answer();
+											osceAnswer.setAnswer(answerOption.getChecklistOptionValue());
+											osceAnswer.setChecklistOption(checklistOption);
+											osceAnswer.setDoctor(doctor);
+											osceAnswer.setOscePostRoom(oscePostRoom);
+											osceAnswer.setChecklistItem(checklistItem);
+											if (answerOption.getTimestamp() != null) {
+												osceAnswer.setAnswerTimestamp(jsonsdf.parse(answerOption.getTimestamp()));
+											}											
+											osceAnswer.setStudent(osceStudent);
+											osceAnswer.persist();
+											
+											if (jsonAnswer.getCriterias() != null && jsonAnswer.getCriterias().size() > 0) {
+												importChecklistCriteria(osceAnswer, jsonAnswer.getCriterias());
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				return true;
+			}
+		}
+		catch (Exception e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}
+		return false;
+	}
+	
+	private void importChecklistCriteria(Answer osceAnswer, List<Criteria> criteriaList) throws eOSCESyncException {
+		try {
+			for (Criteria criteria : criteriaList) {
+				Long checklistCriteriaId = criteria.getId();
+				
+				if (checklistCriteriaId != null) {
+					ChecklistCriteria checklistCriteria = ChecklistCriteria.findChecklistCriteria(checklistCriteriaId);
+					
+					AnswerCheckListCriteria answerCheckListCriteria = new AnswerCheckListCriteria();
+					answerCheckListCriteria.setAnswer(osceAnswer);
+					answerCheckListCriteria.setChecklistCriteria(checklistCriteria);
+					if (criteria.getTimestamp() != null) {
+						answerCheckListCriteria.setAnswerCriteriaTimestamp(jsonsdf.parse(criteria.getTimestamp()));
+					}					
+					answerCheckListCriteria.persist();
+				}
+			}
+		}
+		catch (Exception e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}		
+	}
+
+	private void importAudioNotes(List<AudioNote> audioNotes, Student osceStudent, Doctor doctor, OscePostRoom oscePostRoom, Long semesterID) throws eOSCESyncException {
+		try {
+			BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
+			
+			Semester semester = Semester.findSemester(semesterID);
+			String localPath = OsMaFilePathConstant.IMPORT_AUDIO_NOTE_PATH + semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+			
+			for (AudioNote audioNote : audioNotes) {
+				String fileName = "";
+				if (BucketInfoType.S3.equals(bucketInformation.getType())) {
+					fileName = copyAudioFileFromS3(bucketInformation, audioNote.getNotePath(), localPath);
+				}
+				else if (BucketInfoType.FTP.equals(bucketInformation.getType())) {
+					fileName = copyAudioFileFromSFTP(bucketInformation, audioNote.getNotePath(), localPath);
+				}
+				
+				OsceDay osceDay = oscePostRoom.getOscePost().getOsceSequence().getOsceDay();
+				
+				Notes osceNotes = new Notes();
+				osceNotes.setStudent(osceStudent);
+				osceNotes.setDoctor(doctor);
+				osceNotes.setOscePostRoom(oscePostRoom);
+				osceNotes.setOsceDay(osceDay);
+				if (StringUtils.isNotBlank(fileName)) {
+					osceNotes.setComment(fileName);
+				}
+				else {
+					osceNotes.setComment(audioNote.getNotePath());
+				}
+				osceNotes.setNoteType(NoteType.values()[Integer.parseInt(audioNote.getType())]);
+				if (audioNote.getTimestamp() != null)
+					osceNotes.setLastviewed(jsonsdf.parse(audioNote.getTimestamp()));
+				
+				osceNotes.persist();
+			}
+		}
+		catch (Exception e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}
+	}
+
+	private String copyAudioFileFromSFTP(BucketInformation bucketInformation, String notePath, String localPath) throws eOSCESyncException {
+		
+		String SFTPHOST = bucketInformation == null ? "" : bucketInformation.getBucketName();
+		int    SFTPPORT = 22;
+		String SFTPUSER = (bucketInformation == null || bucketInformation.getAccessKey().isEmpty()) ? "" : bucketInformation.getAccessKey();
+		String SFTPPASS = (bucketInformation == null || bucketInformation.getSecretKey().isEmpty()) ? "" : bucketInformation.getSecretKey();
+		String SFTPWORKINGDIR = (bucketInformation == null || bucketInformation.getBasePath().isEmpty()) ? "" : bucketInformation.getBasePath();
+		
+		Session     session     = null;
+		Channel     channel     = null;
+		ChannelSftp channelSftp = null;
+		
+		try {	
+			JSch jsch = new JSch();
+			session = jsch.getSession(SFTPUSER,SFTPHOST,SFTPPORT);
+			session.setPassword(SFTPPASS);
+			java.util.Properties config = new java.util.Properties();
+			config.put("StrictHostKeyChecking", "no");
+			session.setConfig(config);
+			session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
+			session.connect();
+			channel = session.openChannel("sftp");
+			channel.connect();
+			channelSftp = (ChannelSftp)channel;
+			channelSftp.cd(SFTPWORKINGDIR);
+				
+			Vector<ChannelSftp.LsEntry> list =  channelSftp.ls("*.*");
+			InputStream inputStream = channelSftp.get(notePath);
+			
+			String filename = FilenameUtils.getBaseName(notePath) + "_" + UUID.randomUUID().toString() + AUDIO_FILE_EXTENSION;
+			String fullFilePath = localPath + filename;
+			File file = new File(fullFilePath);
+			FileUtils.touch(file);
+			byte[] data = IOUtils.toByteArray(inputStream);
+			FileUtils.writeByteArrayToFile(file, data);
+			
+			return filename;
+		}
+		catch (JSchException e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}
+		catch (SftpException e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}			
+		catch(Exception ex){
+			Log.error(ex.getMessage(), ex);
+			throw new eOSCESyncException("",ex.getMessage());
+		}
+		finally{
+			if (channel != null)
+				channel.disconnect();
+			
+			if (session != null)
+				session.disconnect();
+		}
+	}
+
+	private String copyAudioFileFromS3(BucketInformation bucketInformation, String notePath, String localPath) throws eOSCESyncException {
+		try {
+			String accessKey = "";
+			String secretKey = "";
+			String bucketName = "";
+			
+			if (bucketInformation != null)
+			{
+				accessKey = bucketInformation.getAccessKey() == null ? "" : bucketInformation.getAccessKey();
+				secretKey = bucketInformation.getSecretKey() == null ? "" : bucketInformation.getSecretKey();
+				bucketName = bucketInformation.getBucketName() == null ? "" : bucketInformation.getBucketName();
+			}
+			
+			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+			AmazonS3Client client;
+			
+			Properties properties =  new Properties();
+			properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/proxy.properties"));			
+			String proxyHost = properties.getProperty("proxy.host");
+			String proxyPort = properties.getProperty("proxy.port");
+			
+			if (StringUtils.isNotBlank(proxyHost) && StringUtils.isNotBlank(proxyPort))
+			{
+				ClientConfiguration configuration = new ClientConfiguration();
+				configuration.setProtocol(Protocol.HTTP);
+				configuration.setProxyHost(proxyHost);
+				configuration.setProxyPort(Integer.parseInt(proxyPort));
+				client = new AmazonS3Client(credentials, configuration);
+			}
+			else  
+			{
+				client = new AmazonS3Client(credentials);			
+			}	
+			
+			S3Object object = null;			
+			object = client.getObject(new GetObjectRequest(bucketName, notePath));
+			InputStream inputStream = object.getObjectContent();
+			
+			String filename = FilenameUtils.getBaseName(notePath) + "_" + UUID.randomUUID().toString() + AUDIO_FILE_EXTENSION;
+			String fullFilePath = localPath + filename;
+			File file = new File(fullFilePath);
+			FileUtils.touch(file);
+			byte[] data = IOUtils.toByteArray(inputStream);
+			FileUtils.writeByteArrayToFile(file, data);
+			
+			return filename;
+		}
+		catch (Exception e) {
+			Log.error(e.getMessage());
+			throw new eOSCESyncException("", e.getMessage());
+		}	
+	}
+
+	private void importTextualNotes(ch.unibas.medizin.osce.server.importanswer.Notes notes, Student osceStudent, Doctor doctor, OscePostRoom oscePostRoom) throws eOSCESyncException {
+		try
+		{								
+			OsceDay osceDay = oscePostRoom.getOscePost().getOsceSequence().getOsceDay();
+			
+			Notes osceNotes = new Notes();
+			osceNotes.setStudent(osceStudent);
+			osceNotes.setDoctor(doctor);
+			osceNotes.setOscePostRoom(oscePostRoom);
+			osceNotes.setOsceDay(osceDay);
+			osceNotes.setComment(notes.getNoteText());
+			osceNotes.setNoteType(NoteType.TEXTUAL);
+			if (notes.getTimestamp() != null)
+				osceNotes.setLastviewed(jsonsdf.parse(notes.getTimestamp()));
+			
+			osceNotes.persist();
+		}
+		catch (Exception e) {
+			throw new eOSCESyncException("",e.getMessage());
+		}
+	}
+
+	public void importiOSCESignature(ch.unibas.medizin.osce.server.importanswer.Signature signature, Doctor doctor, OscePostRoom oscePostRoom, Long semesterID) throws eOSCESyncException {
+		try
+		{
+			byte[] signatureImage = null;
+			BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
+			if (BucketInfoType.S3.equals(bucketInformation.getType())) {
+				signatureImage = copySignatureFileFromS3(bucketInformation, signature.getSignaturePath());
+			}
+			else if (BucketInfoType.FTP.equals(bucketInformation.getType())) {
+				signatureImage = copySignatureFileFromSFTP(bucketInformation, signature.getSignaturePath());
+			}
+			
+			Signature newSignature = new Signature();
+			newSignature.setDoctor(doctor);
+			newSignature.setOscePost(oscePostRoom.getOscePost());
+			
+			if (signature.getTimestamp() != null) {
+				newSignature.setSignatureTimestamp(jsonsdf.parse(signature.getTimestamp()));
+			}	
+				
+			if (oscePostRoom.getOscePost() != null && oscePostRoom.getOscePost().getOsceSequence() != null)
+				newSignature.setOsceDay(oscePostRoom.getOscePost().getOsceSequence().getOsceDay());
+			
+			if (signatureImage != null) {
+				newSignature.setSignatureImage(signatureImage);
+			}
+			
+			newSignature.persist();	
+		}
+		catch(Exception e)
+		{
+			Log.error(e.getMessage());
+			throw new eOSCESyncException("",e.getMessage());
+		}
+	}
+
+	private byte[] copySignatureFileFromSFTP(BucketInformation bucketInformation, String signaturePath) throws eOSCESyncException {
+		
+		String SFTPHOST = bucketInformation == null ? "" : bucketInformation.getBucketName();
+		int    SFTPPORT = 22;
+		String SFTPUSER = (bucketInformation == null || bucketInformation.getAccessKey().isEmpty()) ? "" : bucketInformation.getAccessKey();
+		String SFTPPASS = (bucketInformation == null || bucketInformation.getSecretKey().isEmpty()) ? "" : bucketInformation.getSecretKey();
+		String SFTPWORKINGDIR = (bucketInformation == null || bucketInformation.getBasePath().isEmpty()) ? "" : bucketInformation.getBasePath();
+		
+		Session     session     = null;
+		Channel     channel     = null;
+		ChannelSftp channelSftp = null;
+		
+		try {	
+			JSch jsch = new JSch();
+			session = jsch.getSession(SFTPUSER,SFTPHOST,SFTPPORT);
+			session.setPassword(SFTPPASS);
+			java.util.Properties config = new java.util.Properties();
+			config.put("StrictHostKeyChecking", "no");
+			session.setConfig(config);
+			session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
+			session.connect();
+			channel = session.openChannel("sftp");
+			channel.connect();
+			channelSftp = (ChannelSftp)channel;
+			channelSftp.cd(SFTPWORKINGDIR);
+				
+			Vector<ChannelSftp.LsEntry> list =  channelSftp.ls("*.*");
+			InputStream inputStream = channelSftp.get(signaturePath);
+			return IOUtils.toByteArray(inputStream);
+		}
+		catch (JSchException e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}
+		catch (SftpException e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}			
+		catch(Exception ex){
+			Log.error(ex.getMessage(), ex);
+			throw new eOSCESyncException("",ex.getMessage());
+		}
+		finally{
+			if (channel != null)
+				channel.disconnect();
+			
+			if (session != null)
+				session.disconnect();
+		}
+	}
+
+	private byte[] copySignatureFileFromS3(BucketInformation bucketInformation, String signaturePath) throws eOSCESyncException {
+		try {
+			String accessKey = "";
+			String secretKey = "";
+			String bucketName = "";
+			
+			if (bucketInformation != null)
+			{
+				accessKey = bucketInformation.getAccessKey() == null ? "" : bucketInformation.getAccessKey();
+				secretKey = bucketInformation.getSecretKey() == null ? "" : bucketInformation.getSecretKey();
+				bucketName = bucketInformation.getBucketName() == null ? "" : bucketInformation.getBucketName();
+			}
+			
+			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+			AmazonS3Client client;
+			
+			Properties properties =  new Properties();
+			properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/proxy.properties"));			
+			String proxyHost = properties.getProperty("proxy.host");
+			String proxyPort = properties.getProperty("proxy.port");
+			
+			if (StringUtils.isNotBlank(proxyHost) && StringUtils.isNotBlank(proxyPort))
+			{
+				ClientConfiguration configuration = new ClientConfiguration();
+				configuration.setProtocol(Protocol.HTTP);
+				configuration.setProxyHost(proxyHost);
+				configuration.setProxyPort(Integer.parseInt(proxyPort));
+				client = new AmazonS3Client(credentials, configuration);
+			}
+			else  
+			{
+				client = new AmazonS3Client(credentials);			
+			}	
+			
+			S3Object object = null;			
+			object = client.getObject(new GetObjectRequest(bucketName, signaturePath));
+			InputStream inputStream = object.getObjectContent();
+			return IOUtils.toByteArray(inputStream);
+		}
+		catch (Exception e) {
+			Log.error(e.getMessage());
+			throw new eOSCESyncException("", e.getMessage());
+		}	
+	}
+
 	/*public Boolean fileExist(String fileName)
 	{
 		String cntxt = appUploadDirectory;
@@ -484,16 +936,14 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			S3Object object = null;			
 			boolean deleteFlag = true;
 			
-			
-			
 			for (int i=0; i<fileList.size(); i++)
 			{
 				object = client.getObject(new GetObjectRequest(bucketName, fileList.get(i)));
 				
-				 if (FilenameUtils.getExtension(object.getKey()).equals(IMPORT_FILE_EXATENSION)) {
+				 if (FilenameUtils.getExtension(object.getKey()).equals(IMPORT_EOSCE_FILE_EXTENSION)) {
 					 if (ExportOsceType.EOSCE.equals(osceType)) {
 						//import in answer table is done from add file
-						deleteFlag = deleteFlag & addFile(osceType, path, object.getKey(), object.getObjectContent(), secretKey, encryptionKey);
+						deleteFlag = deleteFlag & addFile(osceType, path, object.getKey(), IOUtils.toByteArray(object.getObjectContent()), secretKey, encryptionKey, semesterID);
 					 }
 					 else if (ExportOsceType.IOSCE.equals(osceType)) {
 						 
@@ -626,6 +1076,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		
 	}*/
 	
+	@Transactional
 	public boolean importEOSCE(String filename)
 	{
 		//System.out.println("~~~!!!Import EOSCE");
@@ -688,6 +1139,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				String oprId = StringUtils.substring(resultset.getString(6), 0, 4);
 				roomid = Long.parseLong(oprId);
 				
+				new Answer().deleteNoteAnswerCriteria(examinerid, roomid, candidateId);
+				
 				Student stud = Student.findStudent(candidateId);
 				//ChecklistQuestion checklistQuestion = ChecklistQuestion.findChecklistQuestion(questionId);
 				ChecklistItem checklistItem = ChecklistItem.findChecklistItem(questionId);
@@ -706,23 +1159,23 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				answerTable.setOscePostRoom(oscePostRoom);
 				answerTable.setDoctor(doctor);
 				answerTable.setAnswerTimestamp(sdf.parse(resultset.getString("d")));
+				answerTable.persist();
 				
 				if (answerCriteriaMap.containsKey(ansId) == true)
 				{
 					Set<Long> criteriaIdList = answerCriteriaMap.get(ansId);
-					Set<ChecklistCriteria> criteriaSet = new HashSet<ChecklistCriteria>();
 					
 					for (Long criteriaId : criteriaIdList)
 					{
 						ChecklistCriteria checklistCriteria = ChecklistCriteria.findChecklistCriteria(criteriaId);
-						if (checklistCriteria != null)
-							criteriaSet.add(checklistCriteria);
+						if (checklistCriteria != null) {
+							AnswerCheckListCriteria answerChecklistCriteria = new AnswerCheckListCriteria();
+							answerChecklistCriteria.setChecklistCriteria(checklistCriteria);
+							answerChecklistCriteria.setAnswer(answerTable);
+							answerChecklistCriteria.persist();
+						}
 					}
-					
-					answerTable.setChecklistCriteria(criteriaSet);
 				}
-				
-				answerTable.persist();
 			}
 			
 			importNotes(statement);
@@ -831,6 +1284,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					notes.setOscePostRoom(oscePostRoom);
 					notes.setOsceDay(osceDay);
 					notes.setComment(comment);
+					notes.setNoteType(NoteType.TEXTUAL);
 					
 					if (resultset.getString("d") != null)
 						notes.setLastviewed(sdf.parse(resultset.getString("d")));
@@ -860,6 +1314,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				examinerId = Long.parseLong(resultSet.getString(1));
 				String oprId = StringUtils.substring(resultSet.getString(3), 0, 4);
 				oscePostRoomId = Long.parseLong(oprId);
+				
+				new Signature().deleteSignature(examinerId, oscePostRoomId);
 				
 				OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoom(oscePostRoomId);
 				Doctor examiner = Doctor.findDoctor(examinerId);
@@ -3136,7 +3592,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 	}
 	
-	 private static XMLSerializer getXMLSerializer(File file) throws FileNotFoundException {
+	private static XMLSerializer getXMLSerializer(File file) throws FileNotFoundException {
 	        // configure an OutputFormat to handle CDATA
 	        OutputFormat of = new OutputFormat();
 
@@ -3156,5 +3612,765 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	        serializer.setOutputByteStream(new FileOutputStream(file));
 
 	        return serializer;
-	    }
+    }
+	
+	public List<String> findProcessedFileNameFromLocal(ExportOsceType osceType, Long semesterID) throws eOSCESyncException {
+		List<String> fileList = new ArrayList<String>();
+		try
+		{
+			Semester semester = Semester.findSemester(semesterID);
+			String path = OsMaFilePathConstant.IMPORT_PROCESSED_EOSCE_PATH + semester.getSemester() + semester.getCalYear();
+	    	if (ExportOsceType.EOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
+	    	}
+	    	else if (ExportOsceType.IOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+	    	}
+	    	
+			File folder = new File(path);
+			if (folder.exists() && folder.list() != null) {
+				String[] fileNameList = folder.list();
+				fileList.addAll(Arrays.asList(fileNameList));
+			}
+		}
+		catch(AmazonServiceException ase)
+		{
+			Log.error(ase.getMessage());
+			throw new eOSCESyncException(ase.getErrorType().toString(),ase.getMessage());
+		}
+		catch(AmazonClientException ace)
+		{
+			Log.error(ace.getMessage());
+			throw new eOSCESyncException("",ace.getMessage());
+		}
+		catch(Exception e)
+		{
+			Log.error(e.getMessage());
+			throw new eOSCESyncException("",e.getMessage());
+		}
+		
+		return fileList;
+	}
+	 
+	public List<String> findUnProcessedFileNameFromLocal(ExportOsceType osceType, Long semesterID) throws eOSCESyncException {
+		List<String> fileList = new ArrayList<String>();
+		try
+		{
+			Semester semester = Semester.findSemester(semesterID);
+			String path = OsMaFilePathConstant.IMPORT_UNPROCESSED_EOSCE_PATH + semester.getSemester() + semester.getCalYear();
+	    	if (ExportOsceType.EOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
+	    	}
+	    	else if (ExportOsceType.IOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+	    	}
+	    	
+			File folder = new File(path);
+			if (folder.exists() && folder.list() != null) {
+				String[] fileNameList = folder.list();
+				fileList.addAll(Arrays.asList(fileNameList));
+			}
+		}
+		catch(AmazonServiceException ase)
+		{
+			Log.error(ase.getMessage());
+			throw new eOSCESyncException(ase.getErrorType().toString(),ase.getMessage());
+		}
+		catch(AmazonClientException ace)
+		{
+			Log.error(ace.getMessage());
+			throw new eOSCESyncException("",ace.getMessage());
+		}
+		catch(Exception e)
+		{
+			Log.error(e.getMessage());
+			throw new eOSCESyncException("",e.getMessage());
+		}
+		
+		return fileList;
+	}
+	
+	public List<String> findProcessedFilesFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID) throws eOSCESyncException {
+		if (BucketInfoType.S3.equals(bucketInfoType)) {
+			return findProcessedFilesFromS3(osceType, semesterID);
+		}
+		else if (BucketInfoType.FTP.equals(bucketInfoType)) {
+			return findProcessedFilesFromSFTP(osceType, semesterID);
+		}
+		return new ArrayList<String>();
+	}
+	
+	public List<String> findProcessedFilesFromS3(ExportOsceType osceType, Long semesterID) throws eOSCESyncException{
+
+		List<String> fileList = new ArrayList<String>();
+		try
+		{
+			Semester semester = Semester.findSemester(semesterID);
+			String path = OsMaFilePathConstant.IMPORT_PROCESSED_EOSCE_PATH + semester.getSemester() + semester.getCalYear();
+	    	if (ExportOsceType.EOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
+	    	}
+	    	else if (ExportOsceType.IOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+	    	}
+	    	
+			String accessKey = "";
+			String secretKey = "";
+			String bucketName = "";
+			
+			BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
+			
+			if (bucketInformation != null)
+			{
+				accessKey = bucketInformation.getAccessKey() == null ? "" : bucketInformation.getAccessKey();
+				secretKey = bucketInformation.getSecretKey() == null ? "" : bucketInformation.getSecretKey();
+				bucketName = bucketInformation.getBucketName() == null ? "" : bucketInformation.getBucketName();
+			}
+			
+			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+			AmazonS3Client client;
+			
+			Properties properties =  new Properties();
+			properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/proxy.properties"));			
+			String proxyHost = properties.getProperty("proxy.host");
+			String proxyPort = properties.getProperty("proxy.port");
+			
+			if (StringUtils.isNotBlank(proxyHost) && StringUtils.isNotBlank(proxyPort))
+			{
+				ClientConfiguration configuration = new ClientConfiguration();
+				configuration.setProtocol(Protocol.HTTP);
+				configuration.setProxyHost(proxyHost);
+				configuration.setProxyPort(Integer.parseInt(proxyPort));
+				client = new AmazonS3Client(credentials, configuration);
+			}
+			else  
+			{
+				client = new AmazonS3Client(credentials);			
+			}
+			
+			ObjectListing objectListing = client.listObjects(bucketName.toLowerCase());
+			
+			for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries())
+			{
+				String fileName = objectSummary.getKey();
+				 
+				if (ExportOsceType.EOSCE.equals(osceType)) {
+					if (StringUtils.startsWith(fileName, "00") == false && FilenameUtils.getExtension(fileName).equals(IMPORT_EOSCE_FILE_EXTENSION))
+					{	
+						fileName = fileName.replaceAll(" ", "_");
+						String fullFilename = path + fileName;
+						if (new File(fullFilename).exists() == true)
+						{
+							fileList.add(objectSummary.getKey());					
+						}
+					}
+				}
+				
+				else if (ExportOsceType.IOSCE.equals(osceType)) {
+					if (FilenameUtils.getExtension(fileName).equals(IMPORT_IOSCE_FILE_EXTENSION))
+					{	
+						fileName = fileName.replaceAll(" ", "_");
+						String fullFilename = path + fileName;
+						if (new File(fullFilename).exists() == true)
+						{
+							fileList.add(objectSummary.getKey());					
+						}
+					}
+				}
+			}
+		}
+		catch(AmazonServiceException ase)
+		{
+			Log.error(ase.getMessage());
+			throw new eOSCESyncException(ase.getErrorType().toString(),ase.getMessage());
+		}
+		catch(AmazonClientException ace)
+		{
+			Log.error(ace.getMessage());
+			throw new eOSCESyncException("",ace.getMessage());
+		}
+		catch(Exception e)
+		{
+			Log.error(e.getMessage());
+			throw new eOSCESyncException("",e.getMessage());
+		}
+		
+		return fileList;
+	
+	}
+	
+	public List<String> findProcessedFilesFromSFTP(ExportOsceType osceType, Long semesterID) throws eOSCESyncException {
+		List<String> fileList = new ArrayList<String>();
+		
+		Semester semester = Semester.findSemester(semesterID);
+		String path = OsMaFilePathConstant.IMPORT_PROCESSED_EOSCE_PATH + semester.getSemester() + semester.getCalYear();
+    	if (ExportOsceType.EOSCE.equals(osceType)) {
+    		path = path + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
+    	}
+    	else if (ExportOsceType.IOSCE.equals(osceType)) {
+    		path = path + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+    	}
+		
+		BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
+		
+		String SFTPHOST = bucketInformation == null ? "" : bucketInformation.getBucketName();
+		int    SFTPPORT = 22;
+		String SFTPUSER = (bucketInformation == null || bucketInformation.getAccessKey().isEmpty()) ? "" : bucketInformation.getAccessKey();
+		String SFTPPASS = (bucketInformation == null || bucketInformation.getSecretKey().isEmpty()) ? "" : bucketInformation.getSecretKey();
+		String SFTPWORKINGDIR = (bucketInformation == null || bucketInformation.getBasePath().isEmpty()) ? "" : bucketInformation.getBasePath();
+		
+		Session     session     = null;
+		Channel     channel     = null;
+		ChannelSftp channelSftp = null;
+		
+		try{
+			JSch jsch = new JSch();
+			session = jsch.getSession(SFTPUSER,SFTPHOST,SFTPPORT);
+			session.setPassword(SFTPPASS);
+			java.util.Properties config = new java.util.Properties();
+			config.put("StrictHostKeyChecking", "no");
+			session.setConfig(config);
+			session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
+			session.connect();
+			channel = session.openChannel("sftp");
+			channel.connect();
+			channelSftp = (ChannelSftp)channel;
+			channelSftp.cd(SFTPWORKINGDIR);
+				
+			Vector<ChannelSftp.LsEntry> list =  channelSftp.ls("*.*");
+			
+			if (list.size() > 0)
+			{
+				for(ChannelSftp.LsEntry lsEntry : list) 
+				{
+					String fileName = lsEntry.getFilename();
+					
+					if (ExportOsceType.EOSCE.equals(osceType)) {
+						if (StringUtils.startsWith(fileName, "00") == false && FilenameUtils.getExtension(fileName).equals(IMPORT_EOSCE_FILE_EXTENSION))
+						{	
+							fileName = fileName.replaceAll(" ", "_");
+							String fullFilename = path + fileName;
+							if (new File(fullFilename).exists() == true)
+							{
+								fileList.add(fileName);					
+							}
+						}
+					}
+					else if (ExportOsceType.IOSCE.equals(osceType)) {
+						if (FilenameUtils.getExtension(fileName).equals(IMPORT_IOSCE_FILE_EXTENSION))
+						{	
+							fileName = fileName.replaceAll(" ", "_");
+							String fullFilename = path + fileName;
+							if (new File(fullFilename).exists() == true)
+							{
+								fileList.add(fileName);					
+							}
+						}
+					}
+				}
+			}	
+		}
+		catch (JSchException e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}
+		catch (SftpException e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}			
+		catch(Exception ex){
+			Log.error(ex.getMessage(), ex);
+			throw new eOSCESyncException("",ex.getMessage());
+		}
+		finally{
+			if (channel != null)
+				channel.disconnect();
+			
+			if (session != null)
+				session.disconnect();
+		}
+		
+		return fileList;
+	}
+	
+	public List<String> findUnProcessedFilesFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID) throws eOSCESyncException {
+		if (BucketInfoType.S3.equals(bucketInfoType)) {
+			return findUnProcessedFilesFromS3(osceType, semesterID);
+		}
+		else if (BucketInfoType.FTP.equals(bucketInfoType)) {
+			return findUnProcessedFilesFromSFTP(osceType, semesterID);
+		}
+		return new ArrayList<String>();
+	}
+	
+	public List<String> findUnProcessedFilesFromS3(ExportOsceType osceType, Long semesterID) throws eOSCESyncException{
+		List<String> fileList = new ArrayList<String>();
+		try
+		{
+			Semester semester = Semester.findSemester(semesterID);
+			String path = OsMaFilePathConstant.IMPORT_PROCESSED_EOSCE_PATH + semester.getSemester() + semester.getCalYear();
+	    	if (ExportOsceType.EOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
+	    	}
+	    	else if (ExportOsceType.IOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+	    	}
+			
+			String accessKey = "";
+			String secretKey = "";
+			String bucketName = "";
+			
+			BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
+			
+			if (bucketInformation != null)
+			{
+				accessKey = bucketInformation.getAccessKey() == null ? "" : bucketInformation.getAccessKey();
+				secretKey = bucketInformation.getSecretKey() == null ? "" : bucketInformation.getSecretKey();
+				bucketName = bucketInformation.getBucketName() == null ? "" : bucketInformation.getBucketName();
+			}
+			
+			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+			AmazonS3Client client;
+			
+			Properties properties =  new Properties();
+			properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/proxy.properties"));			
+			String proxyHost = properties.getProperty("proxy.host");
+			String proxyPort = properties.getProperty("proxy.port");
+			
+			if (StringUtils.isNotBlank(proxyHost) && StringUtils.isNotBlank(proxyPort))
+			{
+				ClientConfiguration configuration = new ClientConfiguration();
+				configuration.setProtocol(Protocol.HTTP);
+				configuration.setProxyHost(proxyHost);
+				configuration.setProxyPort(Integer.parseInt(proxyPort));
+				client = new AmazonS3Client(credentials, configuration);
+			}
+			else  
+			{
+				client = new AmazonS3Client(credentials);			
+			}
+			
+			ObjectListing objectListing = client.listObjects(bucketName.toLowerCase());
+			
+			for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries())
+			{
+				String fileName = objectSummary.getKey();
+				
+				if (ExportOsceType.EOSCE.equals(osceType)) {
+					if (StringUtils.startsWith(fileName, "00") == false && FilenameUtils.getExtension(fileName).equals(IMPORT_EOSCE_FILE_EXTENSION))
+					{
+						fileName = fileName.replaceAll(" ", "_");
+						String fullFilename = path + fileName;
+						if (new File(fullFilename).exists() == false)
+						{
+							fileList.add(objectSummary.getKey());					
+						}
+					}
+				}
+				else if (ExportOsceType.IOSCE.equals(osceType)) {
+					if (StringUtils.startsWith(fileName, "00") == false && FilenameUtils.getExtension(fileName).equals(IMPORT_IOSCE_FILE_EXTENSION))
+					{
+						fileName = fileName.replaceAll(" ", "_");
+						String fullFilename = path + fileName;
+						if (new File(fullFilename).exists() == false)
+						{
+							fileList.add(objectSummary.getKey());					
+						}
+					}
+				}
+			}
+		}
+		catch(AmazonServiceException ase)
+		{
+			Log.error(ase.getMessage());
+			throw new eOSCESyncException(ase.getErrorType().toString(),ase.getMessage());
+		}
+		catch(AmazonClientException ace)
+		{
+			Log.error(ace.getMessage());
+			throw new eOSCESyncException("",ace.getMessage());
+		}
+		catch(Exception e)
+		{
+			Log.error(e.getMessage());
+			throw new eOSCESyncException("",e.getMessage());
+		}
+		
+		return fileList;
+	
+	}
+	
+	public List<String> findUnProcessedFilesFromSFTP(ExportOsceType osceType, Long semesterID) throws eOSCESyncException {
+		List<String> fileList = new ArrayList<String>();
+		
+		Semester semester = Semester.findSemester(semesterID);
+		String path = OsMaFilePathConstant.IMPORT_PROCESSED_EOSCE_PATH + semester.getSemester() + semester.getCalYear();
+    	if (ExportOsceType.EOSCE.equals(osceType)) {
+    		path = path + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
+    	}
+    	else if (ExportOsceType.IOSCE.equals(osceType)) {
+    		path = path + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+    	}
+		
+		BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
+		
+		String SFTPHOST = bucketInformation == null ? "" : bucketInformation.getBucketName();
+		int    SFTPPORT = 22;
+		String SFTPUSER = (bucketInformation == null || bucketInformation.getAccessKey().isEmpty()) ? "" : bucketInformation.getAccessKey();
+		String SFTPPASS = (bucketInformation == null || bucketInformation.getSecretKey().isEmpty()) ? "" : bucketInformation.getSecretKey();
+		String SFTPWORKINGDIR = (bucketInformation == null || bucketInformation.getBasePath().isEmpty()) ? "" : bucketInformation.getBasePath();
+		
+		Session     session     = null;
+		Channel     channel     = null;
+		ChannelSftp channelSftp = null;
+		
+		try{
+			JSch jsch = new JSch();
+			session = jsch.getSession(SFTPUSER,SFTPHOST,SFTPPORT);
+			session.setPassword(SFTPPASS);
+			java.util.Properties config = new java.util.Properties();
+			config.put("StrictHostKeyChecking", "no");
+			session.setConfig(config);
+			session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
+			session.connect();
+			channel = session.openChannel("sftp");
+			channel.connect();
+			channelSftp = (ChannelSftp)channel;
+			channelSftp.cd(SFTPWORKINGDIR);
+				
+			Vector<ChannelSftp.LsEntry> list =  channelSftp.ls("*.*");
+			
+			if (list.size() > 0)
+			{
+				for(ChannelSftp.LsEntry lsEntry : list) 
+				{
+					String fileName = lsEntry.getFilename();
+					
+					if (ExportOsceType.EOSCE.equals(osceType)) {
+						if (StringUtils.startsWith(fileName, "00") == false && FilenameUtils.getExtension(fileName).equals(IMPORT_EOSCE_FILE_EXTENSION))
+						{	
+							fileName = fileName.replaceAll(" ", "_");
+							String fullFilename = path + fileName;
+							if (new File(fullFilename).exists() == false)
+							{
+								fileList.add(fileName);					
+							}
+						}
+					}
+					else if (ExportOsceType.IOSCE.equals(osceType)) {
+						if (FilenameUtils.getExtension(fileName).equals(IMPORT_IOSCE_FILE_EXTENSION))
+						{	
+							fileName = fileName.replaceAll(" ", "_");
+							String fullFilename = path + fileName;
+							if (new File(fullFilename).exists() == false)
+							{
+								fileList.add(fileName);					
+							}
+						}
+					}
+				}
+			}	
+		}
+		catch (JSchException e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}
+		catch (SftpException e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}			
+		catch(Exception ex){
+			Log.error(ex.getMessage(), ex);
+			throw new eOSCESyncException("",ex.getMessage());
+		}
+		finally{
+			if (channel != null)
+				channel.disconnect();
+			
+			if (session != null)
+				session.disconnect();
+		}
+		
+		return fileList;
+	}
+	
+	public void importFileFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag) throws eOSCESyncException{
+		if (BucketInfoType.S3.equals(bucketInfoType)) {
+			importFileFromS3(osceType, semesterID, fileList, flag);
+		}
+		else if (BucketInfoType.FTP.equals(bucketInfoType)) {
+			importFileFromSFTP(osceType, semesterID, fileList, flag);
+		}
+	}
+	
+	public void importFileFromS3(ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag) throws eOSCESyncException{
+		try
+		{
+			Semester semester = Semester.findSemester(semesterID);
+			String path = OsMaFilePathConstant.IMPORT_PROCESSED_EOSCE_PATH + semester.getSemester() + semester.getCalYear();
+	    	if (ExportOsceType.EOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
+	    	}
+	    	else if (ExportOsceType.IOSCE.equals(osceType)) {
+	    		path = path + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+	    	}
+	    	
+			String accessKey = "";
+			String secretKey = "";
+			String bucketName = "";
+			String encryptionKey = "";
+			
+			BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
+			
+			if (bucketInformation != null)
+			{
+				accessKey = bucketInformation.getAccessKey() == null ? "" : bucketInformation.getAccessKey();
+				secretKey = bucketInformation.getSecretKey() == null ? "" : bucketInformation.getSecretKey();
+				bucketName = bucketInformation.getBucketName() == null ? "" : bucketInformation.getBucketName();
+				encryptionKey = bucketInformation.getEncryptionKey() == null ? "" : bucketInformation.getEncryptionKey();
+			}
+			
+			AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+			AmazonS3Client client;
+			
+			Properties properties =  new Properties();
+			properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/proxy.properties"));			
+			String proxyHost = properties.getProperty("proxy.host");
+			String proxyPort = properties.getProperty("proxy.port");
+			
+			if (StringUtils.isNotBlank(proxyHost) && StringUtils.isNotBlank(proxyPort))
+			{
+				ClientConfiguration configuration = new ClientConfiguration();
+				configuration.setProtocol(Protocol.HTTP);
+				configuration.setProxyHost(proxyHost);
+				configuration.setProxyPort(Integer.parseInt(proxyPort));
+				client = new AmazonS3Client(credentials, configuration);
+			}
+			else  
+			{
+				client = new AmazonS3Client(credentials);			
+			}	
+			
+			S3Object object = null;			
+			boolean deleteFlag = true;
+			
+			for (int i=0; i<fileList.size(); i++)
+			{
+				 object = client.getObject(new GetObjectRequest(bucketName, fileList.get(i)));
+				 InputStream inputStream = object.getObjectContent();
+				 byte[] byteArray = IOUtils.toByteArray(inputStream);
+								 
+				 if (ExportOsceType.EOSCE.equals(osceType) && FilenameUtils.getExtension(object.getKey()).equals(IMPORT_EOSCE_FILE_EXTENSION)) {
+					//import in answer table is done from add file
+					deleteFlag = deleteFlag & addFile(osceType, path, object.getKey(), byteArray, secretKey, encryptionKey, semesterID);
+				 }
+				 else if (ExportOsceType.IOSCE.equals(osceType) && FilenameUtils.getExtension(fileList.get(i)).equals(IMPORT_IOSCE_FILE_EXTENSION)) {
+					NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(byteArray);
+					NSObject submit = rootDict.objectForKey(IMPORT_ANSWER_PLIST_SUBMIT);
+					NSString submitData = (NSString) submit;
+					if (submitData.getContent().equals("1")) {
+						deleteFlag = deleteFlag & addFile(osceType, path, object.getKey(), byteArray, secretKey, encryptionKey, semesterID);
+					}
+				 }		
+				 		
+			}
+		
+			if (flag == true && deleteFlag == true) {
+				deleteAmzonS3Object(osceType, semesterID, fileList, bucketName, accessKey, secretKey);
+			}
+		}
+		catch(AmazonServiceException ase)
+		{
+			Log.error(ase.getMessage(),ase);
+			throw new eOSCESyncException(ase.getErrorType().toString(),ase.getMessage());
+		}
+		catch(AmazonClientException ace)
+		{
+			Log.error(ace.getMessage(),ace);
+			throw new eOSCESyncException("",ace.getMessage());
+		}
+		catch(Exception e)
+		{
+			Log.error(e.getMessage(),e);
+			throw new eOSCESyncException("",e.getMessage());
+		}
+	}
+	
+	public void importFileFromSFTP(ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag) throws eOSCESyncException {
+		
+		Semester semester = Semester.findSemester(semesterID);
+		String path = OsMaFilePathConstant.IMPORT_PROCESSED_EOSCE_PATH + semester.getSemester() + semester.getCalYear();
+    	if (ExportOsceType.EOSCE.equals(osceType)) {
+    		path = path + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
+    	}
+    	else if (ExportOsceType.IOSCE.equals(osceType)) {
+    		path = path + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+    	}
+		
+		BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
+		
+		String SFTPHOST = bucketInformation == null ? "" : bucketInformation.getBucketName();
+		int    SFTPPORT = 22;
+		String SFTPUSER = (bucketInformation == null || bucketInformation.getAccessKey().isEmpty()) ? "" : bucketInformation.getAccessKey();
+		String SFTPPASS = (bucketInformation == null || bucketInformation.getSecretKey().isEmpty()) ? "" : bucketInformation.getSecretKey();
+		String SFTPWORKINGDIR = (bucketInformation == null || bucketInformation.getBasePath().isEmpty()) ? "" : bucketInformation.getBasePath();
+		
+		Session     session     = null;
+		Channel     channel     = null;
+		ChannelSftp channelSftp = null;
+		
+		try{
+			JSch jsch = new JSch();
+			session = jsch.getSession(SFTPUSER,SFTPHOST,SFTPPORT);
+			session.setPassword(SFTPPASS);
+			java.util.Properties config = new java.util.Properties();
+			config.put("StrictHostKeyChecking", "no");
+			session.setConfig(config);
+			session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
+			session.connect();
+			channel = session.openChannel("sftp");
+			channel.connect();
+			channelSftp = (ChannelSftp)channel;
+			channelSftp.cd(SFTPWORKINGDIR);
+				
+			Vector<ChannelSftp.LsEntry> list =  channelSftp.ls("*.*");
+			
+			if (list.size() > 0)
+			{
+				boolean deleteFlag = true;
+				for (int i=0; i<fileList.size(); i++)
+				{
+					InputStream inputStream = channelSftp.get(fileList.get(i));
+					byte[] byteArray = IOUtils.toByteArray(inputStream);
+					
+					if (ExportOsceType.EOSCE.equals(osceType) && FilenameUtils.getExtension(fileList.get(i)).equals(IMPORT_EOSCE_FILE_EXTENSION)) {
+						//import in answer table is done from add file
+						deleteFlag = deleteFlag & addFile(osceType, path, fileList.get(i), byteArray, bucketInformation.getSecretKey(), bucketInformation.getEncryptionKey(), semesterID);
+					}
+					else if (ExportOsceType.IOSCE.equals(osceType) && FilenameUtils.getExtension(fileList.get(i)).equals(IMPORT_IOSCE_FILE_EXTENSION)) {
+						NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(byteArray);
+						NSObject submit = rootDict.objectForKey(IMPORT_ANSWER_PLIST_SUBMIT);
+						NSString submitData = (NSString) submit;
+						if (submitData.getContent().equals("1")) {
+							inputStream = channelSftp.get(fileList.get(i));
+							deleteFlag = deleteFlag & addFile(osceType, path, fileList.get(i), byteArray, bucketInformation.getSecretKey(), bucketInformation.getEncryptionKey(), semesterID);
+						}
+					}		
+				}
+			
+				if (flag == true && deleteFlag == true) {
+					deleteSFTPObject(osceType, semesterID, fileList);
+				}
+			}	
+		}
+		catch (JSchException e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}
+		catch (SftpException e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}			
+		catch(Exception ex){
+			Log.error(ex.getMessage(), ex);
+			throw new eOSCESyncException("",ex.getMessage());
+		}
+		finally{
+			if (channel != null)
+				channel.disconnect();
+			
+			if (session != null)
+				session.disconnect();
+		}
+	}
+	
+	public void deleteFileFromCloud(ExportOsceType osceType, BucketInfoType bucketInfoType, Long semesterID, List<String> fileList) throws eOSCESyncException {
+		BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
+		
+		if (BucketInfoType.S3.equals(bucketInfoType) && bucketInformation != null) {
+			deleteAmzonS3Object(osceType, semesterID, fileList, bucketInformation.getBucketName(), bucketInformation.getAccessKey(), bucketInformation.getSecretKey());
+		}
+		else if (BucketInfoType.FTP.equals(bucketInfoType)) {
+			deleteSFTPObject(osceType, semesterID, fileList);
+		}
+	}
+	
+	public void deleteSFTPObject(ExportOsceType osceType, Long semesterID, List<String> fileList) throws eOSCESyncException {
+		Semester semester = Semester.findSemester(semesterID);
+		String path = OsMaFilePathConstant.IMPORT_PROCESSED_EOSCE_PATH + semester.getSemester() + semester.getCalYear();
+    	if (ExportOsceType.EOSCE.equals(osceType)) {
+    		path = path + OsMaFilePathConstant.EXPORT_EOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);	
+    	}
+    	else if (ExportOsceType.IOSCE.equals(osceType)) {
+    		path = path + OsMaFilePathConstant.EXPORT_IOSCE + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+    	}
+    	
+    	BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
+		
+		String SFTPHOST = bucketInformation == null ? "" : bucketInformation.getBucketName();
+		int    SFTPPORT = 22;
+		String SFTPUSER = (bucketInformation == null || bucketInformation.getAccessKey().isEmpty()) ? "" : bucketInformation.getAccessKey();
+		String SFTPPASS = (bucketInformation == null || bucketInformation.getSecretKey().isEmpty()) ? "" : bucketInformation.getSecretKey();
+		String SFTPWORKINGDIR = (bucketInformation == null || bucketInformation.getBasePath().isEmpty()) ? "" : bucketInformation.getBasePath();
+		
+		Session     session     = null;
+		Channel     channel     = null;
+		ChannelSftp channelSftp = null;
+		
+		try{
+			JSch jsch = new JSch();
+			session = jsch.getSession(SFTPUSER,SFTPHOST,SFTPPORT);
+			session.setPassword(SFTPPASS);
+			java.util.Properties config = new java.util.Properties();
+			config.put("StrictHostKeyChecking", "no");
+			session.setConfig(config);
+			session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
+			session.connect();
+			channel = session.openChannel("sftp");
+			channel.connect();
+			channelSftp = (ChannelSftp)channel;
+			channelSftp.cd(SFTPWORKINGDIR);
+				
+			Vector<ChannelSftp.LsEntry> list =  channelSftp.ls("*.*");
+			
+			if (list.size() > 0)
+			{
+				for (int i=0; i<fileList.size(); i++)
+				{
+					String filename = fileList.get(i);
+					String fileName = fileList.get(i);
+					fileName = fileName.replaceAll(" ", "_");
+					fileName = path + fileName;
+					File file = new File(fileName);
+					
+					if (file.exists() == true)
+					{
+						file.delete();
+					}
+					//System.out.println("DELETED : " + fileName);
+					//write bucket name
+					channelSftp.rm(filename);
+				}
+			}	
+		}
+		catch (JSchException e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}
+		catch (SftpException e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}			
+		catch(Exception ex){
+			Log.error(ex.getMessage(), ex);
+			throw new eOSCESyncException("",ex.getMessage());
+		}
+		finally{
+			if (channel != null)
+				channel.disconnect();
+			
+			if (session != null)
+				session.disconnect();
+		}
+	}
 }

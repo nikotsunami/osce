@@ -1759,6 +1759,10 @@ public interface OsceConstants extends Constants {
 	public String exportSettingsQR();
 
 	public String checklistQuestions();
+	
+	public String importFilesProcessed();
+			
+	public String fetchFilesFromCloud();
 }
 
 

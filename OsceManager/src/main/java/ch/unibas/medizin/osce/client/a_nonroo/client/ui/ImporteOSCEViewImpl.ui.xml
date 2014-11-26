@@ -2,9 +2,13 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets">
-<ui:style src="../styles.css">
-		.panelStyle {
+	<ui:style src="../styles.css">
+		.viewWidth {
 			width: 500px;
+		}
+		
+		.panelStyle {
+			/*width: 500px; */
 			height: 400px;
 			border-width: thin;
 			border-style: solid;
@@ -13,57 +17,100 @@
 			margin-bottom: 5px;
 			margin-left: 5px;
 		}
-		.scrollpanelStyle
-		{
+	
+		.scrollpanelStyle {
 			height:400px; 
-			width:500px;			
+			/*width:500px; */			
 		}
 		
 		.tabPanel{
 			margin-left: 20px;
 		}
-</ui:style>
+		
+		.importLbl {
+			font-weight :bold
+		}
+	</ui:style>
 	<g:HTMLPanel addStyleNames="{style.tabPanel}" >
 	
-		<g:HorizontalPanel>
+		<g:VerticalPanel>
+			<g:HorizontalPanel>
+				<g:HTMLPanel>
+					<g:RadioButton ui:field="s3" name="type" checked="true"></g:RadioButton>
+					<g:RadioButton ui:field="ftp" name="type"></g:RadioButton>
+				</g:HTMLPanel>
+			</g:HorizontalPanel>
+			
+			<g:HorizontalPanel spacing="5" verticalAlignment="middle">
+				<g:Label styleName="{style.importLbl}" ui:field="bucketNameLbl"></g:Label>
+				<g:TextBox ui:field="bucketName"></g:TextBox>
+	
+				<g:Label styleName="{style.importLbl}" ui:field="basePathLbl"></g:Label>
+				<g:TextBox ui:field="basePath"></g:TextBox>
+							
+				<g:Label styleName="{style.importLbl}" ui:field="accessKeyLbl"></g:Label>
+				<g:TextBox ui:field="accessKey"></g:TextBox>
+				
+				<g:Label styleName="{style.importLbl}" ui:field="secretKeyLbl"></g:Label>
+				<g:TextBox ui:field="secretKey"></g:TextBox>
+				
+				<g:Label styleName="{style.importLbl}" ui:field="encryptionKeyLbl"></g:Label>
+				<g:TextBox ui:field="encryptionKey"></g:TextBox>
+				
+				<my:IconButton icon="pencil" ui:field="saveEditButton"></my:IconButton>
+				<my:IconButton icon="closethick" ui:field="cancelButton"></my:IconButton>
+				
+			</g:HorizontalPanel>
+		</g:VerticalPanel>
+		
+		<!-- <g:HorizontalPanel>
 			<g:HTMLPanel>
-			<span class="{style.label}" ui:field="bucketNameLbl" />			
-			<g:TextBox ui:field="bucketName"></g:TextBox>
-			
-			<span class="{style.label}" ui:field="accessKeyLbl" />
-			<g:TextBox ui:field="accessKey"></g:TextBox>
-			
-			<span class="{style.label}" ui:field="secretKeyLbl" />
-			<g:TextBox ui:field="secretKey"></g:TextBox>
-			
-			<span class="{style.label}" ui:field="encryptionKeyLbl" />
-			<g:TextBox ui:field="encryptionKey"></g:TextBox>
-			
-			<my:IconButton icon="pencil" ui:field="saveEditButton"></my:IconButton>
-			<my:IconButton icon="closethick" ui:field="cancelButton"></my:IconButton>
+				<span class="{style.label}" ui:field="bucketNameLbl" />			
+				<g:TextBox ui:field="bucketName"></g:TextBox>
+				
+				<span class="{style.label}" ui:field="accessKeyLbl" />
+				<g:TextBox ui:field="accessKey"></g:TextBox>
+				
+				<span class="{style.label}" ui:field="secretKeyLbl" />
+				<g:TextBox ui:field="secretKey"></g:TextBox>
+				
+				<span class="{style.label}" ui:field="encryptionKeyLbl" />
+				<g:TextBox ui:field="encryptionKey"></g:TextBox>
+				
+				<my:IconButton icon="pencil" ui:field="saveEditButton"></my:IconButton>
+				<my:IconButton icon="closethick" ui:field="cancelButton"></my:IconButton>
 			</g:HTMLPanel>
-		</g:HorizontalPanel>
+		</g:HorizontalPanel> -->
 	
-		<g:HorizontalPanel>
-			<g:RadioButton ui:field="eOSCE" name="osceType" checked="true"></g:RadioButton>
-			<g:RadioButton ui:field="iOSCE" name="osceType"></g:RadioButton>
-		</g:HorizontalPanel>	
-	
-		<g:HorizontalPanel>
-			<g:RadioButton ui:field="processed" name="status" checked="true"></g:RadioButton>
-			<g:RadioButton ui:field="unprocessed" name="status"></g:RadioButton>
+		<g:HorizontalPanel addStyleNames="{style.viewWidth}">
+			<g:cell horizontalAlignment="ALIGN_LEFT" verticalAlignment="ALIGN_MIDDLE">
+				<g:HorizontalPanel>
+					<g:RadioButton ui:field="eOSCE" name="osceType" checked="true"></g:RadioButton>
+					<g:RadioButton ui:field="iOSCE" name="osceType"></g:RadioButton>
+				</g:HorizontalPanel>
+			</g:cell>
+			
+			<g:cell horizontalAlignment="ALIGN_RIGHT" verticalAlignment="ALIGN_MIDDLE">
+				<g:HorizontalPanel>
+					<g:RadioButton ui:field="processed" name="status" checked="true"></g:RadioButton>
+					<g:RadioButton ui:field="unprocessed" name="status"></g:RadioButton>
+				</g:HorizontalPanel>
+			</g:cell>
 		</g:HorizontalPanel>	
 		
-		<g:DisclosurePanel ui:field="disclouserPanelFlie" open="true" addStyleNames="{style.panelStyle}">
+		<g:DisclosurePanel ui:field="disclouserPanelFlie" open="true" addStyleNames="{style.panelStyle} {style.viewWidth}">
 			<g:header></g:header>
 			
-			<g:ScrollPanel addStyleNames="{style.scrollpanelStyle}">															
+			<g:ScrollPanel addStyleNames="{style.scrollpanelStyle} {style.viewWidth}">															
 				<g:VerticalPanel ui:field="fileListPanel">																							
 				</g:VerticalPanel>							
 			</g:ScrollPanel>
-		</g:DisclosurePanel>		
-		
-		<my:IconButton icon="arrowthick-1-s" ui:field="importButton"></my:IconButton>
-		<my:IconButton icon="trash" ui:field="delButton"></my:IconButton>
+		</g:DisclosurePanel>
+				
+		<g:HorizontalPanel verticalAlignment="ALIGN_MIDDLE" spacing="4">
+			<my:IconButton icon="arrowthickstop-1-s" ui:field="importButton"></my:IconButton>
+			<my:IconButton icon="arrowthick-1-s" ui:field="fetchFiles"></my:IconButton>
+			<my:IconButton icon="trash" ui:field="delButton"></my:IconButton>
+		</g:HorizontalPanel>	
 	</g:HTMLPanel>
 </ui:UiBinder> 

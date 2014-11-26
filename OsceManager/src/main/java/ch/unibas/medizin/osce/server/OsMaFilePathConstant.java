@@ -218,4 +218,6 @@ public class OsMaFilePathConstant {
 	public static final String STUDENT_LIST_QR = "StudentQR";
 
 	public static final String EXTRA_SPACE_TITLE = "                    ";
+	
+	public static final String IMPORT_AUDIO_NOTE_PATH = getUploadBaseDIRPath() + "/eosce/import/audionote/";
 }
