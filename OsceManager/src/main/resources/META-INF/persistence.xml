@@ -81,6 +81,9 @@
 		<class>ch.unibas.medizin.osce.domain.TrainingSuggestion</class>
 		<class>ch.unibas.medizin.osce.domain.ChecklistItem</class>
 		<class>ch.unibas.medizin.osce.domain.OsceSettings</class>
+		<class>ch.unibas.medizin.osce.domain.AnswerCheckListCriteria</class>
+		<class>ch.unibas.medizin.osce.domain.KeyPair</class>
+		
 		<!-- <class>ch.unibas.medizin.osce.domain.SPPortalPerson</class> -->
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>

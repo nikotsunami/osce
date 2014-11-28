@@ -726,7 +726,7 @@ public class StandardizedRole {
 
 	public static String getRolePrintPDFByStudentUsingServlet(Long studentId, Long osceId, String locale, ByteArrayOutputStream os) 
 	{
-		String fileName = OsMaFilePathConstant.ROLE_FILE_STUDENT_MANAGEMENT_PDF_FORMAT;
+		String fileName = OsMaFilePathConstant.ROLE_FILE_STUDENT_MANAGEMENT_ZIP_FORMAT;
 		System.out.println("Id: " + studentId + " Locale: " + locale);
 		//Student student=Student.findStudent(studentId);	
 		List<StandardizedRole> standardizedRoleList=findRoleByStudentUsingAnswer(studentId, osceId);
@@ -752,7 +752,7 @@ public class StandardizedRole {
 	
 	public static String getRolePrintPDFByStudentForMinValueUsingServlet(Long studentId, Long osceId, String locale, ByteArrayOutputStream os) 
 	{
-		String fileName = OsMaFilePathConstant.ROLE_FILE_STUDENT_MANAGEMENT_PDF_FORMAT;
+		String fileName = OsMaFilePathConstant.ROLE_FILE_STUDENT_MANAGEMENT_ZIP_FORMAT;
 		System.out.println("Id: " + studentId + " Locale: " + locale);
 		//Student student=Student.findStudent(studentId);	
 		List<StandardizedRole> standardizedRoleList=findRoleByStudentUsingAnswer(studentId, osceId);

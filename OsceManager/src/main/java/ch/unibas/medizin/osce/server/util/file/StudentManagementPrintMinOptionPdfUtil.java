@@ -1,11 +1,18 @@
 package ch.unibas.medizin.osce.server.util.file;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import org.apache.commons.io.FileUtils;
 
 import ch.unibas.medizin.osce.domain.Answer;
 import ch.unibas.medizin.osce.domain.CheckList;
@@ -14,9 +21,14 @@ import ch.unibas.medizin.osce.domain.ChecklistItem;
 import ch.unibas.medizin.osce.domain.ChecklistOption;
 import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.domain.File;
+import ch.unibas.medizin.osce.domain.Notes;
+import ch.unibas.medizin.osce.domain.Osce;
+import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.Signature;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
+import ch.unibas.medizin.osce.shared.NoteType;
 import ch.unibas.medizin.osce.shared.util;
 
 import com.itextpdf.text.Chunk;
@@ -68,7 +80,13 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 			Iterator<StandardizedRole> standardizedRoleIterator=standardizedRoleList.iterator();
 			//title = constants.standardizedRole(); // + " "+ util.getEmptyIfNull(standardizedRole.getLongName());
 			title = "";
-			writer = PdfWriter.getInstance(document, out);
+			Osce osce = Osce.findOsce(osceId);
+			Semester semester = Semester.findSemester(osce.getSemester().getId());
+			List<String> files= new ArrayList<String>();
+			String localPath = OsMaFilePathConstant.IMPORT_AUDIO_NOTE_PATH + semester.getSemester() + semester.getCalYear() + "/";
+			
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			writer = PdfWriter.getInstance(document, os);
 			addMetaData();
 			document.open();
 			addHeader();			
@@ -83,8 +101,10 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 				addCheckListDetails(studId,standardizedRole.getCheckList().getId());
 				addSignature(standardizedRole, osceId, studId);
 				document.newPage();
+				files.addAll(findAudioFileNamesForStudent(studId, osceId,standardizedRole,localPath));
 			}
 			document.close();
+			createZipFile(os, out, files);
 		}
 		catch (Exception e) 
 		{
@@ -108,6 +128,19 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 			log.error(e.getMessage(),e);
 		}
 	}
+	
+	 private List<String> findAudioFileNamesForStudent(Long studId, Long osceId, StandardizedRole standardizedRole, String localPath) {
+		
+		List<String> fileNameList = new ArrayList<String>(); 
+		Doctor examiner = Answer.findExaminerByStandardizedRoleOsceAndStudent(standardizedRole.getId(), osceId, studId);
+		List<Notes> audioNotes =  Notes.findNotesByExaminerAndStudentAndNotetype(examiner.getId(), studId, NoteType.STUDENT_AUDIO.ordinal(), standardizedRole.getId());
+	
+		for (Notes notes : audioNotes) {				
+			localPath+= notes.getComment();
+			fileNameList.add(localPath);
+		}
+		return fileNameList;
+    }
 	
 	private void addSignature(StandardizedRole standardizedRole, Long osceId, Long studId) {
 		try
@@ -588,7 +621,29 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 		table.setWidthPercentage(100);
 		return table;
 	}
-	
 
-
+	public static void createZipFile(ByteArrayOutputStream pdfOutputStream, OutputStream zipOutputStream, List<String> fileNames)
+	 {
+		 try {
+		      ZipOutputStream zipOut = new ZipOutputStream(zipOutputStream);
+		      
+		      zipOut.putNextEntry(new ZipEntry(OsMaFilePathConstant.ROLE_FILE_STUDENT_MANAGEMENT_PDF_FORMAT));
+			  zipOut.write(pdfOutputStream.toByteArray());	
+			  
+			 for (String fileName : fileNames) {
+				  java.io.File file = new java.io.File(fileName);
+				  if(file.exists()){
+					  zipOut.putNextEntry(new ZipEntry(file.getName()));
+					  zipOut.write(FileUtils.readFileToByteArray(file));
+				  }  
+			  }
+			  zipOut.closeEntry();	            
+		      zipOut.close();
+		      
+		     } catch (FileNotFoundException e) {
+		    	 log.info("File does not exists");
+		    } catch (IOException e) {
+		    	 log.info("IO error");
+		 }
+	 }
 }

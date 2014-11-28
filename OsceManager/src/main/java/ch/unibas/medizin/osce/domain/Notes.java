@@ -1,12 +1,14 @@
 package ch.unibas.medizin.osce.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -44,4 +46,11 @@ public class Notes {
     private Date lastviewed;
 	
 	private NoteType noteType;
+
+	public static List<Notes> findNotesByExaminerAndStudentAndNotetype(Long examinerId, Long studentId, Integer studentAudio, Long roleId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT n FROM Notes as n  WHERE n.doctor = " + examinerId + "  and n.student.id = "+ studentId  +"  and n.noteType =" + studentAudio + "AND n.oscePostRoom IS NOT NULL AND n.oscePostRoom.oscePost.standardizedRole.id = " + roleId;
+		TypedQuery<Notes> query = em.createQuery(sql, Notes.class);
+		return query.getResultList();
+	}
 }
