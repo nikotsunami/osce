@@ -1763,6 +1763,8 @@ public interface OsceConstants extends Constants {
 	public String importFilesProcessed();
 			
 	public String fetchFilesFromCloud();
+
+	public String backUpPeriodLengthError();
 }
 
 

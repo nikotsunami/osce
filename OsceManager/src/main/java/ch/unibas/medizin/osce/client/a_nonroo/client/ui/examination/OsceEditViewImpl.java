@@ -732,7 +732,10 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 			if (backUpPeriod.getValue().matches(regex) == false) {
 				backUpPeriod.addStyleName("higlight_onViolation");
 				errorMessage = constants.backUpPeriodMustBeInt();
-			} 
+			} else if(backUpPeriod.getValue().length() > 2){
+				backUpPeriod.addStyleName("higlight_onViolation");
+				errorMessage = constants.backUpPeriodLengthError();
+			}
 			else {
 				backUpPeriod.removeStyleName("higlight_onViolation");
 			}

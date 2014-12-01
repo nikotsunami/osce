@@ -4080,3 +4080,11 @@ color: #f1b532;
     border-right: 10px solid transparent; 
     border-top: 8px solid #AAAAAA;
 }
+.qr_popup_close_button{
+	float: right;
+	background: none;
+	border: none;
+}
+.qr_popup_close_button:HOVER {
+	background: none;
+}

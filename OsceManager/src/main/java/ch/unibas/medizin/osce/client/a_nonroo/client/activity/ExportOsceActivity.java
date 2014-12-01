@@ -25,6 +25,7 @@ import ch.unibas.medizin.osce.shared.ExportOsceData;
 import ch.unibas.medizin.osce.shared.ExportOsceType;
 import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -58,7 +59,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 	private SelectChangeHandler removeHandler;
 	private final OsceConstants constants = GWT.create(OsceConstants.class);
 	private eOSCESyncServiceAsync eOsceServiceAsync = null;
-	
+	private static OsceConstantsWithLookup osceConstantsWithLookup = GWT.create(OsceConstantsWithLookup.class);
 	
 	Boolean flag = false;
 		
@@ -517,7 +518,9 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 					
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-					messageConfirmationDialogBox.showConfirmationDialog(caught.getMessage());
+					if(caught.getMessage() != null){
+						messageConfirmationDialogBox.showConfirmationDialog(osceConstantsWithLookup.getString(caught.getMessage()));
+					} 
 				}
 
 				@Override
@@ -576,7 +579,9 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 					
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-					messageConfirmationDialogBox.showConfirmationDialog(caught.getMessage());
+					if(caught.getMessage() != null){
+						messageConfirmationDialogBox.showConfirmationDialog(osceConstantsWithLookup.getString(caught.getMessage()));
+					} 
 				}
 
 				@Override

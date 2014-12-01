@@ -453,5 +453,17 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String HASH();
 
 	public String NO();
+	
+	//SFTP exception types
+	public String JSCH_EXCEPTION();
+	
+	public String SFTP_EXCEPTION();
+	
+	public String UNKNOWN_HOST();
+	
+	public String IO_EXCEPTION();
+	
+	public String EXCEPTION();
+	
 }
 
