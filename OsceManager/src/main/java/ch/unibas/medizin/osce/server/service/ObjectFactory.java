@@ -43,6 +43,14 @@ public class ObjectFactory {
     public Oscedata.Exam createOscedataExam() {
         return new Oscedata.Exam();
     }
+    
+    /**
+     * Create an instance of {@link Oscedata.Osceday }
+     * 
+     */
+    public Oscedata.Exam.Osceday createOscedataOsceday() {
+        return new Oscedata.Exam.Osceday();
+    }
 
 
     /**

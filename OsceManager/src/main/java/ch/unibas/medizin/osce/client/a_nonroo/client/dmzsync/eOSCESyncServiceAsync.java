@@ -16,8 +16,8 @@ public interface eOSCESyncServiceAsync {
 
 	void deleteFileFromCloud(ExportOsceType osceType, BucketInfoType bucketInfoType, Long semesterID, List<String> fileList, AsyncCallback<Void> cb);
 	
-	void findProcessedFileNameFromLocal(ExportOsceType osceType, Long semesterID, AsyncCallback<List<String>> cb);
-	void findUnProcessedFileNameFromLocal(ExportOsceType osceType, Long semesterID, AsyncCallback<List<String>> cb);
+	void findProcessedFileNameFromLocal(ExportOsceType osceType, Long semesterID, AsyncCallback<List<ExportOsceData>> cb);
+	void findUnProcessedFileNameFromLocal(ExportOsceType osceType, Long semesterID, AsyncCallback<List<ExportOsceData>> cb);
 	
 	/*void findProcessedFilesFromS3(ExportOsceType osceType, Long semesterID, AsyncCallback<List<String>> cb);
 	void findProcessedFilesFromSFTP(ExportOsceType osceType, Long semesterID, AsyncCallback<List<String>> cb);
@@ -28,10 +28,10 @@ public interface eOSCESyncServiceAsync {
 	void importFileFromS3(ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag, AsyncCallback<Void> cb);
 	void importFileFromSFTP(ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag, AsyncCallback<Void> cb);*/
 	
-	void findProcessedFilesFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID, AsyncCallback<List<String>> cb);
-	void findUnProcessedFilesFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID, AsyncCallback<List<String>> cb);
+	void findProcessedFilesFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID, AsyncCallback<List<ExportOsceData>> cb);
+	void findUnProcessedFilesFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID, AsyncCallback<List<ExportOsceData>> cb);
 	void importFileFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag, AsyncCallback<Void> cb);
-	
+	void importFileFromLocal(ExportOsceType osceType, Long semesterID, List<String> fileList, AsyncCallback<Void> cb);
 	//export
 	void exportOsceFile(Long semesterID, AsyncCallback<Void> cb);
 	void exportProcessedFileList(ExportOsceType osceType, Long semesterID,AsyncCallback<List<ExportOsceData>> cb);

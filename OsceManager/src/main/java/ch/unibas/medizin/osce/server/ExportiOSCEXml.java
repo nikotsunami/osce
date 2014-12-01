@@ -44,6 +44,7 @@ import ch.unibas.medizin.osce.server.service.Oscedata.Checklists.Checklist.Check
 import ch.unibas.medizin.osce.server.service.Oscedata.Checklists.Checklist.Checklistitems.Checklistitem.Checklistoptions.Checklistoption;
 import ch.unibas.medizin.osce.server.service.Oscedata.Courses;
 import ch.unibas.medizin.osce.server.service.Oscedata.Exam;
+import ch.unibas.medizin.osce.server.service.Oscedata.Exam.Osceday;
 import ch.unibas.medizin.osce.server.service.Oscedata.Examiners;
 import ch.unibas.medizin.osce.server.service.Oscedata.Examiners.Examiner;
 import ch.unibas.medizin.osce.server.service.Oscedata.Rotations;
@@ -55,6 +56,7 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 public class ExportiOSCEXml {
 	private static Logger Log = Logger.getLogger(ExportiOSCEXml.class);
 	private static DateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm");
+	private static DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	public ExportiOSCEXml() {
 	}
@@ -128,6 +130,14 @@ public class ExportiOSCEXml {
 		examBean.setPostLength(osce.getPostLength() == null ? 0 : osce.getPostLength());
 		examBean.setShortBreak(osce.getShortBreak() == null ? 0 : osce.getShortBreak().intValue());
 		examBean.setIsFormativeOsce(osce.getIsFormativeOsce() == null ? Boolean.FALSE.toString() : osce.getIsFormativeOsce().toString());
+		
+		for (OsceDay osceDay : osce.getOsce_days()) {
+			Osceday osceDayBean = factory.createOscedataOsceday();
+			osceDayBean.setId(osceDay.getId());
+			osceDayBean.setDate(DATE_TIME_FORMAT.format(osceDay.getOsceDate()));
+			
+			examBean.getOsceday().add(osceDayBean);
+		}
 	}
 
 	private void exportChecklist(ObjectFactory factory, Oscedata oscedata, Long osceId) {
@@ -426,7 +436,7 @@ public class ExportiOSCEXml {
 
 		Log.info("export exportRotations at : StandardizedRole");
 
-
+		Osce osce = Osce.findOsce(osceId);
 		List<OsceDay> osceDayList = OsceDay.findOsceDayByOsce(osceId);
 		int startrotation = 0;
 		int totalrotation = 0;
@@ -456,6 +466,7 @@ public class ExportiOSCEXml {
 						rotationBean.setId(Long.parseLong((l+1) + "" + course.getId()));
 						rotationBean.setTitle(("Rotation " + String.format("%02d", (l+1)) + " " + constants.getString(course.getColor())));
 						rotationBean.setCourseId(course.getId());
+						rotationBean.setOsceDayId(osceDay.getId());
 						
 						List<Date> timeList = Assignment.findMinTimeStartAndMaxTimeEndByOsceDayAndRotationNumber(osceDay.getId(), l);
 						
@@ -499,6 +510,21 @@ public class ExportiOSCEXml {
 							
 							if (assignmentlist.size() > 0)
 							{
+								for (int i=0; i<(assignmentlist.size() - 1); i++) {
+									Assignment startAss = assignmentlist.get(i);
+									if ((i+1) < assignmentlist.size()) {
+										Assignment endAss = assignmentlist.get(i+1);
+										
+										long mins = diffInMinBetweenTwoDate(startAss.getTimeEnd(), endAss.getTimeStart());
+										
+										if (mins > osce.getShortBreak()) {
+											String breakTimeStart = DATE_FORMAT.format(startAss.getTimeEnd());
+											String breakTimeEnd = DATE_FORMAT.format(endAss.getTimeStart());
+											rotationBean.setBreakStartTime(breakTimeStart);
+											rotationBean.setBreakEndTime(breakTimeEnd);
+										}
+									}
+								}
 								Date timestart = assignmentlist.get(0).getTimeStart();
 								Date timeend = assignmentlist.get(assignmentlist.size()-1).getTimeEnd();
 								examinerAssList = Assignment.findAssignmentExamnierByOscePostRoom(oscePostRoom.getId(), osceId, timestart, timeend);
@@ -555,5 +581,12 @@ public class ExportiOSCEXml {
 		}
 		
 		return null;
+	}
+	
+	public long diffInMinBetweenTwoDate(Date startTime, Date endTime) {
+		long diff = endTime.getTime() - startTime.getTime();
+		long diffInMin = diff / (60 * 1000) % 60;
+		
+		return diffInMin;
 	}
 }

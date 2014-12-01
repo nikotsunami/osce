@@ -19,6 +19,7 @@ import ch.unibas.medizin.osce.client.managed.request.BucketInformationRequest;
 import ch.unibas.medizin.osce.client.managed.request.SemesterProxy;
 import ch.unibas.medizin.osce.shared.BucketInfoType;
 import ch.unibas.medizin.osce.shared.EosceStatus;
+import ch.unibas.medizin.osce.shared.ExportOsceData;
 import ch.unibas.medizin.osce.shared.ExportOsceType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -200,7 +201,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 			checkBoxList.clear();
 			view.getFileListPanel().clear();
 			
-			eOsceServiceAsync.findProcessedFileNameFromLocal(osceType, semesterProxy.getId(), new AsyncCallback<List<String>>() {
+			eOsceServiceAsync.findProcessedFileNameFromLocal(osceType, semesterProxy.getId(), new AsyncCallback<List<ExportOsceData>>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -210,7 +211,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 				}
 
 				@Override
-				public void onSuccess(List<String> result) {
+				public void onSuccess(List<ExportOsceData> result) {
 					if (result.size() == 0) {
 						Label label = new Label();
 						label.setText(constants.importFilesProcessed());
@@ -225,8 +226,8 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					{
 						CheckBox checkBox = new CheckBox();
 						Label label = new Label();
-						label.setText(result.get(i));
-						checkBox.setFormValue(result.get(i));
+						label.setText(result.get(i).getFilename());
+						checkBox.setFormValue(result.get(i).getFilepath());
 						
 						checkBoxList.add(checkBox);
 						
@@ -256,7 +257,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 			checkBoxList.clear();
 			view.getFileListPanel().clear();
 			
-			eOsceServiceAsync.findUnProcessedFileNameFromLocal(osceType, semesterProxy.getId(), new AsyncCallback<List<String>>() {
+			eOsceServiceAsync.findUnProcessedFileNameFromLocal(osceType, semesterProxy.getId(), new AsyncCallback<List<ExportOsceData>>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -266,7 +267,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 				}
 
 				@Override
-				public void onSuccess(List<String> result) {
+				public void onSuccess(List<ExportOsceData> result) {
 					if (result.size() == 0) {
 						Label label = new Label();
 						label.setText(constants.importFilesProcessed());
@@ -281,8 +282,8 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					{
 						CheckBox checkBox = new CheckBox();
 						Label label = new Label();
-						label.setText(result.get(i));
-						checkBox.setFormValue(result.get(i));
+						label.setText(result.get(i).getFilename());
+						checkBox.setFormValue(result.get(i).getFilepath());
 						
 						checkBoxList.add(checkBox);
 						
@@ -395,32 +396,64 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 		
 		System.out.println("IMPORT FILELIST SIZE : " + fileList.size());
 		
-		eOsceServiceAsync.importFileFromCloud(bucketInfoType, osceType, semesterProxy.getId(), fileList, flag, new AsyncCallback<Void>() {
+		if (view.getProcessed().getValue()) {
+			eOsceServiceAsync.importFileFromLocal(osceType, semesterProxy.getId(), fileList, new AsyncCallback<Void>() {
 
-			@Override
-			public void onFailure(Throwable caught) {
-				showApplicationLoading(false);
-				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-				messageConfirmationDialogBox.showConfirmationDialog(constants.importFileError());
-			}
+				@Override
+				public void onFailure(Throwable caught) {
+					showApplicationLoading(false);
+					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.importFileError());
+				}
 
-			@Override
-			public void onSuccess(Void result) {
-				showApplicationLoading(false);
-				MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-				messageConfirmationDialogBox.showConfirmationDialog(constants.importSuccess());
-				messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
-					
-					@Override
-					public void onClick(ClickEvent event) {
-						if (view.getUnprocessed().getValue())
-							fetchUnProcessedFileFromLocal(osceType);
-						else if (view.getProcessed().getValue()) 
-							fetchProcessedFileFromLocal(osceType);
-					}
-				});
-			}
-		});
+				@Override
+				public void onSuccess(Void result) {
+					showApplicationLoading(false);
+					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.importSuccess());
+					messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							if (view.getUnprocessed().getValue())
+								fetchUnProcessedFileFromLocal(osceType);
+							else if (view.getProcessed().getValue()) 
+								fetchProcessedFileFromLocal(osceType);
+						}
+					});
+				}
+			});
+		}
+		else if (view.getUnprocessed().getValue()) {
+			eOsceServiceAsync.importFileFromCloud(bucketInfoType, osceType, semesterProxy.getId(), fileList, flag, new AsyncCallback<Void>() {
+
+				@Override
+				public void onFailure(Throwable caught) {
+					showApplicationLoading(false);
+					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.importFileError());
+				}
+
+				@Override
+				public void onSuccess(Void result) {
+					showApplicationLoading(false);
+					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
+					messageConfirmationDialogBox.showConfirmationDialog(constants.importSuccess());
+					messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							if (view.getUnprocessed().getValue())
+								fetchUnProcessedFileFromLocal(osceType);
+							else if (view.getProcessed().getValue()) 
+								fetchProcessedFileFromLocal(osceType);
+						}
+					});
+				}
+			});
+		}
+		
+		
 			
 			/*eOsceServiceAsync.importFileList(osceType, semesterProxy.getId(), fileList, flag, new AsyncCallback<Void>() {
 				@Override
@@ -716,7 +749,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 			checkBoxList.clear();
 			view.getFileListPanel().clear();
 			
-			eOsceServiceAsync.findUnProcessedFilesFromCloud(bucketInfoType, osceType, semesterProxy.getId(), new AsyncCallback<List<String>>() {
+			eOsceServiceAsync.findUnProcessedFilesFromCloud(bucketInfoType, osceType, semesterProxy.getId(), new AsyncCallback<List<ExportOsceData>>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -726,7 +759,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 				}
 
 				@Override
-				public void onSuccess(List<String> result) {
+				public void onSuccess(List<ExportOsceData> result) {
 					if (result.size() == 0) {
 						Label label = new Label();
 						label.setText(constants.importFilesProcessed());
@@ -741,8 +774,8 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					{
 						CheckBox checkBox = new CheckBox();
 						Label label = new Label();
-						label.setText(result.get(i));
-						checkBox.setFormValue(result.get(i));
+						label.setText(result.get(i).getFilename());
+						checkBox.setFormValue(result.get(i).getFilepath());
 						
 						checkBoxList.add(checkBox);
 						
@@ -774,7 +807,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 			checkBoxList.clear();
 			view.getFileListPanel().clear();
 			
-			eOsceServiceAsync.findProcessedFilesFromCloud(bucketInfoType, osceType, semesterProxy.getId(), new AsyncCallback<List<String>>() {
+			eOsceServiceAsync.findProcessedFilesFromCloud(bucketInfoType, osceType, semesterProxy.getId(), new AsyncCallback<List<ExportOsceData>>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -784,7 +817,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 				}
 
 				@Override
-				public void onSuccess(List<String> result) {
+				public void onSuccess(List<ExportOsceData> result) {
 					if (result.size() == 0) {
 						Label label = new Label();
 						label.setText(constants.importFilesProcessed());
@@ -799,8 +832,8 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 					{
 						CheckBox checkBox = new CheckBox();
 						Label label = new Label();
-						label.setText(result.get(i));
-						checkBox.setFormValue(result.get(i));
+						label.setText(result.get(i).getFilename());
+						checkBox.setFormValue(result.get(i).getFilepath());
 						
 						checkBoxList.add(checkBox);
 						

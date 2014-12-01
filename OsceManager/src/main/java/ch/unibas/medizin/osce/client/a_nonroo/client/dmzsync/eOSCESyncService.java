@@ -7,6 +7,7 @@ import ch.unibas.medizin.osce.shared.ExportOsceData;
 import ch.unibas.medizin.osce.shared.ExportOsceType;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -23,8 +24,8 @@ public interface eOSCESyncService extends RemoteService {
 	
 	void importFileList(ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag) throws eOSCESyncException;
 	
-	List<String> findProcessedFileNameFromLocal(ExportOsceType osceType, Long semesterID) throws eOSCESyncException;
-	List<String> findUnProcessedFileNameFromLocal(ExportOsceType osceType, Long semesterID) throws eOSCESyncException;
+	List<ExportOsceData> findProcessedFileNameFromLocal(ExportOsceType osceType, Long semesterID) throws eOSCESyncException;
+	List<ExportOsceData> findUnProcessedFileNameFromLocal(ExportOsceType osceType, Long semesterID) throws eOSCESyncException;
 	
 	/*List<String> findProcessedFilesFromS3(ExportOsceType osceType, Long semesterID) throws eOSCESyncException;
 	List<String> findProcessedFilesFromSFTP(ExportOsceType osceType, Long semesterID);
@@ -35,11 +36,13 @@ public interface eOSCESyncService extends RemoteService {
 	void importFileFromS3(ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag) throws eOSCESyncException;
 	void importFileFromSFTP(ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag);*/
 	
-	List<String> findProcessedFilesFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID) throws eOSCESyncException;
+	List<ExportOsceData> findProcessedFilesFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID) throws eOSCESyncException;
 	
-	List<String> findUnProcessedFilesFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID) throws eOSCESyncException;
+	List<ExportOsceData> findUnProcessedFilesFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID) throws eOSCESyncException;
 	
 	void importFileFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag) throws eOSCESyncException;
+	
+	void importFileFromLocal(ExportOsceType osceType, Long semesterID, List<String> fileList) throws eOSCESyncException;
 	
 	//export
 	void exportOsceFile(Long semesterID) throws eOSCESyncException;

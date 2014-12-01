@@ -8,6 +8,8 @@ public class ExportOsceData implements IsSerializable {
 	
 	private String filename;
 	
+	private String filepath;
+	
 	public Long getOsceId() {
 		return osceId;
 	}
@@ -22,5 +24,13 @@ public class ExportOsceData implements IsSerializable {
 	
 	public void setFilename(String filename) {
 		this.filename = filename;
+	}
+	
+	public String getFilepath() {
+		return filepath;
+	}
+	
+	public void setFilepath(String filepath) {
+		this.filepath = filepath;
 	}
 }

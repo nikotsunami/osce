@@ -13,9 +13,19 @@ public class Rotation {
     private String stationId;
     private Signature signature;
     private String rotationId;
+    private String examinerId;
     private List<Student> students = new ArrayList<Student>();
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+    public String getExaminerId() {
+		return examinerId;
+	}
+    
+    public void setExaminerId(String examinerId) {
+		this.examinerId = examinerId;
+	}
+    
+    
     /**
      * 
      * @return

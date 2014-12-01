@@ -35,6 +35,7 @@ import ch.unibas.medizin.osce.server.CalculateCronbachValue;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.upload.ExportStatisticData;
 import ch.unibas.medizin.osce.shared.MapEnvelop;
+import ch.unibas.medizin.osce.shared.NoteType;
 
 import com.google.gwt.requestfactory.server.RequestFactoryServlet;
 
@@ -1646,19 +1647,44 @@ public class Answer {
 	}
 
 	@Transactional
-	public void deleteNoteAnswerCriteria(Long doctorId, Long oprId, Long studentId) {
+	public void deleteAnswerAndCriteria(Long doctorId, Long oprId, Long studentId) {
 		try 
     	{
 			OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoom(oprId);
 			if (oscePostRoom != null && oscePostRoom.getOscePost() != null) {
-				String noteSql = "delete from notes where osce_post_room = " + oprId + " and doctor = " + doctorId + " and student = " + studentId;
-	    		int notesDeletedCount = entityManager().createNativeQuery(noteSql).executeUpdate();
-	    		
-	    		String criteriaSql = "delete from answer_check_list_criteria where answer in (select id from answer where osce_post_room = " + oprId + " and doctor = " + doctorId + " and student = " + studentId +")";
+				String criteriaSql = "delete from answer_check_list_criteria where answer in (select id from answer where osce_post_room = " + oprId + " and doctor = " + doctorId + " and student = " + studentId +")";
 	    		int criteriaDeletedCount = entityManager().createNativeQuery(criteriaSql).executeUpdate();
 	    		
 	    		String answerSql = "delete from answer where osce_post_room = " + oprId + " and doctor = " + doctorId + " and student = " + studentId;
 	    		int answerDeletedCount = entityManager().createNativeQuery(answerSql).executeUpdate();
+			}
+    	} catch(Exception e) {
+    		e.printStackTrace();    		
+    	}
+	}
+	
+	@Transactional
+	public void deleteAudioNote(Long doctorId, Long oprId, Long studentId) {
+		try 
+    	{
+			OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoom(oprId);
+			if (oscePostRoom != null && oscePostRoom.getOscePost() != null) {
+				String noteSql = "delete from notes where osce_post_room = " + oprId + " and doctor = " + doctorId + " and student = " + studentId + " and note_type != " + NoteType.TEXTUAL.ordinal();
+	    		int notesDeletedCount = entityManager().createNativeQuery(noteSql).executeUpdate();
+	    	}
+    	} catch(Exception e) {
+    		e.printStackTrace();    		
+    	}
+	}
+	
+	@Transactional
+	public void deleteTextualNote(Long doctorId, Long oprId, Long studentId) {
+		try 
+    	{
+			OscePostRoom oscePostRoom = OscePostRoom.findOscePostRoom(oprId);
+			if (oscePostRoom != null && oscePostRoom.getOscePost() != null) {
+				String noteSql = "delete from notes where osce_post_room = " + oprId + " and doctor = " + doctorId + " and student = " + studentId + " and note_type = " + NoteType.TEXTUAL.ordinal();
+	    		int notesDeletedCount = entityManager().createNativeQuery(noteSql).executeUpdate();
 			}
     	} catch(Exception e) {
     		e.printStackTrace();    		

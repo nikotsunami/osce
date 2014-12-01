@@ -221,4 +221,8 @@ public class OsMaFilePathConstant {
 	public static final String EXTRA_SPACE_TITLE = "                    ";
 	
 	public static final String IMPORT_AUDIO_NOTE_PATH = getUploadBaseDIRPath() + "/eosce/import/audionote/";
+	
+	public static final String CERTIFICATE_ALIAS = "Test CA";
+	
+	public static final String SIGN_ALGO = "SHA256WithRSA";
 }

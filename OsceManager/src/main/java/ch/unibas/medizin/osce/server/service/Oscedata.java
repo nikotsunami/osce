@@ -2802,6 +2802,36 @@ public class Oscedata {
             protected String startTime;
             @XmlAttribute
             protected String endTime;
+            @XmlAttribute
+            protected Long osceDayId;
+            @XmlAttribute
+            protected String breakStartTime;
+            @XmlAttribute
+            protected String breakEndTime;
+            
+            public String getBreakStartTime() {
+				return breakStartTime;
+			}
+            
+            public String getBreakEndTime() {
+				return breakEndTime;
+			}
+            
+            public void setBreakStartTime(String breakStartTime) {
+				this.breakStartTime = breakStartTime;
+			}
+            
+            public void setBreakEndTime(String breakEndTime) {
+				this.breakEndTime = breakEndTime;
+			}
+            
+            public Long getOsceDayId() {
+				return osceDayId;
+			}
+            
+            public void setOsceDayId(Long osceDayId) {
+				this.osceDayId = osceDayId;
+			}
             /**
              * Gets the value of the stations property.
              * 
@@ -3342,12 +3372,11 @@ public class Oscedata {
         "id",
         "postLength",
         "shortBreak",
-        "isFormativeOsce"
+        "isFormativeOsce",
+        "osceday"
     })
     public static class Exam {
 
-        @XmlValue
-        protected String value;
         @XmlAttribute(required = true)
         protected long id;
         @XmlAttribute
@@ -3356,31 +3385,16 @@ public class Oscedata {
         protected int shortBreak;
         @XmlAttribute
         protected String isFormativeOsce;
+        
+        protected List<Oscedata.Exam.Osceday> osceday;
 
-        /**
-         * Gets the value of the value property.
-         * 
-         * @return
-         *     possible object is
-         *     {@link String }
-         *     
-         */
-        public String getValue() {
-            return value;
+        public List<Oscedata.Exam.Osceday> getOsceday() {
+            if (osceday == null) {
+                osceday = new ArrayList<Oscedata.Exam.Osceday>();
+            }
+            return this.osceday;
         }
-
-        /**
-         * Sets the value of the value property.
-         * 
-         * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
-         */
-        public void setValue(String value) {
-            this.value = value;
-        }
-
+       
         /**
          * Gets the value of the id property.
          * 
@@ -3420,5 +3434,44 @@ public class Oscedata {
 		public void setIsFormativeOsce(String isFormativeOsce) {
 			this.isFormativeOsce = isFormativeOsce;
 		}
+		
+		@XmlAccessorType(XmlAccessType.FIELD)
+		@XmlType(name = "", propOrder = {
+				"value"
+		})		
+		public static class Osceday {
+	    	@XmlValue
+	        protected String value;
+	        @XmlAttribute
+	        protected long id;
+	        @XmlAttribute
+	        protected String date;
+	        
+	        public String getValue() {
+				return value;
+			}
+	        
+	        public void setValue(String value) {
+				this.value = value;
+			}
+
+	        public long getId() {
+				return id;
+			}
+	        
+	        public void setId(long id) {
+				this.id = id;
+			}
+	        
+	        public String getDate() {
+				return date;
+			}
+	        
+	        public void setDate(String date) {
+				this.date = date;
+			}
+		}
     }
+    
+  
 }

@@ -9,6 +9,7 @@ import javax.annotation.Generated;
 public class StudentAnswer {
 
     private Examanswers examanswers;
+    private String publicKey;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
@@ -36,5 +37,13 @@ public class StudentAnswer {
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
     }
+    
+    public String getPublicKey() {
+		return publicKey;
+	}
+    
+    public void setPublicKey(String publicKey) {
+		this.publicKey = publicKey;
+	}
 
 }

@@ -20,8 +20,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
-import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
-
 import com.dd.plist.NSData;
 import com.dd.plist.NSDictionary;
 import com.dd.plist.NSObject;
