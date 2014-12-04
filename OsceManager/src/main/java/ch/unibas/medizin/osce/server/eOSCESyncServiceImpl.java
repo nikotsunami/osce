@@ -169,6 +169,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	private static final String IMPORT_ANSWER_PLIST_SHA_CODE = "DigitalSignature";
 	private static final String IMPORT_ANSWER_PLIST_DATA = "EncryptedData";
 	private static final String IMPORT_ANSWER_PLIST_SUBMIT = "submit";
+	private static final String IMPORT_ANSWER_PLIST_ENCRYPTION = "encryption";
 	private static final String IMPORT_ANSWER_PLIST_SIGN_MECHANISM = "signMechanism";
 	private static final String IMPORT_ANSWER_EXAMINER_DATA = "examinerId";
 	
@@ -478,11 +479,22 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
 			byte[] bytes = FileUtils.readFileToByteArray(new File(filename));
 			
-			ByteArrayOutputStream byteArrayOutputStream = decryptFileWithAdminPrivateKey(bytes, bucketInformation);
+			
+				NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(bytes);
+				NSObject encryption = rootDict.objectForKey(IMPORT_ANSWER_PLIST_ENCRYPTION);
+				NSString encryptionData = (NSString) encryption;
+			
+				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+				
+				if(encryptionData.getContent().equals("0")){
+					byteArrayOutputStream = decryptFileWithAdminPrivateKey(bytes, bucketInformation);
+				}else if(encryptionData.getContent().equals("1")){
+					byteArrayOutputStream = decryptFileWithSymmetricKey(bytes, bucketInformation);
+				}
 			
 			/*NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(bytes);
 			NSObject encryptedObject = rootDict.objectForKey(IMPORT_ANSWER_PLIST_DATA);
-			NSString encryptedData = (NSString) encryptedObject;
+			NSString 66encryptedData = (NSStrin6g) encryptedObject;
 			byte[] dataBytes = encryptedData.getContent().getBytes();*/
 			
 			if (byteArrayOutputStream != null) {			
@@ -519,14 +531,18 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 									}
 									
 									if (student.getAudioNotes() != null) {
-										new Answer().deleteAudioNote(doctor.getId(), oscePostRoom.getId(), osceStudent.getId());
-										importAudioNotes(student.getAudioNotes(), osceStudent, doctor, oscePostRoom, semesterID);
+										if(oscePostRoom != null){
+											new Answer().deleteAudioNote(doctor.getId(), oscePostRoom.getId(), osceStudent.getId());
+											importAudioNotes(student.getAudioNotes(), osceStudent, doctor, oscePostRoom, semesterID);
+										}
 									}	
 									
 									List<ch.unibas.medizin.osce.server.importanswer.Answer> answerList = student.getAnswers();
 									
 									if (answerList.size() > 0) {
-										new Answer().deleteAnswerAndCriteria(doctor.getId(), oscePostRoom.getId(), osceStudent.getId());
+										if(oscePostRoom != null){
+											new Answer().deleteAnswerAndCriteria(doctor.getId(), oscePostRoom.getId(), osceStudent.getId());
+										}
 									}
 									
 									for (ch.unibas.medizin.osce.server.importanswer.Answer jsonAnswer : answerList) {
@@ -572,6 +588,67 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 	}
 	
+	private ByteArrayOutputStream decryptFileWithSymmetricKey(byte[] bytes,BucketInformation bucketInformation)  throws eOSCESyncException{
+
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		try{
+			String symmetricKey =bucketInformation.getEncryptionKey();
+			ByteArrayOutputStream generateDecryptedDataFile = null;
+			if (StringUtils.isNotBlank(symmetricKey))
+			{
+				NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(bytes);
+				NSObject encryptedObject = rootDict.objectForKey(IMPORT_ANSWER_PLIST_DATA);
+				NSData encryptedData = (NSData) encryptedObject;
+				generateDecryptedDataFile = S3Decryptor.decryptFile(StringUtils.rightPad(symmetricKey, 16,'0'), encryptedData.bytes());
+				
+				NSObject signMechanismObject = rootDict.objectForKey(IMPORT_ANSWER_PLIST_SIGN_MECHANISM);
+				NSString signMechanismData = (NSString) signMechanismObject;
+				
+				if (generateDecryptedDataFile != null && signMechanismData.getContent().equals(String.valueOf(EncryptionType.ASYM.ordinal()))) {
+					
+					//Need to discuss with team.
+					/*NSObject shaHashObject = rootDict.objectForKey(IMPORT_ANSWER_PLIST_SHA_CODE);
+					NSData shaHashValue = (NSData) shaHashObject;
+					
+					if (shaHashValue == null) {
+						generateDecryptedDataFile = null;
+					}
+					else {
+						JSONDeserializer<StudentAnswer> deserializer = new JSONDeserializer<StudentAnswer>().use("values", StudentAnswer.class);				
+						StudentAnswer studentAnswer = new StudentAnswer();
+						studentAnswer = deserializer.deserializeInto(new InputStreamReader(new ByteArrayInputStream(generateDecryptedDataFile.toByteArray())), studentAnswer);
+						
+						if (studentAnswer.getPublicKey() != null) {
+							PublicKey publicKey = generatePublicKey(studentAnswer.getPublicKey());
+							boolean isSigned = generateSignData(publicKey, shaHashValue.bytes(), generateDecryptedDataFile.toByteArray());
+							if (isSigned == false)
+								generateDecryptedDataFile = null;
+						}
+					}*/
+				}
+				else if (generateDecryptedDataFile != null && signMechanismData.getContent().equals(EncryptionType.HASH.ordinal())) {
+					NSObject shaHashObject = rootDict.objectForKey(IMPORT_ANSWER_PLIST_SHA_CODE);
+					NSString shaHashValue = (NSString) shaHashObject;
+					
+					byte[] calculatedHashValue = checkSignedWithSHA256(generateDecryptedDataFile.toByteArray());
+					String base64CalculatedHashValue = Base64.encodeBase64String(calculatedHashValue);
+					
+					if (shaHashValue == null || base64CalculatedHashValue == null) {
+						generateDecryptedDataFile = null;
+					}
+					else if (shaHashValue.getContent().equals(base64CalculatedHashValue) == false) {
+						generateDecryptedDataFile = null;
+					}
+				}
+			}
+			return generateDecryptedDataFile;
+		}
+		catch (Exception e) {
+			Log.error(e.getMessage(), e);
+		}
+		return bout;
+	}
+
 	private void importChecklistCriteria(Answer osceAnswer, List<Criteria> criteriaList) throws eOSCESyncException {
 		try {
 			for (Criteria criteria : criteriaList) {
