@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.shared;
 
-public enum TemplateTypes {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public enum TemplateTypes implements IsSerializable {
 	STUDENT, STANDARDIZED_PATIENT ,EXAMINER ;
 }

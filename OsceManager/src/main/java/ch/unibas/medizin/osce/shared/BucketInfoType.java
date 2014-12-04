@@ -1,6 +1,8 @@
 package ch.unibas.medizin.osce.shared;
 
-public enum BucketInfoType {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public enum BucketInfoType implements IsSerializable {
 	S3("amazonS3"),FTP("ftp");
 
 	private final String stringValue;
