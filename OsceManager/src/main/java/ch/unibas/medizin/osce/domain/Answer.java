@@ -1624,21 +1624,6 @@ public class Answer {
 		return query.getResultList();
 	}
 	
-	public static List<Answer> findAnswerByChecklistCriteria(Long criteriaId) {
-		CriteriaBuilder criteriaBuilder = entityManager().getCriteriaBuilder();
-		CriteriaQuery<Answer> criteriaQuery = criteriaBuilder.createQuery(Answer.class);
-		Root<Answer> from = criteriaQuery.from(Answer.class);
-		
-		SetJoin<Answer, ChecklistCriteria> joinSet = from.joinSet("checklistCriteria", JoinType.LEFT);
-		Predicate predicate = criteriaBuilder.equal(joinSet.get("id"), criteriaId);
-		
-		criteriaQuery.where(predicate);
-		
-		TypedQuery<Answer> query = entityManager().createQuery(criteriaQuery);
-		
-		return query.getResultList();
-	}
-	
 	public static List<Answer> findAnswerByChecklistItem(Long checklistItemId) {
 		EntityManager em = entityManager();
 		String sql = "SELECT a FROM Answer a WHERE a.checklistItem is not null AND a.checklistItem.id = " + checklistItemId;

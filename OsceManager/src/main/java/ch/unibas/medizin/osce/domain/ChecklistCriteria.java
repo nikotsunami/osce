@@ -99,9 +99,9 @@ public class ChecklistCriteria implements Comparable<ChecklistCriteria> {
 	}
 	
 	public static ChecklistItem removeChecklistCriteria(Long criteriaId) {
-		List<Answer> answerList = Answer.findAnswerByChecklistCriteria(criteriaId);
+		Long answerCount = AnswerCheckListCriteria.findAnswerByChecklistCriteria(criteriaId);
 		
-		if (answerList == null || answerList.isEmpty()) {
+		if ( answerCount != null && answerCount <= 0) {
 			ChecklistCriteria checklistCriteria = ChecklistCriteria.findChecklistCriteria(criteriaId);
 			ChecklistItem checklistItem = checklistCriteria.getChecklistItem();
 			checklistCriteria.remove();
