@@ -465,5 +465,11 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	
 	public String EXCEPTION();
 	
+	//Role topic factors
+	
+	public String RATIO();
+	
+	public String NONE(); 
+	
 }
 

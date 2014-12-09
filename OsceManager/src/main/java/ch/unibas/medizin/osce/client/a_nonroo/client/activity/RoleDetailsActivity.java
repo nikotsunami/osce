@@ -167,6 +167,7 @@ import ch.unibas.medizin.osce.shared.OptionType;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.RoleParticipantTypes;
+import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.util;
@@ -945,7 +946,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		standardizedRoleDetailsView[index].studyYear.setInnerText(new EnumRenderer<StudyYears>().render(proxy.getStudyYear())); // ADDED
 		standardizedRoleDetailsView[index].factor.setInnerText(proxy.getFactor() == null ? "": proxy.getFactor().toString());
 		standardizedRoleDetailsView[index].sum.setInnerText(proxy.getSum() == null ? "": proxy.getSum().toString());
-		
+		standardizedRoleDetailsView[index].topicFactor.setInnerText(proxy.getTopicFactor()==null?"": new EnumRenderer<RoleTopicFactor>().render(proxy.getTopicFactor()));
 		// E: Issue Role
 		standardizedRoleDetailsView[index].labelLongNameHeader.setText("" + proxy.getLongName()+ " ("+proxy.getMainVersion()+"."+proxy.getSubVersion()+")");
 
@@ -5574,6 +5575,7 @@ final int index2 = index;
 		standardizedRoleDetailsView[index].studyYear.setInnerText(new EnumRenderer<StudyYears>().render(proxy.getStudyYear())); // ADDED
 		standardizedRoleDetailsView[index].factor.setInnerText(proxy.getFactor() == null ? "": proxy.getFactor().toString());
 		standardizedRoleDetailsView[index].sum.setInnerText(proxy.getSum() == null ? "": proxy.getSum().toString());
+		standardizedRoleDetailsView[index].topicFactor.setInnerText(new EnumRenderer<RoleTopicFactor>().render(proxy.getTopicFactor())); // ADDED
 		
 		// E: Issue Role
 		standardizedRoleDetailsView[index].labelLongNameHeader.setText("" + proxy.getLongName()+ " ("+proxy.getMainVersion()+"."+proxy.getSubVersion()+")");
@@ -8066,7 +8068,9 @@ public void onDragStart(DragStartEvent event) {
 			}
 			
 			if (checklistTopicSubView == null) {
-				checklistTopicSubView = new RoleDetailsChecklistTopicSubViewImpl();
+				final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+				final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+				checklistTopicSubView = new RoleDetailsChecklistTopicSubViewImpl(standardizedRoleProxy);
 				checklistTopicSubView.setChecklistItemProxy(topicProxy);
 				checklistTopicSubView.setDelegate(this);
 				checklistTopicSubView.getCheckListTopicLbl().setText(name);
@@ -8124,7 +8128,9 @@ public void onDragStart(DragStartEvent event) {
 			}
 			
 			if (roleDetailsChecklistTabSubView == null) {
-				roleDetailsChecklistTabSubView = new RoleDetailsChecklistTabSubViewImpl();		
+				final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+				final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+				roleDetailsChecklistTabSubView = new RoleDetailsChecklistTabSubViewImpl(standardizedRoleProxy);		
 				roleDetailsChecklistTabSubView.setChecklistItemProxy(tabProxy);
 				roleDetailsChecklistTabSubView.setDelegate(this);
 				roleDetailsChecklistTabSubView.setTabPanel(checklistTabPanel);
@@ -8160,8 +8166,9 @@ public void onDragStart(DragStartEvent event) {
 		}
 
 		@Override
-		public void addiOSCECheckListTopicClicked(ItemType itemType, final String name, final String description, final RoleDetailsChecklistTabSubViewImpl roleDetailsChecklistTabSubViewImpl, ChecklistItemProxy tabProxy) {
-			requests.checklistItemRequestNonRoo().saveChecklistTopicItem(name, description, tabProxy.getId()).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
+		public void addiOSCECheckListTopicClicked(ItemType itemType, final String name, final String description, final RoleDetailsChecklistTabSubViewImpl roleDetailsChecklistTabSubViewImpl, ChecklistItemProxy tabProxy, String weight) {
+			Double topicWeight= weight==""?0:Double.valueOf(weight);
+			requests.checklistItemRequestNonRoo().saveChecklistTopicItem(name, description, tabProxy.getId(),topicWeight).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 				@Override
 				public void onSuccess(ChecklistItemProxy response) {
@@ -8226,6 +8233,7 @@ public void onDragStart(DragStartEvent event) {
 
 		@Override
 		public void deleteChecklistQuestionClicked(final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl, ChecklistItemProxy checklistItemProxy) {
+			System.out.println("Checklist item id" +checklistItemProxy.getId() );
 			requests.checklistItemRequestNonRoo().removeChecklistItemQuestionItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
@@ -8267,7 +8275,7 @@ public void onDragStart(DragStartEvent event) {
 						final RoleDetailsChecklistTabSubView tabSubView = createTabView(standardizedRoleDetailsView.getContainerVerticalPanel(), tabProxy);
 						
 						for (ChecklistItemProxy topicProxy : topicList) {
-							if (topicProxy.getParentItem().getId().equals(tabProxy.getId())) {
+							if (topicProxy.getParentItem().getId() != null && topicProxy.getParentItem().getId().equals(tabProxy.getId())) {
 								final RoleDetailsChecklistTopicSubView topicSubView = createTopicView(tabSubView.getContainerVerticalPanel(), topicProxy.getName(), topicProxy.getDescription(), topicProxy);
 								
 								for (ChecklistItemProxy questionProxy : questionList) {
@@ -8301,11 +8309,12 @@ public void onDragStart(DragStartEvent event) {
 		}
 
 		@Override
-		public void updateChecklistTopic(ItemType itemType, final String name, final String description, final RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl, ChecklistItemProxy checklistItemProxy) {
+		public void updateChecklistTopic(ItemType itemType, final String name, final String description, final RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl, ChecklistItemProxy checklistItemProxy, String weight) {
 			ChecklistItemRequest checklistItemRequest = requests.checklistItemRequest();
 			final ChecklistItemProxy proxy = checklistItemRequest.edit(checklistItemProxy);
 			proxy.setName(name);
 			proxy.setDescription(description);
+			proxy.setWeight(weight =="" ? 0 :Double.valueOf(weight));
 			
 			checklistItemRequest.persist().using(checklistItemProxy).fire(new OSCEReceiver<Void>() {
 

@@ -2,9 +2,11 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistItemProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import ch.unibas.medizin.osce.shared.ItemType;
+import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
@@ -55,8 +57,11 @@ public class RoleDetailsChecklistTabSubViewImpl extends Composite implements Rol
 	
 	private ChecklistItemProxy checklistItemProxy;
 	
-	public RoleDetailsChecklistTabSubViewImpl() {
+	private StandardizedRoleProxy roleProxy;
+	
+	public RoleDetailsChecklistTabSubViewImpl(StandardizedRoleProxy standardizedRoleProxy) {
 		initWidget(uiBinder.createAndBindUi(this));
+		this.roleProxy=standardizedRoleProxy;
 		addCheckListSectionButton.setText(constants.addCheckListTopic());
 		importSectionButton.setText(constants.importTopic());
 		editChecklistSectionButton.setText(constants.editSection());
@@ -72,6 +77,10 @@ public class RoleDetailsChecklistTabSubViewImpl extends Composite implements Rol
 	public void editChecklistSectionClicked(ClickEvent e) {
 		final ChecklistiOSCEPopupViewImpl popupViewImpl = new ChecklistiOSCEPopupViewImpl();
 		popupViewImpl.setPopupStyle(ItemType.TAB);
+		popupViewImpl.topicFactorBox.setVisible(false);
+		popupViewImpl.topicFactorLbl.setVisible(false);
+		popupViewImpl.getItemTypeBox().setValue(ItemType.TAB);
+		popupViewImpl.getItemTypeBox().getElement().setAttribute("disabled", "true");
 		
 		if (checklistItemProxy != null) {
 			popupViewImpl.getNameTextBox().setValue(checklistItemProxy.getName());
@@ -114,13 +123,23 @@ public class RoleDetailsChecklistTabSubViewImpl extends Composite implements Rol
 		final ChecklistiOSCEPopupViewImpl popupViewImpl = new ChecklistiOSCEPopupViewImpl();
 		popupViewImpl.getItemTypeBox().setValue(ItemType.TOPIC);
 		popupViewImpl.setPopupStyle(ItemType.TAB);
+		if(roleProxy.getTopicFactor() != null){
+			if(roleProxy.getTopicFactor().equals(RoleTopicFactor.WEIGHT)){
+				popupViewImpl.getTopicFactorLbl().setText("Weight");//TODO
+			}else if(roleProxy.getTopicFactor().equals(RoleTopicFactor.RATIO)){
+				popupViewImpl.getTopicFactorLbl().setText("Ratio(in %)");
+			}else{
+				popupViewImpl.getTopicFactorLbl().setVisible(false);
+				popupViewImpl.getTopicFactorBox().setVisible(false);
+			}
+		}
 		popupViewImpl.getSaveBtn().addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent event) {
 				popupViewImpl.hide();
 				if (validateField(popupViewImpl.getNameTextBox().getValue())) {
-					delegate.addiOSCECheckListTopicClicked(popupViewImpl.getItemTypeBox().getValue(), popupViewImpl.getNameTextBox().getValue(), popupViewImpl.getDescriptionTextArea().getValue(), RoleDetailsChecklistTabSubViewImpl.this, checklistItemProxy);
+					delegate.addiOSCECheckListTopicClicked(popupViewImpl.getItemTypeBox().getValue(), popupViewImpl.getNameTextBox().getValue(), popupViewImpl.getDescriptionTextArea().getValue(), RoleDetailsChecklistTabSubViewImpl.this, checklistItemProxy,popupViewImpl.getTopicFactorBox().getValue());
 					popupViewImpl.getNameTextBox().setValue("");
 					popupViewImpl.getDescriptionTextArea().setValue("");
 				} else {

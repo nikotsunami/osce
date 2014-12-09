@@ -43,6 +43,7 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleRequest;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialRequest;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -391,6 +392,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			((RoleEditViewImpl)view).factor.setSelectedIndex(standardizedRole.getFactor()==null?0: Integer.parseInt(standardizedRole.getFactor().toString())-1);
 			//((RoleEditViewImpl)view).sum.setSelectedIndex(standardizedRole.getSum()==null?Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(0)): (Integer.parseInt(standardizedRole.getSum().toString()))-1);
 			((RoleEditViewImpl)view).sum.setSelectedIndex(standardizedRole.getSum()==null?0: (Integer.parseInt(standardizedRole.getSum().toString())));
+			((RoleEditViewImpl)view).topicFactor.setValue(standardizedRole.getTopicFactor() == null? RoleTopicFactor.NONE: standardizedRole.getTopicFactor());
+			
 			//standardizedRole.setFactor(standardizedRole.getFactor()==null?Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(0)): Integer.parseInt(standardizedRole.getFactor().toString()));
 			//Log.info("st role sum--"+standardizedRole.getSum());
 			//standardizedRole.setSum(standardizedRole.getSum()==null?Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(0)): (Integer.parseInt(standardizedRole.getSum().toString())));
@@ -516,6 +519,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 					proxy.setLongName(((RoleEditViewImpl)view).longName.getValue());
 					proxy.setStudyYear(((RoleEditViewImpl)view).studyYear.getValue());
 					proxy.setRoleType(((RoleEditViewImpl)view).roleType.getValue());
+					proxy.setTopicFactor(((RoleEditViewImpl)view).topicFactor.getValue());
+					
 					//add factor and sum
 					
 					proxy.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
@@ -562,7 +567,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 					oldProxy.setLongName(((RoleEditViewImpl)view).longName.getValue());
 					oldProxy.setStudyYear(((RoleEditViewImpl)view).studyYear.getValue());
 					oldProxy.setRoleType(((RoleEditViewImpl)view).roleType.getValue());
-						
+					oldProxy.setTopicFactor(((RoleEditViewImpl)view).topicFactor.getValue());	
+					
 					oldProxy.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
 					oldProxy.setSum(Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex())));
 					
@@ -713,6 +719,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		standardizedRole.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
 		standardizedRole.setSum((Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex()))));
 		
+		//standardizedRole.setTopicFactor(((RoleEditViewImpl)view).topicFactorBox.getValue().ordinal());
 		if(((RoleEditViewImpl)view).roleTopic.getSelected().getId()!=roleTopic.getId())
 		{
 			//Issue # 122 : Replace pull down with autocomplete.	 
@@ -1123,6 +1130,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 												
 												((RoleEditViewImpl)view).getRoleEditCheckListPanel().setTitle(standardizedRole.getCheckList().getTitle());
 												//((RoleEditCheckListSubViewImpl)checkListView).title.setValue("ABC");//spec
+												((RoleEditViewImpl)view).topicFactor.setValue(standardizedRole.getTopicFactor());
 												
 												save();
 												return;

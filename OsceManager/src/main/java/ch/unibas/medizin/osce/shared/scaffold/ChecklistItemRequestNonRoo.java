@@ -24,7 +24,7 @@ public interface ChecklistItemRequestNonRoo  extends RequestContext{
 	
 	public abstract Request<ChecklistItemProxy> saveChecklistTabItem(String name, String description, Long standardizedRoleId);
 	
-	public abstract Request<ChecklistItemProxy> saveChecklistTopicItem(String name, String description, Long parentTabItemId);
+	public abstract Request<ChecklistItemProxy> saveChecklistTopicItem(String name, String description, Long parentTabItemId, Double weight);
 	
 	public abstract Request<ChecklistItemProxy> saveChecklistQuestionItem(String name, String description, Boolean isOverallQue, OptionType optionType, Long parentTopicItemId);
 	

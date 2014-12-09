@@ -20,6 +20,7 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.ItemType;
+import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
@@ -190,6 +191,13 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	
 	@UiField
 	Label labelOtherCriteria;
+	
+	@UiField
+	public SpanElement labelTopicFactor;
+	
+	@UiField
+	public SpanElement topicFactor;
+	
 
 	// Temp Fields
 
@@ -564,6 +572,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		labelSum.setInnerText(constants.sum() + ":");
 		
 		labelOtherCriteria.setText(constants.furtherCriteria());
+		labelTopicFactor.setInnerText("Topic factor");
 	}
 
 	@UiHandler("previous")
@@ -922,6 +931,8 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 			final ChecklistiOSCEPopupViewImpl popupViewImpl = new ChecklistiOSCEPopupViewImpl();
 			popupViewImpl.getItemTypeBox().setValue(ItemType.TAB);
 			popupViewImpl.setPopupStyle(ItemType.TAB);
+			popupViewImpl.getItemTypeBox().getElement().setAttribute("disabled", "true");
+			popupViewImpl.topicFactorBox.setVisible(false);
 			popupViewImpl.getSaveBtn().addClickHandler(new ClickHandler() {
 				
 				@Override

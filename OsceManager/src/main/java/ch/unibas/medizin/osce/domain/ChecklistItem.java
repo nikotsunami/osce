@@ -57,6 +57,8 @@ public class ChecklistItem {
 	@ManyToOne
 	private ChecklistItem parentItem;
 	
+	private Double weight; 
+	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "checklistItem")
 	@OrderBy("sequenceNumber")
     private List<ChecklistOption> checkListOptions = new ArrayList<ChecklistOption>();
@@ -216,7 +218,7 @@ public class ChecklistItem {
 		return true;
 	}
 	
-	public static ChecklistItem saveChecklistTopicItem(String name, String description, Long parentTabItemId) {
+	public static ChecklistItem saveChecklistTopicItem(String name, String description, Long parentTabItemId, Double weight) {
 		ChecklistItem parentItem = ChecklistItem.findChecklistItem(parentTabItemId);
 		Integer seqNumber = findMaxSequenceNumberByParentItem(parentTabItemId);
 		
@@ -225,6 +227,7 @@ public class ChecklistItem {
 		checklistItem.setDescription(description);
 		checklistItem.setItemType(ItemType.TOPIC);
 		checklistItem.setSequenceNumber(seqNumber);
+		checklistItem.setWeight(weight);
 		checklistItem.setParentItem(parentItem);
 		checklistItem.persist();
 		

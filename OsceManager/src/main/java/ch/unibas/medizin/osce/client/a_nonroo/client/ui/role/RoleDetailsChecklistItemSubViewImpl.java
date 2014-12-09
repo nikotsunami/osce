@@ -515,6 +515,7 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 			@Override
 			public void onClick(ClickEvent event) {
 				dialogBox.hide();
+				System.out.println("checklist item id :::" + checklistItemProxy.getId());
 				delegate.deleteChecklistQuestionClicked(RoleDetailsChecklistItemSubViewImpl.this, checklistItemProxy);
 			}
 		});
@@ -525,6 +526,10 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 	public void editQuestionClicked(ClickEvent e) {
 		final ChecklistiOSCEPopupViewImpl popupViewImpl = new ChecklistiOSCEPopupViewImpl();
 		popupViewImpl.getItemTypeBox().setValue(ItemType.QUESTION);
+		popupViewImpl.topicFactorBox.setVisible(false);
+		popupViewImpl.topicFactorLbl.setVisible(false);
+		popupViewImpl.getItemTypeBox().getElement().setAttribute("disabled", "true");
+		
 		popupViewImpl.setPopupStyle(ItemType.TOPIC);
 		popupViewImpl.createQuestionPopup();
 		if (checklistItemProxy != null) {

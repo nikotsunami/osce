@@ -11,6 +11,8 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -77,6 +79,12 @@ public class ChecklistiOSCEPopupViewImpl extends PopupPanel {
 	CheckBox isOverallQuestionChkBox;
 	
 	@UiField
+	Label topicFactorLbl;
+	
+	@UiField
+	TextBox topicFactorBox;
+	
+	@UiField
 	DivElement arrowBorder;
 	
 	@UiField
@@ -106,10 +114,16 @@ public class ChecklistiOSCEPopupViewImpl extends PopupPanel {
 				if (ItemType.QUESTION.equals(itemTypeBox.getValue())) {
 					optionTypeHp.getElement().getStyle().clearDisplay();
 					isOverallQueHp.getElement().getStyle().clearDisplay();
+					topicFactorBox.getElement().getStyle().setDisplay(Display.NONE);
+					topicFactorLbl.getElement().getStyle().setDisplay(Display.NONE);
+				
 				}
 				else {
 					optionTypeHp.getElement().getStyle().setDisplay(Display.NONE);
 					isOverallQueHp.getElement().getStyle().setDisplay(Display.NONE);
+					topicFactorBox.getElement().getStyle().clearDisplay();
+					topicFactorLbl.getElement().getStyle().clearDisplay();
+				
 				}
 			}
 		});*/
@@ -161,6 +175,14 @@ public class ChecklistiOSCEPopupViewImpl extends PopupPanel {
 	
 	public ValueListBox<ItemType> getItemTypeBox() {
 		return itemTypeBox;
+	}
+	
+	public TextBox getTopicFactorBox() {
+		return topicFactorBox;
+	}
+	
+	public Label getTopicFactorLbl() {
+		return topicFactorLbl;
 	}
 	
 	public void setDownArrowStyle() {

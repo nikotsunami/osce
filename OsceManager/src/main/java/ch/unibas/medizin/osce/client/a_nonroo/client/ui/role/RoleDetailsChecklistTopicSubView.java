@@ -17,7 +17,7 @@ public interface RoleDetailsChecklistTopicSubView extends IsWidget {
 
 		void deleteTopicClicked(RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl, ChecklistItemProxy checklistItemProxy);
 
-		void updateChecklistTopic(ItemType itemType, String name, String description, RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl, ChecklistItemProxy checklistItemProxy);
+		void updateChecklistTopic(ItemType itemType, String name, String description, RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl, ChecklistItemProxy checklistItemProxy, String weight);
 
 		void createImportQuestionPopUp(IconButton importSectionButton,Long topicId);
 	}

@@ -63,6 +63,7 @@ import ch.unibas.medizin.osce.server.util.qrcode.Encryptor;
 import ch.unibas.medizin.osce.server.util.qrcode.QRCodePlist;
 import ch.unibas.medizin.osce.server.util.qrcode.QRCodeUtil;
 import ch.unibas.medizin.osce.shared.QRCodeType;
+import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
@@ -136,6 +137,9 @@ public class StandardizedRole {
 
 	private Integer subVersion;
 	
+	@Enumerated
+	private RoleTopicFactor topicFactor;
+	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
 	private Set<RoleParticipant> roleParticipants = new HashSet<RoleParticipant>();
 
@@ -178,6 +182,7 @@ public class StandardizedRole {
 	@OneToOne
 	private RoleTemplate roleTemplate;
 
+	
 
 	public static boolean copyStandardizedRole(Long standardizedRoleId) {
 		   

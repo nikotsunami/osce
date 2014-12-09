@@ -3,9 +3,11 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.role;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistItemProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.ItemType;
+import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
@@ -69,12 +71,15 @@ public class RoleDetailsChecklistTopicSubViewImpl extends Composite implements R
 	
 	private ChecklistItemProxy checklistItemProxy;
 	
-	public RoleDetailsChecklistTopicSubViewImpl() {
+	private StandardizedRoleProxy roleProxy;
+	
+	public RoleDetailsChecklistTopicSubViewImpl(StandardizedRoleProxy standardizedRoleProxy) {
 		initWidget(uiBinder.createAndBindUi(this));
 		/*addCheckListSectionButton.setText(constants.addCheckListTopic());
 		importSectionButton.setText(constants.importTopic());
 		addCheckListSectionButton.addStyleName("expTopicButton");
 		importSectionButton.addStyleName("expTopicButton");*/
+		this.roleProxy= standardizedRoleProxy;
 	}
 	
 	public VerticalPanel getContainerVerticalPanel() {
@@ -138,6 +143,7 @@ public class RoleDetailsChecklistTopicSubViewImpl extends Composite implements R
 		popupViewImpl.getItemTypeBox().setValue(ItemType.QUESTION);
 		popupViewImpl.setPopupStyle(ItemType.TOPIC);
 		popupViewImpl.createQuestionPopup();
+		popupViewImpl.getTopicFactorBox().setVisible(false);
 		popupViewImpl.getSaveBtn().addClickHandler(new ClickHandler() {
 			
 			@Override
@@ -181,9 +187,23 @@ public class RoleDetailsChecklistTopicSubViewImpl extends Composite implements R
 		final ChecklistiOSCEPopupViewImpl popupViewImpl = new ChecklistiOSCEPopupViewImpl();
 		popupViewImpl.getItemTypeBox().setValue(ItemType.TOPIC);
 		popupViewImpl.setPopupStyle(ItemType.TOPIC);
+		
+		popupViewImpl.getItemTypeBox().getElement().setAttribute("disabled", "true");
+		
+		if(roleProxy.getTopicFactor() != null){
+			if(roleProxy.getTopicFactor().equals(RoleTopicFactor.WEIGHT)){
+				popupViewImpl.getTopicFactorLbl().setText("Weight");//TODO
+			}else if(roleProxy.getTopicFactor().equals(RoleTopicFactor.RATIO)){
+				popupViewImpl.getTopicFactorLbl().setText("Ratio(in %)");
+			}else{
+				popupViewImpl.getTopicFactorLbl().setVisible(false);
+				popupViewImpl.getTopicFactorBox().setVisible(false);
+			}
+		}
 		if (checklistItemProxy != null) {
 			popupViewImpl.getNameTextBox().setValue(checklistItemProxy.getName());
 			popupViewImpl.getDescriptionTextArea().setValue(checklistItemProxy.getDescription());
+			popupViewImpl.getTopicFactorBox().setValue(String.valueOf(checklistItemProxy.getWeight()));
 		}
 		
 		popupViewImpl.getSaveBtn().addClickHandler(new ClickHandler() {
@@ -192,7 +212,7 @@ public class RoleDetailsChecklistTopicSubViewImpl extends Composite implements R
 			public void onClick(ClickEvent event) {
 				popupViewImpl.hide();
 				if (validateField(popupViewImpl.getNameTextBox().getValue())) {
-					delegate.updateChecklistTopic(popupViewImpl.getItemTypeBox().getValue(), popupViewImpl.getNameTextBox().getValue(), popupViewImpl.getDescriptionTextArea().getValue(), RoleDetailsChecklistTopicSubViewImpl.this, checklistItemProxy);
+					delegate.updateChecklistTopic(popupViewImpl.getItemTypeBox().getValue(), popupViewImpl.getNameTextBox().getValue(), popupViewImpl.getDescriptionTextArea().getValue(), RoleDetailsChecklistTopicSubViewImpl.this, checklistItemProxy, popupViewImpl.getTopicFactorBox().getValue());
 					popupViewImpl.getNameTextBox().setValue("");
 					popupViewImpl.getDescriptionTextArea().setValue("");
 				} else {

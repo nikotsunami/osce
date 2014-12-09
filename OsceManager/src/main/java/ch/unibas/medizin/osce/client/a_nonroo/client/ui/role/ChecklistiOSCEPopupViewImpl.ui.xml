@@ -38,6 +38,12 @@
 			<g:CheckBox ui:field="isOverallQuestionChkBox"></g:CheckBox>
 		</g:HorizontalPanel>
 		
+		<g:HorizontalPanel spacing="3" verticalAlignment="ALIGN_MIDDLE">
+			<g:Label ui:field="topicFactorLbl" width="75px"></g:Label>
+			<g:TextBox ui:field="topicFactorBox" width="180px"></g:TextBox>
+		</g:HorizontalPanel>
+		
+		
 		<g:VerticalPanel width="100%" horizontalAlignment="ALIGN_CENTER">
 			<g:HorizontalPanel spacing="3">
 				<s:IconButton ui:field="saveBtn" icon="disk"></s:IconButton>

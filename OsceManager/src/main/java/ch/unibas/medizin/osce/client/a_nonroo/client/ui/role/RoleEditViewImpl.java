@@ -16,6 +16,8 @@ import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
+import ch.unibas.medizin.osce.shared.BucketInfoType;
+import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -43,6 +45,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<StandardizedRoleProxy> {
@@ -90,6 +93,8 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 	@UiField(provided = true)
 	public ListBox factor=new ListBox();
 	
+	@UiField(provided = true)
+	public FocusableValueListBox<RoleTopicFactor> topicFactor = new FocusableValueListBox<RoleTopicFactor>(new EnumRenderer<RoleTopicFactor>());
 	
 	public StandardizedRoleProxy getStandardizedRoleProxy() {
 		return standardizedRoleProxy;
@@ -166,6 +171,11 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 	SpanElement labelstudyYear;
 	
 	@UiField
+	SpanElement	topicFactorLbl;
+	
+	
+	
+	@UiField
 	IconButton cancel;
 	@UiField
 	IconButton save;
@@ -200,7 +210,8 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 		
 		rolePanel.selectTab(0);
 		roleDetailPanel.selectTab(0);
-		
+		topicFactor.setValue(RoleTopicFactor.WEIGHT);
+		topicFactor.setAcceptableValues(Arrays.asList(RoleTopicFactor.values()));
 		// Highlight onViolation
 		for(int i=1;i<=5;i++)
 		{
@@ -223,7 +234,7 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 		standardizedRoleMap.put("active", active);
 		standardizedRoleMap.put("factor", factor);
 		standardizedRoleMap.put("sum", sum);
-		
+		standardizedRoleMap.put("topicFactor", topicFactor);
 		
 		// E Highlight onViolation
 		
@@ -244,6 +255,7 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 		labelActive.setInnerText(constants.roleActive());
 		labelSum.setInnerText(constants.sum());
 		labelFactor.setInnerText(constants.factor());
+		topicFactorLbl.setInnerText("Topic factor");
 	}
 	
 	public void setCreating(boolean creating) {
