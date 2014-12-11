@@ -227,7 +227,7 @@ public class ChecklistItem {
 		checklistItem.setDescription(description);
 		checklistItem.setItemType(ItemType.TOPIC);
 		checklistItem.setSequenceNumber(seqNumber);
-		checklistItem.setWeight(weight);
+		checklistItem.setWeight(weight==null?0:weight);
 		checklistItem.setParentItem(parentItem);
 		checklistItem.persist();
 		
@@ -750,5 +750,18 @@ public class ChecklistItem {
 		}
 		return checklistImportPojoList;
 		
+	}
+	
+	public static Double findMaxTopicWeight(Long checklistId){
+
+		List<ChecklistItem> topics = findChecklistTopicByChecklist(checklistId);
+		Double sum=0.0;
+		for (ChecklistItem topic : topics) {
+			
+			if(topic.getWeight() != null){
+				sum += topic.getWeight();
+			}
+		}
+		return sum;
 	}
 }

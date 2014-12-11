@@ -255,7 +255,7 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 		labelActive.setInnerText(constants.roleActive());
 		labelSum.setInnerText(constants.sum());
 		labelFactor.setInnerText(constants.factor());
-		topicFactorLbl.setInnerText("Topic factor");
+		topicFactorLbl.setInnerText(constants.topicFactor());
 	}
 	
 	public void setCreating(boolean creating) {

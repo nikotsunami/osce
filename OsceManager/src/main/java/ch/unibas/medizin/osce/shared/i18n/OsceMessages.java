@@ -9,4 +9,6 @@ public interface OsceMessages extends Messages {
 	public String selectedMultipleConsecutiveDays(int days);
 	
 	public String trainingOverlapingMsg(String startime,String endTime);
+
+	public String topicFactorMustBeNumeric(String string);
 }

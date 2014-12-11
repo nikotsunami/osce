@@ -172,6 +172,7 @@ import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceMessages;
 
 import com.allen_sauer.gwt.dnd.client.DragEndEvent;
 import com.allen_sauer.gwt.dnd.client.DragHandler;
@@ -400,6 +401,8 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		 
 		 private List<LearningObjectiveData> learningObjectiveData = new ArrayList<LearningObjectiveData>();
 		 private LearningObjectiveData learningObjective;
+		 private final OsceMessages osceMessages = GWT.create(OsceMessages.class);
+			
 		 
 		 String temp = "";
 
@@ -8073,8 +8076,18 @@ public void onDragStart(DragStartEvent event) {
 				checklistTopicSubView = new RoleDetailsChecklistTopicSubViewImpl(standardizedRoleProxy);
 				checklistTopicSubView.setChecklistItemProxy(topicProxy);
 				checklistTopicSubView.setDelegate(this);
-				checklistTopicSubView.getCheckListTopicLbl().setText(name);
-				checklistTopicSubView.getDescriptionLbl().setText(description);
+				if (name.length() > 40) {
+					checklistTopicSubView.getCheckListTopicLbl().setText(name.substring(0, 40) + "...");
+				} else {
+					checklistTopicSubView.getCheckListTopicLbl().setText(name);
+				}
+				if (description.length() > 50) {
+					checklistTopicSubView.getDescriptionLbl().setText(description.substring(0, 50) + "...");
+				} else {
+					checklistTopicSubView.getDescriptionLbl().setText(description);
+				}
+				//checklistTopicSubView.getCheckListTopicLbl().setText(name);
+				//checklistTopicSubView.getDescriptionLbl().setText(description);
 				containerVerticalPanel.add(checklistTopicSubView);
 			}
 			
@@ -8166,17 +8179,75 @@ public void onDragStart(DragStartEvent event) {
 		}
 
 		@Override
-		public void addiOSCECheckListTopicClicked(ItemType itemType, final String name, final String description, final RoleDetailsChecklistTabSubViewImpl roleDetailsChecklistTabSubViewImpl, ChecklistItemProxy tabProxy, String weight) {
-			Double topicWeight= weight==""?0:Double.valueOf(weight);
-			requests.checklistItemRequestNonRoo().saveChecklistTopicItem(name, description, tabProxy.getId(),topicWeight).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
+		public void addiOSCECheckListTopicClicked(ItemType itemType, final String name, final String description, final RoleDetailsChecklistTabSubViewImpl roleDetailsChecklistTabSubViewImpl, final ChecklistItemProxy tabProxy, final String weight) {
+		
+			final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+			
+			
+			if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.WEIGHT)){
+					if(isDouble(weight) == true){
+						
+						final Double topicWeight= weight==""?0:Double.valueOf(weight);
+					    requests.checklistItemRequestNonRoo().saveChecklistTopicItem(name, description, tabProxy.getId(),topicWeight).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
-				@Override
-				public void onSuccess(ChecklistItemProxy response) {
-					createTopicView(roleDetailsChecklistTabSubViewImpl.getContainerVerticalPanel(), name, description, response);
-				}
-			});
+						@Override
+						public void onSuccess(ChecklistItemProxy response) {
+							createTopicView(roleDetailsChecklistTabSubViewImpl.getContainerVerticalPanel(), name, description, response);
+							}
+					    });
+					}else
+					{
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric("Weight"));	
+					}
+				}else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.RATIO)){
+					requests.checklistItemRequestNonRoo().findMaxTopicWeight(standardizedRoleProxy.getCheckList().getId()).fire(new OSCEReceiver<Double>() {
+
+						@Override
+						public void onSuccess(Double response) {
+							
+							if(response != null && response <100){
+								if(isDouble(weight) == true){
+									
+									final Double topicWeight= weight==""?0:Double.valueOf(weight);
+									if((topicWeight  + response) > 100){
+										MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+										dialogBox.showConfirmationDialog(constants.ratioExceedError());	
+									}else{
+									requests.checklistItemRequestNonRoo().saveChecklistTopicItem(name, description, tabProxy.getId(),topicWeight).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+										@Override
+										public void onSuccess(ChecklistItemProxy response) {
+											createTopicView(roleDetailsChecklistTabSubViewImpl.getContainerVerticalPanel(), name, description, response);
+										}
+									});
+						
+								}
+							}else {
+								MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+								dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric("Ratio"));	
+							}
+						}else{
+							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+							dialogBox.showConfirmationDialog(constants.ratioExceedError());
+						}
+					}
+				});
+				
+			}else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.NONE)){
+				
+				requests.checklistItemRequestNonRoo().saveChecklistTopicItem(name, description, tabProxy.getId(),null).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+					@Override
+					public void onSuccess(ChecklistItemProxy response) {
+						createTopicView(roleDetailsChecklistTabSubViewImpl.getContainerVerticalPanel(), name, description, response);
+					}
+				});
+			}
+		
 		}
-
+		
 		@Override
 		public void addiOsceChecklistQuestionClicked(ItemType itemType, final String name, final String description, Boolean isOverallQuestion, OptionType optionType, final RoleDetailsChecklistTopicSubViewImpl checklistTopicSubViewImpl, ChecklistItemProxy checklistTopicProxy) { 
 			requests.checklistItemRequestNonRoo().saveChecklistQuestionItem(name, description, isOverallQuestion, optionType, checklistTopicProxy.getId()).with("").fire(new OSCEReceiver<ChecklistItemProxy>() {
@@ -8308,24 +8379,140 @@ public void onDragStart(DragStartEvent event) {
 			});
 		}
 
+		/*
+		 *In this method, if topic factor for role is weight then checklist topic could be added 
+		 *with any value of weight. But if topic factor is ratio, then sum of ratio of all topics
+		 *must not exceed 100. 
+		 */
 		@Override
-		public void updateChecklistTopic(ItemType itemType, final String name, final String description, final RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl, ChecklistItemProxy checklistItemProxy, String weight) {
-			ChecklistItemRequest checklistItemRequest = requests.checklistItemRequest();
-			final ChecklistItemProxy proxy = checklistItemRequest.edit(checklistItemProxy);
-			proxy.setName(name);
-			proxy.setDescription(description);
-			proxy.setWeight(weight =="" ? 0 :Double.valueOf(weight));
+		public void updateChecklistTopic(ItemType itemType, final String name, final String description, final RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl, final ChecklistItemProxy checklistItemProxy, String weight) {
+						
+			final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+			final String topicFactor = RoleTopicFactor.values()[standardizedRoleProxy.getTopicFactor().ordinal()].toString();
+				
 			
-			checklistItemRequest.persist().using(checklistItemProxy).fire(new OSCEReceiver<Void>() {
-
-				@Override
-				public void onSuccess(Void response) {
-					roleDetailsChecklistTopicSubViewImpl.setChecklistItemProxy(proxy);
-					roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);          
-					roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);      
+				
+			if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.WEIGHT)){
+				if(isDouble(weight) == true){
+					ChecklistItemRequest checklistItemRequest = requests.checklistItemRequest();
+					final ChecklistItemProxy proxy = checklistItemRequest.edit(checklistItemProxy);
 					
+					proxy.setName(name);
+					proxy.setDescription(description);
+					proxy.setWeight(weight =="" ? 0 :Double.valueOf(weight));
+			
+					System.out.println("proxy id " + proxy.getId());
+					checklistItemRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+
+						@Override
+						public void onSuccess(Void response) {
+							System.out.println("proxy" + proxy.getWeight());
+							roleDetailsChecklistTopicSubViewImpl.setChecklistItemProxy(proxy);
+							if (name.length() > 40) {
+								roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name.substring(0, 40) + "...");
+								
+							} else {
+								roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);
+							}
+							if (description.length() > 50) {
+								roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description.substring(0, 50) + "...");
+							} else {
+								roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);
+							}
+							//roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);          
+							//roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);      
+							
+						}
+					});
+				 } else {
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric("Weight"));	
 				}
-			});
+					
+				} else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.RATIO)){
+				
+				if(isDouble(weight) == true){
+						final Double topicWeight= weight==""?0:Double.valueOf(weight);
+						final ChecklistItemRequest checklistItemRequest = requests.checklistItemRequest();
+						final ChecklistItemProxy proxy = checklistItemRequest.edit(checklistItemProxy);
+						
+						proxy.setName(name);
+						proxy.setDescription(description);
+						proxy.setWeight(weight =="" ? 0 :Double.valueOf(weight));
+						
+						requests.checklistItemRequestNonRoo().findMaxTopicWeight(standardizedRoleProxy.getCheckList().getId()).fire(new OSCEReceiver<Double>() {
+
+							@Override
+							public void onSuccess(Double response) {
+								
+								if(response != null && response <100){
+									
+									if((topicWeight  + response) > 100){
+										MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+										dialogBox.showConfirmationDialog(constants.ratioExceedError());	
+									}else{
+										checklistItemRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+
+											@Override
+											public void onSuccess(Void response) {
+												roleDetailsChecklistTopicSubViewImpl.setChecklistItemProxy(proxy);
+												if (name.length() > 50) {
+													roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name.substring(0, 50) + "...");
+												} else {
+													roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);
+												}
+												if (description.length() > 50) {
+													roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description.substring(0, 50) + "...");
+												} else {
+													roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);
+												}
+												//roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);          
+												//roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);      
+												
+											}
+										});
+							
+									}
+								}else{
+									MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+									dialogBox.showConfirmationDialog(constants.ratioExceedError());	
+								}
+							}
+						});
+					} else {
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric("Ratio"));	
+					}
+				
+			       }else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.NONE)){
+			    	   ChecklistItemRequest checklistItemRequest = requests.checklistItemRequest();
+			    	   final ChecklistItemProxy proxy = checklistItemRequest.edit(checklistItemProxy);
+						
+			    	   proxy.setName(name);
+			    	   proxy.setDescription(description);
+						
+			    	   checklistItemRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+
+							@Override
+							public void onSuccess(Void response) {
+								roleDetailsChecklistTopicSubViewImpl.setChecklistItemProxy(proxy);
+								if (name.length() > 50) {
+									roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name.substring(0, 50) + "...");
+								} else {
+									roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);
+								}
+								if (description.length() > 50) {
+									roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description.substring(0, 50) + "...");
+								} else {
+									roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);
+								}
+								//roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);          
+								//roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);      
+								
+							}
+						});
+			       }
 		}
 		
 		@Override
@@ -8757,6 +8944,23 @@ public void onDragStart(DragStartEvent event) {
 				}
 			 });
 		}
+		 public static boolean isDouble(String value) {
+
+			  try  
+			  {  
+				  Double.parseDouble(value);  
+			  }  
+			  catch(NumberFormatException nfe)  
+			  {  
+			    return false;  
+			  }  
+			  catch (Exception e) {
+				  return false;
+			  }
+			  
+			  return true;  
+		}
+
 }
 
 	

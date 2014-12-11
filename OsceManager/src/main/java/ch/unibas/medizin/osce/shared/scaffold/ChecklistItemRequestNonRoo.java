@@ -51,4 +51,6 @@ public interface ChecklistItemRequestNonRoo  extends RequestContext{
 	public abstract Request<List<ChecklistImportPojoValueProxy>> findChecklistQuestionByTopicId(Long topicId);
 	
 	public abstract Request<List<ChecklistItemProxy>> importChecklistQuestionsForTopic(Long selectedTopicId, Long selectedRole, Long questionId, Long topicId);
+
+	public abstract Request<Double> findMaxTopicWeight(Long checklistId);
 }

@@ -7,10 +7,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -42,11 +44,13 @@ import ch.unibas.medizin.osce.domain.PostAnalysis;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.server.CalculateCronbachValue;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
+import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 
 public class ExportStatisticData extends HttpServlet{
 
 	
 	private static Logger Log = Logger.getLogger(UploadServlet.class);
+	private static Double Double;
 	
 	
 	  @Override
@@ -153,6 +157,9 @@ public class ExportStatisticData extends HttpServlet{
 			 List<String> postShortNameList = new ArrayList<String>();
 			 List<String> postLongNameList = new ArrayList<String>();
 			 List<String> postPassMarkList = new ArrayList<String>();
+			 List<String> postIdList = new ArrayList<String>();
+			 List<String> postWeightList = new ArrayList<String>();
+			 List<String> postRatioList = new ArrayList<String>();
 			 
 				
 			 for(int i=0;i<osceDays.size();i++)
@@ -172,6 +179,7 @@ public class ExportStatisticData extends HttpServlet{
 						noOfOscePost = noOfOscePost + 1;
 						String postFileName;
 						
+						postIdList.add(oscePost.getId().toString());
 						if (oscePost.getStandardizedRole() != null)
 						{
 							postFileName = oscePost.getStandardizedRole().getShortName() + "_" + osceSeq.getLabel() +".csv";
@@ -186,6 +194,18 @@ public class ExportStatisticData extends HttpServlet{
 							
 							postShortNameList.add(oscePost.getStandardizedRole().getShortName());
 							postLongNameList.add(oscePost.getStandardizedRole().getLongName());
+							if (RoleTopicFactor.WEIGHT.equals(oscePost.getStandardizedRole().getTopicFactor())) {
+								postWeightList.add(Boolean.TRUE.toString());
+								postRatioList.add(Boolean.FALSE.toString());
+							}
+							else if (RoleTopicFactor.RATIO.equals(oscePost.getStandardizedRole().getTopicFactor())) {
+								postWeightList.add(Boolean.FALSE.toString());
+								postRatioList.add(Boolean.TRUE.toString());
+							}
+							else {
+								postWeightList.add(Boolean.FALSE.toString());
+								postRatioList.add(Boolean.FALSE.toString());
+							}
 						}
 						else
 						{
@@ -193,6 +213,8 @@ public class ExportStatisticData extends HttpServlet{
 							fileName = "Day"+ (i+1) + "_" + ("P"+noOfOscePost) + "_" + "post" + oscePost.getId() + "_" + osceSeq.getLabel();
 							postShortNameList.add("");
 							postLongNameList.add("");
+							postWeightList.add(Boolean.FALSE.toString());
+							postRatioList.add(Boolean.FALSE.toString());
 						}
 								
 						postFileNameList.add(fileName);
@@ -229,11 +251,17 @@ public class ExportStatisticData extends HttpServlet{
 			 
 			 writer.write("posts$filenames <- c(\"" + StringUtils.join(postFileNameList, "\",\"") + "\")");
 			 writer.write("\n");
+			 writer.write("posts$id <- c(\"" + StringUtils.join(postIdList, "\",\"") + "\")");
+			 writer.write("\n");
 			 writer.write("posts$short.names <- c(\"" + StringUtils.join(postShortNameList, "\",\"") + "\")");
 			 writer.write("\n");
 			 writer.write("posts$long.names <- c(\"" + StringUtils.join(postLongNameList, "\",\"") + "\")");
 			 writer.write("\n");
 			 writer.write("posts$passmark <- c(\"" + StringUtils.join(postPassMarkList, "\",\"") + "\")");
+			 writer.write("\n");
+			 writer.write("posts$part <- c(\"" + StringUtils.join(postRatioList, "\",\"") + "\")");
+			 writer.write("\n");
+			 writer.write("posts$weight <- c(\"" + StringUtils.join(postWeightList, "\",\"") + "\")");
 			 writer.write("\n");
 			
 			 writer.write("posts <- as.data.frame(posts)");
@@ -777,9 +805,41 @@ public class ExportStatisticData extends HttpServlet{
 								    writer.close();
 									
 								}
-								
+								Map<Long, Double> topicWiseRatioMap = new HashMap<Long, Double>();
 								if(k==4)// Item file (id, item_text, points (example 0|1|2.5|3), is_eval_item, weight)
 								{
+									if (oscePost.getStandardizedRole() != null && RoleTopicFactor.RATIO.equals(oscePost.getStandardizedRole().getTopicFactor()) && oscePost.getStandardizedRole().getCheckList() != null) {
+										Double totalPoints = 0.0; 
+										CheckList checkList = oscePost.getStandardizedRole().getCheckList();
+										List<ChecklistItem> checklistTopicItemList = ChecklistItem.findChecklistTopicByChecklist(checkList.getId());
+										Map<Long, Double> topicWiseMaxPoint = new HashMap<Long, Double>();
+										
+										for (ChecklistItem checklistTopicItem : checklistTopicItemList) {
+											Double totalTopicPoints = 0.0;
+											List<ChecklistItem> checklistQuestionItemList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistTopicItem.getId());
+											
+											for (ChecklistItem checklistQuestionItem : checklistQuestionItemList) {
+												int maxOptionVal = ChecklistOption.findMaxOptionValueByQuestionId(checklistQuestionItem.getId());
+												totalTopicPoints += maxOptionVal;
+											}
+											
+											totalPoints += totalTopicPoints;
+											topicWiseMaxPoint.put(checklistTopicItem.getId(), totalTopicPoints);
+											System.out.println("total topic points" + totalTopicPoints);
+											System.out.println("total  points" + totalPoints);
+											
+										}
+										
+										for (Entry<Long, java.lang.Double> entry : topicWiseMaxPoint.entrySet()) {
+											Double topicsRatio = entry.getValue()/totalPoints;
+
+											topicWiseRatioMap.put(entry.getKey(), topicsRatio);
+											System.out.println("topic ratio map :" + topicWiseRatioMap);
+
+										}
+									
+									}				
+									
 									FileWriter writer = new FileWriter(fileName);
 									writer.append("id");
 									writer.append('|');
@@ -803,6 +863,10 @@ public class ExportStatisticData extends HttpServlet{
 									//for(ChecklistQuestion d:items)
 									for(ChecklistItem d:items)
 									{
+										if (d.getId().equals(337l)) {
+											System.out.println("TEST" + d.getParentItem().getWeight() ==null? "no weight" : d.getParentItem().getWeight());
+										}
+										
 										if (postMissingQueList.contains(d.getId()) == false)
 										{
 											writer.append(d.getId().toString());
@@ -834,9 +898,31 @@ public class ExportStatisticData extends HttpServlet{
 											double average=StatUtils.mean(pointList);
 											
 											double weight = 0.0;
-											if (NumberUtils.isNumber(String.valueOf(maxPoint)) && NumberUtils.isNumber(String.valueOf(average)))
+											/*if (NumberUtils.isNumber(String.valueOf(maxPoint)) && NumberUtils.isNumber(String.valueOf(average)))
 											{
 												weight=Answer.roundTwoDecimals(Answer.percentage(average, maxPoint));
+											}*/
+											
+											if (oscePost.getStandardizedRole() != null) {
+												if (RoleTopicFactor.RATIO.equals(oscePost.getStandardizedRole().getTopicFactor())) {
+													
+													if(topicWiseRatioMap.containsKey(d.getParentItem().getId())){
+														Double  ratio= topicWiseRatioMap.get(d.getParentItem().getId());
+														if(d.getParentItem().getWeight() != null) {
+															weight =(d.getParentItem().getWeight() / 100) * ratio;	
+														}
+														
+												 }
+													
+												}
+												else if (RoleTopicFactor.WEIGHT.equals(oscePost.getStandardizedRole().getTopicFactor())) {
+													if (d.getParentItem() != null && d.getParentItem().getWeight() != null) {
+														weight = d.getParentItem().getWeight();
+													}
+												}
+											}
+											if (d.getId().equals(202l)) {
+												System.out.println(weight);
 											}
 											
 											writer.append(points);

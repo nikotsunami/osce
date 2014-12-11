@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
@@ -186,5 +187,16 @@ public class ChecklistOption implements Comparable<ChecklistOption> {
  		}
  		
  		return null;
+ 	}
+ 	public static int findMaxOptionValueByQuestionId(Long questionId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT MAX(c.value) FROM ChecklistOption c WHERE c.checklistItem.id = " + questionId;
+		Query query = em.createQuery(sql);
+		
+		if (query.getResultList() != null && query.getResultList().size() > 0 && query.getResultList().get(0) != null)
+			return Integer.parseInt(query.getResultList().get(0).toString());
+		else
+			return 0;
+	
  	}
 }

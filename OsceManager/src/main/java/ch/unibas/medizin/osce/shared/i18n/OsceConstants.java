@@ -1769,7 +1769,9 @@ public interface OsceConstants extends Constants {
 	public String ratio();
 
 	public String topicFactor();
-	
+
+	public String ratioExceedError();
+
 }
 
 
