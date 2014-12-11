@@ -174,12 +174,15 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 	{
 		title = "";
 		try {
-			writer = PdfWriter.getInstance(document, os);
+			ByteArrayOutputStream pdfStream=new ByteArrayOutputStream();
+			List<String> files= new ArrayList<String>();
+			writer = PdfWriter.getInstance(document, pdfStream);
 			addMetaData();
 			document.open();
 			addHeader();			
 			document.add(new Chunk(constants.noDataFound()));
 			document.close();
+			createZipFile(pdfStream, os, files);
 		} catch (DocumentException e) {
 			log.error(e.getMessage(),e);
 		}

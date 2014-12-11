@@ -568,7 +568,7 @@ public class ChecklistItem {
 	}
 	
 	@Transactional
-	public ChecklistItem copyChecklistItem(ChecklistItem oldChecklistItem, ChecklistItem newItem) {
+	public static ChecklistItem copyChecklistItem(ChecklistItem oldChecklistItem, ChecklistItem newItem) {
 		ChecklistItem newChecklistItem = new ChecklistItem();
 		newChecklistItem.setName(oldChecklistItem.getName());
 		newChecklistItem.setDescription(oldChecklistItem.getDescription());

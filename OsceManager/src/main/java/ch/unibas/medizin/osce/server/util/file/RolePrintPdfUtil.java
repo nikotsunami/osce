@@ -22,15 +22,18 @@ import ch.unibas.medizin.osce.domain.RoleTableItem;
 import ch.unibas.medizin.osce.domain.RoleTableItemValue;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.UsedMaterial;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
 import ch.unibas.medizin.osce.shared.ItemDefination;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.html.simpleparser.HTMLWorker;
@@ -512,6 +515,8 @@ public class RolePrintPdfUtil extends PdfUtil {
 			} catch (DocumentException e) {
 				log.error("in PdfUtil.addDetails(): " + e.getMessage());
 			}
+		}
+		if(standardizedRole.getCheckList() != null){
 			createCheckListTabs(standardizedRole.getCheckList().getId());
 		}
 	}
@@ -568,7 +573,7 @@ public class RolePrintPdfUtil extends PdfUtil {
 					Chunk instructionChunk = null;
 					
 					if (question.getDescription() != null) {
-						instructionChunk = new Chunk(question.getDescription(), italicFont);						
+						instructionChunk = new Chunk(OsMaFilePathConstant.SPACING_QUESTION_DESCRIPTION + question.getDescription(), FontFactory.getFont(FontFactory.HELVETICA, 10, Font.ITALIC, new BaseColor(181,185,200)));						
 					}
 
 					if (question.getCheckListCriterias().size() > 0) {

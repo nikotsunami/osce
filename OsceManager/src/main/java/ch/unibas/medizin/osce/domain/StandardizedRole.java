@@ -278,7 +278,7 @@ public class StandardizedRole {
 		   return flag;
 	}
 	
-	private static CheckList copyChecklistItemFromOldRole(CheckList checkList) {
+	public static CheckList copyChecklistItemFromOldRole(CheckList checkList) {
 		
 		CheckList newChecklist = new CheckList();
 		newChecklist.setTitle(checkList.getTitle());

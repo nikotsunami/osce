@@ -572,7 +572,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		labelSum.setInnerText(constants.sum() + ":");
 		
 		labelOtherCriteria.setText(constants.furtherCriteria());
-		labelTopicFactor.setInnerText("Topic factor");
+		labelTopicFactor.setInnerText(constants.topicFactor());
 	}
 
 	@UiHandler("previous")

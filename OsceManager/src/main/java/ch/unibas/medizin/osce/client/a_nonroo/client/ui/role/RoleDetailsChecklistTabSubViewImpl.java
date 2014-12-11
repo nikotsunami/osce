@@ -125,9 +125,9 @@ public class RoleDetailsChecklistTabSubViewImpl extends Composite implements Rol
 		popupViewImpl.setPopupStyle(ItemType.TAB);
 		if(roleProxy.getTopicFactor() != null){
 			if(roleProxy.getTopicFactor().equals(RoleTopicFactor.WEIGHT)){
-				popupViewImpl.getTopicFactorLbl().setText("Weight");//TODO
+				popupViewImpl.getTopicFactorLbl().setText(constants.weight());
 			}else if(roleProxy.getTopicFactor().equals(RoleTopicFactor.RATIO)){
-				popupViewImpl.getTopicFactorLbl().setText("Ratio(in %)");
+				popupViewImpl.getTopicFactorLbl().setText(constants.ratio());
 			}else{
 				popupViewImpl.getTopicFactorLbl().setVisible(false);
 				popupViewImpl.getTopicFactorBox().setVisible(false);

@@ -192,9 +192,9 @@ public class RoleDetailsChecklistTopicSubViewImpl extends Composite implements R
 		
 		if(roleProxy.getTopicFactor() != null){
 			if(roleProxy.getTopicFactor().equals(RoleTopicFactor.WEIGHT)){
-				popupViewImpl.getTopicFactorLbl().setText("Weight");//TODO
+				popupViewImpl.getTopicFactorLbl().setText(constants.weight());
 			}else if(roleProxy.getTopicFactor().equals(RoleTopicFactor.RATIO)){
-				popupViewImpl.getTopicFactorLbl().setText("Ratio(in %)");
+				popupViewImpl.getTopicFactorLbl().setText(constants.ratio());
 			}else{
 				popupViewImpl.getTopicFactorLbl().setVisible(false);
 				popupViewImpl.getTopicFactorBox().setVisible(false);
@@ -203,7 +203,7 @@ public class RoleDetailsChecklistTopicSubViewImpl extends Composite implements R
 		if (checklistItemProxy != null) {
 			popupViewImpl.getNameTextBox().setValue(checklistItemProxy.getName());
 			popupViewImpl.getDescriptionTextArea().setValue(checklistItemProxy.getDescription());
-			popupViewImpl.getTopicFactorBox().setValue(String.valueOf(checklistItemProxy.getWeight()));
+			popupViewImpl.getTopicFactorBox().setValue(checklistItemProxy.getWeight() == null?"" :String.valueOf(checklistItemProxy.getWeight()));
 		}
 		
 		popupViewImpl.getSaveBtn().addClickHandler(new ClickHandler() {

@@ -225,4 +225,6 @@ public class OsMaFilePathConstant {
 	public static final String CERTIFICATE_ALIAS = "Test CA";
 	
 	public static final String SIGN_ALGO = "SHA256WithRSA";
+	
+	public static final String SPACING_QUESTION_DESCRIPTION ="  ";
 }

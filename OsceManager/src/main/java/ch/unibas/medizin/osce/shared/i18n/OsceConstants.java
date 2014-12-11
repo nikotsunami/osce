@@ -1765,6 +1765,11 @@ public interface OsceConstants extends Constants {
 	public String fetchFilesFromCloud();
 
 	public String backUpPeriodLengthError();
+
+	public String ratio();
+
+	public String topicFactor();
+	
 }
 
 
