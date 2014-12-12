@@ -1771,7 +1771,8 @@ public interface OsceConstants extends Constants {
 	public String topicFactor();
 
 	public String ratioExceedError();
-
+	
+	public String backUpPeriodMaxLengthError();
 }
 
 

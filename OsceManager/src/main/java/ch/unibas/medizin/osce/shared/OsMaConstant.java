@@ -70,4 +70,6 @@ public class OsMaConstant {
 	public static final int  QR_CODE_WIDTH = 400;
 	
 	public static final int  QR_CODE_HEIGHT = 400;
+	
+	public static final int BACK_UP_PERIOD_MAX_VALUE = 59; 
 }

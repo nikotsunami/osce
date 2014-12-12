@@ -160,7 +160,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		lblPointNxtExaminee.setInnerText(constants.pointNxtExaminee());
 		lblEncryptionType.setInnerText(constants.encryptionType());
 		lblSymmetricKey.setInnerText(constants.symmetricKey());
-		lblExamReviewMode.setInnerText(constants.examReviewMode());
+		//lblExamReviewMode.setInnerText(constants.examReviewMode());
 		lblPassword.setInnerText(constants.password());
 		lblSettingPaasword.setInnerText(constants.settingPassword());
 		labelOtherInfo.setInnerText(constants.otherInformation());
@@ -398,11 +398,11 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	@UiField
 	SpanElement symmetricKey;
 	
-	@UiField
+	/*@UiField
 	SpanElement lblExamReviewMode;
 	
 	@UiField
-	SpanElement examMode;
+	SpanElement examMode;*/
 	
 	@UiField
 	SpanElement lblUnit;
@@ -1228,11 +1228,11 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		encryptionType.setInnerText(enumConstants.getString(osceSettingsProxy.getEncryptionType().toString()));
 		symmetricKey.setInnerText(osceSettingsProxy.getSymmetricKey());
 		screenSaverText.setInnerText(osceSettingsProxy.getScreenSaverText());
-		if(osceSettingsProxy.getReviewMode()==null || !osceSettingsProxy.getReviewMode()) {
+		/*if(osceSettingsProxy.getReviewMode()==null || !osceSettingsProxy.getReviewMode()) {
 			examMode.setInnerHTML(OsMaConstant.UNCHECK_ICON.asString());
 		} else {
 			examMode.setInnerHTML(OsMaConstant.CHECK_ICON.asString());
-		}
+		}*/
 		screenSaverTime.setInnerText(String.valueOf(osceSettingsProxy.getScreenSaverTime() == null?"" :osceSettingsProxy.getScreenSaverTime()));
 
 		if(osceSettingsProxy.getAutoSelection()==null || !osceSettingsProxy.getAutoSelection()) {

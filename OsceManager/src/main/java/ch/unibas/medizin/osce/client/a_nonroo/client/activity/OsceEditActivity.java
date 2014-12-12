@@ -677,7 +677,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 				 proxy.setEncryptionType(((OsceEditViewImpl)view).encryptionType.getValue());
 				 proxy.setInfotype(((OsceEditViewImpl)view).bucketInfo.getValue());
 				 proxy.setSymmetricKey(((OsceEditViewImpl)view).symmetricKey.getValue());
-				 proxy.setReviewMode(((OsceEditViewImpl)view).examReviewMode.getValue());
+				 //proxy.setReviewMode(((OsceEditViewImpl)view).examReviewMode.getValue());
 				 proxy.setAutoSelection(((OsceEditViewImpl)view).autoSelection.getValue());
 				 proxy.setScreenSaverText(((OsceEditViewImpl)view).screenSaverText.getValue());
 				 if(((OsceEditViewImpl)view).screenSaverTime.getValue().equals("") == false){
@@ -719,7 +719,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 					proxy.setEncryptionType(((OsceEditViewImpl)view).encryptionType.getValue());
 					proxy.setInfotype(((OsceEditViewImpl)view).bucketInfo.getValue());
 					proxy.setSymmetricKey(((OsceEditViewImpl)view).symmetricKey.getValue());
-					proxy.setReviewMode(((OsceEditViewImpl)view).examReviewMode.getValue());
+					//proxy.setReviewMode(((OsceEditViewImpl)view).examReviewMode.getValue());
 					proxy.setScreenSaverText(((OsceEditViewImpl)view).screenSaverText.getValue());
 					if(((OsceEditViewImpl)view).screenSaverTime.getValue().equals("") == false){
 						Integer screenSaverTime= Integer.parseInt(((OsceEditViewImpl)view).screenSaverTime.getValue());

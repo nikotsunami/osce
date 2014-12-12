@@ -21,6 +21,7 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
 import ch.unibas.medizin.osce.shared.BucketInfoType;
 import ch.unibas.medizin.osce.shared.EncryptionType;
+import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.OsceCreationType;
 import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.StudyYears;
@@ -369,11 +370,11 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 	public TextBox symmetricKey;
 	
 	
-	@UiField
+	/*@UiField
 	DivElement lblExamReviewMode;
 	
 	@UiField
-	public CheckBox  examReviewMode;
+	public CheckBox  examReviewMode;*/
 	
 	@UiField
 	public DivElement lblScreenSaverText;
@@ -461,7 +462,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 		lblTimeUnit.setInnerText(constants.timeUnit());
 		lblEncryptionType.setInnerText(constants.encryptionType());
 		lblPointNxtExaminee.setInnerText(constants.pointNxtExaminee());
-		lblExamReviewMode.setInnerText(constants.examReviewMode());
+		//lblExamReviewMode.setInnerText(constants.examReviewMode());
 		lblSymmetricKey.setInnerText(constants.symmetricKey());
 		lblAutoSelection.setInnerText(constants.autoSelection());
 		lblScreenSaverTime.setInnerText(constants.screenSaverTime());
@@ -735,6 +736,9 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 			} else if(backUpPeriod.getValue().length() > 2){
 				backUpPeriod.addStyleName("higlight_onViolation");
 				errorMessage = constants.backUpPeriodLengthError();
+			}else if(Integer.parseInt(backUpPeriod.getValue()) > OsMaConstant.BACK_UP_PERIOD_MAX_VALUE){
+				backUpPeriod.addStyleName("higlight_onViolation");
+				errorMessage=constants.backUpPeriodMaxLengthError() + String.valueOf(OsMaConstant.BACK_UP_PERIOD_MAX_VALUE); 
 			}
 			else {
 				backUpPeriod.removeStyleName("higlight_onViolation");
@@ -996,7 +1000,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 		timeUnit.setValue(osceSettingsProxy.getTimeunit());
 		pointNextExaminee.setValue(osceSettingsProxy.getNextExaminee());
 		encryptionType.setValue(osceSettingsProxy.getEncryptionType());
-		examReviewMode.setValue(osceSettingsProxy.getReviewMode());
+		//examReviewMode.setValue(osceSettingsProxy.getReviewMode());
 		symmetricKey.setValue(osceSettingsProxy.getSymmetricKey());
 		screenSaverText.setValue(osceSettingsProxy.getScreenSaverText());
 		screenSaverTime.setValue(osceSettingsProxy.getScreenSaverTime()==null?"" :String.valueOf(osceSettingsProxy.getScreenSaverTime()));

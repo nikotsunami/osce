@@ -367,8 +367,8 @@
 							</tr>
 							
 							<tr height="10px">
-								<td><div class="{style.checkBoxlabel} {style.leftpadding10}" ui:field="lblExamReviewMode"></div></td>
-								<td><g:CheckBox ui:field="examReviewMode"></g:CheckBox></td>
+								<!-- <td><div class="{style.checkBoxlabel} {style.leftpadding10}" ui:field="lblExamReviewMode"></div></td>
+								<td><g:CheckBox ui:field="examReviewMode"></g:CheckBox></td> -->
 								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblScreenSaverTime"></div></td>
 								<td><g:TextBox ui:field="screenSaverTime"></g:TextBox></td>
 							</tr>

@@ -8078,16 +8078,18 @@ public void onDragStart(DragStartEvent event) {
 				checklistTopicSubView.setDelegate(this);
 				if (name.length() > 40) {
 					checklistTopicSubView.getCheckListTopicLbl().setText(name.substring(0, 40) + "...");
+					checklistTopicSubView.getCheckListTopicLbl().setTitle(name);
 				} else {
 					checklistTopicSubView.getCheckListTopicLbl().setText(name);
+					checklistTopicSubView.getCheckListTopicLbl().setTitle(name);
 				}
 				if (description.length() > 50) {
 					checklistTopicSubView.getDescriptionLbl().setText(description.substring(0, 50) + "...");
+					checklistTopicSubView.getDescriptionLbl().setTitle(description);
 				} else {
 					checklistTopicSubView.getDescriptionLbl().setText(description);
+					checklistTopicSubView.getDescriptionLbl().setTitle(description);
 				}
-				//checklistTopicSubView.getCheckListTopicLbl().setText(name);
-				//checklistTopicSubView.getDescriptionLbl().setText(description);
 				containerVerticalPanel.add(checklistTopicSubView);
 			}
 			
@@ -8402,16 +8404,13 @@ public void onDragStart(DragStartEvent event) {
 					proxy.setDescription(description);
 					proxy.setWeight(weight =="" ? 0 :Double.valueOf(weight));
 			
-					System.out.println("proxy id " + proxy.getId());
 					checklistItemRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
 
 						@Override
 						public void onSuccess(Void response) {
-							System.out.println("proxy" + proxy.getWeight());
 							roleDetailsChecklistTopicSubViewImpl.setChecklistItemProxy(proxy);
 							if (name.length() > 40) {
 								roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name.substring(0, 40) + "...");
-								
 							} else {
 								roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);
 							}
@@ -8420,11 +8419,12 @@ public void onDragStart(DragStartEvent event) {
 							} else {
 								roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);
 							}
-							//roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);          
-							//roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);      
-							
 						}
 					});
+					roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setTitle(name);
+					roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setTitle(description);
+
+					
 				 } else {
 						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
 						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric(constants.weight()));	
