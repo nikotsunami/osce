@@ -8199,7 +8199,7 @@ public void onDragStart(DragStartEvent event) {
 					}else
 					{
 						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
-						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric("Weight"));	
+						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric(constants.weight()));	
 					}
 				}else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.RATIO)){
 					requests.checklistItemRequestNonRoo().findMaxTopicWeight(standardizedRoleProxy.getCheckList().getId()).fire(new OSCEReceiver<Double>() {
@@ -8427,7 +8427,7 @@ public void onDragStart(DragStartEvent event) {
 					});
 				 } else {
 						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
-						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric("Weight"));	
+						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric(constants.weight()));	
 				}
 					
 				} else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.RATIO)){
@@ -8482,7 +8482,7 @@ public void onDragStart(DragStartEvent event) {
 						});
 					} else {
 						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
-						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric("Ratio"));	
+						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric(constants.ratio()));	
 					}
 				
 			       }else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.NONE)){

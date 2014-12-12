@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -805,9 +806,12 @@ public class ExportStatisticData extends HttpServlet{
 								    writer.close();
 									
 								}
-								Map<Long, Double> topicWiseRatioMap = new HashMap<Long, Double>();
+								
 								if(k==4)// Item file (id, item_text, points (example 0|1|2.5|3), is_eval_item, weight)
 								{
+									Map<Long, Double> topicWiseRatioMap = new HashMap<Long, Double>();
+									Map<Long, Double> topicWeightMap = new HashMap<Long, Double>();
+									
 									if (oscePost.getStandardizedRole() != null && RoleTopicFactor.RATIO.equals(oscePost.getStandardizedRole().getTopicFactor()) && oscePost.getStandardizedRole().getCheckList() != null) {
 										Double totalPoints = 0.0; 
 										CheckList checkList = oscePost.getStandardizedRole().getCheckList();
@@ -818,6 +822,7 @@ public class ExportStatisticData extends HttpServlet{
 											Double totalTopicPoints = 0.0;
 											List<ChecklistItem> checklistQuestionItemList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistTopicItem.getId());
 											
+											
 											for (ChecklistItem checklistQuestionItem : checklistQuestionItemList) {
 												int maxOptionVal = ChecklistOption.findMaxOptionValueByQuestionId(checklistQuestionItem.getId());
 												totalTopicPoints += maxOptionVal;
@@ -825,18 +830,27 @@ public class ExportStatisticData extends HttpServlet{
 											
 											totalPoints += totalTopicPoints;
 											topicWiseMaxPoint.put(checklistTopicItem.getId(), totalTopicPoints);
-											System.out.println("total topic points" + totalTopicPoints);
-											System.out.println("total  points" + totalPoints);
+											topicWeightMap.put(checklistTopicItem.getId(), checklistTopicItem.getWeight());
+											Log.info("total topic points" + totalTopicPoints);
+											Log.info("total  points" + totalPoints);
 											
 										}
 										
 										for (Entry<Long, java.lang.Double> entry : topicWiseMaxPoint.entrySet()) {
-											Double topicsRatio = entry.getValue()/totalPoints;
-
-											topicWiseRatioMap.put(entry.getKey(), topicsRatio);
-											System.out.println("topic ratio map :" + topicWiseRatioMap);
-
+											
+											if(topicWeightMap.containsKey(entry.getKey())){
+												Double topicsRatio = entry.getValue()/totalPoints;
+												if(topicWeightMap.get(entry.getKey()) != null){
+													Double finalWeight = (topicWeightMap.get(entry.getKey())/100) * topicsRatio;
+													if(finalWeight != null){
+														topicWiseRatioMap.put(entry.getKey(), Answer.roundTwoDecimals(finalWeight));
+													}
+												}
+											} else {
+												Log.info("TOpic id not found for key :" + entry.getKey());
+											}
 										}
+										Log.info("TOpicwise ratio map "  + topicWiseRatioMap);
 									
 									}				
 									
@@ -863,9 +877,6 @@ public class ExportStatisticData extends HttpServlet{
 									//for(ChecklistQuestion d:items)
 									for(ChecklistItem d:items)
 									{
-										if (d.getId().equals(337l)) {
-											System.out.println("TEST" + d.getParentItem().getWeight() ==null? "no weight" : d.getParentItem().getWeight());
-										}
 										
 										if (postMissingQueList.contains(d.getId()) == false)
 										{
@@ -907,10 +918,12 @@ public class ExportStatisticData extends HttpServlet{
 												if (RoleTopicFactor.RATIO.equals(oscePost.getStandardizedRole().getTopicFactor())) {
 													
 													if(topicWiseRatioMap.containsKey(d.getParentItem().getId())){
-														Double  ratio= topicWiseRatioMap.get(d.getParentItem().getId());
-														if(d.getParentItem().getWeight() != null) {
-															weight =(d.getParentItem().getWeight() / 100) * ratio;	
-														}
+														/*Double  ratio= topicWiseRatioMap.get(d.getParentItem().getId());
+														if(d.getParentItem().getWeight() != null) {*/
+															//weight =(d.getParentItem().getWeight() / 100) * ratio;	
+															weight =topicWiseRatioMap.get(d.getParentItem().getId());	
+															
+														//}
 														
 												 }
 													
@@ -920,9 +933,6 @@ public class ExportStatisticData extends HttpServlet{
 														weight = d.getParentItem().getWeight();
 													}
 												}
-											}
-											if (d.getId().equals(202l)) {
-												System.out.println(weight);
 											}
 											
 											writer.append(points);

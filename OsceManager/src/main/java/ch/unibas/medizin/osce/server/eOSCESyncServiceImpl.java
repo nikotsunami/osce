@@ -22,7 +22,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -474,31 +473,33 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	
 	@Transactional
 	private boolean importIOSCE(String filename, Long semesterID) throws eOSCESyncException {
+		ChannelSftp channelSftp = null;
 		try {
 			//decrypted code
 			BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
 			byte[] bytes = FileUtils.readFileToByteArray(new File(filename));
+			String SFTPWORKINGDIR = (bucketInformation == null || bucketInformation.getBasePath().isEmpty()) ? "" : bucketInformation.getBasePath();
+
+			String dir = SFTPWORKINGDIR;
 			
+			if (dir.endsWith("/") == false) {
+				dir = dir + "/";
+			}
 			
-				NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(bytes);
-				NSObject encryption = rootDict.objectForKey(IMPORT_ANSWER_PLIST_ENCRYPTION);
-				NSString encryptionData = (NSString) encryption;
-			
-				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(bytes);
+			NSObject encryption = rootDict.objectForKey(IMPORT_ANSWER_PLIST_ENCRYPTION);
+			NSString encryptionData = (NSString) encryption;
 				
-				if(encryptionData.getContent().equals("0")){
-					byteArrayOutputStream = decryptFileWithAdminPrivateKey(bytes, bucketInformation);
-				}else if(encryptionData.getContent().equals("1")){
-					byteArrayOutputStream = decryptFileWithSymmetricKey(bytes, bucketInformation);
-				}
+			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 			
-			/*NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(bytes);
-			NSObject encryptedObject = rootDict.objectForKey(IMPORT_ANSWER_PLIST_DATA);
-			NSString 66encryptedData = (NSStrin6g) encryptedObject;
-			byte[] dataBytes = encryptedData.getContent().getBytes();*/
-			
+			if(encryptionData.getContent().equals("0")) {
+				byteArrayOutputStream = decryptFileWithAdminPrivateKey(bytes, bucketInformation);
+			}
+			else if(encryptionData.getContent().equals("1")) {
+				byteArrayOutputStream = decryptFileWithSymmetricKey(bytes, bucketInformation);
+			}
+		
 			if (byteArrayOutputStream != null) {			
-				FileUtils.writeByteArrayToFile(new File("E:\\IOSCE_Decrypt.json"), byteArrayOutputStream.toByteArray());
 				JSONDeserializer<StudentAnswer> deserializer = new JSONDeserializer<StudentAnswer>().use("values", StudentAnswer.class);				
 				StudentAnswer studentAnswer = new StudentAnswer();
 				studentAnswer = deserializer.deserializeInto(new InputStreamReader(new ByteArrayInputStream(byteArrayOutputStream.toByteArray())), studentAnswer);
@@ -506,6 +507,8 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				if (studentAnswer != null)
 				{
 					Examanswers examanswer = studentAnswer.getExamanswers();
+					
+					channelSftp = createSFTPConnection(bucketInformation);
 					
 					for (ch.unibas.medizin.osce.server.importanswer.Rotation rotation : examanswer.getRotations()) {
 						
@@ -515,7 +518,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 							
 							if (rotation.getSignature() != null) {
 								new Signature().deleteSignature(doctor.getId(), oscePostRoom.getId());
-								importiOSCESignature(rotation.getSignature(), doctor, oscePostRoom, bucketInformation);
+								importiOSCESignature(rotation.getSignature(), doctor, oscePostRoom, bucketInformation, channelSftp, dir);
 							}
 							
 							List<ch.unibas.medizin.osce.server.importanswer.Student> studentList = rotation.getStudents();
@@ -533,7 +536,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 									if (student.getAudioNotes() != null) {
 										if(oscePostRoom != null){
 											new Answer().deleteAudioNote(doctor.getId(), oscePostRoom.getId(), osceStudent.getId());
-											importAudioNotes(student.getAudioNotes(), osceStudent, doctor, oscePostRoom, semesterID);
+											importAudioNotes(student.getAudioNotes(), osceStudent, doctor, oscePostRoom, semesterID, bucketInformation, channelSftp, dir);
 										}
 									}	
 									
@@ -586,8 +589,23 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			Log.error(e.getMessage(), e);
 			throw new eOSCESyncException("",e.getMessage());
 		}
+		finally{
+			try {
+				if(channelSftp != null){
+					if(channelSftp.getSession() != null){
+						channelSftp.getSession().disconnect();
+					}
+					
+					channelSftp.disconnect();
+				}
+			} catch (JSchException e) {
+				Log.error(e.getMessage(), e);
+				throw new eOSCESyncException("",e.getMessage());
+			}
+		}
 	}
 	
+
 	private ByteArrayOutputStream decryptFileWithSymmetricKey(byte[] bytes,BucketInformation bucketInformation)  throws eOSCESyncException{
 
 		ByteArrayOutputStream bout = new ByteArrayOutputStream();
@@ -673,61 +691,18 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}		
 	}
 
-	private void importAudioNotes(List<AudioNote> audioNotes, Student osceStudent, Doctor doctor, OscePostRoom oscePostRoom, Long semesterID) throws eOSCESyncException {
+	public ChannelSftp createSFTPConnection(BucketInformation bucketInformation) throws eOSCESyncException {
 		try {
-			BucketInformation bucketInformation = BucketInformation.findBucketInformationBySemesterForImport(semesterID);
+			String SFTPHOST = bucketInformation == null ? "" : bucketInformation.getBucketName();
+			int    SFTPPORT = 22;
+			String SFTPUSER = (bucketInformation == null || bucketInformation.getAccessKey().isEmpty()) ? "" : bucketInformation.getAccessKey();
+			String SFTPPASS = (bucketInformation == null || bucketInformation.getSecretKey().isEmpty()) ? "" : bucketInformation.getSecretKey();
+			String SFTPWORKINGDIR = (bucketInformation == null || bucketInformation.getBasePath().isEmpty()) ? "" : bucketInformation.getBasePath();
 			
-			Semester semester = Semester.findSemester(semesterID);
-			String localPath = OsMaFilePathConstant.IMPORT_AUDIO_NOTE_PATH + semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+			Session     session     = null;
+			Channel     channel     = null;
+			ChannelSftp channelSftp = null;
 			
-			for (AudioNote audioNote : audioNotes) {
-				String fileName = "";
-				if (BucketInfoType.S3.equals(bucketInformation.getType())) {
-					fileName = copyAudioFileFromS3(bucketInformation, audioNote.getNotePath(), localPath);
-				}
-				else if (BucketInfoType.FTP.equals(bucketInformation.getType())) {
-					fileName = copyAudioFileFromSFTP(bucketInformation, audioNote.getNotePath(), localPath, doctor.getId());
-				}
-				
-				OsceDay osceDay = oscePostRoom.getOscePost().getOsceSequence().getOsceDay();
-				
-				Notes osceNotes = new Notes();
-				osceNotes.setStudent(osceStudent);
-				osceNotes.setDoctor(doctor);
-				osceNotes.setOscePostRoom(oscePostRoom);
-				osceNotes.setOsceDay(osceDay);
-				if (StringUtils.isNotBlank(fileName)) {
-					osceNotes.setComment(fileName);
-				}
-				else {
-					osceNotes.setComment(audioNote.getNotePath());
-				}
-				osceNotes.setNoteType(NoteType.values()[Integer.parseInt(audioNote.getType())]);
-				if (audioNote.getTimestamp() != null)
-					osceNotes.setLastviewed(jsonsdf.parse(audioNote.getTimestamp()));
-				
-				osceNotes.persist();
-			}
-		}
-		catch (Exception e) {
-			Log.error(e.getMessage(), e);
-			throw new eOSCESyncException("",e.getMessage());
-		}
-	}
-
-	private String copyAudioFileFromSFTP(BucketInformation bucketInformation, String notePath, String localPath, Long doctorId) throws eOSCESyncException {
-		
-		String SFTPHOST = bucketInformation == null ? "" : bucketInformation.getBucketName();
-		int    SFTPPORT = 22;
-		String SFTPUSER = (bucketInformation == null || bucketInformation.getAccessKey().isEmpty()) ? "" : bucketInformation.getAccessKey();
-		String SFTPPASS = (bucketInformation == null || bucketInformation.getSecretKey().isEmpty()) ? "" : bucketInformation.getSecretKey();
-		String SFTPWORKINGDIR = (bucketInformation == null || bucketInformation.getBasePath().isEmpty()) ? "" : bucketInformation.getBasePath();
-		
-		Session     session     = null;
-		Channel     channel     = null;
-		ChannelSftp channelSftp = null;
-		
-		try {	
 			JSch jsch = new JSch();
 			session = jsch.getSession(SFTPUSER,SFTPHOST,SFTPPORT);
 			session.setPassword(SFTPPASS);
@@ -740,28 +715,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			channel.connect();
 			channelSftp = (ChannelSftp)channel;
 			channelSftp.cd(SFTPWORKINGDIR);
-			
-			String dir = SFTPWORKINGDIR;
-			if (dir.endsWith("/") == false) {
-				dir = dir + "/";
-			}
-			
-			String fullAudioNotePath = dir + doctorId + "/" + notePath;
-			//Vector<ChannelSftp.LsEntry> list =  channelSftp.ls("*.*");
-			InputStream inputStream = channelSftp.get(fullAudioNotePath);
-			
-			String filename = FilenameUtils.getBaseName(notePath) + "_" + UUID.randomUUID().toString() + AUDIO_FILE_EXTENSION;
-			String fullFilePath = localPath + filename;
-			File file = new File(fullFilePath);
-			FileUtils.touch(file);
-			byte[] data = IOUtils.toByteArray(inputStream);
-			FileUtils.writeByteArrayToFile(file, data);
-			
-			return filename;
-		}
-		catch (JSchException e) {
-			Log.error(e.getMessage(), e);
-			throw new eOSCESyncException("",e.getMessage());
+			return channelSftp;
 		}
 		catch (SftpException e) {
 			Log.error(e.getMessage(), e);
@@ -771,13 +725,82 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 			Log.error(ex.getMessage(), ex);
 			throw new eOSCESyncException("",ex.getMessage());
 		}
-		finally{
-			if (channel != null)
-				channel.disconnect();
+	}
+	
+	private void importAudioNotes(List<AudioNote> audioNotes, Student osceStudent, Doctor doctor, OscePostRoom oscePostRoom, Long semesterID, BucketInformation bucketInformation, ChannelSftp channelSftp, String dir) throws eOSCESyncException {
+		try {
 			
-			if (session != null)
-				session.disconnect();
+			Semester semester = Semester.findSemester(semesterID);
+			String localPath = OsMaFilePathConstant.IMPORT_AUDIO_NOTE_PATH + semester.getSemester() + semester.getCalYear() + (isLocal==true ? folderSeparatorLocal : folderSeparatorProduction);
+			
+			for (AudioNote audioNote : audioNotes) {
+				String fileName = "";
+				if (BucketInfoType.S3.equals(bucketInformation.getType())) {
+					fileName = copyAudioFileFromS3(bucketInformation, audioNote.getNotePath(), localPath);
+				}
+				else if (BucketInfoType.FTP.equals(bucketInformation.getType())) {
+					System.out.println("Audio note" + audioNote.getNotePath());
+					fileName = copyAudioFileFromSFTP(bucketInformation, audioNote.getNotePath(), localPath, doctor.getId(), channelSftp, dir);
+				}
+				
+				if (StringUtils.isNotBlank(fileName)) {
+					OsceDay osceDay = oscePostRoom.getOscePost().getOsceSequence().getOsceDay();
+					
+					Notes osceNotes = new Notes();
+					osceNotes.setStudent(osceStudent);
+					osceNotes.setDoctor(doctor);
+					osceNotes.setOscePostRoom(oscePostRoom);
+					osceNotes.setOsceDay(osceDay);
+					if (StringUtils.isNotBlank(fileName)) {
+						osceNotes.setComment(fileName);
+					}
+					else {
+						osceNotes.setComment(audioNote.getNotePath());
+					}
+					osceNotes.setNoteType(NoteType.values()[Integer.parseInt(audioNote.getType())]);
+					if (audioNote.getTimestamp() != null)
+						osceNotes.setLastviewed(jsonsdf.parse(audioNote.getTimestamp()));
+					
+					osceNotes.persist();
+				}
+			}
 		}
+		catch (Exception e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}
+	}
+
+	private String copyAudioFileFromSFTP(BucketInformation bucketInformation, String notePath, String localPath, Long doctorId, ChannelSftp channelSftp, String dir) throws eOSCESyncException {
+		
+		try {	
+			byte[] data = null;
+			String fullAudioNotePath = dir + doctorId + "/" + notePath;
+			InputStream inputStream = channelSftp.get(fullAudioNotePath);
+			
+			String filename = UUID.randomUUID().toString() + "_" + notePath;
+			String fullFilePath = localPath + filename;
+			File file = new File(fullFilePath);
+			FileUtils.touch(file);
+			data = IOUtils.toByteArray(inputStream);
+			if (data != null && data.length > 0) {
+				FileUtils.writeByteArrayToFile(file, data);
+				return filename;
+			}
+			else {
+				Log.error("No audio notes are found");
+				return null;
+			}
+		}
+		catch (SftpException e) {
+			Log.error(e.getMessage(), e);
+			throw new eOSCESyncException("",e.getMessage());
+		}			
+		catch(Exception ex){
+			Log.error(ex.getMessage(), ex);
+			throw new eOSCESyncException("",ex.getMessage());
+		}
+		
 	}
 
 	private String copyAudioFileFromS3(BucketInformation bucketInformation, String notePath, String localPath) throws eOSCESyncException {
@@ -855,7 +878,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 	}
 
-	public void importiOSCESignature(ch.unibas.medizin.osce.server.importanswer.Signature signature, Doctor doctor, OscePostRoom oscePostRoom, BucketInformation bucketInformation) throws eOSCESyncException {
+	public void importiOSCESignature(ch.unibas.medizin.osce.server.importanswer.Signature signature, Doctor doctor, OscePostRoom oscePostRoom, BucketInformation bucketInformation, ChannelSftp channelSftp, String dir) throws eOSCESyncException {
 		try
 		{
 			byte[] signatureImage = null;
@@ -863,25 +886,31 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				signatureImage = copySignatureFileFromS3(bucketInformation, signature.getSignaturePath());
 			}
 			else if (BucketInfoType.FTP.equals(bucketInformation.getType())) {
-				signatureImage = copySignatureFileFromSFTP(bucketInformation, signature.getSignaturePath(), doctor.getId());
+				signatureImage = copySignatureFileFromSFTP(channelSftp, signature.getSignaturePath(), doctor.getId(), dir);
 			}
 			
-			Signature newSignature = new Signature();
-			newSignature.setDoctor(doctor);
-			newSignature.setOscePost(oscePostRoom.getOscePost());
-			
-			if (signature.getTimestamp() != null) {
-				newSignature.setSignatureTimestamp(jsonsdf.parse(signature.getTimestamp()));
-			}	
+			if (signatureImage != null && signatureImage.length > 0) {
+				Signature newSignature = new Signature();
+				newSignature.setDoctor(doctor);
+				newSignature.setOscePost(oscePostRoom.getOscePost());
 				
-			if (oscePostRoom.getOscePost() != null && oscePostRoom.getOscePost().getOsceSequence() != null)
-				newSignature.setOsceDay(oscePostRoom.getOscePost().getOsceSequence().getOsceDay());
-			
-			if (signatureImage != null) {
-				newSignature.setSignatureImage(signatureImage);
+				if (signature.getTimestamp() != null) {
+					newSignature.setSignatureTimestamp(jsonsdf.parse(signature.getTimestamp()));
+				}	
+					
+				if (oscePostRoom.getOscePost() != null && oscePostRoom.getOscePost().getOsceSequence() != null)
+					newSignature.setOsceDay(oscePostRoom.getOscePost().getOsceSequence().getOsceDay());
+				
+				if (signatureImage != null) {
+					newSignature.setSignatureImage(signatureImage);
+				}
+				
+				newSignature.persist();
 			}
-			
-			newSignature.persist();	
+			else {
+				Log.error("Signature not found");
+			}
+				
 		}
 		catch(Exception e)
 		{
@@ -890,44 +919,13 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 	}
 
-	private byte[] copySignatureFileFromSFTP(BucketInformation bucketInformation, String signaturePath, Long doctorId) throws eOSCESyncException {
-		
-		String SFTPHOST = bucketInformation == null ? "" : bucketInformation.getBucketName();
-		int    SFTPPORT = 22;
-		String SFTPUSER = (bucketInformation == null || bucketInformation.getAccessKey().isEmpty()) ? "" : bucketInformation.getAccessKey();
-		String SFTPPASS = (bucketInformation == null || bucketInformation.getSecretKey().isEmpty()) ? "" : bucketInformation.getSecretKey();
-		String SFTPWORKINGDIR = (bucketInformation == null || bucketInformation.getBasePath().isEmpty()) ? "" : bucketInformation.getBasePath();
-		
-		Session     session     = null;
-		Channel     channel     = null;
-		ChannelSftp channelSftp = null;
-		
+	private byte[] copySignatureFileFromSFTP(ChannelSftp channelSftp, String signaturePath, Long doctorId,  String dir) throws eOSCESyncException {
 		try {	
-			JSch jsch = new JSch();
-			session = jsch.getSession(SFTPUSER,SFTPHOST,SFTPPORT);
-			session.setPassword(SFTPPASS);
-			java.util.Properties config = new java.util.Properties();
-			config.put("StrictHostKeyChecking", "no");
-			session.setConfig(config);
-			session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
-			session.connect();
-			channel = session.openChannel("sftp");
-			channel.connect();
-			channelSftp = (ChannelSftp)channel;
-			channelSftp.cd(SFTPWORKINGDIR);
-			
-			String dir = SFTPWORKINGDIR;
-			if (dir.endsWith("/") == false) {
-				dir = dir + "/";
-			}
+		
 			String fullSingaturePath = dir + doctorId + "/" + signaturePath;
 				
 			InputStream inputStream = channelSftp.get(fullSingaturePath);
 			return IOUtils.toByteArray(inputStream);
-		}
-		catch (JSchException e) {
-			Log.error(e.getMessage(), e);
-			throw new eOSCESyncException("",e.getMessage());
 		}
 		catch (SftpException e) {
 			Log.error(e.getMessage(), e);
@@ -936,13 +934,6 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		catch(Exception ex){
 			Log.error(ex.getMessage(), ex);
 			throw new eOSCESyncException("",ex.getMessage());
-		}
-		finally{
-			if (channel != null)
-				channel.disconnect();
-			
-			if (session != null)
-				session.disconnect();
 		}
 	}
 
