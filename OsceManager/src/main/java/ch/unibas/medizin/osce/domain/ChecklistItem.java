@@ -764,4 +764,15 @@ public class ChecklistItem {
 		}
 		return sum;
 	}
+	
+	public static CheckList copyOldChecklist(Long oldChecklist, String title){
+		
+		CheckList oldProxy= CheckList.findCheckList(oldChecklist);
+		CheckList newChecklistToReturn = StandardizedRole.copyChecklistItemFromOldRole(oldProxy);
+		
+		 newChecklistToReturn.setTitle(title);
+		 newChecklistToReturn.persist();
+			
+		 return newChecklistToReturn;
+	}
 }

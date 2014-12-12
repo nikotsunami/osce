@@ -4,6 +4,7 @@ import java.util.List;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ChecklistImportPojoValueProxy;
 import ch.unibas.medizin.osce.client.a_nonroo.client.OscePostWiseQuestionProxy;
+import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistItemProxy;
 import ch.unibas.medizin.osce.domain.ChecklistItem;
 import ch.unibas.medizin.osce.shared.OptionType;
@@ -53,4 +54,6 @@ public interface ChecklistItemRequestNonRoo  extends RequestContext{
 	public abstract Request<List<ChecklistItemProxy>> importChecklistQuestionsForTopic(Long selectedTopicId, Long selectedRole, Long questionId, Long topicId);
 
 	public abstract Request<Double> findMaxTopicWeight(Long checklistId);
+	
+	abstract Request<CheckListProxy> copyOldChecklist(Long oldChecklistId, String title);
 }

@@ -37,6 +37,7 @@ import ch.unibas.medizin.osce.client.managed.request.UsedMaterialRequest;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.scaffold.ChecklistItemRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -778,7 +779,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		  CheckListProxy checkListProxy=null;
 		
 
-				final CheckListRequest checklistRequest=requests.checkListRequest();
+				final ChecklistItemRequestNonRoo checklistRequest=requests.checklistItemRequestNonRoo();
 				/*checkListProxy=checklistRequest.create(CheckListProxy.class);
 				 checkListProxy.setCheckListTopics(standardizedRole.getCheckList().getCheckListTopics());
 				checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec

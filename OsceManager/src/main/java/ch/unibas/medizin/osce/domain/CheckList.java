@@ -41,16 +41,4 @@ public class CheckList {
     	TypedQuery<CheckList> q = em.createQuery(query, CheckList.class);
     	return q.getResultList();
 	}
-
-	public static CheckList copyOldChecklist(Long oldChecklist, String title){
-		
-		CheckList oldProxy= CheckList.findCheckList(oldChecklist);
-			
-		 CheckList newChecklistToReturn = StandardizedRole.copyChecklistItemFromOldRole(oldProxy);
-		
-		 newChecklistToReturn.setTitle(title);
-		 newChecklistToReturn.persist();
-			
-		 return newChecklistToReturn;
-	}
 }
