@@ -470,6 +470,11 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	public String RATIO();
 	
 	public String NONE(); 
+
+	public String ROLE_WEIGHT();
 	
+	public String ROLE_RATIO();
+	
+	public String ROLE_NONE();
 }
 

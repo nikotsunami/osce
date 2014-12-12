@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EnumType;
+
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.managed.request.RoleTopicProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
@@ -94,7 +96,7 @@ public class RoleEditViewImpl extends Composite implements RoleEditView, Editor<
 	public ListBox factor=new ListBox();
 	
 	@UiField(provided = true)
-	public FocusableValueListBox<RoleTopicFactor> topicFactor = new FocusableValueListBox<RoleTopicFactor>(new EnumRenderer<RoleTopicFactor>());
+	public FocusableValueListBox<RoleTopicFactor> topicFactor = new FocusableValueListBox<RoleTopicFactor>(new EnumRenderer<RoleTopicFactor>(EnumRenderer.Type.ROLETOPICFACTOR));
 	
 	public StandardizedRoleProxy getStandardizedRoleProxy() {
 		return standardizedRoleProxy;
