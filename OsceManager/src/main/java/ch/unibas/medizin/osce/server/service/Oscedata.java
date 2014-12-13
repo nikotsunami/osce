@@ -10,6 +10,7 @@ package ch.unibas.medizin.osce.server.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -17,6 +18,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 
 /**
@@ -1270,9 +1272,11 @@ public class Oscedata {
                 })
                 public static class Checklistitem {
 
+                	@XmlJavaTypeAdapter(AdapterCDATA.class)
                     @XmlElement(required = true)
                     protected String name;
                     @XmlElement(required = true)
+                    @XmlJavaTypeAdapter(AdapterCDATA.class)
                     protected String description;
                     @XmlElement(required = true)
                     protected String isRegressionItem;
@@ -1611,12 +1615,14 @@ public class Oscedata {
 
                             @XmlValue
                             protected String value;
+                            @XmlJavaTypeAdapter(AdapterCDATA.class)
                             @XmlAttribute
                             protected String name;
                             @XmlAttribute
                             protected Long id;
                             @XmlAttribute
                             protected Integer sequencenumber;
+                            @XmlJavaTypeAdapter(AdapterCDATA.class)
                             @XmlAttribute
                             protected String description;
                             
@@ -1812,6 +1818,7 @@ public class Oscedata {
                         })
                         public static class Checklistoption {
 
+                        	
                             @XmlValue
                             protected String value;
                             @XmlAttribute
@@ -1820,8 +1827,10 @@ public class Oscedata {
                             protected Integer criteriacount;
                             @XmlAttribute(name = "value")
                             protected String value1;
+                            @XmlJavaTypeAdapter(AdapterCDATA.class)
                             @XmlAttribute
                             protected String description;
+                            @XmlJavaTypeAdapter(AdapterCDATA.class)
                             @XmlAttribute(required = true)
                             protected String name;
                             @XmlAttribute

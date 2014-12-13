@@ -4,6 +4,7 @@ import static org.apache.commons.lang.StringUtils.defaultString;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,6 +53,9 @@ import ch.unibas.medizin.osce.server.service.Oscedata.Rotations.Rotation;
 import ch.unibas.medizin.osce.server.service.Oscedata.Stations;
 import ch.unibas.medizin.osce.server.service.Oscedata.Stations.Station;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
+
+
+import com.sun.xml.internal.bind.marshaller.CharacterEscapeHandler;
 
 public class ExportiOSCEXml {
 	private static Logger Log = Logger.getLogger(ExportiOSCEXml.class);
@@ -107,6 +111,15 @@ public class ExportiOSCEXml {
 	 
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+			
+			jaxbMarshaller.setProperty("com.sun.xml.internal.bind.characterEscapeHandler",  new CharacterEscapeHandler() {
+                @Override
+                public void escape(char[] ch, int start, int length,
+                        boolean isAttVal, Writer writer)
+                        throws IOException {
+                    writer.write(ch, start, length);
+                }
+            });
 	 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 			jaxbMarshaller.marshal(oscedata, stream);
 			String data = new String(stream.toByteArray(),"UTF-8");

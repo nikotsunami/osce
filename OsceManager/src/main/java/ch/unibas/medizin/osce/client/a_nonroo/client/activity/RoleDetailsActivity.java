@@ -8078,18 +8078,17 @@ public void onDragStart(DragStartEvent event) {
 				checklistTopicSubView.setDelegate(this);
 				if (name.length() > 40) {
 					checklistTopicSubView.getCheckListTopicLbl().setText(name.substring(0, 40) + "...");
-					checklistTopicSubView.getCheckListTopicLbl().setTitle(name);
 				} else {
 					checklistTopicSubView.getCheckListTopicLbl().setText(name);
-					checklistTopicSubView.getCheckListTopicLbl().setTitle(name);
 				}
 				if (description.length() > 50) {
 					checklistTopicSubView.getDescriptionLbl().setText(description.substring(0, 50) + "...");
-					checklistTopicSubView.getDescriptionLbl().setTitle(description);
 				} else {
 					checklistTopicSubView.getDescriptionLbl().setText(description);
-					checklistTopicSubView.getDescriptionLbl().setTitle(description);
 				}
+				checklistTopicSubView.getCheckListTopicLbl().setTitle(name);
+				checklistTopicSubView.getDescriptionLbl().setTitle(description);
+				
 				containerVerticalPanel.add(checklistTopicSubView);
 			}
 			
@@ -8228,7 +8227,7 @@ public void onDragStart(DragStartEvent event) {
 								}
 							}else {
 								MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
-								dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric("Ratio"));	
+								dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric(constants.ratio()));	
 							}
 						}else{
 							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
@@ -8419,10 +8418,12 @@ public void onDragStart(DragStartEvent event) {
 							} else {
 								roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);
 							}
+							
+							roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setTitle(name);
+							roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setTitle(description);
 						}
 					});
-					roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setTitle(name);
-					roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setTitle(description);
+					
 
 					
 				 } else {
@@ -8457,8 +8458,8 @@ public void onDragStart(DragStartEvent event) {
 											@Override
 											public void onSuccess(Void response) {
 												roleDetailsChecklistTopicSubViewImpl.setChecklistItemProxy(proxy);
-												if (name.length() > 50) {
-													roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name.substring(0, 50) + "...");
+												if (name.length() > 40) {
+													roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name.substring(0, 40) + "...");
 												} else {
 													roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);
 												}
@@ -8467,9 +8468,8 @@ public void onDragStart(DragStartEvent event) {
 												} else {
 													roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);
 												}
-												//roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);          
-												//roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);      
-												
+												roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setTitle(name);
+												roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setTitle(description);
 											}
 										});
 							
@@ -8497,8 +8497,8 @@ public void onDragStart(DragStartEvent event) {
 							@Override
 							public void onSuccess(Void response) {
 								roleDetailsChecklistTopicSubViewImpl.setChecklistItemProxy(proxy);
-								if (name.length() > 50) {
-									roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name.substring(0, 50) + "...");
+								if (name.length() > 40) {
+									roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name.substring(0, 40) + "...");
 								} else {
 									roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);
 								}
@@ -8507,9 +8507,8 @@ public void onDragStart(DragStartEvent event) {
 								} else {
 									roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);
 								}
-								//roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);          
-								//roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);      
-								
+								roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setTitle(name);
+								roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setTitle(description);
 							}
 						});
 			       }
