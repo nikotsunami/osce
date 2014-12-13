@@ -275,7 +275,7 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 		
 		
 		
-		if ((standardizedRole.getCheckList() != null) && (standardizedRole.getCheckList().getCheckListTopics() != null) && (standardizedRole.getCheckList().getCheckListTopics().size() > 0)) 
+		if ((standardizedRole.getCheckList() != null) && (standardizedRole.getCheckList().getChecklistItems() != null) && (standardizedRole.getCheckList().getChecklistItems().size() > 0)) 
 		{
 			Paragraph details = new Paragraph();
 			
@@ -520,7 +520,7 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 			
 			PdfPTable table = createCheckListQuestionTable(checklistQuestionList,studId);
 			
-			if (table.size() > 0)
+			if (table != null && table.size() > 0)
 			{
 				if (chkListTitle != null) {
 					Paragraph titleParagraph = new Paragraph(new Chunk(chkListTitle, subTitleFont));

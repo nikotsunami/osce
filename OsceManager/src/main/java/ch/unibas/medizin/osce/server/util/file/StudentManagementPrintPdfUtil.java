@@ -274,7 +274,7 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 		
 		
 		
-		if ((standardizedRole.getCheckList() != null) && (standardizedRole.getCheckList().getCheckListTopics() != null) && (standardizedRole.getCheckList().getCheckListTopics().size() > 0)) 
+		if ((standardizedRole.getCheckList() != null) && (standardizedRole.getCheckList().getChecklistItems() != null) && (standardizedRole.getCheckList().getChecklistItems().size() > 0)) 
 		{
 			Paragraph details = new Paragraph();
 			
@@ -536,13 +536,15 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 			
 			PdfPTable table = createCheckListQuestionTable(checklistQuestionList,studId);			
 			//PdfPTable table = createCheckListQuestionTable(checkListQuestionList,studId);
-			table.setSpacingBefore(05.0f);
-			table.setSpacingAfter(20.0f);
-			
-			try {
-				document.add(table);
-			} catch (DocumentException ex) {
-				log.error("in RolePrintPdfUtil.createCheckListDetailsTable(): " + ex.getMessage(),ex);
+			if (table != null) {
+				table.setSpacingBefore(05.0f);
+				table.setSpacingAfter(20.0f);
+				
+				try {
+					document.add(table);
+				} catch (DocumentException ex) {
+					log.error("in RolePrintPdfUtil.createCheckListDetailsTable(): " + ex.getMessage(),ex);
+				}
 			}
 			
 		}
