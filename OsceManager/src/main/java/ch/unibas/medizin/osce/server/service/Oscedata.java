@@ -1615,14 +1615,12 @@ public class Oscedata {
 
                             @XmlValue
                             protected String value;
-                            @XmlJavaTypeAdapter(AdapterCDATA.class)
                             @XmlAttribute
                             protected String name;
                             @XmlAttribute
                             protected Long id;
                             @XmlAttribute
                             protected Integer sequencenumber;
-                            @XmlJavaTypeAdapter(AdapterCDATA.class)
                             @XmlAttribute
                             protected String description;
                             
@@ -1827,10 +1825,8 @@ public class Oscedata {
                             protected Integer criteriacount;
                             @XmlAttribute(name = "value")
                             protected String value1;
-                            @XmlJavaTypeAdapter(AdapterCDATA.class)
                             @XmlAttribute
                             protected String description;
-                            @XmlJavaTypeAdapter(AdapterCDATA.class)
                             @XmlAttribute(required = true)
                             protected String name;
                             @XmlAttribute
