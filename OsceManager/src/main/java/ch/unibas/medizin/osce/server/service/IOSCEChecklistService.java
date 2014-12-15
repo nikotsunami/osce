@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.server.service;
 import static org.apache.commons.lang.StringUtils.defaultString;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -15,6 +16,8 @@ import javax.xml.bind.Marshaller;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
+
+import com.sun.xml.internal.bind.marshaller.CharacterEscapeHandler;
 
 import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.ChecklistCriteria;
@@ -112,7 +115,14 @@ public class IOSCEChecklistService extends HttpServlet {
 				// output pretty printed
 				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 				jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-		 
+				jaxbMarshaller.setProperty("com.sun.xml.internal.bind.characterEscapeHandler",  new CharacterEscapeHandler() {
+	                @Override
+	                public void escape(char[] ch, int start, int length,
+	                        boolean isAttVal, Writer writer)
+	                        throws IOException {
+	                    writer.write(ch, start, length);
+	                }
+	            });
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				jaxbMarshaller.marshal(oscedata, stream);
 				
