@@ -17,8 +17,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
 
-import com.sun.xml.internal.bind.marshaller.CharacterEscapeHandler;
-
+import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
 import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.ChecklistCriteria;
 import ch.unibas.medizin.osce.domain.ChecklistItem;
@@ -115,7 +114,7 @@ public class IOSCEChecklistService extends HttpServlet {
 				// output pretty printed
 				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 				jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-				jaxbMarshaller.setProperty("com.sun.xml.internal.bind.characterEscapeHandler",  new CharacterEscapeHandler() {
+				jaxbMarshaller.setProperty("com.sun.xml.bind.marshaller.CharacterEscapeHandler",  new CharacterEscapeHandler() {
 	                @Override
 	                public void escape(char[] ch, int start, int length,
 	                        boolean isAttVal, Writer writer)

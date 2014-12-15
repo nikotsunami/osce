@@ -612,7 +612,7 @@ public class ExportStatisticData extends HttpServlet{
 								    			{
 								    				//Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
 								    				Answer impressionItem1=Answer.findItemAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
-								    				if(impressionItem1.getChecklistOption()!=null)
+								    				if(impressionItem1 != null && impressionItem1.getChecklistOption()!=null)
 								    					writer.append(impressionItem1.getChecklistOption().getValue());
 								    				else
 								    					writer.append("0");
@@ -671,7 +671,7 @@ public class ExportStatisticData extends HttpServlet{
 						    			{
 						    				//Answer impressionItem1=Answer.findAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
 						    				Answer impressionItem1=Answer.findItemAnswer(lastCandidateId, impressionQuestion.get(l), osceDay.getId());
-						    				if(impressionItem1.getChecklistOption() !=null)
+						    				if(impressionItem1 != null && impressionItem1.getChecklistOption() !=null)
 						    					writer.append(impressionItem1.getChecklistOption().getValue());
 						    				else
 						    					writer.append("0");
