@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.shared;
 
-public enum ExportOsceType {
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public enum ExportOsceType implements IsSerializable{
 	EOSCE, IOSCE;
 }
