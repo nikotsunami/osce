@@ -83,6 +83,12 @@ public class IndividualSchedulesDetailsViewImpl extends Composite implements Ind
 	Button btnPrintCopyExaminor;
 	
 	@UiField
+	Button btnPrintExaminerIndividualCopy;
+	
+	@UiField
+	Button btnPrintStudentIndividualCopy;
+	
+	@UiField
 	RadioButton rbSelectedExaminor;
 	
 	@UiField
@@ -145,6 +151,17 @@ public class IndividualSchedulesDetailsViewImpl extends Composite implements Ind
 	{
 		delegate.printCopyforExaminor(event);
 	}
+	@UiHandler("btnPrintExaminerIndividualCopy")
+	public void btnPrintIndividualCopyClicked(ClickEvent event)
+	{
+		delegate.exportQRCodeForExaminer(event);
+	}
+
+	@UiHandler("btnPrintStudentIndividualCopy")
+	public void btnPrintStudentIndividualCopyClicked(ClickEvent event)
+	{
+		delegate.exportQRCodeForStudent(event);
+	}
 	/**
 	 * Because this class has a default constructor, it can
 	 * be used as a binder template. In other words, it can be used in other
@@ -197,6 +214,8 @@ public class IndividualSchedulesDetailsViewImpl extends Composite implements Ind
 		rbAllStud.setText(constants.all());
 		
 		btnPrintCopyExaminor.setText(constants.summoningsPrintExa());
+		btnPrintExaminerIndividualCopy.setText(constants.exportQRCode());
+		btnPrintStudentIndividualCopy.setText(constants.exportQRCode());
 		btnPrintCopySP.setText(constants.summoningsPrintSp());
 		btnPrintCopyStudent.setText(constants.schedulesPrintStud());
 		

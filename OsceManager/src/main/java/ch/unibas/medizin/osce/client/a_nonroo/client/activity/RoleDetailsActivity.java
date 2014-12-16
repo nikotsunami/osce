@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ChecklistImportPojoValueProxy;
 import ch.unibas.medizin.osce.client.a_nonroo.client.MapOsceRoleProxy;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.RoleDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
@@ -20,14 +22,24 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.ScarProxyRender
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CheckListQuestionPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CheckListTopicPopupView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CheckListTopicPopupViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.ChecklistImportQuestionPopupView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.ChecklistImportQuestionPopupViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.ChecklistImportTabPopupView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.ChecklistImportTabPopupViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.ChecklistImportTopicPopupView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.ChecklistImportTopicPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.CriteriaPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.ImportTopicPopupView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.ImportTopicPopupViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.QRPopupView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.QRPopupViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableAccessViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableItemValueView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableItemValueViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableItemView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleBaseTableItemViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsChecklistItemSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsChecklistItemSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsChecklistSubViewChecklistCriteriaItemView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsChecklistSubViewChecklistOptionItemView;
@@ -36,6 +48,10 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsChecklis
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsChecklistSubViewChecklistTopicItemView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsChecklistSubViewChecklistTopicItemViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsChecklistTabSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsChecklistTabSubViewImpl;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsChecklistTopicSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsChecklistTopicSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.role.RoleEditCheckListSubViewImpl;
@@ -86,6 +102,8 @@ import ch.unibas.medizin.osce.client.managed.request.ApplianceProxy;
 import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaRequest;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistItemProxy;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistItemRequest;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionRequest;
 import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
@@ -132,6 +150,7 @@ import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialRequest;
 import ch.unibas.medizin.osce.client.managed.ui.MaterialListProxyRenderer;
 import ch.unibas.medizin.osce.client.style.resources.LearningObjectiveData;
+import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
@@ -139,17 +158,21 @@ import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.clien
 import ch.unibas.medizin.osce.shared.BindType;
 import ch.unibas.medizin.osce.shared.Comparison;
 import ch.unibas.medizin.osce.shared.Gender;
+import ch.unibas.medizin.osce.shared.ItemType;
 import ch.unibas.medizin.osce.shared.LangSkillLevel;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.MaterialUsedFromTypes;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.OptionType;
 import ch.unibas.medizin.osce.shared.PossibleFields;
 import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.RoleParticipantTypes;
+import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceMessages;
 
 import com.allen_sauer.gwt.dnd.client.DragEndEvent;
 import com.allen_sauer.gwt.dnd.client.DragHandler;
@@ -159,6 +182,7 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -173,6 +197,7 @@ import com.google.gwt.requestfactory.shared.Receiver;
 import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.requestfactory.shared.Violation;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -232,7 +257,10 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		StandardizedPatientAdvancedSearchProfessionPopup.Delegate, 
 		StandardizedPatientAdvancedSearchWorkPermissionPopup.Delegate,
 		StandardizedPatientAdvancedSearchMaritialStatusPopupView.Delegate,
-		LearningObjectiveView.Delegate,RoleOsceSemesterSubView.Delegate		
+		LearningObjectiveView.Delegate,RoleOsceSemesterSubView.Delegate,
+		RoleDetailsChecklistTabSubView.Delegate, RoleDetailsChecklistTopicSubView.Delegate, RoleDetailsChecklistItemSubView.Delegate,
+		QRPopupView.Delegate,ChecklistImportTabPopupView.Delegate,ChecklistImportTopicPopupView.Delegate,
+		ChecklistImportQuestionPopupView.Delegate
 
 {
 
@@ -254,15 +282,14 @@ public class RoleDetailsActivity extends AbstractActivity implements
 	//try 
 	int arrayIndx = 0;
 	public StandardizedRoleDetailsView[] standardizedRoleDetailsView_sample;
-	
-	
 	List<Long> standardizedRoleList;
 	
 	public StandardizedRoleDetailsViewImpl[] standardizedRoleDetailsView;
 	public RoleEditCheckListSubViewImpl[] roleEditCheckListSubView;
 	
 	private static int selecTab = 0;
-
+	private UiIcons uiIcons = GWT.create(UiIcons.class);
+	
 	private RoleDetailsChecklistSubViewChecklistTopicItemViewImpl reViewImpl;
 	// Assignment I
 	public String selectedKeyword;
@@ -374,6 +401,8 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		 
 		 private List<LearningObjectiveData> learningObjectiveData = new ArrayList<LearningObjectiveData>();
 		 private LearningObjectiveData learningObjective;
+		 private final OsceMessages osceMessages = GWT.create(OsceMessages.class);
+			
 		 
 		 String temp = "";
 
@@ -887,7 +916,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		// Boolean object has to be checked for null value?
 		if(proxy.getActive().booleanValue() == true) 	{
 		
-			view.checkListsVerticalPanel.clear();
+			//view.checkListsVerticalPanel.clear();
 
 		standardizedRoleDetailsView[index] = view;
 		System.out.println("length previous version--"+proxy.getPreviousVersion());
@@ -905,6 +934,9 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		
 		standardizedRoleDetailsView[index].edit.setEnabled(true);
 
+		if (proxy.getCheckList() != null && standardizedRoleDetailsView[index] != null)
+			initiOSCEChecklist(proxy.getCheckList().getId(), standardizedRoleDetailsView[index]);
+		
 		standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].setHomeRole(proxy);
 		standardizedRoleDetailsView[index].setBaseProxy(proxy);
 		standardizedRoleDetailsView[index].home.setVisible(false);
@@ -917,7 +949,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 		standardizedRoleDetailsView[index].studyYear.setInnerText(new EnumRenderer<StudyYears>().render(proxy.getStudyYear())); // ADDED
 		standardizedRoleDetailsView[index].factor.setInnerText(proxy.getFactor() == null ? "": proxy.getFactor().toString());
 		standardizedRoleDetailsView[index].sum.setInnerText(proxy.getSum() == null ? "": proxy.getSum().toString());
-		
+		standardizedRoleDetailsView[index].topicFactor.setInnerText(proxy.getTopicFactor()==null?"": new EnumRenderer<RoleTopicFactor>().render(proxy.getTopicFactor()));
 		// E: Issue Role
 		standardizedRoleDetailsView[index].labelLongNameHeader.setText("" + proxy.getLongName()+ " ("+proxy.getMainVersion()+"."+proxy.getSubVersion()+")");
 
@@ -1545,7 +1577,7 @@ final int index2 = index;
 		//Assignment E[
 		//set CheckList Title
 		//Log.info(proxy.getCheckList().getTitle());
-		if(proxy.getCheckList()!=null)
+		/*if(proxy.getCheckList()!=null)
 		{
 			
 		((StandardizedRoleDetailsViewImpl)standardizedRoleDetailsView[index]).roleSubPanel.getTabBar().setTabText(0,proxy.getCheckList().getTitle()==null ? constants.checkList() : constants.checkList() + " " + proxy.getCheckList().getTitle());					
@@ -1594,7 +1626,7 @@ final int index2 = index;
 			}
 		}
 		
-		}
+		}*/
 		//Assignment E]
 		
 		
@@ -1973,7 +2005,7 @@ final int index2 = index;
 					
 					//create Topic View
 					int i=0;
-					standardizedRoleDetailsView[selectedtab].checkListsVerticalPanel.clear();
+					//standardizedRoleDetailsView[selectedtab].checkListsVerticalPanel.clear();
 					//standardizedRoleDetailsView[selectedtab].checkListAP.clear();
 					
 					topicView.getDragController().makeDraggable(topicView.getqueVP());
@@ -2293,7 +2325,7 @@ final int index2 = index;
 			view.setProxy(proxy);
 			((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)view).descriptionLbl.setText(proxy.getDescription());
 			((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)view).checkListTopicLbl.setText(proxy.getTitle());
-			standardizedRoleDetailsView[selectedTab].checkListsVerticalPanel.insert(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)view), standardizedRoleDetailsView[selectedTab].checkListsVerticalPanel.getWidgetCount());
+			//standardizedRoleDetailsView[selectedTab].checkListsVerticalPanel.insert(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)view), standardizedRoleDetailsView[selectedTab].checkListsVerticalPanel.getWidgetCount());
 			standardizedRoleDetailsView[selectedTab].checkListTopicView.add(view);
 			standardizedRoleDetailsView[selectedTab].getDragController().makeDraggable(view.asWidget(),view.getDraglbl());
 			//standardizedRoleDetailsView[selectedTab].getDragController().addDragHandler(roleDetailActivity);
@@ -2324,7 +2356,7 @@ final int index2 = index;
 			proxy.setTitle(checkListTopic);
 			proxy.setDescription(description);
 			
-			proxy.setSort_order(standardizedRoleDetailsView[selectedtab].checkListsVerticalPanel.getWidgetCount());
+			//proxy.setSort_order(standardizedRoleDetailsView[selectedtab].checkListsVerticalPanel.getWidgetCount());
 			proxy.setCheckList(standardizedRoleDetailsView[selectedtab].getValue().getCheckList());
 			// Highlight onViolation
 			Log.info("Map Size: "+ standardizedRoleDetailsView[selectedtab].getChecklistTopicMap().size());
@@ -2464,7 +2496,7 @@ final int index2 = index;
 			proxy.setOptionName(option);
 			proxy.setChecklistQuestion(questionView.getProxy());
 			proxy.setValue(value);
-			proxy.setInstruction(description);
+			proxy.setDescription(description);
 			proxy.setSequenceNumber(questionView.optionVerticalPanel.getWidgetCount());
 			proxy.setCriteriaCount(new Integer(questionView.optionPopup.getCriteriaCountLstBox().getValue(questionView.optionPopup.getCriteriaCountLstBox().getSelectedIndex())));
 			// Highlight onViolation
@@ -5514,7 +5546,7 @@ final int index2 = index;
 	{
 		//clear views
 		Log.info("refreshStandardizedRoleDetailView");
-		view.checkListsVerticalPanel.clear();
+		//view.checkListsVerticalPanel.clear();
 		
 		int index =roleDetailTabPanel.getSelectedIndex();
 		selectedtab=roleDetailTabPanel.getSelectedIndex();
@@ -5546,6 +5578,7 @@ final int index2 = index;
 		standardizedRoleDetailsView[index].studyYear.setInnerText(new EnumRenderer<StudyYears>().render(proxy.getStudyYear())); // ADDED
 		standardizedRoleDetailsView[index].factor.setInnerText(proxy.getFactor() == null ? "": proxy.getFactor().toString());
 		standardizedRoleDetailsView[index].sum.setInnerText(proxy.getSum() == null ? "": proxy.getSum().toString());
+		standardizedRoleDetailsView[index].topicFactor.setInnerText(new EnumRenderer<RoleTopicFactor>().render(proxy.getTopicFactor())); // ADDED
 		
 		// E: Issue Role
 		standardizedRoleDetailsView[index].labelLongNameHeader.setText("" + proxy.getLongName()+ " ("+proxy.getMainVersion()+"."+proxy.getSubVersion()+")");
@@ -6156,8 +6189,8 @@ final int index2 = index;
 		standardizedRoleDetailsView.delete.setEnabled(enable);
 		standardizedRoleDetailsView.copy.setEnabled(enable);
 		
-		standardizedRoleDetailsView.getImportTopicButton().setEnabled(enable);
-		standardizedRoleDetailsView.addCheckListTopicButton.setEnabled(enable);
+		//standardizedRoleDetailsView.getImportTopicButton().setEnabled(enable);
+		//standardizedRoleDetailsView.addCheckListTopicButton.setEnabled(enable);
 		
 		standardizedRoleDetailsView.roleTemplateListBox.setEnabled(enable);
 		standardizedRoleDetailsView.roleTemplateValueButon.setEnabled(enable);
@@ -6183,10 +6216,10 @@ final int index2 = index;
 		roleOsceSemesterSubView.getSearchButton().setEnabled(enable);
 		if(enable){
 			
-			standardizedRoleDetailsView.addCheckListTopicButton.removeStyleName("disableButton");
-			standardizedRoleDetailsView.addCheckListTopicButton.addStyleName("expTopicButton");
-			standardizedRoleDetailsView.getImportTopicButton().removeStyleName("disableButton");
-			standardizedRoleDetailsView.getImportTopicButton().addStyleName("expTopicButton");
+			//standardizedRoleDetailsView.addCheckListTopicButton.removeStyleName("disableButton");
+			//standardizedRoleDetailsView.addCheckListTopicButton.addStyleName("expTopicButton");
+			//standardizedRoleDetailsView.getImportTopicButton().removeStyleName("disableButton");
+			//standardizedRoleDetailsView.getImportTopicButton().addStyleName("expTopicButton");
 			
 			standardizedRoleDetailsView.getRoleFileSubViewImpl().addLastThreColumns();
 			standardizedRoleDetailsView.getRoomMaterialsDetailsSubViewImpl().addLastThreeColumns();
@@ -6200,10 +6233,10 @@ final int index2 = index;
 			standardizedRoleDetailsView.getStandartizedPatientAdvancedSearchSubViewImpl().addLastColumn();
 		}else{
 			
-			standardizedRoleDetailsView.addCheckListTopicButton.removeStyleName("expTopicButton");
-			standardizedRoleDetailsView.addCheckListTopicButton.addStyleName("disableButton");
-			standardizedRoleDetailsView.getImportTopicButton().removeStyleName("expTopicButton");
-			standardizedRoleDetailsView.getImportTopicButton().addStyleName("disableButton");
+			//standardizedRoleDetailsView.addCheckListTopicButton.removeStyleName("expTopicButton");
+			//standardizedRoleDetailsView.addCheckListTopicButton.addStyleName("disableButton");
+			//standardizedRoleDetailsView.getImportTopicButton().removeStyleName("expTopicButton");
+			//standardizedRoleDetailsView.getImportTopicButton().addStyleName("disableButton");
 			
 
 //			fileView[index].getTable().setColumnWidth(fileView[index].getTable().getColumn(1), 0, Unit.PX);
@@ -7321,7 +7354,7 @@ public void onDragStart(DragStartEvent event) {
 		proxy.setOptionName(topic);
 		proxy.setChecklistQuestion(optionView.getProxy().getChecklistQuestion());
 		proxy.setValue(description);
-		proxy.setInstruction(optionDesc);
+		proxy.setDescription(optionDesc);
 		proxy.setCriteriaCount(new Integer(optionView.optionPopup.getCriteriaCountLstBox().getValue(optionView.optionPopup.getCriteriaCountLstBox().getSelectedIndex())));
 		// Highlight onViolation
 		request.persist().using(proxy).fire(new OSCEReceiver<Void>(optionView.getChecklistOptionMap()) 
@@ -7957,6 +7990,976 @@ public void onDragStart(DragStartEvent event) {
 				}
 			});*/
 		}
+		@Override
+		public void exportChecklistQRClicked(final StandardizedRoleProxy value) {
+			
+			requests.standardizedRoleRequestNonRoo().createChecklistQRImageByChecklistId(value.getCheckList().getId()).fire(new OSCEReceiver<String>() {
+
+				@Override
+				public void onSuccess(String response) {
+					QRPopupViewImpl checklistQRPopupViewImpl = new QRPopupViewImpl(constants.checklistQRCode());
+					checklistQRPopupViewImpl.setDelegate(RoleDetailsActivity.this);
+					if(response != null) {
+						checklistQRPopupViewImpl.setBase64ImgStr(response);
+					}
+					
+					if(value.getCheckList() != null && value.getCheckList().getTitle() != null){
+						checklistQRPopupViewImpl.setId(value.getCheckList().getId());
+						checklistQRPopupViewImpl.setQRCodeName(value.getCheckList().getTitle());
+					}
+					checklistQRPopupViewImpl.center();
+				}
+			});
+		}
+		
+		private RoleDetailsChecklistItemSubView createiOSCEQuestionView(VerticalPanel containerVerticalPanel, String name, String description, ChecklistItemProxy questionProxy) {
+			RoleDetailsChecklistItemSubView checklistItemSubView = null;
+			
+			int widgetCount = containerVerticalPanel.getWidgetCount();
+			for (int i=0; i<widgetCount; i++) {
+				Widget widget = containerVerticalPanel.getWidget(i);
+				
+				if (widget instanceof RoleDetailsChecklistItemSubView) {
+					RoleDetailsChecklistItemSubView itemSubView = (RoleDetailsChecklistItemSubView) widget;
+					
+					if (itemSubView.getChecklistItemProxy() != null && itemSubView.getChecklistItemProxy().getId().equals(questionProxy.getId())) {
+						checklistItemSubView = itemSubView;
+						break;
+					}
+				}
+			}
+			
+			if (checklistItemSubView == null) {
+				checklistItemSubView = new RoleDetailsChecklistItemSubViewImpl();
+				checklistItemSubView.setChecklistItemProxy(questionProxy);
+				checklistItemSubView.setDelegate(this);
+				checklistItemSubView.setQuestionNameDescription(name, description);
+				
+				containerVerticalPanel.add(checklistItemSubView);
+				
+				if (questionProxy.getCheckListOptions() != null && questionProxy.getCheckListOptions().size() > 0) {
+					checklistItemSubView.getOptionTable().setRowData(questionProxy.getCheckListOptions());
+				} else {
+					checklistItemSubView.getOptionTable().setRowData(new ArrayList<ChecklistOptionProxy>());
+				}
+				
+				if (questionProxy.getCheckListCriterias() != null && questionProxy.getCheckListCriterias().size() > 0) {
+					checklistItemSubView.getCriteriaTable().setRowData(questionProxy.getCheckListCriterias());
+				} else {
+					checklistItemSubView.getCriteriaTable().setRowData(new ArrayList<ChecklistCriteriaProxy>());
+				}
+			}
+			
+			return checklistItemSubView;
+		}
+
+		private RoleDetailsChecklistTopicSubView createTopicView(VerticalPanel containerVerticalPanel, String name, String description, ChecklistItemProxy topicProxy) {
+			RoleDetailsChecklistTopicSubView checklistTopicSubView = null;
+			int widgetCount = containerVerticalPanel.getWidgetCount();
+			
+			for (int i=0; i<widgetCount; i++) {
+				Widget widget = containerVerticalPanel.getWidget(i);
+				
+				if (widget instanceof RoleDetailsChecklistTopicSubView) {
+					RoleDetailsChecklistTopicSubView topicView = (RoleDetailsChecklistTopicSubView) widget;
+					
+					if (topicView.getChecklistItemProxy() != null && topicView.getChecklistItemProxy().getId().equals(topicProxy.getId())) {
+						checklistTopicSubView = topicView;
+						break;
+					}
+				}
+			}
+			
+			if (checklistTopicSubView == null) {
+				final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+				final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+				checklistTopicSubView = new RoleDetailsChecklistTopicSubViewImpl(standardizedRoleProxy);
+				checklistTopicSubView.setChecklistItemProxy(topicProxy);
+				checklistTopicSubView.setDelegate(this);
+				if (name.length() > 40) {
+					checklistTopicSubView.getCheckListTopicLbl().setText(name.substring(0, 40) + "...");
+				} else {
+					checklistTopicSubView.getCheckListTopicLbl().setText(name);
+				}
+				if (description.length() > 50) {
+					checklistTopicSubView.getDescriptionLbl().setText(description.substring(0, 50) + "...");
+				} else {
+					checklistTopicSubView.getDescriptionLbl().setText(description);
+				}
+				checklistTopicSubView.getCheckListTopicLbl().setTitle(name);
+				checklistTopicSubView.getDescriptionLbl().setTitle(description);
+				
+				containerVerticalPanel.add(checklistTopicSubView);
+			}
+			
+			return checklistTopicSubView;
+		}
+
+		private RoleDetailsChecklistTabSubView createTabView(VerticalPanel verticalPanel, ChecklistItemProxy tabProxy) {
+			ScrolledTabLayoutPanel checklistTabPanel = null;
+			HorizontalPanel tabPanel = null;
+			int widgetCount = verticalPanel.getWidgetCount();
+			
+			for (int i=0; i<widgetCount; i++) {
+				Widget widget = verticalPanel.getWidget(i);
+				if (widget instanceof HorizontalPanel) {
+					tabPanel = (HorizontalPanel) widget;
+					checklistTabPanel = (ScrolledTabLayoutPanel) tabPanel.getWidget(0);
+				}
+			}
+			
+			if (checklistTabPanel == null) {
+				ImageResource icon1 = uiIcons.triangle1West(); 
+				ImageResource icon2=  uiIcons.triangle1East();
+				Unit u=Unit.PX;
+				
+				tabPanel = new HorizontalPanel();
+				tabPanel.setWidth("100%");
+				tabPanel.setHeight("100%");
+				
+				checklistTabPanel = new ScrolledTabLayoutPanel(40L, u, icon1, icon2);
+				checklistTabPanel.setHeight((ResolutionSettings.getRightWidgetHeight() / 2) - 50 + "px");
+				
+				tabPanel.add(checklistTabPanel);
+				tabPanel.addStyleName("horizontalPanelStyle");
+			
+				verticalPanel.add(tabPanel);
+			}
+			
+			RoleDetailsChecklistTabSubView roleDetailsChecklistTabSubView = null;
+			for (int i=0; i<checklistTabPanel.getWidgetCount(); i++) {
+				Widget widget = checklistTabPanel.getWidget(i);
+				
+				if (widget instanceof RoleDetailsChecklistTabSubView) {
+					RoleDetailsChecklistTabSubView checklistTabSubView = (RoleDetailsChecklistTabSubView) widget;
+					
+					if (checklistTabSubView.getChecklistItemProxy() != null && checklistTabSubView.getChecklistItemProxy().getId().equals(tabProxy.getId())) {
+						roleDetailsChecklistTabSubView = checklistTabSubView;
+						break;
+					}
+					
+				}
+			}
+			
+			if (roleDetailsChecklistTabSubView == null) {
+				final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+				final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+				roleDetailsChecklistTabSubView = new RoleDetailsChecklistTabSubViewImpl(standardizedRoleProxy);		
+				roleDetailsChecklistTabSubView.setChecklistItemProxy(tabProxy);
+				roleDetailsChecklistTabSubView.setDelegate(this);
+				roleDetailsChecklistTabSubView.setTabPanel(checklistTabPanel);
+				
+				if (tabProxy != null && tabProxy.getName() != null)
+					checklistTabPanel.add(roleDetailsChecklistTabSubView, tabProxy.getName());
+				else
+					checklistTabPanel.add(roleDetailsChecklistTabSubView, "");
+				
+				checklistTabPanel.selectTab(roleDetailsChecklistTabSubView);
+			}
+			
+			return roleDetailsChecklistTabSubView;
+		}
+		
+		@Override
+		public void addiOsceChecklistTabClicked(ItemType itemType, String name, String description, StandardizedRoleProxy standardizedRoleProxy) {
+			
+			requests.checklistItemRequestNonRoo().saveChecklistTabItem(name, description, standardizedRoleProxy.getId()).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+				@Override
+				public void onSuccess(ChecklistItemProxy response) {
+					int selectedIndex = view.getRoleDetailTabPanel().getSelectedIndex();
+					if (standardizedRoleDetailsView != null && standardizedRoleDetailsView.length > selectedIndex) {
+						StandardizedRoleDetailsViewImpl standardizedRoleDetailsViewImpl = standardizedRoleDetailsView[selectedIndex];
+					
+						if (standardizedRoleDetailsViewImpl != null) {
+							createTabView(standardizedRoleDetailsViewImpl.getContainerVerticalPanel(), response);
+						}
+					}
+				}
+			});
+		}
+
+		@Override
+		public void addiOSCECheckListTopicClicked(ItemType itemType, final String name, final String description, final RoleDetailsChecklistTabSubViewImpl roleDetailsChecklistTabSubViewImpl, final ChecklistItemProxy tabProxy, final String weight) {
+		
+			final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+			
+			
+			if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.WEIGHT)){
+					if(isDouble(weight) == true){
+						
+						final Double topicWeight= weight==""?0:Double.valueOf(weight);
+					    requests.checklistItemRequestNonRoo().saveChecklistTopicItem(name, description, tabProxy.getId(),topicWeight).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+						@Override
+						public void onSuccess(ChecklistItemProxy response) {
+							createTopicView(roleDetailsChecklistTabSubViewImpl.getContainerVerticalPanel(), name, description, response);
+							}
+					    });
+					}else
+					{
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric(constants.weight()));	
+					}
+				}else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.RATIO)){
+					requests.checklistItemRequestNonRoo().findMaxTopicWeight(standardizedRoleProxy.getCheckList().getId()).fire(new OSCEReceiver<Double>() {
+
+						@Override
+						public void onSuccess(Double response) {
+							
+							if(response != null && response <100){
+								if(isDouble(weight) == true){
+									
+									final Double topicWeight= weight==""?0:Double.valueOf(weight);
+									if((topicWeight  + response) > 100){
+										MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+										dialogBox.showConfirmationDialog(constants.ratioExceedError());	
+									}else{
+									requests.checklistItemRequestNonRoo().saveChecklistTopicItem(name, description, tabProxy.getId(),topicWeight).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+										@Override
+										public void onSuccess(ChecklistItemProxy response) {
+											createTopicView(roleDetailsChecklistTabSubViewImpl.getContainerVerticalPanel(), name, description, response);
+										}
+									});
+						
+								}
+							}else {
+								MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+								dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric(constants.ratio()));	
+							}
+						}else{
+							MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+							dialogBox.showConfirmationDialog(constants.ratioExceedError());
+						}
+					}
+				});
+				
+			}else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.NONE)){
+				
+				requests.checklistItemRequestNonRoo().saveChecklistTopicItem(name, description, tabProxy.getId(),null).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+					@Override
+					public void onSuccess(ChecklistItemProxy response) {
+						createTopicView(roleDetailsChecklistTabSubViewImpl.getContainerVerticalPanel(), name, description, response);
+					}
+				});
+			}
+		
+		}
+		
+		@Override
+		public void addiOsceChecklistQuestionClicked(ItemType itemType, final String name, final String description, Boolean isOverallQuestion, OptionType optionType, final RoleDetailsChecklistTopicSubViewImpl checklistTopicSubViewImpl, ChecklistItemProxy checklistTopicProxy) { 
+			requests.checklistItemRequestNonRoo().saveChecklistQuestionItem(name, description, isOverallQuestion, optionType, checklistTopicProxy.getId()).with("").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+				@Override
+				public void onSuccess(ChecklistItemProxy response) {
+					createiOSCEQuestionView(checklistTopicSubViewImpl.getContainerVerticalPanel(), name, description, response);
+				}
+			});
+		}
+
+		@Override
+		public void deleteChecklistTabClicked(final ScrolledTabLayoutPanel checklistTabPanel, final ChecklistItemProxy checklistItemProxy) {
+			
+			requests.checklistItemRequestNonRoo().removeChecklistTabItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+				@Override
+				public void onSuccess(Boolean response) {
+					if (response) {
+						if (checklistTabPanel.getWidgetCount() == 1) {
+							checklistTabPanel.getParent().removeFromParent();
+							checklistTabPanel.removeFromParent();
+						} else {
+							Widget widget = checklistTabPanel.getWidget(checklistTabPanel.getSelectedIndex());
+							checklistTabPanel.remove(widget);
+						}
+					}
+					else {
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+						dialogBox.showConfirmationDialog(constants.deleteTabError());
+					}
+					
+				}
+			});
+			
+		}
+
+		@Override
+		public void deleteTopicClicked(final RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl, ChecklistItemProxy checklistItemProxy) {
+			requests.checklistItemRequestNonRoo().removeChecklistTopicItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+				@Override
+				public void onSuccess(Boolean response) {
+					if (response) {
+						roleDetailsChecklistTopicSubViewImpl.removeFromParent();
+					}
+					else {
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+						dialogBox.showConfirmationDialog(constants.deleteTopicError());
+					}
+				}
+			});
+		}
+
+		@Override
+		public void deleteChecklistQuestionClicked(final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl, ChecklistItemProxy checklistItemProxy) {
+			System.out.println("Checklist item id" +checklistItemProxy.getId() );
+			requests.checklistItemRequestNonRoo().removeChecklistItemQuestionItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+				@Override
+				public void onSuccess(Boolean response) {
+					if (response) {
+						roleDetailsChecklistItemSubViewImpl.removeFromParent();
+					}
+					else {
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+						dialogBox.showConfirmationDialog(constants.deleteQuestionError());
+					}
+				}
+			});
+		}
+		
+		private void initiOSCEChecklist(Long checklistId, final StandardizedRoleDetailsViewImpl standardizedRoleDetailsView) {
+			
+			requests.checklistItemRequestNonRoo().findAllChecklistItemByChecklistId(checklistId).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+
+				@Override
+				public void onSuccess(List<ChecklistItemProxy> response) {
+					List<ChecklistItemProxy> tabList = new ArrayList<ChecklistItemProxy>();
+					List<ChecklistItemProxy> topicList = new ArrayList<ChecklistItemProxy>();
+					List<ChecklistItemProxy> questionList = new ArrayList<ChecklistItemProxy>();
+					
+					for (ChecklistItemProxy proxy : response) {
+						if (ItemType.TAB.equals(proxy.getItemType())) {
+							tabList.add(proxy);
+						}
+						else if (ItemType.TOPIC.equals(proxy.getItemType())) {
+							topicList.add(proxy);
+						}
+						else if (ItemType.QUESTION.equals(proxy.getItemType())) {
+							questionList.add(proxy);
+						}
+					}
+					
+					for (ChecklistItemProxy tabProxy : tabList) {
+						final RoleDetailsChecklistTabSubView tabSubView = createTabView(standardizedRoleDetailsView.getContainerVerticalPanel(), tabProxy);
+						
+						for (ChecklistItemProxy topicProxy : topicList) {
+							if (topicProxy.getParentItem().getId() != null && topicProxy.getParentItem().getId().equals(tabProxy.getId())) {
+								final RoleDetailsChecklistTopicSubView topicSubView = createTopicView(tabSubView.getContainerVerticalPanel(), topicProxy.getName(), topicProxy.getDescription(), topicProxy);
+								
+								for (ChecklistItemProxy questionProxy : questionList) {
+									if (questionProxy.getParentItem().getId().equals(topicProxy.getId())) {
+										RoleDetailsChecklistItemSubView checklistQuestionSubView = createiOSCEQuestionView(topicSubView.getContainerVerticalPanel(), questionProxy.getName(), questionProxy.getDescription(), questionProxy);
+									}									
+								}
+							}
+						}
+					}
+				}
+			});	
+		}
+
+		@Override
+		public void updateChecklistTab(final ChecklistItemProxy checklistItemProxy, final String name, String description, final RoleDetailsChecklistTabSubViewImpl roleDetailsChecklistTabSubViewImpl, final ScrolledTabLayoutPanel checklistTabPanel) {
+
+			ChecklistItemRequest checklistItemRequest = requests.checklistItemRequest();
+			final ChecklistItemProxy proxy = checklistItemRequest.edit(checklistItemProxy);
+			proxy.setName(name);
+			proxy.setDescription(description);
+			
+			checklistItemRequest.persist().using(checklistItemProxy).fire(new OSCEReceiver<Void>() {
+
+				@Override
+				public void onSuccess(Void response) {
+					roleDetailsChecklistTabSubViewImpl.setChecklistItemProxy(proxy);
+					checklistTabPanel.setTabText(checklistTabPanel.getSelectedIndex(), name);
+				}
+			});
+		}
+
+		/*
+		 *In this method, if topic factor for role is weight then checklist topic could be added 
+		 *with any value of weight. But if topic factor is ratio, then sum of ratio of all topics
+		 *must not exceed 100. 
+		 */
+		@Override
+		public void updateChecklistTopic(ItemType itemType, final String name, final String description, final RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl, final ChecklistItemProxy checklistItemProxy, String weight) {
+						
+			final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+			final String topicFactor = RoleTopicFactor.values()[standardizedRoleProxy.getTopicFactor().ordinal()].toString();
+				
+			
+				
+			if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.WEIGHT)){
+				if(isDouble(weight) == true){
+					ChecklistItemRequest checklistItemRequest = requests.checklistItemRequest();
+					final ChecklistItemProxy proxy = checklistItemRequest.edit(checklistItemProxy);
+					
+					proxy.setName(name);
+					proxy.setDescription(description);
+					proxy.setWeight(weight =="" ? 0 :Double.valueOf(weight));
+			
+					checklistItemRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+
+						@Override
+						public void onSuccess(Void response) {
+							roleDetailsChecklistTopicSubViewImpl.setChecklistItemProxy(proxy);
+							if (name.length() > 40) {
+								roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name.substring(0, 40) + "...");
+							} else {
+								roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);
+							}
+							if (description.length() > 50) {
+								roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description.substring(0, 50) + "...");
+							} else {
+								roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);
+							}
+							
+							roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setTitle(name);
+							roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setTitle(description);
+						}
+					});
+					
+
+					
+				 } else {
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric(constants.weight()));	
+				}
+					
+				} else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.RATIO)){
+				
+				if(isDouble(weight) == true){
+						final Double topicWeight= weight==""?0:Double.valueOf(weight);
+						final ChecklistItemRequest checklistItemRequest = requests.checklistItemRequest();
+						final ChecklistItemProxy proxy = checklistItemRequest.edit(checklistItemProxy);
+						
+						proxy.setName(name);
+						proxy.setDescription(description);
+						proxy.setWeight(weight =="" ? 0 :Double.valueOf(weight));
+						
+						requests.checklistItemRequestNonRoo().findMaxTopicWeight(standardizedRoleProxy.getCheckList().getId()).fire(new OSCEReceiver<Double>() {
+
+							@Override
+							public void onSuccess(Double response) {
+								
+								if(response != null && response <100){
+									
+									if((topicWeight  + response) > 100){
+										MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+										dialogBox.showConfirmationDialog(constants.ratioExceedError());	
+									}else{
+										checklistItemRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+
+											@Override
+											public void onSuccess(Void response) {
+												roleDetailsChecklistTopicSubViewImpl.setChecklistItemProxy(proxy);
+												if (name.length() > 40) {
+													roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name.substring(0, 40) + "...");
+												} else {
+													roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);
+												}
+												if (description.length() > 50) {
+													roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description.substring(0, 50) + "...");
+												} else {
+													roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);
+												}
+												roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setTitle(name);
+												roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setTitle(description);
+											}
+										});
+							
+									}
+								}else{
+									MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+									dialogBox.showConfirmationDialog(constants.ratioExceedError());	
+								}
+							}
+						});
+					} else {
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric(constants.ratio()));	
+					}
+				
+			       }else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.NONE)){
+			    	   ChecklistItemRequest checklistItemRequest = requests.checklistItemRequest();
+			    	   final ChecklistItemProxy proxy = checklistItemRequest.edit(checklistItemProxy);
+						
+			    	   proxy.setName(name);
+			    	   proxy.setDescription(description);
+						
+			    	   checklistItemRequest.persist().using(proxy).fire(new OSCEReceiver<Void>() {
+
+							@Override
+							public void onSuccess(Void response) {
+								roleDetailsChecklistTopicSubViewImpl.setChecklistItemProxy(proxy);
+								if (name.length() > 40) {
+									roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name.substring(0, 40) + "...");
+								} else {
+									roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setText(name);
+								}
+								if (description.length() > 50) {
+									roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description.substring(0, 50) + "...");
+								} else {
+									roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setText(description);
+								}
+								roleDetailsChecklistTopicSubViewImpl.getCheckListTopicLbl().setTitle(name);
+								roleDetailsChecklistTopicSubViewImpl.getDescriptionLbl().setTitle(description);
+							}
+						});
+			       }
+		}
+		
+		@Override
+		public void updateChecklistQuestion(ItemType itemType, final String name, final String description, Boolean isOverallQuestion, OptionType optionType, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl, ChecklistItemProxy checklistQuestionProxy) {
+			ChecklistItemRequest checklistItemRequest = requests.checklistItemRequest();
+			final ChecklistItemProxy proxy = checklistItemRequest.edit(checklistQuestionProxy);
+			proxy.setName(name);
+			proxy.setDescription(description);
+			proxy.setIsRegressionItem(isOverallQuestion);
+			proxy.setOptionType(optionType);
+			
+			checklistItemRequest.persist().using(checklistQuestionProxy).fire(new OSCEReceiver<Void>() {
+
+				@Override
+				public void onSuccess(Void response) {
+					roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(proxy);
+					roleDetailsChecklistItemSubViewImpl.setQuestionNameDescription(name, description);
+				}
+			});
+		}
+		
+		@Override
+		public void saveCriteriaClicked(String name, ChecklistItemProxy checklistItemProxy, String description, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
+			requests.checklistCriteriaRequestNonRooo().saveChecklistCriteria(name, description, checklistItemProxy.getId(), null).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+				@Override
+				public void onSuccess(ChecklistItemProxy response) {	
+					if (response != null ) {
+						roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(response);
+						roleDetailsChecklistItemSubViewImpl.getCriteriaTable().setRowData(response.getCheckListCriterias());
+					}
+				}
+			});
+		}
+
+		public void saveOptionClicked(String name, String description, String value, String criteriaCount, ChecklistItemProxy checklistItemProxy, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
+			requests.checklistOptionRequestNonRooo().saveChecklistOption(name, description, value, Integer.parseInt(criteriaCount), checklistItemProxy.getId(), null).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+				@Override
+				public void onSuccess(ChecklistItemProxy response) {
+					if (response != null) {
+						roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(response);
+						roleDetailsChecklistItemSubViewImpl.getOptionTable().setRowData(response.getCheckListOptions());
+					}
+				}
+			});
+		}
+
+		@Override
+		public void deleteCriteriaClicked(ChecklistCriteriaProxy criteriaProxy, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
+			requests.checklistCriteriaRequestNonRooo().removeChecklistCriteria(criteriaProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+				@Override
+				public void onSuccess(ChecklistItemProxy response) {
+					if (response == null) {
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+						dialogBox.showConfirmationDialog(constants.deleteCriteriaError());
+					} 
+					else {
+						roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(response);
+						roleDetailsChecklistItemSubViewImpl.getCriteriaTable().setRowData(response.getCheckListCriterias());
+					}
+				}
+			});
+		}
+
+		@Override
+		public void deleteOptionClicked(ChecklistOptionProxy optionProxy, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
+			requests.checklistOptionRequestNonRooo().removeChecklistOption(optionProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+				@Override
+				public void onSuccess(ChecklistItemProxy response) {
+					if (response == null) {
+						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.error());
+						dialogBox.showConfirmationDialog(constants.deleteOptionError());
+					} 
+					else {
+						roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(response);
+						roleDetailsChecklistItemSubViewImpl.getOptionTable().setRowData(response.getCheckListOptions());
+					}
+				}
+			});
+		}
+		
+		@Override
+		public void updateCriteriaClicked(String name, String description, ChecklistItemProxy checklistItemProxy, ChecklistCriteriaProxy criteriaProxy, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
+			requests.checklistCriteriaRequestNonRooo().saveChecklistCriteria(name, description, checklistItemProxy.getId(), criteriaProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+				@Override
+				public void onSuccess(ChecklistItemProxy response) {	
+					if (response != null ) {
+						roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(response);
+						roleDetailsChecklistItemSubViewImpl.getCriteriaTable().setRowData(response.getCheckListCriterias());
+					}
+				}
+			});
+		
+		}
+		
+		@Override
+		public void updateOptionClicked(String name, String description, String value, String criteriaCount, ChecklistItemProxy checklistItemProxy, ChecklistOptionProxy optionProxy, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
+			requests.checklistOptionRequestNonRooo().saveChecklistOption(name, description, value, Integer.parseInt(criteriaCount), checklistItemProxy.getId(), optionProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+
+				@Override
+				public void onSuccess(ChecklistItemProxy response) {
+					if (response != null) {
+						roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(response);
+						roleDetailsChecklistItemSubViewImpl.getOptionTable().setRowData(response.getCheckListOptions());
+					}
+				}
+			});
+		}
+
+		@Override
+		public void exportChecklistQRCodePopUp(Long checklistId) {
+			String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.ROLE_CHECKLIST_QR.ordinal()));          
+			String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+					.concat("&").concat(ResourceDownloadProps.ID).concat("=").concat(URL.encodeQueryString(checklistId.toString()));
+			Log.info("--> url is : " +url);
+			Window.open(url, "", "");
+		}
+
+		@Override
+		public void exportSettingsQRCodePopUp(Long osceSettingsId) {}
+
+		@Override
+		public void setSpecialisationBoxValues(final ChecklistImportTabPopupView checklistImportTabPopUpView) {
+			requests.specialisationRequestNonRoo().findSpecialisations().fire(new OSCEReceiver<List<SpecialisationProxy>>() {
+
+				@Override
+				public void onSuccess(List<SpecialisationProxy> response) {
+					
+					DefaultSuggestOracle<SpecialisationProxy> specialisation =  (DefaultSuggestOracle<SpecialisationProxy>)checklistImportTabPopUpView.getView().getSpecialisationSuggestionBox().getSuggestOracle();
+					specialisation.setPossiblilities(response);
+					checklistImportTabPopUpView.getView().getSpecialisationSuggestionBox().setSuggestOracle(specialisation);
+				
+					DefaultSuggestOracle<StandardizedRoleProxy> roleBox =  (DefaultSuggestOracle<StandardizedRoleProxy>)checklistImportTabPopUpView.getView().getStandardizedRoleSuggestionBox().getSuggestOracle();
+					roleBox.clear();
+					checklistImportTabPopUpView.getView().getStandardizedRoleSuggestionBox().setSuggestOracle(roleBox);
+				
+					DefaultSuggestOracle<ChecklistImportPojoValueProxy> tabBox =  (DefaultSuggestOracle<ChecklistImportPojoValueProxy>)checklistImportTabPopUpView.getView().getTabSuggestionBox().getSuggestOracle();
+					tabBox.clear();
+					checklistImportTabPopUpView.getView().getTabSuggestionBox().setSuggestOracle(tabBox);
+				}
+			});
+		}
+	
+		@Override
+		public void createImportTabPopUp(IconButton iOsceImportItemButton) {
+			final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+			final ChecklistImportTabPopupView checklistImportTabView = new ChecklistImportTabPopupViewImpl();
+			checklistImportTabView.setDelegate(this);
+			checklistImportTabView.getView().showRelativeTo(iOsceImportItemButton);
+			int height = checklistImportTabView.getView().getOffsetHeight() + iOsceImportItemButton.getAbsoluteTop();
+			if (height > (ResolutionSettings.getRightWidgetHeight() + 20)) {
+				checklistImportTabView.getView().setPopupPosition(checklistImportTabView.getView().getAbsoluteLeft(), checklistImportTabView.getView().getAbsoluteTop() - 6);
+			}			
+			else {
+				checklistImportTabView.getView().setPopupPosition(checklistImportTabView.getView().getAbsoluteLeft(),checklistImportTabView.getView().getAbsoluteTop() + 10);
+			}
+			setSpecialisationBoxValues(checklistImportTabView);
+			
+			checklistImportTabView.getView().getOkBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					checklistImportTabView.getView().hide();
+					if(standardizedRoleProxy != null && checklistImportTabView.getTabId() != null && checklistImportTabView.getStandardizedRoleId() != null){
+				
+						requests.checklistItemRequestNonRoo().importChecklistTabsForTab(standardizedRoleProxy.getId(),checklistImportTabView.getStandardizedRoleId(),checklistImportTabView.getTabId()).fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+
+							@Override
+							public void onSuccess(List<ChecklistItemProxy> response) {
+								if (standardizedRoleProxy.getCheckList() != null && selectedStandardizedRoleView != null) {
+									initiOSCEChecklist(standardizedRoleProxy.getCheckList().getId(), selectedStandardizedRoleView);
+								}
+							}
+						});
+					}
+				}
+			});
+			
+			checklistImportTabView.getView().getCancelBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					checklistImportTabView.getView().hide();
+				}
+			});
+			
+		}
+
+		@Override
+		public void specialisationSuggectionBoxValueSelected(Long specialisationId,final ChecklistImportTabPopupViewImpl checklistImportTabPopupViewImpl) {
+				final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+			
+				if (standardizedRoleProxy != null) {
+					requests.standardizedRoleRequestNonRoo().findRolesFromSpecialisationId(specialisationId, standardizedRoleProxy.getId()).with("checkList").fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
+	
+						@Override
+						public void onSuccess(List<StandardizedRoleProxy> response) {
+							
+							 DefaultSuggestOracle<StandardizedRoleProxy> suggestOracle1 = (DefaultSuggestOracle<StandardizedRoleProxy>) checklistImportTabPopupViewImpl.getStandardizedRoleSuggestionBox().getSuggestOracle();
+							 suggestOracle1.setPossiblilities(response);
+							 checklistImportTabPopupViewImpl.getStandardizedRoleSuggestionBox().setSuggestOracle(suggestOracle1);
+							 checklistImportTabPopupViewImpl.getStandardizedRoleSuggestionBox().setText("");
+						}
+					});
+				}
+		}
+
+		@Override
+		public void standardizedRoleSuggectionBoxValueSelected(Long checklistId,final ChecklistImportTabPopupViewImpl checklistImportTabPopupViewImpl) {
+		
+			 requests.checklistItemRequestNonRoo().findAllChecklistTabsByRoles(checklistId).fire(new OSCEReceiver<List<ChecklistImportPojoValueProxy>>() {
+
+					@Override
+					public void onSuccess(List<ChecklistImportPojoValueProxy> response) {
+
+						List<ChecklistImportPojoValueProxy> tabs=new ArrayList<ChecklistImportPojoValueProxy>();
+						
+						if(response != null && response.size() > 0){
+							DefaultSuggestOracle<ChecklistImportPojoValueProxy> tabsuggestOracle=(DefaultSuggestOracle<ChecklistImportPojoValueProxy>)checklistImportTabPopupViewImpl.getTabSuggestionBox().getSuggestOracle();
+							tabsuggestOracle.clear();
+							tabs.addAll(response);
+							checklistImportTabPopupViewImpl.getTabSuggestionBox().setSuggestOracle(tabsuggestOracle);
+							checklistImportTabPopupViewImpl.getTabSuggestionBox().setSelected(response.get(0));
+							tabsuggestOracle.setPossiblilities(tabs);
+						}
+					}
+				 });
+		}
+
+		@Override
+		public void createImportTopicPopUp(IconButton importSectionButton,final Long tabId) {
+	
+			final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+			final ChecklistImportTopicPopupView checklistImportTopicPopup = new ChecklistImportTopicPopupViewImpl();
+			checklistImportTopicPopup.getView().showRelativeTo(importSectionButton);
+			checklistImportTopicPopup.setDelegate(this);
+			int height =checklistImportTopicPopup.getView().getOffsetHeight() + importSectionButton.getAbsoluteTop();
+			if (height > (ResolutionSettings.getRightWidgetHeight() + 20)) {
+				checklistImportTopicPopup.getView().getView().setDownArrowStyle();
+				checklistImportTopicPopup.getView().getView().setPopupPosition(checklistImportTopicPopup.getView().getView().getAbsoluteLeft(), checklistImportTopicPopup.getView().getView().getAbsoluteTop() - 6);
+			}			
+			else {
+				checklistImportTopicPopup.getView().setPopupPosition(checklistImportTopicPopup.getView().getAbsoluteLeft(), checklistImportTopicPopup.getView().getAbsoluteTop() + 10);
+			}
+
+			setStandardizedRoleBoxValuesTopicPopup(checklistImportTopicPopup);
+
+			checklistImportTopicPopup.getView().getOkBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					checklistImportTopicPopup.getView().hide();
+					if(standardizedRoleProxy != null && checklistImportTopicPopup.getStandardizedRoleId() != null && checklistImportTopicPopup.getTopicId() != null){
+				
+						requests.checklistItemRequestNonRoo().importChecklistTopicsForRole(standardizedRoleProxy.getId(),checklistImportTopicPopup.getStandardizedRoleId(),checklistImportTopicPopup.getTopicId(),tabId).fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+
+							@Override
+							public void onSuccess(List<ChecklistItemProxy> response) {
+								if (standardizedRoleProxy.getCheckList() != null && selectedStandardizedRoleView != null) {
+									initiOSCEChecklist(standardizedRoleProxy.getCheckList().getId(), selectedStandardizedRoleView);
+								}
+							}
+						});
+					}
+				}
+			});
+			checklistImportTopicPopup.getView().getCancelBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					checklistImportTopicPopup.getView().hide();
+				}
+			});
+		}
+
+		private void setStandardizedRoleBoxValuesTopicPopup(final ChecklistImportTopicPopupView checklistImportTopicPopup) {
+
+			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+			
+			if (standardizedRoleProxy != null) {
+				requests.standardizedRoleRequestNonRoo().findRolesExceptCurrentRole(standardizedRoleProxy.getId()).with("checkList").fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
+
+					@Override
+					public void onSuccess(List<StandardizedRoleProxy> response) {
+						if(response != null && response.size() > 0){
+
+							DefaultSuggestOracle<StandardizedRoleProxy> suggestOracle1 = (DefaultSuggestOracle<StandardizedRoleProxy>) checklistImportTopicPopup.getView().getStandardizedRoleSuggestionBox().getSuggestOracle();
+							suggestOracle1.setPossiblilities(response);
+							checklistImportTopicPopup.getView().getStandardizedRoleSuggestionBox().setSuggestOracle(suggestOracle1);
+							checklistImportTopicPopup.getView().getStandardizedRoleSuggestionBox().setText("");
+						}
+					}
+				});
+			}
+		}
+
+		@Override
+		public void createImportQuestionPopUp(IconButton importSectionButton, final Long topicId) {
+
+			final ChecklistImportQuestionPopupView checklistImportQuestionPopup = new ChecklistImportQuestionPopupViewImpl();
+			final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+		
+			checklistImportQuestionPopup.getView().showRelativeTo(importSectionButton);
+			checklistImportQuestionPopup.setDelegate(this);
+			int height = checklistImportQuestionPopup.getView().getOffsetHeight() + importSectionButton.getAbsoluteTop();
+			if (height > (ResolutionSettings.getRightWidgetHeight() + 20)) {
+				checklistImportQuestionPopup.getView().setDownArrowStyle();
+				checklistImportQuestionPopup.getView().setPopupPosition(checklistImportQuestionPopup.getView().getAbsoluteLeft(),checklistImportQuestionPopup.getView().getAbsoluteTop() - 6);
+			}			
+			else {
+				checklistImportQuestionPopup.getView().setPopupPosition(checklistImportQuestionPopup.getView().getAbsoluteLeft(), checklistImportQuestionPopup.getView().getAbsoluteTop() + 8);
+			}
+			setStandardizedRoleBoxValuesQuestionPopup(checklistImportQuestionPopup);
+			checklistImportQuestionPopup.getView().getOkBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					checklistImportQuestionPopup.getView().hide();
+					if(standardizedRoleProxy != null && checklistImportQuestionPopup.getRoleId() != null && checklistImportQuestionPopup.getQuestionId() != null && checklistImportQuestionPopup.getTopicId() != null){
+				
+						requests.checklistItemRequestNonRoo().importChecklistQuestionsForTopic(checklistImportQuestionPopup.getTopicId(),checklistImportQuestionPopup.getRoleId(),checklistImportQuestionPopup.getQuestionId(),topicId).fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+
+							@Override
+							public void onSuccess(List<ChecklistItemProxy> response) {
+								if (standardizedRoleProxy.getCheckList() != null && selectedStandardizedRoleView != null) {
+									initiOSCEChecklist(standardizedRoleProxy.getCheckList().getId(), selectedStandardizedRoleView);
+								}
+							}
+						});
+					}
+				}
+			});
+			
+			checklistImportQuestionPopup.getView().getCancelBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					checklistImportQuestionPopup.getView().hide();
+				}
+			});
+		}
+		
+		private void setStandardizedRoleBoxValuesQuestionPopup(final ChecklistImportQuestionPopupView checklistImportQuestionPopup) {
+
+			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+			
+			if (standardizedRoleProxy != null) {
+				requests.standardizedRoleRequestNonRoo().findRolesExceptCurrentRole(standardizedRoleProxy.getId()).with("checkList").fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
+
+					@Override
+					public void onSuccess(List<StandardizedRoleProxy> response) {
+						if(response != null && response.size() > 0){
+
+							DefaultSuggestOracle<StandardizedRoleProxy> suggestOracle1 = (DefaultSuggestOracle<StandardizedRoleProxy>) checklistImportQuestionPopup.getView().getStandardizedRoleSuggestionBox().getSuggestOracle();
+							suggestOracle1.setPossiblilities(response);
+							checklistImportQuestionPopup.getView().getStandardizedRoleSuggestionBox().setSuggestOracle(suggestOracle1);
+							checklistImportQuestionPopup.getView().getStandardizedRoleSuggestionBox().setText("");
+						}
+					}
+				});
+			}
+		}
+
+		@Override
+		public void standardizedRoleSuggectionBoxValueSelectedTopicPopUp(Long checklistId,final ChecklistImportTopicPopupViewImpl checklistImportTopicPopup) {
+			
+			requests.checklistItemRequestNonRoo().findAllChecklistTopicsByRoles(checklistId).fire(new OSCEReceiver<List<ChecklistImportPojoValueProxy>>() {
+
+				@Override
+				public void onSuccess(List<ChecklistImportPojoValueProxy> response) {
+
+					List<ChecklistImportPojoValueProxy> topics=new ArrayList<ChecklistImportPojoValueProxy>();
+					if(response != null && response.size() > 0){
+						DefaultSuggestOracle<ChecklistImportPojoValueProxy> topicsuggestOracle=(DefaultSuggestOracle<ChecklistImportPojoValueProxy>)checklistImportTopicPopup.getTopicSuggestionBox().getSuggestOracle();
+						topics.addAll(response);
+						checklistImportTopicPopup.getTopicSuggestionBox().setSuggestOracle(topicsuggestOracle);
+						topicsuggestOracle.setPossiblilities(topics);
+						checklistImportTopicPopup.getTopicSuggestionBox().setSelected(response.get(0));
+					}
+				}
+			 });
+		}
+
+		@Override
+		public void standardizedRoleSuggectionBoxValueSelectedQuestionPopup(Long checklistId,final ChecklistImportQuestionPopupViewImpl checklistImportQuestionPopupViewImpl) {
+			
+			requests.checklistItemRequestNonRoo().findAllChecklistTopicsByChecklist(checklistId).fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+
+				@Override
+				public void onSuccess(List<ChecklistItemProxy> response) {
+
+					List<ChecklistItemProxy> topics=new ArrayList<ChecklistItemProxy>();
+					
+					if(response != null && response.size() > 0){
+						DefaultSuggestOracle<ChecklistItemProxy> topicsuggestOracle=(DefaultSuggestOracle<ChecklistItemProxy>)checklistImportQuestionPopupViewImpl.getTopicSuggestionBox().getSuggestOracle();
+						topics.addAll(response);
+						checklistImportQuestionPopupViewImpl.getTopicSuggestionBox().setSuggestOracle(topicsuggestOracle);
+						topicsuggestOracle.setPossiblilities(topics);
+					}
+				}
+			 });
+			
+		}
+
+		@Override
+		public void topicSuggestionBoxValueSelectedQuestionPopup(Long topicId,final ChecklistImportQuestionPopupViewImpl checklistImportQuestionPopup) {
+	
+			requests.checklistItemRequestNonRoo().findChecklistQuestionByTopicId(topicId).fire(new OSCEReceiver<List<ChecklistImportPojoValueProxy>>() {
+
+				@Override
+				public void onSuccess(List<ChecklistImportPojoValueProxy> response) {
+
+					List<ChecklistImportPojoValueProxy> questions=new ArrayList<ChecklistImportPojoValueProxy>();
+					
+					if(response != null && response.size() > 0){
+						DefaultSuggestOracle<ChecklistImportPojoValueProxy> questionsuggestOracle=(DefaultSuggestOracle<ChecklistImportPojoValueProxy>)checklistImportQuestionPopup.getQuestionSuggestionBox().getSuggestOracle();
+						questions.addAll(response);
+						checklistImportQuestionPopup.getQuestionSuggestionBox().setSuggestOracle(questionsuggestOracle);
+						questionsuggestOracle.setPossiblilities(questions);
+						checklistImportQuestionPopup.getQuestionSuggestionBox().setSelected(response.get(0));
+					}
+				}
+			 });
+		}
+		 public static boolean isDouble(String value) {
+
+			  try  
+			  {  
+				  Double.parseDouble(value);  
+			  }  
+			  catch(NumberFormatException nfe)  
+			  {  
+			    return false;  
+			  }  
+			  catch (Exception e) {
+				  return false;
+			  }
+			  
+			  return true;  
+		}
+
 }
 
 	

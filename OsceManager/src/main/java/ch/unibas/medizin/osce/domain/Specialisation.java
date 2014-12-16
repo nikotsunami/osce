@@ -106,5 +106,13 @@ public class Specialisation {
 		return result;
 	}
  // TestCasePurpose Method End }
-    
+
+   public static java.util.List<Specialisation> findSpecialisations(){
+
+    	EntityManager em = entityManager();
+        String sqlQuery = "SELECT o FROM Specialisation AS o ";
+        TypedQuery<Specialisation> q = em.createQuery(sqlQuery, Specialisation.class);
+        
+        return q.getResultList();
+    }
 }

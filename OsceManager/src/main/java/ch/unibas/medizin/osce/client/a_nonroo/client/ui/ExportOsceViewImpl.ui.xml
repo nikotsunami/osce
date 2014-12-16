@@ -28,34 +28,39 @@
 </ui:style>
 	<g:HTMLPanel addStyleNames="{style.dockhtml}">
 		<g:VerticalPanel>
-		<g:HorizontalPanel>
-			<g:HTMLPanel>
-			<g:RadioButton ui:field="s3" name="type" checked="true"></g:RadioButton>
-			<g:RadioButton ui:field="ftp" name="type"></g:RadioButton>
-		</g:HTMLPanel>
-		</g:HorizontalPanel>
-		<g:HorizontalPanel spacing="5" verticalAlignment="middle">
-			
-			<g:Label styleName="{style.exportLbl}" ui:field="bucketNameLbl"></g:Label>
-			<g:TextBox ui:field="bucketName"></g:TextBox>
-
-			<g:Label styleName="{style.exportLbl}" ui:field="basePathLbl"></g:Label>
-			<g:TextBox ui:field="basePath"></g:TextBox>
-						
-			<g:Label styleName="{style.exportLbl}" ui:field="accessKeyLbl"></g:Label>
-			<g:TextBox ui:field="accessKey"></g:TextBox>
-			
-			<g:Label styleName="{style.exportLbl}" ui:field="secretKeyLbl"></g:Label>
-			<g:TextBox ui:field="secretKey"></g:TextBox>
-			
-			<g:Label styleName="{style.exportLbl}" ui:field="encryptionKeyLbl"></g:Label>
-			<g:TextBox ui:field="encryptionKey"></g:TextBox>
-			
-			<my:IconButton icon="pencil" ui:field="saveEditButton"></my:IconButton>
-			<my:IconButton icon="closethick" ui:field="cancelButton"></my:IconButton>
-			
-		</g:HorizontalPanel>
+			<g:HorizontalPanel>
+				<g:HTMLPanel>
+				<g:RadioButton ui:field="s3" name="type" checked="true"></g:RadioButton>
+				<g:RadioButton ui:field="ftp" name="type"></g:RadioButton>
+			</g:HTMLPanel>
+			</g:HorizontalPanel>
+			<g:HorizontalPanel spacing="5" verticalAlignment="middle">
+				
+				<g:Label styleName="{style.exportLbl}" ui:field="bucketNameLbl"></g:Label>
+				<g:TextBox ui:field="bucketName"></g:TextBox>
+	
+				<g:Label styleName="{style.exportLbl}" ui:field="basePathLbl"></g:Label>
+				<g:TextBox ui:field="basePath"></g:TextBox>
+							
+				<g:Label styleName="{style.exportLbl}" ui:field="accessKeyLbl"></g:Label>
+				<g:TextBox ui:field="accessKey"></g:TextBox>
+				
+				<g:Label styleName="{style.exportLbl}" ui:field="secretKeyLbl"></g:Label>
+				<g:TextBox ui:field="secretKey"></g:TextBox>
+				
+				<g:Label styleName="{style.exportLbl}" ui:field="encryptionKeyLbl"></g:Label>
+				<g:TextBox ui:field="encryptionKey"></g:TextBox>
+				
+				<my:IconButton icon="pencil" ui:field="saveEditButton"></my:IconButton>
+				<my:IconButton icon="closethick" ui:field="cancelButton"></my:IconButton>
+				
+			</g:HorizontalPanel>
 		</g:VerticalPanel>
+		
+		<g:HorizontalPanel>
+			<g:RadioButton ui:field="eOSCE" name="osceType" checked="true"></g:RadioButton>
+			<g:RadioButton ui:field="iOSCE" name="osceType"></g:RadioButton>
+		</g:HorizontalPanel>
 	
 		<g:HorizontalPanel>
 			<g:RadioButton ui:field="unprocessed" name="status" checked="true"></g:RadioButton>
@@ -71,6 +76,8 @@
 			</g:ScrollPanel>
 		</g:DisclosurePanel>		
 		
-		<my:IconButton icon="extlink" ui:field="exportButton"></my:IconButton>		
+		<g:HorizontalPanel spacing="3">
+			<my:IconButton icon="extlink" ui:field="exportOSCEButton"></my:IconButton>
+		</g:HorizontalPanel>	
 	</g:HTMLPanel>
 </ui:UiBinder> 

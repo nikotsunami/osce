@@ -56,4 +56,6 @@ public interface OsceRequestNonRoo extends RequestContext{
 	public abstract Request<OsceProxy> clearAllManualOsce(Long osceId);
 	
 	public abstract Request<OsceProxy> changeOsceStatus(Long osceId, OsceStatus osceStatus);
+	
+	public abstract Request<List<OsceProxy>> findOsceBySemesterId(Long semesterId);
 }

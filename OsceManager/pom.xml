@@ -118,6 +118,23 @@
     
     <dependencies>
     
+    <dependency>
+    		<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>  
+ 			<version>2.2.4</version>
+ 		</dependency>
+ 		<dependency>
+    		<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.2.4</version>
+ 		</dependency>
+    	<!--  Dependency for SFTP File Transfer -->
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.49</version>
+		</dependency>
+    
     	<!-- ftp  -->
 	    <dependency>
 		    <groupId>commons-net</groupId>
@@ -224,7 +241,7 @@
   		<dependency>
     		<groupId>com.googlecode.plist</groupId>
      		<artifactId>dd-plist</artifactId>
-     		<version>1.0</version>
+     		<version>1.3</version>
   		</dependency>
 		
 		<!--  Dependency for S3 Decryption -->
@@ -877,7 +894,7 @@
                     <execution>
                     	<configuration>
 							<extraJvmArgs>-Xmx10G</extraJvmArgs>
-						</configuration>   
+						</configuration>  
                         <id>gwtcompile</id>
                         <phase>prepare-package</phase>
                         <goals>

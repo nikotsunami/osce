@@ -27,9 +27,14 @@ public interface StandardizedRoleRequestNonRoo extends RequestContext
 	abstract Request<List<StandardizedRoleProxy>> findRoleByRoleTopic(Long roleTopicId);
 	
 	abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy>> findAllStandardizeRolesOfPreviousVersion(Long id);
-	
+
+	abstract Request<String> createChecklistQRImageByChecklistId(Long checklistId);
 	//export checklist
 	//abstract Request<String> exportOsce(Long id);
+
+	abstract Request<List<StandardizedRoleProxy>> findRolesFromSpecialisationId(Long specialisationId, Long currentStandardizedRoleId);
+
+	abstract Request<List<StandardizedRoleProxy>> findRolesExceptCurrentRole(Long currentRoleId);
 }
 
 

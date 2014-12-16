@@ -1653,6 +1653,128 @@ public interface OsceConstants extends Constants {
 	public String hideUnavilableSps();
 	
 	public String noSuggestionsFound();
+	
+	public String exportChecklistQR();
+	
+	public String addOption();
+	
+	public String addCriteria();
+	
+	public String itemType();
+	
+	public String optionType();
+	
+	public String isRegressionItem(); 
+	
+	public String tabErrorMessage();
+	
+	public String exportToeOSCE();
+	
+	public String exportToiOSCE();
+	
+	public String editSection();
+	
+	public String deleteTab();
+	
+	public String optionValueErrMessage();
+	
+	public String optionValueEmptyMessage();
+	
+	public String downloadeOSCE();
+	
+	public String downloadiOSCE();
+	
+	public String exporteOSCE();
+			
+	public String exportiOSCE();
+	
+	public String osceScreenSaverText();
+
+	public String exportQRCode();
+
+	public String bucketInformation();
+
+	public String settingPassword();
+
+	public String backUpPeriod();
+
+	public String timeUnit();
+
+	public String encryptionType();
+
+	public String pointNxtExaminee();
+
+	public String examReviewMode();
+
+	public String symmetricKey();
+
+	public String bucketParameters();
+
+	public String osceSettings();
+
+	public String otherInformation();
+
+	public String noSettingsForOsceError();
+
+	public String exportSettingsQRCode();
+
+	public String exportSettingsXml();
+
+	public String bucketType();
+
+	public String eOSCE();
+		
+	public String iOSCE();
+	
+	public String confirmDelete();
+
+	public String credentialsMustNotBeEmpty();
+	
+	public String optionNameSizeError();
+
+	public String autoSelection();
+
+	public String screenSaverTime();
+
+	public String backUpPeriodMustBeInt();
+
+	public String screenSaverTimeMustBeInt();
+	
+	public String formativeStudentAssignError();
+	
+	public String isFormativeOsce();
+	
+	public String exportFormativeOsceError();
+	
+	public String deleteOptionError();
+	
+	public String deleteCriteriaError();
+	
+	public String deleteQuestionError();
+	
+	public String deleteTopicError(); 
+	
+	public String deleteTabError();
+
+	public String checklistQRCode();
+
+	public String exportSettingsQR();
+
+	public String checklistQuestions();
+	
+	public String importFilesProcessed();
+			
+	public String fetchFilesFromCloud();
+
+	public String backUpPeriodLengthError();
+
+	public String ratio();
+
+	public String topicFactor();
+
+	public String ratioExceedError();
+	
+	public String backUpPeriodMaxLengthError();
 }
 
 

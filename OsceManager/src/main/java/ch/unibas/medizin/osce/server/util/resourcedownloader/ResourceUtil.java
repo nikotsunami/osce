@@ -23,7 +23,12 @@ import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.PatientInSemester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
+import ch.unibas.medizin.osce.server.ExportSettingsXml;
+import ch.unibas.medizin.osce.server.ExporteOSCEXml;
+import ch.unibas.medizin.osce.server.ExportiOSCEXml;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.StandardizedPatientPaymentUtil;
+import ch.unibas.medizin.osce.server.util.qrcode.QRCodeUtil;
 import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.Sorting;
 
@@ -41,71 +46,190 @@ public class ResourceUtil {
 		String fileName = "default.pdf";
 
 		switch (entity) {
-		case STANDARDIZED_PATIENT: {
-			fileName = setStandardizedPatientResource(request, os);
-			break;
-		}
-
-		case STANDARDIZED_PATIENT_EXPORT: {
-			fileName = setStandardizedPatientExportResource(request, response,
-					os);
-			break;
-		}
-		case STANDARDIZED_ROLE: {
-			fileName = setStandardizedRoleResource(request, os);
-			break;
-		}
-		case SUMMONINGS : {
-			fileName = setSummoningsResouce(request,os);
-			break;
-		}
-
-		case INDIVIDUAL_SCHEDULE : {
-			fileName = setIndividualScheduleResouce(request,os);
-			break;
-		}
-		
-		case STUDENT_MANAGEMENT : {
-			fileName = setStudentManagementResouce(request,os);
-			break;
-		}
-		
-		case CHECKLIST : {
-			fileName = setChecklistResouce(request,os);
-			break;
-		}
-		
-		case STANDARDIZED_PATIENT_PAYMENT : {
-			fileName = setStandardizedPatientPaymentResource(request, response, os);
-			break;
-		}
-		
-		case PATIENT_IN_SEMESTER_CSV : {
-			fileName = setExportPatientInSemesterCsv(request, response, os);
-			break;
-		}
-		
-		case ALARM_SCHEDULE_SUPERVISOR: {
-			fileName = setExportScheduleCsv(request, response, os);
-			break;
-		}
-		
-		case STUDENT_MANAGEMENT_MIN_OPTION_VALUE:{
-			fileName = setStudentManagementResouceMinValue(request,os);
-			break;
-		}
-		case ROLE_CHECKLIST_EOSCE:{
-			fileName = setRoleChecklisteOSCE(request,os);
-			break;
-		}
-		default: {
-			Log.info("Error in entity : " + entity);
-			break;
-		}
+			case STANDARDIZED_PATIENT: {
+				fileName = setStandardizedPatientResource(request, os);
+				break;
+			}
+	
+			case STANDARDIZED_PATIENT_EXPORT: {
+				fileName = setStandardizedPatientExportResource(request, response,
+						os);
+				break;
+			}
+			case STANDARDIZED_ROLE: {
+				fileName = setStandardizedRoleResource(request, os);
+				break;
+			}
+			case SUMMONINGS : {
+				fileName = setSummoningsResouce(request,os);
+				break;
+			}
+	
+			case INDIVIDUAL_SCHEDULE : {
+				fileName = setIndividualScheduleResouce(request,os);
+				break;
+			}
+			
+			case STUDENT_MANAGEMENT : {
+				fileName = setStudentManagementResouce(request,os);
+				break;
+			}
+			
+			case CHECKLIST : {
+				fileName = setChecklistResouce(request,os);
+				break;
+			}
+			
+			case STANDARDIZED_PATIENT_PAYMENT : {
+				fileName = setStandardizedPatientPaymentResource(request, response, os);
+				break;
+			}
+			
+			case PATIENT_IN_SEMESTER_CSV : {
+				fileName = setExportPatientInSemesterCsv(request, response, os);
+				break;
+			}
+			
+			case ALARM_SCHEDULE_SUPERVISOR: {
+				fileName = setExportScheduleCsv(request, response, os);
+				break;
+			}
+			
+			case STUDENT_MANAGEMENT_MIN_OPTION_VALUE:{
+				fileName = setStudentManagementResouceMinValue(request,os);
+				break;
+			}
+			case ROLE_CHECKLIST_EOSCE:{
+				fileName = setRoleChecklisteOSCE(request,os);
+				break;
+			}
+			case ROLE_CHECKLIST_QR:{
+				
+				fileName=exportChecklistQRCode(request,os);
+				break;
+			}
+			case EOSCE_XML: {
+				fileName = setExporteOSCEXml(request, os);
+				break;
+			}
+            case OSCE_SETTINGS:{
+	            fileName=exportSettingsQRCode(request,os);
+				break;
+			}
+            case OSCE_SETTINGS_XML:{
+            	fileName=exportOsceSettingsXml(request,os);
+            	break;
+            }
+            case IOSCE_XML : {
+            	fileName = setExportiOSCEXml(request, os);
+				break;
+            }
+            case EXAMINER_QR:{
+            	fileName=exportExaminerQRCode(request,os);
+            	break;
+            }
+            case STUDENT_QR:{
+            	fileName=exportStudentQR(request,os);
+            	break;
+            }
+			default: {
+				Log.info("Error in entity : " + entity);
+				break;
+			}
 		}
 
 		sendFile(response, os.toByteArray(), fileName);
 		os = null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static String exportStudentQR(HttpServletRequest request,ByteArrayOutputStream os) {
+		List<Long> studentList = new java.util.ArrayList<Long>();
+
+		 HttpSession session = request.getSession();
+		Object object = request.getSession().getAttribute(OsMaFilePathConstant.STUDENT_LIST_QR);
+		if (object != null &&  object instanceof List){
+			studentList = (List<Long>) object;		
+		}		
+		session.removeAttribute(OsMaFilePathConstant.STUDENT_LIST_QR);
+		
+		Long osceId = Long.parseLong(request.getParameter(ResourceDownloadProps.OSCE_ID));
+		String locale = request.getParameter(ResourceDownloadProps.LOCALE);
+		
+		String fileName =QRCodeUtil.generateStudentQRCode(osceId,studentList, locale, os,session);
+		
+		return fileName;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static String exportExaminerQRCode(HttpServletRequest request,ByteArrayOutputStream os) {
+		
+		List<Long> examinersList = new java.util.ArrayList<Long>();
+
+		 HttpSession session = request.getSession();
+		Object object = request.getSession().getAttribute(OsMaFilePathConstant.EXAMINER_LIST_QR);
+		if (object != null &&  object instanceof List){
+			examinersList = (List<Long>) object;		
+		}		
+		session.removeAttribute(OsMaFilePathConstant.EXAMINER_LIST_QR);
+		
+		//String fileName = OsMaFilePathConstant.EXAMINER_QR_PDF_FORMAT;
+		
+		Long osceId = Long.parseLong(request.getParameter(ResourceDownloadProps.OSCE_ID));
+		String locale = request.getParameter(ResourceDownloadProps.LOCALE);
+		
+		String fileName =QRCodeUtil.generateExaminerQRCode(osceId,examinersList, locale, os,session);
+		
+		
+		return fileName;
+	}
+
+	private static String setExportiOSCEXml(HttpServletRequest request, ByteArrayOutputStream os) {
+		String fileName = "";
+		try {
+			Long osceId = Long.parseLong(request.getParameter(ResourceDownloadProps.ID));
+			fileName = ExportiOSCEXml.createiOSCEXmlFile(request, os, osceId);
+			return fileName;
+		}
+		catch (Exception e) {
+			Log.error(e.getMessage(), e);
+		}
+		return fileName;
+	}
+	
+	private static String exportSettingsQRCode(HttpServletRequest request,ByteArrayOutputStream os) {
+
+		Long settingsId = Long
+				.parseLong(request.getParameter(ResourceDownloadProps.ID));
+		String locale = request.getParameter(ResourceDownloadProps.LOCALE);
+		ByteArrayOutputStream newOs = new ByteArrayOutputStream();
+		ExportSettingsXml.createSettingsXmlFile(newOs, settingsId);
+		String xml = new String(newOs.toByteArray());
+		return QRCodeUtil.generateQRCodeForSettings(xml, settingsId,locale, os,request.getSession());
+	}
+	/*
+	 * This method will pass a hard coded url to generate QR code.
+	 */
+	private static String exportChecklistQRCode(HttpServletRequest request,ByteArrayOutputStream os) {
+		Long checklistId = Long
+				.parseLong(request.getParameter(ResourceDownloadProps.ID));
+		String locale = request.getParameter(ResourceDownloadProps.LOCALE);
+	
+		String url=OsMaFilePathConstant.getQRCodeURL() + checklistId;
+		return QRCodeUtil.generateQRCodeForChecklist(url,checklistId,locale, os,request.getSession());
+	}
+
+	private static String setExporteOSCEXml(HttpServletRequest request, ByteArrayOutputStream os) {
+		String fileName = "";
+		try {
+			Long osceId = Long.parseLong(request.getParameter(ResourceDownloadProps.ID));
+			fileName = ExporteOSCEXml.createeOSCEXmlFile(request, os, osceId);
+			return fileName;
+		}
+		catch (Exception e) {
+			Log.error(e.getMessage(), e);
+		}
+		return fileName;
 	}
 
 	private static String setRoleChecklisteOSCE(HttpServletRequest request,ByteArrayOutputStream os) {
@@ -388,4 +512,17 @@ public class ResourceUtil {
 		stream.close();
 	}
 
+	private static String exportOsceSettingsXml(HttpServletRequest request,ByteArrayOutputStream os) {
+
+		String fileName="";
+		try{
+		Long osceSettingsId = Long.parseLong(request.getParameter(ResourceDownloadProps.ID));
+		fileName = ExportSettingsXml.createSettingsXmlFile(os, osceSettingsId);
+		return fileName;
+		}
+		catch (Exception e) {
+			Log.error(e.getMessage(), e);
+		}
+		return fileName;
+	}
 }

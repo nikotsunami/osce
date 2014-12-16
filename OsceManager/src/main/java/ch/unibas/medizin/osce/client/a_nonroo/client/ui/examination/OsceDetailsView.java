@@ -4,6 +4,7 @@ import java.util.List;
 
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSettingsProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 
 import com.google.gwt.place.shared.Place;
@@ -27,6 +28,8 @@ public interface OsceDetailsView extends IsWidget{
 		void deleteClicked(TaskProxy task);
 		void editForDone(TaskProxy task);
 
+		void exportSettingsQRCodeClicked(OsceSettingsProxy osceSettingsProxy);
+		void exportXmlClicked(OsceSettingsProxy osceSettingsProxy);
 		/*void saveClicked(Boolean isedit, String innerText,
 				AdministratorProxy value, Date value2,OsceProxy osceproxy,TaskProxy task);
 		*/
@@ -44,6 +47,7 @@ public interface OsceDetailsView extends IsWidget{
     void setPresenter(Presenter osceActivity);
 	void setAdministratorValue(List<AdministratorProxy> emptyList);
 	public OsceTaskPopViewImpl getPopView();
+	void setOsceSettings(OsceSettingsProxy response);
 	
 	
 }

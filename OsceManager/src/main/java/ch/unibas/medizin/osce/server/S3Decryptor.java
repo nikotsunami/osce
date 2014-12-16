@@ -18,9 +18,8 @@ import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
-
-import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 
 import com.dd.plist.NSData;
 import com.dd.plist.NSDictionary;
@@ -32,13 +31,13 @@ public class S3Decryptor {
 	private static final String EXAM_DATA_PLIST_KEY = "body";
 	private static final int KEY_STRING_LENGTH = 32;
 
-	public static String decrypt(String symmetricKey, String fileName) {
+	public static String decrypt(String symmetricKey, String fileName, String filePath) {
 		
 		if (FilenameUtils.getExtension(fileName).equalsIgnoreCase("crumble"))
 		{
-			String outputPath = OsMaFilePathConstant.DEFAULT_IMPORT_EOSCE_PATH + FilenameUtils.getBaseName(fileName) + "_dec.oscexam";
+			String outputPath = filePath + FilenameUtils.getBaseName(fileName) + "_dec.oscexam";
 			File outputFilePath = new File(outputPath);
-			File inputFilePath = new File((OsMaFilePathConstant.DEFAULT_IMPORT_EOSCE_PATH + fileName));
+			File inputFilePath = new File((filePath + fileName));
 			
 			try {
 				FileUtils.touch(outputFilePath);
@@ -145,5 +144,30 @@ public class S3Decryptor {
 		Cipher dcipher = Cipher.getInstance("AES/CBC/NoPadding");
 		dcipher.init(Cipher.DECRYPT_MODE, skey, paramSpec);
 		return dcipher;
+	}
+	
+	/**
+	 * Decrypts a .crumble file and writes it to the specified path.
+	 * @param symmetricKey The symmetric key to use for decryption
+	 * @param outputFilePath The path to the target decrypted file
+	 * @param inputFilePath The source path of the encrypted file
+	 */
+	public static ByteArrayOutputStream decryptFile(String symmetricKey, byte[] encryptedBytes) throws Exception {
+		
+		ByteArrayOutputStream bout = new ByteArrayOutputStream();
+		Cipher dcipher = getAESCipherWithEncryptionKey(symmetricKey);
+		ByteArrayInputStream input = new ByteArrayInputStream(encryptedBytes);
+				
+		byte[] buffer = new byte[1024];
+		int byteCount = input.read(buffer);
+
+		while (byteCount >= 0) {
+			byte[] cipherData = dcipher.update(buffer, 0, byteCount); 
+			//output.write(cipherData);
+			bout.write(cipherData);
+			byteCount = input.read(buffer);
+		}
+		
+		return bout;
 	}
 }

@@ -1,0 +1,185 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:my="urn:import:ch.unibas.medizin.osce.client.style.widgets" xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+	<ui:style src="../../styles.css">
+		.headerLabel {
+			font-size: 13px;
+			padding-bottom: 0px;
+			min-height: 10px;
+			max-height: 13px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis; 
+		}
+		
+		.heightSet {
+			font-size:11px;
+			max-height: 13px;
+			min-height: 5px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+			
+		.noOutline {
+			outline-style: none;
+			overflow: hidden;	
+		}
+	
+		.padleft5 {
+			vertical-align: top;
+			padding-left: 0px;
+			padding-top: 10px;
+			margin-right: 0px;
+		}
+		
+		.standardTable input {
+			width: 98%;
+			opacity: 0.3;
+		}
+		
+		.optionIcon {
+			vertical-align: top;
+			float: left;
+			margin-left: 13px;
+			margin-right: 5px;
+		}	
+		
+		.addBtn {
+			margin-left: 10px;
+		}
+		
+		.icon {
+			vertical-align: top;
+			padding-left: 3px;
+			padding-top: 6px;
+			margin-right: 3px;
+		}
+		
+		.iconnew {
+			vertical-align: top;
+			padding-left: 0px;
+			padding-top: 6px;
+			margin-right: 5px;
+			height: 9px !important;
+		}
+	
+		.iconnew:hover {
+			cursor: pointer;
+		}
+		
+		.icon:hover {
+			cursor: pointer;
+		}
+		
+		.maxWidth {
+			margin-bottom: 3px;
+			border-radius: 16px;
+		}
+			
+		.exp {
+			background-color: #DFDAD6;
+			border-bottom-color:#808080;
+			border-radius: 16px;
+		}
+	
+		.borderDP {		
+			border: 10;
+		}
+	
+		.right {
+			float:right
+		}
+	
+		.middle {
+			float:inherit;
+		}
+		
+		.criteria {	
+			margin-left: 5px;
+			margin-right: 5px;
+		}
+	
+		.editQuestionBtn {
+			margin-left: 100%;
+		}
+	
+		.crtariaTop {
+			margin-top: 5px;
+		}
+	
+		.tabStylenew { 
+			margin: 3px auto;	
+		}		
+		.lableMinWidth {
+			min-width: 50px;
+		}
+		.topPanelMargin {
+			padding-top: 0px !important;
+		}
+		.marginQue{
+			margin-left:1px;
+			margin-right:9px;
+			margin-top: 5px;
+			margin-bottom: 5px;			
+		}
+	</ui:style>
+	<ui:with type="ch.unibas.medizin.osce.client.style.resources.UiIcons" field="uiIcons" ></ui:with>
+	
+	<g:HTMLPanel width="100%">
+		<g:VerticalPanel ui:field="checkListQuestionItemVerticalPanel"   addStyleNames="{style.maxWidth}{style.tabStylenew} {style.roleQuetion}" height="10px" width="100%">
+			<g:VerticalPanel ui:field="headerPanel" styleName="{style.exp}" verticalAlignment="middle" width="100%">
+				<g:HorizontalPanel width="100%">
+					<g:AbsolutePanel ui:field="roleQueAP" width="100%">
+						<g:HorizontalPanel ui:field="roleQueHP" width="100%">
+							<g:VerticalPanel width="100%" verticalAlignment="middle" horizontalAlignment="center">
+								<g:SimplePanel height="29px" width="100%">
+									<g:HorizontalPanel  spacing="1" width="100%">
+										<g:VerticalPanel width="100%" >
+											<g:HorizontalPanel  horizontalAlignment="left" verticalAlignment="middle" width="100%">
+												<g:cell horizontalAlignment="ALIGN_LEFT">
+													<g:HorizontalPanel>
+														<g:Image ui:field="arrow" styleName="{style.icon}" resource="{uiIcons.triangle1South}" ></g:Image>
+														<g:Image  styleName="{style.icon} " resource="{uiIcons.question}"></g:Image>
+														
+														<g:VerticalPanel width="100%">
+															<g:Label addStyleNames="{style.headerLabel}" ui:field="questionNameLbl" width="100%" ></g:Label>
+															<g:Label ui:field="questionDescLbl"  addStyleNames="{style.heightSet}" width="100%"></g:Label>
+														</g:VerticalPanel>
+													</g:HorizontalPanel>
+												</g:cell>	
+													
+												<g:cell horizontalAlignment="ALIGN_RIGHT">
+													<g:HorizontalPanel spacing="3">
+														<my:IconButton ui:field="delete" icon="trash" ></my:IconButton>
+														<my:IconButton ui:field="edit" icon="pencil" ></my:IconButton>														
+														<g:Image ui:field="down" styleName="{style.iconnew}" resource="{uiIcons.triangle1South}"></g:Image>
+														<g:Image ui:field="up" styleName="{style.iconnew} " resource="{uiIcons.triangle1North}"></g:Image>
+													</g:HorizontalPanel>													
+												</g:cell>
+											</g:HorizontalPanel>				
+										</g:VerticalPanel>
+									</g:HorizontalPanel>
+								</g:SimplePanel>
+							</g:VerticalPanel>	
+						</g:HorizontalPanel>
+					</g:AbsolutePanel>
+				</g:HorizontalPanel>
+			</g:VerticalPanel>	
+	
+			<g:DisclosurePanel animationEnabled="true" open="true" styleName="{style.borderDP}" ui:field="checkListQuestionDisclosurePanel" width="100%">
+				<g:VerticalPanel width="100%">
+					<g:HorizontalPanel width="100%" styleName="{style.marginQue}" spacing="5">
+						<g:cell width="70%">
+							<c:CellTable ui:field="criteriaTable" width="100%" addStyleNames="{style.standardTable}"></c:CellTable>
+						</g:cell>
+						
+						<g:cell width="30%">
+							<c:CellTable ui:field="optionTable" width="100%" addStyleNames="{style.standardTable}"></c:CellTable>
+						</g:cell>
+					</g:HorizontalPanel>
+				</g:VerticalPanel>
+			</g:DisclosurePanel>
+		</g:VerticalPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

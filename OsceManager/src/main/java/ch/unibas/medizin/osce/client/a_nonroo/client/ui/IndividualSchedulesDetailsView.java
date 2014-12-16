@@ -34,7 +34,9 @@ public interface IndividualSchedulesDetailsView extends IsWidget{
 		
 		void printCopyforStud(ClickEvent event);
 		void printCopyforSP(ClickEvent event);		
-		void printCopyforExaminor(ClickEvent event);		
+		void printCopyforExaminor(ClickEvent event);
+		void exportQRCodeForExaminer(ClickEvent event);
+		void exportQRCodeForStudent(ClickEvent event);
 	}
 
     String[] getPaths();

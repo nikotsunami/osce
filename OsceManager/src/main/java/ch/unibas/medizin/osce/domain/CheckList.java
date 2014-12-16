@@ -31,6 +31,9 @@ public class CheckList {
     @OrderBy("sort_order")
     private List<ChecklistTopic> checkListTopics = new ArrayList<ChecklistTopic>();
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "checkList")
+    @OrderBy("sequenceNumber")
+    private List<ChecklistItem> checklistItems = new ArrayList<ChecklistItem>();
 
 	public static List<CheckList> findAllCheckListforOsce(Long osceId) {
 		EntityManager em = entityManager();
@@ -38,5 +41,4 @@ public class CheckList {
     	TypedQuery<CheckList> q = em.createQuery(query, CheckList.class);
     	return q.getResultList();
 	}
-  
 }

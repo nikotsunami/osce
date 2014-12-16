@@ -15,14 +15,6 @@ import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaRequest;
 import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.CheckListRequest;
-import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaProxy;
-import ch.unibas.medizin.osce.client.managed.request.ChecklistCriteriaRequest;
-import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionProxy;
-import ch.unibas.medizin.osce.client.managed.request.ChecklistOptionRequest;
-import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionProxy;
-import ch.unibas.medizin.osce.client.managed.request.ChecklistQuestionRequest;
-import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicProxy;
-import ch.unibas.medizin.osce.client.managed.request.ChecklistTopicRequest;
 import ch.unibas.medizin.osce.client.managed.request.FileProxy;
 import ch.unibas.medizin.osce.client.managed.request.FileRequest;
 import ch.unibas.medizin.osce.client.managed.request.MainSkillProxy;
@@ -43,7 +35,9 @@ import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleRequest;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialProxy;
 import ch.unibas.medizin.osce.client.managed.request.UsedMaterialRequest;
 import ch.unibas.medizin.osce.shared.Operation;
+import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.scaffold.ChecklistItemRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -391,6 +385,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			((RoleEditViewImpl)view).factor.setSelectedIndex(standardizedRole.getFactor()==null?0: Integer.parseInt(standardizedRole.getFactor().toString())-1);
 			//((RoleEditViewImpl)view).sum.setSelectedIndex(standardizedRole.getSum()==null?Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(0)): (Integer.parseInt(standardizedRole.getSum().toString()))-1);
 			((RoleEditViewImpl)view).sum.setSelectedIndex(standardizedRole.getSum()==null?0: (Integer.parseInt(standardizedRole.getSum().toString())));
+			((RoleEditViewImpl)view).topicFactor.setValue(standardizedRole.getTopicFactor() == null? RoleTopicFactor.NONE: standardizedRole.getTopicFactor());
+			
 			//standardizedRole.setFactor(standardizedRole.getFactor()==null?Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(0)): Integer.parseInt(standardizedRole.getFactor().toString()));
 			//Log.info("st role sum--"+standardizedRole.getSum());
 			//standardizedRole.setSum(standardizedRole.getSum()==null?Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(0)): (Integer.parseInt(standardizedRole.getSum().toString())));
@@ -516,6 +512,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 					proxy.setLongName(((RoleEditViewImpl)view).longName.getValue());
 					proxy.setStudyYear(((RoleEditViewImpl)view).studyYear.getValue());
 					proxy.setRoleType(((RoleEditViewImpl)view).roleType.getValue());
+					proxy.setTopicFactor(((RoleEditViewImpl)view).topicFactor.getValue());
+					
 					//add factor and sum
 					
 					proxy.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
@@ -562,7 +560,8 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 					oldProxy.setLongName(((RoleEditViewImpl)view).longName.getValue());
 					oldProxy.setStudyYear(((RoleEditViewImpl)view).studyYear.getValue());
 					oldProxy.setRoleType(((RoleEditViewImpl)view).roleType.getValue());
-						
+					oldProxy.setTopicFactor(((RoleEditViewImpl)view).topicFactor.getValue());	
+					
 					oldProxy.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
 					oldProxy.setSum(Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex())));
 					
@@ -713,6 +712,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		standardizedRole.setFactor(Integer.parseInt(((RoleEditViewImpl)view).factor.getValue(((RoleEditViewImpl)view).factor.getSelectedIndex())));
 		standardizedRole.setSum((Integer.parseInt(((RoleEditViewImpl)view).sum.getValue(((RoleEditViewImpl)view).sum.getSelectedIndex()))));
 		
+		//standardizedRole.setTopicFactor(((RoleEditViewImpl)view).topicFactorBox.getValue().ordinal());
 		if(((RoleEditViewImpl)view).roleTopic.getSelected().getId()!=roleTopic.getId())
 		{
 			//Issue # 122 : Replace pull down with autocomplete.	 
@@ -776,157 +776,21 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		// Highlight onViolation
 		Log.info("Map Size: "  + view.getStandardizedRoleMap().size());
 		
-		 CheckListProxy checkListProxy=null;
+		  CheckListProxy checkListProxy=null;
 		
 
-				CheckListRequest checklistRequest=requests.checkListRequest();
-				 checkListProxy=checklistRequest.create(CheckListProxy.class);
-	
+				final ChecklistItemRequestNonRoo checklistRequest=requests.checklistItemRequestNonRoo();
+				/*checkListProxy=checklistRequest.create(CheckListProxy.class);
 				 checkListProxy.setCheckListTopics(standardizedRole.getCheckList().getCheckListTopics());
 				checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec
-				final CheckListProxy newCheckList=checkListProxy;
-				
-				
-				
-				
-				
-				
-				checklistRequest.persist().using(checkListProxy).fire(new OSCEReceiver<Void>() {
+      			*/
+				String title = ((RoleEditCheckListSubViewImpl)checkListView).title.getValue();
+				checklistRequest.copyOldChecklist(standardizedRole.getCheckList().getId(),title).fire(new OSCEReceiver<CheckListProxy>() {
 
 					@Override
-					public void onSuccess(Void response) {
-						Iterator<ChecklistTopicProxy> topicIterator=standardizedRole.getCheckList().getCheckListTopics().iterator();
-						//create new create new topic 
-						while(topicIterator.hasNext())
-						{
-							final ChecklistTopicProxy oldTopc=topicIterator.next();
-							
-							ChecklistTopicRequest topicRequest=requests.checklistTopicRequest();
-							ChecklistTopicProxy topic=topicRequest.create(ChecklistTopicProxy.class);
-							
-							final ChecklistTopicProxy topic1=topic;
-							
-							topic.setCheckList(newCheckList);
-							topic.setDescription(oldTopc.getDescription());
-							topic.setSort_order(oldTopc.getSort_order());
-							topic.setTitle(oldTopc.getTitle());
-							
-							
-							
-							topicRequest.persist().using(topic).fire(new OSCEReceiver<Void>() {
-
-								@SuppressWarnings("deprecation")
-								@Override
-								public void onSuccess(Void response) {
-									Iterator<ChecklistQuestionProxy> questionIterator=oldTopc.getCheckListQuestions().iterator();
-									while(questionIterator.hasNext())
-									{
-										final ChecklistQuestionProxy oldQuestion=questionIterator.next();
-										
-										ChecklistQuestionRequest questionRequest=requests.checklistQuestionRequest();
-										
-										ChecklistQuestionProxy question=questionRequest.create(ChecklistQuestionProxy.class);
-										
-										final ChecklistQuestionProxy question1=question;
-										
-										question.setCheckListTopic(topic1);
-										question.setInstruction(oldQuestion.getInstruction());
-										question.setQuestion(oldQuestion.getQuestion());
-										question.setSequenceNumber(oldQuestion.getSequenceNumber());
-										question.setIsOveralQuestion(oldQuestion.getIsOveralQuestion());
-										questionRequest.persist().using(question).fire(new OSCEReceiver<Void>() {
-
-											@SuppressWarnings("deprecation")
-											@Override
-											public void onSuccess(Void response) {
-												Iterator<ChecklistOptionProxy> optionIterator=oldQuestion.getCheckListOptions().iterator();
-												
-												while(optionIterator.hasNext())
-												{
-													final ChecklistOptionProxy oldOption=optionIterator.next();
-													
-													ChecklistOptionRequest optionRequest=requests.checklistOptionRequest();
-													
-													ChecklistOptionProxy option=optionRequest.create(ChecklistOptionProxy.class);
-													
-													final ChecklistOptionProxy option1 = option;
-													
-													option.setChecklistQuestion(question1);
-													option.setName(oldOption.getName());
-													option.setOptionName(oldOption.getOptionName());
-													option.setValue(oldOption.getValue());
-													option.setSequenceNumber(oldOption.getSequenceNumber());
-													option.setCriteriaCount(oldOption.getCriteriaCount());
-													
-													optionRequest.persist().using(option).fire(new OSCEReceiver<Void>() {
-
-														@Override
-														public void onSuccess(
-																Void response) {
-															// TODO Auto-generated method stub
-															
-														}
-													});
-													
-												}
-													
-													
-													final Iterator<ChecklistCriteriaProxy> criteriaIterator=oldQuestion.getCheckListCriterias().iterator();
-													
-													while(criteriaIterator.hasNext())
-													{
-														final ChecklistCriteriaProxy oldCriteria=criteriaIterator.next();
-														
-														ChecklistCriteriaRequest criteriaRequest=requests.checklistCriteriaRequest();
-														
-														
-														ChecklistCriteriaProxy criteria=criteriaRequest.create(ChecklistCriteriaProxy.class);
-														
-														final ChecklistCriteriaProxy criteria1 = criteria;
-														
-														criteria.setChecklistQuestion(question1);
-														criteria.setCriteria(oldCriteria.getCriteria());
-														criteria.setSequenceNumber(oldCriteria.getSequenceNumber());
-														
-														
-														criteriaRequest.persist().using(criteria).fire(new OSCEReceiver<Void>() {
-
-															@Override
-															public void onSuccess(
-																	Void response) {
-																
-															}
-														});
-													
-													}
-												
-												
-											}
-										});
-									}
-									
-								}
-							});
-						}
+					public void onSuccess(CheckListProxy newChecklist) {
 						
-						
-						//save new role
-						
-						
-						
-						
-						
-						//create Role template
-						
-					/*	RoleTemplateRequest roleTemplateRequest=requests.roleTemplateRequest();
-						RoleTemplateProxy roleTemplateProxy=roleTemplateRequest.create(RoleTemplateProxy.class);
-						roleTemplateProxy.setDate_cretaed(standardizedRole.getRoleTemplate().getDate_cretaed());
-						roleTemplateProxy.setDate_edited(standardizedRole.getRoleTemplate().getDate_edited());
-						roleTemplateProxy.setRoleBaseItem(standardizedRole.getRoleTemplate().getRoleBaseItem());
-						roleTemplateProxy.setTemplateName(standardizedRole.getRoleTemplate().getTemplateName());
-					*/	
-						
-						proxy.setCheckList(newCheckList);
+						proxy.setCheckList(newChecklist);
 						proxy.setRoleTemplate(standardizedRole.getRoleTemplate());
 						final StandardizedRoleProxy proxy1=proxy;
 						 majorRequest.persist().using(proxy).fire(new OSCEReceiver<Void>(view.getStandardizedRoleMap()) {
@@ -1123,6 +987,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 												
 												((RoleEditViewImpl)view).getRoleEditCheckListPanel().setTitle(standardizedRole.getCheckList().getTitle());
 												//((RoleEditCheckListSubViewImpl)checkListView).title.setValue("ABC");//spec
+												((RoleEditViewImpl)view).topicFactor.setValue(standardizedRole.getTopicFactor());
 												
 												save();
 												return;

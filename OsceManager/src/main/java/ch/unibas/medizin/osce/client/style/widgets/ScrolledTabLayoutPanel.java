@@ -190,7 +190,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 							scrollPanel.setHorizontalScrollPosition(scrollPanel.getHorizontalScrollPosition()- mouseWheelScrollPositionStep);
 						    } else if (event.isSouth()) {
 						    	onresizecall();
-						    	System.out.println("Left--"+ left.getAbsoluteLeft());
+						    	//System.out.println("Left--"+ left.getAbsoluteLeft());
 						    	/*if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(offset+50))
 						    	{*/
 						    	//if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()>(left.getAbsoluteLeft()+getOffsetWidth()-320))
@@ -198,8 +198,8 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 						    	if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()+tabBar.getWidget(tabBar.getWidgetCount()-1).getOffsetWidth()>(left.getAbsoluteLeft()+scrollPanel.getOffsetWidth()))
 						    	{
 						    	//if(h2.getHorizontalScrollPosition() < HPwidth-50+10)
-						    		System.out.println("total width--"+tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft());
-									System.out.println("position--"+ scrollPanel.getHorizontalScrollPosition());
+						    		//System.out.println("total width--"+tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft());
+									//System.out.println("position--"+ scrollPanel.getHorizontalScrollPosition());
 						    		scrollPanel.setHorizontalScrollPosition(scrollPanel.getHorizontalScrollPosition() + mouseWheelScrollPositionStep);
 						    	}
 						    }
@@ -258,7 +258,7 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
 							if(tabBar.getWidget(tabBar.getWidgetCount()-1).getAbsoluteLeft()+tabBar.getWidget(tabBar.getWidgetCount()-1).getOffsetWidth()>(left.getAbsoluteLeft()+scrollPanel.getOffsetWidth()))
 					    	{
 					    	//if(h2.getHorizontalScrollPosition() < HPwidth-50+10)
-								System.out.println("in loop position--"+i);
+								//System.out.println("in loop position--"+i);
 								scrollPanel.setHorizontalScrollPosition(i);
 					    	}
 			         		 
@@ -301,8 +301,12 @@ public class ScrolledTabLayoutPanel extends TabLayoutPanel  {
         	
         	Boolean result=super.remove(index);       	
         	//Log.info("remove call");
-        	tabBar.remove(index);
-        	tabLIstBox.removeItem(index);      	
+        	/*if (index < tabBar.getWidgetCount())
+        		tabBar.remove(index);*/
+        	
+        	if (index < tabLIstBox.getItemCount())
+        		tabLIstBox.removeItem(index);
+        	
         	return result;
         	//return true;
         	

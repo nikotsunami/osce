@@ -1,23 +1,34 @@
 package ch.unibas.medizin.osce.server.util.file;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import org.apache.commons.io.FileUtils;
 
 import ch.unibas.medizin.osce.domain.Answer;
 import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.ChecklistCriteria;
+import ch.unibas.medizin.osce.domain.ChecklistItem;
 import ch.unibas.medizin.osce.domain.ChecklistOption;
-import ch.unibas.medizin.osce.domain.ChecklistQuestion;
-import ch.unibas.medizin.osce.domain.ChecklistTopic;
 import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.domain.File;
+import ch.unibas.medizin.osce.domain.Notes;
+import ch.unibas.medizin.osce.domain.Osce;
+import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.Signature;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
+import ch.unibas.medizin.osce.shared.NoteType;
 import ch.unibas.medizin.osce.shared.util;
 
 import com.itextpdf.text.Chunk;
@@ -38,6 +49,8 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 	private StandardizedRole standardizedRole;
 	
 	private boolean isValueAvailable[];
+	
+	protected Font tabFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
 	
 	public StudentManagementPrintMinOptionPdfUtil() {
 		super();		
@@ -67,7 +80,13 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 			Iterator<StandardizedRole> standardizedRoleIterator=standardizedRoleList.iterator();
 			//title = constants.standardizedRole(); // + " "+ util.getEmptyIfNull(standardizedRole.getLongName());
 			title = "";
-			writer = PdfWriter.getInstance(document, out);
+			Osce osce = Osce.findOsce(osceId);
+			Semester semester = Semester.findSemester(osce.getSemester().getId());
+			List<String> files= new ArrayList<String>();
+			String localPath = OsMaFilePathConstant.IMPORT_AUDIO_NOTE_PATH + semester.getSemester() + semester.getCalYear() + "/";
+			
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			writer = PdfWriter.getInstance(document, os);
 			addMetaData();
 			document.open();
 			addHeader();			
@@ -79,11 +98,13 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 				this.standardizedRole = standardizedRole;			
 				//document.add(new Chunk("Hello World"));	
 				addStudentName(studId);
-				addCheckListDetails(studId);
+				addCheckListDetails(studId,standardizedRole.getCheckList().getId());
 				addSignature(standardizedRole, osceId, studId);
 				document.newPage();
+				files.addAll(findAudioFileNamesForStudent(studId, osceId,standardizedRole,localPath));
 			}
 			document.close();
+			createZipFile(os, out, files);
 		}
 		catch (Exception e) 
 		{
@@ -107,6 +128,19 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 			log.error(e.getMessage(),e);
 		}
 	}
+	
+	 private List<String> findAudioFileNamesForStudent(Long studId, Long osceId, StandardizedRole standardizedRole, String localPath) {
+		
+		List<String> fileNameList = new ArrayList<String>(); 
+		Doctor examiner = Answer.findExaminerByStandardizedRoleOsceAndStudent(standardizedRole.getId(), osceId, studId);
+		List<Notes> audioNotes =  Notes.findNotesByExaminerAndStudentAndNotetype(examiner.getId(), studId, NoteType.STUDENT_AUDIO.ordinal(), standardizedRole.getId());
+	
+		for (Notes notes : audioNotes) {				
+			localPath+= notes.getComment();
+			fileNameList.add(localPath);
+		}
+		return fileNameList;
+    }
 	
 	private void addSignature(StandardizedRole standardizedRole, Long osceId, Long studId) {
 		try
@@ -141,12 +175,15 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 	{
 		title = "";
 		try {
-			writer = PdfWriter.getInstance(document, os);
+			ByteArrayOutputStream pdfStream=new ByteArrayOutputStream();
+			List<String> files= new ArrayList<String>();
+			writer = PdfWriter.getInstance(document, pdfStream);
 			addMetaData();
 			document.open();
 			addHeader();			
 			document.add(new Chunk(constants.noDataFound()));
 			document.close();
+			createZipFile(pdfStream, os, files);
 		} catch (DocumentException e) {
 			log.error(e.getMessage(),e);
 		}
@@ -223,7 +260,7 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 		}
 	}
 
-	private void addCheckListDetails(long studId) {
+	private void addCheckListDetails(long studId, Long checkListId) {
 		Paragraph titleDetails = new Paragraph();
 		Font roleTitleFont = new Font(Font.FontFamily.TIMES_ROMAN, 15,Font.BOLD);
 		titleDetails.add(new Chunk(constants.standardizedRole()+": "+ util.getEmptyIfNull(standardizedRole.getLongName()), roleTitleFont));
@@ -238,14 +275,14 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 		
 		
 		
-		if ((standardizedRole.getCheckList() != null) && (standardizedRole.getCheckList().getCheckListTopics() != null) && (standardizedRole.getCheckList().getCheckListTopics().size() > 0)) 
+		if ((standardizedRole.getCheckList() != null) && (standardizedRole.getCheckList().getChecklistItems() != null) && (standardizedRole.getCheckList().getChecklistItems().size() > 0)) 
 		{
 			Paragraph details = new Paragraph();
 			
 			String checkListTitle = (standardizedRole.getCheckList().getTitle() != null)? " " + standardizedRole.getCheckList().getTitle() : "";					
 			details.add(new Chunk(constants.checkList() +": "+ checkListTitle, paragraphTitleFont));
 			//details.add(new Chunk(checkListTitle, paragraphTitleFont));			
-			// addEmptyLine(details, 1);
+			addEmptyLine(details, 1);
 
 			try {
 				//document.add(titleDetails);
@@ -254,10 +291,29 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 			} catch (DocumentException e) {
 				log.error("in PdfUtil.addDetails(): " + e.getMessage());
 			}
-			createCheckListDetailsTable(studId);
+			createCheckListTabDetails(studId,checkListId);
+			//createCheckListDetailsTable(studId);
 		}	
 		
 	}
+
+	private void createCheckListTabDetails(long studId, Long checkListId) {
+
+		List<ChecklistItem> checklistTabs = ChecklistItem.findAllChecklistTabsByChecklistId(checkListId);
+		for(ChecklistItem checklistTab: checklistTabs){
+			String tabText=checklistTab.getName();
+			Paragraph tabParagraph = new Paragraph(new Chunk(tabText,tabFont));
+			try {
+				addEmptyLine(tabParagraph, 1);
+				document.add(tabParagraph);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+			}
+			createCheckListDetailsTable(studId,checklistTab.getId());
+
+		}
+	}
+	
 
 	private Paragraph createPara(PdfPTable pdfPTable, String header) {
 
@@ -363,21 +419,21 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 		
 	}
 	
-	private PdfPTable createCheckListQuestionTable(List<ChecklistQuestion> questions,long studId) {
+	private PdfPTable createCheckListQuestionTable(List<ChecklistItem> questions,long studId) {
 		if (questions != null && questions.size() > 0) {
 		PdfPTable table = new PdfPTable(new float[] { 0.7f, 0.3f });
 			
 			int i = 0;
 			int j=0;
-			for (ChecklistQuestion question: questions) {
-				String questionText = question.getQuestion();
+			for (ChecklistItem question: questions) {
+				String questionText = question.getName();
 				if (questionText != null) {
 					Chunk questionChunk = new Chunk(questionText, boldFont);					
 					Chunk criteriaChunk = null;
 					Chunk instructionChunk = null;
 					
-					if (question.getInstruction() != null) {
-						instructionChunk = new Chunk(question.getInstruction(), italicFont);						
+					if (question.getDescription() != null) {
+						instructionChunk = new Chunk(question.getDescription(), italicFont);						
 					}
 
 					if (question.getCheckListCriterias().size() > 0) {
@@ -445,22 +501,26 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 	}
 
 	
-	private void createCheckListDetailsTable(long studId) {
+	private void createCheckListDetailsTable(long studId, Long checkListTabId) {
 		isValueAvailable[3] = true;
 		CheckList checkList = standardizedRole.getCheckList();
 
-		List<ChecklistTopic> checklistTopics = checkList.getCheckListTopics();
+		List<ChecklistItem> checklistTopics = ChecklistItem.findChecklistTopicByChecklistTab(checkListTabId);
+		
+		//List<ChecklistTopic> checklistTopics = checkList.getCheckListTopics();
 
 		log.info("CheckList size " + checklistTopics.size());
 		
 		Paragraph checklistDetails = new Paragraph();
 
-		for (ChecklistTopic checklistTopic : checklistTopics) {
-			String chkListTitle = checklistTopic.getTitle();
+		for (ChecklistItem checklistTopic : checklistTopics) {
+			String chkListTitle = checklistTopic.getName();
 			
-			PdfPTable table = createCheckListQuestionTable(checklistTopic.getCheckListQuestions(),studId);
+			List<ChecklistItem> checklistQuestionList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistTopic.getId());
 			
-			if (table.size() > 0)
+			PdfPTable table = createCheckListQuestionTable(checklistQuestionList,studId);
+			
+			if (table != null && table.size() > 0)
 			{
 				if (chkListTitle != null) {
 					Paragraph titleParagraph = new Paragraph(new Chunk(chkListTitle, subTitleFont));
@@ -564,7 +624,29 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 		table.setWidthPercentage(100);
 		return table;
 	}
-	
 
-
+	public static void createZipFile(ByteArrayOutputStream pdfOutputStream, OutputStream zipOutputStream, List<String> fileNames)
+	 {
+		 try {
+		      ZipOutputStream zipOut = new ZipOutputStream(zipOutputStream);
+		      
+		      zipOut.putNextEntry(new ZipEntry(OsMaFilePathConstant.ROLE_FILE_STUDENT_MANAGEMENT_PDF_FORMAT));
+			  zipOut.write(pdfOutputStream.toByteArray());	
+			  
+			 for (String fileName : fileNames) {
+				  java.io.File file = new java.io.File(fileName);
+				  if(file.exists()){
+					  zipOut.putNextEntry(new ZipEntry(file.getName()));
+					  zipOut.write(FileUtils.readFileToByteArray(file));
+				  }  
+			  }
+			  zipOut.closeEntry();	            
+		      zipOut.close();
+		      
+		     } catch (FileNotFoundException e) {
+		    	 log.info("File does not exists");
+		    } catch (IOException e) {
+		    	 log.info("IO error");
+		 }
+	 }
 }

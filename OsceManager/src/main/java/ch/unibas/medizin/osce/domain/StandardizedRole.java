@@ -2,6 +2,8 @@ package ch.unibas.medizin.osce.domain;
 
 import static org.apache.commons.lang.StringUtils.defaultString;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
@@ -22,6 +25,7 @@ import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
 import org.springframework.roo.addon.entity.RooEntity;
@@ -55,11 +59,17 @@ import ch.unibas.medizin.osce.server.util.file.RolePrintPdfUtil;
 import ch.unibas.medizin.osce.server.util.file.StudentManagementPrintMinOptionPdfUtil;
 import ch.unibas.medizin.osce.server.util.file.StudentManagementPrintPdfUtil;
 import ch.unibas.medizin.osce.server.util.file.XmlUtil;
+import ch.unibas.medizin.osce.server.util.qrcode.Encryptor;
+import ch.unibas.medizin.osce.server.util.qrcode.QRCodePlist;
+import ch.unibas.medizin.osce.server.util.qrcode.QRCodeUtil;
+import ch.unibas.medizin.osce.shared.QRCodeType;
+import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.google.gwt.requestfactory.server.RequestFactoryServlet;
+import com.itextpdf.text.pdf.BarcodeQRCode;
 
 @RooJavaBean
 @RooToString
@@ -127,6 +137,9 @@ public class StandardizedRole {
 
 	private Integer subVersion;
 	
+	@Enumerated
+	private RoleTopicFactor topicFactor;
+	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "standardizedRole")
 	private Set<RoleParticipant> roleParticipants = new HashSet<RoleParticipant>();
 
@@ -169,6 +182,7 @@ public class StandardizedRole {
 	@OneToOne
 	private RoleTemplate roleTemplate;
 
+	
 
 	public static boolean copyStandardizedRole(Long standardizedRoleId) {
 		   
@@ -190,8 +204,23 @@ public class StandardizedRole {
 		   
 		   newStandardizedRole.setRoleScript(oldStandardizedRole.getRoleScript());
 		   
-		   CheckList newChecklist = copyChecklistFromOldRole(oldStandardizedRole.getCheckList());
-		   newStandardizedRole.setCheckList(newChecklist);		   
+		   /*try {
+			   CheckList newChecklist = new StandardizedRole().copyChecklistItemFromOldRole(oldStandardizedRole.getCheckList());
+			   newChecklist = CheckList.findCheckList(newChecklist.getId());
+			   newStandardizedRole.setCheckList(newChecklist);
+		   }
+		   catch (Exception e) {
+			   e.printStackTrace();
+		   }*/
+		   try {
+			   CheckList newChecklist = copyChecklistItemFromOldRole(oldStandardizedRole.getCheckList());
+			   newStandardizedRole.setCheckList(newChecklist);
+		   } catch (Exception e) {
+			   e.printStackTrace();
+		   }
+		   
+		   //CheckList newChecklist = copyChecklistFromOldRole(oldStandardizedRole.getCheckList());
+		   		   
 		   //newStandardizedRole.setCheckList(oldStandardizedRole.getCheckList());//spec
 		   
 		   newStandardizedRole.setRoleTopic(oldStandardizedRole.getRoleTopic());
@@ -249,6 +278,75 @@ public class StandardizedRole {
 		   return flag;
 	}
 	
+	public static CheckList copyChecklistItemFromOldRole(CheckList checkList) {
+		
+		CheckList newChecklist = new CheckList();
+		newChecklist.setTitle(checkList.getTitle());
+		newChecklist.setVersion(checkList.getVersion());
+		newChecklist.persist();
+		
+		List<ChecklistItem> checklistItems = ChecklistItem.findAllChecklistItemsForChecklist(checkList.getId());
+		
+		for (ChecklistItem checklistItem : checklistItems) {
+			ChecklistItem newChecklistItem = new ChecklistItem();
+			newChecklistItem.setCheckList(newChecklist);
+			exportChecklistItemBean(checklistItem, newChecklistItem);
+		
+			List<ChecklistItem> checklistItemChilds = ChecklistItem.findAllChecklistItemsChild(checklistItem.getId());
+			exportChecklistItemsChild(checklistItemChilds,newChecklistItem);
+		}
+		return newChecklist;
+	}
+	
+	private static void exportChecklistItemsChild(List<ChecklistItem> checklistItemChilds, ChecklistItem parentChecklistItem) {
+		for (ChecklistItem checklistItem : checklistItemChilds) {
+			ChecklistItem newChecklistItem = new ChecklistItem();
+			newChecklistItem.setParentItem(parentChecklistItem);
+			exportChecklistItemBean(checklistItem, newChecklistItem);
+		
+			List<ChecklistItem> checklistItemChildList = ChecklistItem.findAllChecklistItemsChild(checklistItem.getId());
+			exportChecklistItemsChild(checklistItemChildList,newChecklistItem);
+		}		
+	}
+	
+	private static void exportChecklistItemBean(ChecklistItem checklistItem, ChecklistItem newChecklistItem) {
+		newChecklistItem.setName(checklistItem.getName());
+		newChecklistItem.setItemType(checklistItem.getItemType());
+		newChecklistItem.setOptionType(checklistItem.getOptionType());	
+		newChecklistItem.setIsRegressionItem(checklistItem.getIsRegressionItem());
+		newChecklistItem.setSequenceNumber(checklistItem.getSequenceNumber());	
+		newChecklistItem.setDescription(checklistItem.getDescription());
+		newChecklistItem.setVersion(checklistItem.getVersion());
+		newChecklistItem.persist();
+		
+		if(checklistItem.getCheckListCriterias() != null && checklistItem.getCheckListCriterias().isEmpty() == false) {
+			for (ChecklistCriteria checklistCriteria : checklistItem.getCheckListCriterias()) {
+				ChecklistCriteria newChecklistCriteria = new ChecklistCriteria();
+				newChecklistCriteria.setCriteria(checklistCriteria.getCriteria());
+				newChecklistCriteria.setSequenceNumber(checklistCriteria.getSequenceNumber());
+				newChecklistCriteria.setDescription(checklistCriteria.getDescription());
+				newChecklistCriteria.setVersion(checklistCriteria.getVersion());
+				newChecklistCriteria.setChecklistItem(newChecklistItem);
+				newChecklistCriteria.persist();
+			}
+		}
+		
+		if(checklistItem.getCheckListOptions() != null && checklistItem.getCheckListOptions().isEmpty() == false) {
+			for (ChecklistOption option : checklistItem.getCheckListOptions()) {
+				ChecklistOption newChecklistOption = new ChecklistOption();
+				newChecklistOption.setOptionName(option.getOptionName());
+				newChecklistOption.setDescription(option.getDescription());
+				newChecklistOption.setValue(option.getValue());
+				newChecklistOption.setSequenceNumber(option.getSequenceNumber());
+				newChecklistOption.setCriteriaCount(option.getCriteriaCount());
+				newChecklistOption.setVersion(option.getVersion());
+				newChecklistOption.setChecklistItem(newChecklistItem);
+				newChecklistOption.persist();
+			}
+		}
+		
+	}
+	
 	private static CheckList copyChecklistFromOldRole(CheckList checkList) {
 		CheckList newCheckList = new CheckList();
 		newCheckList.setTitle(checkList.getTitle());
@@ -287,7 +385,7 @@ public class StandardizedRole {
 					ChecklistOption newOption = new ChecklistOption();
 					newOption.setName(option.getName());
 					newOption.setOptionName(option.getOptionName());
-					newOption.setInstruction(option.getInstruction());
+					newOption.setDescription(option.getDescription());
 					newOption.setSequenceNumber(option.getSequenceNumber());
 					newOption.setValue(option.getValue());
 					newOption.setCriteriaCount(option.getCriteriaCount());
@@ -633,7 +731,7 @@ public class StandardizedRole {
 
 	public static String getRolePrintPDFByStudentUsingServlet(Long studentId, Long osceId, String locale, ByteArrayOutputStream os) 
 	{
-		String fileName = OsMaFilePathConstant.ROLE_FILE_STUDENT_MANAGEMENT_PDF_FORMAT;
+		String fileName = OsMaFilePathConstant.ROLE_FILE_STUDENT_MANAGEMENT_ZIP_FORMAT;
 		System.out.println("Id: " + studentId + " Locale: " + locale);
 		//Student student=Student.findStudent(studentId);	
 		List<StandardizedRole> standardizedRoleList=findRoleByStudentUsingAnswer(studentId, osceId);
@@ -659,7 +757,7 @@ public class StandardizedRole {
 	
 	public static String getRolePrintPDFByStudentForMinValueUsingServlet(Long studentId, Long osceId, String locale, ByteArrayOutputStream os) 
 	{
-		String fileName = OsMaFilePathConstant.ROLE_FILE_STUDENT_MANAGEMENT_PDF_FORMAT;
+		String fileName = OsMaFilePathConstant.ROLE_FILE_STUDENT_MANAGEMENT_ZIP_FORMAT;
 		System.out.println("Id: " + studentId + " Locale: " + locale);
 		//Student student=Student.findStudent(studentId);	
 		List<StandardizedRole> standardizedRoleList=findRoleByStudentUsingAnswer(studentId, osceId);
@@ -758,6 +856,8 @@ public class StandardizedRole {
 				
 				String roleTopicName=StandardizedRole.findStandardizedRole(standardizedRoleId).getRoleTopic().getName();
 				
+				roleTopicName = roleTopicName.replaceAll(" ", "");
+				
 				fileName ="Checklist-" +toCamelCase(roleTopicName.replaceAll("[^A-Za-z0-9]"," ")); 
 										
 				fileName = fileName + ".osceexchange";
@@ -791,31 +891,35 @@ public class StandardizedRole {
 		Checklisttopics checklisttopicsBean = factory.createOscedataChecklistsChecklistChecklisttopics();
 		checklistBean.setChecklisttopics(checklisttopicsBean);
 		
-		List<ChecklistTopic> checklistTopicList = checklist.getCheckListTopics();
+		List<ChecklistItem> checklistTopicList = ChecklistItem.findChecklistTopicByChecklist(checklist.getId());
 		
-		for (ChecklistTopic checklistTopic : checklistTopicList)
+		//List<ChecklistTopic> checklistTopicList = checklist.getCheckListTopics();
+		
+		for (ChecklistItem checklistTopic : checklistTopicList)
 		{
 			Checklisttopic checklisttopicBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopic();
 			checklisttopicsBean.getChecklisttopic().add(checklisttopicBean);
 			
 			checklisttopicBean.setId(checklistTopic.getId());
-			checklisttopicBean.setTitle(defaultString(checklistTopic.getTitle()));
+			checklisttopicBean.setTitle(defaultString(checklistTopic.getName()));
 			checklisttopicBean.setInstruction(defaultString(checklistTopic.getDescription()));
 			
 			Checklistitems checklistitemsBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitems();
 			checklisttopicBean.setChecklistitems(checklistitemsBean);
 			
-			List<ChecklistQuestion> checklistQuestionsList = checklistTopic.getCheckListQuestions();
+			List<ChecklistItem> checklistQuestionList = ChecklistItem.findChecklistQuestionByChecklistId(checklistTopic.getId());
 			
-			for (ChecklistQuestion checklistQuestion : checklistQuestionsList)
+			//List<ChecklistQuestion> checklistQuestionsList = checklistTopic.getCheckListQuestions();
+			
+			for (ChecklistItem checklistQuestion : checklistQuestionList)
 			{
 				Checklistitem checklistitemBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitemsChecklistitem();
 				checklistitemsBean.getChecklistitem().add(checklistitemBean);
 				
 				checklistitemBean.setId(checklistQuestion.getId());
-				checklistitemBean.setAffectsOverallRating((checklistQuestion.getIsOveralQuestion() == null ? "no" : checklistQuestion.getIsOveralQuestion() == true ? "yes" : "no"));
-				checklistitemBean.setTitle(defaultString(checklistQuestion.getQuestion()));
-				checklistitemBean.setInstruction(defaultString(checklistQuestion.getInstruction()));
+				checklistitemBean.setAffectsOverallRating((checklistQuestion.getIsRegressionItem() == null ? "no" : checklistQuestion.getIsRegressionItem() == true ? "yes" : "no"));
+				checklistitemBean.setTitle(defaultString(checklistQuestion.getName()));
+				checklistitemBean.setInstruction(defaultString(checklistQuestion.getDescription()));
 				
 				Checklistcriteria checklistcriteriaBean = factory.createOscedataChecklistsChecklistChecklisttopicsChecklisttopicChecklistitemsChecklistitemChecklistcriteria();
 				checklistitemBean.setChecklistcriteria(checklistcriteriaBean);
@@ -846,7 +950,7 @@ public class StandardizedRole {
 					
 					checklistoptionBean.setId(option.getId());
 					checklistoptionBean.setTitle(defaultString(option.getOptionName()));
-					checklistoptionBean.setSubtitle(defaultString(option.getInstruction()));
+					checklistoptionBean.setSubtitle(defaultString(option.getDescription()));
 					checklistoptionBean.setVal(defaultString(option.getValue()));
 					
 					if(option.getCriteriaCount() != null) {
@@ -983,5 +1087,64 @@ public class StandardizedRole {
 		  return standardizedRoleList;
 	}
 	
+	public static String createChecklistQRImageByChecklistId(Long checklistId){
+		String qrCodeBase64="";
+		try {
+			//Save the propery list
+			QRCodePlist qrCodePlist = new QRCodePlist();
+			QRCodeUtil qrCodeUtil=new QRCodeUtil();
+			String url=OsMaFilePathConstant.getQRCodeURL() +checklistId;
+			url = url + OsMaFilePathConstant.EXTRA_SPACE_QR;
+			java.io.ByteArrayOutputStream encryptedBytes = Encryptor.encryptFile(OsMaFilePathConstant.getSymmetricKey(),url.getBytes());
+			String base64String = Base64.encodeBase64String(encryptedBytes.toByteArray());
+			
+			qrCodePlist.setQrCodeType(QRCodeType.CHECKLIST_URL_QR_CODE);
+			qrCodePlist.setData(base64String);
+			
+			String plistString = qrCodeUtil.generatePlistFile(qrCodePlist);
+			//put data into plist
+			if(plistString != null){
+				
+				int qrCodeWidth = Integer.parseInt(OsMaFilePathConstant.getQRCodeWidth());
+				int qrCodeHeight = Integer.parseInt(OsMaFilePathConstant.getQRCodeHeight());
+				BarcodeQRCode qrBarCode = new  BarcodeQRCode(plistString,qrCodeWidth,qrCodeHeight, null);
+				java.awt.Image awtImage = qrBarCode.createAwtImage(Color.BLACK, Color.WHITE);
+				BufferedImage bufferedImage = qrCodeUtil.toBufferedImage(awtImage);
+				
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write( bufferedImage, "png", baos );
+				byte[] imageInByte = baos.toByteArray();
+				
+				qrCodeBase64 = Base64.encodeBase64String(imageInByte);
+				System.out.println("image in bytes: " + imageInByte.length);
+				baos.flush();
+				baos.close();
+				return qrCodeBase64;
+			}
+		} catch (Exception e) {
+			Log.error(e.getMessage(),e);
+		}
+		return qrCodeBase64;
+	}
+	
+	public static List<StandardizedRole> findRolesFromSpecialisationId(Long specialisationid, Long currentStandardizedRoleId){
+
+		EntityManager em = entityManager();
+		String sqlQuery = "SELECT sr FROM StandardizedRole AS sr where sr.id != " + currentStandardizedRoleId + " AND  sr.roleTopic.specialisation.id = " + specialisationid + " and active = 1";
+        TypedQuery<StandardizedRole> q = em.createQuery(sqlQuery, StandardizedRole.class);
+        
+        return q.getResultList();
+	}
+	
+	public static List<StandardizedRole> findRolesExceptCurrentRole(Long currentRoleId){
+		StandardizedRole standardizedRole = StandardizedRole.findStandardizedRole(currentRoleId);
+		EntityManager em = entityManager();
+		if(standardizedRole != null &&  standardizedRole.getRoleTopic() != null) {
+			String sqlQuery = "SELECT sr FROM StandardizedRole AS sr where sr.id != " + currentRoleId + " AND  sr.roleTopic.id = " + standardizedRole.getRoleTopic().getId() + " and active = 1";
+	        TypedQuery<StandardizedRole> q = em.createQuery(sqlQuery, StandardizedRole.class);
+	        return q.getResultList();    
+		}
+		return null;
+	}
 }
 

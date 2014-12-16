@@ -120,6 +120,20 @@ public class OscePost {
 		return maxValue;
 	}
 	
+	public static Integer findMaxValueOfCheckListQuestionItemByOscePost(Long oscePostId)
+	{
+		Integer maxValue = 0;
+		EntityManager em = entityManager();
+		String sql = "SELECT max(opt.value) AS max_value FROM ChecklistOption opt, ChecklistItem que, ItemAnalysis ia WHERE opt.checklistItem.id = que.id" +
+				" AND que.id = ia.checklistItem.id AND ia.oscePost.id = " + oscePostId + " AND ia.deActivate = 0 GROUP BY que.id";
+		Query query = em.createQuery(sql, String.class);
+		
+		for (Object object : query.getResultList())
+			maxValue += Integer.parseInt(object.toString());
+		
+		return maxValue;
+	}
+	
 	public static List<OscePost> findOscePostByOsceSequenceId(Long osceSeqId)
 	{
 		EntityManager em = entityManager();

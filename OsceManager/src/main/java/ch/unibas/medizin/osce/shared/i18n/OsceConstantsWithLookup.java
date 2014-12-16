@@ -425,6 +425,56 @@ public interface OsceConstantsWithLookup extends ConstantsWithLookup {
 	
 	public String SUNDAY(); 
 	
-	public String SUN(); 
+	public String SUN();
+	
+	//Item Type
+	public String TAB();
+	
+	public String TOPIC();
+	
+	public String QUESTION();
+
+	//Option Type
+	public String POPOVER();
+	
+	public String SLIDER();
+	
+	public String TOGGLE_2();
+	
+	public String TOGGLE_3();
+
+	//Time unit and encryption enum values
+	public String SECOND();
+
+	public String MINUTE();
+
+	public String ASYM();
+
+	public String HASH();
+
+	public String NO();
+	
+	//SFTP exception types
+	public String JSCH_EXCEPTION();
+	
+	public String SFTP_EXCEPTION();
+	
+	public String UNKNOWN_HOST();
+	
+	public String IO_EXCEPTION();
+	
+	public String EXCEPTION();
+	
+	//Role topic factors
+	
+	public String RATIO();
+	
+	public String NONE(); 
+
+	public String ROLE_WEIGHT();
+	
+	public String ROLE_RATIO();
+	
+	public String ROLE_NONE();
 }
 

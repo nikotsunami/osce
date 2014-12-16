@@ -36,6 +36,10 @@
 			text-shadow: #ddf 1px 1px 0;
 			margin-bottom: 0;
 		}
+		.wrapLine{
+	 		white-space: normal;
+    		word-wrap: break-word;
+		}
 	</ui:style>
 	<g:HTMLPanel>
 
@@ -51,6 +55,8 @@
 
 					<my:IconButton ui:field="edit" icon="pencil">Edit</my:IconButton>
 					<my:IconButton ui:field="delete" icon="trash">Delete</my:IconButton>
+					<my:IconButton ui:field="exportXml" icon="extlink"></my:IconButton>
+					<my:IconButton ui:field="exportSettingsQRCode" icon="extlink"></my:IconButton>
 
 				</div>
 			</g:HTMLPanel>
@@ -241,10 +247,178 @@
 										<span ui:field="osceCreationType" />
 									</td>
 								</tr>
+								
+								<tr>
+									<td>
+										<span class="{style.label}" ui:field="labelIsFormativeOsce"></span>
+									</td>
+									<td>
+										<span ui:field="isFormativeOsce" />
+									</td>
+									<td>
+									</td>
+									<td>
+									</td>
+								</tr>
 							</table>
 						</g:HTMLPanel>
 
 					</g:HorizontalPanel>
+				</g:Tab>
+				
+			<g:Tab> 
+				<g:TabHTML></g:TabHTML>
+		
+					<g:HTMLPanel addStyleNames="{style.patientDetails}">
+							<table class="{style.fields}">
+
+								<tr height="10px">
+									<td>
+										<u>
+											<b>
+												<span ui:field="labelTitleSettings"></span>
+											</b>
+										</u>
+									</td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<!-- <tr id="name"> -->
+								<tr>
+									<td>
+										<span class="{style.label}" ui:field="labelBucketType"></span>
+									</td>
+									<td>
+										<span ui:field="bucketType" />
+									</td>
+									
+								</tr>
+
+								<tr>
+									<!-- <tr id="isRepetion"> -->
+									<td>
+										<span class="{style.label}" ui:field="lblUsername"></span>
+									</td>
+									<td>
+										<span ui:field="username" />
+									</td>
+									<td>
+										<span class="{style.label}" ui:field="lblPassword"></span>
+									</td>
+									<td>
+										<span ui:field="password" />
+									</td>
+								</tr>
+							
+								<tr>
+									<td>
+										<span class="{style.label}" ui:field="lblBucketName"></span>
+									</td>
+									<td>
+										<span ui:field="bucketName" />
+									</td>
+									
+									<td>
+										<span class="{style.label}" ui:field="lblHost"></span>
+									</td>
+									<td>
+										<span ui:field="host" />
+									</td>
+								</tr>
+
+								<tr height="10px">
+									<td>
+										<u>
+											<b>
+												<span ui:field="labelOtherInfo"></span>
+											</b>
+										</u>
+									</td>
+									<td></td>
+									<td></td>
+									<td></td>
+								</tr>
+
+								<tr>
+								<td>
+									<span class="{style.label}" ui:field="lblScreenSaverText"></span>
+									</td>
+									<td>
+										<span class="{style.wrapLine}" ui:field="screenSaverText" />
+									</td>
+										<td id="lblBackUpPeriodTd">
+										<span class="{style.label}" ui:field="lblBackUpPeriod"></span>
+									</td>
+									<td id="backupPeriodTd">
+										<span ui:field="backupPeriod" />
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<span class="{style.label}" ui:field="lblUnit"></span>
+									</td>
+									<td>
+										<span ui:field="unit" />
+									</td>
+									<td>
+										<span class="{style.label}" ui:field="lblEncryptionType"></span>
+									</td>
+									<td>
+										<span ui:field="encryptionType" />
+									</td>
+								</tr>
+								<tr>
+								<td>
+									<span class="{style.label}" ui:field="lblSymmetricKey"></span>
+								</td>
+								<td>
+										<span ui:field="symmetricKey" />
+								</td>
+								<td id="lblSettingPaaswordTd">
+										
+										<span class="{style.label}" ui:field="lblSettingPaasword"></span>
+								</td>
+								
+								<td id="settingPasswordTd">
+									
+										<span ui:field="settingPassword" />
+								</td>
+								</tr>
+								
+								<tr>
+								<td>
+										<span class="{style.label}" ui:field="lblPointNxtExaminee"></span>
+								</td>
+								<td>
+										<span ui:field="pointNxtExaminee" />
+								</td>
+								<!-- <td>
+										<span class="{style.label}" ui:field="lblExamReviewMode"></span>
+								</td>
+								<td>
+										<span ui:field="examMode" />
+								</td> -->
+								<td>
+										<span class="{style.label}" ui:field="lblScreenSaverTime"></span>
+								</td>
+								<td>
+										<span ui:field="screenSaverTime" />
+								</td>
+								</tr>
+								
+								<tr>
+								<td>
+										<span class="{style.label}" ui:field="lblAutoSelection"></span>
+								</td>
+								<td>
+										<span ui:field="autoSelection" />
+								</td>
+								</tr>
+							
+							</table>
+						</g:HTMLPanel>
+				
 				</g:Tab>
 			</g:TabPanel>
 

@@ -12,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Pattern;
 
 import org.apache.log4j.Logger;
@@ -19,9 +20,12 @@ import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.OsceCreationType;
 import ch.unibas.medizin.osce.shared.Sorting;
+
+import com.google.gwt.requestfactory.server.RequestFactoryServlet;
 
 @RooJavaBean
 @RooToString
@@ -240,5 +244,11 @@ public class Student {
      	}
      	
      	return nameList;
+	}
+	
+	public static void updateStudentToSession(List<Long> studIdList){
+		
+		HttpSession session = RequestFactoryServlet.getThreadLocalRequest().getSession();
+		session.setAttribute(OsMaFilePathConstant.STUDENT_LIST_QR, studIdList);
 	}
 }

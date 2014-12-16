@@ -9,6 +9,9 @@
 		.leftpadding10 {
 			margin-left: 10px;
 		}
+		.checkBoxlabel{
+			font-weight: bold;	
+		}
 	</ui:style>
 	<g:VerticalPanel addStyleNames="{style.tabStyle}">
 		<g:HTMLPanel styleName="{style.patientControls}">
@@ -213,6 +216,13 @@
 								<td>
 									<r:ShortBox ui:field="longBreakRequiredTime" />
 								</td>
+								
+								<td>
+									<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceForTask">OSCE for Task :</div>
+								</td>
+								<td>
+									<i:DefaultSuggestBox ui:field="osceValue"></i:DefaultSuggestBox>
+								</td>
 							</tr>
 							<tr>
 								<td id="spStayInPost">
@@ -224,10 +234,10 @@
 								</td>
 
 								<td>
-									<div class="{style.label} {style.leftpadding10}" ui:field="labelOsceForTask">OSCE for Task :</div>
+									<div class="{style.checkBoxlabel} {style.leftpadding10}" ui:field="labelIsFormativeOsce"></div>
 								</td>
 								<td>
-									<i:DefaultSuggestBox ui:field="osceValue"></i:DefaultSuggestBox>
+									<g:CheckBox ui:field="isFormativeOsce"></g:CheckBox>
 								</td>
 
 
@@ -275,6 +285,100 @@
 
 					</g:HTMLPanel>
 
+				</g:Tab>
+
+				<g:Tab>
+				<g:TabHTML></g:TabHTML>
+					<g:HTMLPanel>
+					<table>
+					
+						<tr height="10px">
+								<td>
+									<u>
+										<b>
+											<span ui:field="labelKeySettings"></span>
+										</b>
+									</u>
+								</td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+					
+							<tr height="10px">
+								<td><div class="{style.label} {style.leftpadding10}" ui:field="bucketInfoLabel"></div> </td>
+								<td><g:ValueListBox ui:field="bucketInfo"></g:ValueListBox></td>
+								
+							</tr>
+							
+							<tr height="10px">
+								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblUserName"></div> </td>
+								<td><g:TextBox ui:field="userName"></g:TextBox></td>
+								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblPassword"></div> </td>
+								<td><g:TextBox ui:field="password"></g:TextBox></td>
+							</tr>
+							
+							<tr height="10px">
+								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblBucketName"></div> </td>
+								<td><g:TextBox ui:field="bucketName"></g:TextBox></td>
+								<td id="lblHostTd"><div class="{style.label} {style.leftpadding10}" ui:field="lblHost"></div> </td>
+								<td id="hostTd"><g:TextBox ui:field="host"></g:TextBox></td>
+								
+							</tr>
+							
+							<tr height="10px">
+								<td>
+									<u>
+										<b>
+											<span ui:field="labelGeneralSettings"></span>
+										</b>
+									</u>
+								</td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr height="10px">
+									<td><div class="{style.label} {style.leftpadding10}" ui:field="lblScreenSaverText"></div></td>
+									<td colspan="3" width="100% "><g:TextArea ui:field="screenSaverText"></g:TextArea></td>
+									<td></td>
+									<td></td>		
+							</tr>
+							<tr height="10px">
+								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblBackUpPeriod"></div> </td>
+								<td><g:TextBox ui:field="backUpPeriod"></g:TextBox></td>
+								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblTimeUnit"></div> </td>
+								<td><g:ValueListBox ui:field="timeUnit"></g:ValueListBox></td>
+							</tr>
+							
+							<tr height="10px">
+								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblEncryptionType"></div> </td>
+								<td><g:ValueListBox ui:field="encryptionType"></g:ValueListBox></td>
+								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblSymmetricKey"></div> </td>
+								<td><g:TextBox ui:field="symmetricKey"></g:TextBox></td>
+							</tr>
+							
+							<tr height="10px">
+							
+								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblSettingPassword"></div> </td>
+								<td><g:TextBox ui:field="settingPassword"></g:TextBox></td>
+								<td><div class="{style.checkBoxlabel} {style.leftpadding10}" ui:field="lblPointNxtExaminee"></div></td>
+								<td><g:CheckBox ui:field="pointNextExaminee"></g:CheckBox></td>
+							</tr>
+							
+							<tr height="10px">
+								<!-- <td><div class="{style.checkBoxlabel} {style.leftpadding10}" ui:field="lblExamReviewMode"></div></td>
+								<td><g:CheckBox ui:field="examReviewMode"></g:CheckBox></td> -->
+								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblScreenSaverTime"></div></td>
+								<td><g:TextBox ui:field="screenSaverTime"></g:TextBox></td>
+								<td><div class="{style.checkBoxlabel} {style.leftpadding10}" ui:field="lblAutoSelection"></div></td>
+								<td><g:CheckBox ui:field="autoSelection"></g:CheckBox></td>
+							</tr>
+							
+					</table>
+					</g:HTMLPanel>
+				
+				
 				</g:Tab>
 			</g:TabPanel>
 		</g:HTMLPanel>

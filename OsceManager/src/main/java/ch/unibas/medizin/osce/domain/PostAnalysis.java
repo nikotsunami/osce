@@ -1,6 +1,5 @@
 package ch.unibas.medizin.osce.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -53,6 +52,9 @@ public class PostAnalysis {
 	
 	@ManyToOne
 	ChecklistQuestion checklistQuestion;
+	
+	@ManyToOne
+	ChecklistItem checklistItem;
 	
 	public static PostAnalysis findExaminerLevelData(Osce osce, OscePost oscePost,Doctor examiner)
 	{
@@ -158,5 +160,12 @@ public class PostAnalysis {
 		else
 			return null;
 	}
-	
+
+	public static List<PostAnalysis> findItemAnalysisByChecklistItem(Long checklistItemId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT a FROM PostAnalysis a WHERE a.checklistItem is not null AND a.checklistItem.id = " + checklistItemId;
+		TypedQuery<PostAnalysis> query = em.createQuery(sql, PostAnalysis.class);
+		return query.getResultList();
+	}
 }
+

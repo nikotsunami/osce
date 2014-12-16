@@ -3442,12 +3442,12 @@ color: #f1b532;
 /* eosce */
 .eOSCElable
 {
-	padding-top: 6px;
-	width: 390px;
+	/* padding-top: 6px; */
+	width: 340px;
 }
 .eOSCEHorizontalPanel
 {
-	padding-top: 6px;
+	/* padding-top: 6px; */
 }
 .schedulePanelStyle
 {	
@@ -3587,7 +3587,8 @@ color: #f1b532;
 /* Export OSCE Issue Change*/
 .exportAnchor{
 	float: right;
-    margin-top: 5px;
+    /* margin-top: 5px; */
+    margin-left: 8px;
 }
 
 /* Module 16 start */
@@ -4033,4 +4034,79 @@ color: #f1b532;
 	float: left;
 	margin-top: -5px;
 	
+}
+
+ .checklist-popup-arrow{ 
+	border-bottom: 8px solid #FFFFFF;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    bottom: -8px;
+    height: 0;
+    left: 35px;
+    position: absolute;
+    top: -8px;
+    width: 0;
+}
+.checklist-popup-arrow-border{ 
+	border-bottom: 8px solid #AAAAAA;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    bottom: -8px;
+    height: 0;
+    left: 33px;
+    position: absolute;
+    top: -8px;
+    width: 0;
+}
+
+.checklist-topic-popup-arrow{ 
+	border-bottom: 8px solid #FFFFFF;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    bottom: -8px;
+    height: 0;
+    right: 5px;
+    position: absolute;
+    top: -8px;
+    width: 0;
+}
+.checklist-topic-popup-arrow-border{ 
+	border-bottom: 8px solid #AAAAAA;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    bottom: -8px;
+    height: 0;
+    right: 3px;
+    position: absolute;
+    top: -8px;
+    width: 0;
+}
+
+.checklist-edit-popup-arrow{ 
+	position:absolute; 
+	bottom:-8px; 
+	right:5px;
+    width: 0; 
+    height: 0; 
+    border-left:8px solid transparent; 
+    border-right: 8px solid transparent; 
+    border-top: 8px solid #fff;
+ }
+.checklist-edit-popup-arrow-border{ 
+	position:absolute; 
+	bottom:-8px; 
+	right:3px;
+    width: 0; 
+    height: 0; 
+    border-left:10px solid transparent; 
+    border-right: 10px solid transparent; 
+    border-top: 8px solid #AAAAAA;
+}
+.qr_popup_close_button{
+	float: right;
+	background: none;
+	border: none;
+}
+.qr_popup_close_button:HOVER {
+	background: none;
 }

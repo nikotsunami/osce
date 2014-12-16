@@ -23,12 +23,16 @@ public class ChecklistCriteria implements Comparable<ChecklistCriteria> {
 	@Size(max=255)
 	private String criteria;
 	
+	@Size(max=5000)
+	private String description;
+	
 	@ManyToOne
 	private ChecklistQuestion checklistQuestion;
 	
 	private Integer sequenceNumber;
 	
-	
+	@ManyToOne
+	private ChecklistItem checklistItem;
 	
 	public static Boolean updateSequence(List<ChecklistCriteria> criterias)
 	{
@@ -71,4 +75,59 @@ public class ChecklistCriteria implements Comparable<ChecklistCriteria> {
 		return null;	
 	}
 	
+	public static ChecklistItem saveChecklistCriteria(String name, String description, Long checklistItemId, Long checklistCriteriaId) {
+		
+		ChecklistCriteria checklistCriteria;
+		ChecklistItem checklistItem;
+		
+		if (checklistCriteriaId != null) {
+			checklistCriteria = ChecklistCriteria.findChecklistCriteria(checklistCriteriaId);
+			checklistItem = checklistCriteria.getChecklistItem();
+		} else {
+			checklistCriteria = new ChecklistCriteria();
+			checklistItem = ChecklistItem.findChecklistItem(checklistItemId);
+			Integer seqNo = findMaxSequenceNumberByItemId(checklistItemId);
+			checklistCriteria.setSequenceNumber(seqNo);
+			checklistCriteria.setChecklistItem(checklistItem);
+		}
+		
+		checklistCriteria.setCriteria(name);
+		checklistCriteria.setDescription(description);
+		checklistCriteria.persist();
+		
+		return checklistItem;
+	}
+	
+	public static ChecklistItem removeChecklistCriteria(Long criteriaId) {
+		Long answerCount = AnswerCheckListCriteria.findAnswerByChecklistCriteria(criteriaId);
+		
+		if ( answerCount != null && answerCount <= 0) {
+			ChecklistCriteria checklistCriteria = ChecklistCriteria.findChecklistCriteria(criteriaId);
+			ChecklistItem checklistItem = checklistCriteria.getChecklistItem();
+			checklistCriteria.remove();
+			
+			if (checklistCriteria != null && checklistItem.getCheckListCriterias() != null && checklistItem.getCheckListCriterias().size() > 0) {
+				int seqNumber = 0;
+				for (ChecklistCriteria criteria : checklistItem.getCheckListCriterias()) {
+					criteria.setSequenceNumber(seqNumber);
+					criteria.persist();
+					seqNumber += 1;
+				}
+			}
+			
+			return checklistItem;
+		}
+		
+		return null;
+	}
+	
+	public static int findMaxSequenceNumberByItemId(Long itemId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT MAX(c.sequenceNumber) FROM ChecklistCriteria c WHERE c.checklistItem.id = " + itemId;
+		TypedQuery<Integer> query = em.createQuery(sql, Integer.class);
+		if (query.getResultList() != null && query.getResultList().size() > 0 && query.getResultList().get(0) != null)
+			return (query.getResultList().get(0) + 1);
+		else
+			return 0;
+	}
 }

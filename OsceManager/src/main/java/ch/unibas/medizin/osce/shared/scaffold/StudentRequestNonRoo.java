@@ -35,4 +35,6 @@ public interface StudentRequestNonRoo extends RequestContext{
 	abstract Request<List<OsceProxy>> findOsceBasedOnStudent(Long studentID);
 	abstract Request<List<StudentProxy>> findStudentByOsceIdAndCourseId(long oscetID, long courseId);
 
+	abstract Request<Void> updateStudentToSession(List<Long> studId);
+
 }

@@ -11,7 +11,7 @@ public class OsMaFilePathConstant {
 		  try 
 		  {
 			  Properties properties =  new Properties();
-			  properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/paths.properties")); 
+			  properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/config.properties")); 
 			  UPLOAD_BASE_DIR_PATH = properties.getProperty("baseDir");
 		  }
 		  catch (Exception e) 
@@ -22,6 +22,81 @@ public class OsMaFilePathConstant {
 		  return UPLOAD_BASE_DIR_PATH;
 	 }
 	
+	 public static String getQRCodeURL() {
+		  
+		 String  QR_CODE_URL = ""; 
+		 
+	
+		  try 
+		  {
+			  Properties properties =  new Properties();
+			  properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/config.properties")); 
+			  QR_CODE_URL = properties.getProperty("url");
+		  }
+		  catch (Exception e) 
+		  {
+			   e.printStackTrace();
+		  }
+		  
+		  return QR_CODE_URL;
+	 }
+	 
+	 public static String getSymmetricKey() {
+		  
+		 String  SYMMETRIC_KEY = ""; 
+		 
+	
+		  try 
+		  {
+			  Properties properties =  new Properties();
+			  properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/config.properties")); 
+			  SYMMETRIC_KEY = properties.getProperty("key");
+		  }
+		  catch (Exception e) 
+		  {
+			   e.printStackTrace();
+		  }
+		  
+		  return SYMMETRIC_KEY;
+	 }
+	 
+	 public static String getQRCodeWidth() {
+		  
+		 String  width = ""; 
+		 
+	
+		  try 
+		  {
+			  Properties properties =  new Properties();
+			  properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/config.properties")); 
+			  width = properties.getProperty("qrCodeWidth");
+		  }
+		  catch (Exception e) 
+		  {
+			   e.printStackTrace();
+		  }
+		  
+		  return width;
+	 }
+	 
+	 public static String getQRCodeHeight() {
+		  
+		 String  height = ""; 
+		 
+	
+		  try 
+		  {
+			  Properties properties =  new Properties();
+			  properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/config.properties")); 
+			  height = properties.getProperty("qrCodeHeight");
+		  }
+		  catch (Exception e) 
+		  {
+			   e.printStackTrace();
+		  }
+		  
+		  return height;
+	 }
 	// Module 9 Start
 
 	public static String DOWNLOAD_DIR_PATH = "Download";
@@ -29,12 +104,15 @@ public class OsMaFilePathConstant {
 	public static String FILENAME = "StandardizedPatientList.csv";
 	public static String FILE_NAME_PDF_FORMAT = "StandardizedPatientDetails.pdf";
 	public static String ROLE_FILE_NAME_PDF_FORMAT = "StandardizedRoleDetails.pdf";
+	public static String ROLE_FILE_STUDENT_MANAGEMENT_ZIP_FORMAT = "StudentRoleDetails.zip";
 	public static String ROLE_FILE_STUDENT_MANAGEMENT_PDF_FORMAT = "StudentRoleDetails.pdf";
 
 	public static String PATIENT_FILE_NAME_PDF_FORMAT = "StandardizedPatient.pdf";
 	public static String STUDENT_FILE_NAME_PDF_FORMAT = "Student.pdf";
 	public static String EXAMINER_FILE_NAME_PDF_FORMAT = "Examiner.pdf";
 	public static String INVITATION_FILE_NAME_PDF_FORMAT = "Invitation.pdf";
+	public static String EXAMINER_QR_PDF_FORMAT="ExaminerQR.pdf";
+	public static final String STUDENT_QR_PDF_FORMAT = "StudentQR.pdf";
 
 	public static String TXT_EXTENTION = ".txt";
 
@@ -75,7 +153,9 @@ public class OsMaFilePathConstant {
 	public static String appImageUploadDirectory = "osMaEntry/gwt/unibas/sp/images";
 
 	// Module 9 End
-	public static String DEFAULT_IMPORT_EOSCE_PATH = getUploadBaseDIRPath() + "/eosce/import/"; //"/usr/oscemanager/eOSCE/import/";
+	public static String IMPORT_UNPROCESSED_EOSCE_PATH = getUploadBaseDIRPath() + "/eosce/import/unprocessed/"; //"/usr/oscemanager/eOSCE/import/";
+	
+	public static String IMPORT_PROCESSED_EOSCE_PATH = getUploadBaseDIRPath() + "/eosce/import/processed/";
 	// public static String DEFAULT_IMPORT_EOSCE_PATH = "C:\\oscemanager\\eOSCE\\import\\";
 
 	// Role Module
@@ -123,4 +203,28 @@ public class OsMaFilePathConstant {
 	public static String localSpDataDirectory = getUploadBaseDIRPath() + "/sp/";
 	
 	public static final String appStandardizedPatientPaymentPDF = "/osMaEntry/gwt/unibas/payment/Honorarabrechnung_Form_2011_01.pdf";
+
+	public static final String EXTRA_SPACE_QR="                                       ";
+	
+	public static final String EXPORT_EOSCE = "/eosce";
+	
+	public static final String EXPORT_IOSCE = "/iosce";
+	
+	public static final String EOSCE_FILE_EXTENSION = ".osceexchange";
+	
+	public static final String IOSCE_FILE_EXTENSION = ".iosce";
+	
+	public static final String EXAMINER_LIST_QR = "ExaminerQr";
+
+	public static final String STUDENT_LIST_QR = "StudentQR";
+
+	public static final String EXTRA_SPACE_TITLE = "                    ";
+	
+	public static final String IMPORT_AUDIO_NOTE_PATH = getUploadBaseDIRPath() + "/eosce/import/audionote/";
+	
+	public static final String CERTIFICATE_ALIAS = "Test CA";
+	
+	public static final String SIGN_ALGO = "SHA256WithRSA";
+	
+	public static final String SPACING_QUESTION_DESCRIPTION ="  ";
 }

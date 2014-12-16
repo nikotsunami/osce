@@ -3,10 +3,12 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
+import ch.unibas.medizin.osce.shared.BucketInfoType;
+import ch.unibas.medizin.osce.shared.ExportOsceType;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -17,6 +19,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -56,16 +59,19 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	RadioButton unprocessed;
 	
 	@UiField
-	SpanElement bucketNameLbl;
+	Label bucketNameLbl;
 	
 	@UiField
-	SpanElement accessKeyLbl;
+	Label accessKeyLbl;
 	
 	@UiField
-	SpanElement secretKeyLbl;
+	Label secretKeyLbl;
 	
 	@UiField
-	SpanElement encryptionKeyLbl;
+	Label encryptionKeyLbl;
+	
+	@UiField
+	Label basePathLbl;
 	
 	@UiField
 	TextBox bucketName;
@@ -80,12 +86,32 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	TextBox encryptionKey;
 	
 	@UiField
+	TextBox basePath;
+	
+	@UiField
 	IconButton saveEditButton;
 	
 	@UiField
 	IconButton cancelButton;
 	
+	@UiField
+	IconButton fetchFiles;
+	
 	BucketInformationProxy bucketInformationProxy;
+	
+	@UiField
+	RadioButton eOSCE;
+	
+	@UiField
+	RadioButton iOSCE;
+	
+	@UiField
+	RadioButton s3;
+	
+	@UiField
+	RadioButton ftp;
+	
+	ExportOsceType osceType = null;
 		
 	public ImporteOSCEViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -104,12 +130,46 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 			}
 		});
 		
-		bucketNameLbl.setInnerText(constants.bucketName());
-		accessKeyLbl.setInnerText(constants.accessKey());
-		secretKeyLbl.setInnerText(constants.secretKey());
-		encryptionKeyLbl.setInnerText(constants.encryptionKey());
+		bucketNameLbl.setText(constants.bucketName());
+		accessKeyLbl.setText(constants.accessKey());
+		secretKeyLbl.setText(constants.secretKey());
+		basePath.setText(constants.basePath());
+		encryptionKeyLbl.setText(constants.encryptionKey());
 		cancelButton.setText(constants.cancel());
+		fetchFiles.setText(constants.fetchFilesFromCloud());
+		
+		eOSCE.setText(constants.eOSCE());
+		iOSCE.setText(constants.iOSCE());
+		
+		s3.setText(constants.s3());
+		ftp.setText(constants.ftp());
 	}	
+	
+	@UiHandler("fetchFiles")
+	public void fetchFilesClicked(ClickEvent e) {
+		if (eOSCE.getValue() && unprocessed.getValue()) {
+			delegate.fetchUnprocessedFilesFromCloud(ExportOsceType.EOSCE, selectedBucketType());
+		}
+		else if (eOSCE.getValue() && processed.getValue()) {
+			delegate.fetchProcessedFilesFromCloud(ExportOsceType.EOSCE, selectedBucketType());
+		}
+		else if (iOSCE.getValue() && unprocessed.getValue()) {
+			delegate.fetchUnprocessedFilesFromCloud(ExportOsceType.IOSCE, selectedBucketType());
+		}
+		else if (iOSCE.getValue() && processed.getValue()) {
+			delegate.fetchProcessedFilesFromCloud(ExportOsceType.IOSCE, selectedBucketType());
+		}
+	}
+	
+	@UiHandler("eOSCE")
+	public void eOSCESelected(ClickEvent e) {
+		delegate.eOsceClicked();
+	}
+	
+	@UiHandler("iOSCE")
+	public void iOSCESelected(ClickEvent e) {
+		delegate.iOsceClicked();
+	}
 	
 	@UiHandler("unprocessed")
 	public void unprocessedSelected(ClickEvent event)
@@ -117,7 +177,11 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.importUnprocessed());
 		delButton.setEnabled(false);
 		//importButton.setEnabled(true);
-		delegate.unprocessedClicked();
+		if (eOSCE.getValue())
+			delegate.unprocessedClicked(ExportOsceType.EOSCE);
+		else if (iOSCE.getValue())
+			delegate.unprocessedClicked(ExportOsceType.IOSCE);
+		
 	}
 	
 	@UiHandler("processed")
@@ -126,7 +190,11 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		disclouserPanelFlie.getHeaderTextAccessor().setText(constants.importProcessed());
 		delButton.setEnabled(true);
 		//importButton.setEnabled(false);
-		delegate.processedClicked();
+		if (eOSCE.getValue())
+			delegate.processedClicked(ExportOsceType.EOSCE);
+		else if (iOSCE.getValue())
+			delegate.processedClicked(ExportOsceType.IOSCE);
+		
 	}
 	
 	@UiHandler("importButton")
@@ -134,6 +202,12 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	{
 		//delegate.importButtonClicked(true);
 		Boolean test = delegate.checkSelectedValue();
+		
+		if (eOSCE.getValue())
+			osceType = ExportOsceType.EOSCE;
+		else if (iOSCE.getValue())
+			osceType = ExportOsceType.IOSCE;
+			
 		
 		if (test)
 		{
@@ -143,14 +217,14 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 				@Override
 				public void onClick(ClickEvent event) {
 					messageConfirmationDialogBox.hide();
-					delegate.importButtonClicked(true);
+					delegate.importButtonClicked(osceType, true, selectedBucketType());
 				}
 			});
 			messageConfirmationDialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent event) {
 					messageConfirmationDialogBox.hide();
-					delegate.importButtonClicked(false);
+					delegate.importButtonClicked(osceType, false, selectedBucketType());
 				}
 			});
 		}
@@ -169,7 +243,16 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		
 		if (test)
 		{
-			delegate.deleteButtonClicked();
+			final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+			messageConfirmationDialogBox.showYesNoDialog(constants.confirmDelete());
+			messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					messageConfirmationDialogBox.hide();
+					delegate.deleteButtonClicked(selectedOsceType(), selectedBucketType());
+				}
+			});
 		}
 		else
 		{
@@ -240,8 +323,7 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		return bucketInformationProxy;
 	}
 
-	public void setBucketInformationProxy(
-			BucketInformationProxy bucketInformationProxy) {
+	public void setBucketInformationProxy(BucketInformationProxy bucketInformationProxy) {
 		this.bucketInformationProxy = bucketInformationProxy;
 	}
 	
@@ -259,7 +341,7 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		if (saveEditButton.getText().equals(constants.save()))
 		{
 			cancelButton.setVisible(false);
-			delegate.bucketSaveButtonClicked(bucketInformationProxy, bucketName.getText(), accessKey.getText(), secretKey.getText(), encryptionKey.getText());
+			delegate.bucketSaveButtonClicked(bucketInformationProxy, bucketName.getText(), accessKey.getText(), secretKey.getText(), encryptionKey.getText(), basePath.getText(), ftp.getValue());
 		}
 		else if (saveEditButton.getText().equals(constants.edit()))
 		{
@@ -267,6 +349,7 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 			accessKey.setEnabled(true);
 			secretKey.setEnabled(true);
 			encryptionKey.setEnabled(true);
+			basePath.setEnabled(true);
 			
 			saveEditButton.setText(constants.save());
 			
@@ -301,6 +384,159 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	public void setUnprocessed(RadioButton unprocessed) {
 		this.unprocessed = unprocessed;
 	}
+
+	public ExportOsceType selectedOsceType() {
+		if (eOSCE.getValue())
+			return ExportOsceType.EOSCE;
+		else if (iOSCE.getValue())
+			return ExportOsceType.IOSCE;
+		
+		return null;
+	}
 	
+
+	@UiHandler("s3")
+	public void s3Selected(ClickEvent event)
+	{
+		if(s3.getValue() == true) {
+			encryptionKeyLbl.setText(constants.encryptionKey());
+			bucketNameLbl.setText(constants.bucketName());
+			accessKeyLbl.setText(constants.accessKey());
+			secretKeyLbl.setText(constants.secretKey());
+			basePath.setVisible(false);
+			basePathLbl.setVisible(false);
+			
+			boolean isFTP;
+			boolean empty;
+			boolean enabled;
+			
+			if(bucketInformationProxy != null && (bucketInformationProxy.getType() == null || BucketInfoType.S3.equals(bucketInformationProxy.getType()))) {
+				isFTP = false;
+				empty = false;
+				enabled = false;
+			} else {
+				isFTP = false;
+				empty = true;
+				enabled = true;
+			}
+			setValuesToTextBoxs(isFTP,empty);
+			enableTextBoxs(enabled,isFTP);	
+			
+			bucketName.setFocus(true);
+		}else {
+			Log.info("changes of ftp");
+		}
+		
+	}
+
+	@UiHandler("ftp")
+	public void ftpSelected(ClickEvent event)
+	{
+		if(ftp.getValue() == true) {
+			basePathLbl.setText(constants.basePath());
+			encryptionKeyLbl.setText(constants.encryptionKey());
+			bucketNameLbl.setText(constants.host());
+			accessKeyLbl.setText(constants.userName());
+			secretKeyLbl.setText(constants.password());
+			basePath.setVisible(true);
+			basePathLbl.setVisible(true);
+			
+			boolean isFTP;
+			boolean empty;
+			boolean enabled;
+			
+			if(bucketInformationProxy != null && BucketInfoType.FTP.equals(bucketInformationProxy.getType())) {
+				isFTP = true;
+				empty = false;
+				enabled = false;
+			} else {
+				isFTP = true;
+				empty = true;
+				enabled = true;
+			}
+			
+			setValuesToTextBoxs(isFTP,empty);
+			enableTextBoxs(enabled,isFTP);
+			
+			bucketName.setFocus(true);
+		}else {
+			Log.info("changes of s3");
+		}
+		
+	}
 	
+	private void setValuesToTextBoxs(boolean isFTP,boolean empty) {
+		if(empty == false) {
+			bucketName.setText(bucketInformationProxy.getBucketName());
+			accessKey.setText(bucketInformationProxy.getAccessKey());
+			secretKey.setText(bucketInformationProxy.getSecretKey());
+			encryptionKey.setText(bucketInformationProxy.getEncryptionKey());
+			
+			if(isFTP) {
+				basePath.setText(bucketInformationProxy.getBasePath());
+			}	
+		} else {
+			bucketName.setText("");
+			accessKey.setText("");
+			secretKey.setText("");
+			encryptionKey.setText("");
+			if(isFTP) {
+				basePath.setText("");
+			}	
+		}
+		
+	}
+
+	private void enableTextBoxs(boolean enabled,boolean isFTP) {
+		bucketName.setEnabled(enabled);
+		accessKey.setEnabled(enabled);
+		secretKey.setEnabled(enabled);
+		encryptionKey.setEnabled(enabled);
+		
+		if(isFTP == true) {
+			basePath.setEnabled(enabled);	
+		} else {
+			basePath.setVisible(false);
+		}
+		
+		if(enabled == false) {
+			saveEditButton.setText(constants.edit());
+			cancelButton.setVisible(false);	
+		} else {
+			saveEditButton.setText(constants.save());
+			cancelButton.setVisible(true);
+		}
+		
+	}
+	
+	@Override
+	public void typeValueChanged(boolean isFTP) {
+		if(isFTP) {
+			ftpSelected(null);
+		}else {
+			s3Selected(null);
+		}
+	}
+	
+	public RadioButton getFtp() {
+		return ftp;
+	}
+	
+	public RadioButton getS3() {
+		return s3;
+	}
+	
+	public TextBox getBasePath() {
+		return basePath;
+	}
+	
+	public BucketInfoType selectedBucketType() {
+		if (s3.getValue()) 
+			return BucketInfoType.S3;
+		else if (ftp.getValue()) 
+			return BucketInfoType.FTP;
+		
+		return null;
+	}
 }
+

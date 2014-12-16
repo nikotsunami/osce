@@ -98,6 +98,16 @@
 									<!-- //Issue # 122 : Replace pull down with autocomplete. -->
 									<!-- <td><g:TextBox ui:field='studyYear'/></td> -->						
 								</tr>
+								<tr id="checklistFactor">
+									<td><span class="{style.label}" ui:field="topicFactorLbl" /></td>
+									<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+									
+								 	<td><my:FocusableValueListBox ui:field="topicFactor"></my:FocusableValueListBox></td> 
+									
+									<!-- <my:FocusableValueListBox ui:field="roleTopic" /> -->
+									<!-- //Issue # 122 : Replace pull down with autocomplete. -->
+									<!-- <td><g:TextBox ui:field='studyYear'/></td> -->						
+								</tr>
 								</tbody>
 							</table>
 						</g:HTMLPanel>

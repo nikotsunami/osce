@@ -14,15 +14,18 @@ import java.util.Set;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.managed.request.AdministratorProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceSettingsProxy;
 import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.client.style.widgets.cell.IconCell;
+import ch.unibas.medizin.osce.shared.BucketInfoType;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
 import ch.unibas.medizin.osce.shared.OsceCreationType;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractEditableCell;
@@ -36,6 +39,7 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -78,6 +82,11 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 
 	
 	private Delegate delegate;
+	
+	OsceSettingsProxy osceSettingsProxy;
+	
+	OsceConstantsWithLookup enumConstants = GWT.create(OsceConstantsWithLookup.class);
+	
 
 	/**
 	 * Because this class has a default constructor, it can
@@ -98,6 +107,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		
 		osceDetailPanel.selectTab(0);
 		osceDetailPanel.getTabBar().setTabText(0, constants.manageOsces());
+		osceDetailPanel.getTabBar().setTabText(1, constants.osceSettings());
 		TabPanelHelper.moveTabBarToBottom(osceDetailPanel);
 		
 		
@@ -143,8 +153,27 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		labelLOngBreakRequiredTime.setInnerText(constants.osceLongBreakRequiredFiled());
 		labelOsceCreationType.setInnerText(constants.osceCreationType());
 		
-		
+		labelTitleSettings.setInnerText(constants.osceSettings());
+		lblBackUpPeriod.setInnerText(constants.backUpPeriod());
+		lblBucketName.setInnerText(constants.bucketName());
+		lblUnit.setInnerText(constants.timeUnit());
+		lblPointNxtExaminee.setInnerText(constants.pointNxtExaminee());
+		lblEncryptionType.setInnerText(constants.encryptionType());
+		lblSymmetricKey.setInnerText(constants.symmetricKey());
+		//lblExamReviewMode.setInnerText(constants.examReviewMode());
+		lblPassword.setInnerText(constants.password());
+		lblSettingPaasword.setInnerText(constants.settingPassword());
+		labelOtherInfo.setInnerText(constants.otherInformation());
+		lblUsername.setInnerText(constants.userName());
+		lblHost.setInnerText(constants.host());
+		lblScreenSaverText.setInnerText(constants.osceScreenSaverText());
+		lblScreenSaverTime.setInnerText(constants.screenSaverTime());
+		lblAutoSelection.setInnerText(constants.autoSelection());
+		labelBucketType.setInnerText(constants.bucketType());
+		exportSettingsQRCode.setText(constants.exportSettingsQRCode());
+		exportXml.setText(constants.exportSettingsXml());
 		newButton.setText(constants.osceAddTask());
+		labelIsFormativeOsce.setInnerText(constants.isFormativeOsce());
 		
 		init();
 		
@@ -197,9 +226,15 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	
 	@UiField
 	SpanElement labelTitleGeneral;
+	
+	@UiField
+	SpanElement labelTitleSettings;
 
 	@UiField
 	SpanElement labelTitleAttributes;
+	
+	@UiField
+	SpanElement labelOtherInfo;
 
 	@UiField
 	SpanElement labelTitleBreaks;
@@ -312,7 +347,110 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	@UiField
 	SpanElement osceCreationType;
 	
+	//Settings Tab fields start
 	
+	@UiField
+	SpanElement labelBucketType;
+	
+	@UiField
+	SpanElement bucketType;
+	
+	@UiField
+	SpanElement lblHost;
+	
+	@UiField
+	SpanElement host;
+	
+	@UiField
+	SpanElement lblUsername;
+	
+	@UiField
+	SpanElement username;
+	
+	@UiField
+	SpanElement lblBucketName;
+	
+	@UiField
+	SpanElement bucketName;
+	
+	@UiField
+	SpanElement lblBackUpPeriod;
+	
+	@UiField
+	SpanElement backupPeriod;
+	
+	
+	@UiField
+	SpanElement lblPointNxtExaminee;
+	
+	@UiField
+	SpanElement pointNxtExaminee;
+	
+	@UiField
+	SpanElement lblEncryptionType;
+	
+	@UiField
+	SpanElement encryptionType;
+	
+	@UiField
+	SpanElement lblSymmetricKey;
+	
+	@UiField
+	SpanElement symmetricKey;
+	
+	/*@UiField
+	SpanElement lblExamReviewMode;
+	
+	@UiField
+	SpanElement examMode;*/
+	
+	@UiField
+	SpanElement lblUnit;
+	
+	@UiField
+	SpanElement unit;
+	
+	@UiField
+	SpanElement lblSettingPaasword;
+	
+	@UiField
+	SpanElement settingPassword;
+	
+	@UiField
+	SpanElement lblPassword;
+	
+	@UiField
+	SpanElement password;
+	
+	@UiField
+	IconButton exportSettingsQRCode;
+
+	@UiField
+	IconButton exportXml;
+	
+	@UiField
+	SpanElement lblScreenSaverText;
+	
+	@UiField
+	SpanElement screenSaverText;
+	
+	@UiField
+	SpanElement lblScreenSaverTime;
+	
+	@UiField
+	SpanElement screenSaverTime;
+	
+	@UiField
+	SpanElement lblAutoSelection;
+	
+	@UiField
+	SpanElement autoSelection;
+	
+	@UiField
+	SpanElement labelIsFormativeOsce;
+	
+	@UiField
+	SpanElement isFormativeOsce;
 	/* @UiField
 	    DateBox deadline;
 
@@ -888,6 +1026,12 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 			osceCreationType.setInnerText(proxy.getOsceCreationType().toString());
 		}
 		
+		if(proxy.getIsFormativeOsce() == null || proxy.getIsFormativeOsce() == false) {
+			isFormativeOsce.setInnerHTML(OsMaConstant.UNCHECK_ICON.asString());
+		} else {
+			isFormativeOsce.setInnerHTML(OsMaConstant.CHECK_ICON.asString());
+		}
+		
 		System.out.println("total task"+ proxy.getTasks().size());
 		
 		table.setRowCount(proxy.getTasks().size());
@@ -964,6 +1108,15 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		delegate.osceDeleteClicked();
 	}
 
+	@UiHandler("exportSettingsQRCode")
+	public void onExportSettingsQRCodeClicked(ClickEvent e){
+		delegate.exportSettingsQRCodeClicked(osceSettingsProxy);
+	}
+	
+	@UiHandler("exportXml")
+	public void exportXmlClicked(ClickEvent event){
+		delegate.exportXmlClicked(osceSettingsProxy);
+	}
 	@Override
 	public CellTable<TaskProxy> getTable() {
 		// TODO Auto-generated method stub
@@ -1035,6 +1188,58 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 	public void setAdministratorValue(List<AdministratorProxy> emptyList) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setOsceSettings(OsceSettingsProxy response) {
+		this.osceSettingsProxy=response;
+		
+		if(osceSettingsProxy == null){
+			return;
+		}
+		
+		if(osceSettingsProxy.getInfotype().equals(BucketInfoType.FTP)){
+		bucketType.setInnerText(response.getInfotype().name());	
+		lblHost.setInnerText(constants.host());
+		lblUsername.setInnerText(constants.userName());
+		lblBucketName.setInnerText(constants.basePath());
+		}
+		
+		if(osceSettingsProxy.getInfotype().equals(BucketInfoType.S3)){
+		bucketType.setInnerText(response.getInfotype().name());	
+		lblHost.getStyle().setDisplay(Display.NONE);
+		host.getStyle().setDisplay(Display.NONE);
+		lblUsername.setInnerText(constants.accessKey());
+		lblBucketName.setInnerText(constants.bucketName());
+		}
+		username.setInnerText(osceSettingsProxy.getUsername());
+		host.setInnerText(osceSettingsProxy.getHost());
+		bucketName.setInnerText(osceSettingsProxy.getBucketName());
+		backupPeriod.setInnerText(String.valueOf(osceSettingsProxy.getBackupPeriod() == null?"" :osceSettingsProxy.getBackupPeriod()));
+		unit.setInnerText(enumConstants.getString(osceSettingsProxy.getTimeunit().toString()));
+		password.setInnerText(osceSettingsProxy.getPassword());
+		settingPassword.setInnerText(osceSettingsProxy.getSettingPassword());
+		
+		if(osceSettingsProxy.getNextExaminee()==null || !osceSettingsProxy.getNextExaminee()) {
+			pointNxtExaminee.setInnerHTML(OsMaConstant.UNCHECK_ICON.asString());
+		} else {
+			pointNxtExaminee.setInnerHTML(OsMaConstant.CHECK_ICON.asString());
+		}
+		encryptionType.setInnerText(enumConstants.getString(osceSettingsProxy.getEncryptionType().toString()));
+		symmetricKey.setInnerText(osceSettingsProxy.getSymmetricKey());
+		screenSaverText.setInnerText(osceSettingsProxy.getScreenSaverText());
+		/*if(osceSettingsProxy.getReviewMode()==null || !osceSettingsProxy.getReviewMode()) {
+			examMode.setInnerHTML(OsMaConstant.UNCHECK_ICON.asString());
+		} else {
+			examMode.setInnerHTML(OsMaConstant.CHECK_ICON.asString());
+		}*/
+		screenSaverTime.setInnerText(String.valueOf(osceSettingsProxy.getScreenSaverTime() == null?"" :osceSettingsProxy.getScreenSaverTime()));
+
+		if(osceSettingsProxy.getAutoSelection()==null || !osceSettingsProxy.getAutoSelection()) {
+			autoSelection.setInnerHTML(OsMaConstant.UNCHECK_ICON.asString());
+		} else {
+			autoSelection.setInnerHTML(OsMaConstant.CHECK_ICON.asString());
+		}
 	}
 	
 /*	@UiHandler("table")

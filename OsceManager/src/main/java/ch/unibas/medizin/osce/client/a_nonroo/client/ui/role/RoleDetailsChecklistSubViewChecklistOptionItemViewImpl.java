@@ -126,8 +126,8 @@ public class RoleDetailsChecklistSubViewChecklistOptionItemViewImpl extends Comp
 			
 		optionPopup.getDescriptionTxtBox().setValue(roleDetailsChecklistSubViewChecklistOptionItemViewImpl.getProxy().getValue());
 		
-		if (roleDetailsChecklistSubViewChecklistOptionItemViewImpl.getProxy().getInstruction() != null)
-			optionPopup.getOptionDescTextArea().setValue(roleDetailsChecklistSubViewChecklistOptionItemViewImpl.getProxy().getInstruction());
+		if (roleDetailsChecklistSubViewChecklistOptionItemViewImpl.getProxy().getDescription() != null)
+			optionPopup.getOptionDescTextArea().setValue(roleDetailsChecklistSubViewChecklistOptionItemViewImpl.getProxy().getDescription());
 		
 		if(roleDetailsChecklistSubViewChecklistOptionItemViewImpl.getProxy().getCriteriaCount() != null)
 			optionPopup.getCriteriaCountLstBox().setSelectedIndex(roleDetailsChecklistSubViewChecklistOptionItemViewImpl.getProxy().getCriteriaCount().intValue());

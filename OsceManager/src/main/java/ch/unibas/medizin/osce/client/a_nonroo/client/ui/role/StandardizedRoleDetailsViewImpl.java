@@ -13,11 +13,14 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfi
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.criteria.StandartizedPatientAdvancedSearchSubViewImpl;
 import ch.unibas.medizin.osce.client.managed.request.RoleTemplateProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedRoleProxy;
+import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.TabPanelHelper;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
+import ch.unibas.medizin.osce.shared.ItemType;
+import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
@@ -25,20 +28,18 @@ import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -90,8 +91,8 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	}
 	
 	// to drag
-	@UiField
-	public AbsolutePanel checkListAP;
+	/*@UiField
+	public AbsolutePanel checkListAP;*/
 	PickupDragController dragController;
 	
 	
@@ -101,37 +102,37 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	VerticalPanelDropController dropController;
 	
 	
-	public AbsolutePanel getCheckListAP() {
+	/*public AbsolutePanel getCheckListAP() {
 		return checkListAP;
 	}
 
 	public void setCheckListAP(AbsolutePanel checkListAP) {
 		this.checkListAP = checkListAP;
-	}
+	}*/
 
-	@UiField
+	/*@UiField
 	public VerticalPanel checkListsVerticalPanel;
 	
 	@UiField
 	public HorizontalPanel addTopicHP;
 	
 	@UiField
-	public Button addCheckListTopicButton;
+	public Button addCheckListTopicButton;*/
 	
 	public CheckListTopicPopupView topicPopup;
 	
 	public StandardizedRoleDetailsViewImpl studentRoleView;
 	
-	@UiField
+	/*@UiField
 	Button importTopicButton;
-	
-	public Button getImportTopicButton() {
+	*/
+	/*public Button getImportTopicButton() {
 		return importTopicButton;
 	}
 
 	public void setImportTopicButton(Button importTopicButton) {
 		this.importTopicButton = importTopicButton;
-	}
+	}*/
 	//Assignment E]
 
 	// SPEC START =
@@ -190,6 +191,13 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	
 	@UiField
 	Label labelOtherCriteria;
+	
+	@UiField
+	public SpanElement labelTopicFactor;
+	
+	@UiField
+	public SpanElement topicFactor;
+	
 
 	// Temp Fields
 
@@ -243,6 +251,17 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	@UiField
 	RoleFileSubViewImpl roleFileSubViewImpl;
 
+	private final UiIcons uiIcons = GWT.create(UiIcons.class);
+	public ImageResource icon1 = uiIcons.triangle1West(); 
+	public ImageResource icon2=  uiIcons.triangle1East();
+	Unit u=Unit.PX;
+	
+	/*@UiField(provided=true)
+	ScrolledTabLayoutPanel checklistTabPanel=new ScrolledTabLayoutPanel(40L, u, icon1, icon2);*/
+	
+	/*@UiField
+	HorizontalPanel tabPanel;*/
+	
 	public RoleFileSubViewImpl getRoleFileSubViewImpl() {
 		return roleFileSubViewImpl;
 	}
@@ -417,7 +436,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	// E Highlight onViolation
 	
 	//export checklist change
-	@UiField
+	/*@UiField
 	public IconButton exportChecklist;
 	//export checklist change
 	
@@ -425,6 +444,27 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	@UiField
 	public IconButton exportOsce;
 	//export osce change
+	
+	@UiField
+	public IconButton exportCheckListQR;*/
+
+@UiField
+	IconButton iOsceAddCheckListSectionButton;
+	
+	@UiField
+	IconButton eosceExportChecklist;
+	
+	@UiField
+	IconButton eOsceExport;
+	
+	@UiField
+	IconButton iOsceExport;
+	
+	@UiField
+	IconButton iOsceImportItemButton;
+	
+	@UiField
+	VerticalPanel containerVerticalPanel;
 	
 	public StandardizedRoleDetailsViewImpl() {
 
@@ -449,15 +489,15 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 
 		//Assignment E start[
 		roleSubPanel.selectTab(0);
-		addCheckListTopicButton.setText(constants.addCheckListTopic());
+		//addCheckListTopicButton.setText(constants.addCheckListTopic());
 		studentRoleView=this;
-		importTopicButton.setText(constants.importTopic());
+		//importTopicButton.setText(constants.importTopic());
 		//Assignment E start]
 		
 		//SPEC Change
 		
-		addCheckListTopicButton.addStyleName("expTopicButton");
-		importTopicButton.addStyleName("expTopicButton");
+		//addCheckListTopicButton.addStyleName("expTopicButton");
+		//importTopicButton.addStyleName("expTopicButton");
 		
 		//SPEC Change
 		
@@ -468,7 +508,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 			standardizedRoleTemplateMap.put("roleTemplate", roleTemplateListBox.getTextField().advancedTextBox);
 		// E Highlight onViolation
 		
-	dragController = new PickupDragController(checkListAP,false);
+		/*dragController = new PickupDragController(checkListAP,false);
 		dropController = new VerticalPanelDropController(checkListsVerticalPanel);
 		dragController.registerDropController(dropController);
 		dragController.setBehaviorScrollIntoView(true);
@@ -480,7 +520,31 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		
 		exportOsce.setText(constants.exportOsce());
 		exportOsce.addStyleName("expTopicButton");
+		exportCheckListQR.setText(constants.exportChecklistQR());
+		exportCheckListQR.addStyleName("expTopicButton");*/
 		
+		iOsceAddCheckListSectionButton.setText(constants.addCheckListTopic());
+		eOsceExport.setText(constants.exportToeOSCE());
+		iOsceExport.setText(constants.exportToiOSCE());
+		eosceExportChecklist.setText(constants.exportChecklist());
+		iOsceImportItemButton.setText(constants.importTopic());
+		
+		iOsceAddCheckListSectionButton.addStyleName("expTopicButton");
+		eOsceExport.addStyleName("expTopicButton");
+		iOsceExport.addStyleName("expTopicButton");
+		eosceExportChecklist.addStyleName("expTopicButton");
+		iOsceImportItemButton.addStyleName("expTopicButton");
+		
+		//checklistTabPanel.setHeight((ResolutionSettings.getRightWidgetHeight() / 2) - 20 + "px");
+		//containerVerticalPanel.addStyleName("horizontalPanelStyle");
+		//checklistTabPanel.getElement().getStyle().setDisplay(Display.NONE);
+		/*VerticalPanel vp1 = new VerticalPanel();
+		vp1.setHeight("100%");
+		vp1.setWidth("100%");
+		checklistTabPanel.add(vp1, "Tab1");
+		checklistTabPanel.add(new VerticalPanel(), "Tab2");
+		checklistTabPanel.add(new VerticalPanel(), "Tab3");
+		checklistTabPanel.selectTab(0);*/
 	}
 	
 	private void setTabTexts() {
@@ -491,6 +555,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		rolePanel.getTabBar().setTabText(4, constants.roleUsage());
 		
 		roleSubPanel.getTabBar().setTabText(0, constants.checkList());
+		//roleSubPanel.getTabBar().setTabText(1, constants.checkList());
 		roleSubPanel.getTabBar().setTabText(1, constants.searchCriteria());
 		roleSubPanel.getTabBar().setTabText(2, constants.roomMaterials());
 		roleSubPanel.getTabBar().setTabText(3, constants.roleFile());
@@ -507,6 +572,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		labelSum.setInnerText(constants.sum() + ":");
 		
 		labelOtherCriteria.setText(constants.furtherCriteria());
+		labelTopicFactor.setInnerText(constants.topicFactor());
 	}
 
 	@UiHandler("previous")
@@ -661,7 +727,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 	}
 	// SPEC END =
 	//Assignment E[
-	@UiHandler("addCheckListTopicButton")
+	/*@UiHandler("addCheckListTopicButton")
 	public void addCheckListTopicButtonClickHandler(ClickEvent event)
 	{
 		Log.info("Call addCheckListTopicButtonClickHandler");
@@ -669,9 +735,9 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		
 		//if( addCheckListTopicTxtBox.getValue() != "")
 		//delegate.saveCheckListTopic(addCheckListTopicTxtBox.getValue());
-	}
+	}*/
 
-	public void showTopicPopupPanel()
+	/*public void showTopicPopupPanel()
 	{
 		if(topicPopup==null)
 		{
@@ -707,11 +773,11 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 
 					// Highlight onViolation
 					
-					/*if(topicPopup.getTopicTxtBox().getValue()=="" || topicPopup.getDescriptionTxtBox().getValue()=="")
+					if(topicPopup.getTopicTxtBox().getValue()=="" || topicPopup.getDescriptionTxtBox().getValue()=="")
 					{
 					}	
 					else
-					{*/
+					{
 					// E Highlight onViolation
 					
 					// SPEC Change
@@ -752,17 +818,17 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		((CheckListTopicPopupViewImpl)topicPopup).setPopupPosition(addCheckListTopicButton.getAbsoluteLeft()-170, addCheckListTopicButton.getAbsoluteTop()-192); //SPEC Change+
 		((CheckListTopicPopupViewImpl)topicPopup).show();
 		
-	}
+	}*/
 
-		@UiHandler("importTopicButton")
+		/*@UiHandler("importTopicButton")
 		public void importTopicButtonClickHandler(ClickEvent event)
 		{
 			Log.info("importTopicButtonClickHandler");
 			showImportTopicView();
 			
-		}
+		}*/
 		
-		public void showImportTopicView()
+		/*public void showImportTopicView()
 		{
 			if(importTopicView==null)
 			{
@@ -776,7 +842,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 				
 				
 				
-			/*	importTopicView.getOkBtn().addClickHandler(new ClickHandler() {
+				importTopicView.getOkBtn().addClickHandler(new ClickHandler() {
 					
 					@Override
 					public void onClick(ClickEvent event) 
@@ -785,7 +851,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 							((ImportTopicPopupViewImpl)importTopicView).hide(true);
 						}
 					}
-				});*/
+				});
 				// Issue Role
 					importTopicView.getCancelBtn().addClickHandler(new ClickHandler() 
 					{
@@ -804,7 +870,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 			((ImportTopicPopupViewImpl)importTopicView).queListBox.setText("");
 			((ImportTopicPopupViewImpl)importTopicView).topicLstBox.setText("");
 			((ImportTopicPopupViewImpl)importTopicView).show();
-		}
+		}*/
 	//Assignment E]
 		
 		// Highlight onViolation
@@ -833,7 +899,7 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 		}
 	
 	//export checklist change
-		@UiHandler("exportChecklist")
+		/*@UiHandler("exportChecklist")
 		public void exportChecklistClicked(ClickEvent event)
 		{
 			Log.info("exportChecklistClicked");
@@ -848,4 +914,92 @@ public class StandardizedRoleDetailsViewImpl extends Composite implements
 			delegate.exportOsceClicked(this.getValue());
 			
 		}
+		
+		@UiHandler("exportCheckListQR")
+		public void exportChecklistQRCLicked(ClickEvent event)
+		{
+			delegate.exportChecklistQRClicked(this.getValue());	
+		}*/
+		
+		@UiHandler("iOsceAddCheckListSectionButton")
+		public void iOsceChecklistTabButtonClicked(ClickEvent e) {
+			createiOsceTabPopup();
+		}
+		
+		private void createiOsceTabPopup() {
+			
+			final ChecklistiOSCEPopupViewImpl popupViewImpl = new ChecklistiOSCEPopupViewImpl();
+			popupViewImpl.getItemTypeBox().setValue(ItemType.TAB);
+			popupViewImpl.setPopupStyle(ItemType.TAB);
+			popupViewImpl.getItemTypeBox().getElement().setAttribute("disabled", "true");
+			popupViewImpl.topicFactorBox.setVisible(false);
+			popupViewImpl.getSaveBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					popupViewImpl.hide();
+					if (validateField(popupViewImpl.getNameTextBox().getValue())) {
+						delegate.addiOsceChecklistTabClicked(popupViewImpl.getItemTypeBox().getValue(), popupViewImpl.getNameTextBox().getValue(), popupViewImpl.getDescriptionTextArea().getValue(), StandardizedRoleDetailsViewImpl.this.getValue());
+						popupViewImpl.getNameTextBox().setValue("");
+						popupViewImpl.getDescriptionTextArea().setValue("");
+					} else {
+						MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+						confirmationDialogBox.showConfirmationDialog(constants.tabErrorMessage());
+					}				
+				}
+			});
+			
+			popupViewImpl.getCancelBtn().addClickHandler(new ClickHandler() {
+				
+				@Override
+				public void onClick(ClickEvent event) {
+					popupViewImpl.hide();
+					popupViewImpl.getNameTextBox().setValue("");
+					popupViewImpl.getDescriptionTextArea().setValue("");
+				}
+			});
+			
+			popupViewImpl.showRelativeTo(iOsceAddCheckListSectionButton);
+			popupViewImpl.setPopupPosition(popupViewImpl.getAbsoluteLeft(), popupViewImpl.getAbsoluteTop() + 8);
+			
+		}
+		
+		private boolean validateField(String name) {
+			if (name != null && name.isEmpty() == false && name.length() > 0 && name.trim().length() > 0) 
+				return true;
+			
+			return false;
+		}
+	
+		@UiHandler("eosceExportChecklist")
+		public void eOsceExportChecklist(ClickEvent e) {
+			delegate.exportChecklistClicked(homeRole);
+		}
+		
+		@UiHandler("iOsceImportItemButton")
+		public void iOsceImportItem(ClickEvent e) {
+			delegate.createImportTabPopUp(iOsceImportItemButton);
+		}
+		
+		@UiHandler("eOsceExport")
+		public void iOsceExportToeOsceButtonClicked(ClickEvent e) {
+			delegate.exportOsceClicked(homeRole);
+		}
+		
+		@UiHandler("iOsceExport")
+		public void iOsceExportToiOsceButtonClicked(ClickEvent e) {
+			delegate.exportChecklistQRClicked(this.getValue());
+		}
+		
+		public VerticalPanel getContainerVerticalPanel() {
+			return containerVerticalPanel;
+		}
+		
+		/*public ScrolledTabLayoutPanel getChecklistTabPanel() {
+			return checklistTabPanel;
+		}*/
+		
+		/*public HorizontalPanel getTabPanel() {
+			return tabPanel;
+		}*/
 }
