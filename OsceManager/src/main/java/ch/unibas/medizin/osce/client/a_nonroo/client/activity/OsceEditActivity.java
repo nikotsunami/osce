@@ -663,7 +663,11 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 				 final OsceSettingsRequest osceSettingsRequest=requests.osceSettingsRequest();
 				 proxy=osceSettingsRequest.edit(osceStngPrxy);
 				 proxy.setUsername(((OsceEditViewImpl)view).userName.getValue());
-				 proxy.setPassword(((OsceEditViewImpl)view).password.getValue());
+				 if(((OsceEditViewImpl)view).bucketInfo.getValue().equals(BucketInfoType.S3)){
+					 proxy.setPassword(((OsceEditViewImpl)view).password.getValue());
+				 }else if(((OsceEditViewImpl)view).bucketInfo.getValue().equals(BucketInfoType.FTP)){
+					 proxy.setPassword(((OsceEditViewImpl)view).passwordSFTP.getValue());
+				 }
 				 proxy.setBucketName(((OsceEditViewImpl)view).bucketName.getValue());
 				 proxy.setSettingPassword(((OsceEditViewImpl)view).settingPassword.getValue());
 				 if(((OsceEditViewImpl)view).backUpPeriod.getValue().equals("") == false){
@@ -707,7 +711,11 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 					OsceSettingsProxy proxy= osceSettingsRequest.create(OsceSettingsProxy.class);
 			
 					proxy.setUsername(((OsceEditViewImpl)view).userName.getValue());
-					proxy.setPassword(((OsceEditViewImpl)view).password.getValue());
+					if(((OsceEditViewImpl)view).bucketInfo.getValue().equals(BucketInfoType.S3)){
+						 proxy.setPassword(((OsceEditViewImpl)view).password.getValue());
+					 }else if(((OsceEditViewImpl)view).bucketInfo.getValue().equals(BucketInfoType.FTP)){
+						 proxy.setPassword(((OsceEditViewImpl)view).passwordSFTP.getValue());
+					 }
 					proxy.setBucketName(((OsceEditViewImpl)view).bucketName.getValue());
 					proxy.setSettingPassword(((OsceEditViewImpl)view).settingPassword.getValue());
 					if(((OsceEditViewImpl)view).backUpPeriod.getValue().equals("") == false){
@@ -1306,8 +1314,4 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 			return osceDate;
 		}
 	}
-
-	
-
-	
 }

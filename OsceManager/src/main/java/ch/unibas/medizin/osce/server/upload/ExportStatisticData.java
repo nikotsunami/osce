@@ -841,7 +841,7 @@ public class ExportStatisticData extends HttpServlet{
 											if(topicWeightMap.containsKey(entry.getKey())){
 												Double topicsRatio = entry.getValue()/totalPoints;
 												if(topicWeightMap.get(entry.getKey()) != null){
-													Double finalWeight = (topicWeightMap.get(entry.getKey())/100) * topicsRatio;
+													Double finalWeight = (topicWeightMap.get(entry.getKey())/100) / topicsRatio;
 													if(finalWeight != null){
 														topicWiseRatioMap.put(entry.getKey(), Answer.roundTwoDecimals(finalWeight));
 													}

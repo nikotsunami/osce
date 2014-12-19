@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.poi.ss.usermodel.Textbox;
-
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSettingsProxy;
@@ -48,6 +46,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IntegerBox;
+import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -337,6 +336,9 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 	public TextBox password;
 	
 	@UiField
+	public PasswordTextBox passwordSFTP;
+	
+	@UiField
 	DivElement lblBucketName;
 	
 	@UiField
@@ -518,6 +520,15 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 		encryptionType.setValue(EncryptionType.ASYM);
 		encryptionType.setAcceptableValues(Arrays.asList(EncryptionType.values()));
 		host.getElement().getStyle().setDisplay(Display.NONE);
+		if(bucketInfo.getValue().equals(BucketInfoType.S3)){
+			passwordSFTP.setVisible(false);
+			passwordSFTP.getElement().getStyle().setDisplay(Display.NONE);
+			password.setVisible(true);	
+		}else if(bucketInfo.getValue().equals(BucketInfoType.FTP)){
+			passwordSFTP.setVisible(true);
+			password.setVisible(false);
+			password.getElement().getStyle().setDisplay(Display.NONE);
+		}
 		
 		osceCreationType.addValueChangeHandler(new ValueChangeHandler<OsceCreationType>() {
 			
@@ -552,6 +563,8 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 				password.setValue("");
 				host.setValue("");
 				bucketName.setValue("");
+				passwordSFTP.setValue("");
+				password.setValue("");
 				
 				if(event.getValue().equals(BucketInfoType.S3)){
 					Document.get().getElementById("hostTd").getStyle().setDisplay(Display.NONE);
@@ -559,12 +572,17 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 					lblUserName.setInnerText(constants.accessKey());
 					lblPassword.setInnerText(constants.secretKey());
 					lblBucketName.setInnerText(constants.bucketName());
+					password.setVisible(true);
+					passwordSFTP.getElement().getStyle().setDisplay(Display.NONE);
+					password.getElement().getStyle().clearDisplay();
 					setS3Values();
 				}
 				else if(event.getValue().equals(BucketInfoType.FTP)){
 					Document.get().getElementById("hostTd").getStyle().clearDisplay();
 					Document.get().getElementById("lblHostTd").getStyle().clearDisplay();
 					host.getElement().getStyle().clearDisplay();
+					passwordSFTP.getElement().getStyle().clearDisplay();
+					password.getElement().getStyle().setDisplay(Display.NONE);
 					lblUserName.setInnerText(constants.userName());
 					lblPassword.setInnerText(constants.password());
 					lblBucketName.setInnerText(constants.basePath());
@@ -631,14 +649,17 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 		
 		if (osceSettingsProxy == null) {
 				userName.setValue("");
-				password.setValue("");
+				password.getElement().getStyle().setDisplay(Display.NONE);
+				passwordSFTP.setVisible(true);
+				passwordSFTP.setValue("");
 				bucketName.setValue("");	
 				host.setValue("");
 		}
 		
 		else if (osceSettingsProxy.getInfotype().equals(BucketInfoType.FTP)) {
 				userName.setValue(osceSettingsProxy.getUsername());
-				password.setValue(osceSettingsProxy.getPassword());
+				passwordSFTP.setValue(osceSettingsProxy.getPassword());
+				//password.setValue(osceSettingsProxy.getPassword());
 				bucketName.setValue(osceSettingsProxy.getBucketName());	
 				host.setValue(osceSettingsProxy.getHost());
 				lblUserName.setInnerText(constants.userName());
@@ -707,11 +728,14 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 			userName.addStyleName("higlight_onViolation");
 		}
 		
-		if (password.getValue() != null && password.getValue().isEmpty() == false && password.getValue() != "") {
+		if (password.getValue() != null && password.getValue().isEmpty() == false && password.getValue() != ""
+			||	passwordSFTP.getValue() != null && passwordSFTP.getValue().isEmpty() == false && passwordSFTP.getValue() != "") {
 			password.removeStyleName("higlight_onViolation");
+			passwordSFTP.removeStyleName("higlight_onViolation");
 		} else {
 			errorMessage = constants.credentialsMustNotBeEmpty();
 			password.addStyleName("higlight_onViolation");
+			passwordSFTP.addStyleName("higlight_onViolation");
 		}
 		
 		if (bucketName.getValue() != null && bucketName.getValue().isEmpty() == false && bucketName.getValue() != "") {

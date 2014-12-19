@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -83,6 +84,9 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	TextBox secretKey;
 	
 	@UiField
+	PasswordTextBox password;
+	
+	@UiField
 	TextBox encryptionKey;
 	
 	@UiField
@@ -143,6 +147,14 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		
 		s3.setText(constants.s3());
 		ftp.setText(constants.ftp());
+		
+		if(s3.getValue()){
+			secretKey.setVisible(true);
+			password.setVisible(false);
+		}else if(ftp.getValue()){
+			secretKey.setVisible(false);
+			password.setVisible(true);
+		}
 	}	
 	
 	@UiHandler("fetchFiles")
@@ -298,6 +310,10 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	public TextBox getSecretKey() {
 		return secretKey;
 	}
+	
+	public PasswordTextBox getPassword() {
+		return password;
+	}
 
 	public void setSecretKey(TextBox secretKey) {
 		this.secretKey = secretKey;
@@ -341,13 +357,14 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		if (saveEditButton.getText().equals(constants.save()))
 		{
 			cancelButton.setVisible(false);
-			delegate.bucketSaveButtonClicked(bucketInformationProxy, bucketName.getText(), accessKey.getText(), secretKey.getText(), encryptionKey.getText(), basePath.getText(), ftp.getValue());
+			delegate.bucketSaveButtonClicked(bucketInformationProxy, bucketName.getText(), accessKey.getText(), secretKey.getText(),password.getValue(), encryptionKey.getText(), basePath.getText(), ftp.getValue());
 		}
 		else if (saveEditButton.getText().equals(constants.edit()))
 		{
 			bucketName.setEnabled(true);
 			accessKey.setEnabled(true);
 			secretKey.setEnabled(true);
+			password.setEnabled(true);
 			encryptionKey.setEnabled(true);
 			basePath.setEnabled(true);
 			
@@ -364,6 +381,7 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		accessKey.setEnabled(false);
 		secretKey.setEnabled(false);
 		encryptionKey.setEnabled(false);
+		password.setEnabled(false);
 		
 		saveEditButton.setText(constants.edit());
 		cancelButton.setVisible(false);
@@ -405,6 +423,8 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 			secretKeyLbl.setText(constants.secretKey());
 			basePath.setVisible(false);
 			basePathLbl.setVisible(false);
+			password.setVisible(false);
+			secretKey.setVisible(true);
 			
 			boolean isFTP;
 			boolean empty;
@@ -440,6 +460,8 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 			secretKeyLbl.setText(constants.password());
 			basePath.setVisible(true);
 			basePathLbl.setVisible(true);
+			secretKey.setVisible(false);
+			password.setVisible(true);
 			
 			boolean isFTP;
 			boolean empty;
@@ -469,17 +491,24 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		if(empty == false) {
 			bucketName.setText(bucketInformationProxy.getBucketName());
 			accessKey.setText(bucketInformationProxy.getAccessKey());
-			secretKey.setText(bucketInformationProxy.getSecretKey());
 			encryptionKey.setText(bucketInformationProxy.getEncryptionKey());
-			
+
 			if(isFTP) {
 				basePath.setText(bucketInformationProxy.getBasePath());
-			}	
+				secretKey.setVisible(false);
+				password.setText(bucketInformationProxy.getSecretKey());
+				password.setVisible(true);
+			}	else{
+				password.setVisible(false);
+				secretKey.setText(bucketInformationProxy.getSecretKey());
+				secretKey.setVisible(true);
+			}
 		} else {
 			bucketName.setText("");
 			accessKey.setText("");
-			secretKey.setText("");
+			password.setText("");
 			encryptionKey.setText("");
+			secretKey.setText("");
 			if(isFTP) {
 				basePath.setText("");
 			}	
@@ -490,12 +519,13 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	private void enableTextBoxs(boolean enabled,boolean isFTP) {
 		bucketName.setEnabled(enabled);
 		accessKey.setEnabled(enabled);
-		secretKey.setEnabled(enabled);
 		encryptionKey.setEnabled(enabled);
 		
 		if(isFTP == true) {
 			basePath.setEnabled(enabled);	
+			password.setEnabled(enabled);
 		} else {
+			secretKey.setEnabled(enabled);
 			basePath.setVisible(false);
 		}
 		

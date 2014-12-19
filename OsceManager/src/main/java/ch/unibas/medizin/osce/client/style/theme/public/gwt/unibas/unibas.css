@@ -571,9 +571,9 @@ a:hover, .gwt-Anchor:hover {
 }
 
 .gwt-PasswordTextBox {
-	padding: 2px;
-	border: 1px solid #212121;
-	border-radius: 2px;
+	padding: 0 2px;
+	border: 1px solid #AAAAAA;
+	border-radius: 4px;
 	
 	font-size: 90%;
 }

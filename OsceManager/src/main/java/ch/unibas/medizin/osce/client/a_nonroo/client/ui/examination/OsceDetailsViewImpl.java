@@ -1217,7 +1217,12 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		bucketName.setInnerText(osceSettingsProxy.getBucketName());
 		backupPeriod.setInnerText(String.valueOf(osceSettingsProxy.getBackupPeriod() == null?"" :osceSettingsProxy.getBackupPeriod()));
 		unit.setInnerText(enumConstants.getString(osceSettingsProxy.getTimeunit().toString()));
-		password.setInnerText(osceSettingsProxy.getPassword());
+		int passwordLength = osceSettingsProxy.getPassword().length();
+		String passwrdChars = "";
+		for(int i=0; i<passwordLength; i++){
+			passwrdChars += "*";
+		}
+		password.setInnerText(passwrdChars);
 		settingPassword.setInnerText(osceSettingsProxy.getSettingPassword());
 		
 		if(osceSettingsProxy.getNextExaminee()==null || !osceSettingsProxy.getNextExaminee()) {
