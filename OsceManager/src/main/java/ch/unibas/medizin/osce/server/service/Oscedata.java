@@ -1609,19 +1609,23 @@ public class Oscedata {
                          */
                         @XmlAccessorType(XmlAccessType.FIELD)
                         @XmlType(name = "", propOrder = {
-                            "value"
+                            //"value",
+                            "name",
+                            "description"
                         })
                         public static class Checklistcriteria {
 
-                            @XmlValue
-                            protected String value;
-                            @XmlAttribute
+                            /*@XmlValue
+                            protected String value;*/
+                            @XmlElement
+                            @XmlJavaTypeAdapter(AdapterCDATA.class)
                             protected String name;
                             @XmlAttribute
                             protected Long id;
                             @XmlAttribute
                             protected Integer sequencenumber;
-                            @XmlAttribute
+                            @XmlElement
+                            @XmlJavaTypeAdapter(AdapterCDATA.class)
                             protected String description;
                             
                             public String getDescription() {
@@ -1648,21 +1652,21 @@ public class Oscedata {
                              *     {@link String }
                              *     
                              */
-                            public String getValue() {
+                            /*public String getValue() {
                                 return value;
                             }
 
-                            /**
+                            *//**
                              * Sets the value of the value property.
                              * 
                              * @param value
                              *     allowed object is
                              *     {@link String }
                              *     
-                             */
+                             *//*
                             public void setValue(String value) {
                                 this.value = value;
-                            }
+                            }*/
 
                             /**
                              * Gets the value of the name property.
@@ -1812,22 +1816,26 @@ public class Oscedata {
                          */
                         @XmlAccessorType(XmlAccessType.FIELD)
                         @XmlType(name = "", propOrder = {
-                            "value"
+                            //"value",
+                            "name",
+                            "description"
                         })
                         public static class Checklistoption {
 
                         	
-                            @XmlValue
-                            protected String value;
+                            /*@XmlValue
+                            protected String value;*/
                             @XmlAttribute
                             protected Integer sequencenumber;
                             @XmlAttribute
                             protected Integer criteriacount;
                             @XmlAttribute(name = "value")
                             protected String value1;
-                            @XmlAttribute
+                            @XmlElement
+                            @XmlJavaTypeAdapter(AdapterCDATA.class)
                             protected String description;
-                            @XmlAttribute(required = true)
+                            @XmlElement(required = true)
+                            @XmlJavaTypeAdapter(AdapterCDATA.class)
                             protected String name;
                             @XmlAttribute
                             protected Long id;
@@ -1840,21 +1848,21 @@ public class Oscedata {
                              *     {@link String }
                              *     
                              */
-                            public String getValue() {
+                           /* public String getValue() {
                                 return value;
                             }
 
-                            /**
+                            *//**
                              * Sets the value of the value property.
                              * 
                              * @param value
                              *     allowed object is
                              *     {@link String }
                              *     
-                             */
+                             *//*
                             public void setValue(String value) {
                                 this.value = value;
-                            }
+                            }*/
 
                             /**
                              * Gets the value of the sequencenumber property.
