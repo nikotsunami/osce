@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.shared.ExportOsceType;
 
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -22,7 +23,7 @@ public interface ExportOsceView extends IsWidget {
 		public void unprocessedClicked(ExportOsceType osceType);
 		public Boolean checkSelectedValue();
 		
-		public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey, String encryptionKey, String basePath, Boolean isFTP);
+		public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey, String encryptionKey, String basePath, String password, Boolean isFTP);
 		public void exportiOSCEButtonClicked(Boolean value);
 		public void eOsceClicked();
 		public void iOsceClicked();
@@ -51,6 +52,8 @@ public interface ExportOsceView extends IsWidget {
 	public void setBucketInformationProxy(BucketInformationProxy bucketInformationProxy);
 
 	TextBox getBasePath();
+	
+	PasswordTextBox getPassword();
 
 	TextBox getEncryptionKey();
 

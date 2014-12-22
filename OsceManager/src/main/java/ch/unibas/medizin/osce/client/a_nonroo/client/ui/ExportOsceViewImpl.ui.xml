@@ -47,6 +47,7 @@
 				
 				<g:Label styleName="{style.exportLbl}" ui:field="secretKeyLbl"></g:Label>
 				<g:TextBox ui:field="secretKey"></g:TextBox>
+				<g:PasswordTextBox ui:field="password"  visible="false"></g:PasswordTextBox>
 				
 				<g:Label styleName="{style.exportLbl}" ui:field="encryptionKeyLbl"></g:Label>
 				<g:TextBox ui:field="encryptionKey"></g:TextBox>

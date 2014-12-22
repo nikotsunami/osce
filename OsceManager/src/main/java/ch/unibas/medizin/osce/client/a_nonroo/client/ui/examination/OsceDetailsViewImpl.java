@@ -1222,7 +1222,11 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		for(int i=0; i<passwordLength; i++){
 			passwrdChars += "*";
 		}
-		password.setInnerText(passwrdChars);
+		if(osceSettingsProxy.getInfotype().equals(BucketInfoType.S3)){
+			password.setInnerText(osceSettingsProxy.getPassword());
+		}else if(osceSettingsProxy.getInfotype().equals(BucketInfoType.FTP)){
+			password.setInnerText(passwrdChars);
+		}
 		settingPassword.setInnerText(osceSettingsProxy.getSettingPassword());
 		
 		if(osceSettingsProxy.getNextExaminee()==null || !osceSettingsProxy.getNextExaminee()) {

@@ -666,7 +666,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 	}
 
 	@Override
-	public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey,  String encryptionKey, String basePath, Boolean isFTP) {
+	public void bucketSaveButtonClicked(BucketInformationProxy proxy, String bucketName, String accessKey, String secretKey, String password, String encryptionKey, String basePath, Boolean isFTP) {
 		BucketInformationRequest request = requests.bucketInformationRequest();
 		final BucketInformationProxy bucketInformationProxy;
 		
@@ -684,13 +684,14 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 		bucketInformationProxy.setEosceStatusType(EosceStatus.Export);	
 		bucketInformationProxy.setBucketName(bucketName);
 		bucketInformationProxy.setAccessKey(accessKey);
-		bucketInformationProxy.setSecretKey(secretKey);
 		bucketInformationProxy.setEncryptionKey(encryptionKey);
 		if(isFTP == true) {
 			bucketInformationProxy.setBasePath(basePath);
 			bucketInformationProxy.setType(BucketInfoType.FTP);
+			bucketInformationProxy.setSecretKey(password);
 		} else {
 			bucketInformationProxy.setType(BucketInfoType.S3);
+			bucketInformationProxy.setSecretKey(secretKey);
 		}
 		
 		request.persist().using(bucketInformationProxy).fire(new OSCEReceiver<Void>() {
@@ -702,6 +703,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 				view.getSecretKey().setEnabled(false);
 				view.getEncryptionKey().setEnabled(false);
 				view.getBasePath().setEnabled(false);
+				view.getPassword().setEnabled(false);
 				
 				view.getSaveEditButton().setText(constants.edit());
 				view.setBucketInformationProxy(bucketInformationProxy);

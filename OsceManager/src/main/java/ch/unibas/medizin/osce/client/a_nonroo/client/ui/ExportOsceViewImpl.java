@@ -19,6 +19,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -77,6 +78,9 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	
 	@UiField
 	TextBox secretKey;
+	
+	@UiField
+	PasswordTextBox password;
 	
 	@UiField
 	TextBox basePath;
@@ -141,6 +145,14 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 		else if (iOSCE.getValue()) {
 			exportOSCEButton.setText(constants.exportiOSCE());
 		}
+		
+		if(s3.getValue()){
+			secretKey.setVisible(true);
+			password.setVisible(false);
+		}else if(ftp.getValue()){
+			secretKey.setVisible(false);
+			password.setVisible(true);
+		}
 	}
 	
 	@UiHandler("eOSCE")
@@ -187,12 +199,14 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 			secretKeyLbl.setText(constants.secretKey());
 			basePath.setVisible(false);
 			basePathLbl.setVisible(false);
+			secretKey.setVisible(true);
+			password.setVisible(false);
 			
 			boolean isFTP;
 			boolean empty;
 			boolean enabled;
 			
-			if(bucketInformationProxy != null) {
+			if(bucketInformationProxy != null && BucketInfoType.S3.equals(bucketInformationProxy.getType())) {
 				isFTP = false;
 				empty = false;
 				enabled = false;
@@ -224,6 +238,8 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 			secretKeyLbl.setText(constants.password());
 			basePath.setVisible(true);
 			basePathLbl.setVisible(true);
+			secretKey.setVisible(false);
+			password.setVisible(true);
 			
 			boolean isFTP;
 			boolean empty;
@@ -415,6 +431,10 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 		return secretKey;
 	}
 
+	public PasswordTextBox getPassword(){
+		return password;
+	}
+	
 	public void setSecretKey(TextBox secretKey) {
 		this.secretKey = secretKey;
 	}
@@ -470,7 +490,7 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 		if (saveEditButton.getText().equals(constants.save()))
 		{
 			cancelButton.setVisible(false);
-			delegate.bucketSaveButtonClicked(bucketInformationProxy, bucketName.getText(), accessKey.getText(), secretKey.getText(),encryptionKey.getText(),basePath.getText(),ftp.getValue());
+			delegate.bucketSaveButtonClicked(bucketInformationProxy, bucketName.getText(), accessKey.getText(), secretKey.getText(),password.getText(),encryptionKey.getText(),basePath.getText(),ftp.getValue());
 		}
 		else if (saveEditButton.getText().equals(constants.edit()))
 		{
@@ -479,6 +499,7 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 			secretKey.setEnabled(true);
 			encryptionKey.setEnabled(true);
 			basePath.setEnabled(true);
+			password.setEnabled(true);
 			
 			saveEditButton.setText(constants.save());
 			
@@ -494,6 +515,7 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 		secretKey.setEnabled(false);
 		encryptionKey.setEnabled(false);
 		basePath.setEnabled(false);
+		password.setEnabled(false);
 		
 		saveEditButton.setText(constants.edit());
 		cancelButton.setVisible(false);
@@ -503,17 +525,25 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 		if(empty == false) {
 			bucketName.setText(bucketInformationProxy.getBucketName());
 			accessKey.setText(bucketInformationProxy.getAccessKey());
-			secretKey.setText(bucketInformationProxy.getSecretKey());
 			encryptionKey.setText(bucketInformationProxy.getEncryptionKey());
 			
 			if(isFTP) {
 				basePath.setText(bucketInformationProxy.getBasePath());
-			}	
+				secretKey.setVisible(false);
+				password.setText(bucketInformationProxy.getSecretKey());
+				password.setVisible(true);
+			}else{
+				secretKey.setText(bucketInformationProxy.getSecretKey());
+				password.setVisible(false);
+				secretKey.setText(bucketInformationProxy.getSecretKey());
+				secretKey.setVisible(true);
+			}
 		} else {
 			bucketName.setText("");
 			accessKey.setText("");
 			secretKey.setText("");
 			encryptionKey.setText("");
+			password.setText("");
 			if(isFTP) {
 				basePath.setText("");
 			}	
@@ -524,13 +554,14 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	private void enableTextBoxs(boolean enabled,boolean isFTP) {
 		bucketName.setEnabled(enabled);
 		accessKey.setEnabled(enabled);
-		secretKey.setEnabled(enabled);
 		encryptionKey.setEnabled(enabled);
 		
 		if(isFTP == true) {
-			basePath.setEnabled(enabled);	
+			basePath.setEnabled(enabled);
+			password.setEnabled(enabled);
 		} else {
 			basePath.setVisible(false);
+			secretKey.setEnabled(enabled);
 		}
 		
 		if(enabled == false) {
