@@ -372,11 +372,11 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 	public TextBox symmetricKey;
 	
 	
-	/*@UiField
+	@UiField
 	DivElement lblExamReviewMode;
 	
 	@UiField
-	public CheckBox  examReviewMode;*/
+	public CheckBox  examReviewMode;
 	
 	@UiField
 	public DivElement lblScreenSaverText;
@@ -395,6 +395,18 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 	
 	@UiField
 	public CheckBox  autoSelection;
+	
+	@UiField
+	DivElement lblWebServicePath;
+	
+	@UiField
+	public TextBox webServicePath;
+	
+	@UiField
+	DivElement lblRegisterDevicePath;
+	
+	@UiField
+	public TextBox registerDevicePath;
 	
 	@UiField(provided=true)
     public ValueListBox<TimeUnit> timeUnit = new ValueListBox<TimeUnit>(new EnumRenderer<TimeUnit>());
@@ -464,7 +476,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 		lblTimeUnit.setInnerText(constants.timeUnit());
 		lblEncryptionType.setInnerText(constants.encryptionType());
 		lblPointNxtExaminee.setInnerText(constants.pointNxtExaminee());
-		//lblExamReviewMode.setInnerText(constants.examReviewMode());
+		lblExamReviewMode.setInnerText(constants.examReviewMode());
 		lblSymmetricKey.setInnerText(constants.symmetricKey());
 		lblAutoSelection.setInnerText(constants.autoSelection());
 		lblScreenSaverTime.setInnerText(constants.screenSaverTime());
@@ -474,6 +486,8 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 		lblBucketName.setInnerText(constants.bucketName());
 		lblScreenSaverText.setInnerText(constants.osceScreenSaverText());
 		labelGeneralSettings.setInnerText(constants.generalInformation());
+		lblRegisterDevicePath.setInnerText(constants.registerDevicePath());
+		lblWebServicePath.setInnerText(constants.webServicePath());
 		screenSaverText.setWidth("95%");
 		timeUnit.setWidth("90%");
 		bucketInfo.setWidth("90%");
@@ -1024,11 +1038,13 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 		timeUnit.setValue(osceSettingsProxy.getTimeunit());
 		pointNextExaminee.setValue(osceSettingsProxy.getNextExaminee());
 		encryptionType.setValue(osceSettingsProxy.getEncryptionType());
-		//examReviewMode.setValue(osceSettingsProxy.getReviewMode());
+		examReviewMode.setValue(osceSettingsProxy.getReviewMode());
 		symmetricKey.setValue(osceSettingsProxy.getSymmetricKey());
 		screenSaverText.setValue(osceSettingsProxy.getScreenSaverText());
 		screenSaverTime.setValue(osceSettingsProxy.getScreenSaverTime()==null?"" :String.valueOf(osceSettingsProxy.getScreenSaverTime()));
 		autoSelection.setValue(osceSettingsProxy.getAutoSelection());
+		registerDevicePath.setValue(osceSettingsProxy.getRegisterDevicePath()==null?"":osceSettingsProxy.getRegisterDevicePath());
+		webServicePath.setValue(osceSettingsProxy.getWebServicePath()==null?"" : osceSettingsProxy.getWebServicePath());
 	}
 
 	

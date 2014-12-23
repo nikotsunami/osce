@@ -1775,6 +1775,10 @@ public interface OsceConstants extends Constants {
 	public String ratioExceedError();
 	
 	public String backUpPeriodMaxLengthError();
+
+	public String webServicePath();
+	
+	public String registerDevicePath();
 }
 
 

@@ -466,6 +466,10 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		catch(Exception e)
 		{
 			Log.error(e.getMessage());
+				File importFile = new File(filename);
+				if (importFile.exists()) {
+					importFile.delete();
+				}
 			throw new eOSCESyncException("",e.getMessage());
 		} 
 		
@@ -499,7 +503,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				byteArrayOutputStream = decryptFileWithSymmetricKey(bytes, bucketInformation);
 			}
 		
-			if (byteArrayOutputStream != null) {			
+			if (byteArrayOutputStream != null) {	
 				JSONDeserializer<StudentAnswer> deserializer = new JSONDeserializer<StudentAnswer>().use("values", StudentAnswer.class);				
 				StudentAnswer studentAnswer = new StudentAnswer();
 				studentAnswer = deserializer.deserializeInto(new InputStreamReader(new ByteArrayInputStream(byteArrayOutputStream.toByteArray())), studentAnswer);
@@ -4651,14 +4655,13 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 				
 			Vector<ChannelSftp.LsEntry> list =  channelSftp.ls("*.*");
 			
-			if (list.size() > 0)
-			{
+			/*if (list.size() > 0)
+			{*/
 				for (int i=0; i<fileList.size(); i++)
 				{
 					String filename = fileList.get(i);
 					String fileName = fileList.get(i);
 					fileName = fileName.replaceAll(" ", "_");
-					fileName = path + fileName;
 					File file = new File(fileName);
 					
 					if (file.exists() == true)
@@ -4667,9 +4670,9 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					}
 					//System.out.println("DELETED : " + fileName);
 					//write bucket name
-					channelSftp.rm(filename);
+					//channelSftp.rm(filename);
 				}
-			}	
+			//}	
 		}
 		catch (JSchException e) {
 			Log.error(e.getMessage(), e);

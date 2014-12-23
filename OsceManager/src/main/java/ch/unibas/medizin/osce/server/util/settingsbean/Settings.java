@@ -405,7 +405,9 @@ public class Settings {
         "reviewmode",
         "screenSaverText",
         "screenSaverTime",
-        "autoSelection"
+        "autoSelection",
+        "webServicePath",
+        "registerDevicePath"
     })
     public static class OtherInformation {
 
@@ -426,6 +428,10 @@ public class Settings {
         protected int screenSaverTime;
         @XmlElement(required = true)
         protected String autoSelection;
+        @XmlElement(required = true)
+        protected String webServicePath;
+        @XmlElement(required = true)
+        protected String registerDevicePath;
         
         public String getScreenSaverText() {
 			return screenSaverText;
@@ -584,6 +590,22 @@ public class Settings {
         
         public void setScreenSaverTime(int screenSaverTime) {
 			this.screenSaverTime = screenSaverTime;
+		}
+        
+        public String getRegisterDevicePath() {
+			return registerDevicePath;
+		}
+        
+        public void setRegisterDevicePath(String registerDevicePath) {
+			this.registerDevicePath = registerDevicePath;
+		}
+        
+        public String getWebServicePath() {
+			return webServicePath;
+		}
+        
+        public void setWebServicePath(String webServicePath) {
+			this.webServicePath = webServicePath;
 		}
         /**
          * <p>Java class for anonymous complex type.

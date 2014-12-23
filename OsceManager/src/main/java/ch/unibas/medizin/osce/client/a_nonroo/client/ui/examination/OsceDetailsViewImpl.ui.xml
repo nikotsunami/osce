@@ -393,26 +393,41 @@
 								<td>
 										<span ui:field="pointNxtExaminee" />
 								</td>
-								<!-- <td>
+								<td>
 										<span class="{style.label}" ui:field="lblExamReviewMode"></span>
 								</td>
 								<td>
 										<span ui:field="examMode" />
-								</td> -->
+								</td>
+								</tr>
+								
+								<tr>
 								<td>
 										<span class="{style.label}" ui:field="lblScreenSaverTime"></span>
 								</td>
 								<td>
 										<span ui:field="screenSaverTime" />
 								</td>
-								</tr>
-								
-								<tr>
 								<td>
 										<span class="{style.label}" ui:field="lblAutoSelection"></span>
 								</td>
 								<td>
 										<span ui:field="autoSelection" />
+								</td>
+								</tr>
+								
+								<tr>
+								<td>
+										<span class="{style.label}" ui:field="lblWebServicePath"></span>
+								</td>
+								<td>
+										<span ui:field="webServicePath" />
+								</td>
+								<td>
+										<span class="{style.label}" ui:field="lblRegisterDevicePath"></span>
+								</td>
+								<td>
+										<span ui:field="registerDevicePath" />
 								</td>
 								</tr>
 							

@@ -189,9 +189,9 @@ public class QRCodeUtil extends PdfUtil  {
 				
 				 PdfPTable table = new PdfPTable(1); //1 columns.
 				 PdfPCell cell1 = new PdfPCell(new Paragraph(new Chunk(fileName,paraFont)));
-				 cell1.setPaddingLeft(15);
+				 cell1.setPaddingLeft(70);
 		         PdfPCell cell2 = new PdfPCell(settingsQRImage, true);
-
+		         cell2.setPaddingTop(0);
 		         cell1.setBorder(Rectangle.NO_BORDER);
 		         cell2.setBorder(Rectangle.NO_BORDER);
 		         table.addCell(cell1);

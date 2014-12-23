@@ -89,10 +89,11 @@ public class ExportSettingsXml {
 			}
 			otherInformation.setSignMechanism(osceSettings.getEncryptionType().ordinal());
 			otherInformation.setSymmetricKey(osceSettings.getSymmetricKey());
-			/*if(osceSettings.getReviewMode() != null){
+			if(osceSettings.getReviewMode() != null){
 				otherInformation.setReviewmode(osceSettings.getReviewMode().toString());	
-			}*/
-			otherInformation.setReviewmode(Boolean.FALSE.toString());
+			}
+			otherInformation.setWebServicePath(osceSettings.getWebServicePath()==null? "" : osceSettings.getWebServicePath());
+			otherInformation.setRegisterDevicePath(osceSettings.getRegisterDevicePath() == null ? "" : osceSettings.getRegisterDevicePath());
 			settingsData.setOtherInformation(otherInformation);
 			
 			

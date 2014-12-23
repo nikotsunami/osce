@@ -382,6 +382,7 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		secretKey.setEnabled(false);
 		encryptionKey.setEnabled(false);
 		password.setEnabled(false);
+		basePath.setEnabled(false);
 		
 		saveEditButton.setText(constants.edit());
 		cancelButton.setVisible(false);

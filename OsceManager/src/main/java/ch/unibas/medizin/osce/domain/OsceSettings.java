@@ -79,6 +79,12 @@ public class OsceSettings {
 	@Column(columnDefinition="BIT", length = 1)
 	private Boolean autoSelection;  
 	
+	@Size(max=5000)
+	private String webServicePath;
+	
+	@Size(max=5000)
+	private String registerDevicePath;
+	
 	public static OsceSettings findOsceSettingsByOsce(Long osceId) {
 		EntityManager em = entityManager();
 		String sql = "SELECT os from OsceSettings os where os.osce.id = " + osceId;

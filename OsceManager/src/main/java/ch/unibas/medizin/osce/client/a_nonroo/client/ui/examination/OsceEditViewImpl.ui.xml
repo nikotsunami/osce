@@ -368,12 +368,20 @@
 							</tr>
 							
 							<tr height="10px">
-								<!-- <td><div class="{style.checkBoxlabel} {style.leftpadding10}" ui:field="lblExamReviewMode"></div></td>
-								<td><g:CheckBox ui:field="examReviewMode"></g:CheckBox></td> -->
+								<td><div class="{style.checkBoxlabel} {style.leftpadding10}" ui:field="lblExamReviewMode"></div></td>
+								<td><g:CheckBox ui:field="examReviewMode"></g:CheckBox></td> 
 								<td><div class="{style.label} {style.leftpadding10}" ui:field="lblScreenSaverTime"></div></td>
 								<td><g:TextBox ui:field="screenSaverTime"></g:TextBox></td>
+							</tr>
+							<tr>
 								<td><div class="{style.checkBoxlabel} {style.leftpadding10}" ui:field="lblAutoSelection"></div></td>
 								<td><g:CheckBox ui:field="autoSelection"></g:CheckBox></td>
+								<td><div class="{style.checkBoxlabel} {style.leftpadding10}" ui:field="lblWebServicePath"></div></td>
+								<td><g:TextBox ui:field="webServicePath"></g:TextBox></td>
+							</tr>
+							<tr>
+								<td><div class="{style.checkBoxlabel} {style.leftpadding10}" ui:field="lblRegisterDevicePath"></div></td>
+								<td><g:TextBox  ui:field="registerDevicePath"></g:TextBox></td>
 							</tr>
 							
 					</table>

@@ -160,7 +160,7 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		lblPointNxtExaminee.setInnerText(constants.pointNxtExaminee());
 		lblEncryptionType.setInnerText(constants.encryptionType());
 		lblSymmetricKey.setInnerText(constants.symmetricKey());
-		//lblExamReviewMode.setInnerText(constants.examReviewMode());
+		lblExamReviewMode.setInnerText(constants.examReviewMode());
 		lblPassword.setInnerText(constants.password());
 		lblSettingPaasword.setInnerText(constants.settingPassword());
 		labelOtherInfo.setInnerText(constants.otherInformation());
@@ -169,6 +169,9 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 		lblScreenSaverText.setInnerText(constants.osceScreenSaverText());
 		lblScreenSaverTime.setInnerText(constants.screenSaverTime());
 		lblAutoSelection.setInnerText(constants.autoSelection());
+		lblWebServicePath.setInnerText(constants.webServicePath());
+		lblRegisterDevicePath.setInnerText(constants.registerDevicePath());
+		
 		labelBucketType.setInnerText(constants.bucketType());
 		exportSettingsQRCode.setText(constants.exportSettingsQRCode());
 		exportXml.setText(constants.exportSettingsXml());
@@ -398,11 +401,11 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	@UiField
 	SpanElement symmetricKey;
 	
-	/*@UiField
+	@UiField
 	SpanElement lblExamReviewMode;
 	
 	@UiField
-	SpanElement examMode;*/
+	SpanElement examMode;
 	
 	@UiField
 	SpanElement lblUnit;
@@ -445,6 +448,19 @@ public class OsceDetailsViewImpl extends Composite implements  OsceDetailsView{
 	
 	@UiField
 	SpanElement autoSelection;
+	
+	@UiField
+	SpanElement lblWebServicePath;
+	
+	@UiField
+	SpanElement webServicePath;
+	
+	@UiField
+	SpanElement lblRegisterDevicePath;
+	
+	@UiField
+	SpanElement registerDevicePath;
+	
 	
 	@UiField
 	SpanElement labelIsFormativeOsce;
@@ -1237,11 +1253,11 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		encryptionType.setInnerText(enumConstants.getString(osceSettingsProxy.getEncryptionType().toString()));
 		symmetricKey.setInnerText(osceSettingsProxy.getSymmetricKey());
 		screenSaverText.setInnerText(osceSettingsProxy.getScreenSaverText());
-		/*if(osceSettingsProxy.getReviewMode()==null || !osceSettingsProxy.getReviewMode()) {
+		if(osceSettingsProxy.getReviewMode()==null || !osceSettingsProxy.getReviewMode()) {
 			examMode.setInnerHTML(OsMaConstant.UNCHECK_ICON.asString());
 		} else {
 			examMode.setInnerHTML(OsMaConstant.CHECK_ICON.asString());
-		}*/
+		}
 		screenSaverTime.setInnerText(String.valueOf(osceSettingsProxy.getScreenSaverTime() == null?"" :osceSettingsProxy.getScreenSaverTime()));
 
 		if(osceSettingsProxy.getAutoSelection()==null || !osceSettingsProxy.getAutoSelection()) {
@@ -1249,6 +1265,8 @@ private class StatusColumn extends Column<TaskProxy, Integer> {
 		} else {
 			autoSelection.setInnerHTML(OsMaConstant.CHECK_ICON.asString());
 		}
+		webServicePath.setInnerText(osceSettingsProxy.getWebServicePath()==null? "" : osceSettingsProxy.getWebServicePath());
+		registerDevicePath.setInnerText(osceSettingsProxy.getRegisterDevicePath() == null? "" : osceSettingsProxy.getRegisterDevicePath());
 	}
 	
 /*	@UiHandler("table")
