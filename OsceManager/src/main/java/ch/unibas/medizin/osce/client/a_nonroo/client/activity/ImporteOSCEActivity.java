@@ -381,7 +381,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 	}
 
 	@Override
-	public void importButtonClicked(final ExportOsceType osceType, Boolean flag, BucketInfoType bucketInfoType) {
+	public void importButtonClicked(final ExportOsceType osceType, BucketInfoType bucketInfoType) {
 		showApplicationLoading(true);
 		
 		List<String> fileList = new ArrayList<String>();
@@ -425,7 +425,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 			});
 		}
 		else if (view.getUnprocessed().getValue()) {
-			eOsceServiceAsync.importFileFromCloud(bucketInfoType, osceType, semesterProxy.getId(), fileList, flag, new AsyncCallback<Void>() {
+			eOsceServiceAsync.importFileFromCloud(bucketInfoType, osceType, semesterProxy.getId(), fileList,new AsyncCallback<Void>() {
 
 				@Override
 				public void onFailure(Throwable caught) {

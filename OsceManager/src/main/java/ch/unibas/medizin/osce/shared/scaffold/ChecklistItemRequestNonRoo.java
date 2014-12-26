@@ -56,4 +56,8 @@ public interface ChecklistItemRequestNonRoo  extends RequestContext{
 	public abstract Request<Double> findMaxTopicWeight(Long checklistId);
 	
 	abstract Request<CheckListProxy> copyOldChecklist(Long oldChecklistId, String title);
+	
+	public abstract Request<ChecklistItemProxy> moveChecklistItemUp(ChecklistItemProxy checklistItemToMoveUp, int seqNumToSet);
+
+	public abstract Request<ChecklistItemProxy> moveChecklistItemDown(ChecklistItemProxy checklistItemToMoveDown, int SeqNumberToSet);
 }

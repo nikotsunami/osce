@@ -650,6 +650,7 @@ public class ChecklistItem {
 		newChecklistItem.setItemType(oldChecklistItem.getItemType());
 		newChecklistItem.setSequenceNumber(seqNumber);
 		newChecklistItem.setParentItem(currentTab);
+		newChecklistItem.setWeight(oldChecklistItem.getWeight() == null? null: oldChecklistItem.getWeight());
 		newChecklistItem.persist();
 		
 		return newChecklistItem;
@@ -774,5 +775,61 @@ public class ChecklistItem {
 		 newChecklistToReturn.persist();
 			
 		 return newChecklistToReturn;
+	}
+	
+	public static ChecklistItem moveChecklistItemUp(ChecklistItem checklistItemToMoveUp, int seqNumToSet){
+		
+		if(seqNumToSet >= 0){
+			ChecklistItem checklistItem = moveItemUp(checklistItemToMoveUp,seqNumToSet);
+			return checklistItem;
+		}
+		return null;
+	}
+	
+	public static ChecklistItem moveChecklistItemDown(ChecklistItem checklistItemToMoveDown, int seqNumToSet){
+		
+		if(seqNumToSet >= 0){
+			ChecklistItem checklistItem = moveItemDown(checklistItemToMoveDown,seqNumToSet);
+			return checklistItem;
+		}
+		return null;
+	}
+
+	@Transactional
+	public static ChecklistItem moveItemDown(ChecklistItem checklistItemToMoveDown, int seqNumToSet) {
+	
+		if(checklistItemToMoveDown.getParentItem()  != null){
+
+			EntityManager em = entityManager();
+			String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem = " + checklistItemToMoveDown.getParentItem().getId() + " and ci.sequenceNumber = "  + seqNumToSet + "";
+			TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
+			ChecklistItem item = query.getSingleResult();
+			if(item != null){
+				item.setSequenceNumber(seqNumToSet - 1);
+				item.persist();
+			}
+			checklistItemToMoveDown.setSequenceNumber(seqNumToSet);
+			checklistItemToMoveDown.persist();
+		}
+		return checklistItemToMoveDown;
+	}
+
+	@Transactional
+	public static ChecklistItem moveItemUp(ChecklistItem checklistItemToMoveUp, int seqNumToSet) {
+		
+		if(checklistItemToMoveUp.getParentItem()  != null){
+
+			EntityManager em = entityManager();
+			String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem = " + checklistItemToMoveUp.getParentItem().getId() + " and ci.sequenceNumber = "  + seqNumToSet + "";
+			TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
+			ChecklistItem item = query.getSingleResult();
+			if(item != null){
+				item.setSequenceNumber(seqNumToSet + 1);
+				item.persist();
+			}
+			checklistItemToMoveUp.setSequenceNumber(seqNumToSet);
+			checklistItemToMoveUp.persist();
+		}
+		return checklistItemToMoveUp;
 	}
 }

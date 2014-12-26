@@ -20,7 +20,7 @@ public interface ImporteOSCEView extends IsWidget {
 
 	 public interface Delegate {
 	
-		 public void importButtonClicked(ExportOsceType osceType, Boolean flag, BucketInfoType bucketInfoType);
+		 public void importButtonClicked(ExportOsceType osceType, BucketInfoType bucketInfoType);
 		 
 		 public void unprocessedClicked(ExportOsceType osceType);
 		 

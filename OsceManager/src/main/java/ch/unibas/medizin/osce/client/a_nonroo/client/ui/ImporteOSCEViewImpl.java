@@ -223,7 +223,9 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		
 		if (test)
 		{
-			final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.confirmation());
+			delegate.importButtonClicked(osceType, selectedBucketType());
+			
+			/*final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.confirmation());
 			messageConfirmationDialogBox.showYesNoDialog(constants.confirmationDeleteAfterImport());
 			messageConfirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {			
 				@Override
@@ -238,7 +240,7 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 					messageConfirmationDialogBox.hide();
 					delegate.importButtonClicked(osceType, false, selectedBucketType());
 				}
-			});
+			});*/
 		}
 		else
 		{

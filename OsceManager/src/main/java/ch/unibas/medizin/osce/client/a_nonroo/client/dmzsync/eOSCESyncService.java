@@ -40,7 +40,7 @@ public interface eOSCESyncService extends RemoteService {
 	
 	List<ExportOsceData> findUnProcessedFilesFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID) throws eOSCESyncException;
 	
-	void importFileFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag) throws eOSCESyncException;
+	void importFileFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID, List<String> fileList) throws eOSCESyncException;
 	
 	void importFileFromLocal(ExportOsceType osceType, Long semesterID, List<String> fileList) throws eOSCESyncException;
 	

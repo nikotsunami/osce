@@ -74,6 +74,12 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 	Image arrow;
 	
 	@UiField
+	Image up;
+	
+	@UiField
+	Image down;
+	
+	@UiField
 	DisclosurePanel checkListQuestionDisclosurePanel;
 	
 	@UiField
@@ -486,7 +492,17 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 		}
 	
 	}
-
+	
+	@UiHandler("up")
+	public void upArrowChecklistQuestionClicked(ClickEvent e){
+		delegate.upArrowChecklistQuestionClicked(RoleDetailsChecklistItemSubViewImpl.this,checklistItemProxy);
+	}
+	
+	@UiHandler("down")
+	public void downArrowChecklistQuestionClicked(ClickEvent e){
+		delegate.downArrowChecklistQuestionClicked(RoleDetailsChecklistItemSubViewImpl.this,checklistItemProxy);
+	}
+	
 	@Override
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;		

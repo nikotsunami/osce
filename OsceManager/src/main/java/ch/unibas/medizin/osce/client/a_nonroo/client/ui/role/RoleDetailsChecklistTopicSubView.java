@@ -20,6 +20,10 @@ public interface RoleDetailsChecklistTopicSubView extends IsWidget {
 		void updateChecklistTopic(ItemType itemType, String name, String description, RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl, ChecklistItemProxy checklistItemProxy, String weight);
 
 		void createImportQuestionPopUp(IconButton importSectionButton,Long topicId);
+
+		void upArrowClicked(RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl,ChecklistItemProxy checklistItemProxy);
+
+		void downArrowClicked(RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl,ChecklistItemProxy checklistItemProxy);
 	}
 	
 	public void setDelegate(Delegate delegate);

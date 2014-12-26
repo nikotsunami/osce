@@ -30,7 +30,7 @@ public interface eOSCESyncServiceAsync {
 	
 	void findProcessedFilesFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID, AsyncCallback<List<ExportOsceData>> cb);
 	void findUnProcessedFilesFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID, AsyncCallback<List<ExportOsceData>> cb);
-	void importFileFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag, AsyncCallback<Void> cb);
+	void importFileFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID, List<String> fileList, AsyncCallback<Void> cb);
 	void importFileFromLocal(ExportOsceType osceType, Long semesterID, List<String> fileList, AsyncCallback<Void> cb);
 	//export
 	void exportOsceFile(Long semesterID, AsyncCallback<Void> cb);

@@ -4394,7 +4394,9 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 	 	 				if (submitData.getContent().equals("1")) {
 	 	 					boolean importiOSCEFlag = importIOSCE(fullFilename, semesterID);
 	 	 					resultFlag = resultFlag & importiOSCEFlag;
-	 	 				}
+	 	 				}else{
+							throw new eOSCESyncException("Invalid file","Invalid file with submit tag 0");
+						}
 	 	 			 }
 	 			 }
 	 			 	
@@ -4409,16 +4411,16 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		} 	
 	}
 	
-	public void importFileFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag) throws eOSCESyncException{
+	public void importFileFromCloud(BucketInfoType bucketInfoType, ExportOsceType osceType, Long semesterID, List<String> fileList) throws eOSCESyncException{
 		if (BucketInfoType.S3.equals(bucketInfoType)) {
-			importFileFromS3(osceType, semesterID, fileList, flag);
+			importFileFromS3(osceType, semesterID, fileList);
 		}
 		else if (BucketInfoType.FTP.equals(bucketInfoType)) {
-			importFileFromSFTP(osceType, semesterID, fileList, flag);
+			importFileFromSFTP(osceType, semesterID, fileList);
 		}
 	}
 	
-	public void importFileFromS3(ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag) throws eOSCESyncException{
+	public void importFileFromS3(ExportOsceType osceType, Long semesterID, List<String> fileList) throws eOSCESyncException{
 		try
 		{
 			Semester semester = Semester.findSemester(semesterID);
@@ -4484,15 +4486,17 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 					NSObject submit = rootDict.objectForKey(IMPORT_ANSWER_PLIST_SUBMIT);
 					NSString submitData = (NSString) submit;
 					if (submitData.getContent().equals("1")) {
-						deleteFlag = deleteFlag & addFile(osceType, path, object.getKey(), byteArray, secretKey, encryptionKey, semesterID);
+						/*deleteFlag = deleteFlag & */addFile(osceType, path, object.getKey(), byteArray, secretKey, encryptionKey, semesterID);
+					}else{
+						throw new eOSCESyncException("Invalid file","Invalid file with submit tag 0");
 					}
 				 }		
 				 		
 			}
 		
-			if (flag == true && deleteFlag == true) {
+			/*if (flag == true && deleteFlag == true) {
 				deleteAmzonS3Object(osceType, semesterID, fileList, bucketName, accessKey, secretKey);
-			}
+			}*/
 		}
 		catch(AmazonServiceException ase)
 		{
@@ -4511,7 +4515,7 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 		}
 	}
 	
-	public void importFileFromSFTP(ExportOsceType osceType, Long semesterID, List<String> fileList, Boolean flag) throws eOSCESyncException {
+	public void importFileFromSFTP(ExportOsceType osceType, Long semesterID, List<String> fileList) throws eOSCESyncException {
 		
 		Semester semester = Semester.findSemester(semesterID);
 		String path = OsMaFilePathConstant.IMPORT_PROCESSED_EOSCE_PATH + semester.getSemester() + semester.getCalYear();
@@ -4575,14 +4579,16 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 						NSString submitData = (NSString) submit;
 						if (submitData.getContent().equals("1")) {
 							inputStream = channelSftp.get(fileList.get(i));
-							deleteFlag = deleteFlag & addFile(osceType, path, fileName, byteArray, bucketInformation.getSecretKey(), bucketInformation.getEncryptionKey(), semesterID);
+							/*deleteFlag = deleteFlag &*/ addFile(osceType, path, fileName, byteArray, bucketInformation.getSecretKey(), bucketInformation.getEncryptionKey(), semesterID);
+						}else{
+							throw new eOSCESyncException("Invalid file","Invalid file with submit tag 0");
 						}
 					}		
 				}
 			
-				if (flag == true && deleteFlag == true) {
+				/*if (flag == true && deleteFlag == true) {
 					deleteSFTPObject(osceType, semesterID, fileList);
-				}
+				}*/
 			//}	
 		}
 		catch (JSchException e) {

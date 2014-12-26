@@ -138,6 +138,16 @@ public class RoleDetailsChecklistTopicSubViewImpl extends Composite implements R
 		});
 	}
 	
+	@UiHandler("down")
+	public void downArrowClicked(ClickEvent e){
+		delegate.downArrowClicked(RoleDetailsChecklistTopicSubViewImpl.this,checklistItemProxy);
+	}
+	
+	@UiHandler("up")
+	public void upArrowClicked(ClickEvent e){
+		delegate.upArrowClicked(RoleDetailsChecklistTopicSubViewImpl.this,checklistItemProxy);
+	}
+	
 	private void createiOsceTabPopup() {
 		final ChecklistiOSCEPopupViewImpl popupViewImpl = new ChecklistiOSCEPopupViewImpl();
 		popupViewImpl.getItemTypeBox().setValue(ItemType.QUESTION);
