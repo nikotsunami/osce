@@ -107,7 +107,7 @@ public class ImporteOSCEActivity extends AbstractActivity implements ImporteOSCE
 	
 	public void loadBucketInformation(SemesterProxy semesterProxy)
 	{
-		requests.bucketInformationRequestNonRoo().findBucketInformationBySemesterForImport(semesterProxy.getId()).fire(new OSCEReceiver<BucketInformationProxy>() {
+		requests.bucketInformationRequest().findBucketInformationBySemesterForImport(semesterProxy.getId()).fire(new OSCEReceiver<BucketInformationProxy>() {
 
 			@Override
 			public void onSuccess(BucketInformationProxy response) {

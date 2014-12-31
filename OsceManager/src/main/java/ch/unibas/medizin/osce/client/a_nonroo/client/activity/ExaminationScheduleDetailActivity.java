@@ -64,7 +64,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -470,7 +470,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		}
 		contentView.getOscePostHP().clear();
 		
-		requests.oscePostRoomRequestNonRoo().findOscePostByCourseId(contentView.getCourseProxy().getId()).with("oscePostBlueprint", "standardizedRole", "standardizedRole.roleTopic").fire(new OSCEReceiver<List<OscePostProxy>>() {
+		requests.oscePostRoomRequest().findOscePostByCourseId(contentView.getCourseProxy().getId()).with("oscePostBlueprint", "standardizedRole", "standardizedRole.roleTopic").fire(new OSCEReceiver<List<OscePostProxy>>() {
 
 			@Override
 			public void onSuccess(List<OscePostProxy> oscePostProxyList) {
@@ -487,7 +487,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					}
 				}
 				
-				requests.assignmentRequestNonRoo().minmumStartTime(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId()).fire(new OSCEReceiver<List<Date>>() {
+				requests.assignmentRequest().minmumStartTime(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId()).fire(new OSCEReceiver<List<Date>>() {
 
 					//minimum start time is at 0 location
 					//maximum end time is at 1 location
@@ -561,7 +561,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 										new ApplicationLoadingScreenEvent(true));
 								
 								//retrieve student data of particular post and course from assignment table.
-								requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeStudent(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
+								requests.assignmentRequest().retrieveAssignmenstOfTypeStudent(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
 								.with("student","oscePostRoom","osceDay").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 		
 									@Override
@@ -1008,7 +1008,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 										final long decreaseHeightOfExaminerBy=decreaseHeightOfExaminer;
 										
 										if(oscePostProxy.getOscePostBlueprint().getPostType()!=PostType.BREAK && !isFirstPartOfPreparation)
-										requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeExaminer(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
+										requests.assignmentRequest().retrieveAssignmenstOfTypeExaminer(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
 										.with("examiner").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 		
 											@Override
@@ -1242,7 +1242,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 								{
 									requests.getEventBus().fireEvent(
 											new ApplicationLoadingScreenEvent(true));
-								requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeSP(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
+								requests.assignmentRequest().retrieveAssignmenstOfTypeSP(accordianPanelViewImpl.getOsceDayProxy().getId(), accordianPanelViewImpl.getOsceSequenceProxy().getId(), contentView.getCourseProxy().getId(),oscePostProxy.getId())
 								.with("oscePostRoom","patientInRole","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 		
 									@Override
@@ -1584,7 +1584,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	{
 		Log.info("createLogicalStudentBreak");
 		showLoadingScreen(true);
-		requests.assignmentRequestNonRoo().retrieveLogicalStudentInBreak(osceDayId, courseId).with("osceDay","student").fire(new OSCEReceiver<List<AssignmentProxy>>() {
+		requests.assignmentRequest().retrieveLogicalStudentInBreak(osceDayId, courseId).with("osceDay","student").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 
 			@Override
 			public void onSuccess(List<AssignmentProxy> response) {
@@ -1973,7 +1973,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	{
 		Log.info("createLogicalStudentBreak");
 		showLoadingScreen(true);
-		requests.assignmentRequestNonRoo().retrieveLogicalStudentInBreak(osceDayId, courseId).with("osceDay","student").fire(new OSCEReceiver<List<AssignmentProxy>>() {
+		requests.assignmentRequest().retrieveLogicalStudentInBreak(osceDayId, courseId).with("osceDay","student").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 
 			@Override
 			public void onSuccess(List<AssignmentProxy> response) {
@@ -2186,7 +2186,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				new ApplicationLoadingScreenEvent(true));
 		//create logical break post
 		//retrieve data of logical sp break and create slots.
-		requests.assignmentRequestNonRoo().retrieveAssignmentOfLogicalBreakPost(osceDayProxy.getId(), osceSequenceProxy.getId()).with("oscePostRoom","patientInRole","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<AssignmentProxy>>() {
+		requests.assignmentRequest().retrieveAssignmentOfLogicalBreakPost(osceDayProxy.getId(), osceSequenceProxy.getId()).with("oscePostRoom","patientInRole","patientInRole.patientInSemester","patientInRole.patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 
 			@Override
 			public void onSuccess(List<AssignmentProxy> response) {
@@ -2784,7 +2784,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		final OsceDayProxy osceDayProxy=examinationViewOld.getOsceDayProxy();
 		final OscePostView oscePostView=examinationViewOld.getOscePostView();
 		oscePostView.getExaminerVP().clear();
-		requests.assignmentRequestNonRoo().retrieveAssignmenstOfTypeExaminer(osceDayProxy.getId(), examinationViewOld.getOsceSequenceProxy().getId(), examinationViewOld.getCourseProxy().getId(),oscePostProxy.getId())
+		requests.assignmentRequest().retrieveAssignmenstOfTypeExaminer(osceDayProxy.getId(), examinationViewOld.getOsceSequenceProxy().getId(), examinationViewOld.getCourseProxy().getId(),oscePostProxy.getId())
 		.with("examiner").fire(new OSCEReceiver<List<AssignmentProxy>>() {
 
 			@Override
@@ -3087,7 +3087,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		requests.getEventBus().fireEvent(
 				new ApplicationLoadingScreenEvent(true));
 		
-		requests.osceRequestNonRoo().autoAssignPatientInRole(id).fire(new OSCEReceiver<Boolean>() {
+		requests.osceRequest().autoAssignPatientInRole(id).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -3136,7 +3136,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		requests.getEventBus().fireEvent(
 				new ApplicationLoadingScreenEvent(true));
 		
-		requests.osceRequestNonRoo().autoAssignStudent(id,orderType,changeRequire).fire(new OSCEReceiver<Boolean>() {
+		requests.osceRequest().autoAssignStudent(id,orderType,changeRequire).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -3182,12 +3182,12 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	public void shiftBreak(final Long osceDayId, Date endDate, final int diff,final PopupView popupView) {
 		Log.info("shiftBreak");
 		showLoadingScreen(true);
-		requests.assignmentRequestNonRoo().updateAssignmentByDiff(osceDayId, diff, endDate, false).fire(new OSCEReceiver<Void>() {
+		requests.assignmentRequest().updateAssignmentByDiff(osceDayId, diff, endDate, false).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {
 				
-				requests.assignmentRequestNonRoo().updateLunchBreak(osceDayId, diff).fire(new OSCEReceiver<Void>() {
+				requests.assignmentRequest().updateLunchBreak(osceDayId, diff).fire(new OSCEReceiver<Void>() {
 
 					@Override
 					public void onSuccess(Void response) {
@@ -3231,7 +3231,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	
 	@Override
 	public void showExchangeStudentPopup(final PopupView popupView, final AssignmentProxy ass) {
-		requests.studentRequestNonRoo().findStudnetByAssignment(ass.getId()).fire(new OSCEReceiver<List<StudentProxy>>() {
+		requests.studentRequest().findStudnetByAssignment(ass.getId()).fire(new OSCEReceiver<List<StudentProxy>>() {
 
 			@Override
 			public void onSuccess(List<StudentProxy> response) {
@@ -3278,7 +3278,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	@Override
 	public void exchangeStudentClicked(AssignmentProxy ass, StudentProxy exchangeStudent) {
 		showLoadingScreen(true);
-		requests.assignmentRequestNonRoo().exchangeStudent(ass, exchangeStudent.getId()).fire(new OSCEReceiver<Boolean>() {
+		requests.assignmentRequest().exchangeStudent(ass, exchangeStudent.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -3290,7 +3290,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 
 	@Override
 	public void showExchangeSpPopup(final PopupView popupView, AssignmentProxy assignment) {
-		requests.patientInRoleRequestNonRoo().findPatientInRoleByRotation(assignment).with("patientInSemester", "patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<PatientInRoleProxy>>() {
+		requests.patientInRoleRequest().findPatientInRoleByRotation(assignment).with("patientInSemester", "patientInSemester.standardizedPatient").fire(new OSCEReceiver<List<PatientInRoleProxy>>() {
 
 			@Override
 			public void onSuccess(List<PatientInRoleProxy> response) {
@@ -3320,7 +3320,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	public void exchangeSpClicked(AssignmentProxy assignment,
 			PatientInRoleProxy pir) {
 		showLoadingScreen(true);
-		requests.assignmentRequestNonRoo().exchangeStandardizedPatient(assignment, pir).fire(new OSCEReceiver<Boolean>() {
+		requests.assignmentRequest().exchangeStandardizedPatient(assignment, pir).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -3333,7 +3333,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	public void clearExaminerAssignment(Long oscePostId,Long osceDayId,Long courseId,final ExaminationViewImpl examView)
 	{
 		Log.info("clearExaminerAssignment");
-		requests.assignmentRequestNonRoo().clearExaminerAssignment(osceDayId, oscePostId, courseId).fire(new OSCEReceiver<List<Date>>() {
+		requests.assignmentRequest().clearExaminerAssignment(osceDayId, oscePostId, courseId).fire(new OSCEReceiver<List<Date>>() {
 
 			@Override
 			public void onSuccess(List<Date> response) {
@@ -3381,7 +3381,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		
 		showLoadingScreen(true);
 		
-		requests.assignmentRequestNonRoo().shiftLongBreak(currOsceDayId, nextPrevFlag).fire(new OSCEReceiver<Void>() {
+		requests.assignmentRequest().shiftLongBreak(currOsceDayId, nextPrevFlag).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {
@@ -3399,7 +3399,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	
 		showLoadingScreen(true);
 		
-		requests.assignmentRequestNonRoo().moveLunchBreakOsceDay(flag, osceDayProxy.getId()).fire(new OSCEReceiver<Void>() {
+		requests.assignmentRequest().moveLunchBreakOsceDay(flag, osceDayProxy.getId()).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {
@@ -3448,7 +3448,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	@Override
 	public void retrieveRoomNo(OscePostProxy oscePostProxy,CourseProxy courseProxy,final PopupView popupView) {
 		
-		requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(courseProxy,oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+		requests.oscePostRoomRequest().findOscePostRoomByOscePostAndCourse(courseProxy,oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
 		{
 			@Override
 			public void onSuccess(OscePostRoomProxy response) 
@@ -3478,7 +3478,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 			confirmationDialogBox.showConfirmationDialog(constants.formativeStudentAssignError());
 		}
 		else {
-			requests.studentOsceRequestNonRoo().countStudentByOsce(osceProxy.getId()).fire(new OSCEReceiver<Integer>() {
+			requests.studentOscesRequest().countStudentByOsce(osceProxy.getId()).fire(new OSCEReceiver<Integer>() {
 
 				@Override
 				public void onSuccess(Integer response) {

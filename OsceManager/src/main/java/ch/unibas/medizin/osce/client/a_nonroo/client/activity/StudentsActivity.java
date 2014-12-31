@@ -43,8 +43,8 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -211,7 +211,7 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 		widget.setWidget(systemStartView.asWidget());
 		view.setDelegate(this);
 		
-		requests.osceRequestNonRoo().findAllOsceOnSemesterId(semesterProxy.getId()).with("semester","osceStudents.student").fire(new OSCEReceiver<List<OsceProxy>>() {
+		requests.osceRequest().findAllOsceOnSemesterId(semesterProxy.getId()).with("semester","osceStudents.student").fire(new OSCEReceiver<List<OsceProxy>>() {
 
 			@Override
 			public void onSuccess(List<OsceProxy> response) {
@@ -325,14 +325,14 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 								} 
 							}
 						});
-					requests.studentOsceRequestNonRoo().countStudentByRange(tempOsceProxy.getId(), "").fire(new OSCEReceiver<Integer>() {
+					requests.studentOscesRequest().countStudentByRange(tempOsceProxy.getId(), "").fire(new OSCEReceiver<Integer>() {
 
 						@Override
 						public void onSuccess(final Integer data) {
 							studentSubDetailsViewImpl.getTable().setRowCount(data);
 							
 							final Range range = studentSubDetailsViewImpl.getTable().getVisibleRange();
-							requests.studentOsceRequestNonRoo().findStudentByRange(range.getStart(), range.getLength(), tempOsceProxy.getId(), "").with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
+							requests.studentOscesRequest().findStudentByRange(range.getStart(), range.getLength(), tempOsceProxy.getId(), "").with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
 								@Override
 								public void onSuccess(List<StudentOscesProxy> value) {
 									//table.setRowCount(value.size());
@@ -376,7 +376,7 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 	{
 		final Range range = table.getVisibleRange();
 		
-		requests.studentOsceRequestNonRoo().findStudentEntriesByNameTest(q, osceProxy.getId()).with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
+		requests.studentOscesRequest().findStudentEntriesByNameTest(q, osceProxy.getId()).with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
 
 			@Override
 			public void onSuccess(List<StudentOscesProxy> response) {
@@ -405,7 +405,7 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 	protected void onRangeChanged(final String name) {
 		//table = subDetailsView[currenttab].getTable();
 		this.table = (AdvanceCellTable<StudentOscesProxy>)subDetailsView[currenttab].getTable();
-		requests.studentOsceRequestNonRoo().countStudentByRange(osceProxy.getId(), name).fire(new OSCEReceiver<Integer>() {
+		requests.studentOscesRequest().countStudentByRange(osceProxy.getId(), name).fire(new OSCEReceiver<Integer>() {
 
 			@Override
 			public void onSuccess(final Integer data) {
@@ -413,7 +413,7 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 				
 				final Range range = subDetailsView[currenttab].getTable().getVisibleRange();
 				
-				requests.studentOsceRequestNonRoo().findStudentByRange(range.getStart(), range.getLength(), osceProxy.getId(), name).with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
+				requests.studentOscesRequest().findStudentByRange(range.getStart(), range.getLength(), osceProxy.getId(), name).with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
 					@Override
 					public void onSuccess(List<StudentOscesProxy> value) {
 						//table.setRowCount(value.size());
@@ -432,11 +432,11 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 	}
 	
 	protected Request<List<StudentOscesProxy>> createRangeRequest(String name, Range range) {
-		return requests.studentOsceRequestNonRoo().findStudentEntriesByName(name,osceProxy.getId(), range.getStart(), range.getLength()).with("student");
+		return requests.studentOscesRequest().findStudentEntriesByName(name,osceProxy.getId(), range.getStart(), range.getLength()).with("student");
 	}
 
 	protected void fireCountRequest(String name, Receiver<Long> callback) {
-		requests.studentOsceRequestNonRoo().countStudentByName(name,osceProxy.getId()).fire(callback);
+		requests.studentOscesRequest().countStudentByName(name,osceProxy.getId()).fire(callback);
 	}
 		
 		
@@ -465,7 +465,7 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 							
 							if (studProxy.getIsEnrolled())
 							{
-								requests.assignmentRequestNonRoo().deactivateStudentFromAssignment(studProxy).fire(new OSCEReceiver<Boolean>() {
+								requests.assignmentRequest().deactivateStudentFromAssignment(studProxy).fire(new OSCEReceiver<Boolean>() {
 
 									@Override
 									public void onSuccess(Boolean response) {
@@ -481,7 +481,7 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 							}
 							else if (!studProxy.getIsEnrolled())
 							{
-								requests.assignmentRequestNonRoo().activateStudentFromAssignment(studProxy).fire(new OSCEReceiver<Boolean>() {
+								requests.assignmentRequest().activateStudentFromAssignment(studProxy).fire(new OSCEReceiver<Boolean>() {
 
 									@Override
 									public void onSuccess(Boolean response) {
@@ -506,7 +506,7 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 	
 	public void refreshdata()
 	{
-		/*requests.studentOsceRequestNonRoo().findStudentOsceByOsce(osceProxy.getId()).with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
+		/*requests.studentOscesRequest().findStudentOsceByOsce(osceProxy.getId()).with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
 
 			@Override
 			public void onSuccess(List<StudentOscesProxy> response) {
@@ -517,14 +517,14 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 		
 		displayLoadingScreen(true);
 		
-		requests.studentOsceRequestNonRoo().countStudentByRange(osceProxy.getId(), "").fire(new OSCEReceiver<Integer>() {
+		requests.studentOscesRequest().countStudentByRange(osceProxy.getId(), "").fire(new OSCEReceiver<Integer>() {
 
 			@Override
 			public void onSuccess(final Integer data) {
 				subDetailsView[currenttab].getTable().setRowCount(data);
 				
 				final Range range = subDetailsView[currenttab].getTable().getVisibleRange();
-				requests.studentOsceRequestNonRoo().findStudentByRange(range.getStart(), range.getLength(), osceProxy.getId(), "").with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
+				requests.studentOscesRequest().findStudentByRange(range.getStart(), range.getLength(), osceProxy.getId(), "").with("student").fire(new OSCEReceiver<List<StudentOscesProxy>>() {
 					@Override
 					public void onSuccess(List<StudentOscesProxy> value) {
 						//table.setRowCount(value.size());

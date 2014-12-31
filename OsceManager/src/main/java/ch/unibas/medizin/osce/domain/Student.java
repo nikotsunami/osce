@@ -5,31 +5,31 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.Version;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Pattern;
-
 import org.apache.log4j.Logger;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.transaction.annotation.Transactional;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.OsceCreationType;
 import ch.unibas.medizin.osce.shared.Sorting;
+import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
 
-import com.google.gwt.requestfactory.server.RequestFactoryServlet;
-
-@RooJavaBean
-@RooToString
-@RooEntity
+@Entity
+@Configurable
 public class Student {
 
 	@PersistenceContext(unitName="persistenceUnit")
@@ -251,4 +251,186 @@ public class Student {
 		HttpSession session = RequestFactoryServlet.getThreadLocalRequest().getSession();
 		session.setAttribute(OsMaFilePathConstant.STUDENT_LIST_QR, studIdList);
 	}
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Answer: ").append(getAnswer() == null ? "null" : getAnswer().size()).append(", ");
+        sb.append("Assignments: ").append(getAssignments() == null ? "null" : getAssignments().size()).append(", ");
+        sb.append("City: ").append(getCity()).append(", ");
+        sb.append("Email: ").append(getEmail()).append(", ");
+        sb.append("Gender: ").append(getGender()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("Name: ").append(getName()).append(", ");
+        sb.append("PreName: ").append(getPreName()).append(", ");
+        sb.append("Street: ").append(getStreet()).append(", ");
+        sb.append("StudentId: ").append(getStudentId()).append(", ");
+        sb.append("StudentOsces: ").append(getStudentOsces() == null ? "null" : getStudentOsces().size()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
+
+	public Gender getGender() {
+        return this.gender;
+    }
+
+	public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+	public String getName() {
+        return this.name;
+    }
+
+	public void setName(String name) {
+        this.name = name;
+    }
+
+	public String getPreName() {
+        return this.preName;
+    }
+
+	public void setPreName(String preName) {
+        this.preName = preName;
+    }
+
+	public String getEmail() {
+        return this.email;
+    }
+
+	public void setEmail(String email) {
+        this.email = email;
+    }
+
+	public String getStudentId() {
+        return this.studentId;
+    }
+
+	public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
+	public String getStreet() {
+        return this.street;
+    }
+
+	public void setStreet(String street) {
+        this.street = street;
+    }
+
+	public String getCity() {
+        return this.city;
+    }
+
+	public void setCity(String city) {
+        this.city = city;
+    }
+
+	public Set<Assignment> getAssignments() {
+        return this.assignments;
+    }
+
+	public void setAssignments(Set<Assignment> assignments) {
+        this.assignments = assignments;
+    }
+
+	public Set<StudentOsces> getStudentOsces() {
+        return this.studentOsces;
+    }
+
+	public void setStudentOsces(Set<StudentOsces> studentOsces) {
+        this.studentOsces = studentOsces;
+    }
+
+	public Set<Answer> getAnswer() {
+        return this.answer;
+    }
+
+	public void setAnswer(Set<Answer> answer) {
+        this.answer = answer;
+    }
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            Student attached = Student.findStudent(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public Student merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        Student merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new Student().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countStudents() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM Student o", Long.class).getSingleResult();
+    }
+
+	public static List<Student> findAllStudents() {
+        return entityManager().createQuery("SELECT o FROM Student o", Student.class).getResultList();
+    }
+
+	public static Student findStudent(Long id) {
+        if (id == null) return null;
+        return entityManager().find(Student.class, id);
+    }
+
+	public static List<Student> findStudentEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Student o", Student.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
 }

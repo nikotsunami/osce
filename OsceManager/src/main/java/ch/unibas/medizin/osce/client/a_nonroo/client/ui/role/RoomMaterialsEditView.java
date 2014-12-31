@@ -7,7 +7,7 @@ import ch.unibas.medizin.osce.shared.MaterialType;
 import ch.unibas.medizin.osce.shared.PriceType;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface RoomMaterialsEditView extends IsWidget {

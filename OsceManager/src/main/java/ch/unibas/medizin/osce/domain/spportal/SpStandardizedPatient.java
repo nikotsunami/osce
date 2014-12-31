@@ -5,9 +5,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
@@ -20,16 +20,13 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
+import javax.persistence.Version;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
-
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
 import ch.unibas.medizin.osce.domain.Bankaccount;
 import ch.unibas.medizin.osce.domain.Nationality;
@@ -44,9 +41,8 @@ import ch.unibas.medizin.osce.shared.WorkPermission;
 
 
 
-@RooJavaBean
-@RooToString
-@RooEntity
+@Entity
+@Configurable
 @Table(name="standardized_patient")
 public class SpStandardizedPatient {
 
@@ -607,4 +603,334 @@ public class SpStandardizedPatient {
 			 return resultList.get(0);
 		 }
 	}
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            SpStandardizedPatient attached = SpStandardizedPatient.findSpStandardizedPatient(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public SpStandardizedPatient merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        SpStandardizedPatient merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new SpStandardizedPatient().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countSpStandardizedPatients() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM SpStandardizedPatient o", Long.class).getSingleResult();
+    }
+
+	public static List<SpStandardizedPatient> findAllSpStandardizedPatients() {
+        return entityManager().createQuery("SELECT o FROM SpStandardizedPatient o", SpStandardizedPatient.class).getResultList();
+    }
+
+	public static SpStandardizedPatient findSpStandardizedPatient(Long id) {
+        if (id == null) return null;
+        return entityManager().find(SpStandardizedPatient.class, id);
+    }
+
+	public static List<SpStandardizedPatient> findSpStandardizedPatientEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM SpStandardizedPatient o", SpStandardizedPatient.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public String getPreName() {
+        return this.preName;
+    }
+
+	public void setPreName(String preName) {
+        this.preName = preName;
+    }
+
+	public String getName() {
+        return this.name;
+    }
+
+	public void setName(String name) {
+        this.name = name;
+    }
+
+	public String getStreet() {
+        return this.street;
+    }
+
+	public void setStreet(String street) {
+        this.street = street;
+    }
+
+	public String getPostalCode() {
+        return this.postalCode;
+    }
+
+	public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+	public String getCity() {
+        return this.city;
+    }
+
+	public void setCity(String city) {
+        this.city = city;
+    }
+
+	public String getTelephone() {
+        return this.telephone;
+    }
+
+	public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+	public String getTelephone2() {
+        return this.telephone2;
+    }
+
+	public void setTelephone2(String telephone2) {
+        this.telephone2 = telephone2;
+    }
+
+	public String getMobile() {
+        return this.mobile;
+    }
+
+	public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+	public String getEmail() {
+        return this.email;
+    }
+
+	public void setEmail(String email) {
+        this.email = email;
+    }
+
+	public Date getBirthday() {
+        return this.birthday;
+    }
+
+	public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+	public Gender getGender() {
+        return this.gender;
+    }
+
+	public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+	public Integer getHeight() {
+        return this.height;
+    }
+
+	public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+	public Integer getWeight() {
+        return this.weight;
+    }
+
+	public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
+	public String getImmagePath() {
+        return this.immagePath;
+    }
+
+	public void setImmagePath(String immagePath) {
+        this.immagePath = immagePath;
+    }
+
+	public String getVideoPath() {
+        return this.videoPath;
+    }
+
+	public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
+    }
+
+	public SpProfession getProfession() {
+        return this.profession;
+    }
+
+	public void setProfession(SpProfession profession) {
+        this.profession = profession;
+    }
+
+	public SpNationality getNationality() {
+        return this.nationality;
+    }
+
+	public void setNationality(SpNationality nationality) {
+        this.nationality = nationality;
+    }
+
+	public WorkPermission getWorkPermission() {
+        return this.workPermission;
+    }
+
+	public void setWorkPermission(WorkPermission workPermission) {
+        this.workPermission = workPermission;
+    }
+
+	public StandardizedPatientStatus getStatus() {
+        return this.status;
+    }
+
+	public void setStatus(StandardizedPatientStatus status) {
+        this.status = status;
+    }
+
+	public MaritalStatus getMaritalStatus() {
+        return this.maritalStatus;
+    }
+
+	public void setMaritalStatus(MaritalStatus maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+	public String getSocialInsuranceNo() {
+        return this.socialInsuranceNo;
+    }
+
+	public void setSocialInsuranceNo(String socialInsuranceNo) {
+        this.socialInsuranceNo = socialInsuranceNo;
+    }
+
+	public SpBankaccount getBankAccount() {
+        return this.bankAccount;
+    }
+
+	public void setBankAccount(SpBankaccount bankAccount) {
+        this.bankAccount = bankAccount;
+    }
+
+	public SpAnamnesisForm getAnamnesisForm() {
+        return this.anamnesisForm;
+    }
+
+	public void setAnamnesisForm(SpAnamnesisForm anamnesisForm) {
+        this.anamnesisForm = anamnesisForm;
+    }
+
+	public SPPortalPerson getPerson() {
+        return this.person;
+    }
+
+	public void setPerson(SPPortalPerson person) {
+        this.person = person;
+    }
+
+	public Boolean getIgnoreSocialInsuranceNo() {
+        return this.ignoreSocialInsuranceNo;
+    }
+
+	public void setIgnoreSocialInsuranceNo(Boolean ignoreSocialInsuranceNo) {
+        this.ignoreSocialInsuranceNo = ignoreSocialInsuranceNo;
+    }
+
+	public Date getCreated() {
+        return this.created;
+    }
+
+	public void setCreated(Date created) {
+        this.created = created;
+    }
+
+	public Set<SpPatientInSemester> getPatientInSemester() {
+        return this.patientInSemester;
+    }
+
+	public void setPatientInSemester(Set<SpPatientInSemester> patientInSemester) {
+        this.patientInSemester = patientInSemester;
+    }
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("AnamnesisForm: ").append(getAnamnesisForm()).append(", ");
+        sb.append("BankAccount: ").append(getBankAccount()).append(", ");
+        sb.append("Birthday: ").append(getBirthday()).append(", ");
+        sb.append("City: ").append(getCity()).append(", ");
+        sb.append("Created: ").append(getCreated()).append(", ");
+        sb.append("Email: ").append(getEmail()).append(", ");
+        sb.append("Gender: ").append(getGender()).append(", ");
+        sb.append("Height: ").append(getHeight()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("IgnoreSocialInsuranceNo: ").append(getIgnoreSocialInsuranceNo()).append(", ");
+        sb.append("ImmagePath: ").append(getImmagePath()).append(", ");
+        sb.append("MaritalStatus: ").append(getMaritalStatus()).append(", ");
+        sb.append("Mobile: ").append(getMobile()).append(", ");
+        sb.append("Name: ").append(getName()).append(", ");
+        sb.append("Nationality: ").append(getNationality()).append(", ");
+        sb.append("PatientInSemester: ").append(getPatientInSemester() == null ? "null" : getPatientInSemester().size()).append(", ");
+        sb.append("Person: ").append(getPerson()).append(", ");
+        sb.append("PostalCode: ").append(getPostalCode()).append(", ");
+        sb.append("PreName: ").append(getPreName()).append(", ");
+        sb.append("Profession: ").append(getProfession()).append(", ");
+        sb.append("SocialInsuranceNo: ").append(getSocialInsuranceNo()).append(", ");
+        sb.append("Status: ").append(getStatus()).append(", ");
+        sb.append("Street: ").append(getStreet()).append(", ");
+        sb.append("Telephone: ").append(getTelephone()).append(", ");
+        sb.append("Telephone2: ").append(getTelephone2()).append(", ");
+        sb.append("Version: ").append(getVersion()).append(", ");
+        sb.append("VideoPath: ").append(getVideoPath()).append(", ");
+        sb.append("Weight: ").append(getWeight()).append(", ");
+        sb.append("WorkPermission: ").append(getWorkPermission());
+        return sb.toString();
+    }
 }

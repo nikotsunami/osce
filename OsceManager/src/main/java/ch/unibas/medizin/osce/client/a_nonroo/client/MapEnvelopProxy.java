@@ -4,8 +4,8 @@ import java.util.List;
 
 import ch.unibas.medizin.osce.shared.MapEnvelop;
 
-import com.google.gwt.requestfactory.shared.ProxyFor;
-import com.google.gwt.requestfactory.shared.ValueProxy;
+import com.google.web.bindery.requestfactory.shared.ProxyFor;
+import com.google.web.bindery.requestfactory.shared.ValueProxy;
 
 @ProxyFor(value = MapEnvelop.class)
 public interface MapEnvelopProxy extends ValueProxy{

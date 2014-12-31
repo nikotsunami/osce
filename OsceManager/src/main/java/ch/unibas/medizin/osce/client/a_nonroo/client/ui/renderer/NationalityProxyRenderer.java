@@ -2,7 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer;
 
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 
-import com.google.gwt.requestfactory.ui.client.ProxyRenderer;
+import com.google.web.bindery.requestfactory.gwt.ui.client.ProxyRenderer;
 
 public class NationalityProxyRenderer extends ProxyRenderer<NationalityProxy> {
 	

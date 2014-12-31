@@ -64,6 +64,7 @@ import ch.unibas.medizin.osce.client.managed.request.SpAnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpStandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
+import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
@@ -78,7 +79,6 @@ import ch.unibas.medizin.osce.shared.ResourceDownloadProps;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
-import ch.unibas.medizin.osce.shared.scaffold.StandardizedPatientRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -99,10 +99,6 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.EntityProxyId;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.ServerFailure;
-import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.cellview.client.AbstractHasData;
@@ -117,6 +113,10 @@ import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.web.bindery.requestfactory.shared.EntityProxyId;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 
 /**
  * Activity that handles the search of standardized patients and the display of the search results.
@@ -154,7 +154,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	
 
 	/** Holds the request used to request patient data etc. */
-	private StandardizedPatientRequestNonRoo requestAdvSeaCritStd;
+	private StandardizedPatientRequest requestAdvSeaCritStd;
 	
 	/** Holds the table with the advanced search criteria */ 
 	/*celltable changes start*/
@@ -704,7 +704,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				Range range = table.getVisibleRange();
 								
 /*
-				requests.standardizedPatientRequestNonRoo()
+				requests.standardizedPatientRequest()
 						.getCSVMapperFindPatientsByAdvancedSearchAndSort(
 								"name", Sorting.ASC, quickSearchTerm,
 								searchThrough, searchCriteria // , filePath
@@ -712,7 +712,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 						).fire(new StandardizedPatientCsvFileReceiver());
 */
 /*				
-				requests.standardizedPatientRequestNonRoo()
+				requests.standardizedPatientRequest()
 				.getCSVMapperFindPatientsByAdvancedSearchAndSortUsingSession(
 						"name", Sorting.ASC, quickSearchTerm,
 						searchThrough, searchCriteria // , filePath
@@ -734,7 +734,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 					
 					spIdList.add(standardizedPatientProxy.getId());
 				}
-				requests.standardizedPatientRequestNonRoo().getCSVMapperForStandardizedPatientUsingServlet(spIdList).fire(new Receiver<Void>() {
+				requests.standardizedPatientRequest().getCSVMapperForStandardizedPatientUsingServlet(spIdList).fire(new Receiver<Void>() {
 						@Override
 						public void onSuccess(Void response) {
 							String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.STANDARDIZED_PATIENT_EXPORT.ordinal()));
@@ -902,7 +902,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	@SuppressWarnings("deprecation")
 	private void findAllAnamnesisCheckTitle() {
 		
-	requests.spPortalPersonRequestNonRoo().findAllAnamnesisThatIsSendToDMZ().fire(new OSCEReceiver<List<AnamnesisCheckTitleProxy>>() {
+	requests.sPPortalPersonRequest().findAllAnamnesisThatIsSendToDMZ().fire(new OSCEReceiver<List<AnamnesisCheckTitleProxy>>() {
 
 		@Override
 		public void onSuccess(List<AnamnesisCheckTitleProxy> response) {
@@ -1014,12 +1014,12 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	private void initSearch() {
 		
 		//TODO: @@@SPEC when declared here, the simple search works
-		requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
+		requestAdvSeaCritStd = requests.standardizedPatientRequest();
 		// (1) Text search
 		List<String> searchThrough = view.getSearchFilters();
 
 		// (2) Advanced search
-		requests.standardizedPatientRequestNonRoo().countPatientsByAdvancedSearchAndSort(
+		requests.standardizedPatientRequest().countPatientsByAdvancedSearchAndSort(
 	    		quickSearchTerm, searchThrough, searchCriteria).fire(new StandardizedPatientCountReceiver());
 	}
 
@@ -1069,7 +1069,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.DETAILS));
 			return;
 		}
-		requests.standardizedPatientRequestNonRoo().copyImageAndVideo(imagePath,videoPath).fire(new OSCEReceiver<Boolean>() {
+		requests.standardizedPatientRequest().copyImageAndVideo(imagePath,videoPath).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -1095,7 +1095,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	@SuppressWarnings({ "deprecation" })
 	protected void onRangeChanged() {
 		 // TODO: some bug about request
-		 requestAdvSeaCritStd = requests.standardizedPatientRequestNonRoo();
+		 requestAdvSeaCritStd = requests.standardizedPatientRequest();
 		
 		for (AdvancedSearchCriteriaProxy criterion : searchCriteria) {
 			Log.info("Criterion: " + criterion.getField().toString() + ": " + criterion.getValue());
@@ -1291,7 +1291,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			break;
 			
 		}
-		StandardizedPatientRequestNonRoo req = requests.standardizedPatientRequestNonRoo();
+		StandardizedPatientRequest req = requests.standardizedPatientRequest();
 		AdvancedSearchCriteriaProxy criteria = req.create(AdvancedSearchCriteriaProxy.class);
 		criteria = req.edit(criteria);
 		criteria.setBindType(bindType);
@@ -1595,7 +1595,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		Log.info("Finding all SPS who sent edit request");
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 
-		requests.spPortalPersonRequestNonRoo().findAllSpsCountWhoSentEditReq().fire(new OSCEReceiver<Long>() {
+		requests.sPPortalPersonRequest().findAllSpsCountWhoSentEditReq().fire(new OSCEReceiver<Long>() {
 
 			@Override
 			public void onSuccess(Long response) {
@@ -1630,7 +1630,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 	
-		requests.spPortalPersonRequestNonRoo().findAllSpsWhoSentEditRequest(range.getStart(),range.getLength()).fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
+		requests.sPPortalPersonRequest().findAllSpsWhoSentEditRequest(range.getStart(),range.getLength()).fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
 
 			@Override
 			public void onSuccess(List<StandardizedPatientProxy> response) {
@@ -1655,7 +1655,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 
-		requests.spPortalPersonRequestNonRoo().denyAllSpsEditRequest().fire(new OSCEReceiver<Void>() {
+		requests.sPPortalPersonRequest().denyAllSpsEditRequest().fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {
@@ -1680,7 +1680,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 
-		requests.spPortalPersonRequestNonRoo().allSpsEditRequestIsApproved().fire(new OSCEReceiver<Void>() {
+		requests.sPPortalPersonRequest().allSpsEditRequestIsApproved().fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {
@@ -1705,7 +1705,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
-		requests.spStandardizedPatientRequestNonRoo().findAllSpsCountWhoEditedData().fire(new OSCEReceiver<Long>() {
+		requests.spStandardizedPatientRequest().findAllSpsCountWhoEditedData().fire(new OSCEReceiver<Long>() {
 
 			@Override
 			public void onSuccess(Long response) {
@@ -1737,7 +1737,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
-			requests.spStandardizedPatientRequestNonRoo().findAllSPWhoEditedDetails(range.getStart(),range.getLength()).fire(new OSCEReceiver<List<SpStandardizedPatientProxy>>() {
+			requests.spStandardizedPatientRequest().findAllSPWhoEditedDetails(range.getStart(),range.getLength()).fire(new OSCEReceiver<List<SpStandardizedPatientProxy>>() {
 
 			@Override
 			public void onSuccess(List<SpStandardizedPatientProxy> response) {
@@ -1782,7 +1782,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
-		requests.spStandardizedPatientRequestNonRoo().findALlSPWhoEditedDetails().with("person","anamnesisForm","nationality","profession","bankAccount","bankAccount.country").fire(new OSCEReceiver<List<SpStandardizedPatientProxy>>() {
+		requests.spStandardizedPatientRequest().findALlSPWhoEditedDetails().with("person","anamnesisForm","nationality","profession","bankAccount","bankAccount.country").fire(new OSCEReceiver<List<SpStandardizedPatientProxy>>() {
 
 			@Override
 			public void onSuccess(List<SpStandardizedPatientProxy> response) {
@@ -1793,7 +1793,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				
 				Log.info("finding all standar dized patient whoes data is changed at sp portal to get theird old data");
 				
-				requests.spPortalPersonRequestNonRoo().findAllStandardizedPAtientWhoesDataIsChangedAtSPPortal(listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal).with("anamnesisForm","bankAccount","profession","nationality","bankAccount.country").
+				requests.sPPortalPersonRequest().findAllStandardizedPAtientWhoesDataIsChangedAtSPPortal(listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal).with("anamnesisForm","bankAccount","profession","nationality","bankAccount.country").
 			
 				fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
 
@@ -1843,7 +1843,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				SpStandardizedPatientProxy spStandardizedPatientProxy = listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal.get(currentSPIndexWhoseDataIsReviewing);
 				
 				
-				requests.spStandardizedPatientRequestNonRoo().moveChangedDetailsOfSPFormSPPortal(standardizedPatientProxy.getId(), spStandardizedPatientProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+				requests.spStandardizedPatientRequest().moveChangedDetailsOfSPFormSPPortal(standardizedPatientProxy.getId(), spStandardizedPatientProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 					@Override
 					public void onSuccess(Boolean response) {
@@ -1908,7 +1908,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				SpStandardizedPatientProxy spStandardizedPatientProxy = listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal.get(currentSPIndexWhoseDataIsReviewing);
 				
 				
-				requests.spStandardizedPatientRequestNonRoo().removeSPDetailsFromSPPortal(standardizedPatientProxy.getId(),spStandardizedPatientProxy.getId(),true).fire(new OSCEReceiver<Boolean>() {
+				requests.spStandardizedPatientRequest().removeSPDetailsFromSPPortal(standardizedPatientProxy.getId(),spStandardizedPatientProxy.getId(),true).fire(new OSCEReceiver<Boolean>() {
 
 					@Override
 					public void onSuccess(Boolean response) {
@@ -1991,7 +1991,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			
-			requests.anamnesisChecksValueRequestNonRoo().findAnamnesisChecksValuesByAnamnesisFormAndCheckTitle(anamnesisFormProxy.getId(),anamnesisCheckTitleProxy.getId()).with("anamnesischeck").fire(new OSCEReceiver<List<AnamnesisChecksValueProxy>>() {
+			requests.anamnesisChecksValueRequest().findAnamnesisChecksValuesByAnamnesisFormAndCheckTitle(anamnesisFormProxy.getId(),anamnesisCheckTitleProxy.getId()).with("anamnesischeck").fire(new OSCEReceiver<List<AnamnesisChecksValueProxy>>() {
 
 				@Override
 				public void onSuccess(final List<AnamnesisChecksValueProxy> response1) {
@@ -2002,7 +2002,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 					
 					String anmnesisCheckText = getSPAnamnesisCheckText(response1);
 					
-					requests.spStandardizedPatientRequestNonRoo().findAnamnesisChecksValuesByAnamnesisFormAndCheckTitleText(spAnamnesisFormProxy.getId(),anmnesisCheckText).with("anamnesischeck").fire(new OSCEReceiver<List<SpAnamnesisChecksValueProxy>>() {
+					requests.spStandardizedPatientRequest().findAnamnesisChecksValuesByAnamnesisFormAndCheckTitleText(spAnamnesisFormProxy.getId(),anmnesisCheckText).with("anamnesischeck").fire(new OSCEReceiver<List<SpAnamnesisChecksValueProxy>>() {
 
 						@Override
 						public void onSuccess(List<SpAnamnesisChecksValueProxy> response2) {

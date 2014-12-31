@@ -269,4 +269,14 @@ public class RoleDetailsChecklistTopicSubViewImpl extends Composite implements R
 	public void setChecklistItemProxy(ChecklistItemProxy checklistItemProxy) {
 		this.checklistItemProxy = checklistItemProxy;
 	}
+	
+	@Override
+	public DisclosurePanel getCheckListTopicDisclosurePanel() {
+		return checkListTopicDisclosurePanel;
+	}
+	
+	@Override
+	public Image getArrow() {
+		return arrow;
+	}
 }

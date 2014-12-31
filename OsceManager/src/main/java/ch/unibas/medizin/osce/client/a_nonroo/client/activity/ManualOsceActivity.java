@@ -115,7 +115,7 @@ public class ManualOsceActivity extends AbstractActivity implements ManualOsceVi
 			}
 		});
 		
-		requests.osceRequestNonRoo().findAllOsceBySemesterIdAndCreationType(semesterProxy.getId(), OsceCreationType.Manual).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
+		requests.osceRequest().findAllOsceBySemesterIdAndCreationType(semesterProxy.getId(), OsceCreationType.Manual).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
 
 			@Override
 			public void onSuccess(List<OsceProxy> response) {

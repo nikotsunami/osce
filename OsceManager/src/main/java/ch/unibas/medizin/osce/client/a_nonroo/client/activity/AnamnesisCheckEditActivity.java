@@ -24,10 +24,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.ServerFailure;
-import com.google.gwt.requestfactory.shared.Violation;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
@@ -212,7 +212,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 	private void getQuestionsByselected(final AnamnesisCheckTitleProxy title){
 
 //		if(anamnesisChecktype!=null&&anamnesisChecktype==AnamnesisCheckTypes.QUESTION_TITLE){
-//			requests.anamnesisCheckRequestNonRoo().findAnamnesisChecksByType(AnamnesisCheckTypes.QUESTION_TITLE).with("anamnesisForm","title").fire(new Receiver<List<AnamnesisCheckProxy>>() {
+//			requests.anamnesisCheckRequest().findAnamnesisChecksByType(AnamnesisCheckTypes.QUESTION_TITLE).with("anamnesisForm","title").fire(new Receiver<List<AnamnesisCheckProxy>>() {
 //				public void onFailure(ServerFailure error) {
 //					GWT.log("in AnamnesisCheckEditActivity findAnamnesisChecksByType error = "+error);
 //				}
@@ -224,7 +224,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 //				}
 //			});
 //		}else if(title!=null){
-//			requests.anamnesisCheckRequestNonRoo().findAnamnesisChecksByTitle("", title).with("anamnesisForm","title").fire(new Receiver<List<AnamnesisCheckProxy>>() {
+//			requests.anamnesisCheckRequest().findAnamnesisChecksByTitle("", title).with("anamnesisForm","title").fire(new Receiver<List<AnamnesisCheckProxy>>() {
 //				public void onFailure(ServerFailure error) {
 //					GWT.log("in AnamnesisCheckEditActivity findAnamnesisChecksByType error = "+error);
 //				}
@@ -239,7 +239,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 //				}
 //			});
 //		}
-		requests.anamnesisCheckRequestNonRoo().findAnamnesisChecksBySearchWithAnamnesisCheckTitle("", title).fire(new Receiver<List<AnamnesisCheckProxy>>() {
+		requests.anamnesisCheckRequest().findAnamnesisChecksBySearchWithAnamnesisCheckTitle("", title).fire(new Receiver<List<AnamnesisCheckProxy>>() {
 
 			@Override
 			public void onSuccess(List<AnamnesisCheckProxy> response) {
@@ -264,7 +264,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 
 		
 		if(anamnesisCheck.getSort_order() != null && anamnesisCheck.getSort_order() > 1 && anamnesisCheck.getAnamnesisCheckTitle() !=null ){
-			requests.anamnesisCheckRequestNonRoo().findPreviousAnamnesisCheck(anamnesisCheck.getSort_order(), anamnesisCheck.getAnamnesisCheckTitle()).fire(new Receiver<AnamnesisCheckProxy>() {
+			requests.anamnesisCheckRequest().findPreviousAnamnesisCheck(anamnesisCheck.getSort_order(), anamnesisCheck.getAnamnesisCheckTitle()).fire(new Receiver<AnamnesisCheckProxy>() {
 
 				@Override
 				public void onSuccess(AnamnesisCheckProxy response) {
@@ -310,7 +310,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 				&& anamnesisCheckBefore.getAnamnesisCheckTitle().getId() == anamnesisCheck
 						.getAnamnesisCheckTitle().getId()) {
 			GWT.log("################call oderByPreviousAnamnesisCheck ");
-			requests.anamnesisCheckRequestNonRoo()
+			requests.anamnesisCheckRequest()
 					.oderByPreviousAnamnesisCheck(previousSortOder).using(
 							anamnesisCheck).fire(new Receiver<Void>() {
 
@@ -330,7 +330,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 			System.out.println("sort order--"+previousSortOder);
 			System.out.println("id--"+anamnesisCheck.getId());
 			
-			requests.anamnesisCheckRequestNonRoo().insertAnamnesisCheck(
+			requests.anamnesisCheckRequest().insertAnamnesisCheck(
 					previousSortOder).using(anamnesisCheck).fire(
 					new Receiver<Void>() {
 
@@ -346,7 +346,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 
 								GWT.log(">>>>>>>>>>>>>>>>>>> reSorting call !");
 								requests
-										.anamnesisCheckRequestNonRoo()
+										.anamnesisCheckRequest()
 										.reSorting(
 												anamnesisCheckBefore
 														.getAnamnesisCheckTitle(),
@@ -496,7 +496,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 	}
 	
 	private void saveOrEditAnamnesisCheckTitleInSpportal(AnamnesisCheckProxy anamnesisCheck) {
-		requests.anamnesisCheckRequestNonRoo().saveOrEditAnamnesisCheck(anamnesisCheck).fire(new OSCEReceiver<Boolean>() {
+		requests.anamnesisCheckRequest().saveOrEditAnamnesisCheck(anamnesisCheck).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -509,7 +509,7 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 		
 	}
 	private void reSorting(AnamnesisCheckTitleProxy anamnesisCheckTitle, Integer sortOder){
-		requests.anamnesisCheckRequestNonRoo().reSorting(anamnesisCheckTitle, sortOder+1).fire(new Receiver<Void>() {
+		requests.anamnesisCheckRequest().reSorting(anamnesisCheckTitle, sortOder+1).fire(new Receiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {

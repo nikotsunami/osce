@@ -1,8 +1,8 @@
 package ch.unibas.medizin.osce.client.scaffold.place;
 
 import com.google.gwt.editor.client.HasEditorErrors;
-import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
-import com.google.gwt.requestfactory.shared.EntityProxy;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
+import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.gwt.user.client.ui.IsWidget;
 
 /**

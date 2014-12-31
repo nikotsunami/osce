@@ -1,7 +1,6 @@
 package ch.unibas.medizin.osce.domain;
 
 import static org.apache.commons.lang.StringUtils.defaultString;
-
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -11,27 +10,29 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.transaction.annotation.Transactional;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.bean.ObjectFactory;
 import ch.unibas.medizin.osce.server.bean.Oscedata;
@@ -67,13 +68,11 @@ import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
-
-import com.google.gwt.requestfactory.server.RequestFactoryServlet;
+import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
 import com.itextpdf.text.pdf.BarcodeQRCode;
 
-@RooJavaBean
-@RooToString
-@RooEntity
+@Entity
+@Configurable
 public class StandardizedRole {
 
 	@PersistenceContext(unitName="persistenceUnit")
@@ -1146,5 +1145,357 @@ public class StandardizedRole {
 		}
 		return null;
 	}
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            StandardizedRole attached = StandardizedRole.findStandardizedRole(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public StandardizedRole merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        StandardizedRole merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new StandardizedRole().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countStandardizedRoles() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM StandardizedRole o", Long.class).getSingleResult();
+    }
+
+	public static List<StandardizedRole> findAllStandardizedRoles() {
+        return entityManager().createQuery("SELECT o FROM StandardizedRole o", StandardizedRole.class).getResultList();
+    }
+
+	public static StandardizedRole findStandardizedRole(Long id) {
+        if (id == null) return null;
+        return entityManager().find(StandardizedRole.class, id);
+    }
+
+	public static List<StandardizedRole> findStandardizedRoleEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM StandardizedRole o", StandardizedRole.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Active: ").append(getActive()).append(", ");
+        sb.append("AdvancedSearchCriteria: ").append(getAdvancedSearchCriteria() == null ? "null" : getAdvancedSearchCriteria().size()).append(", ");
+        sb.append("CaseDescription: ").append(getCaseDescription()).append(", ");
+        sb.append("CheckList: ").append(getCheckList()).append(", ");
+        sb.append("Factor: ").append(getFactor()).append(", ");
+        sb.append("Files: ").append(getFiles() == null ? "null" : getFiles().size()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("Keywords: ").append(getKeywords() == null ? "null" : getKeywords().size()).append(", ");
+        sb.append("LongName: ").append(getLongName()).append(", ");
+        sb.append("MainSkills: ").append(getMainSkills() == null ? "null" : getMainSkills().size()).append(", ");
+        sb.append("MainVersion: ").append(getMainVersion()).append(", ");
+        sb.append("MinorSkills: ").append(getMinorSkills() == null ? "null" : getMinorSkills().size()).append(", ");
+        sb.append("OscePosts: ").append(getOscePosts() == null ? "null" : getOscePosts().size()).append(", ");
+        sb.append("RoleParticipants: ").append(getRoleParticipants() == null ? "null" : getRoleParticipants().size()).append(", ");
+        sb.append("RoleScript: ").append(getRoleScript()).append(", ");
+        sb.append("RoleSubItemValue: ").append(getRoleSubItemValue() == null ? "null" : getRoleSubItemValue().size()).append(", ");
+        sb.append("RoleTableItemValue: ").append(getRoleTableItemValue() == null ? "null" : getRoleTableItemValue().size()).append(", ");
+        sb.append("RoleTemplate: ").append(getRoleTemplate()).append(", ");
+        sb.append("RoleTopic: ").append(getRoleTopic()).append(", ");
+        sb.append("RoleType: ").append(getRoleType()).append(", ");
+        sb.append("ShortName: ").append(getShortName()).append(", ");
+        sb.append("SimpleSearchCriteria: ").append(getSimpleSearchCriteria() == null ? "null" : getSimpleSearchCriteria().size()).append(", ");
+        sb.append("StudyYear: ").append(getStudyYear()).append(", ");
+        sb.append("SubVersion: ").append(getSubVersion()).append(", ");
+        sb.append("Sum: ").append(getSum()).append(", ");
+        sb.append("TopicFactor: ").append(getTopicFactor()).append(", ");
+        sb.append("TrainingSuggestions: ").append(getTrainingSuggestions() == null ? "null" : getTrainingSuggestions().size()).append(", ");
+        sb.append("Trainings: ").append(getTrainings() == null ? "null" : getTrainings().size()).append(", ");
+        sb.append("UsedMaterials: ").append(getUsedMaterials() == null ? "null" : getUsedMaterials().size()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
+
+	public String getShortName() {
+        return this.shortName;
+    }
+
+	public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
+
+	public String getLongName() {
+        return this.longName;
+    }
+
+	public void setLongName(String longName) {
+        this.longName = longName;
+    }
+
+	public String getCaseDescription() {
+        return this.caseDescription;
+    }
+
+	public void setCaseDescription(String caseDescription) {
+        this.caseDescription = caseDescription;
+    }
+
+	public String getRoleScript() {
+        return this.roleScript;
+    }
+
+	public void setRoleScript(String roleScript) {
+        this.roleScript = roleScript;
+    }
+
+	public RoleTypes getRoleType() {
+        return this.roleType;
+    }
+
+	public void setRoleType(RoleTypes roleType) {
+        this.roleType = roleType;
+    }
+
+	public Boolean getActive() {
+        return this.active;
+    }
+
+	public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+	public RoleTopic getRoleTopic() {
+        return this.roleTopic;
+    }
+
+	public void setRoleTopic(RoleTopic roleTopic) {
+        this.roleTopic = roleTopic;
+    }
+
+	public Integer getFactor() {
+        return this.factor;
+    }
+
+	public void setFactor(Integer factor) {
+        this.factor = factor;
+    }
+
+	public Integer getSum() {
+        return this.sum;
+    }
+
+	public void setSum(Integer sum) {
+        this.sum = sum;
+    }
+
+	public Set<Training> getTrainings() {
+        return this.trainings;
+    }
+
+	public void setTrainings(Set<Training> trainings) {
+        this.trainings = trainings;
+    }
+
+	public Set<TrainingSuggestion> getTrainingSuggestions() {
+        return this.trainingSuggestions;
+    }
+
+	public void setTrainingSuggestions(Set<TrainingSuggestion> trainingSuggestions) {
+        this.trainingSuggestions = trainingSuggestions;
+    }
+
+	public StudyYears getStudyYear() {
+        return this.studyYear;
+    }
+
+	public void setStudyYear(StudyYears studyYear) {
+        this.studyYear = studyYear;
+    }
+
+	public Integer getMainVersion() {
+        return this.mainVersion;
+    }
+
+	public void setMainVersion(Integer mainVersion) {
+        this.mainVersion = mainVersion;
+    }
+
+	public Integer getSubVersion() {
+        return this.subVersion;
+    }
+
+	public void setSubVersion(Integer subVersion) {
+        this.subVersion = subVersion;
+    }
+
+	public RoleTopicFactor getTopicFactor() {
+        return this.topicFactor;
+    }
+
+	public void setTopicFactor(RoleTopicFactor topicFactor) {
+        this.topicFactor = topicFactor;
+    }
+
+	public Set<RoleParticipant> getRoleParticipants() {
+        return this.roleParticipants;
+    }
+
+	public void setRoleParticipants(Set<RoleParticipant> roleParticipants) {
+        this.roleParticipants = roleParticipants;
+    }
+
+	public Set<File> getFiles() {
+        return this.files;
+    }
+
+	public void setFiles(Set<File> files) {
+        this.files = files;
+    }
+
+	public StandardizedRole getPreviousVersion() {
+        return this.previousVersion;
+    }
+
+	public void setPreviousVersion(StandardizedRole previousVersion) {
+        this.previousVersion = previousVersion;
+    }
+
+	public Set<Keyword> getKeywords() {
+        return this.keywords;
+    }
+
+	public void setKeywords(Set<Keyword> keywords) {
+        this.keywords = keywords;
+    }
+
+	public Set<AdvancedSearchCriteria> getAdvancedSearchCriteria() {
+        return this.advancedSearchCriteria;
+    }
+
+	public void setAdvancedSearchCriteria(Set<AdvancedSearchCriteria> advancedSearchCriteria) {
+        this.advancedSearchCriteria = advancedSearchCriteria;
+    }
+
+	public Set<SimpleSearchCriteria> getSimpleSearchCriteria() {
+        return this.simpleSearchCriteria;
+    }
+
+	public void setSimpleSearchCriteria(Set<SimpleSearchCriteria> simpleSearchCriteria) {
+        this.simpleSearchCriteria = simpleSearchCriteria;
+    }
+
+	public Set<RoleTableItemValue> getRoleTableItemValue() {
+        return this.roleTableItemValue;
+    }
+
+	public void setRoleTableItemValue(Set<RoleTableItemValue> roleTableItemValue) {
+        this.roleTableItemValue = roleTableItemValue;
+    }
+
+	public Set<RoleSubItemValue> getRoleSubItemValue() {
+        return this.roleSubItemValue;
+    }
+
+	public void setRoleSubItemValue(Set<RoleSubItemValue> roleSubItemValue) {
+        this.roleSubItemValue = roleSubItemValue;
+    }
+
+	public CheckList getCheckList() {
+        return this.checkList;
+    }
+
+	public void setCheckList(CheckList checkList) {
+        this.checkList = checkList;
+    }
+
+	public Set<OscePost> getOscePosts() {
+        return this.oscePosts;
+    }
+
+	public void setOscePosts(Set<OscePost> oscePosts) {
+        this.oscePosts = oscePosts;
+    }
+
+	public Set<MinorSkill> getMinorSkills() {
+        return this.minorSkills;
+    }
+
+	public void setMinorSkills(Set<MinorSkill> minorSkills) {
+        this.minorSkills = minorSkills;
+    }
+
+	public Set<MainSkill> getMainSkills() {
+        return this.mainSkills;
+    }
+
+	public void setMainSkills(Set<MainSkill> mainSkills) {
+        this.mainSkills = mainSkills;
+    }
+
+	public Set<UsedMaterial> getUsedMaterials() {
+        return this.usedMaterials;
+    }
+
+	public void setUsedMaterials(Set<UsedMaterial> usedMaterials) {
+        this.usedMaterials = usedMaterials;
+    }
+
+	public RoleTemplate getRoleTemplate() {
+        return this.roleTemplate;
+    }
+
+	public void setRoleTemplate(RoleTemplate roleTemplate) {
+        this.roleTemplate = roleTemplate;
+    }
 }
 

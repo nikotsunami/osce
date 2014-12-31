@@ -13,7 +13,7 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.editor.client.Editor;
-import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;

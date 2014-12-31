@@ -4,33 +4,33 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.Version;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
 import org.apache.log4j.Logger;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.transaction.annotation.Transactional;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.Sorting;
+import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
 
-import com.google.gwt.requestfactory.server.RequestFactoryServlet;
-
-@RooJavaBean
-@RooToString
-@RooEntity
+@Configurable
+@Entity
 public class Doctor {
 	
 	private static Logger Log = Logger.getLogger(Doctor.class);
@@ -211,5 +211,214 @@ public class Doctor {
     {
     	HttpSession session = RequestFactoryServlet.getThreadLocalRequest().getSession();
 		session.setAttribute(OsMaFilePathConstant.EXAMINER_LIST_QR, examinerIdList);
+    }
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            Doctor attached = Doctor.findDoctor(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public Doctor merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        Doctor merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new Doctor().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countDoctors() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM Doctor o", Long.class).getSingleResult();
+    }
+
+	public static List<Doctor> findAllDoctors() {
+        return entityManager().createQuery("SELECT o FROM Doctor o", Doctor.class).getResultList();
+    }
+
+	public static Doctor findDoctor(Long id) {
+        if (id == null) return null;
+        return entityManager().find(Doctor.class, id);
+    }
+
+	public static List<Doctor> findDoctorEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Doctor o", Doctor.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public Gender getGender() {
+        return this.gender;
+    }
+
+	public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+	public String getTitle() {
+        return this.title;
+    }
+
+	public void setTitle(String title) {
+        this.title = title;
+    }
+
+	public String getName() {
+        return this.name;
+    }
+
+	public void setName(String name) {
+        this.name = name;
+    }
+
+	public String getPreName() {
+        return this.preName;
+    }
+
+	public void setPreName(String preName) {
+        this.preName = preName;
+    }
+
+	public String getEmail() {
+        return this.email;
+    }
+
+	public void setEmail(String email) {
+        this.email = email;
+    }
+
+	public String getTelephone() {
+        return this.telephone;
+    }
+
+	public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+	public Clinic getClinic() {
+        return this.clinic;
+    }
+
+	public void setClinic(Clinic clinic) {
+        this.clinic = clinic;
+    }
+
+	public Office getOffice() {
+        return this.office;
+    }
+
+	public void setOffice(Office office) {
+        this.office = office;
+    }
+
+	public Boolean getIsActive() {
+        return this.isActive;
+    }
+
+	public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+	public Specialisation getSpecialisation() {
+        return this.specialisation;
+    }
+
+	public void setSpecialisation(Specialisation specialisation) {
+        this.specialisation = specialisation;
+    }
+
+	public Set<Assignment> getAssignments() {
+        return this.assignments;
+    }
+
+	public void setAssignments(Set<Assignment> assignments) {
+        this.assignments = assignments;
+    }
+
+	public Set<RoleParticipant> getRoleParticipants() {
+        return this.roleParticipants;
+    }
+
+	public void setRoleParticipants(Set<RoleParticipant> roleParticipants) {
+        this.roleParticipants = roleParticipants;
+    }
+
+	public List<PostAnalysis> getPostAnalysis() {
+        return this.postAnalysis;
+    }
+
+	public void setPostAnalysis(List<PostAnalysis> postAnalysis) {
+        this.postAnalysis = postAnalysis;
+    }
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Assignments: ").append(getAssignments() == null ? "null" : getAssignments().size()).append(", ");
+        sb.append("Clinic: ").append(getClinic()).append(", ");
+        sb.append("Email: ").append(getEmail()).append(", ");
+        sb.append("Gender: ").append(getGender()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("IsActive: ").append(getIsActive()).append(", ");
+        sb.append("Name: ").append(getName()).append(", ");
+        sb.append("Office: ").append(getOffice()).append(", ");
+        sb.append("PostAnalysis: ").append(getPostAnalysis() == null ? "null" : getPostAnalysis().size()).append(", ");
+        sb.append("PreName: ").append(getPreName()).append(", ");
+        sb.append("RoleParticipants: ").append(getRoleParticipants() == null ? "null" : getRoleParticipants().size()).append(", ");
+        sb.append("Specialisation: ").append(getSpecialisation()).append(", ");
+        sb.append("Telephone: ").append(getTelephone()).append(", ");
+        sb.append("Title: ").append(getTitle()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
     }
 }

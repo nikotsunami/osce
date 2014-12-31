@@ -6,32 +6,33 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.Version;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
-
 import org.apache.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-
 import ch.unibas.medizin.osce.domain.spportal.SPPortalPerson;
 import ch.unibas.medizin.osce.domain.spportal.SpOsceDate;
 import ch.unibas.medizin.osce.domain.spportal.SpPatientInSemester;
@@ -44,9 +45,8 @@ import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.SurveyStatus;
 
-@RooJavaBean
-@RooToString
-@RooEntity
+@Entity
+@Configurable
 public class Semester {
 
 	@PersistenceContext(unitName="persistenceUnit")
@@ -409,7 +409,7 @@ public class Semester {
 		try{
 			
 			@SuppressWarnings("deprecation")
-			HttpServletRequest request = com.google.gwt.requestfactory.server.RequestFactoryServlet.getThreadLocalRequest();
+			HttpServletRequest request = com.google.web.bindery.requestfactory.server.RequestFactoryServlet.getThreadLocalRequest();
 			
 			HttpSession session = request.getSession();
 			
@@ -1112,5 +1112,205 @@ public class Semester {
 			return null;
 		}
 	}
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            Semester attached = Semester.findSemester(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public Semester merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        Semester merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new Semester().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countSemesters() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM Semester o", Long.class).getSingleResult();
+    }
+
+	public static List<Semester> findAllSemesters() {
+        return entityManager().createQuery("SELECT o FROM Semester o", Semester.class).getResultList();
+    }
+
+	public static Semester findSemester(Long id) {
+        if (id == null) return null;
+        return entityManager().find(Semester.class, id);
+    }
+
+	public static List<Semester> findSemesterEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Semester o", Semester.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Administrators: ").append(getAdministrators() == null ? "null" : getAdministrators().size()).append(", ");
+        sb.append("CalYear: ").append(getCalYear()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("MaximalYearEarnings: ").append(getMaximalYearEarnings()).append(", ");
+        sb.append("OsceDates: ").append(getOsceDates() == null ? "null" : getOsceDates().size()).append(", ");
+        sb.append("Osces: ").append(getOsces() == null ? "null" : getOsces().size()).append(", ");
+        sb.append("PatientsInSemester: ").append(getPatientsInSemester() == null ? "null" : getPatientsInSemester().size()).append(", ");
+        sb.append("PreparationRing: ").append(getPreparationRing()).append(", ");
+        sb.append("PriceStandardizedPartient: ").append(getPriceStandardizedPartient()).append(", ");
+        sb.append("Pricestatist: ").append(getPricestatist()).append(", ");
+        sb.append("Semester: ").append(getSemester()).append(", ");
+        sb.append("SurveyStatus: ").append(getSurveyStatus()).append(", ");
+        sb.append("TrainingBlocks: ").append(getTrainingBlocks() == null ? "null" : getTrainingBlocks().size()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
+
+	public Semesters getSemester() {
+        return this.semester;
+    }
+
+	public void setSemester(Semesters semester) {
+        this.semester = semester;
+    }
+
+	public Integer getCalYear() {
+        return this.calYear;
+    }
+
+	public void setCalYear(Integer calYear) {
+        this.calYear = calYear;
+    }
+
+	public Double getMaximalYearEarnings() {
+        return this.maximalYearEarnings;
+    }
+
+	public void setMaximalYearEarnings(Double maximalYearEarnings) {
+        this.maximalYearEarnings = maximalYearEarnings;
+    }
+
+	public Double getPricestatist() {
+        return this.pricestatist;
+    }
+
+	public void setPricestatist(Double pricestatist) {
+        this.pricestatist = pricestatist;
+    }
+
+	public Double getPriceStandardizedPartient() {
+        return this.priceStandardizedPartient;
+    }
+
+	public void setPriceStandardizedPartient(Double priceStandardizedPartient) {
+        this.priceStandardizedPartient = priceStandardizedPartient;
+    }
+
+	public Set<Administrator> getAdministrators() {
+        return this.administrators;
+    }
+
+	public void setAdministrators(Set<Administrator> administrators) {
+        this.administrators = administrators;
+    }
+
+	public Set<Osce> getOsces() {
+        return this.osces;
+    }
+
+	public void setOsces(Set<Osce> osces) {
+        this.osces = osces;
+    }
+
+	public Set<PatientInSemester> getPatientsInSemester() {
+        return this.patientsInSemester;
+    }
+
+	public void setPatientsInSemester(Set<PatientInSemester> patientsInSemester) {
+        this.patientsInSemester = patientsInSemester;
+    }
+
+	public Set<TrainingBlock> getTrainingBlocks() {
+        return this.trainingBlocks;
+    }
+
+	public void setTrainingBlocks(Set<TrainingBlock> trainingBlocks) {
+        this.trainingBlocks = trainingBlocks;
+    }
+
+	public Set<OsceDate> getOsceDates() {
+        return this.osceDates;
+    }
+
+	public void setOsceDates(Set<OsceDate> osceDates) {
+        this.osceDates = osceDates;
+    }
+
+	public Integer getPreparationRing() {
+        return this.preparationRing;
+    }
+
+	public void setPreparationRing(Integer preparationRing) {
+        this.preparationRing = preparationRing;
+    }
+
+	public SurveyStatus getSurveyStatus() {
+        return this.surveyStatus;
+    }
+
+	public void setSurveyStatus(SurveyStatus surveyStatus) {
+        this.surveyStatus = surveyStatus;
+    }
 }
 

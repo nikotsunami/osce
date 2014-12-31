@@ -54,8 +54,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.ServerFailure;
-import com.google.gwt.requestfactory.shared.Violation;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -202,7 +202,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 							{
 								
 								showApplicationLoading(true);
-								requests.answerRequestNonRoo().retrieveCalulatedData(osceProxy.getId(),0).fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
+								requests.answerRequest().retrieveCalulatedData(osceProxy.getId(),0).fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
 
 									@Override
 									public void onSuccess(List<MapEnvelopProxy> response) {
@@ -217,7 +217,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 							else if(analysisType.equals(AnalysisType.post_analysys))
 							{
 								showApplicationLoading(true);
-								requests.answerRequestNonRoo().retrieveCalulatedData(osceProxy.getId(),1).fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
+								requests.answerRequest().retrieveCalulatedData(osceProxy.getId(),1).fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
 
 									@Override
 									public void onSuccess(List<MapEnvelopProxy> response) {
@@ -513,7 +513,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			else if(analysisType.equals(AnalysisType.item_analysis) && statisticalEvaluationDetailSequenceViewImpl.isPostPanel())
 			{
 				Log.info("create all item panel");
-				/*requests.answerRequestNonRoo().retrieveDistinctQuestion(statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy().getId()).with("checkListOptions").fire(new OSCEReceiver<List<ChecklistQuestionProxy>>() {
+				/*requests.answerRequest().retrieveDistinctQuestion(statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy().getId()).with("checkListOptions").fire(new OSCEReceiver<List<ChecklistQuestionProxy>>() {
 
 					@Override
 					public void onSuccess(List<ChecklistQuestionProxy> response) {
@@ -526,7 +526,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 					}
 				});*/
 				
-				requests.answerRequestNonRoo().retrieveDistinctQuestionItem(statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy().getId()).with("checkListOptions").fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+				requests.answerRequest().retrieveDistinctQuestionItem(statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy().getId()).with("checkListOptions").fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
 
 					@Override
 					public void onSuccess(List<ChecklistItemProxy> response) {
@@ -551,7 +551,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 						final List<OscePostProxy> OscePostProxies=response.getOscePosts();
 						statisticalEvaluationDetailSequenceViewImpl.getDisclosureVP().clear();
 						
-						requests.checklistItemRequestNonRoo().findChecklistQuestionByOscePost(response.getId()).fire(new OSCEReceiver<List<OscePostWiseQuestionProxy>>() {
+						requests.checklistItemRequest().findChecklistQuestionByOscePost(response.getId()).fire(new OSCEReceiver<List<OscePostWiseQuestionProxy>>() {
 
 							@Override
 							public void onSuccess(List<OscePostWiseQuestionProxy> questionProxyList) {
@@ -581,7 +581,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 				//by spec
 				
 				Log.info("create all item panel");
-				requests.answerRequestNonRoo().retrieveDistinctExaminerByItem(statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy().getId()).with("checkListOptions").fire(new OSCEReceiver<List<DoctorProxy>>() {
+				requests.answerRequest().retrieveDistinctExaminerByItem(statisticalEvaluationDetailSequenceViewImpl.getOscePostProxy().getId()).with("checkListOptions").fire(new OSCEReceiver<List<DoctorProxy>>() {
 
 					@Override
 					public void onSuccess(List<DoctorProxy> response) {
@@ -1028,7 +1028,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 		public void parcourDisclosurePanelOpen(final StatisticalEvaluationDetailSequenceViewImpl statisticalEvaluationDetailSequenceViewImpl) {
 			Log.info("parcourDisclosurePanelOpen");
 			
-			requests.answerRequestNonRoo().retrieveStudent(statisticalEvaluationDetailSequenceViewImpl.getOsceDayProxy().getId(),  statisticalEvaluationDetailSequenceViewImpl.getCourseProxy().getId()).with("student").fire(new OSCEReceiver<List<AnswerProxy>>() {
+			requests.answerRequest().retrieveStudent(statisticalEvaluationDetailSequenceViewImpl.getOsceDayProxy().getId(),  statisticalEvaluationDetailSequenceViewImpl.getCourseProxy().getId()).with("student").fire(new OSCEReceiver<List<AnswerProxy>>() {
 
 				@Override
 				public void onSuccess(List<AnswerProxy> response) {
@@ -1110,7 +1110,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 			if(analysisType.equals(AnalysisType.item_analysis))
 			{
 				showApplicationLoading(true);
-				requests.answerRequestNonRoo().calculate(osceProxy.getId(),0,missingItemId,null,null,null,null).with("").fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
+				requests.answerRequest().calculate(osceProxy.getId(),0,missingItemId,null,null,null,null).with("").fire(new OSCEReceiver<List<MapEnvelopProxy>>() {
 	
 					@Override
 					public void onSuccess(List<MapEnvelopProxy> response) {
@@ -1242,7 +1242,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 						}
 					}
 				
-					requests.answerRequestNonRoo().calculate(osceProxy.getId(), 1, null, examinerId, addPoint, postId, impressionQueId).fire(new OSCEReceiver<List<MapEnvelopProxy>>() 
+					requests.answerRequest().calculate(osceProxy.getId(), 1, null, examinerId, addPoint, postId, impressionQueId).fire(new OSCEReceiver<List<MapEnvelopProxy>>() 
 					{
 
 						@Override
@@ -1502,7 +1502,7 @@ StatisticalEvaluationDetailsView.Delegate,StatisticalEvaluationDetailSequenceVie
 		@Override
 		public void graphBtnClicked(Long oscePostId) {
 			showApplicationLoading(true);
-			requests.answerRequestNonRoo().createGraph(oscePostId).fire(new OSCEReceiver<String>() {
+			requests.answerRequest().createGraph(oscePostId).fire(new OSCEReceiver<String>() {
 
 				@Override
 				public void onSuccess(String response) {

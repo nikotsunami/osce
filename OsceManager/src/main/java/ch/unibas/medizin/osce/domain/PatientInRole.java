@@ -6,26 +6,26 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
+import javax.persistence.Version;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
-
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
 
-@RooJavaBean
-@RooToString
-@RooEntity
+@Configurable
+@Entity
 public class PatientInRole {
 	
 	@PersistenceContext(unitName="persistenceUnit")
@@ -739,4 +739,159 @@ public class PatientInRole {
  		else
  			return resultList;
 	}
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            PatientInRole attached = PatientInRole.findPatientInRole(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public PatientInRole merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        PatientInRole merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new PatientInRole().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countPatientInRoles() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM PatientInRole o", Long.class).getSingleResult();
+    }
+
+	public static List<PatientInRole> findAllPatientInRoles() {
+        return entityManager().createQuery("SELECT o FROM PatientInRole o", PatientInRole.class).getResultList();
+    }
+
+	public static PatientInRole findPatientInRole(Long id) {
+        if (id == null) return null;
+        return entityManager().find(PatientInRole.class, id);
+    }
+
+	public static List<PatientInRole> findPatientInRoleEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM PatientInRole o", PatientInRole.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public PatientInSemester getPatientInSemester() {
+        return this.patientInSemester;
+    }
+
+	public void setPatientInSemester(PatientInSemester patientInSemester) {
+        this.patientInSemester = patientInSemester;
+    }
+
+	public OscePost getOscePost() {
+        return this.oscePost;
+    }
+
+	public void setOscePost(OscePost oscePost) {
+        this.oscePost = oscePost;
+    }
+
+	public Boolean getFit_criteria() {
+        return this.fit_criteria;
+    }
+
+	public void setFit_criteria(Boolean fit_criteria) {
+        this.fit_criteria = fit_criteria;
+    }
+
+	public Boolean getIs_backup() {
+        return this.is_backup;
+    }
+
+	public void setIs_backup(Boolean is_backup) {
+        this.is_backup = is_backup;
+    }
+
+	public Boolean getIs_first_in_sequence() {
+        return this.is_first_in_sequence;
+    }
+
+	public void setIs_first_in_sequence(Boolean is_first_in_sequence) {
+        this.is_first_in_sequence = is_first_in_sequence;
+    }
+
+	public Boolean getIsSupportive() {
+        return this.isSupportive;
+    }
+
+	public void setIsSupportive(Boolean isSupportive) {
+        this.isSupportive = isSupportive;
+    }
+
+	public Set<Assignment> getAssignments() {
+        return this.assignments;
+    }
+
+	public void setAssignments(Set<Assignment> assignments) {
+        this.assignments = assignments;
+    }
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Assignments: ").append(getAssignments() == null ? "null" : getAssignments().size()).append(", ");
+        sb.append("Fit_criteria: ").append(getFit_criteria()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("IsSupportive: ").append(getIsSupportive()).append(", ");
+        sb.append("Is_backup: ").append(getIs_backup()).append(", ");
+        sb.append("Is_first_in_sequence: ").append(getIs_first_in_sequence()).append(", ");
+        sb.append("OscePost: ").append(getOscePost()).append(", ");
+        sb.append("PatientInSemester: ").append(getPatientInSemester()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
 }

@@ -9,31 +9,32 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
+import javax.persistence.Version;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
-
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.ExcelUtil;
 import ch.unibas.medizin.osce.server.util.file.QwtUtil;
@@ -46,9 +47,8 @@ import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.TimeBell;
 
 
-@RooJavaBean
-@RooToString
-@RooEntity(finders = { "findAssignmentsByOscePostRoomAndOsceDayAndTypeAndSequenceNumber" })
+@Configurable
+@Entity
 public class Assignment {
 
 	@PersistenceContext(unitName="persistenceUnit")
@@ -3625,4 +3625,209 @@ public class Assignment {
 		 
 		 return timeList;
 	 }
+
+	public static TypedQuery<Assignment> findAssignmentsByOscePostRoomAndOsceDayAndTypeAndSequenceNumber(OscePostRoom oscePostRoom, OsceDay osceDay, AssignmentTypes type, Integer sequenceNumber) {
+        if (oscePostRoom == null) throw new IllegalArgumentException("The oscePostRoom argument is required");
+        if (osceDay == null) throw new IllegalArgumentException("The osceDay argument is required");
+        if (type == null) throw new IllegalArgumentException("The type argument is required");
+        if (sequenceNumber == null) throw new IllegalArgumentException("The sequenceNumber argument is required");
+        EntityManager em = Assignment.entityManager();
+        TypedQuery<Assignment> q = em.createQuery("SELECT o FROM Assignment AS o WHERE o.oscePostRoom = :oscePostRoom AND o.osceDay = :osceDay AND o.type = :type AND o.sequenceNumber = :sequenceNumber", Assignment.class);
+        q.setParameter("oscePostRoom", oscePostRoom);
+        q.setParameter("osceDay", osceDay);
+        q.setParameter("type", type);
+        q.setParameter("sequenceNumber", sequenceNumber);
+        return q;
+    }
+
+	public AssignmentTypes getType() {
+        return this.type;
+    }
+
+	public void setType(AssignmentTypes type) {
+        this.type = type;
+    }
+
+	public Date getTimeStart() {
+        return this.timeStart;
+    }
+
+	public void setTimeStart(Date timeStart) {
+        this.timeStart = timeStart;
+    }
+
+	public Date getTimeEnd() {
+        return this.timeEnd;
+    }
+
+	public void setTimeEnd(Date timeEnd) {
+        this.timeEnd = timeEnd;
+    }
+
+	public OsceDay getOsceDay() {
+        return this.osceDay;
+    }
+
+	public void setOsceDay(OsceDay osceDay) {
+        this.osceDay = osceDay;
+    }
+
+	public OscePostRoom getOscePostRoom() {
+        return this.oscePostRoom;
+    }
+
+	public void setOscePostRoom(OscePostRoom oscePostRoom) {
+        this.oscePostRoom = oscePostRoom;
+    }
+
+	public StudentOsces getOsceStudent() {
+        return this.osceStudent;
+    }
+
+	public void setOsceStudent(StudentOsces osceStudent) {
+        this.osceStudent = osceStudent;
+    }
+
+	public Student getStudent() {
+        return this.student;
+    }
+
+	public void setStudent(Student student) {
+        this.student = student;
+    }
+
+	public PatientInRole getPatientInRole() {
+        return this.patientInRole;
+    }
+
+	public void setPatientInRole(PatientInRole patientInRole) {
+        this.patientInRole = patientInRole;
+    }
+
+	public Doctor getExaminer() {
+        return this.examiner;
+    }
+
+	public void setExaminer(Doctor examiner) {
+        this.examiner = examiner;
+    }
+
+	public Integer getSequenceNumber() {
+        return this.sequenceNumber;
+    }
+
+	public void setSequenceNumber(Integer sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+	public Integer getRotationNumber() {
+        return this.rotationNumber;
+    }
+
+	public void setRotationNumber(Integer rotationNumber) {
+        this.rotationNumber = rotationNumber;
+    }
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Examiner: ").append(getExaminer()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("OsceDay: ").append(getOsceDay()).append(", ");
+        sb.append("OscePostRoom: ").append(getOscePostRoom()).append(", ");
+        sb.append("OsceStudent: ").append(getOsceStudent()).append(", ");
+        sb.append("PatientInRole: ").append(getPatientInRole()).append(", ");
+        sb.append("RotationNumber: ").append(getRotationNumber()).append(", ");
+        sb.append("SequenceNumber: ").append(getSequenceNumber()).append(", ");
+        sb.append("Student: ").append(getStudent()).append(", ");
+        sb.append("TimeEnd: ").append(getTimeEnd()).append(", ");
+        sb.append("TimeStart: ").append(getTimeStart()).append(", ");
+        sb.append("Type: ").append(getType()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            Assignment attached = Assignment.findAssignment(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public Assignment merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        Assignment merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new Assignment().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countAssignments() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM Assignment o", Long.class).getSingleResult();
+    }
+
+	public static List<Assignment> findAllAssignments() {
+        return entityManager().createQuery("SELECT o FROM Assignment o", Assignment.class).getResultList();
+    }
+
+	public static Assignment findAssignment(Long id) {
+        if (id == null) return null;
+        return entityManager().find(Assignment.class, id);
+    }
+
+	public static List<Assignment> findAssignmentEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Assignment o", Assignment.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
 } 

@@ -29,10 +29,10 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
-import com.google.gwt.requestfactory.shared.ServerFailure;
-import com.google.gwt.requestfactory.shared.Violation;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -271,12 +271,12 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 	
 	protected Request<List<ScarProxy>> createRangeRequest(String name, Range range) {
 		//return requests.scarRequest().findScarEntries(range.getStart(), range.getLength());
-		return requests.scarRequestNonRoo().findScarEntriesByName(name, range.getStart(), range.getLength());
+		return requests.scarRequest().findScarEntriesByName(name, range.getStart(), range.getLength());
 	}
 
 	protected void fireCountRequest(String name, Receiver<Long> callback) {
 		//requests.scarRequest().countScars().fire(callback);
-		requests.scarRequestNonRoo().countScarsByName(name).fire(callback);
+		requests.scarRequest().countScarsByName(name).fire(callback);
 	}
 
 	private void setTable(CellTable<ScarProxy> table) {

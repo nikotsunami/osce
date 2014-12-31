@@ -7,7 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.ClinicProxy;
 import ch.unibas.medizin.osce.client.managed.request.DoctorProxy;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface ClinicEditView extends IsWidget {

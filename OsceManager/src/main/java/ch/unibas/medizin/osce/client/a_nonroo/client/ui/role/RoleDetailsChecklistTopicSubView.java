@@ -5,6 +5,8 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.ItemType;
 import ch.unibas.medizin.osce.shared.OptionType;
 
+import com.google.gwt.user.client.ui.DisclosurePanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -37,5 +39,9 @@ public interface RoleDetailsChecklistTopicSubView extends IsWidget {
 	public ChecklistItemProxy getChecklistItemProxy();
 
 	public void setChecklistItemProxy(ChecklistItemProxy checklistItemProxy);
+
+	public DisclosurePanel getCheckListTopicDisclosurePanel();
+
+	public Image getArrow();
 
 }

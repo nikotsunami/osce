@@ -11,7 +11,7 @@ import ch.unibas.medizin.osce.client.style.widgets.richtext.RichTextToolbar;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.editor.client.Editor;
-import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;

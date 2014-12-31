@@ -7,7 +7,7 @@ import ch.unibas.medizin.osce.client.managed.request.TaskProxy;
 import ch.unibas.medizin.osce.shared.StudyYears;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.google.gwt.user.client.ui.IsWidget;
 
 public interface OsceEditView extends IsWidget {

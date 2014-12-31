@@ -27,7 +27,6 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
-import ch.unibas.medizin.osce.shared.scaffold.RoleTemplateRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -44,10 +43,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
-import com.google.gwt.requestfactory.shared.ServerFailure;
-import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -65,6 +60,10 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 
 public class RoleScriptTemplateActivity extends AbstractActivity implements
 		RoleScriptTemplateView.Presenter, RoleScriptTemplateView.Delegate {
@@ -89,7 +88,7 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 	int y;
 	//private CellTable<RoleTemplateProxy> table;
 	private SingleSelectionModel<RoleTemplateProxy> selectionModel;
-	private RoleTemplateRequestNonRoo requestAdvSeaCritStd;
+	private RoleTemplateRequest requestAdvSeaCritStd;
 	private List<RoleTemplateProxy> searchCriteria = new ArrayList<RoleTemplateProxy>();
 
 	/** List of fields that should be searched for the quickSearchTerm */
@@ -400,7 +399,7 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 
 	protected void fireCountRequest(String name, Receiver<Long> callback) {
 		// requests.scarRequest().countScars().fire(callback);
-		requests.roleTemplateRequestNonRoo()
+		requests.roleTemplateRequest()
 				.countRoleTemplateByName(quickSearchTerm, searchThrough)
 				.fire(callback);
 	}
@@ -476,7 +475,7 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 			Range range) {
 		// return requests.scarRequest().findScarEntries(range.getStart(),
 		// range.getLength());
-		return requests.roleTemplateRequestNonRoo().findRoleTemplateByName(
+		return requests.roleTemplateRequest().findRoleTemplateByName(
 				sortname, sortorder, quickSearchTerm, searchThrough,
 				range.getStart(), range.getLength());
 	}
@@ -490,7 +489,7 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 	// @SuppressWarnings({ "deprecation" })
 	// protected void onRangeChanged() {
 	// // TODO: some bug about request
-	// requestAdvSeaCritStd = requests.roleTemplateRequestNonRoo();
+	// requestAdvSeaCritStd = requests.roleTemplateRequest();
 	//
 	// for (RoleTemplateProxy criterion : searchCriteria) {
 	// Log.info("Criterion: " + criterion.getTemplateName().toString());
@@ -547,7 +546,7 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 
 	protected Request<List<RoleTemplateProxy>> createRangeRequest(Range range) {
 		System.out.println("Calling FindAllSpecialization with value : ");
-		return requests.roleTemplateRequestNonRoo().findAllTemplateName(
+		return requests.roleTemplateRequest().findAllTemplateName(
 				sortname, sortorder, quickSearchTerm, range.getStart(),
 				range.getLength());
 	}
@@ -573,7 +572,7 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 	@SuppressWarnings("deprecation")
 	private void initSearch() {
 
-		requestAdvSeaCritStd = requests.roleTemplateRequestNonRoo();
+		requestAdvSeaCritStd = requests.roleTemplateRequest();
 
 		Range range = table.getVisibleRange();
 
@@ -613,7 +612,7 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 		// Role Template Bug {
 		Log.info("Role Template proxy at delete is :" + roleTemplate.getId());
 		
-		requests.roleTemplateRequestNonRoo().findCountOfStandardizedRoleAssignForTemplate(roleTemplate.getId()).fire(new OSCEReceiver<Long>() {
+		requests.roleTemplateRequest().findCountOfStandardizedRoleAssignForTemplate(roleTemplate.getId()).fire(new OSCEReceiver<Long>() {
 			
 			@Override
 			public void onSuccess(Long response) {
@@ -629,7 +628,7 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 				}
 				else if(response==0){
 					
-					requests.roleTemplateRequestNonRoo().deleteRoleTemplate(roleTemplate.getId()).fire(new OSCEReceiver<Boolean>() {
+					requests.roleTemplateRequest().deleteRoleTemplate(roleTemplate.getId()).fire(new OSCEReceiver<Boolean>() {
 
 						@Override
 						public void onSuccess(Boolean response) {

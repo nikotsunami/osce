@@ -140,7 +140,7 @@ public class ImportObjectiveViewActivity extends AbstractActivity implements Imp
 	public void fillClassificationTopicSuggestBox(Long mainClassiId)
 	{
 		
-		requests.classificationTopicRequestNonRoo().findClassiTopicByMainClassi(mainClassiId).fire(new OSCEReceiver<List<ClassificationTopicProxy>>() {
+		requests.classificationTopicRequest().findClassiTopicByMainClassi(mainClassiId).fire(new OSCEReceiver<List<ClassificationTopicProxy>>() {
 
 			@Override
 			public void onSuccess(List<ClassificationTopicProxy> response) {
@@ -166,7 +166,7 @@ public class ImportObjectiveViewActivity extends AbstractActivity implements Imp
 	
 	public void fillTopicSuggestBox(Long classiTopicId)
 	{
-		requests.topicRequestNonRoo().findTopicByClassiTopic(classiTopicId).fire(new OSCEReceiver<List<TopicProxy>>() {
+		requests.topicRequest().findTopicByClassiTopic(classiTopicId).fire(new OSCEReceiver<List<TopicProxy>>() {
 
 			@Override
 			public void onSuccess(List<TopicProxy> response) {
@@ -245,12 +245,12 @@ public class ImportObjectiveViewActivity extends AbstractActivity implements Imp
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
-		requests.skillRequestNonRoo().countSkillBySearchCriteria(mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).fire(new OSCEReceiver<Integer>() {
+		requests.skillRequest().countSkillBySearchCriteria(mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).fire(new OSCEReceiver<Integer>() {
 			@Override
 			public void onSuccess(Integer response) {
 				view.getLearningObjectiveViewImpl().getTable().setRowCount(response, true);
 				
-				requests.skillRequestNonRoo().findSkillBySearchCriteria(start, length, mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
+				requests.skillRequest().findSkillBySearchCriteria(start, length, mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
 
 					@Override
 					public void onSuccess(List<SkillProxy> response) {
@@ -323,12 +323,12 @@ public class ImportObjectiveViewActivity extends AbstractActivity implements Imp
 		learningObjectiveData.clear();		
 		final Range range = view.getLearningObjectiveViewImpl().getTable().getVisibleRange();
 		
-		requests.skillRequestNonRoo().countSkillBySearchCriteria(mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).fire(new OSCEReceiver<Integer>() {
+		requests.skillRequest().countSkillBySearchCriteria(mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).fire(new OSCEReceiver<Integer>() {
 			@Override
 			public void onSuccess(Integer response) {
 				view.getLearningObjectiveViewImpl().getTable().setRowCount(response, true);
 				
-				requests.skillRequestNonRoo().findSkillBySearchCriteria(range.getStart(), range.getLength(), mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
+				requests.skillRequest().findSkillBySearchCriteria(range.getStart(), range.getLength(), mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
 
 					@Override
 					public void onSuccess(List<SkillProxy> response) {

@@ -44,8 +44,8 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Request;
-import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
@@ -236,7 +236,7 @@ public class BellScheduleActivity extends AbstractActivity implements
 
 	public void fireCountAssignmentRequest(OSCEReceiver<Integer> callback) {
 
-		requests.assignmentRequestNonRoo()
+		requests.assignmentRequest()
 				.getCountAssignmentsBySemester(this.semesterProxy.getId())
 				.fire(callback);
 	}
@@ -290,7 +290,7 @@ public class BellScheduleActivity extends AbstractActivity implements
 
 		// return null;
 
-		return requests.assignmentRequestNonRoo().getAssignmentsBySemester(this.semesterProxy.getId()).with("osceDay", "osceDay.osce", "osceDay.osce.semester");
+		return requests.assignmentRequest().getAssignmentsBySemester(this.semesterProxy.getId()).with("osceDay", "osceDay.osce", "osceDay.osce.semester");
 	}
 
 	@Override
@@ -315,7 +315,7 @@ public class BellScheduleActivity extends AbstractActivity implements
 		requests.getEventBus().fireEvent(
 				new ApplicationLoadingScreenEvent(true));
 
-		requests.assignmentRequestNonRoo()
+		requests.assignmentRequest()
 				.getQwtBellSchedule(
 						// bellAssignmentTypes,assignmentProxies,
 						this.semesterProxy.getId(), view.getTimeInMinute(),
@@ -354,7 +354,7 @@ public class BellScheduleActivity extends AbstractActivity implements
 		osceDayHp.add(osceDayLbl);
 		osceDayHp.add(listBox);
 		
-		requests.semesterRequestNonRoo().findAllOsceDayBySemester(semesterProxy.getId()).fire(new OSCEReceiver<List<OsceDayProxy>>() {
+		requests.semesterRequest().findAllOsceDayBySemester(semesterProxy.getId()).fire(new OSCEReceiver<List<OsceDayProxy>>() {
 
 			@Override
 			public void onSuccess(List<OsceDayProxy> response) {

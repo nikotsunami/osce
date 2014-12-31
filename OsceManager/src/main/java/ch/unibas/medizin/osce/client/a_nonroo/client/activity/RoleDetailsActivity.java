@@ -193,10 +193,10 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
-import com.google.gwt.requestfactory.shared.ServerFailure;
-import com.google.gwt.requestfactory.shared.Violation;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.cellview.client.AbstractHasData;
@@ -566,7 +566,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 			long StandardizedRoleID, Range range) {
 		// return requests.scarRequest().findScarEntries(range.getStart(),
 		// range.getLength());
-		return requests.fileRequestNooRoo()
+		return requests.fileRequest()
 				.findFileEntriesByStandardizedRoleID(StandardizedRoleID,
 						range.getStart(), range.getLength());
 	}
@@ -574,7 +574,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	protected void fireCountRequest(long StandardizedRoleID,
 			Receiver<Long> callback) {
 		// requests.scarRequest().countScars().fire(callback);
-		requests.fileRequestNooRoo()
+		requests.fileRequest()
 				.countFilesByStandardizedRoleID(StandardizedRoleID)
 				.fire(callback);
 	}
@@ -589,7 +589,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	public void fileMoveUp(FileProxy proxy,
 			final StandardizedRoleProxy standRoleProxy) {
 		// TODO Auto-generated method stub
-		requests.fileRequestNooRoo().fileMoveUp(standRoleProxy.getId())
+		requests.fileRequest().fileMoveUp(standRoleProxy.getId())
 				.using(proxy).fire(new Receiver<Void>() {
 					@Override
 					public void onSuccess(Void response) {
@@ -612,7 +612,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	public void fileMoveDown(FileProxy proxy,
 			final StandardizedRoleProxy standRoleProxy) {
 		// TODO Auto-generated method stub
-		requests.fileRequestNooRoo().fileMoveDown(standRoleProxy.getId())
+		requests.fileRequest().fileMoveDown(standRoleProxy.getId())
 				.using(proxy).fire(new Receiver<Void>() {
 					@Override
 					public void onSuccess(Void response) {
@@ -819,7 +819,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 
 	protected Request<List<UsedMaterialProxy>> createUsedMaterialRangeRequest(
 			long standardizedRoleID, Range range) {
-		return requests.usedMaterialRequestNonRoo()
+		return requests.usedMaterialRequest()
 				.findUsedMaterialsByStandardizedRoleID(standardizedRoleID,
 						range.getStart(), range.getLength());
 	}
@@ -828,13 +828,13 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 			Receiver<Long> callback) {
 
 		Log.info("Call fireUsedMaterialCountRequest");		
-		requests.usedMaterialRequestNonRoo().countUsedMaterialsByStandardizedRoleID(standardizedRoleID).fire(callback);
+		requests.usedMaterialRequest().countUsedMaterialsByStandardizedRoleID(standardizedRoleID).fire(callback);
 	}
 
 	@Override
 	public void moveUsedMaterialDown(UsedMaterialProxy proxy,
 			final StandardizedRoleProxy standardizedRoleProxy) {
-		requests.usedMaterialRequestNonRoo()
+		requests.usedMaterialRequest()
 				.moveMaterialDown(standardizedRoleProxy.getId()).using(proxy)
 				.fire(new Receiver<Void>() {
 					@Override
@@ -858,7 +858,7 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 	@Override
 	public void moveUsedMaterialUp(UsedMaterialProxy proxy,
 			final StandardizedRoleProxy standardizedRoleProxy) {
-		requests.usedMaterialRequestNonRoo()
+		requests.usedMaterialRequest()
 				.moveMaterialUp(standardizedRoleProxy.getId()).using(proxy)
 				.fire(new Receiver<Void>() {
 					@Override
@@ -1134,7 +1134,7 @@ final int index2 = index;
 		
 		standardizedRoleList=new ArrayList<Long>();
 		
-		requests.standardizedRoleRequestNonRoo().findAllStandardizeRolesOfPreviousVersion(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
+		requests.standardizedRoleRequest().findAllStandardizeRolesOfPreviousVersion(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
 
 			@Override
 			public void onSuccess(List<StandardizedRoleProxy> response) {
@@ -1144,7 +1144,7 @@ final int index2 = index;
 		
 				}
 				
-				requests.osceRequestNonRoo().findAllOsceSemesterByRole(standardizedRoleList,roleOsceSemesterSubView.getStartDate().getValue() , roleOsceSemesterSubView.getEndDate().getValue()).fire(new OSCEReceiver<List<MapOsceRoleProxy>>() {
+				requests.osceRequest().findAllOsceSemesterByRole(standardizedRoleList,roleOsceSemesterSubView.getStartDate().getValue() , roleOsceSemesterSubView.getEndDate().getValue()).fire(new OSCEReceiver<List<MapOsceRoleProxy>>() {
 
 					@Override
 					public void onSuccess(List<MapOsceRoleProxy> response) {
@@ -1176,7 +1176,7 @@ final int index2 = index;
 		//auther and reviewer table changes start
 		
 		
-		requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0).with("doctor").fire(new Receiver<Long>() 
+		requests.roleParticipantRequest().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0).with("doctor").fire(new Receiver<Long>() 
 		{
 				@Override
 				public void onSuccess(Long response) 
@@ -1190,7 +1190,7 @@ final int index2 = index;
 		
 		final Range autherRange = standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().authorTable.getVisibleRange();
 		
-		requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0,autherRange.getStart(),autherRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+		requests.roleParticipantRequest().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0,autherRange.getStart(),autherRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 		{
 				@Override
 				public void onSuccess(List<RoleParticipantProxy> response) 
@@ -1202,7 +1202,7 @@ final int index2 = index;
 				}
 		});
 
-		requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 1).with("doctor").fire(new Receiver<Long>() 
+		requests.roleParticipantRequest().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 1).with("doctor").fire(new Receiver<Long>() 
 				{
 					@Override
 					public void onSuccess(Long response) 
@@ -1215,7 +1215,7 @@ final int index2 = index;
 				});
 		
 		final Range reviewerRange = standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().reviewerTable.getVisibleRange();
-		requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 1,reviewerRange.getStart(),reviewerRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+		requests.roleParticipantRequest().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 1,reviewerRange.getStart(),reviewerRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 		{
 			@Override
 			public void onSuccess(List<RoleParticipantProxy> response) 
@@ -1230,7 +1230,7 @@ final int index2 = index;
 		
 		standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().reviewerTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 			public void onRangeChange(RangeChangeEvent event) {
-				requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId(), 1).with("doctor").fire(new Receiver<Long>() 
+				requests.roleParticipantRequest().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId(), 1).with("doctor").fire(new Receiver<Long>() 
 						{
 							@Override
 							public void onSuccess(Long response) 
@@ -1243,7 +1243,7 @@ final int index2 = index;
 						});
 				
 				final Range reviewerRange = standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().reviewerTable.getVisibleRange();
-				requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId(), 1,reviewerRange.getStart(),reviewerRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+				requests.roleParticipantRequest().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId(), 1,reviewerRange.getStart(),reviewerRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 				{
 					@Override
 					public void onSuccess(List<RoleParticipantProxy> response) 
@@ -1260,7 +1260,7 @@ final int index2 = index;
 		
 		standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().authorTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 			public void onRangeChange(RangeChangeEvent event) {
-				requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId(), 0).with("doctor").fire(new Receiver<Long>() 
+				requests.roleParticipantRequest().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId(), 0).with("doctor").fire(new Receiver<Long>() 
 						{
 								@Override
 								public void onSuccess(Long response) 
@@ -1274,7 +1274,7 @@ final int index2 = index;
 						
 						final Range autherRange = standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().authorTable.getVisibleRange();
 						
-						requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId(), 0,autherRange.getStart(),autherRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+						requests.roleParticipantRequest().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId(), 0,autherRange.getStart(),autherRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 						{
 								@Override
 								public void onSuccess(List<RoleParticipantProxy> response) 
@@ -1295,7 +1295,7 @@ final int index2 = index;
 		// Issue Role
 		// V4
 		//requests.doctorRequest().findAllDoctors().fire(new Receiver<List<DoctorProxy>>() {
-		requests.doctorRequestNonRoo().findDoctorWithRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() 
+		requests.doctorRequest().findDoctorWithRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() 
 		{ 
 					@Override
 					public void onSuccess(List<DoctorProxy> response) 
@@ -1350,7 +1350,7 @@ final int index2 = index;
 
 				});
 
-		requests.keywordRequestNonRoo().findKeywordByStandRoleCount(standardizedRoleDetailsView[index].getValue()).fire(new Receiver<Long>()						 
+		requests.keywordRequest().findKeywordByStandRoleCount(standardizedRoleDetailsView[index].getValue()).fire(new Receiver<Long>()						 
 		{
 				@Override
 				public void onSuccess(Long response) 
@@ -1369,7 +1369,7 @@ final int index2 = index;
 					//standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
 				
 		final Range keywordRange = standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
-		requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[innerindex].getValue(),keywordRange.getStart(),keywordRange.getLength()).fire(new Receiver<List<KeywordProxy>>()						 
+		requests.keywordRequest().findKeywordByStandRole(standardizedRoleDetailsView[innerindex].getValue(),keywordRange.getStart(),keywordRange.getLength()).fire(new Receiver<List<KeywordProxy>>()						 
 				{
 						@Override
 						public void onSuccess(List<KeywordProxy> response) 
@@ -1392,7 +1392,7 @@ final int index2 = index;
 		});
 		standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 			public void onRangeChange(RangeChangeEvent event) {
-				requests.keywordRequestNonRoo().findKeywordByStandRoleCount(standardizedRoleDetailsView[innerindex].getValue()).fire(new Receiver<Long>()						 
+				requests.keywordRequest().findKeywordByStandRoleCount(standardizedRoleDetailsView[innerindex].getValue()).fire(new Receiver<Long>()						 
 						{
 								@Override
 								public void onSuccess(Long response) 
@@ -1411,7 +1411,7 @@ final int index2 = index;
 									//standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.setRowData(response);
 								
 						final Range keywordRange = standardizedRoleDetailsView[innerindex].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
-						requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[innerindex].getValue(),keywordRange.getStart(),keywordRange.getLength()).fire(new Receiver<List<KeywordProxy>>()						 
+						requests.keywordRequest().findKeywordByStandRole(standardizedRoleDetailsView[innerindex].getValue(),keywordRange.getStart(),keywordRange.getLength()).fire(new Receiver<List<KeywordProxy>>()						 
 		{
 				@Override
 				public void onSuccess(List<KeywordProxy> response) 
@@ -1455,7 +1455,7 @@ final int index2 = index;
 		
 		//main skill change
 		
-		requests.mainSkillRequestNonRoo().countMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
+		requests.mainSkillRequest().countMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
 
 			@Override
 			public void onSuccess(Long response) {								
@@ -1466,7 +1466,7 @@ final int index2 = index;
 			}
 		});
 		final Range mainSkillRange = standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.getVisibleRange();
-		requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId(),mainSkillRange.getStart(),mainSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
+		requests.mainSkillRequest().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId(),mainSkillRange.getStart(),mainSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
 
 			@Override
 			public void onSuccess(List<MainSkillProxy> response) {								
@@ -1480,7 +1480,7 @@ final int index2 = index;
 		standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 			public void onRangeChange(RangeChangeEvent event) {
 				
-				requests.mainSkillRequestNonRoo().countMainSkillEntriesByRoleID(standardizedRoleDetailsView[innerindex2].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
+				requests.mainSkillRequest().countMainSkillEntriesByRoleID(standardizedRoleDetailsView[innerindex2].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
 
 					@Override
 					public void onSuccess(Long response) {								
@@ -1491,7 +1491,7 @@ final int index2 = index;
 					}
 				});
 				final Range mainSkillRange = standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.getVisibleRange();
-				requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[innerindex2].getValue().getId(),mainSkillRange.getStart(),mainSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
+				requests.mainSkillRequest().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[innerindex2].getValue().getId(),mainSkillRange.getStart(),mainSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
 
 					@Override
 					public void onSuccess(List<MainSkillProxy> response) {								
@@ -1510,7 +1510,7 @@ final int index2 = index;
 		
 		
 		//minor skill start
-		requests.minorSkillRequestNonRoo().countMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
+		requests.minorSkillRequest().countMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
 
 			@Override
 			public void onSuccess(Long response) {								
@@ -1521,7 +1521,7 @@ final int index2 = index;
 			}
 		});
 		final Range minorSkillRange = standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.getVisibleRange();
-		requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId(),minorSkillRange.getStart(),minorSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
+		requests.minorSkillRequest().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId(),minorSkillRange.getStart(),minorSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
 
 			@Override
 			public void onSuccess(List<MinorSkillProxy> response) {								
@@ -1535,7 +1535,7 @@ final int index2 = index;
 		standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.addRangeChangeHandler(new RangeChangeEvent.Handler() {
 			public void onRangeChange(RangeChangeEvent event) {
 				
-				requests.minorSkillRequestNonRoo().countMinorSkillEntriesByRoleID(standardizedRoleDetailsView[innerindex2].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
+				requests.minorSkillRequest().countMinorSkillEntriesByRoleID(standardizedRoleDetailsView[innerindex2].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
 
 					@Override
 					public void onSuccess(Long response) {								
@@ -1546,7 +1546,7 @@ final int index2 = index;
 					}
 				});
 				final Range minorSkillRange = standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.getVisibleRange();
-				requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[innerindex2].getValue().getId(),minorSkillRange.getStart(),minorSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
+				requests.minorSkillRequest().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[innerindex2].getValue().getId(),minorSkillRange.getStart(),minorSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
 
 					@Override
 					public void onSuccess(List<MinorSkillProxy> response) {								
@@ -1561,7 +1561,7 @@ final int index2 = index;
 		});
 
 		
-/*		requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
+/*		requests.minorSkillRequest().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
 
 			@Override
 			public void onSuccess(List<MinorSkillProxy> response) {
@@ -1651,7 +1651,7 @@ final int index2 = index;
 		//temp[
 		initRoleScript(standarDizedViewIndex,proxy.getRoleTemplate(),false,false);
 		/* 
-		requests.roleBaseItemRequestNoonRoo().findRoleBaseItemByStandardizedRole(standardizedRoleDetailsView[index].getValue().getId()).with("roleSubItem","roleItemAccess").fire(new Receiver<List<RoleBaseItemProxy>>() {
+		requests.roleBaseItemRequest().findRoleBaseItemByStandardizedRole(standardizedRoleDetailsView[index].getValue().getId()).with("roleSubItem","roleItemAccess").fire(new Receiver<List<RoleBaseItemProxy>>() {
 
 			@Override
 			public void onSuccess(List<RoleBaseItemProxy> response) {
@@ -1676,7 +1676,7 @@ final int index2 = index;
 						
 						standardizedRoleDetailsView[standarDizedViewIndex].getRoleBaseItemVerticalPanel().add(roleBaseTableItemViewImpl);
 					
-						requests.roleTableItemValueRequestNonRoo().findRoleTableItemValueByStandardizedRoleANDRoleBaseItemValues(standardizedRoleDetailsView[standarDizedViewIndex].getValue().getId(), roleBaseItemProxy.getId()).with("roleTableItem").fire(new Receiver<List<RoleTableItemValueProxy>>() {
+						requests.roleTableItemValueRequest().findRoleTableItemValueByStandardizedRoleANDRoleBaseItemValues(standardizedRoleDetailsView[standarDizedViewIndex].getValue().getId(), roleBaseItemProxy.getId()).with("roleTableItem").fire(new Receiver<List<RoleTableItemValueProxy>>() {
 
 							@Override
 							public void onSuccess(
@@ -1859,10 +1859,10 @@ final int index2 = index;
 	public void initRoleScript(final int index, final RoleTemplateProxy roleTemplate, final boolean create,final boolean isPrevious)
 	{		
 		//final int index = view.getRoleDetailTabPanel().getTabBar().getSelectedTab();
-	//	requests.roleBaseItemRequestNoonRoo().findRoleBaseItemByStandardizedRole(standardizedRoleDetailsView[index].getValue().getId()).with("roleSubItem","roleItemAccess").fire(new Receiver<List<RoleBaseItemProxy>>() {
+	//	requests.roleBaseItemRequest().findRoleBaseItemByStandardizedRole(standardizedRoleDetailsView[index].getValue().getId()).with("roleSubItem","roleItemAccess").fire(new Receiver<List<RoleBaseItemProxy>>() {
 		if(roleTemplate!=null)
 		{
-			requests.roleBaseItemRequestNoonRoo().findRoleBaseItemByStandardizedRoleAndRoleTemplateId(standardizedRoleDetailsView[index].getValue().getId(),roleTemplate.getId()).with("roleSubItem","roleItemAccess").fire(new Receiver<List<RoleBaseItemProxy>>() {
+			requests.roleBaseItemRequest().findRoleBaseItemByStandardizedRoleAndRoleTemplateId(standardizedRoleDetailsView[index].getValue().getId(),roleTemplate.getId()).with("roleSubItem","roleItemAccess").fire(new Receiver<List<RoleBaseItemProxy>>() {
 	
 				@Override
 				public void onSuccess(List<RoleBaseItemProxy> response) {
@@ -1894,7 +1894,7 @@ final int index2 = index;
 								
 								standardizedRoleDetailsView[index].getRoleBaseItemVerticalPanel().add(roleBaseTableItemViewImpl);
 								roleBaseTableItemViewImpl.description.setEnabled(false);
-								requests.roleTableItemValueRequestNonRoo().findRoleTableItemValueByStandardizedRoleANDRoleBaseItemValues(standardizedRoleDetailsView[index].getValue().getId(), roleBaseItemProxy.getId()).with("roleTableItem").fire(new Receiver<List<RoleTableItemValueProxy>>() {
+								requests.roleTableItemValueRequest().findRoleTableItemValueByStandardizedRoleANDRoleBaseItemValues(standardizedRoleDetailsView[index].getValue().getId(), roleBaseItemProxy.getId()).with("roleTableItem").fire(new Receiver<List<RoleTableItemValueProxy>>() {
 		
 									@Override
 									public void onSuccess(
@@ -2114,7 +2114,7 @@ final int index2 = index;
 		
 		
 		
-//		requests.standardizedRoleRequestNonRoo()
+//		requests.standardizedRoleRequest()
 //				.getRolesPrintPdfBySearch(
 //						standardizedRolePrintFilterViewImpl
 //								.getStandardizedRoleProxy().getId(),
@@ -2202,7 +2202,7 @@ final int index2 = index;
 	public void copyRoleClicked(StandardizedRoleProxy standardizedRoleProxy) {
 		Log.info("copy clicked");
 		
-		requests.standardizedRoleRequestNonRoo().copyStandardizedRole(standardizedRoleProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+		requests.standardizedRoleRequest().copyStandardizedRole(standardizedRoleProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			
 
@@ -3248,7 +3248,7 @@ final int index2 = index;
 			
 		/*	final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();
 			//ScrolledTab Changes end
-			requests.checklistTopicRequestNonRoo()
+			requests.checklistTopicRequest()
 			.topicMoveDown(standardizedRoleDetailsView[selectedtab].getValue().getCheckList().getId()).using(proxy)
 			.fire(new Receiver<Void>() {
 				@Override
@@ -3298,7 +3298,7 @@ final int index2 = index;
 			
 			/*final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();
 			//ScrolledTab Changes end
-			requests.checklistTopicRequestNonRoo().topicMoveUp(standardizedRoleDetailsView[selectedtab].getValue().getCheckList().getId()).using(proxy).fire(new Receiver<Void>() {
+			requests.checklistTopicRequest().topicMoveUp(standardizedRoleDetailsView[selectedtab].getValue().getCheckList().getId()).using(proxy).fire(new Receiver<Void>() {
 				@Override
 				public void onSuccess(Void response) {
 					Log.info("moved");
@@ -3319,7 +3319,7 @@ final int index2 = index;
 			//ScrolledTab Changes end
 			CheckListProxy checkListProxy=standardizedRoleDetailsView[selectedtab].getValue().getCheckList();
 			System.out.println("Topic Id is "+topicProxy);System.out.println("Topic titlke is "+topicProxy);
-			requests.checklistQuestionRequestNonRoo().questionMoveUp(topicProxy.getId()).using(questionView.getProxy()).fire(new Receiver<Void>() {
+			requests.checklistQuestionRequest().questionMoveUp(topicProxy.getId()).using(questionView.getProxy()).fire(new Receiver<Void>() {
 
 				@Override
 				public void onSuccess(Void response) {
@@ -3388,7 +3388,7 @@ final int index2 = index;
 			CheckListProxy checkListProxy=standardizedRoleDetailsView[selectedtab].getValue().getCheckList();
 //			System.out.println("Topic Id is "+topicProxy.getId());System.out.println("Topic titlke is "+topicProxy.getTitle());
 			System.out.println("Topic Id is "+topicProxy);System.out.println("Topic titlke is "+topicProxy);
-			requests.checklistQuestionRequestNonRoo().questionMoveDown(topicProxy.getId()).using(questionView.getProxy()).fire(new Receiver<Void>() {
+			requests.checklistQuestionRequest().questionMoveDown(topicProxy.getId()).using(questionView.getProxy()).fire(new Receiver<Void>() {
 
 				@Override
 				public void onSuccess(Void response) {
@@ -3596,7 +3596,7 @@ final int index2 = index;
 			long standardizedRoleID, Receiver<Long> callback) 
 	{
 		Log.info("Call fireAdvancedSearchCriteriasCountRequest");
-		requests.advancedSearchCriteriaNonRoo().countAdvancedSearchCriteriasByStandardizedRoleID(standardizedRoleID).fire(callback);
+		requests.advancedSearchCriteriaRequest().countAdvancedSearchCriteriasByStandardizedRoleID(standardizedRoleID).fire(callback);
 	}
 
 	protected void onRangeChangedAdvancedSearchCriteriaTable(
@@ -3638,7 +3638,7 @@ final int index2 = index;
 		// return requests.scarRequest().findScarEntries(range.getStart(),
 		// range.getLength());
 		return requests
-				.advancedSearchCriteriaNonRoo()
+				.advancedSearchCriteriaRequest()
 				.findAdvancedSearchCriteriasByStandardizedRoleID(
 						standardizedRoleID, range.getStart(), range.getLength());
 	}
@@ -4027,7 +4027,7 @@ final int index2 = index;
 	protected void fireSimpleSearchCountRequest(long StandardizedRoleID,
 			Receiver<Long> callback) {
 		// requests.scarRequest().countScars().fire(callback);
-		requests.simpleSearchCriteriaRequestNonRoo()
+		requests.simpleSearchCriteriaRequest()
 				.countSimpleSearchByStandardizedRoleID(StandardizedRoleID)
 				.fire(callback);
 	}
@@ -4044,7 +4044,7 @@ final int index2 = index;
 			long StandardizedRoleID, Range range) {
 		// return requests.scarRequest().findScarEntries(range.getStart(),
 		// range.getLength());
-		return requests.simpleSearchCriteriaRequestNonRoo()
+		return requests.simpleSearchCriteriaRequest()
 				.findSimpleSearchByStandardizedRoleID(StandardizedRoleID,
 						range.getStart(), range.getLength());
 	}
@@ -4059,7 +4059,7 @@ final int index2 = index;
 	@Override
 	public void simpleSearchMoveUp(SimpleSearchCriteriaProxy proxy,
 			final StandardizedRoleProxy standRoleProxy) {
-		requests.simpleSearchCriteriaRequestNonRoo()
+		requests.simpleSearchCriteriaRequest()
 				.simpleSearchMoveUp(standRoleProxy.getId()).using(proxy)
 				.fire(new Receiver<Void>() {
 					@Override
@@ -4083,7 +4083,7 @@ final int index2 = index;
 	@Override
 	public void simpleSearchMoveDown(SimpleSearchCriteriaProxy proxy,
 			final StandardizedRoleProxy standRoleProxy) {
-		requests.simpleSearchCriteriaRequestNonRoo()
+		requests.simpleSearchCriteriaRequest()
 				.simpleSearchMoveDown(standRoleProxy.getId()).using(proxy)
 				.fire(new Receiver<Void>() {
 					@Override
@@ -4339,7 +4339,7 @@ final int index2 = index;
 							
 							// REFRESH Author Table
 							//auther table pager changes
-							requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0).with("doctor").fire(new Receiver<Long>() 
+							requests.roleParticipantRequest().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0).with("doctor").fire(new Receiver<Long>() 
 									{
 											@Override
 											public void onSuccess(Long response) 
@@ -4353,7 +4353,7 @@ final int index2 = index;
 							
 							final Range autherRange = standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().authorTable.getVisibleRange();
 							
-							requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0,autherRange.getStart(),autherRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+							requests.roleParticipantRequest().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0,autherRange.getStart(),autherRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 							{
 									@Override
 									public void onSuccess(List<RoleParticipantProxy> response) 
@@ -4449,7 +4449,7 @@ final int index2 = index;
 					// REFRESH Reviewer Table
 					
 					//reviewer table pager changes start
-					requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1).with("doctor").fire(new Receiver<Long>() 
+					requests.roleParticipantRequest().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1).with("doctor").fire(new Receiver<Long>() 
 					{
 							@Override
 							public void onSuccess(Long response) 
@@ -4463,7 +4463,7 @@ final int index2 = index;
 					});
 					
 					final Range reviewerRange = standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().reviewerTable.getVisibleRange();
-					requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1,reviewerRange.getStart(),reviewerRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+					requests.roleParticipantRequest().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1,reviewerRange.getStart(),reviewerRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 					{
 							@Override
 							public void onSuccess(List<RoleParticipantProxy> response) 
@@ -4661,7 +4661,7 @@ final int index2 = index;
 								
 								// REFRESH KEYWORD TABLE DATA
 								
-										requests.keywordRequestNonRoo().findKeywordByStandRoleCount(standardizedRoleDetailsView[selectedTabId].getValue()).fire(new Receiver<Long>()
+										requests.keywordRequest().findKeywordByStandRoleCount(standardizedRoleDetailsView[selectedTabId].getValue()).fire(new Receiver<Long>()
 												{
 														@Override
 														public void onSuccess(Long response) 
@@ -4681,7 +4681,7 @@ final int index2 = index;
 												});
 								
 									final Range keywordRange = standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
-									requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[selectedTabId].getValue(),keywordRange.getStart(),keywordRange.getLength()).fire(new Receiver<List<KeywordProxy>>()
+									requests.keywordRequest().findKeywordByStandRole(standardizedRoleDetailsView[selectedTabId].getValue(),keywordRange.getStart(),keywordRange.getLength()).fire(new Receiver<List<KeywordProxy>>()
 								{
 										@Override
 										public void onSuccess(List<KeywordProxy> response) 
@@ -4810,7 +4810,7 @@ final int index2 = index;
 				
 				// REFRESH KEYWORD TABLE DATA
 				
-				requests.keywordRequestNonRoo().findKeywordByStandRoleCount(standardizedRoleDetailsView[selectedTabId].getValue()).fire(new Receiver<Long>()
+				requests.keywordRequest().findKeywordByStandRoleCount(standardizedRoleDetailsView[selectedTabId].getValue()).fire(new Receiver<Long>()
 				{
 						@Override
 						public void onSuccess(Long response) 
@@ -4829,7 +4829,7 @@ final int index2 = index;
 				});	
 				
 				final Range keywordRange = standardizedRoleDetailsView[selectedTabId].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
-				requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[selectedTabId].getValue(),keywordRange.getStart(),keywordRange.getLength()).fire(new Receiver<List<KeywordProxy>>()
+				requests.keywordRequest().findKeywordByStandRole(standardizedRoleDetailsView[selectedTabId].getValue(),keywordRange.getStart(),keywordRange.getLength()).fire(new Receiver<List<KeywordProxy>>()
 				{
 						@Override
 						public void onSuccess(List<KeywordProxy> response) 
@@ -4877,7 +4877,7 @@ final int index2 = index;
 					// REFRESH Author Table
 					
 					//auther table pager change start
-					requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0).with("doctor").fire(new Receiver<Long>() 
+					requests.roleParticipantRequest().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0).with("doctor").fire(new Receiver<Long>() 
 						{
 								@Override
 								public void onSuccess(Long response) 
@@ -4889,7 +4889,7 @@ final int index2 = index;
 								}
 						});
 					final Range autherRange = standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().authorTable.getVisibleRange();
-					requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0,autherRange.getStart(),autherRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+					requests.roleParticipantRequest().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 0,autherRange.getStart(),autherRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 					{
 							@Override
 							public void onSuccess(List<RoleParticipantProxy> response) 
@@ -4908,7 +4908,7 @@ final int index2 = index;
 				{
 					// REFRESH Reviewer Table
 					
-					requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1).with("doctor").fire(new Receiver<Long>() 
+					requests.roleParticipantRequest().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1).with("doctor").fire(new Receiver<Long>() 
 							{
 									@Override
 									public void onSuccess(Long response) 
@@ -4920,7 +4920,7 @@ final int index2 = index;
 									}
 							});		
 					final Range reviewerRange = standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().reviewerTable.getVisibleRange();
-					requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1,reviewerRange.getStart(),reviewerRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+					requests.roleParticipantRequest().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId(), 1,reviewerRange.getStart(),reviewerRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 					{
 							@Override
 							public void onSuccess(List<RoleParticipantProxy> response) 
@@ -4991,7 +4991,7 @@ final int index2 = index;
 		// Issue Role
 		//	V4
 		//requests.doctorRequest().findAllDoctors().fire(new Receiver<List<DoctorProxy>>() {
-		requests.doctorRequestNonRoo().findDoctorWithRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() {
+		requests.doctorRequest().findDoctorWithRoleTopic(standardizedRoleDetailsView[selectedTabId].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() {
 			@Override
 			public void onSuccess(List<DoctorProxy> response) 
 			{
@@ -5112,7 +5112,7 @@ final int index2 = index;
 	{		
 		Log.info("create default sub value item");
 	
-		requests.roleBaseItemRequestNoonRoo().createRoleBaseItemValueForStandardizedRole(standardizedRoleDetailsView[selectedtab].getValue().getId(),roleTemplateProxy.getId()).fire(new Receiver<Boolean>() {
+		requests.roleBaseItemRequest().createRoleBaseItemValueForStandardizedRole(standardizedRoleDetailsView[selectedtab].getValue().getId(),roleTemplateProxy.getId()).fire(new Receiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -5122,7 +5122,7 @@ final int index2 = index;
 				
 			}
 		});
-		/*requests.roleBaseItemRequestNoonRoo().findAllRoleBaseItemOnTemplateId(roleTemplateProxy.getId()).with("roleTableItem","roleItemAccess").fire(new Receiver<List<RoleBaseItemProxy>>() {
+		/*requests.roleBaseItemRequest().findAllRoleBaseItemOnTemplateId(roleTemplateProxy.getId()).with("roleTableItem","roleItemAccess").fire(new Receiver<List<RoleBaseItemProxy>>() {
 			@Override
 			public void onSuccess(List<RoleBaseItemProxy> response) {
 				Log.info("Total Result is :" +response.size());
@@ -5254,7 +5254,7 @@ final int index2 = index;
 			
 		
 		selectedtab=0;
-		requests.roleBaseItemRequestNoonRoo().findAllRoleBaseItemOnTemplateId(roleTemplateProxy.getId()).with("roleTableItem","roleItemAccess").fire(new Receiver<List<RoleBaseItemProxy>>() {
+		requests.roleBaseItemRequest().findAllRoleBaseItemOnTemplateId(roleTemplateProxy.getId()).with("roleTableItem","roleItemAccess").fire(new Receiver<List<RoleBaseItemProxy>>() {
 			@Override
 			public void onSuccess(List<RoleBaseItemProxy> response) {
 				Log.info("Total Result is :" +response.size());
@@ -5511,7 +5511,7 @@ final int index2 = index;
 											toolTip.clear();
 											toolTip.hide();
 											
-											requests.roleTableItemValueRequestNonRoo().findRoleTableItemValueByStandardizedRoleANDRoleBaseItemValues(standardizedRoleDetailsView[strId].getValue().getId(), roleBaseItemProxyid).with("roleTableItem").fire(new Receiver<List<RoleTableItemValueProxy>>() {
+											requests.roleTableItemValueRequest().findRoleTableItemValueByStandardizedRoleANDRoleBaseItemValues(standardizedRoleDetailsView[strId].getValue().getId(), roleBaseItemProxyid).with("roleTableItem").fire(new Receiver<List<RoleTableItemValueProxy>>() {
 
 												@Override
 												public void onSuccess(List<RoleTableItemValueProxy> response) 
@@ -5762,9 +5762,9 @@ final int index2 = index;
 		
 		// SPEC START =
 		
-		//requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(), roleOsceSemesterSubView.getStartDate().getValue(),roleOsceSemesterSubView.getEndDate().getValue()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
+		//requests.osceRequest().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(), roleOsceSemesterSubView.getStartDate().getValue(),roleOsceSemesterSubView.getEndDate().getValue()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
 
-//		requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(), roleOsceSemesterSubView.getStartDate().getValue(),roleOsceSemesterSubView.getEndDate().getValue()).with("semester").fire(new OSCEReceiver<List<MapOsceRoleProxy>>() {
+//		requests.osceRequest().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(), roleOsceSemesterSubView.getStartDate().getValue(),roleOsceSemesterSubView.getEndDate().getValue()).with("semester").fire(new OSCEReceiver<List<MapOsceRoleProxy>>() {
 //
 //			@Override
 //			public void onSuccess(List<MapOsceRoleProxy> response) {
@@ -5796,7 +5796,7 @@ final int index2 = index;
 		final int innerindex = index;
 		final int getStandardizedRole = Integer	.parseInt(standardizedRoleDetailsView[index].getValue().getId().toString());
 		
-		requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0).with("doctor").fire(new Receiver<Long>() 
+		requests.roleParticipantRequest().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0).with("doctor").fire(new Receiver<Long>() 
 				{
 						@Override
 						public void onSuccess(Long response) 
@@ -5811,7 +5811,7 @@ final int index2 = index;
 		
 		final Range autherRange = standardizedRoleDetailsView[index].getRoleRoleParticipantSubViewImpl().authorTable.getVisibleRange();
 		
-		requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0,autherRange.getStart(),autherRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+		requests.roleParticipantRequest().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0,autherRange.getStart(),autherRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 		{
 				@Override
 				public void onSuccess(List<RoleParticipantProxy> response) 
@@ -5823,7 +5823,7 @@ final int index2 = index;
 				}
 		});
 
-		requests.roleParticipantRequestNonRoo().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 1).with("doctor").fire(new Receiver<Long>() 
+		requests.roleParticipantRequest().countDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 1).with("doctor").fire(new Receiver<Long>() 
 				{
 						@Override
 						public void onSuccess(Long response) 
@@ -5835,7 +5835,7 @@ final int index2 = index;
 						}
 				});
 		final Range reviewerRange = standardizedRoleDetailsView[index].getRoleRoleParticipantSubViewImpl().reviewerTable.getVisibleRange();
-		requests.roleParticipantRequestNonRoo().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0,reviewerRange.getStart(),reviewerRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
+		requests.roleParticipantRequest().findDoctorWithStandardizedRoleAndRoleTopic(standardizedRoleDetailsView[index].getValue().getId(), 0,reviewerRange.getStart(),reviewerRange.getLength()).with("doctor").fire(new Receiver<List<RoleParticipantProxy>>() 
 				{
 						@Override
 						public void onSuccess(List<RoleParticipantProxy> response) 
@@ -5854,7 +5854,7 @@ final int index2 = index;
 		// Issue Role
 		// V4
 		//requests.doctorRequest().findAllDoctors().fire(new Receiver<List<DoctorProxy>>() {
-		requests.doctorRequestNonRoo().findDoctorWithRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() 
+		requests.doctorRequest().findDoctorWithRoleTopic(standardizedRoleDetailsView[innerindex].getValue().getId()).fire(new Receiver<List<DoctorProxy>>() 
 		{ 
 					@Override
 					public void onSuccess(List<DoctorProxy> response) 
@@ -5909,7 +5909,7 @@ final int index2 = index;
 
 				});
 
-		requests.keywordRequestNonRoo().findKeywordByStandRoleCount(standardizedRoleDetailsView[index].getValue()).fire(new Receiver<Long>()						 
+		requests.keywordRequest().findKeywordByStandRoleCount(standardizedRoleDetailsView[index].getValue()).fire(new Receiver<Long>()						 
 		{
 				@Override
 				public void onSuccess(Long response) 
@@ -5926,7 +5926,7 @@ final int index2 = index;
 		});
 		
 		final Range keywordRange = standardizedRoleDetailsView[index].getRoleKeywordSubViewImpl().keywordTable.getVisibleRange();
-		requests.keywordRequestNonRoo().findKeywordByStandRole(standardizedRoleDetailsView[index].getValue(),keywordRange.getStart(),keywordRange.getLength()).fire(new Receiver<List<KeywordProxy>>()
+		requests.keywordRequest().findKeywordByStandRole(standardizedRoleDetailsView[index].getValue(),keywordRange.getStart(),keywordRange.getLength()).fire(new Receiver<List<KeywordProxy>>()
 		{
 				@Override
 				public void onSuccess(List<KeywordProxy> response) 
@@ -5961,7 +5961,7 @@ final int index2 = index;
 		final int innerindex2 = index;
 		
 		
-		/*requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
+		/*requests.mainSkillRequest().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
 
 			@Override
 			public void onSuccess(List<MainSkillProxy> response) {								
@@ -5973,7 +5973,7 @@ final int index2 = index;
 */
 		//main skill change
 		
-				requests.mainSkillRequestNonRoo().countMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
+				requests.mainSkillRequest().countMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
 
 					@Override
 					public void onSuccess(Long response) {								
@@ -5984,7 +5984,7 @@ final int index2 = index;
 					}
 				});
 				final Range mainSkillRange = standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().majorTable.getVisibleRange();
-				requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId(),mainSkillRange.getStart(),mainSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
+				requests.mainSkillRequest().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId(),mainSkillRange.getStart(),mainSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
 
 					@Override
 					public void onSuccess(List<MainSkillProxy> response) {								
@@ -5999,7 +5999,7 @@ final int index2 = index;
 				//main skill change end
 	
 		//minor sikk start		
-		/*requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
+		/*requests.minorSkillRequest().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
 
 			@Override
 			public void onSuccess(List<MinorSkillProxy> response) {
@@ -6008,7 +6008,7 @@ final int index2 = index;
 				Log.info("DATA IS SET FOR MINOR TABLE");
 			}
 		});		*/	
-				requests.minorSkillRequestNonRoo().countMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
+				requests.minorSkillRequest().countMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
 
 					@Override
 					public void onSuccess(Long response) {								
@@ -6019,7 +6019,7 @@ final int index2 = index;
 					}
 				});
 				final Range minorSkillRange = standardizedRoleDetailsView[innerindex2].getRoleLearningSubViewImpl().minorTable.getVisibleRange();
-				requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId(),minorSkillRange.getStart(),minorSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
+				requests.minorSkillRequest().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[index].getValue().getId(),minorSkillRange.getStart(),minorSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
 
 					@Override
 					public void onSuccess(List<MinorSkillProxy> response) {								
@@ -6424,7 +6424,7 @@ final int index2 = index;
 			Log.info("major changes");
 			
 			
-			requests.standardizedRoleRequestNonRoo().createStandardizedRoleMajorVersion(standardizedRoleProxy.getId(),(roleBaseItemProxy.getRoleSubItem().iterator().next()).getId(), description.getHTML()).fire(new OSCEReceiver<StandardizedRoleProxy>() {
+			requests.standardizedRoleRequest().createStandardizedRoleMajorVersion(standardizedRoleProxy.getId(),(roleBaseItemProxy.getRoleSubItem().iterator().next()).getId(), description.getHTML()).fire(new OSCEReceiver<StandardizedRoleProxy>() {
 
 				@Override
 				public void onSuccess(StandardizedRoleProxy newCreatedStandardizedRoleProxy) {
@@ -6792,7 +6792,7 @@ public void onDragStart(DragStartEvent event) {
 			
 				
 			}
-			requests.checklistQuestionRequestNonRoo().updateSequence(questionIdList).fire(new OSCEReceiver<Boolean>() {
+			requests.checklistQuestionRequest().updateSequence(questionIdList).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
 				public void onSuccess(Boolean response) {
@@ -6821,7 +6821,7 @@ public void onDragStart(DragStartEvent event) {
 //			topicIdList.add(((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)vp.getWidget(i)).getProxy().getId());
 		
 		}
-			requests.checklistTopicRequestNonRoo().updateSequence(topicIdList).fire(new OSCEReceiver<Boolean>() {
+			requests.checklistTopicRequest().updateSequence(topicIdList).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
 				public void onSuccess(Boolean response) {
@@ -6847,7 +6847,7 @@ public void onDragStart(DragStartEvent event) {
 				optionIdList.add(((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)flowPanel.getWidget(i)).getProxy());
 		
 			}
-			requests.checklistOptionRequestNonRooo().updateSequence(optionIdList).fire(new OSCEReceiver<Boolean>() {
+			requests.checklistOptionRequest().updateSequence(optionIdList).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
 				public void onSuccess(Boolean response) {
@@ -6871,7 +6871,7 @@ public void onDragStart(DragStartEvent event) {
 			{
 				
 			
-				requests.checklistOptionRequestNonRooo().updateSequence(dstId, dstIndex, srcId, srcIndex).fire(new OSCEReceiver<Boolean>() {
+				requests.checklistOptionRequesto().updateSequence(dstId, dstIndex, srcId, srcIndex).fire(new OSCEReceiver<Boolean>() {
 	
 					@Override
 					public void onSuccess(Boolean response) {
@@ -6909,7 +6909,7 @@ public void onDragStart(DragStartEvent event) {
 			criteriaIdList.add(((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)flowPanel.getWidget(i)).getProxy());
 		
 		}
-		requests.checklistCriteriaRequestNonRooo().updateSequence(criteriaIdList).fire(new OSCEReceiver<Boolean>() {
+		requests.checklistCriteriaRequest().updateSequence(criteriaIdList).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -7028,7 +7028,7 @@ public void onDragStart(DragStartEvent event) {
 	@Override
 	public void mainClassiListBoxClicked(MainClassificationProxy proxy,
 		final RoleLearningPopUpView popupView) {	
-		requests.classificationTopicRequestNonRoo().findClassiTopicByMainClassi(proxy.getId()).fire(new OSCEReceiver<List<ClassificationTopicProxy>>() {
+		requests.classificationTopicRequest().findClassiTopicByMainClassi(proxy.getId()).fire(new OSCEReceiver<List<ClassificationTopicProxy>>() {
 
 			@Override
 			public void onSuccess(List<ClassificationTopicProxy> response) {
@@ -7041,7 +7041,7 @@ public void onDragStart(DragStartEvent event) {
 	@Override
 	public void classiTopicListBoxClicked(ClassificationTopicProxy proxy,
 			final RoleLearningPopUpView popupView) {
-		requests.topicRequestNonRoo().findTopicByClassiTopic(proxy.getId()).fire(new OSCEReceiver<List<TopicProxy>>() {
+		requests.topicRequest().findTopicByClassiTopic(proxy.getId()).fire(new OSCEReceiver<List<TopicProxy>>() {
 
 			@Override
 			public void onSuccess(List<TopicProxy> response) {
@@ -7065,7 +7065,7 @@ public void onDragStart(DragStartEvent event) {
 			skillLevelId = skillLevelProxy.getId();
 		}
 			
-		requests.skillRequestNonRoo().findSkillByTopicIDAndSkillLevelID(topicProxy.getId(), skillLevelId).fire(new OSCEReceiver<List<SkillProxy>>() {
+		requests.skillRequest().findSkillByTopicIDAndSkillLevelID(topicProxy.getId(), skillLevelId).fire(new OSCEReceiver<List<SkillProxy>>() {
 			
 			@Override
 			public void onSuccess(List<SkillProxy> response) {
@@ -7112,7 +7112,7 @@ public void onDragStart(DragStartEvent event) {
 			skillLevelId = skillLevelProxy.getId();
 		}
 			
-		requests.skillRequestNonRoo().findSkillByTopicIDAndSkillLevelID(topicProxy.getId(), skillLevelId).fire(new OSCEReceiver<List<SkillProxy>>() {
+		requests.skillRequest().findSkillByTopicIDAndSkillLevelID(topicProxy.getId(), skillLevelId).fire(new OSCEReceiver<List<SkillProxy>>() {
 			
 			@Override
 			public void onSuccess(List<SkillProxy> response) {
@@ -7159,7 +7159,7 @@ public void onDragStart(DragStartEvent event) {
 	
 	public void refreshMainSkillData()
 	{
-		/*requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
+		/*requests.mainSkillRequest().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
 
 			@Override
 			public void onSuccess(List<MainSkillProxy> response) {
@@ -7169,7 +7169,7 @@ public void onDragStart(DragStartEvent event) {
 		});*/
 		//main skill change
 		
-				requests.mainSkillRequestNonRoo().countMainSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
+				requests.mainSkillRequest().countMainSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
 
 					@Override
 					public void onSuccess(Long response) {								
@@ -7180,7 +7180,7 @@ public void onDragStart(DragStartEvent event) {
 					}
 				});
 				final Range mainSkillRange = standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getRoleLearningSubViewImpl().majorTable.getVisibleRange();
-				requests.mainSkillRequestNonRoo().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(),mainSkillRange.getStart(),mainSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
+				requests.mainSkillRequest().findMainSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(),mainSkillRange.getStart(),mainSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MainSkillProxy>>() {
 
 					@Override
 					public void onSuccess(List<MainSkillProxy> response) {								
@@ -7199,7 +7199,7 @@ public void onDragStart(DragStartEvent event) {
 	public void refreshMinorSkillData()
 	{
 		//minor changes changes
-/*		requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
+/*		requests.minorSkillRequest().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
 
 			@Override
 			public void onSuccess(List<MinorSkillProxy> response) {
@@ -7208,7 +7208,7 @@ public void onDragStart(DragStartEvent event) {
 			}
 		});
 		*/
-		requests.minorSkillRequestNonRoo().countMinorSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
+		requests.minorSkillRequest().countMinorSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<Long>() {
 
 			@Override
 			public void onSuccess(Long response) {								
@@ -7219,7 +7219,7 @@ public void onDragStart(DragStartEvent event) {
 			}
 		});
 		final Range minorSkillRange = standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getRoleLearningSubViewImpl().minorTable.getVisibleRange();
-		requests.minorSkillRequestNonRoo().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(),minorSkillRange.getStart(),minorSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
+		requests.minorSkillRequest().findMinorSkillEntriesByRoleID(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId(),minorSkillRange.getStart(),minorSkillRange.getLength()).with("skill","skill.topic","skill.skillLevel","skill.topic.classificationTopic", "skill.topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<MinorSkillProxy>>() {
 
 			@Override
 			public void onSuccess(List<MinorSkillProxy> response) {								
@@ -7425,14 +7425,14 @@ public void onDragStart(DragStartEvent event) {
 			
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			
-			requests.skillRequestNonRoo().countSkillBySearchCriteria(mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).fire(new OSCEReceiver<Integer>() {
+			requests.skillRequest().countSkillBySearchCriteria(mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).fire(new OSCEReceiver<Integer>() {
 				@Override
 				public void onSuccess(Integer response) {
 					loadRange();
 					System.out.println("~~~~RESPONSE : " + response);
 					learningObjectiveView.getTable().setRowCount(response, true);
 					
-					requests.skillRequestNonRoo().findSkillBySearchCriteria(start, length, mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
+					requests.skillRequest().findSkillBySearchCriteria(start, length, mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
 
 						@Override
 						public void onSuccess(List<SkillProxy> response) {
@@ -7497,7 +7497,7 @@ public void onDragStart(DragStartEvent event) {
 			
 			
 			
-			/*requests.osceRequestNonRoo().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).fire(new OSCEReceiver<List<OsceProxy>>() {
+			/*requests.osceRequest().findAllOsceSemester(standardizedRoleDetailsView[roleDetailTabPanel.getSelectedIndex()].getValue().getId()).fire(new OSCEReceiver<List<OsceProxy>>() {
 
 				@Override
 				public void onSuccess(List<OsceProxy> response) {
@@ -7554,7 +7554,7 @@ public void onDragStart(DragStartEvent event) {
 		public void fillClassificationTopicSuggestBox(Long mainClassiId)
 		{
 			
-			requests.classificationTopicRequestNonRoo().findClassiTopicByMainClassi(mainClassiId).fire(new OSCEReceiver<List<ClassificationTopicProxy>>() {
+			requests.classificationTopicRequest().findClassiTopicByMainClassi(mainClassiId).fire(new OSCEReceiver<List<ClassificationTopicProxy>>() {
 
 				@Override
 				public void onSuccess(List<ClassificationTopicProxy> response) {
@@ -7579,7 +7579,7 @@ public void onDragStart(DragStartEvent event) {
 		
 		public void fillTopicSuggestBox(Long classiTopicId)
 		{
-			requests.topicRequestNonRoo().findTopicByClassiTopic(classiTopicId).fire(new OSCEReceiver<List<TopicProxy>>() {
+			requests.topicRequest().findTopicByClassiTopic(classiTopicId).fire(new OSCEReceiver<List<TopicProxy>>() {
 
 				@Override
 				public void onSuccess(List<TopicProxy> response) {
@@ -7660,12 +7660,12 @@ public void onDragStart(DragStartEvent event) {
 			System.out.println("Start : " + range.getStart());
 			System.out.println("Length : " + range.getLength());
 			
-			requests.skillRequestNonRoo().countSkillBySearchCriteria(mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).fire(new OSCEReceiver<Integer>() {
+			requests.skillRequest().countSkillBySearchCriteria(mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).fire(new OSCEReceiver<Integer>() {
 				@Override
 				public void onSuccess(Integer response) {
 					learningObjectiveView.getTable().setRowCount(response, true);
 					
-					requests.skillRequestNonRoo().findSkillBySearchCriteria(range.getStart(), range.getLength(), mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
+					requests.skillRequest().findSkillBySearchCriteria(range.getStart(), range.getLength(), mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
 
 						@Override
 						public void onSuccess(List<SkillProxy> response) {
@@ -7904,7 +7904,7 @@ public void onDragStart(DragStartEvent event) {
 		public void changeDasteValueForOsceSemesterCall() {
 			// TODO Auto-generated method stub
 			
-			requests.osceRequestNonRoo().findAllOsceSemesterByRole(standardizedRoleList,roleOsceSemesterSubView.getStartDate().getValue() , roleOsceSemesterSubView.getEndDate().getValue()).fire(new OSCEReceiver<List<MapOsceRoleProxy>>() {
+			requests.osceRequest().findAllOsceSemesterByRole(standardizedRoleList,roleOsceSemesterSubView.getStartDate().getValue() , roleOsceSemesterSubView.getEndDate().getValue()).fire(new OSCEReceiver<List<MapOsceRoleProxy>>() {
 
 				@Override
 				public void onSuccess(List<MapOsceRoleProxy> response) {
@@ -7952,7 +7952,7 @@ public void onDragStart(DragStartEvent event) {
 				StandardizedRoleProxy standardizedRoleProxy) {
 			showApplicationLoading(true);
 			
-			requests.standardizedRoleRequestNonRoo().exportChecklistByStandardizedRole(standardizedRoleProxy.getId()).fire(new OSCEReceiver<String>() {
+			requests.standardizedRoleRequest().exportChecklistByStandardizedRole(standardizedRoleProxy.getId()).fire(new OSCEReceiver<String>() {
 
 				@Override
 				public void onSuccess(String response) {
@@ -7981,7 +7981,7 @@ public void onDragStart(DragStartEvent event) {
 					.concat("&").concat(ResourceDownloadProps.ID).concat("=").concat(URL.encodeQueryString(standardizedRoleProxy.getId().toString()));
 			Log.info("--> url is : " +url);
 			Window.open(url, "", "");
-			/*requests.standardizedRoleRequestNonRoo().exportOsce(standardizedRoleProxy.getId()).fire(new OSCEReceiver<String>() {
+			/*requests.standardizedRoleRequest().exportOsce(standardizedRoleProxy.getId()).fire(new OSCEReceiver<String>() {
 
 				@Override
 				public void onSuccess(String response) {
@@ -7993,7 +7993,7 @@ public void onDragStart(DragStartEvent event) {
 		@Override
 		public void exportChecklistQRClicked(final StandardizedRoleProxy value) {
 			
-			requests.standardizedRoleRequestNonRoo().createChecklistQRImageByChecklistId(value.getCheckList().getId()).fire(new OSCEReceiver<String>() {
+			requests.standardizedRoleRequest().createChecklistQRImageByChecklistId(value.getCheckList().getId()).fire(new OSCEReceiver<String>() {
 
 				@Override
 				public void onSuccess(String response) {
@@ -8163,7 +8163,7 @@ public void onDragStart(DragStartEvent event) {
 		@Override
 		public void addiOsceChecklistTabClicked(ItemType itemType, String name, String description, StandardizedRoleProxy standardizedRoleProxy) {
 			
-			requests.checklistItemRequestNonRoo().saveChecklistTabItem(name, description, standardizedRoleProxy.getId()).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
+			requests.checklistItemRequest().saveChecklistTabItem(name, description, standardizedRoleProxy.getId()).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 				@Override
 				public void onSuccess(ChecklistItemProxy response) {
@@ -8190,7 +8190,7 @@ public void onDragStart(DragStartEvent event) {
 					if(isDouble(weight) == true){
 						
 						final Double topicWeight= weight==""?0:Double.valueOf(weight);
-					    requests.checklistItemRequestNonRoo().saveChecklistTopicItem(name, description, tabProxy.getId(),topicWeight).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
+					    requests.checklistItemRequest().saveChecklistTopicItem(name, description, tabProxy.getId(),topicWeight).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 						@Override
 						public void onSuccess(ChecklistItemProxy response) {
@@ -8203,7 +8203,7 @@ public void onDragStart(DragStartEvent event) {
 						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric(constants.weight()));	
 					}
 				}else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.RATIO)){
-					requests.checklistItemRequestNonRoo().findMaxTopicWeight(standardizedRoleProxy.getCheckList().getId()).fire(new OSCEReceiver<Double>() {
+					requests.checklistItemRequest().findMaxTopicWeight(standardizedRoleProxy.getCheckList().getId()).fire(new OSCEReceiver<Double>() {
 
 						@Override
 						public void onSuccess(Double response) {
@@ -8216,7 +8216,7 @@ public void onDragStart(DragStartEvent event) {
 										MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
 										dialogBox.showConfirmationDialog(constants.ratioExceedError());	
 									}else{
-									requests.checklistItemRequestNonRoo().saveChecklistTopicItem(name, description, tabProxy.getId(),topicWeight).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
+									requests.checklistItemRequest().saveChecklistTopicItem(name, description, tabProxy.getId(),topicWeight).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 										@Override
 										public void onSuccess(ChecklistItemProxy response) {
@@ -8238,7 +8238,7 @@ public void onDragStart(DragStartEvent event) {
 				
 			}else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.NONE)){
 				
-				requests.checklistItemRequestNonRoo().saveChecklistTopicItem(name, description, tabProxy.getId(),null).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
+				requests.checklistItemRequest().saveChecklistTopicItem(name, description, tabProxy.getId(),null).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 					@Override
 					public void onSuccess(ChecklistItemProxy response) {
@@ -8251,10 +8251,14 @@ public void onDragStart(DragStartEvent event) {
 		
 		@Override
 		public void addiOsceChecklistQuestionClicked(ItemType itemType, final String name, final String description, Boolean isOverallQuestion, OptionType optionType, final RoleDetailsChecklistTopicSubViewImpl checklistTopicSubViewImpl, ChecklistItemProxy checklistTopicProxy) { 
-			requests.checklistItemRequestNonRoo().saveChecklistQuestionItem(name, description, isOverallQuestion, optionType, checklistTopicProxy.getId()).with("").fire(new OSCEReceiver<ChecklistItemProxy>() {
+			requests.checklistItemRequest().saveChecklistQuestionItem(name, description, isOverallQuestion, optionType, checklistTopicProxy.getId()).with("").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 				@Override
 				public void onSuccess(ChecklistItemProxy response) {
+					if(checklistTopicSubViewImpl.getCheckListTopicDisclosurePanel().isOpen() == false){
+						checklistTopicSubViewImpl.getCheckListTopicDisclosurePanel().setOpen(true);
+						checklistTopicSubViewImpl.getArrow().setResource(uiIcons.triangle1South());
+					}
 					createiOSCEQuestionView(checklistTopicSubViewImpl.getContainerVerticalPanel(), name, description, response);
 				}
 			});
@@ -8263,7 +8267,7 @@ public void onDragStart(DragStartEvent event) {
 		@Override
 		public void deleteChecklistTabClicked(final ScrolledTabLayoutPanel checklistTabPanel, final ChecklistItemProxy checklistItemProxy) {
 			
-			requests.checklistItemRequestNonRoo().removeChecklistTabItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+			requests.checklistItemRequest().removeChecklistTabItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
 				public void onSuccess(Boolean response) {
@@ -8288,7 +8292,7 @@ public void onDragStart(DragStartEvent event) {
 
 		@Override
 		public void deleteTopicClicked(final RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistTopicSubViewImpl, ChecklistItemProxy checklistItemProxy) {
-			requests.checklistItemRequestNonRoo().removeChecklistTopicItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+			requests.checklistItemRequest().removeChecklistTopicItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
 				public void onSuccess(Boolean response) {
@@ -8306,7 +8310,7 @@ public void onDragStart(DragStartEvent event) {
 		@Override
 		public void deleteChecklistQuestionClicked(final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl, ChecklistItemProxy checklistItemProxy) {
 			System.out.println("Checklist item id" +checklistItemProxy.getId() );
-			requests.checklistItemRequestNonRoo().removeChecklistItemQuestionItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+			requests.checklistItemRequest().removeChecklistItemQuestionItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
 				public void onSuccess(Boolean response) {
@@ -8323,7 +8327,7 @@ public void onDragStart(DragStartEvent event) {
 		
 		private void initiOSCEChecklist(Long checklistId, final StandardizedRoleDetailsViewImpl standardizedRoleDetailsView) {
 			
-			requests.checklistItemRequestNonRoo().findAllChecklistItemByChecklistId(checklistId).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+			requests.checklistItemRequest().findAllChecklistItemByChecklistId(checklistId).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
 
 				@Override
 				public void onSuccess(List<ChecklistItemProxy> response) {
@@ -8349,7 +8353,10 @@ public void onDragStart(DragStartEvent event) {
 						for (ChecklistItemProxy topicProxy : topicList) {
 							if (topicProxy.getParentItem().getId() != null && topicProxy.getParentItem().getId().equals(tabProxy.getId())) {
 								final RoleDetailsChecklistTopicSubView topicSubView = createTopicView(tabSubView.getContainerVerticalPanel(), topicProxy.getName(), topicProxy.getDescription(), topicProxy);
-								
+								if(topicSubView.getCheckListTopicDisclosurePanel().isOpen() == false){
+									topicSubView.getCheckListTopicDisclosurePanel().setOpen(true);
+									topicSubView.getArrow().setResource(uiIcons.triangle1South());
+								}
 								for (ChecklistItemProxy questionProxy : questionList) {
 									if (questionProxy.getParentItem().getId().equals(topicProxy.getId())) {
 										RoleDetailsChecklistItemSubView checklistQuestionSubView = createiOSCEQuestionView(topicSubView.getContainerVerticalPanel(), questionProxy.getName(), questionProxy.getDescription(), questionProxy);
@@ -8442,7 +8449,7 @@ public void onDragStart(DragStartEvent event) {
 						proxy.setDescription(description);
 						proxy.setWeight(weight =="" ? 0 :Double.valueOf(weight));
 						
-						requests.checklistItemRequestNonRoo().findMaxTopicWeight(standardizedRoleProxy.getCheckList().getId()).fire(new OSCEReceiver<Double>() {
+						requests.checklistItemRequest().findMaxTopicWeight(standardizedRoleProxy.getCheckList().getId()).fire(new OSCEReceiver<Double>() {
 
 							@Override
 							public void onSuccess(Double response) {
@@ -8535,7 +8542,7 @@ public void onDragStart(DragStartEvent event) {
 		
 		@Override
 		public void saveCriteriaClicked(String name, ChecklistItemProxy checklistItemProxy, String description, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
-			requests.checklistCriteriaRequestNonRooo().saveChecklistCriteria(name, description, checklistItemProxy.getId(), null).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+			requests.checklistCriteriaRequest().saveChecklistCriteria(name, description, checklistItemProxy.getId(), null).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 				@Override
 				public void onSuccess(ChecklistItemProxy response) {	
@@ -8548,7 +8555,7 @@ public void onDragStart(DragStartEvent event) {
 		}
 
 		public void saveOptionClicked(String name, String description, String value, String criteriaCount, ChecklistItemProxy checklistItemProxy, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
-			requests.checklistOptionRequestNonRooo().saveChecklistOption(name, description, value, Integer.parseInt(criteriaCount), checklistItemProxy.getId(), null).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+			requests.checklistOptionRequest().saveChecklistOption(name, description, value, Integer.parseInt(criteriaCount), checklistItemProxy.getId(), null).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 				@Override
 				public void onSuccess(ChecklistItemProxy response) {
@@ -8562,7 +8569,7 @@ public void onDragStart(DragStartEvent event) {
 
 		@Override
 		public void deleteCriteriaClicked(ChecklistCriteriaProxy criteriaProxy, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
-			requests.checklistCriteriaRequestNonRooo().removeChecklistCriteria(criteriaProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+			requests.checklistCriteriaRequest().removeChecklistCriteria(criteriaProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 				@Override
 				public void onSuccess(ChecklistItemProxy response) {
@@ -8580,7 +8587,7 @@ public void onDragStart(DragStartEvent event) {
 
 		@Override
 		public void deleteOptionClicked(ChecklistOptionProxy optionProxy, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
-			requests.checklistOptionRequestNonRooo().removeChecklistOption(optionProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+			requests.checklistOptionRequest().removeChecklistOption(optionProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 				@Override
 				public void onSuccess(ChecklistItemProxy response) {
@@ -8598,7 +8605,7 @@ public void onDragStart(DragStartEvent event) {
 		
 		@Override
 		public void updateCriteriaClicked(String name, String description, ChecklistItemProxy checklistItemProxy, ChecklistCriteriaProxy criteriaProxy, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
-			requests.checklistCriteriaRequestNonRooo().saveChecklistCriteria(name, description, checklistItemProxy.getId(), criteriaProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+			requests.checklistCriteriaRequest().saveChecklistCriteria(name, description, checklistItemProxy.getId(), criteriaProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 				@Override
 				public void onSuccess(ChecklistItemProxy response) {	
@@ -8613,7 +8620,7 @@ public void onDragStart(DragStartEvent event) {
 		
 		@Override
 		public void updateOptionClicked(String name, String description, String value, String criteriaCount, ChecklistItemProxy checklistItemProxy, ChecklistOptionProxy optionProxy, final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl) {
-			requests.checklistOptionRequestNonRooo().saveChecklistOption(name, description, value, Integer.parseInt(criteriaCount), checklistItemProxy.getId(), optionProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+			requests.checklistOptionRequest().saveChecklistOption(name, description, value, Integer.parseInt(criteriaCount), checklistItemProxy.getId(), optionProxy.getId()).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 				@Override
 				public void onSuccess(ChecklistItemProxy response) {
@@ -8639,7 +8646,7 @@ public void onDragStart(DragStartEvent event) {
 
 		@Override
 		public void setSpecialisationBoxValues(final ChecklistImportTabPopupView checklistImportTabPopUpView) {
-			requests.specialisationRequestNonRoo().findSpecialisations().fire(new OSCEReceiver<List<SpecialisationProxy>>() {
+			requests.specialisationRequest().findSpecialisations().fire(new OSCEReceiver<List<SpecialisationProxy>>() {
 
 				@Override
 				public void onSuccess(List<SpecialisationProxy> response) {
@@ -8682,7 +8689,7 @@ public void onDragStart(DragStartEvent event) {
 					checklistImportTabView.getView().hide();
 					if(standardizedRoleProxy != null && checklistImportTabView.getTabId() != null && checklistImportTabView.getStandardizedRoleId() != null){
 				
-						requests.checklistItemRequestNonRoo().importChecklistTabsForTab(standardizedRoleProxy.getId(),checklistImportTabView.getStandardizedRoleId(),checklistImportTabView.getTabId()).fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+						requests.checklistItemRequest().importChecklistTabsForTab(standardizedRoleProxy.getId(),checklistImportTabView.getStandardizedRoleId(),checklistImportTabView.getTabId()).fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
 
 							@Override
 							public void onSuccess(List<ChecklistItemProxy> response) {
@@ -8710,7 +8717,7 @@ public void onDragStart(DragStartEvent event) {
 				final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
 			
 				if (standardizedRoleProxy != null) {
-					requests.standardizedRoleRequestNonRoo().findRolesFromSpecialisationId(specialisationId, standardizedRoleProxy.getId()).with("checkList").fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
+					requests.standardizedRoleRequest().findRolesFromSpecialisationId(specialisationId, standardizedRoleProxy.getId()).with("checkList").fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
 	
 						@Override
 						public void onSuccess(List<StandardizedRoleProxy> response) {
@@ -8727,7 +8734,7 @@ public void onDragStart(DragStartEvent event) {
 		@Override
 		public void standardizedRoleSuggectionBoxValueSelected(Long checklistId,final ChecklistImportTabPopupViewImpl checklistImportTabPopupViewImpl) {
 		
-			 requests.checklistItemRequestNonRoo().findAllChecklistTabsByRoles(checklistId).fire(new OSCEReceiver<List<ChecklistImportPojoValueProxy>>() {
+			 requests.checklistItemRequest().findAllChecklistTabsByRoles(checklistId).fire(new OSCEReceiver<List<ChecklistImportPojoValueProxy>>() {
 
 					@Override
 					public void onSuccess(List<ChecklistImportPojoValueProxy> response) {
@@ -8772,7 +8779,7 @@ public void onDragStart(DragStartEvent event) {
 					checklistImportTopicPopup.getView().hide();
 					if(standardizedRoleProxy != null && checklistImportTopicPopup.getStandardizedRoleId() != null && checklistImportTopicPopup.getTopicId() != null){
 				
-						requests.checklistItemRequestNonRoo().importChecklistTopicsForRole(standardizedRoleProxy.getId(),checklistImportTopicPopup.getStandardizedRoleId(),checklistImportTopicPopup.getTopicId(),tabId).fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+						requests.checklistItemRequest().importChecklistTopicsForRole(standardizedRoleProxy.getId(),checklistImportTopicPopup.getStandardizedRoleId(),checklistImportTopicPopup.getTopicId(),tabId).fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
 
 							@Override
 							public void onSuccess(List<ChecklistItemProxy> response) {
@@ -8798,7 +8805,7 @@ public void onDragStart(DragStartEvent event) {
 			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
 			
 			if (standardizedRoleProxy != null) {
-				requests.standardizedRoleRequestNonRoo().findRolesExceptCurrentRole(standardizedRoleProxy.getId()).with("checkList").fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
+				requests.standardizedRoleRequest().findRolesExceptCurrentRole(standardizedRoleProxy.getId()).with("checkList").fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
 
 					@Override
 					public void onSuccess(List<StandardizedRoleProxy> response) {
@@ -8839,7 +8846,7 @@ public void onDragStart(DragStartEvent event) {
 					checklistImportQuestionPopup.getView().hide();
 					if(standardizedRoleProxy != null && checklistImportQuestionPopup.getRoleId() != null && checklistImportQuestionPopup.getQuestionId() != null && checklistImportQuestionPopup.getTopicId() != null){
 				
-						requests.checklistItemRequestNonRoo().importChecklistQuestionsForTopic(checklistImportQuestionPopup.getTopicId(),checklistImportQuestionPopup.getRoleId(),checklistImportQuestionPopup.getQuestionId(),topicId).fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+						requests.checklistItemRequest().importChecklistQuestionsForTopic(checklistImportQuestionPopup.getTopicId(),checklistImportQuestionPopup.getRoleId(),checklistImportQuestionPopup.getQuestionId(),topicId).fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
 
 							@Override
 							public void onSuccess(List<ChecklistItemProxy> response) {
@@ -8866,7 +8873,7 @@ public void onDragStart(DragStartEvent event) {
 			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
 			
 			if (standardizedRoleProxy != null) {
-				requests.standardizedRoleRequestNonRoo().findRolesExceptCurrentRole(standardizedRoleProxy.getId()).with("checkList").fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
+				requests.standardizedRoleRequest().findRolesExceptCurrentRole(standardizedRoleProxy.getId()).with("checkList").fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
 
 					@Override
 					public void onSuccess(List<StandardizedRoleProxy> response) {
@@ -8885,7 +8892,7 @@ public void onDragStart(DragStartEvent event) {
 		@Override
 		public void standardizedRoleSuggectionBoxValueSelectedTopicPopUp(Long checklistId,final ChecklistImportTopicPopupViewImpl checklistImportTopicPopup) {
 			
-			requests.checklistItemRequestNonRoo().findAllChecklistTopicsByRoles(checklistId).fire(new OSCEReceiver<List<ChecklistImportPojoValueProxy>>() {
+			requests.checklistItemRequest().findAllChecklistTopicsByRoles(checklistId).fire(new OSCEReceiver<List<ChecklistImportPojoValueProxy>>() {
 
 				@Override
 				public void onSuccess(List<ChecklistImportPojoValueProxy> response) {
@@ -8905,7 +8912,7 @@ public void onDragStart(DragStartEvent event) {
 		@Override
 		public void standardizedRoleSuggectionBoxValueSelectedQuestionPopup(Long checklistId,final ChecklistImportQuestionPopupViewImpl checklistImportQuestionPopupViewImpl) {
 			
-			requests.checklistItemRequestNonRoo().findAllChecklistTopicsByChecklist(checklistId).fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+			requests.checklistItemRequest().findAllChecklistTopicsByChecklist(checklistId).fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
 
 				@Override
 				public void onSuccess(List<ChecklistItemProxy> response) {
@@ -8926,7 +8933,7 @@ public void onDragStart(DragStartEvent event) {
 		@Override
 		public void topicSuggestionBoxValueSelectedQuestionPopup(Long topicId,final ChecklistImportQuestionPopupViewImpl checklistImportQuestionPopup) {
 	
-			requests.checklistItemRequestNonRoo().findChecklistQuestionByTopicId(topicId).fire(new OSCEReceiver<List<ChecklistImportPojoValueProxy>>() {
+			requests.checklistItemRequest().findChecklistQuestionByTopicId(topicId).fire(new OSCEReceiver<List<ChecklistImportPojoValueProxy>>() {
 
 				@Override
 				public void onSuccess(List<ChecklistImportPojoValueProxy> response) {
@@ -8967,7 +8974,7 @@ public void onDragStart(DragStartEvent event) {
 			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
 			
 			if(checklistItemProxy != null){
-				requests.checklistItemRequestNonRoo().moveChecklistItemUp(checklistItemProxy,checklistItemProxy.getSequenceNumber() - 1).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+				requests.checklistItemRequest().moveChecklistItemUp(checklistItemProxy,checklistItemProxy.getSequenceNumber() - 1).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 					@Override
 					public void onSuccess(ChecklistItemProxy response) {
@@ -8982,7 +8989,7 @@ public void onDragStart(DragStartEvent event) {
 		}
 
 		protected void refreshiOSCEChecklist(Long id,final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView,final ChecklistItemProxy parentItem, final int parentItemType) {
-			requests.checklistItemRequestNonRoo().findAllChecklistItemByChecklistId(id).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+			requests.checklistItemRequest().findAllChecklistItemByChecklistId(id).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
 
 				@Override
 				public void onSuccess(List<ChecklistItemProxy> response) {
@@ -9011,7 +9018,10 @@ public void onDragStart(DragStartEvent event) {
 							for (ChecklistItemProxy topicProxy : topicList) {
 								if (topicProxy.getParentItem().getId() != null && topicProxy.getParentItem().getId().equals(tabProxy.getId())) {
 									final RoleDetailsChecklistTopicSubView topicSubView = createTopicView(tabSubView.getContainerVerticalPanel(), topicProxy.getName(), topicProxy.getDescription(), topicProxy);
-
+									if(topicSubView.getCheckListTopicDisclosurePanel().isOpen()){
+										topicSubView.getCheckListTopicDisclosurePanel().setOpen(false);
+										topicSubView.getArrow().setResource(uiIcons.triangle1East());
+									}
 									for (ChecklistItemProxy questionProxy : questionList) {
 										if (questionProxy.getParentItem().getId().equals(topicProxy.getId())) {
 											RoleDetailsChecklistItemSubView checklistQuestionSubView = createiOSCEQuestionView(topicSubView.getContainerVerticalPanel(), questionProxy.getName(), questionProxy.getDescription(), questionProxy);
@@ -9052,7 +9062,7 @@ public void onDragStart(DragStartEvent event) {
 			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
 			
 			if(checklistItemProxy != null){
-				requests.checklistItemRequestNonRoo().moveChecklistItemDown(checklistItemProxy,checklistItemProxy.getSequenceNumber() + 1).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+				requests.checklistItemRequest().moveChecklistItemDown(checklistItemProxy,checklistItemProxy.getSequenceNumber() + 1).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 					@Override
 					public void onSuccess(ChecklistItemProxy response) {
@@ -9073,7 +9083,7 @@ public void onDragStart(DragStartEvent event) {
 			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
 			
 			if(checklistItemProxy != null){
-				requests.checklistItemRequestNonRoo().moveChecklistItemUp(checklistItemProxy,checklistItemProxy.getSequenceNumber() - 1).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+				requests.checklistItemRequest().moveChecklistItemUp(checklistItemProxy,checklistItemProxy.getSequenceNumber() - 1).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 					@Override
 					public void onSuccess(ChecklistItemProxy response) {
@@ -9094,7 +9104,7 @@ public void onDragStart(DragStartEvent event) {
 			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
 			
 			if(checklistItemProxy != null){
-				requests.checklistItemRequestNonRoo().moveChecklistItemDown(checklistItemProxy,checklistItemProxy.getSequenceNumber() + 1).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
+				requests.checklistItemRequest().moveChecklistItemDown(checklistItemProxy,checklistItemProxy.getSequenceNumber() + 1).with("parentItem", "checkListOptions", "checkListCriterias").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 					@Override
 					public void onSuccess(ChecklistItemProxy response) {

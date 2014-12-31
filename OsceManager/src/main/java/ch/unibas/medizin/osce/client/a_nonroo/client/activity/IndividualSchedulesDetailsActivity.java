@@ -40,8 +40,8 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.ServerFailure;
-import com.google.gwt.requestfactory.shared.Violation;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -269,7 +269,7 @@ IndividualSchedulesDetailsView.Delegate
 			lstSPTempEndTime=new ArrayList<String>();
 			lstSPEndTime=new ArrayList<List<String>>();*/
 			
-			requests.standardizedPatientRequestNonRoo().findPatientsByOsceId(osceProxy.getId()).with("patientInSemester","patientInSemester.patientInRole","patientInSemester.patientInRole.assignments","patientInSemester.patientInRole.oscePost","patientInSemester.patientInRole.oscePost.standardizedRole").fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
+			requests.standardizedPatientRequest().findPatientsByOsceId(osceProxy.getId()).with("patientInSemester","patientInSemester.patientInRole","patientInSemester.patientInRole.assignments","patientInSemester.patientInRole.oscePost","patientInSemester.patientInRole.oscePost.standardizedRole").fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
 
 				@Override
 				public void onSuccess(List<StandardizedPatientProxy> response) 
@@ -324,7 +324,7 @@ IndividualSchedulesDetailsView.Delegate
 								}
 							});
 							
-							requests.patientInRoleRequestNonRoo().findPatientsInRoleForAssignmentBySPIdandSemesterId(sp.getId(),IndividualSchedulesActivity.semesterProxyForDetail.getId()).fire(new OSCEReceiver<List<PatientInRoleProxy>>() 
+							requests.patientInRoleRequest().findPatientsInRoleForAssignmentBySPIdandSemesterId(sp.getId(),IndividualSchedulesActivity.semesterProxyForDetail.getId()).fire(new OSCEReceiver<List<PatientInRoleProxy>>() 
 							{
 
 								@Override
@@ -355,7 +355,7 @@ IndividualSchedulesDetailsView.Delegate
 								}
 							});*/
 							
-							/*requests.assignmentRequestNonRoo().findAssignmentsBySPIdandSemesterId(sp.getId(),IndividualSchedulesActivity.semesterProxyForDetail.getId()).fire(new OSCEReceiver<List<AssignmentProxy>>() 
+							/*requests.assignmentRequest().findAssignmentsBySPIdandSemesterId(sp.getId(),IndividualSchedulesActivity.semesterProxyForDetail.getId()).fire(new OSCEReceiver<List<AssignmentProxy>>() 
 							{
 								@Override
 								public void onSuccess(List<AssignmentProxy> response) 
@@ -425,7 +425,7 @@ IndividualSchedulesDetailsView.Delegate
 			//lstChkStud=new ArrayList<CheckBox>();
 			//lstStudentProxy=new ArrayList<StudentProxy>();	
 			
-			requests.courseRequestNonRoo().findCourseByOsce(osceId).fire(new OSCEReceiver<List<CourseProxy>>() 
+			requests.courseRequest().findCourseByOsce(osceId).fire(new OSCEReceiver<List<CourseProxy>>() 
 			{
 				@Override
 				public void onSuccess(List<CourseProxy> courseProxyList) 
@@ -474,9 +474,9 @@ IndividualSchedulesDetailsView.Delegate
 		
 		private void initStudentByParcour(Long osceId, Long courseId) 
 		{		
-				//requests.studentRequestNonRoo().findStudentByOsceId(osceId).fire(new OSCEReceiver<List<StudentProxy>>() {
+				//requests.studentRequest().findStudentByOsceId(osceId).fire(new OSCEReceiver<List<StudentProxy>>() {
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-				requests.studentRequestNonRoo().findStudentByOsceIdAndCourseId(osceId,courseId).fire(new OSCEReceiver<List<StudentProxy>>() 
+				requests.studentRequest().findStudentByOsceIdAndCourseId(osceId,courseId).fire(new OSCEReceiver<List<StudentProxy>>() 
 				{
 				@Override
 				public void onSuccess(List<StudentProxy> response) 
@@ -561,7 +561,7 @@ IndividualSchedulesDetailsView.Delegate
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			lstChkExaminor=new ArrayList<CheckBox>();
 			lstExaminerProxy=new ArrayList<DoctorProxy>();	
-			requests.doctorRequestNonRoo().findDoctorByOsceId(id).fire(new OSCEReceiver<List<DoctorProxy>>() 
+			requests.doctorRequest().findDoctorByOsceId(id).fire(new OSCEReceiver<List<DoctorProxy>>() 
 			{
 				@Override
 				public void onSuccess(List<DoctorProxy> response) 
@@ -813,7 +813,7 @@ IndividualSchedulesDetailsView.Delegate
 			final PrintTemplatePopupViewImpl popupStud=new PrintTemplatePopupViewImpl();							
 			Log.info("get Stud Template Content.");
 			
-			requests.osceRequestNonRoo( ).findAllOsceBySemster(IndividualSchedulesActivity.semesterProxyForDetail.getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() 
+			requests.osceRequest( ).findAllOsceBySemster(IndividualSchedulesActivity.semesterProxyForDetail.getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() 
 			{
 						@Override
 						public void onSuccess(List<OsceProxy> response) 
@@ -875,7 +875,7 @@ IndividualSchedulesDetailsView.Delegate
 					{
 						Log.info("Student Click on Load Template Osce Selected: " + popupStud.getOsceList().getValue(popupStud.getOsceList().getSelectedIndex()));
 						
-						requests.osceRequestNonRoo().findOsceIdByOsceName(popupStud.getOsceList().getValue(popupStud.getOsceList().getSelectedIndex())).fire(new OSCEReceiver<Long>() 
+						requests.osceRequest().findOsceIdByOsceName(popupStud.getOsceList().getValue(popupStud.getOsceList().getSelectedIndex())).fire(new OSCEReceiver<Long>() 
 						{
 
 							@Override
@@ -1179,7 +1179,7 @@ IndividualSchedulesDetailsView.Delegate
 							});*/
 														
 						/*
-							requests.patientInRoleRequestNonRoo().findPatientsInRoleForAssignmentBySPIdandSemesterId(lstStandPatProxy.get(i).getId(),IndividualSchedulesActivity.semesterProxyForDetail.getId()).fire(new OSCEReceiver<List<PatientInRoleProxy>>() 
+							requests.patientInRoleRequest().findPatientsInRoleForAssignmentBySPIdandSemesterId(lstStandPatProxy.get(i).getId(),IndividualSchedulesActivity.semesterProxyForDetail.getId()).fire(new OSCEReceiver<List<PatientInRoleProxy>>() 
 							{
 
 								@Override
@@ -1248,7 +1248,7 @@ IndividualSchedulesDetailsView.Delegate
 			popupSP.displayShortRoleAndPostNumberField();
 			Log.info("getTemplate Content.");
 			
-			requests.osceRequestNonRoo( ).findAllOsceBySemster(IndividualSchedulesActivity.semesterProxyForDetail.getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() 
+			requests.osceRequest( ).findAllOsceBySemster(IndividualSchedulesActivity.semesterProxyForDetail.getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() 
 			{
 						@Override
 						public void onSuccess(List<OsceProxy> response) 
@@ -1302,7 +1302,7 @@ IndividualSchedulesDetailsView.Delegate
 				{
 					Log.info("Click on Load Template Osce Selected: " + popupSP.getOsceList().getValue(popupSP.getOsceList().getSelectedIndex()));
 					
-					requests.osceRequestNonRoo().findOsceIdByOsceName(popupSP.getOsceList().getValue(popupSP.getOsceList().getSelectedIndex())).fire(new OSCEReceiver<Long>() 
+					requests.osceRequest().findOsceIdByOsceName(popupSP.getOsceList().getValue(popupSP.getOsceList().getSelectedIndex())).fire(new OSCEReceiver<Long>() 
 					{
 
 						@Override
@@ -1550,7 +1550,7 @@ IndividualSchedulesDetailsView.Delegate
 			final PrintTemplatePopupViewImpl popupExaminer=new PrintTemplatePopupViewImpl();							
 			Log.info("get Stud Template Content.");
 			
-			requests.osceRequestNonRoo( ).findAllOsceBySemster(IndividualSchedulesActivity.semesterProxyForDetail.getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() 
+			requests.osceRequest( ).findAllOsceBySemster(IndividualSchedulesActivity.semesterProxyForDetail.getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() 
 			{
 						@Override
 						public void onSuccess(List<OsceProxy> response) 
@@ -1601,7 +1601,7 @@ IndividualSchedulesDetailsView.Delegate
 				public void onClick(ClickEvent event) 
 				{
 					Log.info("Examiner Click on Load Template Osce Selected: " + popupExaminer.getOsceList().getValue(popupExaminer.getOsceList().getSelectedIndex()));
-					requests.osceRequestNonRoo().findOsceIdByOsceName(popupExaminer.getOsceList().getValue(popupExaminer.getOsceList().getSelectedIndex())).fire(new OSCEReceiver<Long>() 
+					requests.osceRequest().findOsceIdByOsceName(popupExaminer.getOsceList().getValue(popupExaminer.getOsceList().getSelectedIndex())).fire(new OSCEReceiver<Long>() 
 							{
 
 								@Override
@@ -1828,7 +1828,7 @@ IndividualSchedulesDetailsView.Delegate
 				}
 				if(examinorId.size()>0)
 				{
-					requests.doctorRequestNonRoo().updateExaminerIdToSession(examinorId).fire(new OSCEReceiver<Void>() {
+					requests.doctorRequest().updateExaminerIdToSession(examinorId).fire(new OSCEReceiver<Void>() {
 
 						@Override
 						public void onSuccess(Void response) {
@@ -1879,7 +1879,7 @@ IndividualSchedulesDetailsView.Delegate
 				
 				if(studId.size()>0)
 				{
-					requests.studentRequestNonRoo().updateStudentToSession(studId).fire(new OSCEReceiver<Void>() {
+					requests.studentRequest().updateStudentToSession(studId).fire(new OSCEReceiver<Void>() {
 
 						@Override
 						public void onSuccess(Void response) {

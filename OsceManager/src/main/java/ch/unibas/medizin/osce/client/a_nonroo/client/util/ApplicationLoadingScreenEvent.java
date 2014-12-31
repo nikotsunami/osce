@@ -2,9 +2,10 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.util;
 
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.util.ApplicationLoadingPopupViewImpl;
 
-import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.HandlerRegistration;
+
 
 /**
  * Here is a custom event. For comparison this is also a

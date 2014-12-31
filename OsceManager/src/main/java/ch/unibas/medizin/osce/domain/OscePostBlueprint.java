@@ -3,27 +3,27 @@ package ch.unibas.medizin.osce.domain;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
-
 import org.apache.log4j.Logger;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
-
 import ch.unibas.medizin.osce.shared.PostType;
 
-@RooJavaBean
-@RooToString
-@RooEntity
+@Entity
+@Configurable
 public class OscePostBlueprint {
 
 	@PersistenceContext(unitName="persistenceUnit")
@@ -158,5 +158,161 @@ public class OscePostBlueprint {
     		return null;
     	else 
     		return resultList.get(0);    				
+    }
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            OscePostBlueprint attached = OscePostBlueprint.findOscePostBlueprint(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public OscePostBlueprint merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        OscePostBlueprint merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new OscePostBlueprint().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countOscePostBlueprints() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM OscePostBlueprint o", Long.class).getSingleResult();
+    }
+
+	public static List<OscePostBlueprint> findAllOscePostBlueprints() {
+        return entityManager().createQuery("SELECT o FROM OscePostBlueprint o", OscePostBlueprint.class).getResultList();
+    }
+
+	public static OscePostBlueprint findOscePostBlueprint(Long id) {
+        if (id == null) return null;
+        return entityManager().find(OscePostBlueprint.class, id);
+    }
+
+	public static List<OscePostBlueprint> findOscePostBlueprintEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM OscePostBlueprint o", OscePostBlueprint.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public Boolean getIsFirstPart() {
+        return this.isFirstPart;
+    }
+
+	public void setIsFirstPart(Boolean isFirstPart) {
+        this.isFirstPart = isFirstPart;
+    }
+
+	public RoleTopic getRoleTopic() {
+        return this.roleTopic;
+    }
+
+	public void setRoleTopic(RoleTopic roleTopic) {
+        this.roleTopic = roleTopic;
+    }
+
+	public Osce getOsce() {
+        return this.osce;
+    }
+
+	public void setOsce(Osce osce) {
+        this.osce = osce;
+    }
+
+	public Set<OscePost> getOscePosts() {
+        return this.oscePosts;
+    }
+
+	public void setOscePosts(Set<OscePost> oscePosts) {
+        this.oscePosts = oscePosts;
+    }
+
+	public PostType getPostType() {
+        return this.postType;
+    }
+
+	public void setPostType(PostType postType) {
+        this.postType = postType;
+    }
+
+	public Specialisation getSpecialisation() {
+        return this.specialisation;
+    }
+
+	public void setSpecialisation(Specialisation specialisation) {
+        this.specialisation = specialisation;
+    }
+
+	public Integer getSequenceNumber() {
+        return this.sequenceNumber;
+    }
+
+	public void setSequenceNumber(Integer sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("IsFirstPart: ").append(getIsFirstPart()).append(", ");
+        sb.append("Osce: ").append(getOsce()).append(", ");
+        sb.append("OscePosts: ").append(getOscePosts() == null ? "null" : getOscePosts().size()).append(", ");
+        sb.append("PostType: ").append(getPostType()).append(", ");
+        sb.append("RoleTopic: ").append(getRoleTopic()).append(", ");
+        sb.append("SequenceNumber: ").append(getSequenceNumber()).append(", ");
+        sb.append("Specialisation: ").append(getSpecialisation()).append(", ");
+        sb.append("Version: ").append(getVersion()).append(", ");
+        sb.append("FirstPart: ").append(isFirstPart());
+        return sb.toString();
     }
 }

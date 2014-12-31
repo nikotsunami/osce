@@ -238,7 +238,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		});
 		
 		showApplicationLoading(true);
-		requests.osceDayRequestNooRoo().findOsceDayBySemester(semesterProxy.getId()).fire(new OSCEReceiver<List<OsceDayProxy>>() {
+		requests.osceDayRequest().findOsceDayBySemester(semesterProxy.getId()).fire(new OSCEReceiver<List<OsceDayProxy>>() {
 
 			@Override
 			public void onSuccess(List<OsceDayProxy> response) {
@@ -282,7 +282,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		
 		showApplicationLoading(true);
 		firstBlockDate=null;
-		requests.trainingDateRequestNonRoo().findTrainingDatesFromGivenDateToEndOfMonth(date,semesterProxy.getId()).with("trainingBlock").fire(new OSCEReceiver<List<TrainingDateProxy>>() {
+		requests.trainingDateRequest().findTrainingDatesFromGivenDateToEndOfMonth(date,semesterProxy.getId()).with("trainingBlock").fire(new OSCEReceiver<List<TrainingDateProxy>>() {
 
 			@Override
 			public void onSuccess(List<TrainingDateProxy> response) {
@@ -366,7 +366,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		});
 		
 		showApplicationLoading(true);
-		requests.osceDateRequestNonRoo().findOsceDatesFromGivenDateToEndOfMonth(date,semesterProxy.getId()).fire(new OSCEReceiver<List<OsceDateProxy>>() {
+		requests.osceDateRequest().findOsceDatesFromGivenDateToEndOfMonth(date,semesterProxy.getId()).fire(new OSCEReceiver<List<OsceDateProxy>>() {
 
 			@Override
 			public void onSuccess(List<OsceDateProxy> response) {
@@ -521,7 +521,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 			}
 		}
 		showApplicationLoading(true);
-		requests.osceDateRequestNonRoo().dateIsDefinedAsOSceOrTrainingDate(semesterProxy.getId(),dateOnWidget).fire(new OSCEReceiver<String>() {
+		requests.osceDateRequest().dateIsDefinedAsOSceOrTrainingDate(semesterProxy.getId(),dateOnWidget).fire(new OSCEReceiver<String>() {
 
 			@Override
 			public void onSuccess(String response) {
@@ -595,7 +595,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		
 		Log.info("creating TrainingDate of date : " + currentlySelectedDate);
 		showApplicationLoading(true);
-		requests.trainingDateRequestNonRoo().persistThisDateAsTrainingDate(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<TrainingBlockProxy>() {
+		requests.trainingDateRequest().persistThisDateAsTrainingDate(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<TrainingBlockProxy>() {
 
 			@Override
 			public void onSuccess(TrainingBlockProxy response) {
@@ -636,7 +636,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	public void proposeMultipleDaysAsTrainingDaysButtonClicked() {
 		Log.info("creating TrainingDate of selected dates : ");
 		showApplicationLoading(true);
-		requests.trainingDateRequestNonRoo().persistSelectedMultipleDatesAsTrainingDates(currentlySelectedDatesList,semesterProxy.getId()).fire(new OSCEReceiver<TrainingBlockProxy>() {
+		requests.trainingDateRequest().persistSelectedMultipleDatesAsTrainingDates(currentlySelectedDatesList,semesterProxy.getId()).fire(new OSCEReceiver<TrainingBlockProxy>() {
 
 			@Override
 			public void onSuccess(TrainingBlockProxy response) {
@@ -790,7 +790,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		
 		showApplicationLoading(true);
 		
-		requests.osceDateRequestNonRoo().persistMultipleDateAsOsceDate(currentlySelectedDatesList,semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+		requests.osceDateRequest().persistMultipleDateAsOsceDate(currentlySelectedDatesList,semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -822,7 +822,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	private void persistThisOsceDate() {
 		Log.info("Persisting OsceDate for date : " + currentlySelectedDate);
 		showApplicationLoading(true);
-		requests.osceDateRequestNonRoo().persistThisDateAsOsceDate(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+		requests.osceDateRequest().persistThisDateAsOsceDate(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -920,7 +920,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		
 		showApplicationLoading(true);
 	
-		requests.semesterRequestNonRoo().findTotalPostOfTheSemester(semesterProxy.getId()).with("standardizedRole").fire(new OSCEReceiver<List<OscePostProxy>>() {
+		requests.semesterRequest().findTotalPostOfTheSemester(semesterProxy.getId()).with("standardizedRole").fire(new OSCEReceiver<List<OscePostProxy>>() {
 
 			@Override
 			public void onSuccess(List<OscePostProxy> response) {
@@ -991,7 +991,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 			}
 			showApplicationLoading(true);
 			
-			requests.trainingRequestNonRoo().findTrainingsOfGivenDate(currentlySelectedDate,semesterProxy.getId()).with("trainingDate","standardizedRole","trainingSuggestions").fire(new OSCEReceiver<List<TrainingProxy>>() {
+			requests.trainingRequest().findTrainingsOfGivenDate(currentlySelectedDate,semesterProxy.getId()).with("trainingDate","standardizedRole","trainingSuggestions").fire(new OSCEReceiver<List<TrainingProxy>>() {
 
 				@Override
 				public void onSuccess(List<TrainingProxy> response) {
@@ -1063,7 +1063,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	@SuppressWarnings("deprecation")
 	protected void checkForMoreSuggestionsAndSetSuggestionButtonVisibility() {
 
-		requests.trainingDateRequestNonRoo().findTrainingSuggestionsOfDate(currentlySelectedDate,semesterProxy.getId()).with("standardizedRole","trainingDate").fire(new OSCEReceiver<List<TrainingSuggestionProxy>>() {
+		requests.trainingDateRequest().findTrainingSuggestionsOfDate(currentlySelectedDate,semesterProxy.getId()).with("standardizedRole","trainingDate").fire(new OSCEReceiver<List<TrainingSuggestionProxy>>() {
 
 			@Override
 			public void onSuccess(List<TrainingSuggestionProxy> response) {
@@ -1117,7 +1117,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	protected void checkIsMoreSuggestionsExistForDayAndSetSuggestionButtonVisibility(final List<StandardizedRoleProxy> standardizedRoleProxiesList,final int xPosition,final int yPosition,
 			final boolean isSomeTrainingIsExist) {
 		
-		requests.trainingDateRequestNonRoo().findTrainingSuggestionsOfDate(currentlySelectedDate,semesterProxy.getId()).with("standardizedRole","trainingDate").fire(new OSCEReceiver<List<TrainingSuggestionProxy>>() {
+		requests.trainingDateRequest().findTrainingSuggestionsOfDate(currentlySelectedDate,semesterProxy.getId()).with("standardizedRole","trainingDate").fire(new OSCEReceiver<List<TrainingSuggestionProxy>>() {
 
 		@Override
 		public void onSuccess(List<TrainingSuggestionProxy> response) {
@@ -1177,7 +1177,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	private void findAllRolesAssignInBlockAndRemoveThatFromOrgnalListAndShowToUser(final List<StandardizedRoleProxy> standardizedRoleProxiesList,final int xPosition,final int yPosition){
 		
 		showApplicationLoading(true);
-		requests.trainingRequestNonRoo().findAllRolesAssignInBlock(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
+		requests.trainingRequest().findAllRolesAssignInBlock(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
 
 			@Override
 			public void onSuccess(List<StandardizedRoleProxy> response) {
@@ -1560,7 +1560,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		
 		Log.info("Removing TrainingDate of date : " + currentlySelectedDate);
 		showApplicationLoading(true);
-		requests.trainingDateRequestNonRoo().removeTrainingDate(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+		requests.trainingDateRequest().removeTrainingDate(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -1651,7 +1651,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	public void removeOsceDayButtonClicked() {
 		Log.info("Removing osceDate for date : " + currentlySelectedDate);
 		showApplicationLoading(true);
-		requests.osceDateRequestNonRoo().removeOsceDateForGivenDate(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+		requests.osceDateRequest().removeOsceDateForGivenDate(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -1680,7 +1680,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		Log.info("split block button clicked so creating new view of date" + blockStartDate);
 		showApplicationLoading(true);
 		
-		requests.trainingBlockRequestNonRoo().splitBlock(blockStartDate, trainingBlockProxy.getId(), semesterProxy.getId()).with("trainingBlock").fire(new OSCEReceiver<List<TrainingDateProxy>>() {
+		requests.trainingBlockRequest().splitBlock(blockStartDate, trainingBlockProxy.getId(), semesterProxy.getId()).with("trainingBlock").fire(new OSCEReceiver<List<TrainingDateProxy>>() {
 
 			@Override
 			public void onSuccess(List<TrainingDateProxy> response) {
@@ -1711,7 +1711,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	public void joinBlockButtonClicked(final Date blockStartDate,TrainingBlockProxy trainingBlockProxy) {
 		Log.info("join block button clicked so joining block of date" + blockStartDate);
 		showApplicationLoading(true);
-		requests.trainingBlockRequestNonRoo().joinBlock(blockStartDate,trainingBlockProxy.getId(),semesterProxy.getId()).with("trainingBlock").fire(new OSCEReceiver<List<TrainingDateProxy>>() {
+		requests.trainingBlockRequest().joinBlock(blockStartDate,trainingBlockProxy.getId(),semesterProxy.getId()).with("trainingBlock").fire(new OSCEReceiver<List<TrainingDateProxy>>() {
 
 			@Override
 			public void onSuccess(List<TrainingDateProxy> response) {
@@ -1817,7 +1817,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		}
 		else{
 				showApplicationLoading(true);
-				requests.osceDateRequestNonRoo().isThereAnyTrainingDateThatIsAfterOSceDate(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+				requests.osceDateRequest().isThereAnyTrainingDateThatIsAfterOSceDate(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
 				public void onSuccess(Boolean response) {
@@ -1893,7 +1893,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	private void assignPatientInSemester() {
 	
 		showApplicationLoading(true);
-		requests.patientInSemesterRequestNonRoo().assignSPToSemester(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+		requests.patientInSemesterRequest().assignSPToSemester(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -1915,7 +1915,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		Log.info("Starting survey");
 		
 		showApplicationLoading(true);
-		requests.semesterRequestNonRoo().surveyIsStartedSoPushDataToSpPortal(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+		requests.semesterRequest().surveyIsStartedSoPushDataToSpPortal(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -1950,7 +1950,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		Log.info("Stop Survey Button clicked");
 		showApplicationLoading(true);
 		
-		requests.semesterRequestNonRoo().stopSurveyAndPushDateToOsceFromSpPortal(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+		requests.semesterRequest().stopSurveyAndPushDateToOsceFromSpPortal(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -1978,7 +1978,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	Log.info("checking patients are assign in role");
 	
 	showApplicationLoading(true);
-	requests.semesterRequestNonRoo().checkAllSpIsAssignInRole(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+	requests.semesterRequest().checkAllSpIsAssignInRole(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 		@Override
 		public void onSuccess(Boolean response) {
@@ -2007,7 +2007,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		Log.info("creating suggestion");
 		
 		showApplicationLoading(true);
-		 requests.trainingSuggestionRequestNonRoo().createSuggestion(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+		 requests.trainingSuggestionRequest().createSuggestion(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -2030,7 +2030,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	private void fetchAndShowSuggestion(final Date date,final boolean isPreNextBtnClicked) {
 		Log.info("fetching suggestions data");
 		showApplicationLoading(true);
-		requests.trainingSuggestionRequestNonRoo().getSuggestionsFromGivenDate(date,semesterProxy.getId()).with("trainingDate","standardizedRole").fire(new OSCEReceiver<List<TrainingSuggestionProxy>>() {
+		requests.trainingSuggestionRequest().getSuggestionsFromGivenDate(date,semesterProxy.getId()).with("trainingDate","standardizedRole").fire(new OSCEReceiver<List<TrainingSuggestionProxy>>() {
 
 			@Override
 			public void onSuccess(List<TrainingSuggestionProxy> response) {
@@ -2148,7 +2148,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 
 			if(isPreNextBtnClicked){
 
-				requests.trainingSuggestionRequestNonRoo().findTrainingSuggestionFromGivenDateToEndOfMonthForSem(startDate,semesterProxy.getId()).with("standardizedRole","trainingDate").fire(new OSCEReceiver<List<TrainingSuggestionProxy>>() {
+				requests.trainingSuggestionRequest().findTrainingSuggestionFromGivenDateToEndOfMonthForSem(startDate,semesterProxy.getId()).with("standardizedRole","trainingDate").fire(new OSCEReceiver<List<TrainingSuggestionProxy>>() {
 
 					@Override
 					public void onSuccess(List<TrainingSuggestionProxy> response) {
@@ -2359,7 +2359,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		Log.info("Updating Training");
 		showApplicationLoading(true);
 		TrainingProxy trainingProxyThatIsUpdated =currentlyUpdatingTrainingView.getTrainingProxy();
-		requests.trainingRequestNonRoo().updateTraining(startTimeDate,endTimedate,selectedRoleProxy.getId(),semesterProxy.getId(),trainingProxyThatIsUpdated.getId()).with("standardizedRole","trainingSuggestions").fire(new OSCEReceiver<TrainingProxy>() {
+		requests.trainingRequest().updateTraining(startTimeDate,endTimedate,selectedRoleProxy.getId(),semesterProxy.getId(),trainingProxyThatIsUpdated.getId()).with("standardizedRole","trainingSuggestions").fire(new OSCEReceiver<TrainingProxy>() {
 
 			@Override
 			public void onSuccess(TrainingProxy response) {
@@ -2398,7 +2398,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		
 		Log.info("end time : " + endTimedate);
 		
-		requests.trainingRequestNonRoo().findIsTrainingOverLapsWithAnyTraining(startTimeDate,endTimedate,semesterProxy.getId(),selectedRoleProxy.getId()).fire(new OSCEReceiver<TrainingProxy>() {
+		requests.trainingRequest().findIsTrainingOverLapsWithAnyTraining(startTimeDate,endTimedate,semesterProxy.getId(),selectedRoleProxy.getId()).fire(new OSCEReceiver<TrainingProxy>() {
 
 			@Override
 			public void onSuccess(TrainingProxy response) {
@@ -2430,7 +2430,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	@SuppressWarnings("deprecation")
 	protected void showUpdatedTrainingOnTheView() {
 		showApplicationLoading(true);
-		requests.trainingRequestNonRoo().findTrainingsOfGivenDate(currentlySelectedDate,semesterProxy.getId()).with("trainingDate","standardizedRole").fire(new OSCEReceiver<List<TrainingProxy>>() {
+		requests.trainingRequest().findTrainingsOfGivenDate(currentlySelectedDate,semesterProxy.getId()).with("trainingDate","standardizedRole").fire(new OSCEReceiver<List<TrainingProxy>>() {
 
 			@Override
 			public void onSuccess(List<TrainingProxy> response) {
@@ -2456,7 +2456,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	private void saveNewTraining(Date startTimeDate,Date endTimedate,StandardizedRoleProxy selectedRoleProxy,final boolean isTrainingOverlaps,boolean isBindTrainingToSuggestion){
 		
 		showApplicationLoading(true);
-		requests.trainingRequestNonRoo().createTraining(startTimeDate,endTimedate,selectedRoleProxy.getId(),semesterProxy.getId(),isBindTrainingToSuggestion).with("standardizedRole","trainingSuggestions").fire(new OSCEReceiver<TrainingProxy>() {
+		requests.trainingRequest().createTraining(startTimeDate,endTimedate,selectedRoleProxy.getId(),semesterProxy.getId(),isBindTrainingToSuggestion).with("standardizedRole","trainingSuggestions").fire(new OSCEReceiver<TrainingProxy>() {
 
 			@Override
 			public void onSuccess(TrainingProxy response) {
@@ -2510,7 +2510,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 	private void initializeViewForAllReadyScheduledTrainings() {
 			
 			showApplicationLoading(true);
-			requests.trainingRequestNonRoo().findAllTrainingsByTimeAsc(semesterProxy.getId()).with("trainingDate","standardizedRole").fire(new OSCEReceiver<List<TrainingProxy>>() {
+			requests.trainingRequest().findAllTrainingsByTimeAsc(semesterProxy.getId()).with("trainingDate","standardizedRole").fire(new OSCEReceiver<List<TrainingProxy>>() {
 
 				@Override
 				public void onSuccess(List<TrainingProxy> response) {
@@ -2657,7 +2657,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 		Log.info("Removing training of id : " + trainingProxy.getId());
 		
 			showApplicationLoading(true);
-			requests.trainingRequestNonRoo().deleteTrainingOfGivenId(trainingProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+			requests.trainingRequest().deleteTrainingOfGivenId(trainingProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
 				public void onSuccess(Boolean response) {
@@ -2683,7 +2683,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 								}else{
 									//For normal scheduling when all training are removed so finding whether selected date is training date and setting style of the selected date.
 									showApplicationLoading(true);
-									requests.trainingRequestNonRoo().findSelectedDateISTrainingDate(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+									requests.trainingRequest().findSelectedDateISTrainingDate(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 										@Override
 										public void onSuccess(Boolean response) {
@@ -2761,7 +2761,7 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 			}
 			
 			showApplicationLoading(true);
-			requests.trainingRequestNonRoo().findAllRolesAssignInBlock(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
+			requests.trainingRequest().findAllRolesAssignInBlock(currentlySelectedDate,semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
 
 				@Override
 				public void onSuccess(List<StandardizedRoleProxy> response) {

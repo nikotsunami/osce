@@ -1,8 +1,9 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.util;
 
-import com.google.gwt.event.shared.EventBus;
+
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class RotationRefreshEvent extends GwtEvent<RotationRefreshHandler> {
 	

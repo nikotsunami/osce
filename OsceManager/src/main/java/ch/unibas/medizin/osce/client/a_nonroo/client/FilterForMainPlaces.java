@@ -3,6 +3,7 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.activity.AsyncFilteredActivityMapper;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AdministratorPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
@@ -55,8 +56,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.StudentsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.SummoningsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.TopicsAndSpecPlace;
-import com.google.gwt.activity.shared.FilteredActivityMapper;
-import ch.unibas.medizin.osce.client.a_nonroo.client.activity.AsyncFilteredActivityMapper;
+
 import com.google.gwt.place.shared.Place;
 
 /**

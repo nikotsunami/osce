@@ -5,8 +5,8 @@ import ch.unibas.medizin.osce.shared.Operation;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.place.shared.PlaceTokenizer;
-import com.google.gwt.requestfactory.shared.EntityProxyId;
-import com.google.gwt.requestfactory.shared.RequestFactory;
+import com.google.web.bindery.requestfactory.shared.EntityProxyId;
+import com.google.web.bindery.requestfactory.shared.RequestFactory;
 
 public class ClinicDetailsPlace extends OsMaDetailsPlace {
 	private String token = "ClinicDetailsPlace";

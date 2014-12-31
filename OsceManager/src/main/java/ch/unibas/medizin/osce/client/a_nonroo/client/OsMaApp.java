@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.activity.ActivityCallbackHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.activity.ApplicationMainActivitiesMapper;
 import ch.unibas.medizin.osce.client.a_nonroo.client.activity.AsyncActivityMapper;
 import ch.unibas.medizin.osce.client.a_nonroo.client.activity.AsyncCachingActivityMapper;
@@ -14,15 +13,9 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlaceHistoryMappe
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.StandardizedPatientPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.request.OsMaRequestFactory;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.AsyncActivityManager;
-import ch.unibas.medizin.osce.client.managed.activity.ApplicationDetailsActivities;
 import ch.unibas.medizin.osce.client.scaffold.request.RequestEvent;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityManager;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.activity.shared.CachingActivityMapper;
-import com.google.gwt.activity.shared.FilteredActivityMapper;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -30,10 +23,10 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.logging.client.LogConfiguration;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.place.shared.PlaceHistoryHandler;
-import com.google.gwt.requestfactory.client.RequestFactoryLogHandler;
-import com.google.gwt.requestfactory.shared.LoggingRequest;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.inject.Inject;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryLogHandler;
+import com.google.web.bindery.requestfactory.shared.LoggingRequest;
 
 public class OsMaApp {
 
@@ -45,13 +38,13 @@ public class OsMaApp {
 	private final PlaceController placeController;
 	private final OscePlaceHistoryFactory oscePlaceHistoryFactory;
 	private final ApplicationMainActivitiesMapper applicationMainActivitiesMapper;
-	private final ApplicationDetailsActivities applicationDetailsActivities;
+	/*private final ApplicationDetailsActivities applicationDetailsActivities;*/
 
 	@Inject
 	public OsMaApp(OsMaShell shell, OsMaRequestFactory requestFactory, EventBus eventBus,
 	                          PlaceController placeController, OscePlaceHistoryFactory oscePlaceHistoryFactory,
-	                          ApplicationMainActivitiesMapper applicationMainActivitiesMapper,
-	                          ApplicationDetailsActivities applicationDetailsActivities) {
+	                          ApplicationMainActivitiesMapper applicationMainActivitiesMapper
+	                          /*ApplicationDetailsActivities applicationDetailsActivities*/) {
 		Log.debug("OsceApp.OsceApp");
 		this.shell = shell;
 		this.requestFactory = requestFactory;
@@ -59,7 +52,7 @@ public class OsMaApp {
 		this.placeController = placeController;
 		this.oscePlaceHistoryFactory = oscePlaceHistoryFactory;
 		this.applicationMainActivitiesMapper = applicationMainActivitiesMapper;
-		this.applicationDetailsActivities = applicationDetailsActivities;
+		//this.applicationDetailsActivities = applicationDetailsActivities;
 	}
 
 	public void run() {

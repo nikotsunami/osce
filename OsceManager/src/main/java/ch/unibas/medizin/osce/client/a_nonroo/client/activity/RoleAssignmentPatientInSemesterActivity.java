@@ -68,7 +68,6 @@ import ch.unibas.medizin.osce.shared.SurveyStatus;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
-import ch.unibas.medizin.osce.shared.scaffold.PatientInRoleRequestNonRoo;
 
 import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.allen_sauer.gwt.log.client.Log;
@@ -85,8 +84,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.ServerFailure;
-import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
@@ -102,6 +99,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.Range;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 
 import de.novanic.eventservice.client.event.RemoteEventService;
 import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
@@ -407,7 +406,7 @@ public class RoleAssignmentPatientInSemesterActivity extends AbstractActivity
 	//timerMap = new HashMap<String, Object>();
 	//Module 3:Assignment D
 	
-	requests.osceRequestNonRoo().initOsceBySecurity().fire(new OSCEReceiver<Object>() {
+	requests.osceRequest().initOsceBySecurity().fire(new OSCEReceiver<Object>() {
 		@Override
 		public void onSuccess(Object response) {
 			Log.info("Osce Changed : "+response);
@@ -1318,7 +1317,7 @@ public void checkFitCriteria(final RoleSubView view,final boolean refreshRole,fi
 		return;
 	}*/
 	
-	requests.patientInSemesterRequestNonRoo().checkAndSetFitCriteriaOfRole(view.getPostProxy().getId(), semesterProxy.getId(), listAdvanceSearchCirteria).fire(new OSCEReceiver<Boolean>() {
+	requests.patientInSemesterRequest().checkAndSetFitCriteriaOfRole(view.getPostProxy().getId(), semesterProxy.getId(), listAdvanceSearchCirteria).fire(new OSCEReceiver<Boolean>() {
 
 		@Override
 		public void onSuccess(Boolean response) {
@@ -1374,7 +1373,7 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 	// module 3 bug }
 	final PatientInRoleProxy patientInRoleProxy=proxy;
 	//PatientInRoleRequest patientInRoleRequest=requests.patientInRoleRequest();
-	PatientInRoleRequestNonRoo patientInRoleRequest=requests.patientInRoleRequestNonRoo();
+	PatientInRoleRequest patientInRoleRequest=requests.patientInRoleRequest();
 	Log.info("SP name : " + proxy.getPatientInSemester().getStandardizedPatient().getName());
 	proxy=patientInRoleRequest.edit(proxy);
 	proxy.setIs_backup(isBackUp);
@@ -1469,7 +1468,7 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 				{
 					final PatientInRoleSubView patientInRoleSubView1=patientInRoleSubViewFirstAssigned;
 					//PatientInRoleRequest patientRequest=requests.patientInRoleRequest();
-					PatientInRoleRequestNonRoo patientRequest=requests.patientInRoleRequestNonRoo();
+					PatientInRoleRequest patientRequest=requests.patientInRoleRequest();
 					patientInRoleProxyFirstAssigned=patientRequest.edit(patientInRoleProxyFirstAssigned);
 					patientInRoleProxyFirstAssigned.setIs_first_in_sequence(true);
 					patientRequest.save().using(patientInRoleProxyFirstAssigned).with("patientInSemester","patientInSemester.standardizedPatient","patientInRole.patientInSemester.osceDays").fire(new OSCEReceiver<PatientInRoleProxy>() {
@@ -1526,7 +1525,7 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 				{
 					final PatientInRoleSubView patientInRoleSubView1=patientInRoleSubViewFirstAssigned;
 					//PatientInRoleRequest patientRequest=requests.patientInRoleRequest();
-					PatientInRoleRequestNonRoo patientRequest=requests.patientInRoleRequestNonRoo();
+					PatientInRoleRequest patientRequest=requests.patientInRoleRequest();
 					patientInRoleProxyFirstAssigned=patientRequest.edit(patientInRoleProxyFirstAssigned);
 					Log.info("Backup falg :" + patientInRoleProxyFirstAssigned.getIs_backup());
 					patientInRoleProxyFirstAssigned.setIs_first_in_sequence(true);
@@ -1554,7 +1553,7 @@ public void editBackUpFlag(final RoleSubView view,final PatientInRoleSubView pat
 					final PatientInRoleSubView patientInRoleSubView1=patientViews.get(0);
 					PatientInRoleProxy patientInRoleProxy1=patientInRoleSubView1.getPatientInRoleProxy();
 					//PatientInRoleRequest patientRequest=requests.patientInRoleRequest();
-					PatientInRoleRequestNonRoo patientRequest=requests.patientInRoleRequestNonRoo();
+					PatientInRoleRequest patientRequest=requests.patientInRoleRequest();
 					patientInRoleProxy1=patientRequest.edit(patientInRoleProxy1);
 					patientInRoleProxy1.setIs_first_in_sequence(false);
 					patientRequest.save().using(patientInRoleProxy1).with("patientInSemester","patientInSemester.standardizedPatient","patientInRole.patientInSemester.osceDays").fire(new OSCEReceiver<PatientInRoleProxy>() {
@@ -1636,7 +1635,7 @@ public void deletePatientInRole(final PatientInRoleSubViewImpl patientInRoleView
 	Log.info("deletePatientInRole PatientInRoleProxy: " + patientInRoleView.getPatientInRoleProxy().getId());
 	
 	showApplicationLoading(true);
-	requests.patientInRoleRequestNonRoo().deletePatientInRole(patientInRoleView.getPatientInRoleProxy()).fire(new OSCEReceiver<Boolean>() {
+	requests.patientInRoleRequest().deletePatientInRole(patientInRoleView.getPatientInRoleProxy()).fire(new OSCEReceiver<Boolean>() {
 
 		@Override
 		public void onSuccess(Boolean response) {
@@ -1890,7 +1889,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 	if (isFirstData) {
 		showApplicationLoading(true);
 		//showApplicationLoading(true);
-			requests.patientInSemesterRequestNonRoo().findPatientInSemesterBySemester(semesterProxy.getId(),view.getIgnoreOsceDaycheckBox().isChecked(),searchword).with(withStatement).fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
+			requests.patientInSemesterRequest().findPatientInSemesterBySemester(semesterProxy.getId(),view.getIgnoreOsceDaycheckBox().isChecked(),searchword).with(withStatement).fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
 					@Override
 				public void onSuccess(List<PatientInSemesterProxy> patientInSemesterProxies) {
 						// Module 3 : Assignment E : Start
@@ -2018,7 +2017,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		osceDayTimer.cancel();
 		
 		// module 3 bug }
-		requests.patientInSemesterRequestNonRoo().findAvailableSPBySemester(semesterProxy.getId())
+		requests.patientInSemesterRequest().findAvailableSPBySemester(semesterProxy.getId())
 				.fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
 					
 					@Override
@@ -2125,7 +2124,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 						Log.info("Value saved successfully");
 //						initPatientInSemester(false,false);
 						showApplicationLoading(true);
-						requests.patientInSemesterRequestNonRoo().findPisBySemesterSp(semesterProxy.getId(), standardizedPatientProxy.getId()).with(withStatement).fire(new OSCEReceiver<PatientInSemesterProxy>() {
+						requests.patientInSemesterRequest().findPisBySemesterSp(semesterProxy.getId(), standardizedPatientProxy.getId()).with(withStatement).fire(new OSCEReceiver<PatientInSemesterProxy>() {
 
 							@Override
 							public void onSuccess(PatientInSemesterProxy patientInSemesterProxy) {
@@ -2298,7 +2297,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 								}*/
 //								if (addPatientInRole) {
 									showApplicationLoading(true);
-									requests.patientInRoleRequestNonRoo().savePatientInRole(osceDayProxy.getId(), tempOscePostProxy.getId(), patientInSemesterProxy.getId(), roleSubViewSelected.getRoleProxy().getId(), roleSubViewSelected.getDualSPPatientSupportive()).fire(new OSCEReceiver<String>() {
+									requests.patientInRoleRequest().savePatientInRole(osceDayProxy.getId(), tempOscePostProxy.getId(), patientInSemesterProxy.getId(), roleSubViewSelected.getRoleProxy().getId(), roleSubViewSelected.getDualSPPatientSupportive()).fire(new OSCEReceiver<String>() {
 
 										@Override
 										public void onSuccess(String response) {
@@ -2387,7 +2386,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 					ArrayList<AdvancedSearchCriteriaProxy> advancedSearchCriteriaProxies = new ArrayList<AdvancedSearchCriteriaProxy>(roleSubViewSelected.getRoleProxy().getAdvancedSearchCriteria());
 					this.showApplicationLoading(true);
-					requests.patientInSemesterRequestNonRoo().findPatientInSemesterByAdvancedCriteria(			semesterProxy.getId(),
+					requests.patientInSemesterRequest().findPatientInSemesterByAdvancedCriteria(			semesterProxy.getId(),
 									advancedSearchCriteriaProxies)
 							.fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
 								@Override
@@ -2579,7 +2578,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 //		if (searchCriteria != null && searchCriteria.size() > 0) {
 			// Log.info("searchCriteria Id" +searchCriteria.get(0).getId());
 		this.showApplicationLoading(true);
-			requests.patientInSemesterRequestNonRoo()
+			requests.patientInSemesterRequest()
 					.findPatientInSemesterByOsceDayAdvancedCriteria(
 							semesterProxy.getId(),selectedRolsOsceDayProxy.getId(),isCriteriaAvailable, searchCriteria,view.getIgnoreOsceDaycheckBox().isChecked())
 					.with(withStatement)
@@ -2655,7 +2654,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 				// 
 //manish				if(isNavigationButtonEnable){
 //manish					showApplicationLoading(true);
-//manish				requests.patientInSemesterRequestNonRoo().findPatientInSemesterBySemester(semesterProxy.getId())/*.with(withStatement)*/.fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
+//manish				requests.patientInSemesterRequest().findPatientInSemesterBySemester(semesterProxy.getId())/*.with(withStatement)*/.fire(new OSCEReceiver<List<PatientInSemesterProxy>>() {
 //manish					@Override
 //manish					public void onSuccess(List<PatientInSemesterProxy> patientInSemesterProxies) {
 						// Module 3 : Assignment E : Start
@@ -2855,7 +2854,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 	private void fireAdvancedSearchRangeRequest(long standardizedRoleID,
 			final Range range,
 			final OSCEReceiver<List<AdvancedSearchCriteriaProxy>> callback) {
-		requests.advancedSearchCriteriaNonRoo()
+		requests.advancedSearchCriteriaRequest()
 				.findAdvancedSearchCriteriasByStandardizedRoleID(
 						standardizedRoleID, range.getStart(), range.getLength())
 				.fire(callback);
@@ -2864,7 +2863,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 
 	protected void fireAdvancedSearchCriteriasCountRequest(
 			long standardizedRoleID, OSCEReceiver<Long> callback) {
-		requests.advancedSearchCriteriaNonRoo()
+		requests.advancedSearchCriteriaRequest()
 				.countAdvancedSearchCriteriasByStandardizedRoleID(
 						standardizedRoleID).fire(callback);
 	}
@@ -2931,7 +2930,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 				osceDaySubViewImpl.simpleDiscloserPanel.getHeader().setStyleName("highlight-role");
 
 				showApplicationLoading(true);
-				requests.osceDayRequestNooRoo().findRoleForSPInSemester(patientInSemesterProxy.getId(), oDProxy.getId()).fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
+				requests.osceDayRequest().findRoleForSPInSemester(patientInSemesterProxy.getId(), oDProxy.getId()).fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
 
 						@Override
 						public void onSuccess(List<StandardizedRoleProxy> response ) {
@@ -3178,7 +3177,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		
 		this.showApplicationLoading(true);
 
-		requests.patientInSemesterRequestNonRoo().findAvailableSPActiveBySemester(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+		requests.patientInSemesterRequest().findAvailableSPActiveBySemester(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -3336,7 +3335,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 					public void onSuccess(Void arg0) {
 
 						if (isSecurityChange) {
-							requests.patientInRoleRequestNonRoo()
+							requests.patientInRoleRequest()
 									.removePatientInRoleByOSCE(
 											osceProxy.getId())
 									.fire(new OSCEReceiver<Integer>() {
@@ -3355,7 +3354,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 											osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
 										}
 										
-										public void onViolation(java.util.Set<com.google.gwt.requestfactory.shared.Violation> errors) {
+										public void onViolation(java.util.Set<com.google.web.bindery.requestfactory.shared.Violation> errors) {
 											
 											// module 3 bug {
 											osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
@@ -3641,7 +3640,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 					
 					final PatientInSemesterProxy patientInSemesterProxy = response;
 					
-					requests.osceDayRequestNooRoo().findOsceDayBySemester(semesterProxy.getId()).with("osce").fire(new OSCEReceiver<List<OsceDayProxy>>() {
+					requests.osceDayRequest().findOsceDayBySemester(semesterProxy.getId()).with("osce").fire(new OSCEReceiver<List<OsceDayProxy>>() {
 
 						@Override
 						public void onSuccess(List<OsceDayProxy> response) {
@@ -3723,7 +3722,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 						}
 					}
 					
-					requests.patientInSemesterRequestNonRoo().updatePatientInSemesterForOsceDay(patientInSemProxy.getId(), osceDayIdList).fire(new OSCEReceiver<Boolean>() {
+					requests.patientInSemesterRequest().updatePatientInSemesterForOsceDay(patientInSemProxy.getId(), osceDayIdList).fire(new OSCEReceiver<Boolean>() {
 
 						@Override
 						public void onSuccess(Boolean response) {
@@ -3824,7 +3823,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 	@SuppressWarnings("deprecation")
 	private void checkUserHasDefinedAtleastBothDate() {
 		
-		requests.semesterRequestNonRoo().findIsAssignTrainingDateAndOsceDate(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+		requests.semesterRequest().findIsAssignTrainingDateAndOsceDate(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -3832,7 +3831,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 					
 					showApplicationLoading(true);
 				
-					requests.osceDateRequestNonRoo().isThereAnyTrainingDateThatIsAfterOSceDate(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+					requests.osceDateRequest().isThereAnyTrainingDateThatIsAfterOSceDate(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 					@Override
 					public void onSuccess(Boolean response) {
@@ -3899,7 +3898,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		Log.info("Starting survey");
 		
 		showApplicationLoading(true);
-		requests.semesterRequestNonRoo().surveyIsStartedSoPushDataToSpPortal(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+		requests.semesterRequest().surveyIsStartedSoPushDataToSpPortal(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -3924,7 +3923,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 		
 		showApplicationLoading(true);
 		
-		requests.semesterRequestNonRoo().stopSurveyAndPushDateToOsceFromSpPortal(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+		requests.semesterRequest().stopSurveyAndPushDateToOsceFromSpPortal(semesterProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {

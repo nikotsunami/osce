@@ -51,8 +51,6 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.ServerFailure;
-import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -60,6 +58,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 
 public class OsceEditActivity extends AbstractActivity implements
 OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
@@ -218,7 +218,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 
 		// change {
 		
-		/*requests.roomRequestNonRoo().countTotalRooms().fire(new OSCEReceiver<Integer>() {
+		/*requests.roomRequest().countTotalRooms().fire(new OSCEReceiver<Integer>() {
 
 			@Override
 			public void onSuccess(Integer response) {
@@ -245,7 +245,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 			view.setEditTitle(false);
 			*/
 			view.setEditTitle(false);
-			requests.roomRequestNonRoo().countTotalRooms().fire(new OSCEReceiver<Integer>() {
+			requests.roomRequest().countTotalRooms().fire(new OSCEReceiver<Integer>() {
 
 				@Override
 				public void onSuccess(Integer response) {
@@ -257,7 +257,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 		} else {
 			view.setEditTitle(true);
 			view.setOsceProxy(osce);
-			requests.osceSettingsRequestNonRoo().findOsceSettingsByOsce(osce.getId()).fire(new OSCEReceiver<OsceSettingsProxy>() {
+			requests.osceSettingsRequest().findOsceSettingsByOsce(osce.getId()).fire(new OSCEReceiver<OsceSettingsProxy>() {
 
 				@Override
 				public void onSuccess(OsceSettingsProxy response) {
@@ -575,7 +575,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 					Log.info("succesfull iosce settings data save");
 					if(((OsceEditViewImpl)view).osceValue.getSelected()!=null)
 					{
-						requests.osceRequestNonRoo().findMaxOsce().fire(new OSCEReceiver<OsceProxy>() {
+						requests.osceRequest().findMaxOsce().fire(new OSCEReceiver<OsceProxy>() {
 	
 							@Override
 							public void onViolation(Set<Violation> errors) {
@@ -629,7 +629,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 					}
 					else
 					{
-						requests.osceRequestNonRoo().findMaxOsce().fire(new OSCEReceiver<OsceProxy>() {
+						requests.osceRequest().findMaxOsce().fire(new OSCEReceiver<OsceProxy>() {
 
 							@Override
 							public void onSuccess(OsceProxy response) {
@@ -756,7 +756,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 
 	@SuppressWarnings("deprecation")
 	public void createOsceDaySequenceAndParcour(Long osceId) {
-		requests.osceRequestNonRoo().createOsceDaySequeceAndCourse(osceId).fire(new OSCEReceiver<Void>() {
+		requests.osceRequest().createOsceDaySequeceAndCourse(osceId).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {

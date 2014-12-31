@@ -154,7 +154,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 		lstChkSp=new ArrayList<CheckBox>(0);
 		lstChkExaminor=new ArrayList<CheckBox>(0);
 		  
-		requests.assignmentRequestNonRoo().findAssignedExaminer(semesterProxy.getId()).fire(new OSCEReceiver<List<DoctorProxy>>() {
+		requests.assignmentRequest().findAssignedExaminer(semesterProxy.getId()).fire(new OSCEReceiver<List<DoctorProxy>>() {
 
 			@Override
 			public void onSuccess(List<DoctorProxy> response) {
@@ -239,7 +239,7 @@ public class SummoningsActivity extends AbstractActivity implements SummoningsVi
 		});
 		
 		  
-		requests.assignmentRequestNonRoo().findAssignedSP(semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
+		requests.assignmentRequest().findAssignedSP(semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
 					
 					@Override
 					public void onSuccess(List<StandardizedPatientProxy> response) {

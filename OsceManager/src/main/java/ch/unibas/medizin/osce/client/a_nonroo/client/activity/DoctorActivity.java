@@ -37,8 +37,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.cellview.client.AbstractHasData;
@@ -383,12 +383,12 @@ DoctorView.Presenter, DoctorView.Delegate {
 		//final Range newRange = table.getVisibleRange();
 		if(view.getSuggestBox().getSelected()==null)
 		{
-			//return requests.doctorRequestNonRoo().findDoctorsBySearch(q, range.getStart(), range.getLength(),sortorder,sortname);
-			return requests.doctorRequestNonRoo().findDoctorsBySearchWithClinic(q,null, range.getStart(), range.getLength(),sortorder,sortname);
+			//return requests.doctorRequest().findDoctorsBySearch(q, range.getStart(), range.getLength(),sortorder,sortname);
+			return requests.doctorRequest().findDoctorsBySearchWithClinic(q,null, range.getStart(), range.getLength(),sortorder,sortname);
 		}
 		else
 		{
-			return requests.doctorRequestNonRoo().findDoctorsBySearchWithClinic(q,view.getSuggestBox().getSelected().getId(), range.getStart(), range.getLength(),sortorder,sortname);
+			return requests.doctorRequest().findDoctorsBySearchWithClinic(q,view.getSuggestBox().getSelected().getId(), range.getStart(), range.getLength(),sortorder,sortname);
 		}
 	}
 
@@ -396,13 +396,13 @@ DoctorView.Presenter, DoctorView.Delegate {
 //		requests.doctorRequest().countDoctors().fire(callback);
 		if(view.getSuggestBox().getSelected()==null)
 		{
-			//requests.doctorRequestNonRoo().countDoctorsBySearch(q).fire(callback);
-			requests.doctorRequestNonRoo().countDoctorsBySearchWithClinic(q,null).fire(callback);
+			//requests.doctorRequest().countDoctorsBySearch(q).fire(callback);
+			requests.doctorRequest().countDoctorsBySearchWithClinic(q,null).fire(callback);
 		}
 		else
 		{
 		
-			requests.doctorRequestNonRoo().countDoctorsBySearchWithClinic(q,view.getSuggestBox().getSelected().getId()).fire(callback);
+			requests.doctorRequest().countDoctorsBySearchWithClinic(q,view.getSuggestBox().getSelected().getId()).fire(callback);
 		}
 		
 	}
@@ -445,7 +445,7 @@ DoctorView.Presenter, DoctorView.Delegate {
 		/*if (selectedTitle != null)
 		{
 		
-			requests.doctorRequestNonRoo().findDoctorByClinicID(selectedTitle.getId()).with("office").fire(new OSCEReceiver<List<DoctorProxy>>() {
+			requests.doctorRequest().findDoctorByClinicID(selectedTitle.getId()).with("office").fire(new OSCEReceiver<List<DoctorProxy>>() {
 
 				@Override
 				public void onSuccess(List<DoctorProxy> response) {
@@ -613,7 +613,7 @@ DoctorView.Presenter, DoctorView.Delegate {
 		if (view.getSuggestBox().getSelected()==null)
 		{
 		
-			requests.doctorRequestNonRoo().findDoctorByClinicID(Long.parseLong("0")).with("office").fire(new OSCEReceiver<List<DoctorProxy>>() {
+			requests.doctorRequest().findDoctorByClinicID(Long.parseLong("0")).with("office").fire(new OSCEReceiver<List<DoctorProxy>>() {
 
 				@Override
 				public void onSuccess(List<DoctorProxy> response) {

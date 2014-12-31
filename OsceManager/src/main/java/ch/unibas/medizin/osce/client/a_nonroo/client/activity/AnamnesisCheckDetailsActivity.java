@@ -1,7 +1,5 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
-import java.util.List;
-
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.AnamnesisCheckPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.receiver.OSCEReceiver;
@@ -10,8 +8,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckDetailsVie
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.AnamnesisCheckDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckProxy;
-import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
-import ch.unibas.medizin.osce.client.managed.request.OsceRequest;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
@@ -22,15 +18,12 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.BaseProxy;
-import com.google.gwt.requestfactory.shared.InstanceRequest;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
-import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 public class AnamnesisCheckDetailsActivity extends AbstractActivity implements
 AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
@@ -84,7 +77,7 @@ AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
 //						previousSortOrder = anamnesisCheckProxy.getSort_order() - 1;
 //					}
 					if(anamnesisCheckProxy.getSort_order() != null && anamnesisCheckProxy.getSort_order() > 1 && anamnesisCheckProxy.getAnamnesisCheckTitle() !=null ){
-						requests.anamnesisCheckRequestNonRoo().findPreviousAnamnesisCheck(anamnesisCheckProxy.getSort_order(), anamnesisCheckProxy.getAnamnesisCheckTitle()).fire(new Receiver<AnamnesisCheckProxy>() {
+						requests.anamnesisCheckRequest().findPreviousAnamnesisCheck(anamnesisCheckProxy.getSort_order(), anamnesisCheckProxy.getAnamnesisCheckTitle()).fire(new Receiver<AnamnesisCheckProxy>() {
 
 							@Override
 							public void onSuccess(AnamnesisCheckProxy response) {
@@ -99,7 +92,7 @@ AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
 						init(anamnesisCheckProxy, "");
 					}
 //					if (anamnesisCheckProxy.getType() != AnamnesisCheckTypes.QUESTION_TITLE) {
-//						requests.anamnesisCheckRequestNonRoo().findAnamnesisChecksBySortOder(previousSortOrder).fire(new Receiver<AnamnesisCheckProxy>() {
+//						requests.anamnesisCheckRequest().findAnamnesisChecksBySortOder(previousSortOrder).fire(new Receiver<AnamnesisCheckProxy>() {
 //							public void onFailure(ServerFailure error) {
 //								Log.error(error.getMessage());
 //							}
@@ -116,7 +109,7 @@ AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
 //						});
 //					} else {
 //						if(anamnesisCheckProxy.getSort_order()!=null){
-//						requests.anamnesisCheckRequestNonRoo().findPreviousTitleBySortOder(anamnesisCheckProxy.getSort_order()).fire(new Receiver<AnamnesisCheckProxy>() {
+//						requests.anamnesisCheckRequest().findPreviousTitleBySortOder(anamnesisCheckProxy.getSort_order()).fire(new Receiver<AnamnesisCheckProxy>() {
 //							public void onFailure(ServerFailure error) {
 //								Log.error(error.getMessage());
 //							}
@@ -166,7 +159,7 @@ AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
 				.confirm("Really delete this entry? You cannot undo this change.")) {
 			return;
 		}
-		requests.anamnesisCheckRequestNonRoo().deleteAnamnesisCheckFromSpPortal(anamnesisCheckProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+		requests.anamnesisCheckRequest().deleteAnamnesisCheckFromSpPortal(anamnesisCheckProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -183,7 +176,7 @@ AnamnesisCheckDetailsView.Presenter, AnamnesisCheckDetailsView.Delegate {
 							// TODO
 							if (anamnesisCheckProxy.getAnamnesisCheckTitle() != null
 									&& anamnesisCheckProxy.getSort_order() != null) {
-								requests.anamnesisCheckRequestNonRoo().reSorting(
+								requests.anamnesisCheckRequest().reSorting(
 										anamnesisCheckProxy
 												.getAnamnesisCheckTitle(),
 										anamnesisCheckProxy.getSort_order()).fire(

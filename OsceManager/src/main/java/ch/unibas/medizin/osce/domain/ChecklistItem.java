@@ -4,19 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
 
 import ch.unibas.medizin.osce.shared.ChecklistImportPojo;
@@ -25,9 +29,8 @@ import ch.unibas.medizin.osce.shared.OptionType;
 import ch.unibas.medizin.osce.shared.OscePostWiseQuestion;
 import ch.unibas.medizin.osce.shared.StatisticalEvaluationQuestion;
 
-@RooJavaBean
-@RooToString
-@RooEntity
+@Entity
+@Configurable
 public class ChecklistItem {
 
 	@PersistenceContext(unitName="persistenceUnit")
@@ -777,6 +780,7 @@ public class ChecklistItem {
 		 return newChecklistToReturn;
 	}
 	
+
 	public static ChecklistItem moveChecklistItemUp(ChecklistItem checklistItemToMoveUp, int seqNumToSet){
 		
 		if(seqNumToSet >= 0){
@@ -788,7 +792,9 @@ public class ChecklistItem {
 	
 	public static ChecklistItem moveChecklistItemDown(ChecklistItem checklistItemToMoveDown, int seqNumToSet){
 		
-		if(seqNumToSet >= 0){
+		Integer maxSeqNum = findMaxSequenceNumberByParentItem(checklistItemToMoveDown.getParentItem().getId());
+
+		if(seqNumToSet >= 0 &&  seqNumToSet < (maxSeqNum)){
 			ChecklistItem checklistItem = moveItemDown(checklistItemToMoveDown,seqNumToSet);
 			return checklistItem;
 		}
@@ -832,4 +838,221 @@ public class ChecklistItem {
 		}
 		return checklistItemToMoveUp;
 	}
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            ChecklistItem attached = ChecklistItem.findChecklistItem(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public ChecklistItem merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        ChecklistItem merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new ChecklistItem().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countChecklistItems() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM ChecklistItem o", Long.class).getSingleResult();
+    }
+
+	public static List<ChecklistItem> findAllChecklistItems() {
+        return entityManager().createQuery("SELECT o FROM ChecklistItem o", ChecklistItem.class).getResultList();
+    }
+
+	public static ChecklistItem findChecklistItem(Long id) {
+        if (id == null) return null;
+        return entityManager().find(ChecklistItem.class, id);
+    }
+
+	public static List<ChecklistItem> findChecklistItemEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM ChecklistItem o", ChecklistItem.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("CheckList: ").append(getCheckList()).append(", ");
+        sb.append("CheckListCriterias: ").append(getCheckListCriterias() == null ? "null" : getCheckListCriterias().size()).append(", ");
+        sb.append("CheckListOptions: ").append(getCheckListOptions() == null ? "null" : getCheckListOptions().size()).append(", ");
+        sb.append("ChildChecklistItems: ").append(getChildChecklistItems() == null ? "null" : getChildChecklistItems().size()).append(", ");
+        sb.append("Description: ").append(getDescription()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("IsRegressionItem: ").append(getIsRegressionItem()).append(", ");
+        sb.append("ItemAnalysis: ").append(getItemAnalysis() == null ? "null" : getItemAnalysis().size()).append(", ");
+        sb.append("ItemType: ").append(getItemType()).append(", ");
+        sb.append("Name: ").append(getName()).append(", ");
+        sb.append("OptionType: ").append(getOptionType()).append(", ");
+        sb.append("PostAnalysis: ").append(getPostAnalysis() == null ? "null" : getPostAnalysis().size()).append(", ");
+        sb.append("SequenceNumber: ").append(getSequenceNumber()).append(", ");
+        sb.append("Version: ").append(getVersion()).append(", ");
+        sb.append("Weight: ").append(getWeight());
+        return sb.toString();
+    }
+
+	public String getName() {
+        return this.name;
+    }
+
+	public void setName(String name) {
+        this.name = name;
+    }
+
+	public String getDescription() {
+        return this.description;
+    }
+
+	public void setDescription(String description) {
+        this.description = description;
+    }
+
+	public ItemType getItemType() {
+        return this.itemType;
+    }
+
+	public void setItemType(ItemType itemType) {
+        this.itemType = itemType;
+    }
+
+	public OptionType getOptionType() {
+        return this.optionType;
+    }
+
+	public void setOptionType(OptionType optionType) {
+        this.optionType = optionType;
+    }
+
+	public Boolean getIsRegressionItem() {
+        return this.isRegressionItem;
+    }
+
+	public void setIsRegressionItem(Boolean isRegressionItem) {
+        this.isRegressionItem = isRegressionItem;
+    }
+
+	public Integer getSequenceNumber() {
+        return this.sequenceNumber;
+    }
+
+	public void setSequenceNumber(Integer sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+	public CheckList getCheckList() {
+        return this.checkList;
+    }
+
+	public void setCheckList(CheckList checkList) {
+        this.checkList = checkList;
+    }
+
+	public ChecklistItem getParentItem() {
+        return this.parentItem;
+    }
+
+	public void setParentItem(ChecklistItem parentItem) {
+        this.parentItem = parentItem;
+    }
+
+	public Double getWeight() {
+        return this.weight;
+    }
+
+	public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+	public List<ChecklistOption> getCheckListOptions() {
+        return this.checkListOptions;
+    }
+
+	public void setCheckListOptions(List<ChecklistOption> checkListOptions) {
+        this.checkListOptions = checkListOptions;
+    }
+
+	public List<ChecklistCriteria> getCheckListCriterias() {
+        return this.checkListCriterias;
+    }
+
+	public void setCheckListCriterias(List<ChecklistCriteria> checkListCriterias) {
+        this.checkListCriterias = checkListCriterias;
+    }
+
+	public List<ChecklistItem> getChildChecklistItems() {
+        return this.childChecklistItems;
+    }
+
+	public void setChildChecklistItems(List<ChecklistItem> childChecklistItems) {
+        this.childChecklistItems = childChecklistItems;
+    }
+
+	public List<ItemAnalysis> getItemAnalysis() {
+        return this.itemAnalysis;
+    }
+
+	public void setItemAnalysis(List<ItemAnalysis> itemAnalysis) {
+        this.itemAnalysis = itemAnalysis;
+    }
+
+	public List<PostAnalysis> getPostAnalysis() {
+        return this.postAnalysis;
+    }
+
+	public void setPostAnalysis(List<PostAnalysis> postAnalysis) {
+        this.postAnalysis = postAnalysis;
+    }
 }

@@ -25,8 +25,8 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -251,13 +251,11 @@ public class RoomActivity extends AbstractActivity implements RoomView.Presenter
 	}
 
 	protected Request<List<RoomProxy>> createRangeRequest(String name, Range range) {
-		//return requests.RoomRequest().findScarEntries(range.getStart(), range.getLength());
-		return requests.roomRequestNonRoo().findRoomEntriesByName(name, range.getStart(), range.getLength());
+		return requests.roomRequest().findRoomEntriesByName(name, range.getStart(), range.getLength());
 	}
 
 	protected void fireCountRequest(String name, Receiver<Long> callback) {
-		//requests.RoomRequest().countScars().fire(callback);
-		requests.roomRequestNonRoo().countRoomsByName(name).fire(callback);
+		requests.roomRequest().countRoomsByName(name).fire(callback);
 	}
 
 	private void setTable(CellTable<RoomProxy> table) {

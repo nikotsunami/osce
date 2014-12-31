@@ -27,7 +27,6 @@ import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.StudyYears;
-import ch.unibas.medizin.osce.shared.scaffold.RoleTopicRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -41,9 +40,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
-import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -57,6 +53,9 @@ import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.inject.Inject;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 public class RoleActivity extends AbstractActivity implements
 		RoleView.Presenter, RoleView.Delegate {
@@ -81,7 +80,7 @@ public class RoleActivity extends AbstractActivity implements
 	//spec end
 //	private List<AdvancedSearchCriteriaProxy> searchCriteria = new ArrayList<AdvancedSearchCriteriaProxy>();
 	// spec start
-	private RoleTopicRequestNonRoo requestAllTopic;
+	private RoleTopicRequest requestAllTopic;
 	// private CellTable<RoleTopicProxy> table;
 	// private SingleSelectionModel<RoleTopicProxy> selectionModel;
 
@@ -478,18 +477,18 @@ public class RoleActivity extends AbstractActivity implements
 		 setInserted(false);
 		initSearch();
 		this.SpecialisationListBox = view.getListBox();
-		requestAllTopic = requests.roleTopicRequestNonRoo();
+		requestAllTopic = requests.roleTopicRequest();
 	//	System.out.println("Query Call");
 
 		
-		 requests.roleTopicRequestNonRoo().findAllAutherName().fire(new AutherNameValueReceiver());
-		 requests.roleTopicRequestNonRoo().findAllReviewerName().fire(new ReviewerNameValueReceiver());
+		 requests.roleTopicRequest().findAllAutherName().fire(new AutherNameValueReceiver());
+		 requests.roleTopicRequest().findAllReviewerName().fire(new ReviewerNameValueReceiver());
 		requests.specialisationRequest().findAllSpecialisations().fire(new SpecialisationBoxValuesReceiver());
         requests.keywordRequest().findAllKeywords().fire(new KeywordBoxValuesReceiver());
 //		
 //		System.out.println("Query Call for cell table1");
 		try {
-			//requests.roleTopicRequestNonRoo().findAllRoleTopicAndRoles()
+			//requests.roleTopicRequest().findAllRoleTopicAndRoles()
 			/*requests.roleTopicRequest().findAllRoleTopics()
 					.fire(new RoleAndRolesRecever());*/
 	
@@ -638,7 +637,7 @@ public void setSortname(String sortname) {
 public void initSearch() {
 	// TODO Auto-generated method stub
 	
-	requestAllTopic = requests.roleTopicRequestNonRoo();
+	requestAllTopic = requests.roleTopicRequest();
 // (1) Text search
 	List<String> searchThrough = view.getSearchFilters();
 	final Range range = table.getVisibleRange();
@@ -682,10 +681,10 @@ public void initSearch() {
 			searchThrough, searchCriteria, range.getStart(), range.getLength() fields, bindType, comparations, values ).with("standardizedRoles").fire(callback);
 	*/
 	 
-	requests.roleTopicRequestNonRoo().advanceSearchCount(sortname, sortorder , quickSearchTerm, 
+	requests.roleTopicRequest().advanceSearchCount(sortname, sortorder , quickSearchTerm, 
 			searchThrough,tableFilter,whereFilter ).with("standardizedRoles").fire(new TotalRecordCount());
 
-	requests.roleTopicRequestNonRoo().advanceSearch(sortname, sortorder , quickSearchTerm, 
+	requests.roleTopicRequest().advanceSearch(sortname, sortorder , quickSearchTerm, 
 			searchThrough,tableFilter,whereFilter,  range.getStart(), range.getLength() ).with("standardizedRoles").fire(callback);
 	
 	

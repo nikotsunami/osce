@@ -308,7 +308,7 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 
 	public void init() {
 		
-		/*requests.osceRequestNonRoo().findAllOsce().fire(new OSCEReceiver<List<OsceProxy>>() {
+		/*requests.osceRequest().findAllOsce().fire(new OSCEReceiver<List<OsceProxy>>() {
 
 			@Override
 			public void onSuccess(List<OsceProxy> response) {
@@ -319,7 +319,7 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 			}
 		});*/
 		
-		requests.osceRequestNonRoo().findAllOsceBySemster(semesterProxy.getId()).fire(new OSCEReceiver<List<OsceProxy>>() {
+		requests.osceRequest().findAllOsceBySemster(semesterProxy.getId()).fire(new OSCEReceiver<List<OsceProxy>>() {
 
 			@Override
 			public void onSuccess(List<OsceProxy> response) {

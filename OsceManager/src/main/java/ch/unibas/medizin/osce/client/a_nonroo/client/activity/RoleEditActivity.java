@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaProxy
 import ch.unibas.medizin.osce.client.managed.request.AdvancedSearchCriteriaRequest;
 import ch.unibas.medizin.osce.client.managed.request.CheckListProxy;
 import ch.unibas.medizin.osce.client.managed.request.CheckListRequest;
+import ch.unibas.medizin.osce.client.managed.request.ChecklistItemRequest;
 import ch.unibas.medizin.osce.client.managed.request.FileProxy;
 import ch.unibas.medizin.osce.client.managed.request.FileRequest;
 import ch.unibas.medizin.osce.client.managed.request.MainSkillProxy;
@@ -37,7 +38,6 @@ import ch.unibas.medizin.osce.client.managed.request.UsedMaterialRequest;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
-import ch.unibas.medizin.osce.shared.scaffold.ChecklistItemRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -45,11 +45,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 public class RoleEditActivity extends AbstractActivity implements RoleEditView.Presenter, RoleEditView.Delegate,RoleEditCheckListSubView.Delegate,RoleEditCheckListSubView.Presenter {
 
@@ -218,7 +218,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 								 * made the request conditional.
 								 * -michaelwgnr */
 //								if (standardizedRole.getRoleTopic() != null) {
-									requests.roleTopicRequestNonRoo().
+									requests.roleTopicRequest().
 											findAllRoleTopic(standardizedRole.getRoleTopic().getId().intValue()).
 											fire(new RoleTopicRecevier());
 //								}
@@ -353,7 +353,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 						//test1.roleTopic.setValue(proxy1);
 						//test1.roleTopic.setSelected(proxy1);
 						//Issue # 122 : Replace pull down with autocomplete.
-						//	requests.roleTopicRequestNonRoo().
+						//	requests.roleTopicRequest().
 						//			findAllRoleTopic(proxy1.getId().intValue()).
 						//			fire(new RoleTopicRecevier());
 //						
@@ -363,7 +363,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 			}); 
 		//	requests.roleTopicRequest().findAllRoleTopics().fire(new RoleTopicRecevier());
 			
-			//requests.roleTopicRequestNonRoo().findAllRoleTopic(Integer.parseInt(standardizedRole.getRoleTopic().getId().toString())).fire(new RoleTopicRecevier());
+			//requests.roleTopicRequest().findAllRoleTopic(Integer.parseInt(standardizedRole.getRoleTopic().getId().toString())).fire(new RoleTopicRecevier());
 			Log.info("create");
 			//Issue # 122 : Replace pull down with autocomplete.
 			//((RoleEditViewImpl)view).roleTopic.setValue(this.roleTopic);
@@ -779,7 +779,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		  CheckListProxy checkListProxy=null;
 		
 
-				final ChecklistItemRequestNonRoo checklistRequest=requests.checklistItemRequestNonRoo();
+				final ChecklistItemRequest checklistRequest=requests.checklistItemRequest();
 				/*checkListProxy=checklistRequest.create(CheckListProxy.class);
 				 checkListProxy.setCheckListTopics(standardizedRole.getCheckList().getCheckListTopics());
 				checkListProxy.setTitle(((RoleEditCheckListSubViewImpl)checkListView).title.getValue());//spec

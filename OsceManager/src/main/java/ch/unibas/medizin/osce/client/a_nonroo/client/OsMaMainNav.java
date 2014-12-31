@@ -803,7 +803,7 @@ public class OsMaMainNav extends Composite {
 		
 		// G: SPEC START =
 
-		requests.semesterRequestNonRoo().findAllSemesterOrderByYearAndSemester().fire(new OSCEReceiver<List<SemesterProxy>>() 
+		requests.semesterRequest().findAllSemesterOrderByYearAndSemester().fire(new OSCEReceiver<List<SemesterProxy>>() 
 		{
 				@Override
 				public void onSuccess(List<SemesterProxy> response) 

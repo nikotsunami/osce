@@ -198,7 +198,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 
 	public void loadBucketInformation(SemesterProxy semesterProxy)
 	{
-		requests.bucketInformationRequestNonRoo().findBucketInformationBySemesterForExport(semesterProxy.getId()).fire(new OSCEReceiver<BucketInformationProxy>() {
+		requests.bucketInformationRequest().findBucketInformationBySemesterForExport(semesterProxy.getId()).fire(new OSCEReceiver<BucketInformationProxy>() {
 
 			@Override
 			public void onSuccess(BucketInformationProxy response) {

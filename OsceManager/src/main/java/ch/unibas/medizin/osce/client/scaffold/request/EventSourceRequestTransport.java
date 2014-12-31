@@ -1,9 +1,10 @@
 package ch.unibas.medizin.osce.client.scaffold.request;
 
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.requestfactory.client.DefaultRequestTransport;
-import com.google.gwt.requestfactory.shared.RequestTransport;
-import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.gwt.client.DefaultRequestTransport;
+import com.google.web.bindery.requestfactory.shared.RequestTransport;
+import com.google.web.bindery.requestfactory.shared.RequestTransport.TransportReceiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 /**
  * Wraps {@link RequestTransport} to post events as requests are sent

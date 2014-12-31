@@ -5,28 +5,30 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Table;
 import javax.persistence.TypedQuery;
-
+import javax.persistence.Version;
 import org.apache.log4j.Logger;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.transaction.annotation.Transactional;
 import ch.unibas.medizin.osce.shared.ItemDefination;
 
-@RooJavaBean
-@RooToString
-@RooEntity(table = "role_base_item")
+@Configurable
+@Entity
+@Table(name = "role_base_item")
 public class RoleBaseItem {
  
 	@PersistenceContext(unitName="persistenceUnit")
@@ -367,4 +369,168 @@ String queryString = "SELECT distinct rsiv FROM RoleSubItemValue rsiv join rsiv.
 		return true;
 	}
 	
+
+	public ItemDefination getItem_defination() {
+        return this.item_defination;
+    }
+
+	public void setItem_defination(ItemDefination item_defination) {
+        this.item_defination = item_defination;
+    }
+
+	public String getItem_name() {
+        return this.item_name;
+    }
+
+	public void setItem_name(String item_name) {
+        this.item_name = item_name;
+    }
+
+	public Boolean getDeleted() {
+        return this.deleted;
+    }
+
+	public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
+	public RoleTemplate getRoleTemplate() {
+        return this.roleTemplate;
+    }
+
+	public void setRoleTemplate(RoleTemplate roleTemplate) {
+        this.roleTemplate = roleTemplate;
+    }
+
+	public Integer getSort_order() {
+        return this.sort_order;
+    }
+
+	public void setSort_order(Integer sort_order) {
+        this.sort_order = sort_order;
+    }
+
+	public List<RoleSubItemValue> getRoleSubItem() {
+        return this.roleSubItem;
+    }
+
+	public void setRoleSubItem(List<RoleSubItemValue> roleSubItem) {
+        this.roleSubItem = roleSubItem;
+    }
+
+	public List<RoleTableItem> getRoleTableItem() {
+        return this.roleTableItem;
+    }
+
+	public void setRoleTableItem(List<RoleTableItem> roleTableItem) {
+        this.roleTableItem = roleTableItem;
+    }
+
+	public Set<RoleItemAccess> getRoleItemAccess() {
+        return this.roleItemAccess;
+    }
+
+	public void setRoleItemAccess(Set<RoleItemAccess> roleItemAccess) {
+        this.roleItemAccess = roleItemAccess;
+    }
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            RoleBaseItem attached = RoleBaseItem.findRoleBaseItem(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public RoleBaseItem merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        RoleBaseItem merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new RoleBaseItem().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countRoleBaseItems() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM RoleBaseItem o", Long.class).getSingleResult();
+    }
+
+	public static List<RoleBaseItem> findAllRoleBaseItems() {
+        return entityManager().createQuery("SELECT o FROM RoleBaseItem o", RoleBaseItem.class).getResultList();
+    }
+
+	public static RoleBaseItem findRoleBaseItem(Long id) {
+        if (id == null) return null;
+        return entityManager().find(RoleBaseItem.class, id);
+    }
+
+	public static List<RoleBaseItem> findRoleBaseItemEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM RoleBaseItem o", RoleBaseItem.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Deleted: ").append(getDeleted()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("Item_defination: ").append(getItem_defination()).append(", ");
+        sb.append("Item_name: ").append(getItem_name()).append(", ");
+        sb.append("RoleItemAccess: ").append(getRoleItemAccess() == null ? "null" : getRoleItemAccess().size()).append(", ");
+        sb.append("RoleSubItem: ").append(getRoleSubItem() == null ? "null" : getRoleSubItem().size()).append(", ");
+        sb.append("RoleTableItem: ").append(getRoleTableItem() == null ? "null" : getRoleTableItem().size()).append(", ");
+        sb.append("RoleTemplate: ").append(getRoleTemplate()).append(", ");
+        sb.append("Sort_order: ").append(getSort_order()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
 }

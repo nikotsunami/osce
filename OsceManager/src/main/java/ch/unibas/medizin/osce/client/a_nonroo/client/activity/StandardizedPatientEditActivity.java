@@ -38,7 +38,6 @@ import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
-import ch.unibas.medizin.osce.shared.scaffold.StandardizedPatientRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -46,7 +45,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -398,7 +397,7 @@ requests.professionRequest().findAllProfessions().
 							savedSp = ((StandardizedPatientProxy)response);
 							AnamnesisFormProxy form = ((StandardizedPatientProxy) response).getAnamnesisForm();
 							Long anamnesisFormId = form.getId();
-							requests.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisFormId).fire(new OSCEReceiver<Void>() {
+							requests.anamnesisChecksValueRequest().fillAnamnesisChecksValues(anamnesisFormId).fire(new OSCEReceiver<Void>() {
 
 								@Override
 								public void onSuccess(Void response) {
@@ -445,7 +444,7 @@ requests.professionRequest().findAllProfessions().
 			}
 		});*/
 		
-		requests.spPortalPersonRequestNonRoo().insertStandardizedPatientDetailsInSPportal(standardizedPatient.getId()).fire(new OSCEReceiver<Void>() {
+		requests.sPPortalPersonRequest().insertStandardizedPatientDetailsInSPportal(standardizedPatient.getId()).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {

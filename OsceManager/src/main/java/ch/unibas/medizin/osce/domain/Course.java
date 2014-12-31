@@ -5,26 +5,27 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
-
 import org.apache.log4j.Logger;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.transaction.annotation.Transactional;
 import ch.unibas.medizin.osce.shared.ColorPicker;
 import ch.unibas.medizin.osce.shared.PostType;
 
-@RooJavaBean
-@RooToString
-@RooEntity
+@Entity
+@Configurable
 public class Course {
 
 	@PersistenceContext(unitName="persistenceUnit")
@@ -207,4 +208,132 @@ public class Course {
   		}
   		return false;  		
   	}
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Color: ").append(getColor()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("Osce: ").append(getOsce()).append(", ");
+        sb.append("OscePostRooms: ").append(getOscePostRooms() == null ? "null" : getOscePostRooms().size()).append(", ");
+        sb.append("OsceSequence: ").append(getOsceSequence()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            Course attached = Course.findCourse(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public Course merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        Course merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new Course().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countCourses() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM Course o", Long.class).getSingleResult();
+    }
+
+	public static List<Course> findAllCourses() {
+        return entityManager().createQuery("SELECT o FROM Course o", Course.class).getResultList();
+    }
+
+	public static Course findCourse(Long id) {
+        if (id == null) return null;
+        return entityManager().find(Course.class, id);
+    }
+
+	public static List<Course> findCourseEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Course o", Course.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public String getColor() {
+        return this.color;
+    }
+
+	public void setColor(String color) {
+        this.color = color;
+    }
+
+	public Osce getOsce() {
+        return this.osce;
+    }
+
+	public void setOsce(Osce osce) {
+        this.osce = osce;
+    }
+
+	public Set<OscePostRoom> getOscePostRooms() {
+        return this.oscePostRooms;
+    }
+
+	public void setOscePostRooms(Set<OscePostRoom> oscePostRooms) {
+        this.oscePostRooms = oscePostRooms;
+    }
+
+	public OsceSequence getOsceSequence() {
+        return this.osceSequence;
+    }
+
+	public void setOsceSequence(OsceSequence osceSequence) {
+        this.osceSequence = osceSequence;
+    }
 }

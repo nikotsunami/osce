@@ -4,26 +4,27 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
+import javax.persistence.Version;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.joda.time.DateTime;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
 
 
-@RooJavaBean
-@RooToString
-@RooEntity
+@Configurable
+@Entity
 public class TrainingSuggestion {
 
 	@PersistenceContext(unitName="persistenceUnit")
@@ -311,6 +312,125 @@ public class TrainingSuggestion {
 			return null;
 		}
 	}
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("StandardizedRole: ").append(getStandardizedRole()).append(", ");
+        sb.append("Training: ").append(getTraining()).append(", ");
+        sb.append("TrainingDate: ").append(getTrainingDate()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
+
+	public TrainingDate getTrainingDate() {
+        return this.trainingDate;
+    }
+
+	public void setTrainingDate(TrainingDate trainingDate) {
+        this.trainingDate = trainingDate;
+    }
+
+	public StandardizedRole getStandardizedRole() {
+        return this.standardizedRole;
+    }
+
+	public void setStandardizedRole(StandardizedRole standardizedRole) {
+        this.standardizedRole = standardizedRole;
+    }
+
+	public Training getTraining() {
+        return this.training;
+    }
+
+	public void setTraining(Training training) {
+        this.training = training;
+    }
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            TrainingSuggestion attached = TrainingSuggestion.findTrainingSuggestion(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public TrainingSuggestion merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        TrainingSuggestion merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new TrainingSuggestion().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countTrainingSuggestions() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM TrainingSuggestion o", Long.class).getSingleResult();
+    }
+
+	public static List<TrainingSuggestion> findAllTrainingSuggestions() {
+        return entityManager().createQuery("SELECT o FROM TrainingSuggestion o", TrainingSuggestion.class).getResultList();
+    }
+
+	public static TrainingSuggestion findTrainingSuggestion(Long id) {
+        if (id == null) return null;
+        return entityManager().find(TrainingSuggestion.class, id);
+    }
+
+	public static List<TrainingSuggestion> findTrainingSuggestionEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM TrainingSuggestion o", TrainingSuggestion.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
 }
 
 

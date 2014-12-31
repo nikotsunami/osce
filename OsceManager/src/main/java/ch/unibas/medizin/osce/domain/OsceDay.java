@@ -16,10 +16,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -28,26 +31,22 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
-
+import javax.persistence.Version;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-
+import org.springframework.transaction.annotation.Transactional;
 import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
 import ch.unibas.medizin.osce.shared.BreakType;
 import ch.unibas.medizin.osce.shared.RingtoneTypes;
-
 import com.csvreader.CsvWriter;
 
 
-@RooJavaBean
-@RooToString
-@RooEntity
+@Configurable
+@Entity
 public class OsceDay {
 
 	@PersistenceContext(unitName="persistenceUnit")
@@ -1377,6 +1376,251 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 		else
 			return null;
 	}
+
+	public Date getOsceDate() {
+        return this.osceDate;
+    }
+
+	public void setOsceDate(Date osceDate) {
+        this.osceDate = osceDate;
+    }
+
+	public Date getTimeStart() {
+        return this.timeStart;
+    }
+
+	public void setTimeStart(Date timeStart) {
+        this.timeStart = timeStart;
+    }
+
+	public Date getTimeEnd() {
+        return this.timeEnd;
+    }
+
+	public void setTimeEnd(Date timeEnd) {
+        this.timeEnd = timeEnd;
+    }
+
+	public Date getLunchBreakStart() {
+        return this.lunchBreakStart;
+    }
+
+	public void setLunchBreakStart(Date lunchBreakStart) {
+        this.lunchBreakStart = lunchBreakStart;
+    }
+
+	public Integer getLunchBreakAfterRotation() {
+        return this.lunchBreakAfterRotation;
+    }
+
+	public void setLunchBreakAfterRotation(Integer lunchBreakAfterRotation) {
+        this.lunchBreakAfterRotation = lunchBreakAfterRotation;
+    }
+
+	public Osce getOsce() {
+        return this.osce;
+    }
+
+	public void setOsce(Osce osce) {
+        this.osce = osce;
+    }
+
+	public Integer getValue() {
+        return this.value;
+    }
+
+	public void setValue(Integer value) {
+        this.value = value;
+    }
+
+	public Boolean getIsTimeSlotShifted() {
+        return this.isTimeSlotShifted;
+    }
+
+	public void setIsTimeSlotShifted(Boolean isTimeSlotShifted) {
+        this.isTimeSlotShifted = isTimeSlotShifted;
+    }
+
+	public Set<Assignment> getAssignments() {
+        return this.assignments;
+    }
+
+	public void setAssignments(Set<Assignment> assignments) {
+        this.assignments = assignments;
+    }
+
+	public List<OsceSequence> getOsceSequences() {
+        return this.osceSequences;
+    }
+
+	public void setOsceSequences(List<OsceSequence> osceSequences) {
+        this.osceSequences = osceSequences;
+    }
+
+	public Set<PatientInSemester> getPatientInSemesters() {
+        return this.patientInSemesters;
+    }
+
+	public void setPatientInSemesters(Set<PatientInSemester> patientInSemesters) {
+        this.patientInSemesters = patientInSemesters;
+    }
+
+	public String getBreakByRotation() {
+        return this.breakByRotation;
+    }
+
+	public void setBreakByRotation(String breakByRotation) {
+        this.breakByRotation = breakByRotation;
+    }
+
+	public Integer getLunchBreakAdjustedTime() {
+        return this.lunchBreakAdjustedTime;
+    }
+
+	public void setLunchBreakAdjustedTime(Integer lunchBreakAdjustedTime) {
+        this.lunchBreakAdjustedTime = lunchBreakAdjustedTime;
+    }
+
+	public List<OsceDayRotation> getOsceDayRotations() {
+        return this.osceDayRotations;
+    }
+
+	public void setOsceDayRotations(List<OsceDayRotation> osceDayRotations) {
+        this.osceDayRotations = osceDayRotations;
+    }
+
+	public Integer getStudentCount() {
+        return this.studentCount;
+    }
+
+	public void setStudentCount(Integer studentCount) {
+        this.studentCount = studentCount;
+    }
+
+	public Integer getSpCount() {
+        return this.spCount;
+    }
+
+	public void setSpCount(Integer spCount) {
+        this.spCount = spCount;
+    }
+
+	public Integer getRoomCount() {
+        return this.roomCount;
+    }
+
+	public void setRoomCount(Integer roomCount) {
+        this.roomCount = roomCount;
+    }
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Assignments: ").append(getAssignments() == null ? "null" : getAssignments().size()).append(", ");
+        sb.append("BreakByRotation: ").append(getBreakByRotation()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("IsTimeSlotShifted: ").append(getIsTimeSlotShifted()).append(", ");
+        sb.append("LunchBreakAdjustedTime: ").append(getLunchBreakAdjustedTime()).append(", ");
+        sb.append("LunchBreakAfterRotation: ").append(getLunchBreakAfterRotation()).append(", ");
+        sb.append("LunchBreakStart: ").append(getLunchBreakStart()).append(", ");
+        sb.append("Osce: ").append(getOsce()).append(", ");
+        sb.append("OsceDate: ").append(getOsceDate()).append(", ");
+        sb.append("OsceDayRotations: ").append(getOsceDayRotations() == null ? "null" : getOsceDayRotations().size()).append(", ");
+        sb.append("OsceSequences: ").append(getOsceSequences() == null ? "null" : getOsceSequences().size()).append(", ");
+        sb.append("PatientInSemesters: ").append(getPatientInSemesters() == null ? "null" : getPatientInSemesters().size()).append(", ");
+        sb.append("RoomCount: ").append(getRoomCount()).append(", ");
+        sb.append("SpCount: ").append(getSpCount()).append(", ");
+        sb.append("StudentCount: ").append(getStudentCount()).append(", ");
+        sb.append("TimeEnd: ").append(getTimeEnd()).append(", ");
+        sb.append("TimeStart: ").append(getTimeStart()).append(", ");
+        sb.append("Value: ").append(getValue()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            OsceDay attached = OsceDay.findOsceDay(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public OsceDay merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        OsceDay merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new OsceDay().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countOsceDays() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM OsceDay o", Long.class).getSingleResult();
+    }
+
+	public static List<OsceDay> findAllOsceDays() {
+        return entityManager().createQuery("SELECT o FROM OsceDay o", OsceDay.class).getResultList();
+    }
+
+	public static OsceDay findOsceDay(Long id) {
+        if (id == null) return null;
+        return entityManager().find(OsceDay.class, id);
+    }
+
+	public static List<OsceDay> findOsceDayEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM OsceDay o", OsceDay.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
 }
 
 class Schedule

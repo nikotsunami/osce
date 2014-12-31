@@ -6,10 +6,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -17,19 +21,17 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
-
+import javax.persistence.Version;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.transaction.annotation.Transactional;
 
-@RooJavaBean
-@RooToString
-@RooEntity
+@Entity
+@Configurable
 public class TrainingDate {
 
 	@PersistenceContext(unitName="persistenceUnit")
@@ -353,4 +355,150 @@ public class TrainingDate {
 			return null;
 		}
 	}
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            TrainingDate attached = TrainingDate.findTrainingDate(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public TrainingDate merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        TrainingDate merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new TrainingDate().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countTrainingDates() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM TrainingDate o", Long.class).getSingleResult();
+    }
+
+	public static List<TrainingDate> findAllTrainingDates() {
+        return entityManager().createQuery("SELECT o FROM TrainingDate o", TrainingDate.class).getResultList();
+    }
+
+	public static TrainingDate findTrainingDate(Long id) {
+        if (id == null) return null;
+        return entityManager().find(TrainingDate.class, id);
+    }
+
+	public static List<TrainingDate> findTrainingDateEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM TrainingDate o", TrainingDate.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public Date getTrainingDate() {
+        return this.trainingDate;
+    }
+
+	public void setTrainingDate(Date trainingDate) {
+        this.trainingDate = trainingDate;
+    }
+
+	public Boolean getIsAfternoon() {
+        return this.isAfternoon;
+    }
+
+	public void setIsAfternoon(Boolean isAfternoon) {
+        this.isAfternoon = isAfternoon;
+    }
+
+	public TrainingBlock getTrainingBlock() {
+        return this.trainingBlock;
+    }
+
+	public void setTrainingBlock(TrainingBlock trainingBlock) {
+        this.trainingBlock = trainingBlock;
+    }
+
+	public Set<PatientInSemester> getPatientInSemesters() {
+        return this.patientInSemesters;
+    }
+
+	public void setPatientInSemesters(Set<PatientInSemester> patientInSemesters) {
+        this.patientInSemesters = patientInSemesters;
+    }
+
+	public Set<Training> getTrainings() {
+        return this.trainings;
+    }
+
+	public void setTrainings(Set<Training> trainings) {
+        this.trainings = trainings;
+    }
+
+	public Set<TrainingSuggestion> getTrainingSuggestions() {
+        return this.trainingSuggestions;
+    }
+
+	public void setTrainingSuggestions(Set<TrainingSuggestion> trainingSuggestions) {
+        this.trainingSuggestions = trainingSuggestions;
+    }
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("IsAfternoon: ").append(getIsAfternoon()).append(", ");
+        sb.append("PatientInSemesters: ").append(getPatientInSemesters() == null ? "null" : getPatientInSemesters().size()).append(", ");
+        sb.append("TrainingBlock: ").append(getTrainingBlock()).append(", ");
+        sb.append("TrainingDate: ").append(getTrainingDate()).append(", ");
+        sb.append("TrainingSuggestions: ").append(getTrainingSuggestions() == null ? "null" : getTrainingSuggestions().size()).append(", ");
+        sb.append("Trainings: ").append(getTrainings() == null ? "null" : getTrainings().size()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
 }

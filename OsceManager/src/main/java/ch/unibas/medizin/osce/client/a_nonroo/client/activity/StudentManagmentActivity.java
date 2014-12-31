@@ -320,7 +320,7 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 		
 		final Range range = table.getVisibleRange();
 		//Log.info("search word --"+searchValue);
-		requests.studentRequestNonRoo().getStudents(sortname,sortorder,range.getStart(), range.getLength(),isFirst,searchValue).fire(new OSCEReceiver<List<StudentProxy>>() {
+		requests.studentRequest().getStudents(sortname,sortorder,range.getStart(), range.getLength(),isFirst,searchValue).fire(new OSCEReceiver<List<StudentProxy>>() {
 
 			@Override
 			public void onSuccess(List<StudentProxy> response) {
@@ -333,7 +333,7 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 
 	private void initSearch(final boolean isFirst,final String searchValue) {
 		
-		requests.studentRequestNonRoo().getCountOfStudent(sortname,sortorder,searchValue).fire(new OSCEReceiver<Long>() {
+		requests.studentRequest().getCountOfStudent(sortname,sortorder,searchValue).fire(new OSCEReceiver<Long>() {
 
 			@Override
 			public void onSuccess(Long response) {

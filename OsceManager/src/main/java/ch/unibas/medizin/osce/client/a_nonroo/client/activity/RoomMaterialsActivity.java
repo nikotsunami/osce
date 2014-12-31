@@ -21,7 +21,6 @@ import ch.unibas.medizin.osce.client.managed.request.MaterialListRequest;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.Sorting;
-import ch.unibas.medizin.osce.shared.scaffold.MaterialListRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -35,10 +34,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
-import com.google.gwt.requestfactory.shared.ServerFailure;
-import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -50,6 +45,10 @@ import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 
 public class RoomMaterialsActivity extends AbstractActivity implements
 		RoomMaterialsView.Presenter, RoomMaterialsView.Delegate {
@@ -67,7 +66,7 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 	/** Holds this activities' activityMapper */
 	private RoomMaterialsDetailsActivityMapper RoomMaterialsDetailsActivityMapper;
 	private String quickSearchTerm = "";
-	private MaterialListRequestNonRoo requestAdvSeaCritStd;
+	private MaterialListRequest requestAdvSeaCritStd;
 	/** List of fields that should be searched for the quickSearchTerm */
 	private List<String> searchThrough = Arrays.asList("name");
 
@@ -336,7 +335,7 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 
 	@SuppressWarnings("deprecation")
 	private void initSearch() {
-		requestAdvSeaCritStd = requests.materialListRequestNonRoo();
+		requestAdvSeaCritStd = requests.materialListRequest();
 
 		Range range = table.getVisibleRange();
 
@@ -361,7 +360,7 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 	@SuppressWarnings({ "deprecation" })
 	protected void onRangeChanged() {
 		// TODO: some bug about request
-		requestAdvSeaCritStd = requests.materialListRequestNonRoo();
+		requestAdvSeaCritStd = requests.materialListRequest();
 
 		for (AdvancedSearchCriteriaProxy criterion : searchCriteria) {
 			Log.info("Criterion: " + criterion.getField().toString() + ": "
@@ -458,7 +457,7 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 		System.out.println("Finding total result count value : "
 				+ quickSearchTerm);
 
-		requests.materialListRequestNonRoo()
+		requests.materialListRequest()
 				.countMaterialListByName(quickSearchTerm, searchThrough)
 				.fire(callback);
 	}
@@ -502,7 +501,7 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 			Range range) {
 		System.out.println("Calling RoomMaterialActivity with value : " + name);
 
-		return requests.materialListRequestNonRoo().findUsedMaterialByName(
+		return requests.materialListRequest().findUsedMaterialByName(
 				sortname, sortorder, quickSearchTerm, searchThrough,
 				range.getStart(), range.getLength());
 	}

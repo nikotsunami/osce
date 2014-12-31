@@ -141,7 +141,7 @@ public class CircuitActivity extends AbstractActivity implements CircuitView.Pre
 			}
 		});
 		
-		requests.osceRequestNonRoo().findAllOsceBySemesterIdAndCreationType(semesterProxy.getId(), OsceCreationType.Automatic).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
+		requests.osceRequest().findAllOsceBySemesterIdAndCreationType(semesterProxy.getId(), OsceCreationType.Automatic).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
 
 			@Override
 			public void onSuccess(List<OsceProxy> response) {

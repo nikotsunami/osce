@@ -12,8 +12,6 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ProfessionViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
-import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
-import ch.unibas.medizin.osce.client.managed.request.OsceRequest;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionRequest;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
@@ -33,10 +31,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.BaseProxy;
-import com.google.gwt.requestfactory.shared.InstanceRequest;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -47,6 +41,8 @@ import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
 
 public class ProfessionActivity extends AbstractActivity implements
 ProfessionView.Presenter, ProfessionView.Delegate {
@@ -291,12 +287,12 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 	
 	protected Request<List<ProfessionProxy>> createRangeRequest(String name, Range range) {
 //		return requests.professionRequest().findProfessionEntries(range.getStart(), range.getLength());
-		return requests.professionRequestNonRoo().findProfessionsByName(name, range.getStart(), range.getLength());
+		return requests.professionRequest().findProfessionsByName(name, range.getStart(), range.getLength());
 	}
 
 	protected void fireCountRequest(String name, Receiver<Long> callback) {
 //		requests.professionRequest().countProfessions().fire(callback);
-		requests.professionRequestNonRoo().countProfessionsByName(name).fire(callback);
+		requests.professionRequest().countProfessionsByName(name).fire(callback);
 	}
 
 	private void setTable(CellTable<ProfessionProxy> table) {
@@ -321,7 +317,7 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 			@Override
 			public void onSuccess(Void arg0) {
 				
-				requests.professionRequestNonRoo().saveNewProfessionInSpPortal(profession).fire(new OSCEReceiver<Boolean>() {
+				requests.professionRequest().saveNewProfessionInSpPortal(profession).fire(new OSCEReceiver<Boolean>() {
 
 					@Override
 					public void onSuccess(Boolean response) {
@@ -340,7 +336,7 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void deleteClicked(final ProfessionProxy prof) {
-		requests.professionRequestNonRoo().deleteProfessionInSpportal(prof).fire(new OSCEReceiver<Boolean>() {
+		requests.professionRequest().deleteProfessionInSpportal(prof).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -379,7 +375,7 @@ ProfessionView.Presenter, ProfessionView.Delegate {
 		
 		editedProfession=proxy;
 		
-		requests.professionRequestNonRoo().editProfessionInSpPortal(proxy,value).fire(new OSCEReceiver<Boolean>() {
+		requests.professionRequest().editProfessionInSpPortal(proxy,value).fire(new OSCEReceiver<Boolean>() {
 
 			
 			@Override

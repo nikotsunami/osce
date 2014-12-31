@@ -40,8 +40,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -141,7 +141,7 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 			@Override
 			public void onSuccess(Object response) {
 				if (response instanceof RoleTemplateProxy) {
-					requests.roleBaseItemRequestNoonRoo().findAllDeletedRoleBaseItems(((RoleTemplateProxy) response).getId()).fire(new Receiver<List<RoleBaseItemProxy>>() {
+					requests.roleBaseItemRequest().findAllDeletedRoleBaseItems(((RoleTemplateProxy) response).getId()).fire(new Receiver<List<RoleBaseItemProxy>>() {
 
 						@Override
 						public void onSuccess(List<RoleBaseItemProxy> response) {
@@ -438,7 +438,7 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 	private void fireRangeRequest(final Range range,
 			final Receiver<List<RoleTableItemProxy>> callback,Long roleBaseItemId) {
 		Log.info("Inside fireRangeRequest()");
-		 requests.roleTableItemRequestNoonRoo().findRoleTableItemByBaseItemId(roleBaseItemId).fire(callback);
+		 requests.roleTableItemRequest().findRoleTableItemByBaseItemId(roleBaseItemId).fire(callback);
 		
 	}
 
@@ -692,7 +692,7 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 											toolTip.clear();
 											toolTip.hide();
 											
-										requests.roleTableItemRequestNoonRoo().findRoleTableItemByBaseItemId(roleBaseItemId).fire(new Receiver<List<RoleTableItemProxy>>() {
+										requests.roleTableItemRequest().findRoleTableItemByBaseItemId(roleBaseItemId).fire(new Receiver<List<RoleTableItemProxy>>() {
 
 												@Override
 												public void onSuccess(List<RoleTableItemProxy> response) {
@@ -718,7 +718,7 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 			public void onSuccess(Void ignore) {
 				Log.debug("role Table Item Sucessfully deleted");
 				
-		requests.roleTableItemRequestNoonRoo().findRoleTableItemByBaseItemId(roleBaseItemId).fire(new Receiver<List<RoleTableItemProxy>>() {
+		requests.roleTableItemRequest().findRoleTableItemByBaseItemId(roleBaseItemId).fire(new Receiver<List<RoleTableItemProxy>>() {
 
 			@Override
 			public void onSuccess(List<RoleTableItemProxy> response) {
@@ -784,13 +784,13 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 		
 		
 		Log.info("MoveUP inside Activity");
-		requests.roleTableItemRequestNoonRoo().roleTableItemMoveUp(roleBaseItemId).using(roleTableItem)
+		requests.roleTableItemRequest().roleTableItemMoveUp(roleBaseItemId).using(roleTableItem)
 		.fire(new Receiver<Void>() {
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("moved");
 			
-		requests.roleTableItemRequestNoonRoo().findRoleTableItemByBaseItemId(roleBaseItemId).fire(new Receiver<List<RoleTableItemProxy>>() {
+		requests.roleTableItemRequest().findRoleTableItemByBaseItemId(roleBaseItemId).fire(new Receiver<List<RoleTableItemProxy>>() {
 
 					@Override
 					public void onSuccess(List<RoleTableItemProxy> response) {
@@ -809,13 +809,13 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 	public void roleTableItemMoveDown(RoleTableItemProxy roleTableItem,final Long roleBaseItemId,final CellTable<RoleTableItemProxy> roleTableItemTable) {
 		
 		Log.info("MoveDown inside Activity");
-		requests.roleTableItemRequestNoonRoo().roleTableItemMoveDown(roleBaseItemId).using(roleTableItem)
+		requests.roleTableItemRequest().roleTableItemMoveDown(roleBaseItemId).using(roleTableItem)
 		.fire(new Receiver<Void>() {
 			@Override
 			public void onSuccess(Void response) {
 				Log.info("Downed");
 				
-				requests.roleTableItemRequestNoonRoo().findRoleTableItemByBaseItemId(roleBaseItemId).fire(new Receiver<List<RoleTableItemProxy>>() {
+				requests.roleTableItemRequest().findRoleTableItemByBaseItemId(roleBaseItemId).fire(new Receiver<List<RoleTableItemProxy>>() {
 
 					@Override
 					public void onSuccess(List<RoleTableItemProxy> response) {
@@ -833,7 +833,7 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 	@Override
 	public void baseItemUpButtonClicked(RoleBaseItemProxy roleBasedItemProxy) {
 		Log.info("MoveUP inside Activity");
-		requests.roleBaseItemRequestNoonRoo().baseItemUpButtonClicked().using(roleBasedItemProxy)
+		requests.roleBaseItemRequest().baseItemUpButtonClicked().using(roleBasedItemProxy)
 		.fire(new Receiver<Void>() {
 			@Override
 			public void onSuccess(Void response) {
@@ -850,7 +850,7 @@ public void roleTableItemEditButtonClicked(final RoleTableItemProxy roleTableIte
 	@Override
 	public void baseItemDownButtonClicked(RoleBaseItemProxy roleBasedItemProxy) {
 		Log.info("MoveDown inside Activity");
-		requests.roleBaseItemRequestNoonRoo().baseItemDownButtonClicked().using(roleBasedItemProxy)
+		requests.roleBaseItemRequest().baseItemDownButtonClicked().using(roleBasedItemProxy)
 		.fire(new Receiver<Void>() {
 			@Override
 			public void onSuccess(Void response) {

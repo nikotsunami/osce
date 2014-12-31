@@ -38,9 +38,9 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
-import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -443,7 +443,7 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 	protected void fireCountRequest(Receiver<Long> callback) {
 //		requests.nationalityRequest().countNationalitys().fire(callback);
 		Log.info("Finding total specialtation size value : ");
-		requests.specialisationRequestNonRoo().countSpecializations(searchFilter).fire(callback);
+		requests.specialisationRequest().countSpecializations(searchFilter).fire(callback);
 	}
 	
 	//By spec To handle table chabge lostner
@@ -518,7 +518,7 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 	}
 	protected Request<List<SpecialisationProxy>> createRangeRequest(Range range) {
 		System.out.println("Calling FindAllSpecialization with value : " );
-		return requests.specialisationRequestNonRoo().findAllSpecialisation(sortname,sortorder,searchFilter, range.getStart(), range.getLength());
+		return requests.specialisationRequest().findAllSpecialisation(sortname,sortorder,searchFilter, range.getStart(), range.getLength());
 	}
 
 	@Override

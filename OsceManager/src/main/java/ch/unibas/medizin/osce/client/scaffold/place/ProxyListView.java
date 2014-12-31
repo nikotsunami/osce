@@ -1,6 +1,6 @@
 package ch.unibas.medizin.osce.client.scaffold.place;
 
-import com.google.gwt.requestfactory.shared.EntityProxy;
+import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.view.client.HasData;
 

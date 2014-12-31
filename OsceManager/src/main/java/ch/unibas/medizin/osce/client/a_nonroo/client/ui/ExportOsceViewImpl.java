@@ -510,6 +510,43 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	@UiHandler("cancelButton")
 	public void cancelButtonClicked(ClickEvent event)
 	{
+		if(bucketInformationProxy != null){
+			if(s3.getValue()){
+				if(bucketInformationProxy.getType().equals(BucketInfoType.S3) ==false){
+					bucketName.setText("");
+					password.setText("");
+					accessKey.setText("");
+					encryptionKey.setText("");
+					basePath.setText("");
+					secretKey.setText("");
+				}else{
+					checkPreviousValuesForBucketInformation(bucketInformationProxy);	
+				}
+				
+			}
+			
+			if(ftp.getValue()){
+				if(bucketInformationProxy.getType().equals(BucketInfoType.FTP) ==false){
+					bucketName.setText("");
+					password.setText("");
+					accessKey.setText("");
+					encryptionKey.setText("");
+					basePath.setText("");
+					secretKey.setText("");
+				}else{
+					checkPreviousValuesForBucketInformation(bucketInformationProxy);	
+				}
+			}
+			
+		}else{
+			bucketName.setValue("");
+			password.setValue("");
+			accessKey.setValue("");
+			encryptionKey.setValue("");
+			basePath.setValue("");
+			secretKey.setValue("");
+				
+		}
 		bucketName.setEnabled(false);
 		accessKey.setEnabled(false);
 		secretKey.setEnabled(false);
@@ -590,5 +627,32 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	public RadioButton getiOSCE() {
 		return iOSCE;
 	}
-	
+
+	private void checkPreviousValuesForBucketInformation(BucketInformationProxy bucketInformationProxy) {
+		
+			if(bucketInformationProxy.getBasePath().equals(basePath.getValue()) == false){
+				basePath.setValue(bucketInformationProxy.getBasePath());
+			}
+			if(bucketInformationProxy.getBucketName().equals(bucketName.getValue()) == false){
+				bucketName.setValue(bucketInformationProxy.getBucketName());
+			}
+			if(bucketInformationProxy.getEncryptionKey().equals(encryptionKey.getValue()) == false){
+				encryptionKey.setValue(bucketInformationProxy.getEncryptionKey());
+			}
+			if(bucketInformationProxy.getAccessKey().equals(accessKey.getValue()) == false){
+				accessKey.setValue(bucketInformationProxy.getAccessKey());
+			}
+			if(password.getValue().equals("") == false){
+				if(bucketInformationProxy.getSecretKey().equals(password.getValue()) == false){
+					password.setValue(bucketInformationProxy.getSecretKey());
+				}
+						
+			}
+			if(secretKey.getValue().equals("") == false){
+				if(bucketInformationProxy.getSecretKey().equals(secretKey.getValue()) == false){
+					secretKey.setValue(bucketInformationProxy.getSecretKey());
+				}
+						
+			}
+	}
 }

@@ -132,7 +132,7 @@ public class ExaminationScheduleActivity extends AbstractActivity implements Exa
 		});
 		view.setDelegate(this);
 		
-		requests.osceRequestNonRoo().findAllOsceOnSemesterId(semesterProxy.getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
+		requests.osceRequest().findAllOsceOnSemesterId(semesterProxy.getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
 
 			@Override
 			public void onSuccess(List<OsceProxy> response) {

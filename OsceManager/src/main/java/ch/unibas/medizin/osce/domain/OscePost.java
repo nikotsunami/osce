@@ -4,27 +4,28 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
+import javax.persistence.Version;
 import org.apache.log4j.Logger;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.transaction.annotation.Transactional;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.RoleTypes;
 
-@RooJavaBean
-@RooToString
-@RooEntity(finders = { "findOscePostsByOscePostBlueprintAndOsceSequence" })
+@Entity
+@Configurable
 public class OscePost {
 
 	@PersistenceContext(unitName="persistenceUnit")
@@ -374,4 +375,187 @@ public class OscePost {
 		 
 		 return (query.getResultList().size() + query1.getResultList().size());
 	 }
+
+	public OscePostBlueprint getOscePostBlueprint() {
+        return this.oscePostBlueprint;
+    }
+
+	public void setOscePostBlueprint(OscePostBlueprint oscePostBlueprint) {
+        this.oscePostBlueprint = oscePostBlueprint;
+    }
+
+	public Set<OscePostRoom> getOscePostRooms() {
+        return this.oscePostRooms;
+    }
+
+	public void setOscePostRooms(Set<OscePostRoom> oscePostRooms) {
+        this.oscePostRooms = oscePostRooms;
+    }
+
+	public Set<PatientInRole> getPatientInRole() {
+        return this.patientInRole;
+    }
+
+	public void setPatientInRole(Set<PatientInRole> patientInRole) {
+        this.patientInRole = patientInRole;
+    }
+
+	public StandardizedRole getStandardizedRole() {
+        return this.standardizedRole;
+    }
+
+	public void setStandardizedRole(StandardizedRole standardizedRole) {
+        this.standardizedRole = standardizedRole;
+    }
+
+	public OsceSequence getOsceSequence() {
+        return this.osceSequence;
+    }
+
+	public void setOsceSequence(OsceSequence osceSequence) {
+        this.osceSequence = osceSequence;
+    }
+
+	public Integer getSequenceNumber() {
+        return this.sequenceNumber;
+    }
+
+	public void setSequenceNumber(Integer sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+    }
+
+	public Integer getValue() {
+        return this.value;
+    }
+
+	public void setValue(Integer value) {
+        this.value = value;
+    }
+
+	public List<ItemAnalysis> getItemAnalysis() {
+        return this.itemAnalysis;
+    }
+
+	public void setItemAnalysis(List<ItemAnalysis> itemAnalysis) {
+        this.itemAnalysis = itemAnalysis;
+    }
+
+	public List<PostAnalysis> getPostAnalysis() {
+        return this.postAnalysis;
+    }
+
+	public void setPostAnalysis(List<PostAnalysis> postAnalysis) {
+        this.postAnalysis = postAnalysis;
+    }
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            OscePost attached = OscePost.findOscePost(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public OscePost merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        OscePost merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new OscePost().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countOscePosts() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM OscePost o", Long.class).getSingleResult();
+    }
+
+	public static List<OscePost> findAllOscePosts() {
+        return entityManager().createQuery("SELECT o FROM OscePost o", OscePost.class).getResultList();
+    }
+
+	public static OscePost findOscePost(Long id) {
+        if (id == null) return null;
+        return entityManager().find(OscePost.class, id);
+    }
+
+	public static List<OscePost> findOscePostEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM OscePost o", OscePost.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("ItemAnalysis: ").append(getItemAnalysis() == null ? "null" : getItemAnalysis().size()).append(", ");
+        sb.append("OscePostBlueprint: ").append(getOscePostBlueprint()).append(", ");
+        sb.append("OscePostRooms: ").append(getOscePostRooms() == null ? "null" : getOscePostRooms().size()).append(", ");
+        sb.append("OsceSequence: ").append(getOsceSequence()).append(", ");
+        sb.append("PatientInRole: ").append(getPatientInRole() == null ? "null" : getPatientInRole().size()).append(", ");
+        sb.append("PostAnalysis: ").append(getPostAnalysis() == null ? "null" : getPostAnalysis().size()).append(", ");
+        sb.append("SequenceNumber: ").append(getSequenceNumber()).append(", ");
+        sb.append("StandardizedRole: ").append(getStandardizedRole()).append(", ");
+        sb.append("Value: ").append(getValue()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
+
+	public static TypedQuery<OscePost> findOscePostsByOscePostBlueprintAndOsceSequence(OscePostBlueprint oscePostBlueprint, OsceSequence osceSequence) {
+        if (oscePostBlueprint == null) throw new IllegalArgumentException("The oscePostBlueprint argument is required");
+        if (osceSequence == null) throw new IllegalArgumentException("The osceSequence argument is required");
+        EntityManager em = OscePost.entityManager();
+        TypedQuery<OscePost> q = em.createQuery("SELECT o FROM OscePost AS o WHERE o.oscePostBlueprint = :oscePostBlueprint AND o.osceSequence = :osceSequence", OscePost.class);
+        q.setParameter("oscePostBlueprint", oscePostBlueprint);
+        q.setParameter("osceSequence", osceSequence);
+        return q;
+    }
 }

@@ -10,10 +10,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -21,6 +25,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
+import javax.persistence.Version;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
@@ -31,15 +36,12 @@ import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 import ch.unibas.medizin.osce.domain.spportal.SPPortalPerson;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.CsvUtil;
@@ -57,13 +59,11 @@ import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.StandardizedPatientSearchField;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
+import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
 
-import com.google.gwt.requestfactory.server.RequestFactoryServlet;
 
-
-@RooJavaBean
-@RooToString
-@RooEntity
+@Entity
+@Configurable
 public class StandardizedPatient {
 
 	@PersistenceContext(unitName="persistenceUnit")
@@ -1514,4 +1514,357 @@ public class StandardizedPatient {
 			
 			return spIds.toString();
 		}
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("AnamnesisForm: ").append(getAnamnesisForm()).append(", ");
+        sb.append("BankAccount: ").append(getBankAccount()).append(", ");
+        sb.append("Birthday: ").append(getBirthday()).append(", ");
+        sb.append("City: ").append(getCity()).append(", ");
+        sb.append("Created: ").append(getCreated()).append(", ");
+        sb.append("Descriptions: ").append(getDescriptions()).append(", ");
+        sb.append("Email: ").append(getEmail()).append(", ");
+        sb.append("Gender: ").append(getGender()).append(", ");
+        sb.append("Height: ").append(getHeight()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("IgnoreSocialInsuranceNo: ").append(getIgnoreSocialInsuranceNo()).append(", ");
+        sb.append("ImmagePath: ").append(getImmagePath()).append(", ");
+        sb.append("Langskills: ").append(getLangskills() == null ? "null" : getLangskills().size()).append(", ");
+        sb.append("MaritalStatus: ").append(getMaritalStatus()).append(", ");
+        sb.append("Mobile: ").append(getMobile()).append(", ");
+        sb.append("Name: ").append(getName()).append(", ");
+        sb.append("Nationality: ").append(getNationality()).append(", ");
+        sb.append("PatientInSemester: ").append(getPatientInSemester() == null ? "null" : getPatientInSemester().size()).append(", ");
+        sb.append("PostalCode: ").append(getPostalCode()).append(", ");
+        sb.append("PreName: ").append(getPreName()).append(", ");
+        sb.append("Profession: ").append(getProfession()).append(", ");
+        sb.append("SocialInsuranceNo: ").append(getSocialInsuranceNo()).append(", ");
+        sb.append("SpPortalPersonId: ").append(getSpPortalPersonId()).append(", ");
+        sb.append("Status: ").append(getStatus()).append(", ");
+        sb.append("Street: ").append(getStreet()).append(", ");
+        sb.append("Telephone: ").append(getTelephone()).append(", ");
+        sb.append("Telephone2: ").append(getTelephone2()).append(", ");
+        sb.append("Version: ").append(getVersion()).append(", ");
+        sb.append("VideoPath: ").append(getVideoPath()).append(", ");
+        sb.append("Weight: ").append(getWeight()).append(", ");
+        sb.append("WorkPermission: ").append(getWorkPermission());
+        return sb.toString();
+    }
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            StandardizedPatient attached = StandardizedPatient.findStandardizedPatient(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public StandardizedPatient merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        StandardizedPatient merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new StandardizedPatient().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countStandardizedPatients() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM StandardizedPatient o", Long.class).getSingleResult();
+    }
+
+	public static List<StandardizedPatient> findAllStandardizedPatients() {
+        return entityManager().createQuery("SELECT o FROM StandardizedPatient o", StandardizedPatient.class).getResultList();
+    }
+
+	public static StandardizedPatient findStandardizedPatient(Long id) {
+        if (id == null) return null;
+        return entityManager().find(StandardizedPatient.class, id);
+    }
+
+	public static List<StandardizedPatient> findStandardizedPatientEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM StandardizedPatient o", StandardizedPatient.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public Gender getGender() {
+        return this.gender;
+    }
+
+	public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+	public String getName() {
+        return this.name;
+    }
+
+	public void setName(String name) {
+        this.name = name;
+    }
+
+	public String getPreName() {
+        return this.preName;
+    }
+
+	public void setPreName(String preName) {
+        this.preName = preName;
+    }
+
+	public String getStreet() {
+        return this.street;
+    }
+
+	public void setStreet(String street) {
+        this.street = street;
+    }
+
+	public String getCity() {
+        return this.city;
+    }
+
+	public void setCity(String city) {
+        this.city = city;
+    }
+
+	public String getPostalCode() {
+        return this.postalCode;
+    }
+
+	public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+	public String getTelephone() {
+        return this.telephone;
+    }
+
+	public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+	public String getTelephone2() {
+        return this.telephone2;
+    }
+
+	public void setTelephone2(String telephone2) {
+        this.telephone2 = telephone2;
+    }
+
+	public String getMobile() {
+        return this.mobile;
+    }
+
+	public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+	public Integer getHeight() {
+        return this.height;
+    }
+
+	public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+	public Integer getWeight() {
+        return this.weight;
+    }
+
+	public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
+	public String getImmagePath() {
+        return this.immagePath;
+    }
+
+	public void setImmagePath(String immagePath) {
+        this.immagePath = immagePath;
+    }
+
+	public String getVideoPath() {
+        return this.videoPath;
+    }
+
+	public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
+    }
+
+	public Nationality getNationality() {
+        return this.nationality;
+    }
+
+	public void setNationality(Nationality nationality) {
+        this.nationality = nationality;
+    }
+
+	public Profession getProfession() {
+        return this.profession;
+    }
+
+	public void setProfession(Profession profession) {
+        this.profession = profession;
+    }
+
+	public Date getBirthday() {
+        return this.birthday;
+    }
+
+	public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
+	public String getEmail() {
+        return this.email;
+    }
+
+	public void setEmail(String email) {
+        this.email = email;
+    }
+
+	public Description getDescriptions() {
+        return this.descriptions;
+    }
+
+	public void setDescriptions(Description descriptions) {
+        this.descriptions = descriptions;
+    }
+
+	public Bankaccount getBankAccount() {
+        return this.bankAccount;
+    }
+
+	public void setBankAccount(Bankaccount bankAccount) {
+        this.bankAccount = bankAccount;
+    }
+
+	public MaritalStatus getMaritalStatus() {
+        return this.maritalStatus;
+    }
+
+	public void setMaritalStatus(MaritalStatus maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
+
+	public WorkPermission getWorkPermission() {
+        return this.workPermission;
+    }
+
+	public void setWorkPermission(WorkPermission workPermission) {
+        this.workPermission = workPermission;
+    }
+
+	public StandardizedPatientStatus getStatus() {
+        return this.status;
+    }
+
+	public void setStatus(StandardizedPatientStatus status) {
+        this.status = status;
+    }
+
+	public String getSocialInsuranceNo() {
+        return this.socialInsuranceNo;
+    }
+
+	public void setSocialInsuranceNo(String socialInsuranceNo) {
+        this.socialInsuranceNo = socialInsuranceNo;
+    }
+
+	public Date getCreated() {
+        return this.created;
+    }
+
+	public void setCreated(Date created) {
+        this.created = created;
+    }
+
+	public AnamnesisForm getAnamnesisForm() {
+        return this.anamnesisForm;
+    }
+
+	public void setAnamnesisForm(AnamnesisForm anamnesisForm) {
+        this.anamnesisForm = anamnesisForm;
+    }
+
+	public Set<LangSkill> getLangskills() {
+        return this.langskills;
+    }
+
+	public void setLangskills(Set<LangSkill> langskills) {
+        this.langskills = langskills;
+    }
+
+	public Set<PatientInSemester> getPatientInSemester() {
+        return this.patientInSemester;
+    }
+
+	public void setPatientInSemester(Set<PatientInSemester> patientInSemester) {
+        this.patientInSemester = patientInSemester;
+    }
+
+	public Long getSpPortalPersonId() {
+        return this.spPortalPersonId;
+    }
+
+	public void setSpPortalPersonId(Long spPortalPersonId) {
+        this.spPortalPersonId = spPortalPersonId;
+    }
+
+	public Boolean getIgnoreSocialInsuranceNo() {
+        return this.ignoreSocialInsuranceNo;
+    }
+
+	public void setIgnoreSocialInsuranceNo(Boolean ignoreSocialInsuranceNo) {
+        this.ignoreSocialInsuranceNo = ignoreSocialInsuranceNo;
+    }
 }

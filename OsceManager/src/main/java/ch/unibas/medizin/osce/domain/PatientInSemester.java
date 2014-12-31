@@ -9,10 +9,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -20,21 +24,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
+import javax.persistence.Version;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.transaction.annotation.Transactional;
 import ch.unibas.medizin.osce.domain.spportal.SpPatientInSemester;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
-
 import com.csvreader.CsvWriter;
 
-@RooJavaBean
-@RooToString
-@RooEntity(finders = { "findPatientInSemestersBySemester" })
+@Configurable
+@Entity
 public class PatientInSemester {
 
 	@PersistenceContext(unitName="persistenceUnit")
@@ -568,4 +568,185 @@ public class PatientInSemester {
 		 }
 		
 	}
+
+	public Semester getSemester() {
+        return this.semester;
+    }
+
+	public void setSemester(Semester semester) {
+        this.semester = semester;
+    }
+
+	public StandardizedPatient getStandardizedPatient() {
+        return this.standardizedPatient;
+    }
+
+	public void setStandardizedPatient(StandardizedPatient standardizedPatient) {
+        this.standardizedPatient = standardizedPatient;
+    }
+
+	public Boolean getAccepted() {
+        return this.accepted;
+    }
+
+	public void setAccepted(Boolean accepted) {
+        this.accepted = accepted;
+    }
+
+	public Set<OsceDay> getOsceDays() {
+        return this.osceDays;
+    }
+
+	public void setOsceDays(Set<OsceDay> osceDays) {
+        this.osceDays = osceDays;
+    }
+
+	public Set<OsceDate> getOsceDates() {
+        return this.osceDates;
+    }
+
+	public void setOsceDates(Set<OsceDate> osceDates) {
+        this.osceDates = osceDates;
+    }
+
+	public Set<TrainingDate> getTrainingDates() {
+        return this.trainingDates;
+    }
+
+	public void setTrainingDates(Set<TrainingDate> trainingDates) {
+        this.trainingDates = trainingDates;
+    }
+
+	public Set<PatientInRole> getPatientInRole() {
+        return this.patientInRole;
+    }
+
+	public void setPatientInRole(Set<PatientInRole> patientInRole) {
+        this.patientInRole = patientInRole;
+    }
+
+	public Integer getValue() {
+        return this.value;
+    }
+
+	public void setValue(Integer value) {
+        this.value = value;
+    }
+
+	public Long getSpPortalPersonId() {
+        return this.spPortalPersonId;
+    }
+
+	public void setSpPortalPersonId(Long spPortalPersonId) {
+        this.spPortalPersonId = spPortalPersonId;
+    }
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            PatientInSemester attached = PatientInSemester.findPatientInSemester(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public PatientInSemester merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        PatientInSemester merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new PatientInSemester().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countPatientInSemesters() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM PatientInSemester o", Long.class).getSingleResult();
+    }
+
+	public static List<PatientInSemester> findAllPatientInSemesters() {
+        return entityManager().createQuery("SELECT o FROM PatientInSemester o", PatientInSemester.class).getResultList();
+    }
+
+	public static PatientInSemester findPatientInSemester(Long id) {
+        if (id == null) return null;
+        return entityManager().find(PatientInSemester.class, id);
+    }
+
+	public static List<PatientInSemester> findPatientInSemesterEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM PatientInSemester o", PatientInSemester.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Accepted: ").append(getAccepted()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("OsceDates: ").append(getOsceDates() == null ? "null" : getOsceDates().size()).append(", ");
+        sb.append("OsceDays: ").append(getOsceDays() == null ? "null" : getOsceDays().size()).append(", ");
+        sb.append("PatientInRole: ").append(getPatientInRole() == null ? "null" : getPatientInRole().size()).append(", ");
+        sb.append("Semester: ").append(getSemester()).append(", ");
+        sb.append("SpPortalPersonId: ").append(getSpPortalPersonId()).append(", ");
+        sb.append("StandardizedPatient: ").append(getStandardizedPatient()).append(", ");
+        sb.append("TrainingDates: ").append(getTrainingDates() == null ? "null" : getTrainingDates().size()).append(", ");
+        sb.append("Value: ").append(getValue()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
+
+	public static TypedQuery<PatientInSemester> findPatientInSemestersBySemester(Semester semester) {
+        if (semester == null) throw new IllegalArgumentException("The semester argument is required");
+        EntityManager em = PatientInSemester.entityManager();
+        TypedQuery<PatientInSemester> q = em.createQuery("SELECT o FROM PatientInSemester AS o WHERE o.semester = :semester", PatientInSemester.class);
+        q.setParameter("semester", semester);
+        return q;
+    }
 }

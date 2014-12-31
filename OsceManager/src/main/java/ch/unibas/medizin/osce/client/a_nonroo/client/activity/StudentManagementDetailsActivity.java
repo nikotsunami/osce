@@ -114,7 +114,7 @@ public class StudentManagementDetailsActivity extends AbstractActivity implement
 	
 	public void showOsceParticipation(StudentProxy studentProxy){
 		
-		requests.studentRequestNonRoo().findOsceBasedOnStudent(studentProxy.getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
+		requests.studentRequest().findOsceBasedOnStudent(studentProxy.getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
 
 			@Override
 			public void onSuccess(List<OsceProxy> response) {

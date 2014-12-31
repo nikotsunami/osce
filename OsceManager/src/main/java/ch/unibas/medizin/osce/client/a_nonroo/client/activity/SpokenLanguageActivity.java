@@ -28,8 +28,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -40,6 +38,8 @@ import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
 
 public class SpokenLanguageActivity extends AbstractActivity implements
 SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
@@ -271,13 +271,13 @@ SpokenLanguageView.Presenter, SpokenLanguageView.Delegate {
 	
 	protected Request<List<SpokenLanguageProxy>> createRangeRequest(Range range) {
 		String name = view.getSearchTerm();
-		return requests.languageRequestNonRoo().findLanguagesByName(name, range.getStart(), range.getLength());
+		return requests.spokenLanguageRequest().findLanguagesByName(name, range.getStart(), range.getLength());
 	}
 
 	protected void fireCountRequest(Receiver<Long> callback) {
 //		requests.spokenLanguageRequest().countSpokenLanguages().fire(callback);
 		String name = view.getSearchTerm();
-		requests.languageRequestNonRoo().countLanguagesByName(name).fire(callback);
+		requests.spokenLanguageRequest().countLanguagesByName(name).fire(callback);
 	}
 
 	private void setTable(CellTable<SpokenLanguageProxy> table) {

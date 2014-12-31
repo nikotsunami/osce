@@ -3,7 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.place;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.place.shared.PlaceTokenizer;
-import com.google.gwt.requestfactory.shared.RequestFactory;
+import com.google.web.bindery.requestfactory.shared.RequestFactory;
 
 public class ImportObjectiveViewPlace extends OsMaPlace {
 

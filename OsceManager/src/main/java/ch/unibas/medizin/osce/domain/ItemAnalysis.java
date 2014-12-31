@@ -1,20 +1,22 @@
 package ch.unibas.medizin.osce.domain;
 
 import java.util.List;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
+import javax.persistence.Version;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.transaction.annotation.Transactional;
 
-@RooJavaBean
-@RooToString
-@RooEntity
+@Configurable
+@Entity
 public class ItemAnalysis {
 	
 	@PersistenceContext(unitName="persistenceUnit")
@@ -213,5 +215,214 @@ public class ItemAnalysis {
 		TypedQuery<ItemAnalysis> query = em.createQuery(sql, ItemAnalysis.class);
 		return query.getResultList();
 	}
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ChecklistItem: ").append(getChecklistItem()).append(", ");
+        sb.append("Cronbach: ").append(getCronbach()).append(", ");
+        sb.append("DeActivate: ").append(getDeActivate()).append(", ");
+        sb.append("Frequency: ").append(getFrequency()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("Mean: ").append(getMean()).append(", ");
+        sb.append("Missing: ").append(getMissing()).append(", ");
+        sb.append("MissingPercentage: ").append(getMissingPercentage()).append(", ");
+        sb.append("Osce: ").append(getOsce()).append(", ");
+        sb.append("OscePost: ").append(getOscePost()).append(", ");
+        sb.append("OsceSequence: ").append(getOsceSequence()).append(", ");
+        sb.append("Points: ").append(getPoints()).append(", ");
+        sb.append("Question: ").append(getQuestion()).append(", ");
+        sb.append("StandardDeviation: ").append(getStandardDeviation()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
+
+	public OscePost getOscePost() {
+        return this.oscePost;
+    }
+
+	public void setOscePost(OscePost oscePost) {
+        this.oscePost = oscePost;
+    }
+
+	public ChecklistQuestion getQuestion() {
+        return this.question;
+    }
+
+	public void setQuestion(ChecklistQuestion question) {
+        this.question = question;
+    }
+
+	public Integer getMissing() {
+        return this.missing;
+    }
+
+	public void setMissing(Integer missing) {
+        this.missing = missing;
+    }
+
+	public Double getMean() {
+        return this.mean;
+    }
+
+	public void setMean(Double mean) {
+        this.mean = mean;
+    }
+
+	public Double getStandardDeviation() {
+        return this.standardDeviation;
+    }
+
+	public void setStandardDeviation(Double standardDeviation) {
+        this.standardDeviation = standardDeviation;
+    }
+
+	public String getPoints() {
+        return this.points;
+    }
+
+	public void setPoints(String points) {
+        this.points = points;
+    }
+
+	public String getFrequency() {
+        return this.frequency;
+    }
+
+	public void setFrequency(String frequency) {
+        this.frequency = frequency;
+    }
+
+	public Double getCronbach() {
+        return this.cronbach;
+    }
+
+	public void setCronbach(Double cronbach) {
+        this.cronbach = cronbach;
+    }
+
+	public Osce getOsce() {
+        return this.osce;
+    }
+
+	public void setOsce(Osce osce) {
+        this.osce = osce;
+    }
+
+	public OsceSequence getOsceSequence() {
+        return this.osceSequence;
+    }
+
+	public void setOsceSequence(OsceSequence osceSequence) {
+        this.osceSequence = osceSequence;
+    }
+
+	public Double getMissingPercentage() {
+        return this.missingPercentage;
+    }
+
+	public void setMissingPercentage(Double missingPercentage) {
+        this.missingPercentage = missingPercentage;
+    }
+
+	public Boolean getDeActivate() {
+        return this.deActivate;
+    }
+
+	public void setDeActivate(Boolean deActivate) {
+        this.deActivate = deActivate;
+    }
+
+	public ChecklistItem getChecklistItem() {
+        return this.checklistItem;
+    }
+
+	public void setChecklistItem(ChecklistItem checklistItem) {
+        this.checklistItem = checklistItem;
+    }
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            ItemAnalysis attached = ItemAnalysis.findItemAnalysis(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public ItemAnalysis merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        ItemAnalysis merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new ItemAnalysis().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countItemAnalyses() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM ItemAnalysis o", Long.class).getSingleResult();
+    }
+
+	public static List<ItemAnalysis> findAllItemAnalyses() {
+        return entityManager().createQuery("SELECT o FROM ItemAnalysis o", ItemAnalysis.class).getResultList();
+    }
+
+	public static ItemAnalysis findItemAnalysis(Long id) {
+        if (id == null) return null;
+        return entityManager().find(ItemAnalysis.class, id);
+    }
+
+	public static List<ItemAnalysis> findItemAnalysisEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM ItemAnalysis o", ItemAnalysis.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
 }
 

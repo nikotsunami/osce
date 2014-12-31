@@ -26,8 +26,8 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -128,7 +128,7 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate ,ClinicSubView.Delegate 
 			this.clinicProxy = ClinicProxy;
 			Log.info("Clinic ID ::: "+ clinicProxy.getId());
 			
-			requests.doctorRequestNonRoo().findSpecialisationByClinicId(clinicProxy.getId()).with("specialisation").fire(new OSCEReceiver<List<SpecialisationProxy>>() {
+			requests.doctorRequest().findSpecialisationByClinicId(clinicProxy.getId()).with("specialisation").fire(new OSCEReceiver<List<SpecialisationProxy>>() {
 
 				@Override
 				public void onSuccess(List<SpecialisationProxy> response) {
@@ -137,7 +137,7 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate ,ClinicSubView.Delegate 
 					{
 						final String specialisationLbl = response.get(i).getName();
 						
-						requests.doctorRequestNonRoo().findDoctorByAssignment(response.get(i).getId(), clinicProxy.getId()).with("assignments", "assignments.osceDay", "assignments.osceDay.osce").fire(new OSCEReceiver<List<DoctorProxy>>() {
+						requests.doctorRequest().findDoctorByAssignment(response.get(i).getId(), clinicProxy.getId()).with("assignments", "assignments.osceDay", "assignments.osceDay.osce").fire(new OSCEReceiver<List<DoctorProxy>>() {
 
 							@Override
 							public void onSuccess(List<DoctorProxy> response) {
@@ -157,7 +157,7 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate ,ClinicSubView.Delegate 
 			});
 		
 	
-	/*requests.clinicRequestNonRoo().findAllDoctorsId(clinicProxy.getId()).with("doctars","doctors.specialisation").fire(new OSCEReceiver<List<ClinicProxy>>() {
+	/*requests.clinicRequest().findAllDoctorsId(clinicProxy.getId()).with("doctars","doctors.specialisation").fire(new OSCEReceiver<List<ClinicProxy>>() {
 			
 			@Override
 			public void onSuccess(List<ClinicProxy> response) {
@@ -236,7 +236,7 @@ ClinicDetailsView.Presenter, ClinicDetailsView.Delegate ,ClinicSubView.Delegate 
 
 	private void initDoctorsDetails(Long clinicId) {
 		
-		requests.doctorRequestNonRoo().findDoctorByClinicID(clinicProxy.getId()).fire(new OSCEReceiver<List<DoctorProxy>>() {
+		requests.doctorRequest().findDoctorByClinicID(clinicProxy.getId()).fire(new OSCEReceiver<List<DoctorProxy>>() {
 
 			@Override
 			public void onSuccess(List<DoctorProxy> response) {

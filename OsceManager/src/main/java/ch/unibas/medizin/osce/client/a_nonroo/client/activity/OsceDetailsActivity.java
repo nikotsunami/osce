@@ -35,12 +35,12 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.http.client.URL;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.ServerFailure;
-import com.google.gwt.requestfactory.shared.Violation;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 
 /**
  * @author dk
@@ -145,7 +145,7 @@ public void init()
 				osceProxy=(OsceProxy)response;
 				view.setValue((OsceProxy)response);
 				osceTaskPop.setValue((OsceProxy)response);
-				requests.osceSettingsRequestNonRoo().findOsceSettingsByOsce(osceProxy.getId()).with("osce","osce.semester","osce.semester.calYear","osce.studyYear").fire(new OSCEReceiver<OsceSettingsProxy>() {
+				requests.osceSettingsRequest().findOsceSettingsByOsce(osceProxy.getId()).with("osce","osce.semester","osce.semester.calYear","osce.studyYear").fire(new OSCEReceiver<OsceSettingsProxy>() {
 
 					@Override
 					public void onSuccess(OsceSettingsProxy response) {
@@ -224,7 +224,7 @@ public void init()
 					osceActivity.init();
 					placeController.goTo(new OscePlace("OscePlace!DELETED"));
 					/*final OsceView systemStartView = new OsceViewImpl();
-					 requests.osceRequestNonRoo().findAllOsce().fire(new Receiver<List<OsceProxy>>() {
+					 requests.osceRequest().findAllOsce().fire(new Receiver<List<OsceProxy>>() {
 
 							@Override
 							public void onSuccess(List<OsceProxy> response) {
@@ -320,7 +320,7 @@ public void init()
 				osceActivity.init();
 				placeController.goTo(new OscePlace("OscePlace!DELETED"));
 				final OsceView systemStartView = new OsceViewImpl();
-				 requests.osceRequestNonRoo().findAllOsce().fire(new Receiver<List<OsceProxy>>() {
+				 requests.osceRequest().findAllOsce().fire(new Receiver<List<OsceProxy>>() {
 
 						@Override
 						public void onSuccess(List<OsceProxy> response) {
@@ -555,7 +555,7 @@ public void init()
 	
 		if(osceSettingsProxy != null){
 			try {
-				requests.osceSettingsRequestNonRoo().createSettingsQRImageById(osceSettingsProxy.getId()).fire(new OSCEReceiver<String>() {
+				requests.osceSettingsRequest().createSettingsQRImageById(osceSettingsProxy.getId()).fire(new OSCEReceiver<String>() {
 					@Override
 					public void onSuccess(String response) {
 						

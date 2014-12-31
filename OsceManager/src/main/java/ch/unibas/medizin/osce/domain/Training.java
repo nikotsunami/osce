@@ -5,29 +5,31 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
-
+import javax.persistence.Version;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.transaction.annotation.Transactional;
 
-@RooJavaBean
-@RooToString
-@RooEntity
+@Configurable
+@Entity
 public class Training {
 
 	@PersistenceContext(unitName="persistenceUnit")
@@ -389,5 +391,142 @@ public class Training {
 			return null;
 		}
 	 }
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("StandardizedRole: ").append(getStandardizedRole()).append(", ");
+        sb.append("TimeEnd: ").append(getTimeEnd()).append(", ");
+        sb.append("TimeStart: ").append(getTimeStart()).append(", ");
+        sb.append("TrainingDate: ").append(getTrainingDate()).append(", ");
+        sb.append("TrainingSuggestions: ").append(getTrainingSuggestions() == null ? "null" : getTrainingSuggestions().size()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            Training attached = Training.findTraining(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public Training merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        Training merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new Training().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countTrainings() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM Training o", Long.class).getSingleResult();
+    }
+
+	public static List<Training> findAllTrainings() {
+        return entityManager().createQuery("SELECT o FROM Training o", Training.class).getResultList();
+    }
+
+	public static Training findTraining(Long id) {
+        if (id == null) return null;
+        return entityManager().find(Training.class, id);
+    }
+
+	public static List<Training> findTrainingEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Training o", Training.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public TrainingDate getTrainingDate() {
+        return this.trainingDate;
+    }
+
+	public void setTrainingDate(TrainingDate trainingDate) {
+        this.trainingDate = trainingDate;
+    }
+
+	public Date getTimeStart() {
+        return this.timeStart;
+    }
+
+	public void setTimeStart(Date timeStart) {
+        this.timeStart = timeStart;
+    }
+
+	public Date getTimeEnd() {
+        return this.timeEnd;
+    }
+
+	public void setTimeEnd(Date timeEnd) {
+        this.timeEnd = timeEnd;
+    }
+
+	public StandardizedRole getStandardizedRole() {
+        return this.standardizedRole;
+    }
+
+	public void setStandardizedRole(StandardizedRole standardizedRole) {
+        this.standardizedRole = standardizedRole;
+    }
+
+	public Set<TrainingSuggestion> getTrainingSuggestions() {
+        return this.trainingSuggestions;
+    }
+
+	public void setTrainingSuggestions(Set<TrainingSuggestion> trainingSuggestions) {
+        this.trainingSuggestions = trainingSuggestions;
+    }
 }
 

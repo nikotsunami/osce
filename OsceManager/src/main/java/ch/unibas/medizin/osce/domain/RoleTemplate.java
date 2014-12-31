@@ -5,28 +5,30 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
-
+import javax.persistence.Version;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-
+import org.springframework.transaction.annotation.Transactional;
 import ch.unibas.medizin.osce.shared.Sorting;
 
 
-@RooJavaBean
-@RooToString
-@RooEntity(identifierColumn = "id", identifierType = Integer.class, table = "role_template")
+@Configurable
+@Entity
+@Table(name = "role_template")
 public class RoleTemplate {
 
 	@PersistenceContext(unitName="persistenceUnit")
@@ -223,4 +225,132 @@ public class RoleTemplate {
 		Long result = q.getSingleResult()<=0 ? 0 : q.getSingleResult(); 
 		return result;
 	}
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Date_cretaed: ").append(getDate_cretaed()).append(", ");
+        sb.append("Date_edited: ").append(getDate_edited()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("RoleBaseItem: ").append(getRoleBaseItem() == null ? "null" : getRoleBaseItem().size()).append(", ");
+        sb.append("TemplateName: ").append(getTemplateName()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
+
+	public String getTemplateName() {
+        return this.templateName;
+    }
+
+	public void setTemplateName(String templateName) {
+        this.templateName = templateName;
+    }
+
+	public Date getDate_cretaed() {
+        return this.date_cretaed;
+    }
+
+	public void setDate_cretaed(Date date_cretaed) {
+        this.date_cretaed = date_cretaed;
+    }
+
+	public Date getDate_edited() {
+        return this.date_edited;
+    }
+
+	public void setDate_edited(Date date_edited) {
+        this.date_edited = date_edited;
+    }
+
+	public List<RoleBaseItem> getRoleBaseItem() {
+        return this.roleBaseItem;
+    }
+
+	public void setRoleBaseItem(List<RoleBaseItem> roleBaseItem) {
+        this.roleBaseItem = roleBaseItem;
+    }
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Integer id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Integer getId() {
+        return this.id;
+    }
+
+	public void setId(Integer id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            RoleTemplate attached = RoleTemplate.findRoleTemplate(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public RoleTemplate merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        RoleTemplate merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new RoleTemplate().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countRoleTemplates() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM RoleTemplate o", Long.class).getSingleResult();
+    }
+
+	public static List<RoleTemplate> findAllRoleTemplates() {
+        return entityManager().createQuery("SELECT o FROM RoleTemplate o", RoleTemplate.class).getResultList();
+    }
+
+	public static RoleTemplate findRoleTemplate(Integer id) {
+        if (id == null) return null;
+        return entityManager().find(RoleTemplate.class, id);
+    }
+
+	public static List<RoleTemplate> findRoleTemplateEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM RoleTemplate o", RoleTemplate.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
 }

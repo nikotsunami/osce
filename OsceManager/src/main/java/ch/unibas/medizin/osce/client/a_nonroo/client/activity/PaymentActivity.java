@@ -105,7 +105,7 @@ public class PaymentActivity extends AbstractActivity implements PaymentView.Del
 	
 	public void init()
 	{
-		requests.assignmentRequestNonRoo().countStandardizedPatientBySemester(semesterProxy.getId()).fire(new OSCEReceiver<Long>() {
+		requests.assignmentRequest().countStandardizedPatientBySemester(semesterProxy.getId()).fire(new OSCEReceiver<Long>() {
 
 			@Override
 			public void onSuccess(Long response) {
@@ -113,7 +113,7 @@ public class PaymentActivity extends AbstractActivity implements PaymentView.Del
 			}
 		});
 		
-		requests.assignmentRequestNonRoo().findStandardizedPatientBySemester(0, OsMaConstant.TABLE_PAGE_SIZE, sortname, sortorder, semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
+		requests.assignmentRequest().findStandardizedPatientBySemester(0, OsMaConstant.TABLE_PAGE_SIZE, sortname, sortorder, semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
 
 			@Override
 			public void onSuccess(List<StandardizedPatientProxy> response) {
@@ -132,7 +132,7 @@ public class PaymentActivity extends AbstractActivity implements PaymentView.Del
 	{
 		final Range range = view.getTable().getVisibleRange();
 		
-		requests.assignmentRequestNonRoo().countStandardizedPatientBySemester(semesterProxy.getId()).fire(new OSCEReceiver<Long>() {
+		requests.assignmentRequest().countStandardizedPatientBySemester(semesterProxy.getId()).fire(new OSCEReceiver<Long>() {
 
 			@Override
 			public void onSuccess(Long response) {
@@ -140,7 +140,7 @@ public class PaymentActivity extends AbstractActivity implements PaymentView.Del
 			}
 		});
 		
-		requests.assignmentRequestNonRoo().findStandardizedPatientBySemester(range.getStart(), range.getLength(), sortname, sortorder, semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
+		requests.assignmentRequest().findStandardizedPatientBySemester(range.getStart(), range.getLength(), sortname, sortorder, semesterProxy.getId()).fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
 
 			@Override
 			public void onSuccess(List<StandardizedPatientProxy> response) {
@@ -151,7 +151,7 @@ public class PaymentActivity extends AbstractActivity implements PaymentView.Del
 
 	@Override
 	public void exportButtonClicked() {
-		requests.assignmentRequestNonRoo().findAssignmentByPatinetInRole(semesterProxy.getId()).fire(new OSCEReceiver<String>() {
+		requests.assignmentRequest().findAssignmentByPatinetInRole(semesterProxy.getId()).fire(new OSCEReceiver<String>() {
 			@Override
 			public void onSuccess(String response) {
 				System.out.println("~~SUCCESS~~");
@@ -174,7 +174,7 @@ public class PaymentActivity extends AbstractActivity implements PaymentView.Del
 		
 		//stdPatIdList is List of Selected Standardized Patient
 		
-		requests.standardizedPatientRequestNonRoo().setStandardizedPatientListToSession(stdPatIdList,sortname,sortorder).fire(new OSCEReceiver<Void>() {
+		requests.standardizedPatientRequest().setStandardizedPatientListToSession(stdPatIdList,sortname,sortorder).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {

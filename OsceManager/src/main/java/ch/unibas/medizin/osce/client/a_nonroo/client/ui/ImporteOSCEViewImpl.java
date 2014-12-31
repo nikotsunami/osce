@@ -379,6 +379,44 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 	@UiHandler("cancelButton")
 	public void cancelButtonClicked(ClickEvent event)
 	{
+		
+		if(bucketInformationProxy != null){
+			
+			if(s3.getValue()){
+				if(bucketInformationProxy.getType().equals(BucketInfoType.S3) ==false){
+					bucketName.setText("");
+					password.setText("");
+					accessKey.setText("");
+					encryptionKey.setText("");
+					basePath.setText("");
+					secretKey.setText("");
+				}else{
+					checkPreviousValuesForBucketInformation(bucketInformationProxy);	
+				}
+				
+			}
+			
+			if(ftp.getValue()){
+				if(bucketInformationProxy.getType().equals(BucketInfoType.FTP) ==false){
+					bucketName.setText("");
+					password.setText("");
+					accessKey.setText("");
+					encryptionKey.setText("");
+					basePath.setText("");
+					secretKey.setText("");
+				}else{
+					checkPreviousValuesForBucketInformation(bucketInformationProxy);	
+				}
+			}
+		}else{
+			bucketName.setValue("");
+			password.setValue("");
+			accessKey.setValue("");
+			encryptionKey.setValue("");
+			basePath.setValue("");
+			secretKey.setValue("");
+			
+		}
 		bucketName.setEnabled(false);
 		accessKey.setEnabled(false);
 		secretKey.setEnabled(false);
@@ -388,6 +426,40 @@ public class ImporteOSCEViewImpl extends Composite implements ImporteOSCEView {
 		
 		saveEditButton.setText(constants.edit());
 		cancelButton.setVisible(false);
+	}
+
+	private void checkPreviousValuesForBucketInformation(BucketInformationProxy bucketInformationProxy) {
+		
+		if(bucketInformationProxy.getBasePath().equals(basePath.getValue()) == false){
+			basePath.setText(bucketInformationProxy.getBasePath());
+			basePath.setValue(bucketInformationProxy.getBasePath());
+		}
+		if(bucketInformationProxy.getBucketName().equals(bucketName.getValue()) == false){
+			bucketName.setText(bucketInformationProxy.getBucketName());
+			bucketName.setValue(bucketInformationProxy.getBucketName());
+		}
+		if(bucketInformationProxy.getEncryptionKey().equals(encryptionKey.getValue()) == false){
+			encryptionKey.setText(bucketInformationProxy.getEncryptionKey());
+			encryptionKey.setValue(bucketInformationProxy.getEncryptionKey());
+		}
+		if(bucketInformationProxy.getAccessKey().equals(accessKey.getValue()) == false){
+			accessKey.setText(bucketInformationProxy.getAccessKey());
+			accessKey.setValue(bucketInformationProxy.getAccessKey());
+		}
+		if(password.getValue().equals("") == false){
+			if(bucketInformationProxy.getSecretKey().equals(password.getValue()) == false){
+				password.setText(bucketInformationProxy.getSecretKey());
+				password.setValue(bucketInformationProxy.getSecretKey());
+			}
+					
+		}
+		if(secretKey.getValue().equals("") == false){
+			if(bucketInformationProxy.getSecretKey().equals(secretKey.getValue()) == false){
+				secretKey.setText(bucketInformationProxy.getSecretKey());
+				secretKey.setValue(bucketInformationProxy.getSecretKey());
+			}
+					
+		}
 	}
 
 	public RadioButton getProcessed() {

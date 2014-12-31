@@ -33,10 +33,10 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.client.RequestFactoryEditorDriver;
-import com.google.gwt.requestfactory.shared.EntityProxyId;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
+import com.google.web.bindery.requestfactory.shared.EntityProxyId;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.UIObject;
@@ -218,12 +218,12 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
     @Override
     public void moveUp(final AnamnesisCheckTitleProxy title, AnamnesisCheckProxy proxy) {
-        requests.anamnesisCheckRequestNonRoo().moveUp().using(proxy).fire(new MoveProxyReceiver(title));
+        requests.anamnesisCheckRequest().moveUp().using(proxy).fire(new MoveProxyReceiver(title));
     }
 
     @Override
     public void moveDown(final AnamnesisCheckTitleProxy title, AnamnesisCheckProxy proxy) {
-        requests.anamnesisCheckRequestNonRoo().moveDown().using(proxy).fire(new MoveProxyReceiver(title));
+        requests.anamnesisCheckRequest().moveDown().using(proxy).fire(new MoveProxyReceiver(title));
     }
 
     @Override
@@ -233,14 +233,14 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
     protected Request<java.util.List<AnamnesisCheckProxy>> createRangeRequest(
             String q, AnamnesisCheckProxy title, Range range) {
-        return requests.anamnesisCheckRequestNonRoo()
+        return requests.anamnesisCheckRequest()
                 .findAnamnesisChecksBySearchWithTitle(q, title, range.getStart(),
                         range.getLength());
     }
 
     protected void fireCountRequest(String q, AnamnesisCheckProxy title,
             Receiver<Long> callback) {
-        requests.anamnesisCheckRequestNonRoo()
+        requests.anamnesisCheckRequest()
                 .countAnamnesisChecksBySearchWithTitle(q, title).fire(callback);
     }
 
@@ -252,7 +252,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     protected void fireCheckValueRequest(String searchValue,
             AnamnesisCheckProxy title,
             Receiver<List<AnamnesisCheckProxy>> callback) {
-        requests.anamnesisCheckRequestNonRoo()
+        requests.anamnesisCheckRequest()
                 .findAnamnesisChecksByTitle(searchValue, title)
                 .with(view.getPaths()).fire(callback);
     }
@@ -295,7 +295,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     	Log.debug("###########this is changeFilterTitleShown");
 
 //		Window.alert("getSelectedFilterTitle() = " + getSelectedFilterTitle());
-    	requests.anamnesisCheckRequestNonRoo().findTitlesContatisAnamnesisChecksWithSearching(place.getSearchStr(), getSelectedFilterTitle()).fire(new Receiver<List<AnamnesisCheckTitleProxy>>(){
+    	requests.anamnesisCheckRequest().findTitlesContatisAnamnesisChecksWithSearching(place.getSearchStr(), getSelectedFilterTitle()).fire(new Receiver<List<AnamnesisCheckTitleProxy>>(){
 
 			@Override
 			public void onSuccess(List<AnamnesisCheckTitleProxy> response) {
@@ -322,7 +322,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     
 	@SuppressWarnings("deprecation")
 	private void getTitlesBySearchStringAndFilter() {
-		requests.anamnesisCheckRequestNonRoo()
+		requests.anamnesisCheckRequest()
 				.findTitlesContatisAnamnesisChecksWithSearching(view.getSearchBox().getText(), getSelectedFilterTitle())
 				.fire(new FilteredTitleReceiver());
 	}
@@ -415,7 +415,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
     @Override
     public void orderEdited(final AnamnesisCheckProxy proxy, String sortOrderStr) {
     	try {
-    		requests.anamnesisCheckRequestNonRoo().
+    		requests.anamnesisCheckRequest().
     				changeSortOrder(Integer.parseInt(sortOrderStr)).
     				using(proxy).fire(new OSCEReceiver<Void>() {
 
@@ -485,7 +485,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		
 		if (dataProvider.getList() != null) {
 			Log.debug("view.getSearchBoxShown() = " + view.getSearchBoxShown());
-			requests.anamnesisCheckRequestNonRoo().findAnamnesisChecksBySearchWithAnamnesisCheckTitle(view.getSearchBoxShown(), title).
+			requests.anamnesisCheckRequest().findAnamnesisChecksBySearchWithAnamnesisCheckTitle(view.getSearchBoxShown(), title).
 					with("anamnesisCheckTitle").
 					fire(new AnamnesisCheckReceiver(dataProvider));
 		}
@@ -514,13 +514,13 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 
 	@Override
 	public void moveDownTitle(AnamnesisCheckTitleProxy proxy) {
-		requests.anamnesisCheckTitleRequestNonRoo().moveDown().using(proxy).fire(new TitleMovedReceiver());
+		requests.anamnesisCheckTitleRequest().moveDown().using(proxy).fire(new TitleMovedReceiver());
 		
 	}
 
 	@Override
 	public void moveUpTitle(AnamnesisCheckTitleProxy proxy) {
-		requests.anamnesisCheckTitleRequestNonRoo().moveUp().using(proxy).fire(new TitleMovedReceiver());
+		requests.anamnesisCheckTitleRequest().moveUp().using(proxy).fire(new TitleMovedReceiver());
 		
 	}
 
@@ -552,7 +552,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		
 		deletedTitle=title;
 		
-		requests.anamnesisCheckTitleRequestNonRoo().deleteTitleFromSpPortal(deletedTitle.getId()).fire(new OSCEReceiver<Boolean>() {
+		requests.anamnesisCheckTitleRequest().deleteTitleFromSpPortal(deletedTitle.getId()).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -590,7 +590,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 		
 		sort_order = 0;
 		title = titleText;
-		requests.anamnesisCheckTitleRequestNonRoo().findMaxSortOrder().fire(new OSCEReceiver<Integer>() {
+		requests.anamnesisCheckTitleRequest().findMaxSortOrder().fire(new OSCEReceiver<Integer>() {
 			@SuppressWarnings("deprecation")
 			@Override
 			public void onSuccess(Integer response) {
@@ -615,7 +615,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 					@Override
 					public void onSuccess(Void response) {
 						//Create Anamnisis check title in spportal
-						requests.anamnesisCheckTitleRequestNonRoo().saveAnamnesisCheckTitleInSpPortal(anamnesisCheckTitle).fire(new OSCEReceiver<Boolean>() {
+						requests.anamnesisCheckTitleRequest().saveAnamnesisCheckTitleInSpPortal(anamnesisCheckTitle).fire(new OSCEReceiver<Boolean>() {
 
 							@Override
 							public void onSuccess(Boolean response) {
@@ -649,7 +649,7 @@ public class AnamnesisCheckActivity extends AbstractActivity implements
 			@Override
 			public void onSuccess(Void response) {
 				
-				requests.anamnesisCheckTitleRequestNonRoo().edittitleInSpportal(editedTitle.getId()).fire(new OSCEReceiver<Boolean>() {
+				requests.anamnesisCheckTitleRequest().edittitleInSpportal(editedTitle.getId()).fire(new OSCEReceiver<Boolean>() {
 
 					@Override
 					public void onSuccess(Boolean response) {

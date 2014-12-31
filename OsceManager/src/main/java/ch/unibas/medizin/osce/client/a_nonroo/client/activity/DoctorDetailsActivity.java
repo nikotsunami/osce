@@ -30,8 +30,8 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -100,7 +100,7 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 	private void initOsceTable(DoctorProxy doctorProxy)
 	{
 		
-		requests.osceDayRequestNooRoo().findOsceDayByDoctorAssignment(doctorProxy).with("osceDay","osceDay.osce","osceDay.osce.semester","osceDay.osce.semester.semester").fire(new OSCEReceiver<List<AssignmentProxy>>() 
+		requests.osceDayRequest().findOsceDayByDoctorAssignment(doctorProxy).with("osceDay","osceDay.osce","osceDay.osce.semester","osceDay.osce.semester.semester").fire(new OSCEReceiver<List<AssignmentProxy>>() 
 				{
 
 			@Override
@@ -115,7 +115,7 @@ DoctorDetailsView.Presenter, DoctorDetailsView.Delegate , OfficeDetailsView.Dele
 	private void initRoleTable(DoctorProxy doctorProxy)
 	{
 				
-		requests.roleParticipantRequestNonRoo().findRoleParticipatentByDoctor(doctorProxy).with("standardizedRole").fire(new OSCEReceiver<List<RoleParticipantProxy>>() 
+		requests.roleParticipantRequest().findRoleParticipatentByDoctor(doctorProxy).with("standardizedRole").fire(new OSCEReceiver<List<RoleParticipantProxy>>() 
 		{
 			@Override
 			public void onSuccess(List<RoleParticipantProxy> response) {

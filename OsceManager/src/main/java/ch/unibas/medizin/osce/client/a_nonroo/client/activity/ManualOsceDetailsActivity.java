@@ -248,7 +248,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 			}
 		}
 		
-		requests.oscePostRoomRequestNonRoo().findOscePostRoomByCourseIdOrderByOscePostSeqNo(courseProxy.getId()).with("room", "oscePost", "oscePost.oscePostBlueprint", "oscePost.standardizedRole", "oscePost.standardizedRole", "oscePost.oscePostBlueprint.roleTopic", "oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
+		requests.oscePostRoomRequest().findOscePostRoomByCourseIdOrderByOscePostSeqNo(courseProxy.getId()).with("room", "oscePost", "oscePost.oscePostBlueprint", "oscePost.standardizedRole", "oscePost.standardizedRole", "oscePost.oscePostBlueprint.roleTopic", "oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
 
 			@Override
 			public void onSuccess(List<OscePostRoomProxy> response) {
@@ -461,7 +461,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 			{
 				final ManualOsceParcourView manualOsceParcourView = courseViewMap.get(lastCourseId);
 								
-				requests.oscePostRoomRequestNonRoo().findOscePostRoomByCourseID(courseProxy.getId()).with("room", "oscePost", "oscePost.oscePostBlueprint", "oscePost.standardizedRole", "oscePost.standardizedRole", "oscePost.oscePostBlueprint.roleTopic", "oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
+				requests.oscePostRoomRequest().findOscePostRoomByCourseID(courseProxy.getId()).with("room", "oscePost", "oscePost.oscePostBlueprint", "oscePost.standardizedRole", "oscePost.standardizedRole", "oscePost.oscePostBlueprint.roleTopic", "oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
 
 					@Override
 					public void onSuccess(List<OscePostRoomProxy> response) {
@@ -506,7 +506,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 				if (oprList.equals(oscePostRoomProxyIdList) == false)
 				{
 					oprList.addAll(oscePostRoomProxyIdList);
-					requests.oscePostRoomRequestNonRoo().updateOscePostBlueprintSeqNumber(oscePostRoomProxyIdList).with("courses").fire(new OSCEReceiver<List<OsceSequenceProxy>>() {
+					requests.oscePostRoomRequest().updateOscePostBlueprintSeqNumber(oscePostRoomProxyIdList).with("courses").fire(new OSCEReceiver<List<OsceSequenceProxy>>() {
 
 						@Override
 						public void onSuccess(List<OsceSequenceProxy> response) {
@@ -592,7 +592,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		if (osceProxy != null)
 		{
 			showApplicationLoading(true);
-			requests.osceDayRequestNooRoo().createOsceDaySequenceCourseAndOscePost(osceProxy.getId()).with("osce_days", "osce_days.osceSequences", "osce_days.osceSequences.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<OsceProxy>() {
+			requests.osceDayRequest().createOsceDaySequenceCourseAndOscePost(osceProxy.getId()).with("osce_days", "osce_days.osceSequences", "osce_days.osceSequences.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<OsceProxy>() {
 
 				@Override
 				public void onSuccess(OsceProxy response) {
@@ -612,7 +612,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		if (osceSequenceProxy != null)
 		{
 			showApplicationLoading(true);
-			requests.courseRequestNonRoo().createNewCourse(osceSequenceProxy.getId(), copyWithBreak, copyToAllSequence).with("osceSequence").fire(new OSCEReceiver<List<CourseProxy>>() {
+			requests.courseRequest().createNewCourse(osceSequenceProxy.getId(), copyWithBreak, copyToAllSequence).with("osceSequence").fire(new OSCEReceiver<List<CourseProxy>>() {
 
 				@Override
 				public void onSuccess(List<CourseProxy> response) {
@@ -658,7 +658,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		if (manualOsceSequenceViewImpl != null)
 		{
 			showApplicationLoading(true);
-			requests.osceSequenceRequestNonRoo().createOsceSequence(osceDayProxy.getId()).fire(new OSCEReceiver<Long>() {
+			requests.osceSequenceRequest().createOsceSequence(osceDayProxy.getId()).fire(new OSCEReceiver<Long>() {
 
 				@Override
 				public void onSuccess(Long osceSeqId) {
@@ -702,13 +702,13 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 			manualOsceCreateOscePostPopUpView.setPostType(value);
 			showApplicationLoading(true);
 			
-			requests.specialisationRequestNonRoo().findSpecialisationSortByName(osceProxy.getStudyYear()).with("roleTopics", "roleTopics.standardizedRoles").fire(new OSCEReceiver<List<SpecialisationProxy>>() {
+			requests.specialisationRequest().findSpecialisationSortByName(osceProxy.getStudyYear()).with("roleTopics", "roleTopics.standardizedRoles").fire(new OSCEReceiver<List<SpecialisationProxy>>() {
 
 				@Override
 				public void onSuccess(List<SpecialisationProxy> response) {
 					initSpecialisationSuggestBox(response);
 					
-					requests.roomRequestNonRoo().findAllRoomsOrderByRoomNumber().fire(new OSCEReceiver<List<RoomProxy>>() {
+					requests.roomRequest().findAllRoomsOrderByRoomNumber().fire(new OSCEReceiver<List<RoomProxy>>() {
 
 						@Override
 						public void onSuccess(List<RoomProxy> response) {
@@ -791,7 +791,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 			public void onClick(ClickEvent event) {
 				dialogBox.hide();			
 				
-				requests.oscePostRequestNonRoo().createBreakOscePostBluePrintOscePostAndOscePostRoom(courseProxy.getId(), PostType.BREAK, horizontalCheckbox.getValue(), verticalCheckbox.getValue()).with("course", "room", "oscePost", "oscePost.oscePostBlueprint", "oscePost.standardizedRole", "oscePost.standardizedRole", "oscePost.oscePostBlueprint.roleTopic", "oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
+				requests.oscePostRequest().createBreakOscePostBluePrintOscePostAndOscePostRoom(courseProxy.getId(), PostType.BREAK, horizontalCheckbox.getValue(), verticalCheckbox.getValue()).with("course", "room", "oscePost", "oscePost.oscePostBlueprint", "oscePost.standardizedRole", "oscePost.standardizedRole", "oscePost.oscePostBlueprint.roleTopic", "oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
 
 					@Override
 					public void onSuccess(List<OscePostRoomProxy> response) {
@@ -895,7 +895,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		if (roomProxy != null)
 			roomId = roomProxy.getId();
 		
-		requests.oscePostRequestNonRoo().createOscePostBluePrintOscePostAndOscePostRoom(specialisationProxy.getId(), roleTopicProxy.getId(), standardizedRoleId, roomId, courseProxy.getId(), postType).with("course", "room", "oscePost", "oscePost.oscePostBlueprint", "oscePost.standardizedRole", "oscePost.standardizedRole", "oscePost.oscePostBlueprint.roleTopic", "oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
+		requests.oscePostRequest().createOscePostBluePrintOscePostAndOscePostRoom(specialisationProxy.getId(), roleTopicProxy.getId(), standardizedRoleId, roomId, courseProxy.getId(), postType).with("course", "room", "oscePost", "oscePost.oscePostBlueprint", "oscePost.standardizedRole", "oscePost.standardizedRole", "oscePost.oscePostBlueprint.roleTopic", "oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
 
 			@Override
 			public void onSuccess(List<OscePostRoomProxy> response) {
@@ -925,7 +925,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 			final Long oscePostRoomId = oscePostRoomProxy.getId();
 			showApplicationLoading(true);
 			
-			requests.oscePostRoomRequestNonRoo().deleteOscePostRoom(oscePostRoomId).with("courses").fire(new OSCEReceiver<List<OsceSequenceProxy>>() {
+			requests.oscePostRoomRequest().deleteOscePostRoom(oscePostRoomId).with("courses").fire(new OSCEReceiver<List<OsceSequenceProxy>>() {
 
 				@Override
 				public void onSuccess(List<OsceSequenceProxy> response) {
@@ -954,7 +954,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		if (courseProxy != null && osceSequenceProxy != null)
 		{
 			showApplicationLoading(true);
-			requests.courseRequestNonRoo().deleteCourse(courseProxy.getId()).fire(new OSCEReceiver<Void>() {
+			requests.courseRequest().deleteCourse(courseProxy.getId()).fire(new OSCEReceiver<Void>() {
 
 				@Override
 				public void onSuccess(Void response) {
@@ -984,7 +984,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		if (osceSequenceProxy != null && osceDayProxy != null)
 		{
 			showApplicationLoading(true);
-			requests.osceSequenceRequestNonRoo().removeOsceSequence(osceSequenceProxy.getId()).fire(new OSCEReceiver<Void>() {
+			requests.osceSequenceRequest().removeOsceSequence(osceSequenceProxy.getId()).fire(new OSCEReceiver<Void>() {
 
 				@Override
 				public void onSuccess(Void response) {
@@ -1009,7 +1009,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 	@Override
 	public void createEditStandardizedRolePopup(RoleTopicProxy roleTopicProxy, final StandardizedRoleProxy standardizedRoleProxy, final IconButton editStandardizedRole, final OscePostRoomProxy oscePostRoomProxy, final OscePostProxy oscePostProxy) {
 		showApplicationLoading(true);
-		requests.standardizedRoleRequestNonRoo().findRoleByRoleTopic(roleTopicProxy.getId()).fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
+		requests.standardizedRoleRequest().findRoleByRoleTopic(roleTopicProxy.getId()).fire(new OSCEReceiver<List<StandardizedRoleProxy>>() {
 
 			@Override
 			public void onSuccess(List<StandardizedRoleProxy> response) {
@@ -1051,7 +1051,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 				@Override
 				public void onSuccess(Void response) {
 					
-					requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostId(oscePostProxy2.getId()).with("room", "oscePost", "oscePost.oscePostBlueprint", "oscePost.standardizedRole", "oscePost.standardizedRole", "oscePost.oscePostBlueprint.roleTopic", "oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
+					requests.oscePostRoomRequest().findOscePostRoomByOscePostId(oscePostProxy2.getId()).with("room", "oscePost", "oscePost.oscePostBlueprint", "oscePost.standardizedRole", "oscePost.standardizedRole", "oscePost.oscePostBlueprint.roleTopic", "oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
 
 						@Override
 						public void onSuccess(List<OscePostRoomProxy> response) {
@@ -1078,7 +1078,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 	@Override
 	public void createEditRoomPopup(final IconButton editRoom, final OscePostRoomProxy oscePostRoomProxy, final RoomProxy roomProxy) {
 		showApplicationLoading(true);
-		requests.roomRequestNonRoo().findAllRoomsOrderByRoomNumber().fire(new OSCEReceiver<List<RoomProxy>>() {
+		requests.roomRequest().findAllRoomsOrderByRoomNumber().fire(new OSCEReceiver<List<RoomProxy>>() {
 
 			@Override
 			public void onSuccess(List<RoomProxy> response) {
@@ -1110,14 +1110,14 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		if (oscePostRoomProxy != null && selectedRoomProxy != null)
 		{
 			showApplicationLoading(true);
-			requests.oscePostRoomRequestNonRoo().findOscePostRoomListByRoomAndOscePostRoomId(oscePostRoomProxy.getId(), selectedRoomProxy.getId()).fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
+			requests.oscePostRoomRequest().findOscePostRoomListByRoomAndOscePostRoomId(oscePostRoomProxy.getId(), selectedRoomProxy.getId()).fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
 
 				@Override
 				public void onSuccess(List<OscePostRoomProxy> response) {
 					showApplicationLoading(false);
 					if (response.size() <= 0)
 					{
-						requests.oscePostRoomRequestNonRoo().insertRoomForVerticalOscePost(oscePostRoomProxy.getId(), selectedRoomProxy.getId()).with("room", "oscePost", "oscePost.oscePostBlueprint", "oscePost.standardizedRole", "oscePost.standardizedRole", "oscePost.oscePostBlueprint.roleTopic", "oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
+						requests.oscePostRoomRequest().insertRoomForVerticalOscePost(oscePostRoomProxy.getId(), selectedRoomProxy.getId()).with("room", "oscePost", "oscePost.oscePostBlueprint", "oscePost.standardizedRole", "oscePost.standardizedRole", "oscePost.oscePostBlueprint.roleTopic", "oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
 
 							@Override
 							public void onSuccess(List<OscePostRoomProxy> oscePostRoomList) {
@@ -1144,7 +1144,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 							{
 								dialog.hide();
 								
-								requests.oscePostRoomRequestNonRoo().replaceRoomAndAssignRoomVertically(oscePostRoomProxy.getId(), selectedRoomProxy.getId()).with("room", "oscePost", "oscePost.oscePostBlueprint", "oscePost.standardizedRole", "oscePost.standardizedRole", "oscePost.oscePostBlueprint.roleTopic", "oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
+								requests.oscePostRoomRequest().replaceRoomAndAssignRoomVertically(oscePostRoomProxy.getId(), selectedRoomProxy.getId()).with("room", "oscePost", "oscePost.oscePostBlueprint", "oscePost.standardizedRole", "oscePost.standardizedRole", "oscePost.oscePostBlueprint.roleTopic", "oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
 
 									@Override
 									public void onSuccess(List<OscePostRoomProxy> oscePostRoomList) {
@@ -1180,7 +1180,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 	@Override
 	public void deleteOsceDayClicked(final ManualOsceDaySubViewImpl manualOsceDaySubViewImpl, final OsceDayProxy osceDayProxy) {
 		showApplicationLoading(true);
-		requests.osceDayRequestNooRoo().removeOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<Void>() {
+		requests.osceDayRequest().removeOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {
@@ -1267,7 +1267,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 	@Override
 	public void fixedButtonClicked(OsceProxy osceProxy, final ManualOsceEditViewImpl manualOsceEditViewImpl) {
 		showApplicationLoading(true);
-		requests.osceRequestNonRoo().changeOsceStatus(osceProxy.getId(), OsceStatus.OSCE_FIXED).with("osce_days", "osce_days.osceSequences", "osce_days.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<OsceProxy>() {
+		requests.osceRequest().changeOsceStatus(osceProxy.getId(), OsceStatus.OSCE_FIXED).with("osce_days", "osce_days.osceSequences", "osce_days.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<OsceProxy>() {
 
 			@Override
 			public void onSuccess(OsceProxy response) {
@@ -1352,7 +1352,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 								}
 								
 								
-								requests.oscePostRoomRequestNonRoo().findOscePostRoomByCourseIdOrderByOscePostSeqNo(courseProxy.getId()).fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
+								requests.oscePostRoomRequest().findOscePostRoomByCourseIdOrderByOscePostSeqNo(courseProxy.getId()).fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
 
 									@Override
 									public void onSuccess(List<OscePostRoomProxy> response) {
@@ -1398,7 +1398,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		if (osceProxy != null)
 		{
 			showApplicationLoading(true);
-			requests.osceRequestNonRoo().clearAllManualOsce(osceProxy.getId()).with("osce_days", "osce_days.osceSequences", "osce_days.osceSequences.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<OsceProxy>() {
+			requests.osceRequest().clearAllManualOsce(osceProxy.getId()).with("osce_days", "osce_days.osceSequences", "osce_days.osceSequences.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<OsceProxy>() {
 
 				@Override
 				public void onSuccess(OsceProxy response) {
@@ -1436,7 +1436,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		if (osceProxy != null)
 		{
 			showApplicationLoading(true);
-			requests.osceRequestNonRoo().createAssignmentInManualOsce(osceProxy.getId()).fire(new OSCEReceiver<String>() {
+			requests.osceRequest().createAssignmentInManualOsce(osceProxy.getId()).fire(new OSCEReceiver<String>() {
 
 				@Override
 				public void onSuccess(String response) {
@@ -1468,7 +1468,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		if (osceProxy != null)
 		{
 			showApplicationLoading(true);
-			requests.assignmentRequestNonRoo().removeManualOsceAssignmentByOsceId(osceProxy.getId()).with("osce_days", "osce_days.osceSequences", "osce_days.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<OsceProxy>() {
+			requests.assignmentRequest().removeManualOsceAssignmentByOsceId(osceProxy.getId()).with("osce_days", "osce_days.osceSequences", "osce_days.osceDayRotations", "osce_days.osceSequences.courses").fire(new OSCEReceiver<OsceProxy>() {
 
 				@Override
 				public void onSuccess(OsceProxy response) {
@@ -1488,7 +1488,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 	public void calculateButtonClicked(final OsceProxy osceProxy)
 	{
 		showApplicationLoading(true);
-		requests.osceRequestNonRoo().calculateManualOsce(osceProxy.getId()).fire(new OSCEReceiver<Void>() {
+		requests.osceRequest().calculateManualOsce(osceProxy.getId()).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {
@@ -1545,7 +1545,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		if (osceSequenceProxy != null)
 		{
 			showApplicationLoading(true);
-			requests.osceSequenceRequestNonRoo().manualOsceBreakSooner(osceSequenceProxy.getId()).fire(new OSCEReceiver<String>() {
+			requests.osceSequenceRequest().manualOsceBreakSooner(osceSequenceProxy.getId()).fire(new OSCEReceiver<String>() {
 
 				@Override
 				public void onSuccess(String response) {
@@ -1557,7 +1557,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 					}
 					else 
 					{
-						requests.osceDayRequestNooRoo().findOsceDayByOsceSequenceId(osceSequenceProxy.getId()).with("osceSequences", "osceSequences.osceDayRotations", "osceSequences.courses").fire(new OSCEReceiver<OsceDayProxy>() {
+						requests.osceDayRequest().findOsceDayByOsceSequenceId(osceSequenceProxy.getId()).with("osceSequences", "osceSequences.osceDayRotations", "osceSequences.courses").fire(new OSCEReceiver<OsceDayProxy>() {
 
 							@Override
 							public void onSuccess(OsceDayProxy response) {
@@ -1583,7 +1583,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 		if (osceSequenceProxy != null)
 		{
 			showApplicationLoading(true);
-			requests.osceSequenceRequestNonRoo().manualOsceBreakLater(osceSequenceProxy.getId()).fire(new OSCEReceiver<String>() {
+			requests.osceSequenceRequest().manualOsceBreakLater(osceSequenceProxy.getId()).fire(new OSCEReceiver<String>() {
 
 				@Override
 				public void onSuccess(String response) {
@@ -1595,7 +1595,7 @@ public class ManualOsceDetailsActivity extends AbstractActivity implements
 					}
 					else 
 					{
-						requests.osceDayRequestNooRoo().findOsceDayByOsceSequenceId(osceSequenceProxy.getId()).with("osceSequences", "osceSequences.osceDayRotations", "osceSequences.courses").fire(new OSCEReceiver<OsceDayProxy>() {
+						requests.osceDayRequest().findOsceDayByOsceSequenceId(osceSequenceProxy.getId()).with("osceSequences", "osceSequences.osceDayRotations", "osceSequences.courses").fire(new OSCEReceiver<OsceDayProxy>() {
 
 							@Override
 							public void onSuccess(OsceDayProxy response) {

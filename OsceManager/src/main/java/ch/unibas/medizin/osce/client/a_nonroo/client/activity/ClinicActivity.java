@@ -27,8 +27,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -298,12 +298,12 @@ ClinicView.Presenter, ClinicView.Delegate {
 	
 	protected Request<List<ClinicProxy>> createRangeRequest(String q, Range range) {
 //		return requests.clinicRequest().findClinicEntries(range.getStart(), range.getLength());
-		return requests.clinicRequestNonRoo().findClinicsBySearch(q, range.getStart(), range.getLength());
+		return requests.clinicRequest().findClinicsBySearch(q, range.getStart(), range.getLength());
 	}
 
 	protected void fireCountRequest(String q, Receiver<Long> callback) {
 //		requests.clinicRequest().countClinics().fire(callback);
-		requests.clinicRequestNonRoo().countClinicsBySearch(q).fire(callback);
+		requests.clinicRequest().countClinicsBySearch(q).fire(callback);
 	}
 
 	private void setTable(CellTable<ClinicProxy> table) {

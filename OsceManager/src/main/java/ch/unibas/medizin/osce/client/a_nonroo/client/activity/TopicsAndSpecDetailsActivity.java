@@ -30,8 +30,8 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -257,7 +257,7 @@ TopicsAndSpecDetailsView.Delegate
 		{
 			
 			Log.debug("Start fetchRoleTopic: " );
-			requests.roleTopicRequestNonRoo().countRoleTopicBySpecialisationId(searchFilter,specialisationProxy.getId()).fire(new Receiver<Long>() {
+			requests.roleTopicRequest().countRoleTopicBySpecialisationId(searchFilter,specialisationProxy.getId()).fire(new Receiver<Long>() {
 				@Override
 				public void onSuccess(Long response) {
 					if (view == null) {
@@ -278,7 +278,7 @@ TopicsAndSpecDetailsView.Delegate
 		{
 			System.out.println("In side OnRangeChanged()");
 			final Range range = table.getVisibleRange();
-			requests.roleTopicRequestNonRoo().findRoleTopicBySpecialisationId(sortname,sortorder,searchFilter,specialisationProxy.getId(), range.getStart(), range.getLength()).with("standardizedRoles").fire(new Receiver<List<RoleTopicProxy>>() {				
+			requests.roleTopicRequest().findRoleTopicBySpecialisationId(sortname,sortorder,searchFilter,specialisationProxy.getId(), range.getStart(), range.getLength()).with("standardizedRoles").fire(new Receiver<List<RoleTopicProxy>>() {				
 				@Override
 				public void onSuccess(List<RoleTopicProxy> response) {
 					if(view == null){

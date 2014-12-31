@@ -12,10 +12,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -23,18 +27,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.allen_sauer.gwt.log.client.Log;
-
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
 import ch.unibas.medizin.osce.server.manualoscettgen.ManualOsceTimeTableCalculation;
 import ch.unibas.medizin.osce.server.spalloc.SPAllocator;
@@ -52,9 +52,8 @@ import ch.unibas.medizin.osce.shared.RoleTypes;
 import ch.unibas.medizin.osce.shared.StudyYears;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
-@RooJavaBean
-@RooToString
-@RooEntity
+@Configurable
+@Entity
 public class Osce {
 	
 	@PersistenceContext(unitName="persistenceUnit")
@@ -1680,4 +1679,374 @@ public class Osce {
  		TypedQuery<Osce> query = em.createQuery(sql, Osce.class);
  		return query.getResultList();
  	}
+
+	public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("AssignSPForHalfDay: ").append(getAssignSPForHalfDay()).append(", ");
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("IsFormativeOsce: ").append(getIsFormativeOsce()).append(", ");
+        sb.append("IsRepeOsce: ").append(getIsRepeOsce()).append(", ");
+        sb.append("IsValid: ").append(getIsValid()).append(", ");
+        sb.append("ItemAnalysis: ").append(getItemAnalysis() == null ? "null" : getItemAnalysis().size()).append(", ");
+        sb.append("LongBreak: ").append(getLongBreak()).append(", ");
+        sb.append("LongBreakRequiredTime: ").append(getLongBreakRequiredTime()).append(", ");
+        sb.append("LunchBreak: ").append(getLunchBreak()).append(", ");
+        sb.append("LunchBreakRequiredTime: ").append(getLunchBreakRequiredTime()).append(", ");
+        sb.append("MaxNumberStudents: ").append(getMaxNumberStudents()).append(", ");
+        sb.append("MiddleBreak: ").append(getMiddleBreak()).append(", ");
+        sb.append("Name: ").append(getName()).append(", ");
+        sb.append("NumberCourses: ").append(getNumberCourses()).append(", ");
+        sb.append("NumberRooms: ").append(getNumberRooms()).append(", ");
+        sb.append("OsceCreationType: ").append(getOsceCreationType()).append(", ");
+        sb.append("OscePostBlueprints: ").append(getOscePostBlueprints() == null ? "null" : getOscePostBlueprints().size()).append(", ");
+        sb.append("OsceSecurityTypes: ").append(getOsceSecurityTypes()).append(", ");
+        sb.append("OsceStatus: ").append(getOsceStatus()).append(", ");
+        sb.append("OsceStudents: ").append(getOsceStudents() == null ? "null" : getOsceStudents().size()).append(", ");
+        sb.append("Osce_days: ").append(getOsce_days() == null ? "null" : getOsce_days().size()).append(", ");
+        sb.append("PatientAveragePerPost: ").append(getPatientAveragePerPost()).append(", ");
+        sb.append("PostAnalysis: ").append(getPostAnalysis() == null ? "null" : getPostAnalysis().size()).append(", ");
+        sb.append("PostLength: ").append(getPostLength()).append(", ");
+        sb.append("Security: ").append(getSecurity()).append(", ");
+        sb.append("Semester: ").append(getSemester()).append(", ");
+        sb.append("ShortBreak: ").append(getShortBreak()).append(", ");
+        sb.append("ShortBreakSimpatChange: ").append(getShortBreakSimpatChange()).append(", ");
+        sb.append("SpStayInPost: ").append(getSpStayInPost()).append(", ");
+        sb.append("StudyYear: ").append(getStudyYear()).append(", ");
+        sb.append("Tasks: ").append(getTasks() == null ? "null" : getTasks().size()).append(", ");
+        sb.append("Version: ").append(getVersion());
+        return sb.toString();
+    }
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+	@Version
+    @Column(name = "version")
+    private Integer version;
+
+	public Long getId() {
+        return this.id;
+    }
+
+	public void setId(Long id) {
+        this.id = id;
+    }
+
+	public Integer getVersion() {
+        return this.version;
+    }
+
+	public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+	@Transactional
+    public void persist() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.persist(this);
+    }
+
+	@Transactional
+    public void remove() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        if (this.entityManager.contains(this)) {
+            this.entityManager.remove(this);
+        } else {
+            Osce attached = Osce.findOsce(this.id);
+            this.entityManager.remove(attached);
+        }
+    }
+
+	@Transactional
+    public void flush() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.flush();
+    }
+
+	@Transactional
+    public void clear() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        this.entityManager.clear();
+    }
+
+	@Transactional
+    public Osce merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        Osce merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+	public static final EntityManager entityManager() {
+        EntityManager em = new Osce().entityManager;
+        if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
+        return em;
+    }
+
+	public static long countOsces() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM Osce o", Long.class).getSingleResult();
+    }
+
+	public static List<Osce> findAllOsces() {
+        return entityManager().createQuery("SELECT o FROM Osce o", Osce.class).getResultList();
+    }
+
+	public static Osce findOsce(Long id) {
+        if (id == null) return null;
+        return entityManager().find(Osce.class, id);
+    }
+
+	public static List<Osce> findOsceEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Osce o", Osce.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	public StudyYears getStudyYear() {
+        return this.studyYear;
+    }
+
+	public void setStudyYear(StudyYears studyYear) {
+        this.studyYear = studyYear;
+    }
+
+	public Integer getMaxNumberStudents() {
+        return this.maxNumberStudents;
+    }
+
+	public void setMaxNumberStudents(Integer maxNumberStudents) {
+        this.maxNumberStudents = maxNumberStudents;
+    }
+
+	public String getName() {
+        return this.name;
+    }
+
+	public void setName(String name) {
+        this.name = name;
+    }
+
+	public Short getShortBreak() {
+        return this.shortBreak;
+    }
+
+	public void setShortBreak(Short shortBreak) {
+        this.shortBreak = shortBreak;
+    }
+
+	public Short getShortBreakSimpatChange() {
+        return this.shortBreakSimpatChange;
+    }
+
+	public void setShortBreakSimpatChange(Short shortBreakSimpatChange) {
+        this.shortBreakSimpatChange = shortBreakSimpatChange;
+    }
+
+	public Short getLongBreak() {
+        return this.LongBreak;
+    }
+
+	public void setLongBreak(Short LongBreak) {
+        this.LongBreak = LongBreak;
+    }
+
+	public Short getLunchBreak() {
+        return this.lunchBreak;
+    }
+
+	public void setLunchBreak(Short lunchBreak) {
+        this.lunchBreak = lunchBreak;
+    }
+
+	public Short getMiddleBreak() {
+        return this.middleBreak;
+    }
+
+	public void setMiddleBreak(Short middleBreak) {
+        this.middleBreak = middleBreak;
+    }
+
+	public Short getLunchBreakRequiredTime() {
+        return this.lunchBreakRequiredTime;
+    }
+
+	public void setLunchBreakRequiredTime(Short lunchBreakRequiredTime) {
+        this.lunchBreakRequiredTime = lunchBreakRequiredTime;
+    }
+
+	public Short getLongBreakRequiredTime() {
+        return this.longBreakRequiredTime;
+    }
+
+	public void setLongBreakRequiredTime(Short longBreakRequiredTime) {
+        this.longBreakRequiredTime = longBreakRequiredTime;
+    }
+
+	public Integer getNumberCourses() {
+        return this.numberCourses;
+    }
+
+	public void setNumberCourses(Integer numberCourses) {
+        this.numberCourses = numberCourses;
+    }
+
+	public Integer getPostLength() {
+        return this.postLength;
+    }
+
+	public void setPostLength(Integer postLength) {
+        this.postLength = postLength;
+    }
+
+	public Boolean getIsRepeOsce() {
+        return this.isRepeOsce;
+    }
+
+	public void setIsRepeOsce(Boolean isRepeOsce) {
+        this.isRepeOsce = isRepeOsce;
+    }
+
+	public Integer getNumberRooms() {
+        return this.numberRooms;
+    }
+
+	public void setNumberRooms(Integer numberRooms) {
+        this.numberRooms = numberRooms;
+    }
+
+	public Boolean getIsValid() {
+        return this.isValid;
+    }
+
+	public void setIsValid(Boolean isValid) {
+        this.isValid = isValid;
+    }
+
+	public OsceStatus getOsceStatus() {
+        return this.osceStatus;
+    }
+
+	public void setOsceStatus(OsceStatus osceStatus) {
+        this.osceStatus = osceStatus;
+    }
+
+	public OSCESecurityStatus getSecurity() {
+        return this.security;
+    }
+
+	public void setSecurity(OSCESecurityStatus security) {
+        this.security = security;
+    }
+
+	public OsceSecurityType getOsceSecurityTypes() {
+        return this.osceSecurityTypes;
+    }
+
+	public void setOsceSecurityTypes(OsceSecurityType osceSecurityTypes) {
+        this.osceSecurityTypes = osceSecurityTypes;
+    }
+
+	public PatientAveragePerPost getPatientAveragePerPost() {
+        return this.patientAveragePerPost;
+    }
+
+	public void setPatientAveragePerPost(PatientAveragePerPost patientAveragePerPost) {
+        this.patientAveragePerPost = patientAveragePerPost;
+    }
+
+	public Boolean getSpStayInPost() {
+        return this.spStayInPost;
+    }
+
+	public void setSpStayInPost(Boolean spStayInPost) {
+        this.spStayInPost = spStayInPost;
+    }
+
+	public Boolean getAssignSPForHalfDay() {
+        return this.assignSPForHalfDay;
+    }
+
+	public void setAssignSPForHalfDay(Boolean assignSPForHalfDay) {
+        this.assignSPForHalfDay = assignSPForHalfDay;
+    }
+
+	public Semester getSemester() {
+        return this.semester;
+    }
+
+	public void setSemester(Semester semester) {
+        this.semester = semester;
+    }
+
+	public List<OsceDay> getOsce_days() {
+        return this.osce_days;
+    }
+
+	public void setOsce_days(List<OsceDay> osce_days) {
+        this.osce_days = osce_days;
+    }
+
+	public List<OscePostBlueprint> getOscePostBlueprints() {
+        return this.oscePostBlueprints;
+    }
+
+	public void setOscePostBlueprints(List<OscePostBlueprint> oscePostBlueprints) {
+        this.oscePostBlueprints = oscePostBlueprints;
+    }
+
+	public Set<Task> getTasks() {
+        return this.tasks;
+    }
+
+	public void setTasks(Set<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+	public Set<StudentOsces> getOsceStudents() {
+        return this.osceStudents;
+    }
+
+	public void setOsceStudents(Set<StudentOsces> osceStudents) {
+        this.osceStudents = osceStudents;
+    }
+
+	public Osce getCopiedOsce() {
+        return this.copiedOsce;
+    }
+
+	public void setCopiedOsce(Osce copiedOsce) {
+        this.copiedOsce = copiedOsce;
+    }
+
+	public List<ItemAnalysis> getItemAnalysis() {
+        return this.itemAnalysis;
+    }
+
+	public void setItemAnalysis(List<ItemAnalysis> itemAnalysis) {
+        this.itemAnalysis = itemAnalysis;
+    }
+
+	public List<PostAnalysis> getPostAnalysis() {
+        return this.postAnalysis;
+    }
+
+	public void setPostAnalysis(List<PostAnalysis> postAnalysis) {
+        this.postAnalysis = postAnalysis;
+    }
+
+	public OsceCreationType getOsceCreationType() {
+        return this.osceCreationType;
+    }
+
+	public void setOsceCreationType(OsceCreationType osceCreationType) {
+        this.osceCreationType = osceCreationType;
+    }
+
+	public Boolean getIsFormativeOsce() {
+        return this.isFormativeOsce;
+    }
+
+	public void setIsFormativeOsce(Boolean isFormativeOsce) {
+        this.isFormativeOsce = isFormativeOsce;
+    }
 }

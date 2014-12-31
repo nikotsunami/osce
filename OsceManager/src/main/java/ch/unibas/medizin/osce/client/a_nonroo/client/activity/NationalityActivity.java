@@ -29,8 +29,8 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -268,12 +268,12 @@ NationalityView.Presenter, NationalityView.Delegate {
 	
 	protected Request<List<NationalityProxy>> createRangeRequest(String name, Range range) {
 //		return requests.nationalityRequest().findNationalityEntries(range.getStart(), range.getLength());
-		return requests.nationalityRequestNonRoo().findNationalitiesByName(name, range.getStart(), range.getLength());
+		return requests.nationalityRequest().findNationalitiesByName(name, range.getStart(), range.getLength());
 	}
 
 	protected void fireCountRequest(String name, Receiver<Long> callback) {
 //		requests.nationalityRequest().countNationalitys().fire(callback);
-		requests.nationalityRequestNonRoo().countNationalitiesByName(name).fire(callback);
+		requests.nationalityRequest().countNationalitiesByName(name).fire(callback);
 	}
 
 	private void setTable(CellTable<NationalityProxy> table) {
@@ -298,7 +298,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 	@Override
 	public void newClicked(final String name) {
 		Log.debug("Add nationality");
-		requests.nationalityRequestNonRoo().checkNationnality(name).fire(new OSCEReceiver<Integer>() {
+		requests.nationalityRequest().checkNationnality(name).fire(new OSCEReceiver<Integer>() {
 			@Override
 			public void onSuccess(Integer response) {
 				if (response == 0)
@@ -313,7 +313,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 						@Override
 						public void onSuccess(Void arg0) {
 							
-							requests.nationalityRequestNonRoo().saveNationalityInSpPortal(nation).fire(new OSCEReceiver<Boolean>() {
+							requests.nationalityRequest().saveNationalityInSpPortal(nation).fire(new OSCEReceiver<Boolean>() {
 
 								@Override
 								public void onSuccess(Boolean response) {
@@ -342,7 +342,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 	@Override
 	public void deleteClicked(final NationalityProxy nation) {
 		// Highlight onViolation
-		requests.nationalityRequestNonRoo().deleteNatinalityInSpPortal(nation).fire(new OSCEReceiver<Boolean>() {
+		requests.nationalityRequest().deleteNatinalityInSpPortal(nation).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {
@@ -381,7 +381,7 @@ NationalityView.Presenter, NationalityView.Delegate {
 	public void updateClicked(NationalityProxy nation,final String value) 
 	{
 		editedNationality=nation;
-		requests.nationalityRequestNonRoo().editNationalityInSpPortal(nation,value).fire(new OSCEReceiver<Boolean>() {
+		requests.nationalityRequest().editNationalityInSpPortal(nation,value).fire(new OSCEReceiver<Boolean>() {
 
 			@Override
 			public void onSuccess(Boolean response) {

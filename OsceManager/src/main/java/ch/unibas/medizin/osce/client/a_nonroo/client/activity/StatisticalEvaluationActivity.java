@@ -152,7 +152,7 @@ public class StatisticalEvaluationActivity extends AbstractActivity implements S
 				}
 			});
 			Log.info("Semester Proxy For Osce: " + semesterProxy.getId());
-			requests.osceRequestNonRoo().findAllOsceOnSemesterId(semesterProxy.getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
+			requests.osceRequest().findAllOsceOnSemesterId(semesterProxy.getId()).with("semester").fire(new OSCEReceiver<List<OsceProxy>>() {
 
 				@Override
 				public void onSuccess(List<OsceProxy> response) {

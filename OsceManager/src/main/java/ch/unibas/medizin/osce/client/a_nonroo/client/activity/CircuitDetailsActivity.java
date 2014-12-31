@@ -94,10 +94,10 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.EntityProxy;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.ServerFailure;
-import com.google.gwt.requestfactory.shared.Violation;
+import com.google.web.bindery.requestfactory.shared.EntityProxy;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -211,7 +211,7 @@ AccordianPanelView.ParcourDelegate
 			// E Module 5 Bug Test Change			
 			
 			//requests.specialisationRequest().findAllSpecialisations().with("roleTopics").fire(new OSCEReceiver<List<SpecialisationProxy>>()
-			/*requests.specialisationRequestNonRoo().findSpecialisationSortByName().with("roleTopics").fire(new OSCEReceiver<List<SpecialisationProxy>>()
+			/*requests.specialisationRequest().findSpecialisationSortByName().with("roleTopics").fire(new OSCEReceiver<List<SpecialisationProxy>>()
 					{
 
 						public void onSuccess(List<SpecialisationProxy> response) 
@@ -222,7 +222,7 @@ AccordianPanelView.ParcourDelegate
 							
 							specialisationList = new ArrayList<SpecialisationProxy>();				
 							specialisationList.addAll(response);*/	
-			/*requests.specialisationRequestNonRoo().findSpecialisationSortByName().with("roleTopics").fire(new OSCEReceiver<List<SpecialisationProxy>>()
+			/*requests.specialisationRequest().findSpecialisationSortByName().with("roleTopics").fire(new OSCEReceiver<List<SpecialisationProxy>>()
 					{
 
 						public void onSuccess(List<SpecialisationProxy> response) 
@@ -246,7 +246,7 @@ AccordianPanelView.ParcourDelegate
 					{						
 						osceProxy=(OsceProxy)response;
 											
-						requests.specialisationRequestNonRoo().findSpecialisationSortByName(osceProxy.getStudyYear()).with("roleTopics").fire(new OSCEReceiver<List<SpecialisationProxy>>()
+						requests.specialisationRequest().findSpecialisationSortByName(osceProxy.getStudyYear()).with("roleTopics").fire(new OSCEReceiver<List<SpecialisationProxy>>()
 								{
 
 									public void onSuccess(List<SpecialisationProxy> response1) 
@@ -1300,7 +1300,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				}
 			});*/
 			
-			requests.courseRequestNonRoo().checkAndPersistColorToCourse(proxy.getId(), color).fire(new OSCEReceiver<Boolean>() {
+			requests.courseRequest().checkAndPersistColorToCourse(proxy.getId(), color).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
 				public void onSuccess(Boolean response) {
@@ -1408,7 +1408,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 		public void findStandardizedRoles(final OscePostSubView view)
 		{
 			//requests.roleTopicRequest().findRoleTopic(((OscePostSubViewImpl)view).getOscePostProxy().getOscePostBlueprint().getRoleTopic().getId()).with("standardizedRoles").fire(new OSCEReceiver<RoleTopicProxy>() {
-			requests.standardizedRoleRequestNonRoo().findRoleByRoleTopic(((OscePostSubViewImpl)view).getOscePostProxy().getOscePostBlueprint().getRoleTopic().getId()).fire(new Receiver<List<StandardizedRoleProxy>>() {
+			requests.standardizedRoleRequest().findRoleByRoleTopic(((OscePostSubViewImpl)view).getOscePostProxy().getOscePostBlueprint().getRoleTopic().getId()).fire(new Receiver<List<StandardizedRoleProxy>>() {
 			
 				@Override
 				public void onSuccess(List<StandardizedRoleProxy> response) {
@@ -1625,7 +1625,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			
 			
 			
-			requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+			requests.oscePostRoomRequest().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
 			{
 
 				@Override
@@ -1707,7 +1707,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 			oscePostSubViewNext.getRoleTopicLbl().setTitle(oscePostProxyNext.getOscePostBlueprint().getRoleTopic().getName());
 			}
 			
-			requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxyNext).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+			requests.oscePostRoomRequest().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxyNext).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
 					{
 						@Override
 						public void onSuccess(OscePostRoomProxy response) 
@@ -1818,7 +1818,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				oscePostSubView.getRoleTopicLbl().setTitle(oscePostProxy.getOscePostBlueprint().getRoleTopic().getName());
 			}
 			
-			requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+			requests.oscePostRoomRequest().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
 					{
 
 						@Override
@@ -1916,7 +1916,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				oscePostSubView.getRoleTopicLbl().setTitle(util.getEmptyIfNull(oscePostProxy.getOscePostBlueprint().getRoleTopic().getName()));
 			}
 			
-			requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+			requests.oscePostRoomRequest().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
 			{
 				@Override
 				public void onSuccess(OscePostRoomProxy response) 
@@ -2644,7 +2644,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						//oscePostSubViewImpledit.oscePostBlueprintProxy=this.oscePostBlueprintProxy;
 					// E Module 5 bug Report Change
 					
-					requests.specialisationRequestNonRoo().findSpecialisationSortByName(osceProxy.getStudyYear()).fire(new OSCEReceiver<List<SpecialisationProxy>>() 
+					requests.specialisationRequest().findSpecialisationSortByName(osceProxy.getStudyYear()).fire(new OSCEReceiver<List<SpecialisationProxy>>() 
 					{
 						public void onSuccess(List<SpecialisationProxy> response) 
 						{											
@@ -2768,7 +2768,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 
 					((OscePostSubViewImpl)oscePostSubViewImpledit).listBoxPopupViewImpl.show();
 					
-					requests.roleTopicRequestNonRoo().findRoleTopicBySpecialisation(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation().getId(), oscePostSubViewImpledit.oscePostBlueprintProxy).fire(new OSCEReceiver<List<RoleTopicProxy>>() 
+					requests.roleTopicRequest().findRoleTopicBySpecialisation(oscePostSubViewImpledit.oscePostBlueprintProxy.getSpecialisation().getId(), oscePostSubViewImpledit.oscePostBlueprintProxy).fire(new OSCEReceiver<List<RoleTopicProxy>>() 
 					{
 						@Override
 						public void onSuccess(List<RoleTopicProxy> response) 
@@ -3014,7 +3014,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					}
 						
 					
-					requests.oscePostBluePrintRequestNonRoo().removeOscePostBlueprint(oscePostViewImpl.oscePostBlueprintProxy.getId(), nextOscePostBluePrintId).using(oscePostViewImpl.oscePostBlueprintProxy).fire(new OSCEReceiver<Boolean>() {
+					requests.oscePostBlueprintRequest().removeOscePostBlueprint(oscePostViewImpl.oscePostBlueprintProxy.getId(), nextOscePostBluePrintId).using(oscePostViewImpl.oscePostBlueprintProxy).fire(new OSCEReceiver<Boolean>() {
 
 						@Override
 						public void onSuccess(Boolean response) {
@@ -3796,7 +3796,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 						// E Module 5 Bug Test Change
 						
-					requests.osceSequenceRequestNonRoo().splitSequence(sequenceOsceSubViewImpl.osceSequenceProxy.getId()).fire(new OSCEReceiver<OsceSequenceProxy>() {
+					requests.osceSequenceRequest().splitSequence(sequenceOsceSubViewImpl.osceSequenceProxy.getId()).fire(new OSCEReceiver<OsceSequenceProxy>() {
 
 						@Override
 						public void onSuccess(OsceSequenceProxy osceSequenceProxy) {
@@ -3866,7 +3866,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 									// TODO Auto-generated method stub
 									Log.info("new sequence save successfully");
 									
-									//requests.osceSequenceRequestNonRoo().findMaxOsceSequence().fire(new Receiver<OsceSequenceProxy>() {
+									//requests.osceSequenceRequest().findMaxOsceSequence().fire(new Receiver<OsceSequenceProxy>() {
 									requests.find(sequenceProxy.stableId()).fire(new Receiver<Object>() {
 
 										@Override
@@ -3992,7 +3992,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					}
 					findspecialisation=false;*/
 					
-					requests.oscePostBluePrintRequestNonRoo().countOscebluePrintValue(osceProxy.getId()).fire(new OSCEReceiver<Long>() {
+					requests.oscePostBlueprintRequest().countOscebluePrintValue(osceProxy.getId()).fire(new OSCEReceiver<Long>() {
 
 						@Override
 						public void onSuccess(Long response) {
@@ -4028,7 +4028,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						
 					if(osceProxy.getOsceStatus()==OsceStatus.OSCE_BLUEPRINT)
                                         {
-					//requests.oscePostBluePrintRequestNonRoo().isBluePrintHasBreakAsLast(osceProxy.getId());
+					//requests.oscePostBluePrintRequest().isBluePrintHasBreakAsLast(osceProxy.getId());
 					int totalOscePosts=oSCENewSubViewImpl.getOscePostBluePrintSubViewImpl().getOscePostBluePrintSubViewImplHP().getWidgetCount();
 					Log.info("Total OscePost is :"+totalOscePosts);
 					OscePostViewImpl lastview=(OscePostViewImpl)oSCENewSubViewImpl.getOscePostBluePrintSubViewImpl().getOscePostBluePrintSubViewImplHP().getWidget(totalOscePosts-1);
@@ -4049,7 +4049,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 								// E Module 5 Bug Test Change
 								
-								requests.osceRequestNonRoo().generateOsceScaffold(osceProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+								requests.osceRequest().generateOsceScaffold(osceProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 									@Override
 									public void onSuccess(Boolean response) {
@@ -4095,7 +4095,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 									// E Module 5 bug Report Change
 									
 									@Override
-									public void onViolation(java.util.Set<com.google.gwt.requestfactory.shared.Violation> errors) {
+									public void onViolation(java.util.Set<com.google.web.bindery.requestfactory.shared.Violation> errors) {
 										// Module 5 Bug Test Change
 										requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 										// E Module 5 Bug Test Change
@@ -4120,7 +4120,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 						// E Module 5 Bug Test Change
 					
-						requests.osceRequestNonRoo().generateOsceScaffold(osceProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+						requests.osceRequest().generateOsceScaffold(osceProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 							@Override
 							public void onSuccess(Boolean response) {
@@ -4157,7 +4157,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							}
 							// E Module 5 bug Report Change
 							@Override
-							public void onViolation(java.util.Set<com.google.gwt.requestfactory.shared.Violation> errors) {
+							public void onViolation(java.util.Set<com.google.web.bindery.requestfactory.shared.Violation> errors) {
 								// Module 5 Bug Test Change
 								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
 								// E Module 5 Bug Test Change
@@ -4272,7 +4272,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								// E Module 5 Bug Test Change
 								
 								// Module 5 bug Report Change
-								requests.osceRequestNonRoo().removeassignment(osceProxy).fire(new OSCEReceiver<Boolean>() {
+								requests.osceRequest().removeassignment(osceProxy).fire(new OSCEReceiver<Boolean>() {
 
 									@Override
 									public void onSuccess(Boolean response) {
@@ -4365,7 +4365,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								// 	E Module 5 bug Report Change
 								
 								//To DO
-								//requests.osceRequestNonRoo().deleteAllPatentInRoleForOsce(osceProxy.getId());
+								//requests.osceRequest().deleteAllPatentInRoleForOsce(osceProxy.getId());
 							}
 						});
 						
@@ -4450,7 +4450,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					// E Module 5 Bug Test Change
 					
-					requests.oscePostRequestNonRoo().findOscePostByOsce(proxy.getId()).fire(new OSCEReceiver<List<OscePostProxy>>() 
+					requests.oscePostRequest().findOscePostByOsce(proxy.getId()).fire(new OSCEReceiver<List<OscePostProxy>>() 
 					{
 						@Override
 						public void onSuccess(List<OscePostProxy> response) 
@@ -4466,7 +4466,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							else
 							{
 					
-					requests.oscePostRoomRequestNonRoo().findListOfOscePostRoomByOsce(proxy.getId()).fire(new OSCEReceiver<List<OscePostRoomProxy>>() 
+					requests.oscePostRoomRequest().findListOfOscePostRoomByOsce(proxy.getId()).fire(new OSCEReceiver<List<OscePostRoomProxy>>() 
 					{
 						@Override
 						public void onSuccess(List<OscePostRoomProxy> response) 
@@ -4506,7 +4506,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 											requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 											// E Module 5 Bug Test Change
 										
-										requests.osceRequestNonRoo().generateAssignments(osceProxy.getId()).fire(new  OSCEReceiver<Boolean>() 
+										requests.osceRequest().generateAssignments(osceProxy.getId()).fire(new  OSCEReceiver<Boolean>() 
 										{
 											@Override
 											public void onSuccess(Boolean response) 
@@ -4787,7 +4787,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					// E Module 5 Bug Test Change
 					
-					requests.osceDayRequestNooRoo().findOsceIdByOsceDayId(osceDayProxy.getId()).fire(new OSCEReceiver<Long>() 
+					requests.osceDayRequest().findOsceIdByOsceDayId(osceDayProxy.getId()).fire(new OSCEReceiver<Long>() 
 					{
 						@Override
 						public void onSuccess(Long response) 
@@ -4960,7 +4960,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 					// E Module 5 Bug Test Change
                    				
-					requests.osceDayRequestNooRoo().findOsceIdByOsceDayId(osceDayProxy.getId()).fire(new OSCEReceiver<Long>() 
+					requests.osceDayRequest().findOsceIdByOsceDayId(osceDayProxy.getId()).fire(new OSCEReceiver<Long>() 
 					{
 						@Override
 						public void onSuccess(Long response) 
@@ -5026,7 +5026,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				public void roomEditClicked(final OscePostSubView oscePostSubView,final int left,final int top) 
 				{					
 					Log.info("Room Edit");
-					requests.roomRequestNonRoo().findAllRoomsOrderByRoomNumber().fire(new OSCEReceiver<List<RoomProxy>>() 
+					requests.roomRequest().findAllRoomsOrderByRoomNumber().fire(new OSCEReceiver<List<RoomProxy>>() 
 					{
 							@Override
 							public void onSuccess(List<RoomProxy> response) 
@@ -5095,13 +5095,13 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 						@Override
 						public void onSuccess(OscePostProxy oscePostResult) {
 							
-									requests.oscePostRoomRequestNonRoo().findOscePostRoomByRoom(oscePostResult.getOsceSequence().getId(),roomProxy.getId()).fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
+									requests.oscePostRoomRequest().findOscePostRoomByRoom(oscePostResult.getOsceSequence().getId(),roomProxy.getId()).fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
 
 										@Override
 										public void onSuccess(final List<OscePostRoomProxy> oscePostRoom) {
 											if (oscePostRoom.size()<=0)
 											{
-												requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy()).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+												requests.oscePostRoomRequest().findOscePostRoomByOscePostAndCourse(oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy()).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
 												{												
 
 													@Override
@@ -5127,7 +5127,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 																	
 																	requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 																	
-																	requests.oscePostRoomRequestNonRoo().insertRoomVertically(osceProxy.getId(), oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy().getId(), roomProxy).with("oscePost","course").fire(new OSCEReceiver<List<OscePostRoomProxy>>() 
+																	requests.oscePostRoomRequest().insertRoomVertically(osceProxy.getId(), oscePostSubViewImpl.getCourseProxy(), oscePostSubViewImpl.getOscePostProxy().getId(), roomProxy).with("oscePost","course").fire(new OSCEReceiver<List<OscePostRoomProxy>>() 
 																	{
 
 																		@Override
@@ -5229,7 +5229,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					}
 					final OscePostRoomProxy newOscePostRoomProxy=tempnewOscePostRoomProxy;
 					
-					requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(courseProxy,oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
+					requests.oscePostRoomRequest().findOscePostRoomByOscePostAndCourse(courseProxy,oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() 
 					{
 								@Override
 								public void onSuccess(OscePostRoomProxy response) 
@@ -5257,7 +5257,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							
 							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-							requests.oscePostRoomRequestNonRoo().replaceRoom(selectedRoom.getId(),osceId,newRoomProxy).with("oscePost","course").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
+							requests.oscePostRoomRequest().replaceRoom(selectedRoom.getId(),osceId,newRoomProxy).with("oscePost","course").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
 
 								@Override
 								public void onSuccess(List<OscePostRoomProxy> response) 
@@ -5271,7 +5271,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 								}
 							});
 							
-							requests.oscePostRoomRequestNonRoo().replaceRoom(newOscePostRoom.getId(),osceId,oldRoomProxy).with("oscePost","course").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
+							requests.oscePostRoomRequest().replaceRoom(newOscePostRoom.getId(),osceId,oldRoomProxy).with("oscePost","course").fire(new OSCEReceiver<List<OscePostRoomProxy>>() {
 
 								@Override
 								public void onSuccess(List<OscePostRoomProxy> response) 
@@ -5305,7 +5305,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 							// E Module 5 Bug Test Change
 							
-							requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), (osceDayProxy.getLunchBreakAfterRotation()-1), 1).fire(new OSCEReceiver<Boolean>() {
+							requests.osceDayRequest().updateLunchBreak(osceDayProxy.getId(), (osceDayProxy.getLunchBreakAfterRotation()-1), 1).fire(new OSCEReceiver<Boolean>() {
 
 								@Override
 								public void onSuccess(Boolean response1) {
@@ -5342,7 +5342,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 												
 												if (Integer.parseInt(firstSequenceOsce1.getSequenceRotationLable().getText()) > 1)
 												{
-													requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), +1).fire(new OSCEReceiver<Boolean>() {
+													requests.osceDayRequest().updateRotation(osceDayProxy.getId(), +1).fire(new OSCEReceiver<Boolean>() {
 
 														@Override
 														public void onSuccess(
@@ -5455,7 +5455,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 							// E Module 5 Bug Test Change
 							
-							requests.osceSequenceRequestNonRoo().findOsceSequenceByOsceDayId(osceDayProxy.getId()).fire(new OSCEReceiver<List<OsceSequenceProxy>>() {
+							requests.osceSequenceRequest().findOsceSequenceByOsceDayId(osceDayProxy.getId()).fire(new OSCEReceiver<List<OsceSequenceProxy>>() {
 								
 								@Override
 								public void onSuccess(List<OsceSequenceProxy> response) {
@@ -5469,8 +5469,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 										else if (response.size() == 1)
 											tempLunchBreakRotation = (response.get(0).getNumberRotation() / 2);
 										
-										//requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), ((osceSequenceProxy.getNumberRotation()/2)-1), 1).fire(new OSCEReceiver<Boolean>() {
-										requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), (tempLunchBreakRotation-1), 1).fire(new OSCEReceiver<Boolean>() {
+										//requests.osceDayRequest().updateLunchBreak(osceDayProxy.getId(), ((osceSequenceProxy.getNumberRotation()/2)-1), 1).fire(new OSCEReceiver<Boolean>() {
+										requests.osceDayRequest().updateLunchBreak(osceDayProxy.getId(), (tempLunchBreakRotation-1), 1).fire(new OSCEReceiver<Boolean>() {
 
 											@Override
 											public void onSuccess(Boolean response1) {
@@ -5509,7 +5509,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 																
 																if (Integer.parseInt(firstSequenceOsce1.getSequenceRotationLable().getText()) > 1)
 																{
-																	requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), +1).fire(new OSCEReceiver<Boolean>() {
+																	requests.osceDayRequest().updateRotation(osceDayProxy.getId(), +1).fire(new OSCEReceiver<Boolean>() {
 
 																		@Override
 																		public void onSuccess(
@@ -5637,7 +5637,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							// Module 5 Bug Test Change
 							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 							// E Module 5 Bug Test Change
-							requests.osceSequenceRequestNonRoo().findOsceSequenceByOsceDayId(osceDayProxy.getId()).fire(new OSCEReceiver<List<OsceSequenceProxy>>() {
+							requests.osceSequenceRequest().findOsceSequenceByOsceDayId(osceDayProxy.getId()).fire(new OSCEReceiver<List<OsceSequenceProxy>>() {
 								
 								@Override
 								public void onSuccess(List<OsceSequenceProxy> response) {
@@ -5651,8 +5651,8 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 										else if (response.size() == 1)
 											tempLunchBreakRotation = (response.get(0).getNumberRotation() / 2);
 										
-										//requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), ((osceSequenceProxy.getNumberRotation()/2)+1), 2).fire(new OSCEReceiver<Boolean>() {
-										requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), (tempLunchBreakRotation+1), 2).fire(new OSCEReceiver<Boolean>() {
+										//requests.osceDayRequest().updateLunchBreak(osceDayProxy.getId(), ((osceSequenceProxy.getNumberRotation()/2)+1), 2).fire(new OSCEReceiver<Boolean>() {
+										requests.osceDayRequest().updateLunchBreak(osceDayProxy.getId(), (tempLunchBreakRotation+1), 2).fire(new OSCEReceiver<Boolean>() {
 
 											@Override
 											public void onSuccess(Boolean response1) {
@@ -5693,7 +5693,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 																
 																if (Integer.parseInt(secondSequenceOsce1.getSequenceRotationLable().getText()) > 1)
 																{
-																	requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
+																	requests.osceDayRequest().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
 
 																		@Override
 																		public void onSuccess(
@@ -5786,7 +5786,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 							requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 							// E Module 5 Bug Test Change
 							
-							requests.osceDayRequestNooRoo().updateLunchBreak(osceDayProxy.getId(), (osceDayProxy.getLunchBreakAfterRotation()+1), 2).fire(new OSCEReceiver<Boolean>() {
+							requests.osceDayRequest().updateLunchBreak(osceDayProxy.getId(), (osceDayProxy.getLunchBreakAfterRotation()+1), 2).fire(new OSCEReceiver<Boolean>() {
 
 								@Override
 								public void onSuccess(Boolean response1) {
@@ -5828,7 +5828,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 													
 													if (Integer.parseInt(secondSequenceOsce1.getSequenceRotationLable().getText()) > 1)
 													{
-														requests.osceDayRequestNooRoo().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
+														requests.osceDayRequest().updateRotation(osceDayProxy.getId(), -1).fire(new OSCEReceiver<Boolean>() {
 
 															@Override
 															public void onSuccess(
@@ -6038,7 +6038,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 		
 		//requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
-		/*requests.oscePostRoomRequestNonRoo().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() {
+		/*requests.oscePostRoomRequest().findOscePostRoomByOscePostAndCourse(courseProxy, oscePostProxy).with("room").fire(new OSCEReceiver<OscePostRoomProxy>() {
 			@Override
 			public void onSuccess(OscePostRoomProxy response) {
 				if (response.getRoom() != null)
@@ -6240,7 +6240,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 					afterLunchDiff = newLunchAfterStart - osceDayLunchMin; 
 				}
 				
-				requests.assignmentRequestNonRoo().updateTimeForOsceDay(osceDayProxy.getId(), osceDayDiff, afterLunchDiff).with("osce").fire(new OSCEReceiver<OsceDayProxy>() {
+				requests.assignmentRequest().updateTimeForOsceDay(osceDayProxy.getId(), osceDayDiff, afterLunchDiff).with("osce").fire(new OSCEReceiver<OsceDayProxy>() {
 
 					@Override
 					public void onSuccess(OsceDayProxy response) {

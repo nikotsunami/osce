@@ -60,7 +60,6 @@ import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
-import ch.unibas.medizin.osce.shared.scaffold.AnamnesisChecksValueRequestNonRoo;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -74,15 +73,15 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.gwt.requestfactory.shared.Receiver;
-import com.google.gwt.requestfactory.shared.Request;
-import com.google.gwt.requestfactory.shared.ServerFailure;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 @SuppressWarnings("deprecation")
 public class StandardizedPatientDetailsActivity extends AbstractActivity implements
@@ -257,7 +256,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		Log.info("finding sp person to check whether he has sent edit Request");
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
-		requests.spPortalPersonRequestNonRoo().findSPPersonToCheckWhetherHeHasSentEditReqOrChandedData(standardizedPatientProxy.getId()).fire(new OSCEReceiver<SPPortalPersonProxy>() {
+		requests.sPPortalPersonRequest().findSPPersonToCheckWhetherHeHasSentEditReqOrChandedData(standardizedPatientProxy.getId()).fire(new OSCEReceiver<SPPortalPersonProxy>() {
 
 			@Override
 			public void onSuccess(SPPortalPersonProxy response) {
@@ -285,7 +284,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 
-		requests.spPortalPersonRequestNonRoo().findSPPersonToCheckWhetherHeHasSentEditReqOrChandedData(standardizedPatientProxy.getId()).fire(new OSCEReceiver<SPPortalPersonProxy>() {
+		requests.sPPortalPersonRequest().findSPPersonToCheckWhetherHeHasSentEditReqOrChandedData(standardizedPatientProxy.getId()).fire(new OSCEReceiver<SPPortalPersonProxy>() {
 
 			@Override
 			public void onSuccess(SPPortalPersonProxy response) {
@@ -569,10 +568,10 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 	
 	protected void fillLangSkills() {
 		// Fill ValueListBoxes
-		requests.languageRequestNonRoo().findLanguagesByNotStandardizedPatient(standardizedPatientProxy.getId()).fire(new SpokenLanguageReceiver());
+		requests.spokenLanguageRequest().findLanguagesByNotStandardizedPatient(standardizedPatientProxy.getId()).fire(new SpokenLanguageReceiver());
 		
 		// Request number of Languages spoken by patient and call onRangeChangedLanguageSkillTable() to fill table
-		requests.langSkillRequestNonRoo().countLangSkillsByPatientId(standardizedPatientProxy.getId()).fire(new LangSkillCountReceiver());
+		requests.langSkillRequest().countLangSkillsByPatientId(standardizedPatientProxy.getId()).fire(new LangSkillCountReceiver());
 	}
 	
 	/**
@@ -591,7 +590,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 	 */
 	
 	private void fireLangSkillRangeRequest(final Range range, final Receiver<List<LangSkillProxy>> callback) {
-		requests.langSkillRequestNonRoo().findLangSkillsByPatientId(standardizedPatientProxy.getId(), range.getStart(), range.getLength()).with("spokenlanguage").fire(callback);
+		requests.langSkillRequest().findLangSkillsByPatientId(standardizedPatientProxy.getId(), range.getStart(), range.getLength()).with("spokenlanguage").fire(callback);
 	}
 	
 	/*******************
@@ -608,7 +607,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 			// fills the AnamnesisChecksValue table in the database with
 			// NULL-values for unanswered questions
 			Log.info("unanswered questions are shown (fill table)");
-			requests.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisForm.getId()).fire(new AnamnesisChecksValueFillReceiver(title));
+			requests.anamnesisChecksValueRequest().fillAnamnesisChecksValues(anamnesisForm.getId()).fire(new AnamnesisChecksValueFillReceiver(title));
 		} else {
 			// requests the number of rows in AnamnesisChecksValue for the
 			// current patient
@@ -622,7 +621,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 //			// fills the AnamnesisChecksValue table in the database with
 //			// NULL-values for unanswered questions
 //			Log.info("unanswered questions are shown (fill table)");
-//			requests.anamnesisChecksValueRequestNonRoo().fillAnamnesisChecksValues(anamnesisForm.getId()).fire(new AnamnesisChecksValueFillReceiver());
+//			requests.anamnesisChecksValueRequest().fillAnamnesisChecksValues(anamnesisForm.getId()).fire(new AnamnesisChecksValueFillReceiver());
 //		} else {
 //			// requests the number of rows in AnamnesisChecksValue for the
 //			// current patient
@@ -636,7 +635,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		Receiver<Long> receiver = new AnamnesisChecksValueCountReceiver(title);
 		boolean answeredQuestions = standardizedPatientAnamnesisSubView.areAnsweredQuestionsShown();
 		boolean unansweredQuestions = standardizedPatientAnamnesisSubView.areUnansweredQuestionsShown();
-		AnamnesisChecksValueRequestNonRoo request = requests.anamnesisChecksValueRequestNonRoo(); 
+		AnamnesisChecksValueRequest request = requests.anamnesisChecksValueRequest(); 
 		
 		if (answeredQuestions && unansweredQuestions) {
 			Log.debug("count -- show answered and unanswered");
@@ -661,7 +660,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		
 		String[] paths = anamnesisSubViews.get(title).getPaths();
 				
-		AnamnesisChecksValueRequestNonRoo request = requests.anamnesisChecksValueRequestNonRoo();
+		AnamnesisChecksValueRequest request = requests.anamnesisChecksValueRequest();
 		AnamnesisChecksValueReceiver receiver = new AnamnesisChecksValueReceiver(title);
 		
 		Range range = anamnesisSubViews.get(title).getTable().getVisibleRange();
@@ -713,9 +712,9 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 	protected void fillScar() {
 		// Finds all scars, that can still be added to the patient (i.e. the patient doesn't have them yet) 
 		// and fills the corresponding ValueListBox
-		requests.scarRequestNonRoo().findScarEntriesByNotAnamnesisForm(anamnesisForm.getId()).fire(new ScarBoxReceiver());
+		requests.scarRequest().findScarEntriesByNotAnamnesisForm(anamnesisForm.getId()).fire(new ScarBoxReceiver());
 		// Request number of scars the patient has and then fill the table by calling onRangeChangedScarTable()
-		requests.scarRequestNonRoo().countScarsByAnamnesisForm(anamnesisForm.getId()).fire(new ScarCountReceiver());
+		requests.scarRequest().countScarsByAnamnesisForm(anamnesisForm.getId()).fire(new ScarCountReceiver());
 	}
 	
 	/**
@@ -745,7 +744,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 	 */
 	
 	protected Request<List<ScarProxy>> createScarRangeRequest(Range range) {
-		return requests.scarRequestNonRoo().findScarEntriesByAnamnesisForm(anamnesisForm.getId(), range.getStart(), range.getLength());
+		return requests.scarRequest().findScarEntriesByAnamnesisForm(anamnesisForm.getId(), range.getStart(), range.getLength());
 	}
 	
 	public void storeDisplaySettings() {
@@ -817,7 +816,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		Log.info("--> url is : " +url);
 		Window.open(url, "", "");
 	    
-//		requests.standardizedPatientRequestNonRoo()
+//		requests.standardizedPatientRequest()
 //				.getPdfPatientsBySearch(standardizedPatientProxy.getId(),locale)
 //				.fire(new StandardizedPatientPdfFileReceiver());
 
@@ -1046,13 +1045,13 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 				
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 				
-				requests.spPortalPersonRequestNonRoo().findSpPortalSPBasedOnOsceSPID(standardizedPatientProxy.getId()).fire(new OSCEReceiver<SpStandardizedPatientProxy>() {
+				requests.sPPortalPersonRequest().findSpPortalSPBasedOnOsceSPID(standardizedPatientProxy.getId()).fire(new OSCEReceiver<SpStandardizedPatientProxy>() {
 
 					@Override
 					public void onSuccess(SpStandardizedPatientProxy response) {
 						spStandardizedPatientProxy=response;
 						
-						requests.spStandardizedPatientRequestNonRoo().moveChangedDetailsOfSPFormSPPortal(standardizedPatientProxy.getId(),spStandardizedPatientProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+						requests.spStandardizedPatientRequest().moveChangedDetailsOfSPFormSPPortal(standardizedPatientProxy.getId(),spStandardizedPatientProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 							@Override
 							public void onSuccess(Boolean response) {
@@ -1278,7 +1277,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 
-		requests.spPortalPersonRequestNonRoo().denyEditRequestOfSP(spPersonProxy.getId()).fire(new OSCEReceiver<Void>() {
+		requests.sPPortalPersonRequest().denyEditRequestOfSP(spPersonProxy.getId()).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {
@@ -1300,7 +1299,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 
-			requests.spPortalPersonRequestNonRoo().approveEditRequestOfSP(standardizedPatientProxy.getId(),spPersonProxy.getId()).fire(new OSCEReceiver<Void>() {
+			requests.sPPortalPersonRequest().approveEditRequestOfSP(standardizedPatientProxy.getId(),spPersonProxy.getId()).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {
@@ -1340,7 +1339,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 			
 			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 			
-			requests.anamnesisChecksValueRequestNonRoo().findAnamnesisChecksValuesByAnamnesisFormAndCheckTitle(anamnesisFormProxy.getId(),anamnesisCheckTitleProxy.getId()).with("anamnesischeck").fire(new OSCEReceiver<List<AnamnesisChecksValueProxy>>() {
+			requests.anamnesisChecksValueRequest().findAnamnesisChecksValuesByAnamnesisFormAndCheckTitle(anamnesisFormProxy.getId(),anamnesisCheckTitleProxy.getId()).with("anamnesischeck").fire(new OSCEReceiver<List<AnamnesisChecksValueProxy>>() {
 
 				@Override
 				public void onSuccess(final List<AnamnesisChecksValueProxy> response1) {
@@ -1351,7 +1350,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 					
 					String anmnesisCheckText = getSPAnamnesisCheckText(response1);
 					
-					requests.spStandardizedPatientRequestNonRoo().findAnamnesisChecksValuesByAnamnesisFormAndCheckTitleText(spAnamnesisFormProxy.getId(),anmnesisCheckText).with("anamnesischeck").fire(new OSCEReceiver<List<SpAnamnesisChecksValueProxy>>() {
+					requests.spStandardizedPatientRequest().findAnamnesisChecksValuesByAnamnesisFormAndCheckTitleText(spAnamnesisFormProxy.getId(),anmnesisCheckText).with("anamnesischeck").fire(new OSCEReceiver<List<SpAnamnesisChecksValueProxy>>() {
 
 						@Override
 						public void onSuccess(List<SpAnamnesisChecksValueProxy> response2) {
@@ -1416,7 +1415,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 				
-				requests.spStandardizedPatientRequestNonRoo().moveChangedDetailsOfSPFormSPPortal(standardizedPatientProxy.getId(), spStandardizedPatientProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+				requests.spStandardizedPatientRequest().moveChangedDetailsOfSPFormSPPortal(standardizedPatientProxy.getId(), spStandardizedPatientProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 					@Override
 					public void onSuccess(Boolean response) {
@@ -1476,7 +1475,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 				
 				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 				
-				requests.spStandardizedPatientRequestNonRoo().removeSPDetailsFromSPPortal(standardizedPatientProxy.getId(),spStandardizedPatientProxy.getId(),true).fire(new OSCEReceiver<Boolean>() {
+				requests.spStandardizedPatientRequest().removeSPDetailsFromSPPortal(standardizedPatientProxy.getId(),spStandardizedPatientProxy.getId(),true).fire(new OSCEReceiver<Boolean>() {
 
 					@Override
 					public void onSuccess(Boolean response) {
@@ -1518,7 +1517,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
-		requests.spPortalPersonRequestNonRoo().findSpPortalSPBasedOnOsceSPID(standardizedPatientProxy.getId()).with("person","anamnesisForm","nationality","profession","bankAccount","bankAccount.country").fire(new OSCEReceiver<SpStandardizedPatientProxy>() {
+		requests.sPPortalPersonRequest().findSpPortalSPBasedOnOsceSPID(standardizedPatientProxy.getId()).with("person","anamnesisForm","nationality","profession","bankAccount","bankAccount.country").fire(new OSCEReceiver<SpStandardizedPatientProxy>() {
 
 			@Override
 			public void onSuccess(SpStandardizedPatientProxy response) {
@@ -1545,7 +1544,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 	@SuppressWarnings("deprecation")
 	private void findAllAnamnesisCheckTitle() {
 		
-	requests.spPortalPersonRequestNonRoo().findAllAnamnesisThatIsSendToDMZ().fire(new OSCEReceiver<List<AnamnesisCheckTitleProxy>>() {
+	requests.sPPortalPersonRequest().findAllAnamnesisThatIsSendToDMZ().fire(new OSCEReceiver<List<AnamnesisCheckTitleProxy>>() {
 
 		@Override
 		public void onSuccess(List<AnamnesisCheckTitleProxy> response) {
