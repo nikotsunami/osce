@@ -3,25 +3,23 @@ package ch.unibas.medizin.osce.domain.spportal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Table;
 import javax.persistence.TypedQuery;
 import javax.persistence.Version;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
-import ch.unibas.medizin.osce.domain.OsceDate;
-import ch.unibas.medizin.osce.domain.PatientInSemester;
 
 @Entity
 @Configurable

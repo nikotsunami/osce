@@ -644,13 +644,13 @@
     <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-servlet</artifactId>
-            <version>2.6.1</version>
+            <version>2.7.0</version>
             <classifier/>
         </dependency>
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
-            <version>2.6.1</version>
+            <version>2.7.0</version>
            <!--  <scope>provided</scope> -->
             <classifier/>
         </dependency>
@@ -712,8 +712,8 @@
                 <version>2.3.2</version>
                 <configuration>
                     <argLine>-Xmx8196m</argLine>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                     <encoding>UTF-8</encoding>
                     <meminitial>2048m</meminitial>
                     <maxmem>8192m</maxmem>
@@ -754,8 +754,8 @@
                             <artifactId>spring-aspects</artifactId>
                         </aspectLibrary>
                     </aspectLibraries>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                     <meminitial>2048m</meminitial>
                     <maxmem>8192m</maxmem>
                 </configuration>
@@ -874,7 +874,7 @@
         <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
-                <version>2.6.1</version>
+                <version>2.7.0</version>
                 <configuration>
                     <logLevel>INFO</logLevel>
                     <style>OBF</style>
@@ -901,13 +901,13 @@
                     <dependency>
                         <groupId>com.google.gwt</groupId>
                         <artifactId>gwt-dev</artifactId>
-                        <version>2.6.1</version>
+                        <version>2.7.0</version>
                         <classifier/>
                     </dependency>
                     <dependency>
                         <groupId>com.google.gwt</groupId>
                         <artifactId>gwt-user</artifactId>
-                        <version>2.6.1</version>
+                        <version>2.7.0</version>
                         <classifier/>
                     </dependency>
                 </dependencies>
