@@ -98,7 +98,7 @@ OsceDetailsView.Presenter, OsceDetailsView.Delegate, OsceTaskPopView.Delegate,QR
 		requests.administratorRequest().findAllAdministrators().fire(new OSCEReceiver<List<AdministratorProxy>>() {
 
 			public void onSuccess(List<AdministratorProxy> response) {
-				System.out.println("sem receive:-"+response);
+				//System.out.println("sem receive:-"+response);
 			//	view.setAdministratorValue(response);
 				osceTaskPop.setAdministratorValue(response);
 				
@@ -215,7 +215,7 @@ public void init()
 					if (widget == null) {
 						return;
 					}
-					System.out.println("Deleted record");
+					//System.out.println("Deleted record");
 					//osceActivity.init();
 					
 				//	placeController.goTo(new OscePlace("OscePlace!DELETED"));
@@ -348,7 +348,7 @@ public void init()
 
 	@Override
 	public void deleteClicked(TaskProxy task) {
-		System.out.println("task--"+task);
+		//System.out.println("task--"+task);
 		requests.taskRequest().remove().using(task).fire(new OSCEReceiver<Void>() {
 			
 			public void onFailure(ServerFailure error) {
@@ -376,14 +376,14 @@ public void init()
 	@Override
 	public void saveClicked(Boolean isedit, String innerText,
 			AdministratorProxy value, Date value2, OsceProxy osce,TaskProxy task) {
-		System.out.println("Save call");
+		//System.out.println("Save call");
 		// TODO Auto-generated method stub
 		Date today = new Date();
 		Date futureDate=new Date();
 		futureDate.setYear(today.getYear()+2);
 		if(isedit==true)
 		{
-			System.out.println("edit mode");
+			//System.out.println("edit mode");
 			Log.info("Map Size: " + view.getPopView().getTaskMap().size());
 			TaskRequest taskRequest=requests.taskRequest();
 			task = taskRequest.edit(task);
@@ -449,7 +449,7 @@ public void init()
 		else
 		{
 		
-			System.out.println("new mode");
+			//System.out.println("new mode");
 			TaskRequest taskRequest=requests.taskRequest();
 			TaskProxy taskProxy=taskRequest.create(TaskProxy.class);
 			
@@ -459,10 +459,6 @@ public void init()
 			taskProxy.setVersion(1);
 			taskProxy.setIsDone(false);
 			taskProxy.setOsce(osce);
-			System.out.println("today--"+today);
-			System.out.println("future--"+futureDate);
-			System.out.println("selected--"+taskProxy.getDeadline());
-			
 			/*
 			if(taskProxy.getName().length()<3 )
 			{
@@ -486,7 +482,6 @@ public void init()
 				return;
 			}
 			*/
-				System.out.println("before save");
 				// Highlight onViolation
 				Log.info("Map Size: " + view.getPopView().getTaskMap().size());
 			taskRequest.persist().using(taskProxy).fire(new OSCEReceiver<Void>(view.getPopView().getTaskMap()) {
@@ -515,7 +510,6 @@ public void init()
 	@Override
 	public void editForDone(TaskProxy task) {
 		// TODO Auto-generated method stub
-		System.out.println("edit mode");
 		TaskRequest taskRequest=requests.taskRequest();
 		task = taskRequest.edit(task);
 		if(task.getIsDone()==false)

@@ -159,8 +159,7 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 					if(index < path.size()){
 						
 						sortname = path.get(index);
-						System.out.println("sort name is :" + sortname);
-	
+						
 						sortorder = (event.isSortAscending()) ? Sorting.ASC: Sorting.DESC;
 	
 						// By SPEC]end
@@ -245,7 +244,7 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 				}
 				else{
 					view.setDetailPanel(false);
-					System.out.println("==============No Role Found===============");
+					//System.out.println("==============No Role Found===============");
 				 }
 				}
 				}	
@@ -489,7 +488,7 @@ public class StudentManagmentActivity extends AbstractActivity implements Studen
 	
 	private <C> void addColumn(Cell<C> cell, String headerText,
 			final GetValue<C> getter, FieldUpdater<StudentProxy, C> fieldUpdater) {
-		System.out.println("in Add Column");
+		//System.out.println("in Add Column");
 		
 		Column<StudentProxy, C> column = new Column<StudentProxy, C>(cell) {
 			@Override

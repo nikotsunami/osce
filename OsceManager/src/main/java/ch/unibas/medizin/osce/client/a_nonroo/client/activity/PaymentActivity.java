@@ -154,7 +154,6 @@ public class PaymentActivity extends AbstractActivity implements PaymentView.Del
 		requests.assignmentRequest().findAssignmentByPatinetInRole(semesterProxy.getId()).fire(new OSCEReceiver<String>() {
 			@Override
 			public void onSuccess(String response) {
-				System.out.println("~~SUCCESS~~");
 				if (response != null && response.isEmpty() == false)
 					Window.open(GWT.getHostPageBaseURL() + response, "_blank", "enabled");
 			}

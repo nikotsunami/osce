@@ -291,8 +291,7 @@ public class RoleScriptTemplateDetailsActivity extends AbstractActivity
 						// E Violation Changes Highlight
 							@Override
 							public void onSuccess(Object response) {
-								// TODO Auto-generated method stub
-								System.out.println(" response id : " + ((RoleBaseItemProxy)response).getId());
+								//System.out.println(" response id : " + ((RoleBaseItemProxy)response).getId());
 								if(item_defination.name().equals("table_item"))
 								{
 									RoleBaseTableItemViewImpl roleBaseTableItemViewImpl=new RoleBaseTableItemViewImpl();

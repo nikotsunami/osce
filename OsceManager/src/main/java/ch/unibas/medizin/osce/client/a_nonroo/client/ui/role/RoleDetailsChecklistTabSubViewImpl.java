@@ -9,6 +9,8 @@ import ch.unibas.medizin.osce.shared.ItemType;
 import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -59,6 +61,10 @@ public class RoleDetailsChecklistTabSubViewImpl extends Composite implements Rol
 	
 	private StandardizedRoleProxy roleProxy;
 	
+	private PickupDragController pickupDragController;
+	
+	private VerticalPanelDropController verticalPanelDropController;
+	
 	public RoleDetailsChecklistTabSubViewImpl(StandardizedRoleProxy standardizedRoleProxy) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.roleProxy=standardizedRoleProxy;
@@ -71,6 +77,10 @@ public class RoleDetailsChecklistTabSubViewImpl extends Composite implements Rol
 		importSectionButton.addStyleName("expTopicButton");
 		deleteTab.addStyleName("expTopicButton");
 		editChecklistSectionButton.addStyleName("expTopicButton");
+		
+		pickupDragController = new PickupDragController(checkListAP, false);
+		verticalPanelDropController = new VerticalPanelDropController(containerVerticalPanel);
+		pickupDragController.registerDropController(verticalPanelDropController);
 	}
 
 	@UiHandler("editChecklistSectionButton")
@@ -219,5 +229,15 @@ public class RoleDetailsChecklistTabSubViewImpl extends Composite implements Rol
 	@Override
 	public ChecklistItemProxy getChecklistItemProxy() {
 		return checklistItemProxy;
+	}
+	
+	@Override
+	public PickupDragController getPickupDragController() {
+		return pickupDragController;
+	}
+	
+	@Override
+	public VerticalPanelDropController getVerticalPanelDropController() {
+		return verticalPanelDropController;
 	}
 }

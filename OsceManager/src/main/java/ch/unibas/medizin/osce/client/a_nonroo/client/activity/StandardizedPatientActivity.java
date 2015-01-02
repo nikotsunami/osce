@@ -836,7 +836,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				}
 				else {
 					view.setDetailPanel(false);
-					System.out.println("==============No Role Found===============");
+					//System.out.println("==============No Role Found===============");
 				}
 			}
 		});
@@ -1039,7 +1039,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 	private class CopyReceiver extends Receiver<Boolean>{
 		@Override
 		public void onSuccess(Boolean response) {
-			System.out.println("CopyReceiver :" + response);
+			//System.out.println("CopyReceiver :" + response);
 		}
 	}
 	
@@ -1073,7 +1073,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 			@Override
 			public void onSuccess(Boolean response) {
-				System.out.println("CopyReceiver :" + response);
+				//System.out.println("CopyReceiver :" + response);
 				
 				goTo(new StandardizedPatientDetailsPlace(standardizedPatient.stableId(), Operation.DETAILS));
 			}

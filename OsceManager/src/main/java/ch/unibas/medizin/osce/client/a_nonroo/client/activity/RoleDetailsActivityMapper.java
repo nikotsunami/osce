@@ -28,19 +28,16 @@ public class RoleDetailsActivityMapper implements ActivityMapper {
 
 	@Override
 	public Activity getActivity(Place place) {
-		System.out.println("========================Call RoleDetailActivity getActivity()=========================");
 		Log.debug("im RoleDetailsActivityMapper.getActivity");
 		if (place instanceof RoleDetailsPlace) {
 			if(((RoleDetailsPlace) place).getOperation() == Operation.DETAILS)
 				return new RoleDetailsActivity((RoleDetailsPlace) place, requests, placeController);
 			if(((RoleDetailsPlace) place).getOperation() == Operation.EDIT)
 			{
-				System.out.println("========================Call RoleEditActivity getActivity() EDIT=========================");
 				return new RoleEditActivity((RoleDetailsPlace) place, requests, placeController);
 			}
 			if(((RoleDetailsPlace) place).getOperation() == Operation.CREATE)
 			{
-				System.out.println("========================Call RoleCreateActivity getActivity() EDIT=========================");
 				return new RoleEditActivity((RoleDetailsPlace) place, requests, placeController, Operation.CREATE);																
 			}
 			//return new RoleEditActivity((RoleDetailsPlace) place, requests, placeController,  RoleDetailsPlace.Operation.CREATE);

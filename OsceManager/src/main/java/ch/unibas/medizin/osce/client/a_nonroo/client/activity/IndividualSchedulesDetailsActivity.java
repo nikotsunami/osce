@@ -438,7 +438,7 @@ IndividualSchedulesDetailsView.Delegate
 						for(int i=0;i<courseProxyList.size();i++)
 						{
 							String c="accordion-title-selected"+courseProxyList.get(i).getColor().toString(); 
-							System.out.println("Style Add: " + c);
+							//System.out.println("Style Add: " + c);
 							DOM.getChild(view.getParcourListBox().getElement(), i).setClassName(c);
 						}
 						
@@ -456,7 +456,7 @@ IndividualSchedulesDetailsView.Delegate
 								CourseProxy selectedCourseProxy=courseProxyValueChangeEvent.getValue();
 								if(selectedCourseProxy!=null)
 								{
-									System.out.println("Selected Course Color: " + selectedCourseProxy.getId());
+									//System.out.println("Selected Course Color: " + selectedCourseProxy.getId());
 									String c="accordion-title-selected"+selectedCourseProxy.getColor().toString(); 
 									view.getParcourListBox().addStyleName(c);
 									initStudentByParcour(osceId,selectedCourseProxy.getId());
@@ -1124,7 +1124,7 @@ IndividualSchedulesDetailsView.Delegate
 					if(templateContent.contains(keyword) == false) 
 					{
 						isValidContent = false;
-						System.out.println("Keyword: " + keyword + " Not Found In Template");
+						//System.out.println("Keyword: " + keyword + " Not Found In Template");
 						break;
 					}
 				}

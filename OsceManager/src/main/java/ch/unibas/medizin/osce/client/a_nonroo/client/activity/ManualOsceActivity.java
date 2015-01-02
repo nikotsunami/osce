@@ -70,7 +70,6 @@ public class ManualOsceActivity extends AbstractActivity implements ManualOsceVi
 			
 			@Override
 			public void onSelectionChange(SelectChangeEvent event) {
-				System.out.println("SELECTED ID : " + event.getSemesterProxy().getId());
 				semesterProxy = event.getSemesterProxy();
 				init();
 			}

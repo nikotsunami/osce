@@ -323,7 +323,7 @@ public class OsceActivity extends AbstractActivity implements OsceView.Presenter
 
 			@Override
 			public void onSuccess(List<OsceProxy> response) {
-				System.out.println("Osce size--"+response.size());
+				//System.out.println("Osce size--"+response.size());
 				view.getTable().setRowCount(response.size(), true);
 				view.getTable().setRowData(0, response);
 			}

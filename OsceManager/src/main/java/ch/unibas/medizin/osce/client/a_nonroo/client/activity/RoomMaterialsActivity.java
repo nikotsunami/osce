@@ -418,14 +418,14 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 
 	// @SPEC To add data in table
 	private void init() {
-		System.out.println("Inside INIT()");
+		//System.out.println("Inside INIT()");
 		init2("");
 	}
 
 	// @SPEC To add data in table
 	public void init2(final String q) {
 
-		System.out.println("Inside INIT2()");
+		//System.out.println("Inside INIT2()");
 		fireCountMaterialRequest(q, new Receiver<Long>() {
 			@Override
 			public void onSuccess(Long response) {
@@ -454,8 +454,7 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 	// @SPEC To add data in table
 	public void fireCountMaterialRequest(String name, Receiver<Long> callback) {
 		// requests.nationalityRequest().countNationalitys().fire(callback);
-		System.out.println("Finding total result count value : "
-				+ quickSearchTerm);
+		//System.out.println("Finding total result count value : " + quickSearchTerm);
 
 		requests.materialListRequest()
 				.countMaterialListByName(quickSearchTerm, searchThrough)
@@ -474,7 +473,7 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 				if (view == null) {
 					return;
 				}
-				System.out.println("Successfully result set in table");
+				//System.out.println("Successfully result set in table");
 				// System.out.println("Successfully result set in table count : "
 				// + response.get(0).getRoleTopics().size());
 				table.setRowData(range.getStart(), response);
@@ -492,14 +491,14 @@ public class RoomMaterialsActivity extends AbstractActivity implements
 
 	private void fireRangeRequest(String name, final Range range,
 			final Receiver<List<MaterialListProxy>> callback) {
-		System.out.println("Inside fire range request with value " + name);
+		//System.out.println("Inside fire range request with value " + name);
 		createRangeRequest(name, range).with(view.getPaths()).fire(callback);
 		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
 
 	protected Request<List<MaterialListProxy>> createRangeRequest(String name,
 			Range range) {
-		System.out.println("Calling RoomMaterialActivity with value : " + name);
+		//System.out.println("Calling RoomMaterialActivity with value : " + name);
 
 		return requests.materialListRequest().findUsedMaterialByName(
 				sortname, sortorder, quickSearchTerm, searchThrough,

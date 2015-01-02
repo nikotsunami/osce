@@ -194,8 +194,6 @@ public class BellScheduleActivity extends AbstractActivity implements
 
 	public void init2() {
 
-		System.out.println("Inside INIT2()");
-
 		// fireCountAssignmentRequest(new OSCEReceiver<Integer>() {
 		// @Override
 		// public void onSuccess(Integer response) {

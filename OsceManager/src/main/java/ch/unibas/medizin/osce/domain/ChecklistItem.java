@@ -17,6 +17,10 @@ import javax.persistence.OrderBy;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.Version;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -330,6 +334,7 @@ public class ChecklistItem {
 		Long parentItemId = getParentItem().getId();
 		this.remove();
 		
+		//findAllChecklistItemsChild
 		List<ChecklistItem> checklistItemList = findChecklistItemByParentId(parentItemId);
 		
 		int seqNumber = 0;
@@ -352,7 +357,7 @@ public class ChecklistItem {
 	
 	public static List<ChecklistItem> findChecklistItemByParentId(Long parentId) {
 		EntityManager em = entityManager();
-		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem IS NOT NULL AND ci.parentItem.id = " + parentId;
+		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem IS NOT NULL AND ci.parentItem.id = " + parentId + " ORDER BY ci.sequenceNumber";
 		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
 		return query.getResultList();
 	}
@@ -685,9 +690,8 @@ public class ChecklistItem {
 		return checklistTopics;
 	}
 	
-	public static List<ChecklistItem> importChecklistQuestionsForTopic(Long selectedtopicId, Long selectedRoleId, Long questionId, Long currentTopicId){
+	public static void importChecklistQuestionsForTopic(Long selectedtopicId, Long selectedRoleId, Long questionId, Long currentTopicId){
 		
-		List<ChecklistItem> newChecklistQuestionItemList = new ArrayList<ChecklistItem>();
 		ChecklistItem topic = ChecklistItem.findChecklistItem(currentTopicId);
 		
 		if(questionId.equals(-1L)) {
@@ -696,8 +700,7 @@ public class ChecklistItem {
 				List<ChecklistItem> oldChecklistItemList = findChecklistQuestionByChecklistTopicId(selectedtopicId);
 				Integer seqNumber = findMaxSequenceNumberByParentItem(currentTopicId);
 				for (ChecklistItem oldChecklistItem : oldChecklistItemList) {
-					ChecklistItem newChecklistQuestionItem=copyChecklistQuestionItemFromOld(oldChecklistItem,seqNumber,topic);
-					newChecklistQuestionItemList.add(newChecklistQuestionItem);
+					new ChecklistItem().copyChecklistQuestionItemFromOld(oldChecklistItem,seqNumber,topic);
 					seqNumber += 1;
 				}
 			}
@@ -706,14 +709,24 @@ public class ChecklistItem {
 			if (questionId != null && topic != null) {
 				ChecklistItem questionItem = ChecklistItem.findChecklistItem(questionId);
 				Integer seqNumber = findMaxSequenceNumberByParentItem(currentTopicId);
-				ChecklistItem newChecklistQuestionItem=copyChecklistQuestionItemFromOld(questionItem,seqNumber,topic);
-				newChecklistQuestionItemList.add(newChecklistQuestionItem);
+				new ChecklistItem().copyChecklistQuestionItemFromOld(questionItem,seqNumber,topic);
 			}
 		}
-		return newChecklistQuestionItemList;
+		
 	}
 	
-	private static ChecklistItem copyChecklistQuestionItemFromOld(ChecklistItem questionItem, Integer seqNumber, ChecklistItem currentTopic) {
+	public static List<ChecklistItem> findChecklistItemQuestionById(List<Long> itemIdList) {
+		CriteriaBuilder criteriaBuilder = entityManager().getCriteriaBuilder();
+		CriteriaQuery<ChecklistItem> criteriaQuery = criteriaBuilder.createQuery(ChecklistItem.class);
+		Root<ChecklistItem> from = criteriaQuery.from(ChecklistItem.class);
+		Predicate predicate = criteriaBuilder.in(from.get("id")).value(itemIdList);
+		criteriaQuery.where(predicate);
+		TypedQuery<ChecklistItem> query = entityManager().createQuery(criteriaQuery);
+		return query.getResultList();
+	}
+	
+	@Transactional
+	private void copyChecklistQuestionItemFromOld(ChecklistItem questionItem, Integer seqNumber, ChecklistItem currentTopic) {
 
 		ChecklistItem newChecklistItem = new ChecklistItem();
 		newChecklistItem.setName(questionItem.getName());
@@ -731,7 +744,6 @@ public class ChecklistItem {
 		if(questionItem.getCheckListCriterias() != null) {
 			copyCriterias(newChecklistItem, questionItem);
 		}
-		return newChecklistItem;
 	}
 
 	public static List<ChecklistImportPojo> findChecklistQuestionByTopicId(Long topicId){
@@ -784,7 +796,7 @@ public class ChecklistItem {
 	public static ChecklistItem moveChecklistItemUp(ChecklistItem checklistItemToMoveUp, int seqNumToSet){
 		
 		if(seqNumToSet >= 0){
-			ChecklistItem checklistItem = moveItemUp(checklistItemToMoveUp,seqNumToSet);
+			ChecklistItem checklistItem = new ChecklistItem().moveItemUp(checklistItemToMoveUp,seqNumToSet);
 			return checklistItem;
 		}
 		return null;
@@ -795,48 +807,71 @@ public class ChecklistItem {
 		Integer maxSeqNum = findMaxSequenceNumberByParentItem(checklistItemToMoveDown.getParentItem().getId());
 
 		if(seqNumToSet >= 0 &&  seqNumToSet < (maxSeqNum)){
-			ChecklistItem checklistItem = moveItemDown(checklistItemToMoveDown,seqNumToSet);
+			ChecklistItem checklistItem = new ChecklistItem().moveItemDown(checklistItemToMoveDown,seqNumToSet);
 			return checklistItem;
 		}
 		return null;
 	}
 
 	@Transactional
-	public static ChecklistItem moveItemDown(ChecklistItem checklistItemToMoveDown, int seqNumToSet) {
+	public ChecklistItem moveItemDown(ChecklistItem checklistItemToMoveDown, int seqNumToSet) {
 	
 		if(checklistItemToMoveDown.getParentItem()  != null){
 
 			EntityManager em = entityManager();
 			String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem = " + checklistItemToMoveDown.getParentItem().getId() + " and ci.sequenceNumber = "  + seqNumToSet + "";
 			TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
-			ChecklistItem item = query.getSingleResult();
-			if(item != null){
-				item.setSequenceNumber(seqNumToSet - 1);
-				item.persist();
+			if (query != null && query.getResultList().isEmpty() == false) {
+				ChecklistItem item = query.getResultList().get(0);
+				
+				if(item != null){
+					item.setSequenceNumber(seqNumToSet - 1);
+					item.persist();
+				}
+				checklistItemToMoveDown.setSequenceNumber(seqNumToSet);
+				checklistItemToMoveDown.persist();
 			}
-			checklistItemToMoveDown.setSequenceNumber(seqNumToSet);
-			checklistItemToMoveDown.persist();
 		}
 		return checklistItemToMoveDown;
 	}
 
 	@Transactional
-	public static ChecklistItem moveItemUp(ChecklistItem checklistItemToMoveUp, int seqNumToSet) {
+	public ChecklistItem moveItemUp(ChecklistItem checklistItemToMoveUp, int seqNumToSet) {
 		
 		if(checklistItemToMoveUp.getParentItem()  != null){
 
 			EntityManager em = entityManager();
 			String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem = " + checklistItemToMoveUp.getParentItem().getId() + " and ci.sequenceNumber = "  + seqNumToSet + "";
 			TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
-			ChecklistItem item = query.getSingleResult();
-			if(item != null){
-				item.setSequenceNumber(seqNumToSet + 1);
-				item.persist();
-			}
-			checklistItemToMoveUp.setSequenceNumber(seqNumToSet);
-			checklistItemToMoveUp.persist();
+			if (query != null && query.getResultList().isEmpty() == false) {
+				ChecklistItem item = query.getResultList().get(0);				
+				if(item != null){
+					item.setSequenceNumber(seqNumToSet + 1);
+					item.persist();
+				}
+				checklistItemToMoveUp.setSequenceNumber(seqNumToSet);
+				checklistItemToMoveUp.persist();
+			}				
 		}
 		return checklistItemToMoveUp;
+	}
+	
+	public static List<ChecklistItem> updateChecklistItemQuestionSequenceNumber(List<Long> checklistItemIdList) {
+		new ChecklistItem().updateChecklistItemQueSequenceNumber(checklistItemIdList);
+		
+		return findChecklistItemQuestionById(checklistItemIdList);
+	}
+	
+	@Transactional
+	public void updateChecklistItemQueSequenceNumber(List<Long> checklistItemIdList) {
+		for (int i=0; i<checklistItemIdList.size(); i++) {
+			Long itemId = checklistItemIdList.get(i);
+			ChecklistItem checklistItem = ChecklistItem.findChecklistItem(itemId);
+			if (checklistItem != null) {
+				checklistItem.setSequenceNumber(i);
+				checklistItem.persist();
+			}
+		}
 	}
 
 	@Id

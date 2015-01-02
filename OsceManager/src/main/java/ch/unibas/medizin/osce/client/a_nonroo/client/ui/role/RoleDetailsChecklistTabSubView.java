@@ -4,6 +4,9 @@ import ch.unibas.medizin.osce.client.managed.request.ChecklistItemProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import ch.unibas.medizin.osce.shared.ItemType;
+
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -32,4 +35,8 @@ public interface RoleDetailsChecklistTabSubView extends IsWidget {
 	public void setChecklistItemProxy(ChecklistItemProxy checklistItemProxy);
 
 	public ChecklistItemProxy getChecklistItemProxy();
+
+	public PickupDragController getPickupDragController();
+
+	public VerticalPanelDropController getVerticalPanelDropController();
 }

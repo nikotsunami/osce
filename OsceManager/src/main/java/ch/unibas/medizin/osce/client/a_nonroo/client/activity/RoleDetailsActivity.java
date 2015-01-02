@@ -193,10 +193,6 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.web.bindery.requestfactory.shared.Receiver;
-import com.google.web.bindery.requestfactory.shared.Request;
-import com.google.web.bindery.requestfactory.shared.ServerFailure;
-import com.google.web.bindery.requestfactory.shared.Violation;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.cellview.client.AbstractHasData;
@@ -219,6 +215,10 @@ import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 
 /**
  * @author dk
@@ -313,6 +313,8 @@ public class RoleDetailsActivity extends AbstractActivity implements
 		private int srcTopicIndexOnDragStart=0;
 		private int srcQuestionIndexOnDragStart=0;
 		private int srcCriteriaIndexOnDragStart=0;
+		private int srcChecklistItemQuestionIndexOnDragStart = 0;
+		private int srcChecklistItemTopicIndexOnDragStart = 0;
 	// SPEC START =
 	
 	// Highlight onViolation
@@ -919,7 +921,6 @@ RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl checklistCriteriaItemVi
 			//view.checkListsVerticalPanel.clear();
 
 		standardizedRoleDetailsView[index] = view;
-		System.out.println("length previous version--"+proxy.getPreviousVersion());
 		if(proxy.getPreviousVersion()==null)
 		{
 			standardizedRoleDetailsView[index].previous.setEnabled(false);
@@ -1307,7 +1308,7 @@ final int index2 = index;
 						// SPEC START MODIFIED =
 						if(response.size()==0)
 						{											
-							System.out.println("~Keyword Null for Role " + innerindex );
+							//System.out.println("~Keyword Null for Role " + innerindex );
 							//Issue Role
 							//standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible();
 						}
@@ -1776,10 +1777,10 @@ final int index2 = index;
 			//Assignment E]
 			if (response instanceof RoleTopicProxy) {
 				if (((RoleTopicProxy) response).getStandardizedRoles() != null) {
-					System.out.println("Success Role Found");
+					/*System.out.println("Success Role Found");
 					System.out.println("Size: "
 							+ ((RoleTopicProxy) response)
-									.getStandardizedRoles().size()); // Return
+									.getStandardizedRoles().size()); */// Return
 																		// Size
 																		// of
 																		// Data
@@ -1790,7 +1791,7 @@ final int index2 = index;
 					
 					int size = ((RoleTopicProxy) response).getStandardizedRoles().size(); // Total Size of Data (standardized_role)
 					
-					System.out.println("Total Role: " + totalrole);
+					//System.out.println("Total Role: " + totalrole);
 					// roleDetailTabPanel.insert(standardizedRoleDetailsView,"Test Tab",
 					// totalTab-1);
 					standardizedRoleDetailsView = new StandardizedRoleDetailsViewImpl[size];
@@ -1846,7 +1847,7 @@ final int index2 = index;
 					view.setStandardizedRoleDetailsViewImpl((StandardizedRoleDetailsViewImpl[]) standardizedRoleDetailsView);
 
 				} else {
-					System.out.println("Sorry No Roles Aveilable");
+					//System.out.println("Sorry No Roles Aveilable");
 				}
 
 				init(((RoleTopicProxy) response));
@@ -1995,7 +1996,7 @@ final int index2 = index;
 			//final int selectedtab=view.getRoleDetailTabPanel().getTabBar().getSelectedTab();//gets selected tab of standardized role
 			final int selectedtab=view.getRoleDetailTabPanel().getSelectedIndex();//gets selected tab of standardized role
 			//ScrolledTab Changes start
-			System.out.println("Checklist Id is "+standardizedRoleDetailsView[selectedtab].getValue().getCheckList().getId());
+			//System.out.println("Checklist Id is "+standardizedRoleDetailsView[selectedtab].getValue().getCheckList().getId());
 			requests.checkListRequest().findCheckList(standardizedRoleDetailsView[selectedtab].getValue().getCheckList().getId()).with("checkListTopics").with("checkListTopics.checkListQuestions").with("checkListTopics.checkListQuestions.checkListCriterias").with("checkListTopics.checkListQuestions.checkListOptions").fire(new Receiver<CheckListProxy>() {
 
 				@Override
@@ -2187,8 +2188,8 @@ final int index2 = index;
 				+ roleDetailTabPanel.getTabBar().getSelectedTab());
 		int selTabID = roleDetailTabPanel.getTabBar().getSelectedTab();
 		*/
-		System.out.println("==>"
-				+ roleDetailTabPanel.getSelectedIndex());
+		/*System.out.println("==>"
+				+ roleDetailTabPanel.getSelectedIndex());*/
 		int selTabID = roleDetailTabPanel.getSelectedIndex();
 		
 		//ScrolledTab Changes end
@@ -2297,14 +2298,14 @@ final int index2 = index;
 
 	@Override
 	public void editClicked() {
-		System.out.println("Call editClicked() of RoleDetailActivity");
+		//System.out.println("Call editClicked() of RoleDetailActivity");
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void createRole() {
-		System.out.println("Call createRole() of RoleDetailActivity");
+		//System.out.println("Call createRole() of RoleDetailActivity");
 		RoleEditActivity.setSelectedTab(roleDetailTabPanel.getSelectedIndex());
 		goTo(new RoleDetailsPlace(this.roleTopicProxy.stableId() ,Operation.CREATE));
 	}
@@ -2941,9 +2942,6 @@ final int index2 = index;
 							while(questionIterator.hasNext())
 							{
 								final ChecklistQuestionProxy questionProxy=questionIterator.next();
-								System.out.println("Question id  : " + questionProxy.getId());
-								System.out.println("option size : " + questionProxy.getCheckListOptions().size());
-								System.out.println("criteria size : " + questionProxy.getCheckListCriterias().size());
 								ChecklistQuestionRequest questionRequest=requests.checklistQuestionRequest();
 								
 								final ChecklistQuestionProxy addQuestionProxy=questionRequest.create(ChecklistQuestionProxy.class);
@@ -4200,7 +4198,7 @@ final int index2 = index;
 	@Override
 	public void previousRoleClicked(final StandardizedRoleProxy standardizedRoleProxy) {
 		Log.info("previous clicked");
-		System.out.println("============================Jump to StandardizedPatientDetailActivity previousClick() =========================");
+		//System.out.println("============================Jump to StandardizedPatientDetailActivity previousClick() =========================");
 	//	System.out.println("==>"+roleDetailTabPanel.getTabBar().getSelectedTab());
 	//	int selTabID=roleDetailTabPanel.getTabBar().getSelectedTab();
 		
@@ -4225,7 +4223,7 @@ final int index2 = index;
 				if(roleProxy!=null)
 				{
 					
-					System.out.println("Set value");
+					//System.out.println("Set value");
 					//goTo(new RoleDetailsPlace(RoleEditActivity.roleTopic.stableId(),	Operation.DETAILS));
 				//	goTo(new RoleDetailsPlace((standardizedRoleProxy.getPreviousVersion()).roleTopic.stableId(),Operation.DETAILS));
 				//	goTo(new RoleDetailsPlace((standardizedRoleProxy.getPreviousVersion()).stableId(),Operation.DETAILS));
@@ -5007,7 +5005,7 @@ final int index2 = index;
 				// SPEC START MODIFIED =
 				if(response.size()==0)
 				{											
-					System.out.println("~Keyword Null for Role " + selectedTabId );
+					//System.out.println("~Keyword Null for Role " + selectedTabId );
 					//standardizedRoleDetailsView[selectedTabId].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible(false);
 				}
 				else
@@ -5562,7 +5560,7 @@ final int index2 = index;
 		
 
 		
-		System.out.println("length previous version--"+proxy.getPreviousVersion());
+		//System.out.println("length previous version--"+proxy.getPreviousVersion());
 		if(proxy.getPreviousVersion()==null)
 		{
 			standardizedRoleDetailsView[index].previous.setEnabled(false);
@@ -5866,7 +5864,7 @@ final int index2 = index;
 						// SPEC START MODIFIED =
 						if(response.size()==0)
 						{											
-							System.out.println("~Keyword Null for Role " + innerindex );
+							//System.out.println("~Keyword Null for Role " + innerindex );
 							//Issue Role
 							//standardizedRoleDetailsView[innerindex].getRoleRoleParticipantSubViewImpl().lstDoctor.setVisible();
 						}
@@ -6332,8 +6330,6 @@ final int index2 = index;
 	// E Highlight onViolation
 		
 		//description.setEnabled(false);
-		System.out.println("Major Change Or minor change--"+majorOrMinar);
-		
 		//ScrolledTab Changes start
 		//selectedtab =roleDetailTabPanel.getTabBar().getSelectedTab();
 		selectedtab =roleDetailTabPanel.getSelectedIndex();
@@ -6396,7 +6392,6 @@ final int index2 = index;
 				}
 				@Override
 				public void onViolation(Set<Violation> errors) {
-					System.out.println("violate");
 					description.setVisible(true);
 					descriptionValue.setInnerHTML("");
 					/*Iterator<Violation> iter = errors.iterator();
@@ -6409,8 +6404,6 @@ final int index2 = index;
 				}
 				@Override
 				public void onFailure(ServerFailure error) {
-					// TODO Auto-generated method stub
-					System.out.println("failure");
 					description.setVisible(true);
 					descriptionValue.setInnerHTML("");
 					saveRichTextArea.setVisible(true);
@@ -6721,34 +6714,46 @@ final int index2 = index;
 			}
 	/*	});*/
 
-@Override
-public void onDragStart(DragStartEvent event) {
-	
-	if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)
-	{	
-		FlowPanel flowPanel=((FlowPanel)((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource()).getParent());
-		srcOtionIndexOnDragStart=flowPanel.getWidgetIndex((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource());
+	@Override
+	public void onDragStart(DragStartEvent event) {
 		
-	}else if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl){
-	
-		VerticalPanel vpQ=((VerticalPanel)((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)event.getSource()).getParent());
-		srcQuestionIndexOnDragStart=vpQ.getWidgetIndex((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)event.getSource());
+		if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)
+		{	
+			FlowPanel flowPanel=((FlowPanel)((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource()).getParent());
+			srcOtionIndexOnDragStart=flowPanel.getWidgetIndex((RoleDetailsChecklistSubViewChecklistOptionItemViewImpl)event.getSource());
+			
+		}else if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl){
 		
-	}else if (event.getSource() instanceof RoleDetailsChecklistSubViewChecklistTopicItemViewImpl ){
-		
-		VerticalPanel vp=((VerticalPanel)((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)event.getSource()).getParent());
-		srcTopicIndexOnDragStart=vp.getWidgetIndex((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)event.getSource());
-		
-	}else if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl){
-		
-		FlowPanel flowPanel=((FlowPanel)((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)event.getSource()).getParent());
-		srcCriteriaIndexOnDragStart=flowPanel.getWidgetIndex((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)event.getSource());
-		
-	}
+			VerticalPanel vpQ=((VerticalPanel)((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)event.getSource()).getParent());
+			srcQuestionIndexOnDragStart=vpQ.getWidgetIndex((RoleDetailsChecklistSubViewChecklistQuestionItemViewImpl)event.getSource());
+			
+		}else if (event.getSource() instanceof RoleDetailsChecklistSubViewChecklistTopicItemViewImpl ){
+			
+			VerticalPanel vp=((VerticalPanel)((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)event.getSource()).getParent());
+			srcTopicIndexOnDragStart=vp.getWidgetIndex((RoleDetailsChecklistSubViewChecklistTopicItemViewImpl)event.getSource());
+			
+		}else if(event.getSource() instanceof RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl){
+			
+			FlowPanel flowPanel=((FlowPanel)((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)event.getSource()).getParent());
+			srcCriteriaIndexOnDragStart=flowPanel.getWidgetIndex((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)event.getSource());
+			
+		}
+		else if (event.getSource() instanceof RoleDetailsChecklistItemSubViewImpl) {
+			RoleDetailsChecklistItemSubViewImpl checklistItemSubViewImpl = (RoleDetailsChecklistItemSubViewImpl)event.getSource();
+			if (checklistItemSubViewImpl != null && checklistItemSubViewImpl.getParent() != null && checklistItemSubViewImpl.getParent() instanceof VerticalPanel) {
+				VerticalPanel parentPanel = (VerticalPanel) checklistItemSubViewImpl.getParent();
+				srcChecklistItemQuestionIndexOnDragStart = parentPanel.getWidgetIndex(checklistItemSubViewImpl);
+			}
+		}
+		else if (event.getSource() instanceof RoleDetailsChecklistTopicSubViewImpl) {
+			RoleDetailsChecklistTopicSubViewImpl checklistItemSubViewImpl = (RoleDetailsChecklistTopicSubViewImpl)event.getSource();
+			if (checklistItemSubViewImpl != null && checklistItemSubViewImpl.getParent() != null && checklistItemSubViewImpl.getParent() instanceof VerticalPanel) {
+				VerticalPanel parentPanel = (VerticalPanel) checklistItemSubViewImpl.getParent();
+				srcChecklistItemTopicIndexOnDragStart = parentPanel.getWidgetIndex(checklistItemSubViewImpl);
+			}
+		}
 		Log.info("in Drag Start");
-	
-		
-}
+	}
 
 	@Override
 	public void onPreviewDragEnd(DragEndEvent event) throws VetoDragException {
@@ -6901,22 +6906,104 @@ public void onDragStart(DragStartEvent event) {
 				return;
 			List<ChecklistCriteriaProxy> criteriaIdList=new ArrayList<ChecklistCriteriaProxy>();
 			
-		for(int i=0;i<flowPanel.getWidgetCount();i++)
-		{
-			
-			Log.info("value~~~~"+ i);
-			//updateCriteriaSequence(((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)flowPanel.getWidget(i)).getProxy(),i);
-			criteriaIdList.add(((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)flowPanel.getWidget(i)).getProxy());
-		
-		}
-		requests.checklistCriteriaRequest().updateSequence(criteriaIdList).fire(new OSCEReceiver<Boolean>() {
-
-			@Override
-			public void onSuccess(Boolean response) {
-				Log.info("Option sequence updated success :" + response);
+			for(int i=0;i<flowPanel.getWidgetCount();i++)
+			{
 				
+				Log.info("value~~~~"+ i);
+				//updateCriteriaSequence(((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)flowPanel.getWidget(i)).getProxy(),i);
+				criteriaIdList.add(((RoleDetailsChecklistSubViewChecklistCriteriaItemViewImpl)flowPanel.getWidget(i)).getProxy());
+			
 			}
-		});
+			requests.checklistCriteriaRequest().updateSequence(criteriaIdList).fire(new OSCEReceiver<Boolean>() {
+	
+				@Override
+				public void onSuccess(Boolean response) {
+					Log.info("Option sequence updated success :" + response);
+					
+				}
+			});
+		}
+		else if (event.getSource() instanceof RoleDetailsChecklistItemSubViewImpl) {
+			final Map<Long, RoleDetailsChecklistItemSubViewImpl> questionViewMap = new HashMap<Long, RoleDetailsChecklistItemSubViewImpl>();
+			
+			RoleDetailsChecklistItemSubViewImpl checklistItemSubViewImpl = (RoleDetailsChecklistItemSubViewImpl)event.getSource();
+			if (checklistItemSubViewImpl != null && checklistItemSubViewImpl.getParent() != null && checklistItemSubViewImpl.getParent() instanceof VerticalPanel) {
+				final VerticalPanel parentPanel = (VerticalPanel) checklistItemSubViewImpl.getParent();
+				int index = parentPanel.getWidgetIndex(checklistItemSubViewImpl);
+				
+				if (srcChecklistItemQuestionIndexOnDragStart == index) 
+					return;
+				
+				List<Long> checklistItemQueIdList = new ArrayList<Long>(); 
+				
+				for (int i=0; i<parentPanel.getWidgetCount(); i++) {
+					if (parentPanel.getWidget(i) != null && parentPanel.getWidget(i) instanceof RoleDetailsChecklistItemSubViewImpl) {
+						if (((RoleDetailsChecklistItemSubViewImpl)parentPanel.getWidget(i)).getChecklistItemProxy() != null) {
+							checklistItemQueIdList.add(((RoleDetailsChecklistItemSubViewImpl)parentPanel.getWidget(i)).getChecklistItemProxy().getId());
+							questionViewMap.put(((RoleDetailsChecklistItemSubViewImpl)parentPanel.getWidget(i)).getChecklistItemProxy().getId(), ((RoleDetailsChecklistItemSubViewImpl)parentPanel.getWidget(i)));
+						}							
+					}
+				}
+				
+				if (checklistItemQueIdList.size() > 0) {
+					requests.checklistItemRequest().updateChecklistItemQuestionSequenceNumber(checklistItemQueIdList).fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+
+						@Override
+						public void onSuccess(List<ChecklistItemProxy> response) {
+							if (response != null && response.isEmpty() == false) {
+								
+								for (ChecklistItemProxy checklistItemProxy : response) {
+									if (questionViewMap.containsKey(checklistItemProxy.getId())) {
+										RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl = questionViewMap.get(checklistItemProxy.getId());
+										roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(checklistItemProxy);
+									}
+								}
+							}
+						}
+					});
+				}
+			}
+		}
+		else if (event.getSource() instanceof RoleDetailsChecklistTopicSubViewImpl) {
+			final Map<Long, RoleDetailsChecklistTopicSubViewImpl> topicViewMap = new HashMap<Long, RoleDetailsChecklistTopicSubViewImpl>();
+			
+			RoleDetailsChecklistTopicSubViewImpl checklistItemSubViewImpl = (RoleDetailsChecklistTopicSubViewImpl)event.getSource();
+			if (checklistItemSubViewImpl != null && checklistItemSubViewImpl.getParent() != null && checklistItemSubViewImpl.getParent() instanceof VerticalPanel) {
+				final VerticalPanel parentPanel = (VerticalPanel) checklistItemSubViewImpl.getParent();
+				int index = parentPanel.getWidgetIndex(checklistItemSubViewImpl);
+				
+				if (srcChecklistItemTopicIndexOnDragStart == index) 
+					return;
+				
+				List<Long> checklistItemTopicIdList = new ArrayList<Long>(); 
+				
+				for (int i=0; i<parentPanel.getWidgetCount(); i++) {
+					if (parentPanel.getWidget(i) != null && parentPanel.getWidget(i) instanceof RoleDetailsChecklistTopicSubViewImpl) {
+						if (((RoleDetailsChecklistTopicSubViewImpl)parentPanel.getWidget(i)).getChecklistItemProxy() != null) {
+							checklistItemTopicIdList.add(((RoleDetailsChecklistTopicSubViewImpl)parentPanel.getWidget(i)).getChecklistItemProxy().getId());
+							topicViewMap.put(((RoleDetailsChecklistTopicSubViewImpl)parentPanel.getWidget(i)).getChecklistItemProxy().getId(), ((RoleDetailsChecklistTopicSubViewImpl)parentPanel.getWidget(i)));
+						}							
+					}
+				}
+				
+				if (topicViewMap.size() > 0) {
+					requests.checklistItemRequest().updateChecklistItemQuestionSequenceNumber(checklistItemTopicIdList).fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+
+						@Override
+						public void onSuccess(List<ChecklistItemProxy> response) {
+							if (response != null && response.isEmpty() == false) {
+								
+								for (ChecklistItemProxy checklistItemProxy : response) {
+									if (topicViewMap.containsKey(checklistItemProxy.getId())) {
+										RoleDetailsChecklistTopicSubViewImpl roleDetailsChecklistItemSubViewImpl = topicViewMap.get(checklistItemProxy.getId());
+										roleDetailsChecklistItemSubViewImpl.setChecklistItemProxy(checklistItemProxy);
+									}
+								}
+							}
+						}
+					});
+				}
+			}	
 		}
 		else{
 			Log.info("no selected event");
@@ -7429,7 +7516,6 @@ public void onDragStart(DragStartEvent event) {
 				@Override
 				public void onSuccess(Integer response) {
 					loadRange();
-					System.out.println("~~~~RESPONSE : " + response);
 					learningObjectiveView.getTable().setRowCount(response, true);
 					
 					requests.skillRequest().findSkillBySearchCriteria(start, length, mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).with("topic", "skillLevel", "skillHasAppliances", "skillHasAppliances.appliance", "topic.classificationTopic", "topic.classificationTopic.mainClassification").fire(new OSCEReceiver<List<SkillProxy>>() {
@@ -7517,7 +7603,6 @@ public void onDragStart(DragStartEvent event) {
 
 				@Override
 				public void onRangeChange(RangeChangeEvent event) {
-					System.out.println("**IN RANGE**");
 					onLearningObjectiveRangeChanged();
 				}
 				
@@ -7652,13 +7737,8 @@ public void onDragStart(DragStartEvent event) {
 		
 		protected void onLearningObjectiveRangeChanged() {
 			
-			System.out.println("~~~in onLearningObjectiveRangeChanged");
-			
 			learningObjectiveData.clear();		
 			final Range range = learningObjectiveView.getTable().getVisibleRange();
-			
-			System.out.println("Start : " + range.getStart());
-			System.out.println("Length : " + range.getLength());
 			
 			requests.skillRequest().countSkillBySearchCriteria(mainClassificationId, classificaitonTopicId, topicId, skillLevelId, applianceId).fire(new OSCEReceiver<Integer>() {
 				@Override
@@ -8182,35 +8262,39 @@ public void onDragStart(DragStartEvent event) {
 		@Override
 		public void addiOSCECheckListTopicClicked(ItemType itemType, final String name, final String description, final RoleDetailsChecklistTabSubViewImpl roleDetailsChecklistTabSubViewImpl, final ChecklistItemProxy tabProxy, final String weight) {
 		
-			final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+			//final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
 			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
-			
-			
+					
 			if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.WEIGHT)){
-					if(isDouble(weight) == true){
-						
-						final Double topicWeight= weight==""?0:Double.valueOf(weight);
-					    requests.checklistItemRequest().saveChecklistTopicItem(name, description, tabProxy.getId(),topicWeight).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
+				if(isDouble(weight) == true) {						
+					final Double topicWeight= weight==""?0:Double.valueOf(weight);
+					requests.checklistItemRequest().saveChecklistTopicItem(name, description, tabProxy.getId(),topicWeight).with("parentItem").fire(new OSCEReceiver<ChecklistItemProxy>() {
 
 						@Override
 						public void onSuccess(ChecklistItemProxy response) {
-							createTopicView(roleDetailsChecklistTabSubViewImpl.getContainerVerticalPanel(), name, description, response);
+							RoleDetailsChecklistTopicSubView topicSubView = createTopicView(roleDetailsChecklistTabSubViewImpl.getContainerVerticalPanel(), name, description, response);
+							roleDetailsChecklistTabSubViewImpl.getPickupDragController().removeDragHandler(roleDetailActivity);
+							roleDetailsChecklistTabSubViewImpl.getPickupDragController().addDragHandler(roleDetailActivity);
+							
+							if (topicSubView != null) {
+								roleDetailsChecklistTabSubViewImpl.getPickupDragController().makeDraggable(topicSubView.asWidget(), topicSubView.getCheckListTopicLbl());
 							}
-					    });
-					}else
-					{
-						MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
-						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric(constants.weight()));	
-					}
-				}else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.RATIO)){
-					requests.checklistItemRequest().findMaxTopicWeight(standardizedRoleProxy.getCheckList().getId()).fire(new OSCEReceiver<Double>() {
+						}
+					});
+				}
+				else {
+					MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+					dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric(constants.weight()));	
+				}
+			}
+			else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.RATIO)){
+				requests.checklistItemRequest().findMaxTopicWeight(standardizedRoleProxy.getCheckList().getId()).fire(new OSCEReceiver<Double>() {
 
 						@Override
 						public void onSuccess(Double response) {
 							
 							if(response != null && response <100){
 								if(isDouble(weight) == true){
-									
 									final Double topicWeight= weight==""?0:Double.valueOf(weight);
 									if((topicWeight  + response) > 100){
 										MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
@@ -8220,10 +8304,15 @@ public void onDragStart(DragStartEvent event) {
 
 										@Override
 										public void onSuccess(ChecklistItemProxy response) {
-											createTopicView(roleDetailsChecklistTabSubViewImpl.getContainerVerticalPanel(), name, description, response);
+											RoleDetailsChecklistTopicSubView topicSubView = createTopicView(roleDetailsChecklistTabSubViewImpl.getContainerVerticalPanel(), name, description, response);
+											roleDetailsChecklistTabSubViewImpl.getPickupDragController().removeDragHandler(roleDetailActivity);
+											roleDetailsChecklistTabSubViewImpl.getPickupDragController().addDragHandler(roleDetailActivity);
+											
+											if (topicSubView != null) {
+												roleDetailsChecklistTabSubViewImpl.getPickupDragController().makeDraggable(topicSubView.asWidget(), topicSubView.getCheckListTopicLbl());
+											}
 										}
 									});
-						
 								}
 							}else {
 								MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
@@ -8242,11 +8331,16 @@ public void onDragStart(DragStartEvent event) {
 
 					@Override
 					public void onSuccess(ChecklistItemProxy response) {
-						createTopicView(roleDetailsChecklistTabSubViewImpl.getContainerVerticalPanel(), name, description, response);
+						RoleDetailsChecklistTopicSubView topicSubView = createTopicView(roleDetailsChecklistTabSubViewImpl.getContainerVerticalPanel(), name, description, response);
+						roleDetailsChecklistTabSubViewImpl.getPickupDragController().removeDragHandler(roleDetailActivity);
+						roleDetailsChecklistTabSubViewImpl.getPickupDragController().addDragHandler(roleDetailActivity);
+						
+						if (topicSubView != null) {
+							roleDetailsChecklistTabSubViewImpl.getPickupDragController().makeDraggable(topicSubView.asWidget(), topicSubView.getCheckListTopicLbl());
+						}
 					}
 				});
-			}
-		
+			}		
 		}
 		
 		@Override
@@ -8259,7 +8353,11 @@ public void onDragStart(DragStartEvent event) {
 						checklistTopicSubViewImpl.getCheckListTopicDisclosurePanel().setOpen(true);
 						checklistTopicSubViewImpl.getArrow().setResource(uiIcons.triangle1South());
 					}
-					createiOSCEQuestionView(checklistTopicSubViewImpl.getContainerVerticalPanel(), name, description, response);
+					checklistTopicSubViewImpl.getPickupDragController().removeDragHandler(roleDetailActivity);
+					checklistTopicSubViewImpl.getPickupDragController().addDragHandler(roleDetailActivity);
+					RoleDetailsChecklistItemSubView checklistQuestionSubView = createiOSCEQuestionView(checklistTopicSubViewImpl.getContainerVerticalPanel(), name, description, response);
+					if (checklistQuestionSubView != null)
+						checklistTopicSubViewImpl.getPickupDragController().makeDraggable(checklistQuestionSubView.asWidget(), checklistQuestionSubView.getQuestionNameLbl());
 				}
 			});
 		}
@@ -8309,7 +8407,6 @@ public void onDragStart(DragStartEvent event) {
 
 		@Override
 		public void deleteChecklistQuestionClicked(final RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl, ChecklistItemProxy checklistItemProxy) {
-			System.out.println("Checklist item id" +checklistItemProxy.getId() );
 			requests.checklistItemRequest().removeChecklistItemQuestionItem(checklistItemProxy.getId()).fire(new OSCEReceiver<Boolean>() {
 
 				@Override
@@ -8350,17 +8447,28 @@ public void onDragStart(DragStartEvent event) {
 					for (ChecklistItemProxy tabProxy : tabList) {
 						final RoleDetailsChecklistTabSubView tabSubView = createTabView(standardizedRoleDetailsView.getContainerVerticalPanel(), tabProxy);
 						
-						for (ChecklistItemProxy topicProxy : topicList) {
-							if (topicProxy.getParentItem().getId() != null && topicProxy.getParentItem().getId().equals(tabProxy.getId())) {
-								final RoleDetailsChecklistTopicSubView topicSubView = createTopicView(tabSubView.getContainerVerticalPanel(), topicProxy.getName(), topicProxy.getDescription(), topicProxy);
-								if(topicSubView.getCheckListTopicDisclosurePanel().isOpen() == false){
-									topicSubView.getCheckListTopicDisclosurePanel().setOpen(true);
-									topicSubView.getArrow().setResource(uiIcons.triangle1South());
-								}
-								for (ChecklistItemProxy questionProxy : questionList) {
-									if (questionProxy.getParentItem().getId().equals(topicProxy.getId())) {
-										RoleDetailsChecklistItemSubView checklistQuestionSubView = createiOSCEQuestionView(topicSubView.getContainerVerticalPanel(), questionProxy.getName(), questionProxy.getDescription(), questionProxy);
-									}									
+						if (tabSubView != null) {
+							tabSubView.getPickupDragController().removeDragHandler(roleDetailActivity);
+							tabSubView.getPickupDragController().addDragHandler(roleDetailActivity);
+							for (ChecklistItemProxy topicProxy : topicList) {
+								if (topicProxy.getParentItem().getId() != null && topicProxy.getParentItem().getId().equals(tabProxy.getId())) {
+									final RoleDetailsChecklistTopicSubView topicSubView = createTopicView(tabSubView.getContainerVerticalPanel(), topicProxy.getName(), topicProxy.getDescription(), topicProxy);
+									if (topicSubView != null) {
+										tabSubView.getPickupDragController().makeDraggable(topicSubView.asWidget(), topicSubView.getCheckListTopicLbl());;
+										
+										if(topicSubView.getCheckListTopicDisclosurePanel().isOpen() == false){
+											topicSubView.getCheckListTopicDisclosurePanel().setOpen(true);
+											topicSubView.getArrow().setResource(uiIcons.triangle1South());
+										}
+										topicSubView.getPickupDragController().removeDragHandler(roleDetailActivity);
+										topicSubView.getPickupDragController().addDragHandler(roleDetailActivity);
+										for (ChecklistItemProxy questionProxy : questionList) {
+											if (questionProxy.getParentItem().getId().equals(topicProxy.getId())) {
+												RoleDetailsChecklistItemSubView checklistQuestionSubView = createiOSCEQuestionView(topicSubView.getContainerVerticalPanel(), questionProxy.getName(), questionProxy.getDescription(), questionProxy);
+												topicSubView.getPickupDragController().makeDraggable(checklistQuestionSubView.asWidget(), checklistQuestionSubView.getQuestionNameLbl());	
+											}									
+										}
+									}
 								}
 							}
 						}
@@ -8846,10 +8954,10 @@ public void onDragStart(DragStartEvent event) {
 					checklistImportQuestionPopup.getView().hide();
 					if(standardizedRoleProxy != null && checklistImportQuestionPopup.getRoleId() != null && checklistImportQuestionPopup.getQuestionId() != null && checklistImportQuestionPopup.getTopicId() != null){
 				
-						requests.checklistItemRequest().importChecklistQuestionsForTopic(checklistImportQuestionPopup.getTopicId(),checklistImportQuestionPopup.getRoleId(),checklistImportQuestionPopup.getQuestionId(),topicId).fire(new OSCEReceiver<List<ChecklistItemProxy>>() {
+						requests.checklistItemRequest().importChecklistQuestionsForTopic(checklistImportQuestionPopup.getTopicId(),checklistImportQuestionPopup.getRoleId(),checklistImportQuestionPopup.getQuestionId(),topicId).fire(new OSCEReceiver<Void>() {
 
 							@Override
-							public void onSuccess(List<ChecklistItemProxy> response) {
+							public void onSuccess(Void response) {
 								if (standardizedRoleProxy.getCheckList() != null && selectedStandardizedRoleView != null) {
 									initiOSCEChecklist(standardizedRoleProxy.getCheckList().getId(), selectedStandardizedRoleView);
 								}
@@ -9014,39 +9122,64 @@ public void onDragStart(DragStartEvent event) {
 						if(ItemType.TAB.ordinal() == parentItemType && tabProxy.getId().equals(parentItem.getId())){
 							
 							final RoleDetailsChecklistTabSubView tabSubView = createTabView(selectedStandardizedRoleView.getContainerVerticalPanel(), tabProxy);
-							tabSubView.getContainerVerticalPanel().clear();
-							for (ChecklistItemProxy topicProxy : topicList) {
-								if (topicProxy.getParentItem().getId() != null && topicProxy.getParentItem().getId().equals(tabProxy.getId())) {
-									final RoleDetailsChecklistTopicSubView topicSubView = createTopicView(tabSubView.getContainerVerticalPanel(), topicProxy.getName(), topicProxy.getDescription(), topicProxy);
-									if(topicSubView.getCheckListTopicDisclosurePanel().isOpen()){
-										topicSubView.getCheckListTopicDisclosurePanel().setOpen(false);
-										topicSubView.getArrow().setResource(uiIcons.triangle1East());
-									}
-									for (ChecklistItemProxy questionProxy : questionList) {
-										if (questionProxy.getParentItem().getId().equals(topicProxy.getId())) {
-											RoleDetailsChecklistItemSubView checklistQuestionSubView = createiOSCEQuestionView(topicSubView.getContainerVerticalPanel(), questionProxy.getName(), questionProxy.getDescription(), questionProxy);
-										}									
-									}	
-								}								
+							
+							if (tabSubView != null) {
+								tabSubView.getPickupDragController().removeDragHandler(roleDetailActivity);
+								tabSubView.getPickupDragController().addDragHandler(roleDetailActivity);
+								
+								tabSubView.getContainerVerticalPanel().clear();							
+								for (ChecklistItemProxy topicProxy : topicList) {
+									if (topicProxy.getParentItem().getId() != null && topicProxy.getParentItem().getId().equals(tabProxy.getId())) {
+										final RoleDetailsChecklistTopicSubView topicSubView = createTopicView(tabSubView.getContainerVerticalPanel(), topicProxy.getName(), topicProxy.getDescription(), topicProxy);
+										if (topicSubView != null) {
+											tabSubView.getPickupDragController().makeDraggable(topicSubView.asWidget(), topicSubView.getCheckListTopicLbl());
+											if(topicSubView.getCheckListTopicDisclosurePanel().isOpen()){
+												topicSubView.getCheckListTopicDisclosurePanel().setOpen(false);
+												topicSubView.getArrow().setResource(uiIcons.triangle1East());
+											}
+											topicSubView.getPickupDragController().removeDragHandler(roleDetailActivity);
+											topicSubView.getPickupDragController().addDragHandler(roleDetailActivity);
+											for (ChecklistItemProxy questionProxy : questionList) {
+												if (questionProxy.getParentItem().getId().equals(topicProxy.getId())) {
+													RoleDetailsChecklistItemSubView checklistQuestionSubView = createiOSCEQuestionView(topicSubView.getContainerVerticalPanel(), questionProxy.getName(), questionProxy.getDescription(), questionProxy);
+													if (checklistQuestionSubView != null)
+														topicSubView.getPickupDragController().makeDraggable(checklistQuestionSubView.asWidget(), checklistQuestionSubView.getQuestionNameLbl());
+												}									
+											}	
+										}
+									}								
+								}
 							}
 						}
 						else if(ItemType.TOPIC.ordinal() == parentItemType){
+							
 							final RoleDetailsChecklistTabSubView tabSubView = createTabView(selectedStandardizedRoleView.getContainerVerticalPanel(), tabProxy);
 							
-							for (ChecklistItemProxy topicProxy : topicList) {
-								if (topicProxy.getParentItem().getId() != null && topicProxy.getParentItem().getId().equals(tabProxy.getId())) {
-								final RoleDetailsChecklistTopicSubView topicSubView = createTopicView(tabSubView.getContainerVerticalPanel(), topicProxy.getName(), topicProxy.getDescription(), topicProxy);
+							if (tabSubView != null) {
+								tabSubView.getPickupDragController().removeDragHandler(roleDetailActivity);
+								tabSubView.getPickupDragController().addDragHandler(roleDetailActivity);
 								
-								if (topicProxy.getId().equals(parentItem.getId())) {
-									topicSubView.getContainerVerticalPanel().clear();
-									
-									for (ChecklistItemProxy questionProxy : questionList) {
-										if (questionProxy.getParentItem().getId().equals(topicProxy.getId())) {
-											RoleDetailsChecklistItemSubView checklistQuestionSubView = createiOSCEQuestionView(topicSubView.getContainerVerticalPanel(), questionProxy.getName(), questionProxy.getDescription(), questionProxy);
-										}									
-									}
-								}	
-							  }
+								for (ChecklistItemProxy topicProxy : topicList) {
+									if (topicProxy.getParentItem().getId() != null && topicProxy.getParentItem().getId().equals(tabProxy.getId())) {
+										final RoleDetailsChecklistTopicSubView topicSubView = createTopicView(tabSubView.getContainerVerticalPanel(), topicProxy.getName(), topicProxy.getDescription(), topicProxy);
+										
+										if (topicProxy.getId().equals(parentItem.getId()) && topicSubView != null) {
+											tabSubView.getPickupDragController().makeDraggable(topicSubView.asWidget(), topicSubView.getCheckListTopicLbl());
+											
+											topicSubView.getPickupDragController().removeDragHandler(roleDetailActivity);
+											topicSubView.getPickupDragController().addDragHandler(roleDetailActivity);
+											topicSubView.getContainerVerticalPanel().clear();
+											
+											for (ChecklistItemProxy questionProxy : questionList) {
+												if (questionProxy.getParentItem().getId().equals(topicProxy.getId())) {
+													RoleDetailsChecklistItemSubView checklistQuestionSubView = createiOSCEQuestionView(topicSubView.getContainerVerticalPanel(), questionProxy.getName(), questionProxy.getDescription(), questionProxy);
+													if (checklistQuestionSubView != null)
+														topicSubView.getPickupDragController().makeDraggable(checklistQuestionSubView.asWidget(), checklistQuestionSubView.getQuestionNameLbl());
+												}									
+											}
+										}	
+								  }
+							   }
 							}
 						}
 					}

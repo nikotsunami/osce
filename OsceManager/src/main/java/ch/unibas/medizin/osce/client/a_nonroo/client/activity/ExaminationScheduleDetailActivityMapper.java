@@ -25,7 +25,6 @@ public class ExaminationScheduleDetailActivityMapper implements ActivityMapper {
 	
 	@Override
 	public Activity getActivity(Place place) {
-		System.out.println("========================ExaminationScheduleDetailActivity getActivity()=========================");
 		Log.debug("im ExaminationScheduleDetailActivity.getActivity");
 		
 		if (place instanceof ExaminationScheduleDetailPlace)

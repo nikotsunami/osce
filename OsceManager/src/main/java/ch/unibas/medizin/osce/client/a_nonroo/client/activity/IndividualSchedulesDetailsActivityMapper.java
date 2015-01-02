@@ -26,7 +26,7 @@ public class IndividualSchedulesDetailsActivityMapper implements ActivityMapper 
 	@Override
 	public Activity getActivity(Place place) {
 		
-		System.out.println("========================IndividualSchedulesDetailsActivityMapper getActivity()=========================");
+		//System.out.println("========================IndividualSchedulesDetailsActivityMapper getActivity()=========================");
 		Log.debug("im IndividualSchedulesDetailsActivityMapper.getActivity");
 		if (place instanceof IndividualSchedulesDetailsPlace) {
 			Log.info("test");

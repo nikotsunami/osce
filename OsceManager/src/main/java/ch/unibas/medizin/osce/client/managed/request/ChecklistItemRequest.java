@@ -62,13 +62,15 @@ public interface ChecklistItemRequest extends RequestContext {
 	
 	abstract Request<List<ChecklistImportPojoValueProxy>> findChecklistQuestionByTopicId(Long topicId);
 	
-	abstract Request<List<ChecklistItemProxy>> importChecklistQuestionsForTopic(Long selectedTopicId, Long selectedRole, Long questionId, Long topicId);
+	abstract Request<Void> importChecklistQuestionsForTopic(Long selectedTopicId, Long selectedRole, Long questionId, Long topicId);
 
 	abstract Request<Double> findMaxTopicWeight(Long checklistId);
 	
-	Request<CheckListProxy> copyOldChecklist(Long oldChecklistId, String title);
+	abstract Request<CheckListProxy> copyOldChecklist(Long oldChecklistId, String title);
 	
 	abstract Request<ChecklistItemProxy> moveChecklistItemUp(ChecklistItemProxy checklistItemToMoveUp, int seqNumToSet);
 
 	abstract Request<ChecklistItemProxy> moveChecklistItemDown(ChecklistItemProxy checklistItemToMoveDown, int SeqNumberToSet);
+	
+	abstract Request<List<ChecklistItemProxy>> updateChecklistItemQuestionSequenceNumber(List<Long> checklistItemIdList);
 }

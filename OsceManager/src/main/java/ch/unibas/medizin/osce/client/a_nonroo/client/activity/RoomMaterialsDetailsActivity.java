@@ -87,7 +87,7 @@ public class RoomMaterialsDetailsActivity extends AbstractActivity implements
 
 		@Override
 		public void onSuccess(Object response) {
-			System.out.println("Cheking whter come Specialization proxy");
+			//System.out.println("Cheking whter come Specialization proxy");
 			if (response instanceof MaterialListProxy) {
 				System.out
 						.println("Obtained Specialisation proxy successfully");
@@ -114,7 +114,7 @@ public class RoomMaterialsDetailsActivity extends AbstractActivity implements
 
 			@Override
 			public void onSuccess(Object object) {
-				System.out.println("Save RoleTopic values value Succesfully1");
+				//System.out.println("Save RoleTopic values value Succesfully1");
 				if (object instanceof MaterialListProxy) {
 					MaterialListRequest materialListRequest = requests
 							.materialListRequest();
@@ -161,14 +161,14 @@ public class RoomMaterialsDetailsActivity extends AbstractActivity implements
 	// @SPEC To add data in table
 	private void init() {
 
-		System.out.println("Inside INIT()");
+		//System.out.println("Inside INIT()");
 
 		Log.info("materialListProxy id : " + materialListProxy.getId());
 		Log.info("materialListProxy name : " + materialListProxy.getName());
 		view.setValue(materialListProxy);
 
 		if (roomMaterialsActivity != null) {
-			System.out.println("calling Perform search from Room details:");
+			//System.out.println("calling Perform search from Room details:");
 
 			roomMaterialsActivity.performSearch("");
 		}

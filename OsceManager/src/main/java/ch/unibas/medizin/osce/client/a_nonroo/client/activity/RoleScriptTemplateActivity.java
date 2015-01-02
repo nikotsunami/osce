@@ -545,7 +545,7 @@ public class RoleScriptTemplateActivity extends AbstractActivity implements
 	}
 
 	protected Request<List<RoleTemplateProxy>> createRangeRequest(Range range) {
-		System.out.println("Calling FindAllSpecialization with value : ");
+		//System.out.println("Calling FindAllSpecialization with value : ");
 		return requests.roleTemplateRequest().findAllTemplateName(
 				sortname, sortorder, quickSearchTerm, range.getStart(),
 				range.getLength());

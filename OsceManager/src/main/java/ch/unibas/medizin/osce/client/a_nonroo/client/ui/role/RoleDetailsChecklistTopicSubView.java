@@ -5,6 +5,8 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.ItemType;
 import ch.unibas.medizin.osce.shared.OptionType;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -43,5 +45,9 @@ public interface RoleDetailsChecklistTopicSubView extends IsWidget {
 	public DisclosurePanel getCheckListTopicDisclosurePanel();
 
 	public Image getArrow();
+
+	public PickupDragController getPickupDragController();
+
+	public VerticalPanelDropController getVerticalPanelDropController();
 
 }

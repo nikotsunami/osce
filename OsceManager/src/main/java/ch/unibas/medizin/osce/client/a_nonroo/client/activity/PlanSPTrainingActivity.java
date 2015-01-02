@@ -2160,8 +2160,8 @@ public class PlanSPTrainingActivity extends AbstractActivity implements PlanSPTr
 							Date cDate =startDate;
 							
 							for(TrainingSuggestionProxy trainingSuggestionProxy : response){
-								System.out.println("T dats is : " + trainingSuggestionProxy.getId() + "Dt id : " +trainingSuggestionProxy.getId() + " Date : "
-							+ trainingSuggestionProxy.getTrainingDate().getTrainingDate());
+								/*System.out.println("T dats is : " + trainingSuggestionProxy.getId() + "Dt id : " +trainingSuggestionProxy.getId() + " Date : "
+							+ trainingSuggestionProxy.getTrainingDate().getTrainingDate());*/
 								if(CalendarUtil.getDaysBetween(cDate,trainingSuggestionProxy.getTrainingDate().getTrainingDate())!=0){
 									
 									moreSuggestionForMorningMap.put(cDate,morningRoleList);

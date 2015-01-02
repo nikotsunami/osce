@@ -1848,8 +1848,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 										super.onFailure(error);
 
 										Log.info(error.getMessage());
-										System.out.println(error
-												.getStackTraceString());
+										System.out.println(error.getStackTraceString());
 										// module 3 bug {
 										
 										osceDayTimer.scheduleRepeating(osMaConstant.OSCEDAYTIMESCHEDULE);
@@ -3363,7 +3362,7 @@ public void discloserPanelClosed(OsceDayProxy osceDayProxy,OsceDaySubViewImpl os
 										}
 										
 										public void onFailure(ServerFailure error) {
-											System.out.println("In onFailure ");
+											//System.out.println("In onFailure ");
 											error.getStackTraceString();
 											System.out.println(error.getMessage() +"\n"+error.getStackTraceString());
 											

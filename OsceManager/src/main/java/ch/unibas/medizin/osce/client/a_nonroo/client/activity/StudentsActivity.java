@@ -179,8 +179,6 @@ public class StudentsActivity extends AbstractActivity implements StudentsView.P
 				
 				currenttab = event.getSelectedItem();
 				
-				System.out.println("CURRENT TAB : " + currenttab);
-				
 				osceProxy = osceProxyList.get(currenttab);
 				
 				subDetailsView[currenttab].getHidden().setValue(String.valueOf(osceProxy.getId()));

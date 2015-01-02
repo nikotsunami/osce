@@ -497,7 +497,6 @@ public class RoleActivity extends AbstractActivity implements
 			
 		
 		} catch (Exception e) {
-			System.out.println("Eoor bhargav");
 			Log.error(e.getMessage());
 			e.printStackTrace();
 		}
@@ -517,7 +516,7 @@ public class RoleActivity extends AbstractActivity implements
 		// the corresponding details view is shown (via showDetails())
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 			public void onSelectionChange(SelectionChangeEvent event) {
-				System.out.println("======================================Selection Change==================================");
+				//System.out.println("======================================Selection Change==================================");
 				
 				RoleTopicProxy selectedObject = selectionModel.getSelectedObject();
 				if (selectedObject.getId() != null) {
@@ -530,7 +529,7 @@ public class RoleActivity extends AbstractActivity implements
 				else
 				{
 					view.setDetailPanel(false);
-					System.out.println("==============No Role Found===============");
+					//System.out.println("==============No Role Found===============");
 				}
 			}
 		});			
@@ -706,7 +705,7 @@ private class TotalRecordCount extends  Receiver<Long> {
 
 protected void showDetails(RoleTopicProxy RoleTopic) 
 {	
-	System.out.println("============================showDetails() GotoStandardizedPatientDetailsPlace=========================");	
+	//System.out.println("============================showDetails() GotoStandardizedPatientDetailsPlace=========================");	
 	RoleEditActivity.roleTopic = RoleTopic;//angiv
 	goTo(new RoleDetailsPlace(RoleTopic.stableId(), Operation.DETAILS));
 }
@@ -718,7 +717,7 @@ protected void showDetails(RoleTopicProxy RoleTopic)
 
 			@Override
 			public void onSuccess(List<SpecialisationProxy> response) {
-				System.out.println("LIST SIZE : " + response.size());
+				//System.out.println("LIST SIZE : " + response.size());
 				
 				((RoleAddPopupViewImpl)popupView).setSpecialisationBoxValues(response);
 				((RoleAddPopupViewImpl)popupView).setPopupPosition(clientX - 100, clientY);

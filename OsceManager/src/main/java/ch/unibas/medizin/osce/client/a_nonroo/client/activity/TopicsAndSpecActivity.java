@@ -517,7 +517,7 @@ public class TopicsAndSpecActivity extends  AbstractActivity implements TopicsAn
 		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
 	protected Request<List<SpecialisationProxy>> createRangeRequest(Range range) {
-		System.out.println("Calling FindAllSpecialization with value : " );
+		//System.out.println("Calling FindAllSpecialization with value : " );
 		return requests.specialisationRequest().findAllSpecialisation(sortname,sortorder,searchFilter, range.getStart(), range.getLength());
 	}
 

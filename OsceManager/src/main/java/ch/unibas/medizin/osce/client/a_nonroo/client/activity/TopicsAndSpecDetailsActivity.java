@@ -184,7 +184,7 @@ TopicsAndSpecDetailsView.Delegate
 			
 			@Override
 			public void onSuccess(Object object) {
-				System.out.println("Save RoleTopic values value Succesfully1");
+				//System.out.println("Save RoleTopic values value Succesfully1");
 				if (object instanceof SpecialisationProxy)
 				{
 					RoleTopicRequest roletopicReq = requests.roleTopicRequest();
@@ -212,7 +212,7 @@ TopicsAndSpecDetailsView.Delegate
 						
 						@Override
 						public void onSuccess(Void arg0) {
-							System.out.println("Save RoleTopic values value Succesfully");
+							//System.out.println("Save RoleTopic values value Succesfully");
 							// Violation Changes Highlight
 							Log.info("Save RoleTopic values value Succesfully");
 							view.getAddTextBox().removeStyleName("higlight_onViolation");
@@ -265,7 +265,7 @@ TopicsAndSpecDetailsView.Delegate
 						return;
 					}
 					Log.debug("Geholte Nationalitäten aus der Datenbank: " + response);
-					System.out.println("Arrived result of TotalRole Topic set table size according to it");
+					//System.out.println("Arrived result of TotalRole Topic set table size according to it");
 					view.getTable().setRowCount(response.intValue(), true);
 
 					onRangeChanged();
@@ -276,7 +276,7 @@ TopicsAndSpecDetailsView.Delegate
 		
 		private void onRangeChanged() 
 		{
-			System.out.println("In side OnRangeChanged()");
+			//System.out.println("In side OnRangeChanged()");
 			final Range range = table.getVisibleRange();
 			requests.roleTopicRequest().findRoleTopicBySpecialisationId(sortname,sortorder,searchFilter,specialisationProxy.getId(), range.getStart(), range.getLength()).with("standardizedRoles").fire(new Receiver<List<RoleTopicProxy>>() {				
 				@Override
@@ -284,7 +284,7 @@ TopicsAndSpecDetailsView.Delegate
 					if(view == null){
 					return;
 				}
-					System.out.println("Successfully  RoleTopic values set in table");
+					//System.out.println("Successfully  RoleTopic values set in table");
 					table.setRowData(range.getStart(), response);
 
 					// finishPendingSelection();

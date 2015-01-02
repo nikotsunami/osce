@@ -27,7 +27,7 @@ public class StatisticalEvaluationDetailsActivityMapper implements ActivityMappe
 	@Override
 	public Activity getActivity(Place place) {
 		
-		System.out.println("========================StatisticalEvaluation getActivity()=========================");
+		//System.out.println("========================StatisticalEvaluation getActivity()=========================");
 		Log.debug("im StatisticalEvaluation.getActivity");
 		if (place instanceof StatisticalEvaluationDetailsPlace) {
 			Log.info("test");

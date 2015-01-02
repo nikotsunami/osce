@@ -26,7 +26,7 @@ public class CircuitDetailsActivityMapper implements ActivityMapper {
 	@Override
 	public Activity getActivity(Place place) {
 		
-		System.out.println("========================CircuitDetailsActivity getActivity()=========================");
+		//System.out.println("========================CircuitDetailsActivity getActivity()=========================");
 		Log.debug("im CircuitDetailsActivity.getActivity");
 		if (place instanceof CircuitDetailsPlace) {
 			if(((CircuitDetailsPlace) place).getOperation() == Operation.DETAILS)

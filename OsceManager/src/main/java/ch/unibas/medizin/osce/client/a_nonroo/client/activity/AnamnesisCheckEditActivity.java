@@ -294,8 +294,8 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 				&& !view.getSelectedPreviousQuestion().equals("")
 				&& view.getSelectedPreviousQuestion().length() != 0) {
 			
-			System.out.println("inside if--"+view.getSelectedPreviousQuestion());
-			System.out.println("inside if--"+Integer.valueOf(view.getSelectedPreviousQuestion()));
+			//System.out.println("inside if--"+view.getSelectedPreviousQuestion());
+			//System.out.println("inside if--"+Integer.valueOf(view.getSelectedPreviousQuestion()));
 			//TODO: If remove comment then null pointer exceptin occurs from server side. Need to check in detail.  
 			/*previousSortOder = Integer.valueOf(view
 					.getSelectedPreviousQuestion());*/
@@ -327,8 +327,8 @@ AnamnesisCheckEditView.Presenter, AnamnesisCheckEditView.Delegate {
 					});
 		} else {
 			GWT.log("################call insertAnamnesisCheck ");
-			System.out.println("sort order--"+previousSortOder);
-			System.out.println("id--"+anamnesisCheck.getId());
+			//System.out.println("sort order--"+previousSortOder);
+			//System.out.println("id--"+anamnesisCheck.getId());
 			
 			requests.anamnesisCheckRequest().insertAnamnesisCheck(
 					previousSortOder).using(anamnesisCheck).fire(

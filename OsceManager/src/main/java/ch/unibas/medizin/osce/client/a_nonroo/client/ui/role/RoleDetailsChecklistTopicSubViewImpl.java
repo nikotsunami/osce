@@ -10,12 +10,15 @@ import ch.unibas.medizin.osce.shared.ItemType;
 import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.dnd.client.PickupDragController;
+import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.Image;
@@ -69,9 +72,16 @@ public class RoleDetailsChecklistTopicSubViewImpl extends Composite implements R
 	@UiField
 	DisclosurePanel checkListTopicDisclosurePanel;
 	
+	@UiField
+	AbsolutePanel topicAP;
+	
 	private ChecklistItemProxy checklistItemProxy;
 	
 	private StandardizedRoleProxy roleProxy;
+	
+	private PickupDragController pickupDragController;
+	
+	private VerticalPanelDropController verticalPanelDropController;
 	
 	public RoleDetailsChecklistTopicSubViewImpl(StandardizedRoleProxy standardizedRoleProxy) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -80,6 +90,10 @@ public class RoleDetailsChecklistTopicSubViewImpl extends Composite implements R
 		addCheckListSectionButton.addStyleName("expTopicButton");
 		importSectionButton.addStyleName("expTopicButton");*/
 		this.roleProxy= standardizedRoleProxy;
+		
+		pickupDragController = new PickupDragController(topicAP, false);
+		verticalPanelDropController = new VerticalPanelDropController(containerVerticalPanel);
+		pickupDragController.registerDropController(verticalPanelDropController);
 	}
 	
 	public VerticalPanel getContainerVerticalPanel() {
@@ -278,5 +292,15 @@ public class RoleDetailsChecklistTopicSubViewImpl extends Composite implements R
 	@Override
 	public Image getArrow() {
 		return arrow;
+	}
+	
+	@Override
+	public PickupDragController getPickupDragController() {
+		return pickupDragController;
+	}
+	
+	@Override
+	public VerticalPanelDropController getVerticalPanelDropController() {
+		return verticalPanelDropController;
 	}
 }

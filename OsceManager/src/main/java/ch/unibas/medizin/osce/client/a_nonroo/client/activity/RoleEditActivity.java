@@ -316,7 +316,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		
 
 		if (standardizedRole == null) {
-			System.out.println("====================standardizedRole=null in RoleEditActivity==================");
+			//System.out.println("====================standardizedRole=null in RoleEditActivity==================");
 			standardizedRole = request.create(StandardizedRoleProxy.class);
 			checkListProxy=request.create(CheckListProxy.class);//spec
 			standardizedRole.setCheckList(checkListProxy);//spec
@@ -716,7 +716,7 @@ public class RoleEditActivity extends AbstractActivity implements RoleEditView.P
 		if(((RoleEditViewImpl)view).roleTopic.getSelected().getId()!=roleTopic.getId())
 		{
 			//Issue # 122 : Replace pull down with autocomplete.	 
-		 System.out.println("not Same");
+		 //System.out.println("not Same");
 	
 			Log.info(" save role---check"+oldProxy.getShortName());
 			// Highlight onViolation

@@ -126,7 +126,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 		this.view = new OsceEditViewImpl();
 		//editorDriver = view.createEditorDriver();
 
-		System.out.println("sem found:-"+semester.getCalYear());
+		//System.out.println("sem found:-"+semester.getCalYear());
 		view.setDelegate(this);
 
 
@@ -457,8 +457,7 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 	}
 		else
 		{
-			System.out.println("create mode");
-			 OsceRequest osceRequest=requests.osceRequest();
+			OsceRequest osceRequest=requests.osceRequest();
 			final OsceProxy osceProxy=osceRequest.create(OsceProxy.class);
 			
 			osceProxy.setName(((OsceEditViewImpl)view).name.getValue());
