@@ -3,10 +3,16 @@
  */
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
+import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
+import ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer;
+import ch.unibas.medizin.osce.client.managed.ui.ScarProxyRenderer;
+import ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
 import ch.unibas.medizin.osce.client.style.resources.MySimplePagerResources;
 import ch.unibas.medizin.osce.shared.OsMaConstant;
@@ -140,9 +146,10 @@ public class AnamnesisFormViewImpl extends Composite implements  AnamnesisFormVi
 			}
 		}, "Create Date");
 		paths.add("anamnesischecksvalues");
+		
 		table.addColumn(new TextColumn<AnamnesisFormProxy>() {
 
-			Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance());
+			CollectionRenderer<AnamnesisChecksValueProxy, AnamnesisChecksValueProxyRenderer, Collection<AnamnesisChecksValueProxy>> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.AnamnesisChecksValueProxyRenderer.instance());
 
 			@Override
 			public String getValue(AnamnesisFormProxy object) {
@@ -152,7 +159,7 @@ public class AnamnesisFormViewImpl extends Composite implements  AnamnesisFormVi
 		paths.add("scars");
 		table.addColumn(new TextColumn<AnamnesisFormProxy>() {
 
-			Renderer<java.util.Set> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.ScarProxyRenderer.instance());
+			CollectionRenderer<ScarProxy, ScarProxyRenderer, Collection<ScarProxy>> renderer = ch.unibas.medizin.osce.client.scaffold.place.CollectionRenderer.of(ch.unibas.medizin.osce.client.managed.ui.ScarProxyRenderer.instance());
 
 			@Override
 			public String getValue(AnamnesisFormProxy object) {
