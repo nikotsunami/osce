@@ -13,6 +13,7 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.CheckList;
+import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceSettings;
 import ch.unibas.medizin.osce.domain.Student;
@@ -69,6 +70,8 @@ public class QRCodeUtil extends PdfUtil  {
 	public static final String STUDENT_ID_END_TAG="</student-id>";
 	
 	protected static Font paraFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
+	
+	private static Font NAME_FONT = new Font(Font.FontFamily.TIMES_ROMAN, 15,Font.BOLD);
 	
 	/*
 	 * This method will do symmetric encryption of url and pass the encrypted url to generate QR code
@@ -216,7 +219,8 @@ public class QRCodeUtil extends PdfUtil  {
 			qrCodeExaminer.open();
 			
 			for (Long examinerId : examinersList) {
-				
+				Doctor doctor = Doctor.findDoctor(examinerId);
+				String doctorName = (doctor.getTitle() == null ? "" : doctor.getTitle()) + " " + (doctor.getPreName() == null ? "" : doctor.getPreName()+ " " +  (doctor.getName() == null ? "" : doctor.getName()));
 				NSDictionary examinerNsDictionary=new NSDictionary();
 				examinerNsDictionary.put("examinerId", (examinerId == null ? "" : examinerId.toString()));
 				examinerNsDictionary.put("examId",(osceId == null ? "" : osceId.toString()));
@@ -226,7 +230,16 @@ public class QRCodeUtil extends PdfUtil  {
 				//put data into plist
 				if(plistString != null){
 					Image examinerQRImage = generateQRCode(plistString);
-					qrCodeExaminer.add(examinerQRImage);
+					PdfPTable table = new PdfPTable(1); //1 columns.
+					PdfPCell cell1 = new PdfPCell(new Paragraph(new Chunk(doctorName, NAME_FONT)));
+					cell1.setPaddingLeft(35);
+					PdfPCell cell2 = new PdfPCell(examinerQRImage, true);
+					cell2.setPaddingTop(0);
+					cell1.setBorder(Rectangle.NO_BORDER);
+					cell2.setBorder(Rectangle.NO_BORDER);
+					table.addCell(cell1);
+					table.addCell(cell2);
+					qrCodeExaminer.add(table);
 					qrCodeExaminer.newPage();
 				}  
 			}
@@ -255,7 +268,7 @@ public class QRCodeUtil extends PdfUtil  {
 			
 			for (Long studId : studentList) {
 				Student student = Student.findStudent(studId);
-				
+				String studentName = (student.getPreName() == null ? "" : student.getPreName() + " " + (student.getName() == null ? "" : student.getName()));
 				NSDictionary examinerNsDictionary=new NSDictionary();
 				examinerNsDictionary.put("studentId", (student.getId() == null ? "" : student.getId().toString()));
 				examinerNsDictionary.put("examId",(osceId == null ? "" : osceId.toString()));
@@ -265,8 +278,18 @@ public class QRCodeUtil extends PdfUtil  {
 					
 				//put data into plist
 				if(plistString != null){
+					
 					Image studentQRImage = generateQRCode(plistString);
-					qrCodeStudent.add(studentQRImage);
+					PdfPTable table = new PdfPTable(1); //1 columns.
+					PdfPCell cell1 = new PdfPCell(new Paragraph(new Chunk(studentName, NAME_FONT)));
+					cell1.setPaddingLeft(35);
+					PdfPCell cell2 = new PdfPCell(studentQRImage, true);
+					cell2.setPaddingTop(0);
+					cell1.setBorder(Rectangle.NO_BORDER);
+					cell2.setBorder(Rectangle.NO_BORDER);
+					table.addCell(cell1);
+					table.addCell(cell2);
+					qrCodeStudent.add(table);
 					qrCodeStudent.newPage();
 				}  
 			}
