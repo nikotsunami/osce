@@ -104,6 +104,14 @@ public class OscePostRoom {
     	TypedQuery<OscePostRoom> q = em.createQuery(query, OscePostRoom.class);
     	return q.getResultList();
     }
+    
+    public static List<OscePostRoom> findOscePostRoomByCourseIDForIOSCE(long courseId)
+    {
+    	EntityManager em = entityManager();
+    	String query = "SELECT o FROM OscePostRoom o WHERE o.course.id = " + courseId + " order by o.id desc";
+    	TypedQuery<OscePostRoom> q = em.createQuery(query, OscePostRoom.class);
+    	return q.getResultList();
+    }
      
     public static OscePostRoom findOscePostRoomByOscePostAndCourse(Course course, OscePost oscePost)
     {

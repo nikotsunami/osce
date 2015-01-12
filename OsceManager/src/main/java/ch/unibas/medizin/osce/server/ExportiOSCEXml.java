@@ -507,7 +507,7 @@ public class ExportiOSCEXml {
 						ch.unibas.medizin.osce.server.service.Oscedata.Rotations.Rotation.Stations stationsBean = factory.createOscedataRotationsRotationStations();
 						rotationBean.setStations(stationsBean);
 						
-						List<OscePostRoom> oscePostRoomList = OscePostRoom.findOscePostRoomByCourseID(course.getId());
+						List<OscePostRoom> oscePostRoomList = OscePostRoom.findOscePostRoomByCourseIDForIOSCE(course.getId());
 						
 						for (OscePostRoom oscePostRoom : oscePostRoomList)
 						{
