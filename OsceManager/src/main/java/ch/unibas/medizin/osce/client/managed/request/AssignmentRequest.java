@@ -5,6 +5,7 @@ package ch.unibas.medizin.osce.client.managed.request;
 import java.util.Date;
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.CloudConfigurationProxy;
 import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.TimeBell;
 
@@ -105,4 +106,6 @@ public interface AssignmentRequest extends RequestContext {
 	abstract Request<Void> updateLunchBreak(Long osceDayId, int diff);
 	
 	abstract Request<OsceProxy> removeManualOsceAssignmentByOsceId(Long osceId);
+	
+	abstract Request<CloudConfigurationProxy> findCloudConfigurationFromFile();
 }

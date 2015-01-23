@@ -11,6 +11,7 @@ import org.vaadin.gwtgraphics.client.DrawingArea;
 import org.vaadin.gwtgraphics.client.shape.Rectangle;
 import org.vaadin.gwtgraphics.client.shape.Text;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.CloudConfigurationProxy;
 import ch.unibas.medizin.osce.client.a_nonroo.client.TimeTableEstimation;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OsceDetailsPlace;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.OscePlace;
@@ -84,6 +85,8 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 	
 	int previousNoOfDays = 0;
 	
+	private CloudConfigurationProxy cloudConfigurationProxy = null;
+	
 	public OsceEditActivity(OsceDetailsPlace place,
 			OsMaRequestFactory requests, PlaceController placeController) {
 		this.place = place;
@@ -128,6 +131,10 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 
 		//System.out.println("sem found:-"+semester.getCalYear());
 		view.setDelegate(this);
+		
+		
+		
+		
 
 
 		view.setStudyYearPickerValues(Arrays.asList(StudyYears.values()));
@@ -233,49 +240,57 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 
 	@SuppressWarnings("deprecation")
 	private void init() {
+		requests.assignmentRequest().findCloudConfigurationFromFile().fire(new OSCEReceiver<CloudConfigurationProxy>() {
 
-		OsceRequest request = requests.osceRequest();
+			@Override
+			public void onSuccess(CloudConfigurationProxy response) {
+				cloudConfigurationProxy = response;
+				
+				OsceRequest request = requests.osceRequest();
 
-		if (osce == null) {
+				if (osce == null) {
 
-			view.setOsceProxy(osce);
-			/*OsceProxy osce = request.create(OsceProxy.class);
-			this.osce = osce;
-			this.osce.setOsceCreationType(OsceCreationType.Automatic);
-			view.setEditTitle(false);
-			*/
-			view.setEditTitle(false);
-			requests.roomRequest().countTotalRooms().fire(new OSCEReceiver<Integer>() {
+					view.setOsceProxy(osce);
+					/*OsceProxy osce = request.create(OsceProxy.class);
+					this.osce = osce;
+					this.osce.setOsceCreationType(OsceCreationType.Automatic);
+					view.setEditTitle(false);
+					*/
+					view.setEditTitle(false);
+					view.setS3Values();
+					requests.roomRequest().countTotalRooms().fire(new OSCEReceiver<Integer>() {
 
-				@Override
-				public void onSuccess(Integer response) {
-					Log.info("Response Of countTotalRooms()  Is:" + response);
-					((OsceEditViewImpl)view).numberRooms.setValue(response);
+						@Override
+						public void onSuccess(Integer response) {
+							Log.info("Response Of countTotalRooms()  Is:" + response);
+							((OsceEditViewImpl)view).numberRooms.setValue(response);
+						}
+					});
+
+				} else {
+					view.setEditTitle(true);
+					view.setOsceProxy(osce);
+					requests.osceSettingsRequest().findOsceSettingsByOsce(osce.getId()).fire(new OSCEReceiver<OsceSettingsProxy>() {
+
+						@Override
+						public void onSuccess(OsceSettingsProxy response) {
+							
+							view.setOsceSttingsProxy(response);
+							view.setValue(osce,response);
+						}
+					});
 				}
-			});
 
-		} else {
-			view.setEditTitle(true);
-			view.setOsceProxy(osce);
-			requests.osceSettingsRequest().findOsceSettingsByOsce(osce.getId()).fire(new OSCEReceiver<OsceSettingsProxy>() {
+				Log.info("edit");
 
-				@Override
-				public void onSuccess(OsceSettingsProxy response) {
-					
-					view.setOsceSttingsProxy(response);
-					view.setValue(osce,response);
-				}
-			});
-		}
-
-		Log.info("edit");
-
-		Log.info("persist");
-		//osce.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
-		//editorDriver.edit(osce, request);
-		Log.info("flush");
-		//editorDriver.flush();
-		//Log.debug("Create für: " + osce.getId());
+				Log.info("persist");
+				//osce.setCopiedOsce(((OsceEditViewImpl)view).copiedOsce.getSelected());
+				//editorDriver.edit(osce, request);
+				Log.info("flush");
+				//editorDriver.flush();
+				//Log.debug("Create für: " + osce.getId());
+			}
+		});		
 	}
 
 	@Override
@@ -1316,5 +1331,10 @@ OsceEditView.Presenter, OsceEditView.Delegate, OsceEditPopupView.Delegate{
 		public String getOsceDate() {
 			return osceDate;
 		}
+	}
+
+	@Override
+	public CloudConfigurationProxy findCloudConfigurationSetting() {
+		return cloudConfigurationProxy;
 	}
 }

@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -27,6 +29,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
@@ -35,11 +38,13 @@ import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
+
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.ExcelUtil;
 import ch.unibas.medizin.osce.server.util.file.QwtUtil;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.BellAssignmentType;
+import ch.unibas.medizin.osce.shared.CloudConfiguration;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PostType;
 import ch.unibas.medizin.osce.shared.RoleTypes;
@@ -3830,4 +3835,28 @@ public class Assignment {
 	public static List<Assignment> findAssignmentEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM Assignment o", Assignment.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
+	
+	public static CloudConfiguration findCloudConfigurationFromFile() {
+		CloudConfiguration cloudConfiguration = new CloudConfiguration();
+		try 
+		{
+			Properties properties =  new Properties();
+			properties.load(OsMaFilePathConstant.class.getResourceAsStream("/META-INF/spring/config.properties")); 
+			
+			cloudConfiguration.setSftpHost(properties.getProperty("sftp.host"));
+			cloudConfiguration.setSftpUsername(properties.getProperty("sftp.username"));
+			cloudConfiguration.setSftpPassword(properties.getProperty("sftp.password"));
+			cloudConfiguration.setSftpPath(properties.getProperty("sftp.path"));
+			
+			cloudConfiguration.setS3Accesskey(properties.getProperty("s3.accesskey"));
+			cloudConfiguration.setS3Secrectkey(properties.getProperty("s3.secrectkey"));
+			cloudConfiguration.setS3Bucketname(properties.getProperty("s3.bucketname"));
+		}
+		catch (Exception e) 
+		{
+			Log.error(e.getMessage(), e);
+		}
+		
+		return cloudConfiguration;
+	}
 } 

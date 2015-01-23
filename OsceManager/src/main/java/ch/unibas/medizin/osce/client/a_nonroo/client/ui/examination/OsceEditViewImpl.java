@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.CloudConfigurationProxy;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSettingsProxy;
@@ -537,7 +538,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 		if(bucketInfo.getValue().equals(BucketInfoType.S3)){
 			passwordSFTP.setVisible(false);
 			passwordSFTP.getElement().getStyle().setDisplay(Display.NONE);
-			password.setVisible(true);	
+			password.setVisible(true);
 		}else if(bucketInfo.getValue().equals(BucketInfoType.FTP)){
 			passwordSFTP.setVisible(true);
 			password.setVisible(false);
@@ -640,47 +641,103 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 		return driver;
 	}*/
 	
-	private void setS3Values() {
+	@Override
+	public void setS3Values() {
 		
 		if (osceSettingsProxy == null)
 		{
-				lblUserName.setInnerText(constants.accessKey());
-				lblPassword.setInnerText(constants.secretKey());
-				lblBucketName.setInnerText(constants.bucketName());
+			CloudConfigurationProxy cloudConfigurationProxy = delegate.findCloudConfigurationSetting();
+			if (cloudConfigurationProxy != null) {
+				userName.setValue(cloudConfigurationProxy.getS3Accesskey());
+				password.setValue(cloudConfigurationProxy.getS3Secrectkey());
+				bucketName.setValue(cloudConfigurationProxy.getS3Bucketname());
+			}
+			else {
 				userName.setValue("");
 				password.setValue("");
 				bucketName.setValue("");
+			}
+			
+			lblUserName.setInnerText(constants.accessKey());
+			lblPassword.setInnerText(constants.secretKey());
+			lblBucketName.setInnerText(constants.bucketName());
+				
 		}
 		else if (osceSettingsProxy.getInfotype().equals(BucketInfoType.S3)) {
-		
-				userName.setValue(osceSettingsProxy.getUsername());
-				password.setValue(osceSettingsProxy.getPassword());
-				bucketName.setValue(osceSettingsProxy.getBucketName());	
-		} 
+			userName.setValue(osceSettingsProxy.getUsername());
+			password.setValue(osceSettingsProxy.getPassword());
+			bucketName.setValue(osceSettingsProxy.getBucketName());	
+		}
+		else if (osceSettingsProxy.getInfotype().equals(BucketInfoType.FTP)) {
+			if (BucketInfoType.S3.equals(bucketInfo.getValue())) {
+				CloudConfigurationProxy cloudConfigurationProxy = delegate.findCloudConfigurationSetting();
+				if (cloudConfigurationProxy != null) {
+					userName.setValue(cloudConfigurationProxy.getS3Accesskey());
+					password.setValue(cloudConfigurationProxy.getS3Secrectkey());
+					bucketName.setValue(cloudConfigurationProxy.getS3Bucketname());
+				}
+				else {
+					userName.setValue("");
+					password.setValue("");
+					bucketName.setValue("");
+				}
+			}
+		}
 	}
 	
 	private void setSFTPValues(){
 		
 		if (osceSettingsProxy == null) {
+			CloudConfigurationProxy cloudConfigurationProxy = delegate.findCloudConfigurationSetting();
+			if (cloudConfigurationProxy != null) {
+				userName.setValue(cloudConfigurationProxy.getSftpUsername());
+				password.getElement().getStyle().setDisplay(Display.NONE);
+				passwordSFTP.setVisible(true);
+				passwordSFTP.setValue(cloudConfigurationProxy.getSftpPassword());
+				bucketName.setValue(cloudConfigurationProxy.getSftpPath());	
+				host.setValue(cloudConfigurationProxy.getSftpHost());				
+			}
+			else {
 				userName.setValue("");
 				password.getElement().getStyle().setDisplay(Display.NONE);
 				passwordSFTP.setVisible(true);
 				passwordSFTP.setValue("");
 				bucketName.setValue("");	
 				host.setValue("");
+			}
 		}
-		
 		else if (osceSettingsProxy.getInfotype().equals(BucketInfoType.FTP)) {
-				userName.setValue(osceSettingsProxy.getUsername());
-				passwordSFTP.setValue(osceSettingsProxy.getPassword());
-				//password.setValue(osceSettingsProxy.getPassword());
-				bucketName.setValue(osceSettingsProxy.getBucketName());	
-				host.setValue(osceSettingsProxy.getHost());
-				lblUserName.setInnerText(constants.userName());
-				lblPassword.setInnerText(constants.password());
-				lblBucketName.setInnerText(constants.basePath());
-				lblHost.setInnerText(constants.host());
+			userName.setValue(osceSettingsProxy.getUsername());
+			passwordSFTP.setValue(osceSettingsProxy.getPassword());
+			//password.setValue(osceSettingsProxy.getPassword());
+			bucketName.setValue(osceSettingsProxy.getBucketName());	
+			host.setValue(osceSettingsProxy.getHost());
+			lblUserName.setInnerText(constants.userName());
+			lblPassword.setInnerText(constants.password());
+			lblBucketName.setInnerText(constants.basePath());
+			lblHost.setInnerText(constants.host());
 		}	
+		else if (osceSettingsProxy.getInfotype().equals(BucketInfoType.S3)) {
+			if (BucketInfoType.FTP.equals(bucketInfo.getValue())) {
+				CloudConfigurationProxy cloudConfigurationProxy = delegate.findCloudConfigurationSetting();
+				if (cloudConfigurationProxy != null) {
+					userName.setValue(cloudConfigurationProxy.getSftpUsername());
+					password.getElement().getStyle().setDisplay(Display.NONE);
+					passwordSFTP.setVisible(true);
+					passwordSFTP.setValue(cloudConfigurationProxy.getSftpPassword());
+					bucketName.setValue(cloudConfigurationProxy.getSftpPath());	
+					host.setValue(cloudConfigurationProxy.getSftpHost());				
+				}
+				else {
+					userName.setValue("");
+					password.getElement().getStyle().setDisplay(Display.NONE);
+					passwordSFTP.setVisible(true);
+					passwordSFTP.setValue("");
+					bucketName.setValue("");	
+					host.setValue("");
+				}
+			}
+		}
 	}
 	
 	public void setCreating(boolean creating) {
@@ -735,7 +792,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 		String regex = "\\d+";
 		backUpPeriod.removeStyleName("higlight_onViolation");
 		screenSaverTime.removeStyleName("higlight_onViolation");
-		if (userName.getValue() != null && userName.getValue().isEmpty() == false && userName.getValue() != "") {
+		/*if (userName.getValue() != null && userName.getValue().isEmpty() == false && userName.getValue() != "") {
 			userName.removeStyleName("higlight_onViolation");
 		} else {
 			errorMessage = constants.credentialsMustNotBeEmpty();
@@ -764,7 +821,7 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 		} else if (BucketInfoType.FTP.equals(bucketInfo.getValue())) {
 			errorMessage = constants.credentialsMustNotBeEmpty();
 			host.addStyleName("higlight_onViolation");
-		}
+		}*/
 		
 		if (errorMessage.isEmpty() && backUpPeriod.getValue() != null && backUpPeriod.getValue().isEmpty() == false && backUpPeriod.getValue().length() > 0) {
 			
@@ -1029,6 +1086,9 @@ public class OsceEditViewImpl extends Composite implements OsceEditView {
 			setS3Values();
 			setSFTPValues();
 			setGeneralInfoValues(osceSettingsProxy);
+		}
+		else {
+			setS3Values();
 		}
 	}
 
