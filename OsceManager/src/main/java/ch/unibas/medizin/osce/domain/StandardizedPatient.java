@@ -116,7 +116,7 @@ public class StandardizedPatient {
     @ManyToOne
     private Profession profession;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "M-")
     private Date birthday;
 
