@@ -6,14 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -25,16 +22,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
-import org.apache.commons.math.stat.StatUtils;
 import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.Answer;
-import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.ChecklistItem;
 import ch.unibas.medizin.osce.domain.ChecklistOption;
-import ch.unibas.medizin.osce.domain.ChecklistQuestion;
-import ch.unibas.medizin.osce.domain.ChecklistTopic;
 import ch.unibas.medizin.osce.domain.Doctor;
 import ch.unibas.medizin.osce.domain.ItemAnalysis;
 import ch.unibas.medizin.osce.domain.Osce;
@@ -49,10 +41,8 @@ import ch.unibas.medizin.osce.shared.RoleTopicFactor;
 
 public class ExportStatisticData extends HttpServlet{
 
-	
+	private static final long serialVersionUID = 1L;
 	private static Logger Log = Logger.getLogger(UploadServlet.class);
-	private static Double Double;
-	
 	
 	  @Override
 	  protected void doGet(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException 
@@ -809,7 +799,7 @@ public class ExportStatisticData extends HttpServlet{
 								
 								if(k==4)// Item file (id, item_text, points (example 0|1|2.5|3), is_eval_item, weight)
 								{
-									Map<Long, Double> topicWiseRatioMap = new HashMap<Long, Double>();
+									/*Map<Long, Double> topicWiseRatioMap = new HashMap<Long, Double>();
 									Map<Long, Double> topicWeightMap = new HashMap<Long, Double>();
 									
 									if (oscePost.getStandardizedRole() != null && RoleTopicFactor.RATIO.equals(oscePost.getStandardizedRole().getTopicFactor()) && oscePost.getStandardizedRole().getCheckList() != null) {
@@ -819,21 +809,22 @@ public class ExportStatisticData extends HttpServlet{
 										Map<Long, Double> topicWiseMaxPoint = new HashMap<Long, Double>();
 										
 										for (ChecklistItem checklistTopicItem : checklistTopicItemList) {
-											Double totalTopicPoints = 0.0;
-											List<ChecklistItem> checklistQuestionItemList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistTopicItem.getId());
-											
-											
-											for (ChecklistItem checklistQuestionItem : checklistQuestionItemList) {
-												int maxOptionVal = ChecklistOption.findMaxOptionValueByQuestionId(checklistQuestionItem.getId());
-												totalTopicPoints += maxOptionVal;
+											if (checklistTopicItem.getWeight() != null) {
+												Double totalTopicPoints = 0.0;
+												List<ChecklistItem> checklistQuestionItemList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistTopicItem.getId());
+												
+												
+												for (ChecklistItem checklistQuestionItem : checklistQuestionItemList) {
+													int maxOptionVal = ChecklistOption.findMaxOptionValueByQuestionId(checklistQuestionItem.getId());
+													totalTopicPoints += maxOptionVal;
+												}
+												
+												totalPoints += totalTopicPoints;
+												topicWiseMaxPoint.put(checklistTopicItem.getId(), totalTopicPoints);
+												topicWeightMap.put(checklistTopicItem.getId(), checklistTopicItem.getWeight());
+												Log.info("total topic points" + totalTopicPoints);
+												Log.info("total  points" + totalPoints);
 											}
-											
-											totalPoints += totalTopicPoints;
-											topicWiseMaxPoint.put(checklistTopicItem.getId(), totalTopicPoints);
-											topicWeightMap.put(checklistTopicItem.getId(), checklistTopicItem.getWeight());
-											Log.info("total topic points" + totalTopicPoints);
-											Log.info("total  points" + totalPoints);
-											
 										}
 										
 										for (Entry<Long, java.lang.Double> entry : topicWiseMaxPoint.entrySet()) {
@@ -852,7 +843,7 @@ public class ExportStatisticData extends HttpServlet{
 										}
 										Log.info("TOpicwise ratio map "  + topicWiseRatioMap);
 									
-									}				
+									}*/				
 									
 									FileWriter writer = new FileWriter(fileName);
 									writer.append("id");
@@ -905,10 +896,10 @@ public class ExportStatisticData extends HttpServlet{
 												}
 											}
 											
-											double maxPoint=StatUtils.max(pointList);
-											double average=StatUtils.mean(pointList);
+											//double maxPoint=StatUtils.max(pointList);
+											//double average=StatUtils.mean(pointList);
 											
-											double weight = 0.0;
+											String weight = "0";
 											/*if (NumberUtils.isNumber(String.valueOf(maxPoint)) && NumberUtils.isNumber(String.valueOf(average)))
 											{
 												weight=Answer.roundTwoDecimals(Answer.percentage(average, maxPoint));
@@ -917,21 +908,23 @@ public class ExportStatisticData extends HttpServlet{
 											if (oscePost.getStandardizedRole() != null) {
 												if (RoleTopicFactor.RATIO.equals(oscePost.getStandardizedRole().getTopicFactor())) {
 													
-													if(topicWiseRatioMap.containsKey(d.getParentItem().getId())){
-														/*Double  ratio= topicWiseRatioMap.get(d.getParentItem().getId());
-														if(d.getParentItem().getWeight() != null) {*/
+													/*if(topicWiseRatioMap.containsKey(d.getParentItem().getId()) && topicWiseRatioMap.get(d.getParentItem().getId()) != null){
+														Double  ratio= topicWiseRatioMap.get(d.getParentItem().getId());
+														if(d.getParentItem().getWeight() != null) {
 															//weight =(d.getParentItem().getWeight() / 100) * ratio;	
-															weight =topicWiseRatioMap.get(d.getParentItem().getId());	
+															weight = topicWiseRatioMap.get(d.getParentItem().getId()).toString();	
 															
 														//}
 														
-												 }
-													
+													}*/
+													if (d.getParentItem() != null && d.getParentItem().getWeight() != null) {
+														weight = String.valueOf(d.getParentItem().getWeight() / 100);
+													}													
 												}
 												else if (RoleTopicFactor.WEIGHT.equals(oscePost.getStandardizedRole().getTopicFactor())) {
 													if (d.getParentItem() != null && d.getParentItem().getWeight() != null) {
-														weight = d.getParentItem().getWeight();
-													}
+														weight = d.getParentItem().getWeight().toString();
+													}													
 												}
 											}
 											
@@ -1378,7 +1371,7 @@ writer.append(answer.getStudent().getId() );
 					//List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
 					List<ChecklistItem> itemQuestionList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistItemTopic.getId());
 					
-					int count = 1;
+					//int count = 1;
 					//for (ChecklistQuestion question : questionList)
 					for (ChecklistItem questionItem : itemQuestionList)
 					{
@@ -1579,7 +1572,7 @@ writer.append(answer.getStudent().getId() );
 					//List<ChecklistQuestion> questionList = ChecklistQuestion.findCheckListQuestionByTopic(checklistTopic.getId());
 					List<ChecklistItem> itemQuestionList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistItemTopic.getId());
 					
-					int count = 1;
+					//int count = 1;
 					//for (ChecklistQuestion question : questionList)
 					for (ChecklistItem questionItem : itemQuestionList)
 					{
@@ -1783,7 +1776,7 @@ writer.append(answer.getStudent().getId() );
 	 public static String createOscePostGraphCSV(HttpServletRequest request, ServletContext servletContext, String fileName, OscePost oscePost)
 	  {
 		  
-		  char alphaSeq = 'A';
+		  //char alphaSeq = 'A';
 		  Long impressionQueId = null;
 		  
 		  try
@@ -1812,7 +1805,7 @@ writer.append(answer.getStudent().getId() );
 				
 				if (oscePost.getStandardizedRole() != null)
 					checklistTopicList = oscePost.getStandardizedRole().getCheckList().getCheckListTopics();*/
-				alphaSeq = 'A';
+				//alphaSeq = 'A';
 				
 				impressionQueId = PostAnalysis.findImpressionQuestionByOscePostAndOsce(oscePost.getId(), oscePost.getOsceSequence().getOsceDay().getOsce().getId());
 				
@@ -1834,7 +1827,7 @@ writer.append(answer.getStudent().getId() );
 					List<ChecklistItem> itemQuestionList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistTopicItem.getId());
 					
 					
-					int count = 1;
+					//int count = 1;
 					//for (ChecklistQuestion question : questionList)
 					for (ChecklistItem questionItem : itemQuestionList)
 					{
@@ -1855,11 +1848,11 @@ writer.append(answer.getStudent().getId() );
 								missingQue = missingQue + "," + "Q" + String.valueOf(questionItem.getId());
 						}
 						
-						count += 1;
+					//	count += 1;
 						//writer.append(question.getId().toString());
 						writer.append('|');
 					}
-					alphaSeq++;
+					//alphaSeq++;
 				}
 				writer.append("AddPoint");
 				writer.append('|');
