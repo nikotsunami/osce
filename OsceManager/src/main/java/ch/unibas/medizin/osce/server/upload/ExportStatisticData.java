@@ -1020,6 +1020,10 @@ public class ExportStatisticData extends HttpServlet{
 							writer.append('|');
 							writer.append("id of student");
 							writer.append('|');
+							if (flag) {
+								writer.append("student id");
+								writer.append('|');
+							}
 							
 							
 							//List<Long> postMissingQueList = ItemAnalysis.findDeactivatedItemByOscePostAndOsceSeq(oscePost.getId(), osceSeq.getId());
@@ -1116,6 +1120,10 @@ public class ExportStatisticData extends HttpServlet{
 						    		writer.append('|');
 						    		writer.append(answer.getStudent().getId().toString() );
 						    		writer.append('|');
+						    		if (flag) {
+						    			writer.append(StringUtils.defaultString(answer.getStudent().getStudentId()));
+						    			writer.append('|');
+						    		}
 						    		
 						    		Map<Long, ChecklistOption> answerMap = new HashMap<Long, ChecklistOption>();
 						    		

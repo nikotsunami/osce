@@ -118,8 +118,8 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 			List<Notes> audioNotes =  Notes.findNotesByExaminerAndStudentAndNotetype(examiner.getId(), studId, NoteType.STUDENT_AUDIO.ordinal(), standardizedRole.getId());
 		
 			for (Notes notes : audioNotes) {				
-				localPath+= notes.getComment();
-				fileNameList.add(localPath);
+				String audioPath = localPath + notes.getComment();
+				fileNameList.add(audioPath);
 			}
 			return fileNameList;
 	}
