@@ -1845,4 +1845,12 @@ public class Answer {
 	public static List<Answer> findAnswerEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM Answer o", Answer.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
+	
+	public static List<Answer> findAnswerByStudentOsceAndChecklistTopic(Long studentId, Long osceId, Long parentItemId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT a FROM Answer a WHERE a.student.id = " + studentId + " AND a.checklistItem.parentItem.id = " + parentItemId + " AND a.oscePostRoom.course.osce.id = " + osceId;
+		TypedQuery<Answer> query = em.createQuery(sql, Answer.class);
+		return query.getResultList();
+		
+	}
 }

@@ -6,21 +6,22 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 
 import ch.unibas.medizin.osce.domain.Answer;
-import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.ChecklistCriteria;
 import ch.unibas.medizin.osce.domain.ChecklistItem;
 import ch.unibas.medizin.osce.domain.ChecklistOption;
 import ch.unibas.medizin.osce.domain.Doctor;
-import ch.unibas.medizin.osce.domain.File;
 import ch.unibas.medizin.osce.domain.Notes;
 import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.Semester;
@@ -49,6 +50,10 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 	private boolean isValueAvailable[];
 	
 	protected Font tabFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
+	
+	protected Font notesDescriptionFont = new Font(Font.FontFamily.TIMES_ROMAN, 13);
+	
+	protected Font summaryItalicFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.ITALIC);
 	
 	public StudentManagementPrintPdfUtil() {
 		super();		
@@ -98,9 +103,11 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 				//document.add(new Chunk("Hello World"));		
 				addStudentName(studId);
 				addCheckListDetails(studId,standardizedRole.getCheckList().getId());
-				addSignature(standardizedRole, osceId, studId);
-				document.newPage();
+				addTextualNotes(studId, standardizedRole.getId(), osceId);
 				files.addAll(findAudioFileNamesForStudent(studId, osceId,standardizedRole,localPath));
+				addStudentSummary(standardizedRole, osceId, studId);
+				addSignature(standardizedRole, osceId, studId);
+				document.newPage();				
 			}
 			document.close();
 			createZipFile(os, out,files);
@@ -111,17 +118,192 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 		}		
 	}
 
-	private List<String> findAudioFileNamesForStudent(Long studId, Long osceId, StandardizedRole standardizedRole, String localPath) {
-		
-			List<String> fileNameList = new ArrayList<String>(); 
- 			Doctor examiner = Answer.findExaminerByStandardizedRoleOsceAndStudent(standardizedRole.getId(), osceId, studId);
-			List<Notes> audioNotes =  Notes.findNotesByExaminerAndStudentAndNotetype(examiner.getId(), studId, NoteType.STUDENT_AUDIO.ordinal(), standardizedRole.getId());
-		
-			for (Notes notes : audioNotes) {				
-				String audioPath = localPath + notes.getComment();
-				fileNameList.add(audioPath);
+	private void addStudentSummary(StandardizedRole standardizedRole, Long osceId, Long studId) {
+		if (standardizedRole.getCheckList() != null) {
+			Map<Long, String> topicNameMap = new HashMap<Long, String>();
+			Map<Long, String> topicPointMap = new HashMap<Long, String>();
+			int totalPoint = 0;
+			int totalStudentPoint = 0;
+			List<ChecklistItem> checklistTabs = ChecklistItem.findAllChecklistTabsByChecklistId(standardizedRole.getCheckList().getId());
+			Paragraph titleSummaryParagraph = new Paragraph(new Chunk(constants.summary() + " : ", tabFont));
+			Paragraph totalPointParagraph = new Paragraph();
+			
+			
+			
+			PdfPTable table = new PdfPTable(2);
+			table.setWidthPercentage(100.0f);
+			
+			for(ChecklistItem checklistTab: checklistTabs){
+				List<ChecklistItem> checklistTopics = ChecklistItem.findChecklistTopicByChecklistTab(checklistTab.getId());
+				
+				for (ChecklistItem checklistItem : checklistTopics) {
+					int totalOptionValue = 0;
+					Integer studentPoint = 0;
+					
+					List<ChecklistItem> checklistQuestionList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistItem.getId());
+						
+					for (ChecklistItem checklistQueItem : checklistQuestionList) {
+						int maxOptionVal = ChecklistOption.findMaxOptionValueByQuestionId(checklistQueItem.getId());
+						totalOptionValue += maxOptionVal;
+					}
+						
+					List<Answer> studentAnswerList = Answer.findAnswerByStudentOsceAndChecklistTopic(studId, osceId, checklistItem.getId());
+					
+					for (Answer answer : studentAnswerList) {
+						if (answer.getChecklistOption() != null && StringUtils.isNotBlank(answer.getChecklistOption().getValue())) {
+							studentPoint +=  Integer.parseInt(answer.getChecklistOption().getValue());
+						}
+					}
+					
+					topicNameMap.put(checklistItem.getId(), checklistItem.getName());
+					topicPointMap.put(checklistItem.getId(), (studentPoint + "/" + totalOptionValue));
+					totalPoint += totalOptionValue;
+					totalStudentPoint += studentPoint;
+					
+					PdfPCell cell1 = new PdfPCell();
+					cell1.addElement(new Chunk(checklistItem.getName()));
+					cell1.setBorder(Rectangle.NO_BORDER);
+										
+					PdfPCell cell2 = new PdfPCell();
+					cell2.addElement(new Chunk(studentPoint + "/" + totalOptionValue));
+					cell2.setBorder(Rectangle.NO_BORDER);
+					
+					table.addCell(cell1);
+					table.addCell(cell2);
+				}
 			}
-			return fileNameList;
+			
+			totalPointParagraph.add(new Chunk(standardizedRole.getShortName() + "(" + totalStudentPoint + "/" + totalPoint + ")", summaryItalicFont));
+			try {
+				PdfPTable mainTable = new PdfPTable(1);
+				mainTable.setWidthPercentage(100.0f);
+				
+				PdfPCell cell1 = new PdfPCell();
+				cell1.setBorder(Rectangle.NO_BORDER);
+				cell1.addElement(titleSummaryParagraph);
+				
+				PdfPCell cell2 = new PdfPCell();
+				cell2.setBorder(Rectangle.NO_BORDER);
+				cell2.addElement(totalPointParagraph);
+				
+				PdfPCell cell3 = new PdfPCell();
+				cell3.setBorder(Rectangle.NO_BORDER);
+				cell3.addElement(table);
+				
+				PdfPCell cell4 = new PdfPCell();
+				cell4.setPadding(0);
+				cell4.setBorder(Rectangle.NO_BORDER);
+				cell4.setBorderWidthBottom(0.5f);
+				
+				//cell.setPaddingTop(5.0f);
+				//cell.setPaddingBottom(5.0f);
+				
+				mainTable.addCell(cell1);
+				mainTable.addCell(cell2);
+				mainTable.addCell(cell3);
+				mainTable.addCell(cell4);
+				//document.add(titleSummaryParagraph);
+				//document.add(totalPointParagraph);
+				document.add(mainTable);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
+
+	private void addTextualNotes(Long studId, Long standardizedRoleId, Long osceId) {
+		Doctor examiner = Answer.findExaminerByStandardizedRoleOsceAndStudent(standardizedRole.getId(), osceId, studId);
+		
+		if (examiner != null) {
+			PdfPTable pdfPTable = new PdfPTable(1);
+			pdfPTable.setWidthPercentage(100.0f);
+			List<Notes> textualNotes =  Notes.findNotesByExaminerAndStudentAndNotetype(examiner.getId(), studId, NoteType.TEXTUAL.ordinal(), standardizedRoleId);
+			String textualNoteTitle = constants.examinerComment() + " : ";
+			String textualNote = "";
+			for (Notes notes : textualNotes) {
+				if (StringUtils.isNotBlank(notes.getComment()))
+					textualNote += notes.getComment();
+			}
+			Paragraph tabTitleParagraph = new Paragraph(new Chunk(textualNoteTitle,tabFont));
+			if (StringUtils.isBlank(textualNote)) {
+				textualNote = "Not available";
+			}
+			Paragraph tabParagraph = new Paragraph(new Chunk(textualNote, notesDescriptionFont));
+			try {
+				//addEmptyLine(tabParagraph, 1);
+				
+				PdfPCell cell = new PdfPCell();
+				cell.setBorder(Rectangle.NO_BORDER);
+				cell.addElement(tabTitleParagraph);
+				
+				PdfPCell cell1 = new PdfPCell();
+				cell1.setBorder(Rectangle.NO_BORDER);				
+				cell1.addElement(tabParagraph);
+				
+				PdfPCell cell2 = new PdfPCell();
+				cell2.setBorder(Rectangle.NO_BORDER);
+				cell2.setBorderWidthBottom(0.5f);
+				
+				pdfPTable.addCell(cell);
+				pdfPTable.addCell(cell1);
+				pdfPTable.addCell(cell2);
+				//document.add(tabTitleParagraph);
+				document.add(pdfPTable);				
+			} catch (DocumentException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private List<String> findAudioFileNamesForStudent(Long studId, Long osceId, StandardizedRole standardizedRole, String localPath) {
+		PdfPTable pdfPTable = new PdfPTable(1);
+		pdfPTable.setWidthPercentage(100.0f);
+		
+		List<String> fileNameList = new ArrayList<String>(); 
+		Doctor examiner = Answer.findExaminerByStandardizedRoleOsceAndStudent(standardizedRole.getId(), osceId, studId);
+		List<Notes> audioNotes =  Notes.findNotesByExaminerAndStudentAndNotetype(examiner.getId(), studId, NoteType.STUDENT_AUDIO.ordinal(), standardizedRole.getId());
+		
+		String audioNoteTitle = constants.audioNotes() + " : ";
+		String audioNote = "";
+		Paragraph titleTabParagraph = new Paragraph(new Chunk(audioNoteTitle,tabFont));
+		
+		for (Notes notes : audioNotes) {				
+			String audioPath = localPath + notes.getComment();
+			fileNameList.add(audioPath);
+			
+			if (StringUtils.isNotBlank(notes.getComment())) {
+				audioNote = audioNote + StringUtils.substringAfter(notes.getComment(), "_") + "\n";				
+			}			
+		}			
+			
+		if (StringUtils.isBlank(audioNote)) {
+			audioNote = constants.notAvailable();
+		}
+		Paragraph tabParagraph = new Paragraph(new Chunk(audioNote,notesDescriptionFont));
+		try {
+			PdfPCell cell = new PdfPCell();
+			cell.setBorder(Rectangle.NO_BORDER);
+			cell.addElement(titleTabParagraph);
+			
+			PdfPCell cell1 = new PdfPCell();
+			cell1.setBorder(Rectangle.NO_BORDER);
+			cell1.addElement(tabParagraph);
+			
+			PdfPCell cell2 = new PdfPCell();
+			cell2.setBorder(Rectangle.NO_BORDER);
+			cell2.setBorderWidthBottom(0.5f);
+			
+			pdfPTable.addCell(cell);
+			pdfPTable.addCell(cell1);
+			pdfPTable.addCell(cell2);
+			//document.add(titleTabParagraph);
+			document.add(pdfPTable);
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+		
+		return fileNameList;
 	}
 	
 	private void addStudentName(Long studId) {
@@ -220,7 +402,7 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 		}
 	}
 
-	private void addDetails() {
+	/*private void addDetails() {
 		if (isValueAvailable[0]) 
 		{
 			Paragraph details = new Paragraph();
@@ -236,12 +418,12 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 				log.error("in PdfUtil.addDetails(): " + e.getMessage());
 			}
 		}
-	}
+	}*/
 
 	
 
 	
-	private void addFileDetails() {
+	/*private void addFileDetails() {
 		Paragraph details = new Paragraph();
 		PdfPTable table = createFileDetailsTable();
 		if (isValueAvailable[1]) {
@@ -257,7 +439,7 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 				log.error("in PdfUtil.addDetails(): " + e.getMessage());
 			}
 		}
-	}
+	}*/
 
 	private void addCheckListDetails(long studId, Long checklistId) {
 		Paragraph titleDetails = new Paragraph();
@@ -315,7 +497,7 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 		}
 	}
 
-	private Paragraph createPara(PdfPTable pdfPTable, String header) {
+	/*private Paragraph createPara(PdfPTable pdfPTable, String header) {
 
 		Paragraph details = new Paragraph();
 		// pdfPTable.setSpacingBefore(titleTableSpacing);
@@ -324,7 +506,7 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 			details.add(new Chunk(header, subTitleFont));
 		details.add(pdfPTable);
 		return details;
-	}
+	}*/
 	
 	private PdfPCell getAnswerCell(String question, List<ChecklistOption> options,List<Long> givenAnswer) {
 		Collections.sort(options);
@@ -385,7 +567,7 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 				subTable.addCell(answer);*/
 				String answer = options.get(i).getOptionName();
 				PdfPCell subCell = new PdfPCell();
-				CheckBoxCellEvent event;
+				//CheckBoxCellEvent event;
 				/*if (isRadio) {
 					event = new CheckBoxCellEvent(writer, group,possibleAnswers[i], isSelected);
 				}
@@ -499,14 +681,14 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 	
 	private void createCheckListDetailsTable(long studId, Long checklistTabId) {
 		isValueAvailable[3] = true;
-		CheckList checkList = standardizedRole.getCheckList();
+		//CheckList checkList = standardizedRole.getCheckList();
 
 		//List<ChecklistTopic> checklistTopics = checkList.getCheckListTopics();
 		List<ChecklistItem> checklistTopics = ChecklistItem.findChecklistTopicByChecklistTab(checklistTabId);
 
 		log.info("CheckList size " + checklistTopics.size());
 		
-		Paragraph checklistDetails = new Paragraph();
+		//Paragraph checklistDetails = new Paragraph();
 
 		for (ChecklistItem checklistTopic : checklistTopics) {
 			String chkListTitle = checklistTopic.getName();
@@ -550,7 +732,7 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 		}
 	}
 
-	private PdfPTable createFileDetailsTable() {
+	/*private PdfPTable createFileDetailsTable() {
 
 		PdfPTable fileTable = new PdfPTable(2);
 
@@ -580,9 +762,9 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 		}
 
 		return fileTable;
-	}
+	}*/
 
-	private PdfPTable createDetailsTable() {
+	/*private PdfPTable createDetailsTable() {
 		PdfPTable table = new PdfPTable(new float[] { 0.2f, 0.3f, 0.2f, 0.3f });
 
 		String shortName = (standardizedRole.getShortName() != null) ? standardizedRole
@@ -614,7 +796,7 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 
 		table.setWidthPercentage(100);
 		return table;
-	}
+	}*/
 
 	public static void createZipFile(ByteArrayOutputStream pdfOutputStream, OutputStream zipOutputStream, List<String> fileNames)
 	 {
@@ -627,7 +809,7 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 			 for (String fileName : fileNames) {
 				  java.io.File file = new java.io.File(fileName);
 				  if(file.exists()){
-					  zipOut.putNextEntry(new ZipEntry(file.getName()));
+					  zipOut.putNextEntry(new ZipEntry(StringUtils.substringAfter(file.getName(), "_") ));
 					  zipOut.write(FileUtils.readFileToByteArray(file));
 				  }  
 			  }

@@ -1779,6 +1779,12 @@ public interface OsceConstants extends Constants {
 	public String webServicePath();
 	
 	public String registerDevicePath();
+	
+	public String examinerComment();
+			
+	public String audioNotes();
+			
+	public String summary();
 }
 
 
