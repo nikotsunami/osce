@@ -585,6 +585,7 @@ public class ChecklistItem {
 		newChecklistItem.setParentItem(newItem);
 		newChecklistItem.setOptionType(oldChecklistItem.getOptionType());
 		newChecklistItem.setIsRegressionItem(oldChecklistItem.getIsRegressionItem());
+		newChecklistItem.setWeight(0.0);		
 		newChecklistItem.persist();
 		
 		return newChecklistItem;
@@ -628,60 +629,23 @@ public class ChecklistItem {
 			
 			if (selectedRole != null && selectedRole.getCheckList() != null && selectedRole.getCheckList().getChecklistItems() != null) {
 				List<ChecklistItem> oldChecklistItemList = findChecklistTopicByChecklist(selectedRole.getCheckList().getId());
-				ChecklistItem tabItem = ChecklistItem.findChecklistItem(tabId);
-				
-				if (tabItem != null && tabItem.getCheckList() != null) {
-					Double topicWeight = findMaxTopicWeight(tabItem.getCheckList().getId());
+				Integer seqNumber = findMaxSequenceNumberByParentItem(tabId);
+				for (ChecklistItem oldChecklistItem : oldChecklistItemList) {
+					ChecklistItem newChecklistTopicItem = new ChecklistItem().copyChecklistTopicItemFromOld(oldChecklistItem, seqNumber,tab);
+					newChecklistTopicItemList.add(newChecklistTopicItem);
+					new ChecklistItem().copyChecklistItemFromAnotherItem(newChecklistTopicItem, oldChecklistItem);
 					
-					for (ChecklistItem oldChecklistItem : oldChecklistItemList) {
-						if (oldChecklistItem.getWeight() != null) {
-							topicWeight += oldChecklistItem.getWeight();
-						}
-					}
-					
-					if (topicWeight <= 100) {
-						Integer seqNumber = findMaxSequenceNumberByParentItem(tabId);
-						for (ChecklistItem oldChecklistItem : oldChecklistItemList) {
-							ChecklistItem newChecklistTopicItem = new ChecklistItem().copyChecklistTopicItemFromOld(oldChecklistItem, seqNumber,tab);
-							newChecklistTopicItemList.add(newChecklistTopicItem);
-							new ChecklistItem().copyChecklistItemFromAnotherItem(newChecklistTopicItem, oldChecklistItem);
-							
-							seqNumber += 1;
-						}
-					}
-					else {
-						newChecklistTopicItemList = null;
-					}	
+					seqNumber += 1;
 				}
 			}
 		}
 		else {
 			if (tab != null && tab.getId() != null && topicId != null) {
-				ChecklistItem tabItem = ChecklistItem.findChecklistItem(tabId);
-				if (tabItem != null && tabItem.getCheckList() != null) {
-					Double topicWeight = findMaxTopicWeight(tabItem.getCheckList().getId());				
-					ChecklistItem topic = ChecklistItem.findChecklistItem(topicId);
-					
-					if (topic.getWeight() != null) {
-						topicWeight = topicWeight + topic.getWeight();
-						
-						if (topicWeight <= 100) {
-							Integer seqNumber = findMaxSequenceNumberByParentItem(tabId);
-							ChecklistItem newChecklistTopicItem = new ChecklistItem().copyChecklistTopicItemFromOld(topic, seqNumber,tab);
-							newChecklistTopicItemList.add(newChecklistTopicItem);
-							new ChecklistItem().copyChecklistItemFromAnotherItem(newChecklistTopicItem, topic);
-						}
-						else {
-							newChecklistTopicItemList = null;
-						}
-					}
-					else {
-						Integer seqNumber = findMaxSequenceNumberByParentItem(tabId);
-						ChecklistItem newChecklistTopicItem = new ChecklistItem().copyChecklistTopicItemFromOld(topic, seqNumber,tab);
-						newChecklistTopicItemList.add(newChecklistTopicItem);
-						new ChecklistItem().copyChecklistItemFromAnotherItem(newChecklistTopicItem, topic);
-					}
-				}
+				ChecklistItem topic = ChecklistItem.findChecklistItem(topicId);
+				Integer seqNumber = findMaxSequenceNumberByParentItem(tabId);
+				ChecklistItem newChecklistTopicItem = new ChecklistItem().copyChecklistTopicItemFromOld(topic, seqNumber,tab);
+				newChecklistTopicItemList.add(newChecklistTopicItem);
+				new ChecklistItem().copyChecklistItemFromAnotherItem(newChecklistTopicItem, topic);
 			}
 		}
 		return newChecklistTopicItemList;
@@ -695,7 +659,8 @@ public class ChecklistItem {
 		newChecklistItem.setItemType(oldChecklistItem.getItemType());
 		newChecklistItem.setSequenceNumber(seqNumber);
 		newChecklistItem.setParentItem(currentTab);
-		newChecklistItem.setWeight(oldChecklistItem.getWeight() == null? null: oldChecklistItem.getWeight());
+		//newChecklistItem.setWeight(oldChecklistItem.getWeight() == null? null: oldChecklistItem.getWeight());
+		newChecklistItem.setWeight(0.0);
 		newChecklistItem.persist();
 		
 		return newChecklistItem;
