@@ -55,6 +55,8 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 	
 	protected Font summaryItalicFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.ITALIC);
 	
+	protected String ANSWER_TEXT = "|";
+	
 	public StudentManagementPrintPdfUtil() {
 		super();		
 	}
@@ -170,6 +172,12 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 					
 					table.addCell(cell1);
 					table.addCell(cell2);
+					float[] columnWidths = new float[] {40f, 20f};
+					try {
+						table.setWidths(columnWidths);
+					} catch (DocumentException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			
@@ -510,7 +518,7 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 	
 	private PdfPCell getAnswerCell(String question, List<ChecklistOption> options,List<Long> givenAnswer) {
 		Collections.sort(options);
-		String[] answers = new String[options.size()];
+		//String[] answers = new String[options.size()];
 		
 		List<Integer> selectedAnswers=new ArrayList<Integer>();
 		for(Long ans:givenAnswer)
@@ -520,11 +528,13 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 		}
 		
 		
-		for (int i=0; i < options.size(); i++) {
+		/*for (int i=0; i < options.size(); i++) {
 			ChecklistOption option = options.get(i);		
-			answers[i] = option.getOptionName() + " (" + option.getValue() + ")";
-			
-		}	
+			if (StringUtils.isNotBlank(option.getOptionName()))
+				answers[i] = option.getOptionName() + " (" + option.getValue() + ")";
+			else 
+				answers[i] = "|" + " (" + option.getValue() + ")";
+		}	*/
 /*		for(Long ans:givenAnswer) {
 			selectedAnswers.add(Integer.valueOf(ans.toString()));
 		}
@@ -565,7 +575,10 @@ public class StudentManagementPrintPdfUtil extends PdfUtil {
 				}
 				
 				subTable.addCell(answer);*/
-				String answer = options.get(i).getOptionName();
+				String answer = ANSWER_TEXT;
+				if (StringUtils.isNotBlank(options.get(i).getOptionName()))
+					answer = options.get(i).getOptionName();
+				
 				PdfPCell subCell = new PdfPCell();
 				//CheckBoxCellEvent event;
 				/*if (isRadio) {

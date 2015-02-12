@@ -45,8 +45,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 	
-
-
 	private StandardizedRole standardizedRole;
 	
 	private boolean isValueAvailable[];
@@ -56,6 +54,8 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 	protected Font notesDescriptionFont = new Font(Font.FontFamily.TIMES_ROMAN, 13);
 	
 	protected Font summaryItalicFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.ITALIC);
+	
+	protected String ANSWER_TEXT = "|";
 	
 	public StudentManagementPrintMinOptionPdfUtil() {
 		super();		
@@ -172,6 +172,13 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 					
 					table.addCell(cell1);
 					table.addCell(cell2);
+					
+					float[] columnWidths = new float[] {40f, 20f};
+					try {
+						table.setWidths(columnWidths);
+					} catch (DocumentException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			
@@ -566,7 +573,11 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 				}
 				
 				subTable.addCell(answer);*/
-				String answer = options.get(i).getOptionName();
+				String answer = ANSWER_TEXT;
+				
+				if (StringUtils.isNotBlank(options.get(i).getOptionName()))
+					answer = options.get(i).getOptionName();
+					
 				PdfPCell subCell = new PdfPCell();
 				//CheckBoxCellEvent event;
 				/*if (isRadio) {

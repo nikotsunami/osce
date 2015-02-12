@@ -628,23 +628,60 @@ public class ChecklistItem {
 			
 			if (selectedRole != null && selectedRole.getCheckList() != null && selectedRole.getCheckList().getChecklistItems() != null) {
 				List<ChecklistItem> oldChecklistItemList = findChecklistTopicByChecklist(selectedRole.getCheckList().getId());
-				Integer seqNumber = findMaxSequenceNumberByParentItem(tabId);
-				for (ChecklistItem oldChecklistItem : oldChecklistItemList) {
-					ChecklistItem newChecklistTopicItem = new ChecklistItem().copyChecklistTopicItemFromOld(oldChecklistItem, seqNumber,tab);
-					newChecklistTopicItemList.add(newChecklistTopicItem);
-					new ChecklistItem().copyChecklistItemFromAnotherItem(newChecklistTopicItem, oldChecklistItem);
+				ChecklistItem tabItem = ChecklistItem.findChecklistItem(tabId);
+				
+				if (tabItem != null && tabItem.getCheckList() != null) {
+					Double topicWeight = findMaxTopicWeight(tabItem.getCheckList().getId());
 					
-					seqNumber += 1;
+					for (ChecklistItem oldChecklistItem : oldChecklistItemList) {
+						if (oldChecklistItem.getWeight() != null) {
+							topicWeight += oldChecklistItem.getWeight();
+						}
+					}
+					
+					if (topicWeight <= 100) {
+						Integer seqNumber = findMaxSequenceNumberByParentItem(tabId);
+						for (ChecklistItem oldChecklistItem : oldChecklistItemList) {
+							ChecklistItem newChecklistTopicItem = new ChecklistItem().copyChecklistTopicItemFromOld(oldChecklistItem, seqNumber,tab);
+							newChecklistTopicItemList.add(newChecklistTopicItem);
+							new ChecklistItem().copyChecklistItemFromAnotherItem(newChecklistTopicItem, oldChecklistItem);
+							
+							seqNumber += 1;
+						}
+					}
+					else {
+						newChecklistTopicItemList = null;
+					}	
 				}
 			}
 		}
 		else {
 			if (tab != null && tab.getId() != null && topicId != null) {
-				ChecklistItem topic = ChecklistItem.findChecklistItem(topicId);
-				Integer seqNumber = findMaxSequenceNumberByParentItem(tabId);
-				ChecklistItem newChecklistTopicItem = new ChecklistItem().copyChecklistTopicItemFromOld(topic, seqNumber,tab);
-				newChecklistTopicItemList.add(newChecklistTopicItem);
-				new ChecklistItem().copyChecklistItemFromAnotherItem(newChecklistTopicItem, topic);
+				ChecklistItem tabItem = ChecklistItem.findChecklistItem(tabId);
+				if (tabItem != null && tabItem.getCheckList() != null) {
+					Double topicWeight = findMaxTopicWeight(tabItem.getCheckList().getId());				
+					ChecklistItem topic = ChecklistItem.findChecklistItem(topicId);
+					
+					if (topic.getWeight() != null) {
+						topicWeight = topicWeight + topic.getWeight();
+						
+						if (topicWeight <= 100) {
+							Integer seqNumber = findMaxSequenceNumberByParentItem(tabId);
+							ChecklistItem newChecklistTopicItem = new ChecklistItem().copyChecklistTopicItemFromOld(topic, seqNumber,tab);
+							newChecklistTopicItemList.add(newChecklistTopicItem);
+							new ChecklistItem().copyChecklistItemFromAnotherItem(newChecklistTopicItem, topic);
+						}
+						else {
+							newChecklistTopicItemList = null;
+						}
+					}
+					else {
+						Integer seqNumber = findMaxSequenceNumberByParentItem(tabId);
+						ChecklistItem newChecklistTopicItem = new ChecklistItem().copyChecklistTopicItemFromOld(topic, seqNumber,tab);
+						newChecklistTopicItemList.add(newChecklistTopicItem);
+						new ChecklistItem().copyChecklistItemFromAnotherItem(newChecklistTopicItem, topic);
+					}
+				}
 			}
 		}
 		return newChecklistTopicItemList;

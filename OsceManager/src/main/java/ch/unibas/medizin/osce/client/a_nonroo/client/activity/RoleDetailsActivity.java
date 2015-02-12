@@ -8546,8 +8546,8 @@ final int index2 = index;
 						dialogBox.showConfirmationDialog(osceMessages.topicFactorMustBeNumeric(constants.weight()));	
 				}
 					
-				} else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.RATIO)){
-				
+			} 
+			else if(standardizedRoleProxy.getTopicFactor().equals(RoleTopicFactor.RATIO)){				
 				if(isDouble(weight) == true){
 						final Double topicWeight= weight==""?0:Double.valueOf(weight);
 						final ChecklistItemRequest checklistItemRequest = requests.checklistItemRequest();
@@ -8561,6 +8561,7 @@ final int index2 = index;
 
 							@Override
 							public void onSuccess(Double response) {
+								response = response - checklistItemProxy.getWeight();
 								
 								if(response != null && response <100){
 									
@@ -8891,7 +8892,11 @@ final int index2 = index;
 
 							@Override
 							public void onSuccess(List<ChecklistItemProxy> response) {
-								if (standardizedRoleProxy.getCheckList() != null && selectedStandardizedRoleView != null) {
+								if (response == null) {
+									MessageConfirmationDialogBox dialogBox = new MessageConfirmationDialogBox(constants.warning());
+									dialogBox.showConfirmationDialog(constants.ratioExceedError());	
+								}
+								else if (standardizedRoleProxy.getCheckList() != null && selectedStandardizedRoleView != null) {
 									initiOSCEChecklist(standardizedRoleProxy.getCheckList().getId(), selectedStandardizedRoleView);
 								}
 							}
