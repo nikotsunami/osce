@@ -145,6 +145,78 @@ public class ChecklistCriteria implements Comparable<ChecklistCriteria> {
         return sb.toString();
     }
 
+	public static ChecklistCriteria moveChecklistCriteriaUp(ChecklistCriteria criteriaToMoveUp,int seqNumToSet,ChecklistItem checklistQue) {
+		if(seqNumToSet >= 0){
+			ChecklistCriteria checklistCriteriaItem = new ChecklistCriteria().moveItemUp(criteriaToMoveUp,seqNumToSet,checklistQue.getId());
+			return checklistCriteriaItem;
+		}
+		return null;
+	}
+	
+	@Transactional
+	private ChecklistCriteria moveItemUp(ChecklistCriteria optionToMoveUp,int seqNumToSet,Long checklistQuestionId) {
+
+		if(optionToMoveUp.getChecklistItem()  != null){
+
+			EntityManager em = entityManager();
+			String sql = "SELECT ci FROM ChecklistCriteria ci WHERE ci.checklistItem = " + checklistQuestionId+ " and ci.sequenceNumber = "  + seqNumToSet + "";
+			TypedQuery<ChecklistCriteria> query = em.createQuery(sql, ChecklistCriteria.class);
+			if (query != null && query.getResultList().isEmpty() == false) {
+				ChecklistCriteria item = query.getResultList().get(0);				
+				if(item != null){
+					item.setSequenceNumber(seqNumToSet + 1);
+					item.persist();
+				}
+				optionToMoveUp.setSequenceNumber(seqNumToSet);
+				optionToMoveUp.persist();
+			}				
+		}
+		return optionToMoveUp;
+	}
+	
+	public static ChecklistCriteria moveChecklistCriteriaDown(ChecklistCriteria criteriaToMoveDown, int seqNumToSet,ChecklistItem checklistQue){
+		
+		Integer maxSeqNum = findMaxSequenceNumberByChecklistItem(criteriaToMoveDown,checklistQue.getId());
+
+		if(seqNumToSet >= 0 &&  seqNumToSet < (maxSeqNum)){
+			ChecklistCriteria checklistItem = new ChecklistCriteria().moveItemDown(criteriaToMoveDown,seqNumToSet,checklistQue.getId());
+			return checklistItem;
+		}
+		return null;
+	}
+	
+	private static Integer findMaxSequenceNumberByChecklistItem(ChecklistCriteria optionToMoveDown, Long queId) {
+
+		EntityManager em = entityManager();
+		String sql = "SELECT MAX(ci.sequenceNumber) FROM ChecklistCriteria ci WHERE ci.checklistItem = " + queId;
+		TypedQuery<Integer> query = em.createQuery(sql, Integer.class);
+		if (query.getResultList() != null && query.getResultList().size() > 0 && query.getResultList().get(0) != null)
+			return (query.getResultList().get(0) + 1);
+		else
+			return 0;
+	}
+	
+	@Transactional
+	private ChecklistCriteria moveItemDown(ChecklistCriteria criteriaToMoveDown,int seqNumToSet,Long queId) {
+		if(criteriaToMoveDown.getChecklistItem()  != null){
+
+			EntityManager em = entityManager();
+			String sql = "SELECT ci FROM ChecklistCriteria ci WHERE ci.checklistItem = " + queId+ " and ci.sequenceNumber = "  + seqNumToSet + "";
+			TypedQuery<ChecklistCriteria> query = em.createQuery(sql, ChecklistCriteria.class);
+			if (query != null && query.getResultList().isEmpty() == false) {
+				ChecklistCriteria item = query.getResultList().get(0);
+				
+				if(item != null){
+					item.setSequenceNumber(seqNumToSet - 1);
+					item.persist();
+				}
+				criteriaToMoveDown.setSequenceNumber(seqNumToSet);
+				criteriaToMoveDown.persist();
+			}
+		}
+		return criteriaToMoveDown;
+	}
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")

@@ -29,4 +29,8 @@ public interface ChecklistCriteriaRequest extends RequestContext {
 	abstract Request<ChecklistItemProxy> saveChecklistCriteria(String name, String description, Long checklistItemId, Long checklistCriteriaId);
 	
 	abstract Request<ChecklistItemProxy> removeChecklistCriteria(Long criteriaId);
+
+	abstract Request<ChecklistCriteriaProxy> moveChecklistCriteriaUp(ChecklistCriteriaProxy criteriaProxy, int seqNumToSet,ChecklistItemProxy checklistItemProxy);
+
+	abstract Request<ChecklistCriteriaProxy> moveChecklistCriteriaDown(ChecklistCriteriaProxy criteriaProxy, int seqNumToSet,ChecklistItemProxy checklistItemProxy);
 }

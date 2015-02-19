@@ -8561,6 +8561,7 @@ final int index2 = index;
 
 							@Override
 							public void onSuccess(Double response) {
+								if(checklistItemProxy.getWeight() != null) 
 								response = response - checklistItemProxy.getWeight();
 								
 								if(response != null && response <100){
@@ -9251,6 +9252,85 @@ final int index2 = index;
 							Log.info("question moved down");
 						}
 					}
+				});
+			}
+		}
+
+		@Override
+		public void upArrowChecklistOptionClicked(RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl,ChecklistOptionProxy optionProxy,ChecklistItemProxy checklistitemproxy) {
+			final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+			
+			if(optionProxy != null){
+				requests.checklistOptionRequest().moveChecklistOptionUp(optionProxy,optionProxy.getSequenceNumber() - 1,checklistitemproxy).with("checklistItem","checklistItem.parentItem").fire(new OSCEReceiver<ChecklistOptionProxy>() {
+
+					@Override
+					public void onSuccess(ChecklistOptionProxy response) {
+						if(response != null){
+							refreshiOSCEChecklist(standardizedRoleProxy.getCheckList().getId(), selectedStandardizedRoleView, response.getChecklistItem().getParentItem(), ItemType.TOPIC.ordinal());
+							Log.info("option moved up");
+						}
+					}
+				
+				});
+			}
+		}
+
+		@Override
+		public void downArrowChecklistOptionClicked(RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl,ChecklistOptionProxy optionProxy,ChecklistItemProxy checklistItemProxy) {
+			
+			final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+			
+			if(optionProxy != null){
+				requests.checklistOptionRequest().moveChecklistOptionDown(optionProxy,optionProxy.getSequenceNumber() + 1,checklistItemProxy).with("checklistItem", "checklistItem.parentItem").fire(new OSCEReceiver<ChecklistOptionProxy>() {
+
+					@Override
+					public void onSuccess(ChecklistOptionProxy response) {
+						if(response != null){
+							refreshiOSCEChecklist(standardizedRoleProxy.getCheckList().getId(), selectedStandardizedRoleView, response.getChecklistItem().getParentItem(), ItemType.TOPIC.ordinal());
+							Log.info("option moved down");
+						}
+					}
+				});
+			}
+		}
+
+		@Override
+		public void downArrowChecklistCriteriaClicked(RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl,ChecklistCriteriaProxy criteriaProxy,	ChecklistItemProxy checklistItemProxy) {
+			final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+			
+			if(criteriaProxy != null){
+				requests.checklistCriteriaRequest().moveChecklistCriteriaDown(criteriaProxy,criteriaProxy.getSequenceNumber() + 1,checklistItemProxy).with("checklistItem", "checklistItem.parentItem").fire(new OSCEReceiver<ChecklistCriteriaProxy>() {
+
+					@Override
+					public void onSuccess(ChecklistCriteriaProxy response) {
+						if(response != null){
+							refreshiOSCEChecklist(standardizedRoleProxy.getCheckList().getId(), selectedStandardizedRoleView, response.getChecklistItem().getParentItem(), ItemType.TOPIC.ordinal());
+							Log.info("criteria moved down");
+						}
+					}
+				});
+			}
+		}
+
+		@Override
+		public void upArrowChecklistCriteriaClicked(RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl,ChecklistCriteriaProxy criteriaProxy,ChecklistItemProxy checklistItemProxy) {
+			final StandardizedRoleDetailsViewImpl selectedStandardizedRoleView = standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()];
+			final StandardizedRoleProxy standardizedRoleProxy=standardizedRoleDetailsView[view.getRoleDetailTabPanel().getSelectedIndex()].getValue();
+			
+			if(criteriaProxy != null){
+				requests.checklistCriteriaRequest().moveChecklistCriteriaUp(criteriaProxy,criteriaProxy.getSequenceNumber() - 1,checklistItemProxy).with("checklistItem","checklistItem.parentItem").fire(new OSCEReceiver<ChecklistCriteriaProxy>() {
+
+					@Override
+					public void onSuccess(ChecklistCriteriaProxy response) {
+						if(response != null){
+							refreshiOSCEChecklist(standardizedRoleProxy.getCheckList().getId(), selectedStandardizedRoleView, response.getChecklistItem().getParentItem(), ItemType.TOPIC.ordinal());
+							Log.info("criteria moved up");
+						}
+					}
+				
 				});
 			}
 		}

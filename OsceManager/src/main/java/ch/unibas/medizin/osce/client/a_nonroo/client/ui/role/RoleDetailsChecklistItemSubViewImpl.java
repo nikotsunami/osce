@@ -201,6 +201,30 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 			}
 		}, null, btnHeader);
 		
+		addCriteriaColumn(new ActionCell<ChecklistCriteriaProxy>(
+				OsMaConstant.DOWN_ICON, new ActionCell.Delegate<ChecklistCriteriaProxy>() {
+					public void execute(final ChecklistCriteriaProxy criteriaProxy) {
+						delegate.downArrowChecklistCriteriaClicked(RoleDetailsChecklistItemSubViewImpl.this,criteriaProxy,checklistItemProxy);
+						
+					}
+				}), "", new GetValueCriteria<ChecklistCriteriaProxy>() {
+			public ChecklistCriteriaProxy getValue(ChecklistCriteriaProxy criteriaProxy) {
+				return criteriaProxy;
+			}
+		}, null, null);
+		
+		addCriteriaColumn(new ActionCell<ChecklistCriteriaProxy>(
+				OsMaConstant.UP_ICON, new ActionCell.Delegate<ChecklistCriteriaProxy>() {
+					public void execute(final ChecklistCriteriaProxy criteriaProxy) {
+						delegate.upArrowChecklistCriteriaClicked(RoleDetailsChecklistItemSubViewImpl.this,criteriaProxy,checklistItemProxy);
+						
+					}
+				}), "", new GetValueCriteria<ChecklistCriteriaProxy>() {
+			public ChecklistCriteriaProxy getValue(ChecklistCriteriaProxy criteriaProxy) {
+				return criteriaProxy;
+			}
+		}, null, null);
+		
 		criteriaTable.addColumnStyleName(2, "iconCol");
 	}
 
@@ -384,6 +408,30 @@ public class RoleDetailsChecklistItemSubViewImpl extends Composite implements Ro
 				return optionProxy;
 			}
 		}, null, btnHeader);
+		
+		
+		addOptionColumn(new ActionCell<ChecklistOptionProxy>(
+				OsMaConstant.DOWN_ICON, new ActionCell.Delegate<ChecklistOptionProxy>() {
+					public void execute(final ChecklistOptionProxy optionProxy) {
+						delegate.downArrowChecklistOptionClicked(RoleDetailsChecklistItemSubViewImpl.this,optionProxy,checklistItemProxy);
+					}
+				}), "", new GetValueOption<ChecklistOptionProxy>() {
+			public ChecklistOptionProxy getValue(ChecklistOptionProxy optionProxy) {
+				return optionProxy;
+			}
+		}, null, null);
+
+		
+		addOptionColumn(new ActionCell<ChecklistOptionProxy>(
+				OsMaConstant.UP_ICON, new ActionCell.Delegate<ChecklistOptionProxy>() {
+					public void execute(final ChecklistOptionProxy optionProxy) {
+						delegate.upArrowChecklistOptionClicked(RoleDetailsChecklistItemSubViewImpl.this,optionProxy,checklistItemProxy);
+					}
+				}), "", new GetValueOption<ChecklistOptionProxy>() {
+			public ChecklistOptionProxy getValue(ChecklistOptionProxy optionProxy) {
+				return optionProxy;
+			}
+		}, null, null);
 
 		optionTable.addColumnStyleName(2, "iconCol");
 	}

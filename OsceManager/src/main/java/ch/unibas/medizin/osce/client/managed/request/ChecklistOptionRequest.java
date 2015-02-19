@@ -30,4 +30,8 @@ public interface ChecklistOptionRequest extends RequestContext {
 	
 	public abstract Request<ChecklistItemProxy> removeChecklistOption(Long optionId);
 
+	public abstract Request<ChecklistOptionProxy> moveChecklistOptionUp(ChecklistOptionProxy optionProxy,int seqNumber, ChecklistItemProxy checklistitemproxy);
+
+	public abstract Request<ChecklistOptionProxy> moveChecklistOptionDown(ChecklistOptionProxy optionProxy,int seqNumberToSet, ChecklistItemProxy checklistItemProxy);
+
 }

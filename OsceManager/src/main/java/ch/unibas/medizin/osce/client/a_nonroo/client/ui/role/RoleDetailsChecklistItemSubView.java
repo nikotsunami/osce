@@ -33,6 +33,14 @@ public interface RoleDetailsChecklistItemSubView extends IsWidget {
 		void upArrowChecklistQuestionClicked(RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl,ChecklistItemProxy checklistItemProxy);
 
 		void downArrowChecklistQuestionClicked(RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl,ChecklistItemProxy checklistItemProxy);
+
+		void upArrowChecklistOptionClicked(RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl,	ChecklistOptionProxy optionProxy, ChecklistItemProxy checklistItemProxy);
+
+		void downArrowChecklistOptionClicked(RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl,ChecklistOptionProxy optionProxy,ChecklistItemProxy checklistItemProxy);
+
+		void downArrowChecklistCriteriaClicked(RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl,	ChecklistCriteriaProxy criteriaProxy,ChecklistItemProxy checklistItemProxy);
+
+		void upArrowChecklistCriteriaClicked(RoleDetailsChecklistItemSubViewImpl roleDetailsChecklistItemSubViewImpl,ChecklistCriteriaProxy criteriaProxy,ChecklistItemProxy checklistItemProxy);
 		
 	}
 	
