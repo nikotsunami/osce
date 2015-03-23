@@ -893,15 +893,19 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 //		standardizedPatientProxy.setProfession(null);
 //		standardizedPatientProxy.setLangskills(null);
 		
-		standardizedPatientProxy.getDescriptions().setDescription(constants.anonymisationString());
+		if (standardizedPatientProxy.getDescriptions() != null) {
+			standardizedPatientProxy.getDescriptions().setDescription(constants.anonymisationString());
+		}
 		
-		standardizedPatientProxy.getBankAccount().setBankName(constants.anonymisationString());
-		standardizedPatientProxy.getBankAccount().setIBAN(constants.anonymisationString());
-		standardizedPatientProxy.getBankAccount().setBIC(constants.anonymisationString());
-		standardizedPatientProxy.getBankAccount().setOwnerName(constants.anonymisationString()) ;
-		standardizedPatientProxy.getBankAccount().setPostalCode(constants.anonymisationString());
-		standardizedPatientProxy.getBankAccount().setCity(constants.anonymisationString());
-		
+		if (standardizedPatientProxy.getBankAccount() != null) {
+			standardizedPatientProxy.getBankAccount().setBankName(constants.anonymisationString());
+			standardizedPatientProxy.getBankAccount().setIBAN(constants.anonymisationString());
+			standardizedPatientProxy.getBankAccount().setBIC(constants.anonymisationString());
+			standardizedPatientProxy.getBankAccount().setOwnerName(constants.anonymisationString()) ;
+			standardizedPatientProxy.getBankAccount().setPostalCode(constants.anonymisationString());
+			standardizedPatientProxy.getBankAccount().setCity(constants.anonymisationString());
+		}
+				
 		standardizedPatientProxy.setSocialInsuranceNo(constants.anonymisationString());
 		standardizedPatientProxy.setStatus(StandardizedPatientStatus.ANONYMIZED);
 		
