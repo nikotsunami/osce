@@ -452,7 +452,7 @@ public class ChecklistItem {
 		List<ChecklistItem> topicList = new ArrayList<ChecklistItem>();
 		
 		EntityManager em = entityManager();
-		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem  =" + checklistTabId + " and ci.itemType=" +ItemType.TOPIC.ordinal() +  ") ORDER BY ci.sequenceNumber";
+		String sql = "SELECT ci FROM ChecklistItem ci WHERE ci.parentItem = " + checklistTabId + " and ci.itemType = " + ItemType.TOPIC.ordinal() +  " ORDER BY ci.sequenceNumber";
 		TypedQuery<ChecklistItem> query = em.createQuery(sql, ChecklistItem.class);
 		topicList.addAll(query.getResultList());
 		
