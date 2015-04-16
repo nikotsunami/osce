@@ -1889,7 +1889,7 @@ public class Assignment {
     		 osceDay.setTimeStart(dateAddMin(osceDay.getTimeStart(), newStartDiffTime));
     		 osceDay.setTimeEnd(dateAddMin(osceDay.getTimeEnd(), newStartDiffTime));
     		 osceDay.setLunchBreakStart(dateAddMin(osceDay.getLunchBreakStart(), newStartDiffTime));
-    		 osceDay.setIsTimeSlotShifted(false);
+    		 //osceDay.setIsTimeSlotShifted(false);
     		 osceDay.persist();
     	 }
     	 
@@ -1905,7 +1905,7 @@ public class Assignment {
     			 int oldAdjustedTime = osceDay.getLunchBreakAdjustedTime();
     			 
     			 osceDay.setTimeEnd(dateAddMin(osceDay.getTimeEnd(), newLunchDiffTime));
-    			 osceDay.setIsTimeSlotShifted(false);
+    			// osceDay.setIsTimeSlotShifted(false);
     			 osceDay.setLunchBreakAdjustedTime(oldAdjustedTime + newLunchDiffTime);
     			 //osceDay.setLunchBreakStart(lunchBreakTime);
         		 osceDay.persist();    			 
