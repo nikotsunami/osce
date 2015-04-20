@@ -9,7 +9,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.ChecklistCriteria;
 import ch.unibas.medizin.osce.domain.ChecklistItem;
@@ -24,6 +26,7 @@ import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.UsedMaterial;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
+import ch.unibas.medizin.osce.server.util.ServerUtils;
 import ch.unibas.medizin.osce.shared.ItemDefination;
 import ch.unibas.medizin.osce.shared.util;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -37,6 +40,7 @@ import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.html.simpleparser.HTMLWorker;
+import com.itextpdf.text.pdf.PdfFormField;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -53,6 +57,8 @@ public class RolePrintPdfUtil extends PdfUtil {
 	// private List<String> itemsList;
 	private Long roleItemAccessId;
 	private boolean isValueAvailable[];
+	int questionNumber = 1;
+	int i =0;
 	
 	protected Font tabFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.BOLD);
 	
@@ -551,14 +557,86 @@ public class RolePrintPdfUtil extends PdfUtil {
 	
 	private PdfPCell getAnswerCell(String question, List<ChecklistOption> options) {
 		Collections.sort(options);
-		String[] answers = new String[options.size()];
+		/*String[] answers = new String[options.size()];
 		for (int i=0; i < options.size(); i++) {
 			ChecklistOption option = options.get(i);		
 			answers[i] = option.getOptionName() + " (" + option.getValue() + ")";
-		}
-		return getCheckBoxCell(question, answers, null);
+		}*/
+		return getCheckBoxCellOptions(question, options, null);
 	}
 	
+	protected PdfPCell getCheckBoxCellOptions(String question, List<ChecklistOption> options,
+			List<Integer> selectedAnswers) {
+		return getCheckBoxCellRoleOptions(question, options, selectedAnswers,
+				false);
+	}
+	protected PdfPCell getCheckBoxCellRoleOptions(String question,List<ChecklistOption> options,
+			List<Integer> selectedAnswers, boolean isRadio) {
+		PdfPCell cell = new PdfPCell();
+		PdfFormField group = null;
+		cell.setPadding(0);
+		cell.setBorder(Rectangle.NO_BORDER);
+		
+		if (isRadio) {
+			group = PdfFormField.createRadioButton(writer, true);
+			String fieldName = question.toLowerCase().replaceAll("[^a-z0-9]+",
+					"_");
+			group.setFieldName(fieldName);
+			cell.setCellEvent(new CheckBoxGroupEvent(writer, group));
+		}
+
+		PdfPTable subTable = new PdfPTable(new float[] { 0.10f, 0.90f });
+		for (int i = 0; i < options.size(); i++) {
+			boolean isSelected = false;
+			if (selectedAnswers != null) {
+				for (Integer nAnswer : selectedAnswers) {
+					if (nAnswer != null && nAnswer.intValue() == i) {
+						isSelected = true;
+					}
+				}
+			}
+			ChecklistOption option = options.get(i);		
+			String answer = option.getOptionName() + " (" + option.getValue() + ")";
+			String description = option.getDescription();
+			
+			PdfPCell subCell = new PdfPCell();
+			subCell.setMinimumHeight(15.0f);
+			
+			CheckBoxCellEvent event;
+			if (isRadio) {
+				event = new CheckBoxCellEvent(writer, group,
+						answer, isSelected);
+			} else {
+				event = new CheckBoxCellEvent(writer, UUID.randomUUID().toString(),
+						isSelected);
+			}
+			subCell.setCellEvent(event);
+			subCell.setBorder(Rectangle.NO_BORDER);
+			subTable.addCell(subCell);
+			
+			//changes here
+			Font font = FontFactory.getFont(FontFactory.HELVETICA, 8, Font.ITALIC, new BaseColor(181,185,200));
+			subTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+			
+			PdfPCell cell1 = new PdfPCell(getPdfCell(answer,boldFont,0,0));
+		    cell1.setBorder(Rectangle.NO_BORDER);
+		    subTable.addCell(cell1);
+		     if(StringUtils.isNotBlank(description)) {
+				PdfPCell cell2 = new PdfPCell(new Paragraph(new Chunk(description, font)));
+				cell2.setBorder(Rectangle.NO_BORDER);
+				cell2.setPaddingTop(-2.0f);
+				cell2.setColspan(2);
+				cell2.setPaddingLeft(17f);
+				cell2.setPaddingBottom(4f);
+				cell2.setVerticalAlignment(Element.ALIGN_TOP);
+				subTable.addCell(cell2);
+		      }
+		}
+		subTable.setWidthPercentage(100.0f);
+		cell.addElement(subTable);
+		return cell;
+	}
+
 	private PdfPTable createCheckListQuestionTable(List<ChecklistItem> questions) {
 		if (questions != null && questions.size() > 0) {
 		PdfPTable table = new PdfPTable(new float[] { 0.7f, 0.3f });
@@ -568,7 +646,8 @@ public class RolePrintPdfUtil extends PdfUtil {
 			for (ChecklistItem question: questions) {
 				String questionText = question.getName();
 				if (questionText != null) {
-					Chunk questionChunk = new Chunk(questionText, boldFont);					
+					Chunk questionChunk = new Chunk(questionNumber + ".  "  + questionText, boldFont);					
+					questionNumber++;
 					Chunk criteriaChunk = null;
 					Chunk instructionChunk = null;
 					
@@ -682,7 +761,8 @@ public class RolePrintPdfUtil extends PdfUtil {
 			String chkListTitle = checklistTopic.getName();
 			if (chkListTitle != null) {
 				
-				Paragraph titleParagraph = new Paragraph(new Chunk(chkListTitle, subTitleFont));
+				Paragraph titleParagraph = new Paragraph(new Chunk(ServerUtils.IntToLetter(i) + ".  "  + chkListTitle, subTitleFont));
+				i++;
 				try {
 					document.add(titleParagraph);
 				} catch (DocumentException e) {

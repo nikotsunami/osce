@@ -29,13 +29,16 @@ import ch.unibas.medizin.osce.domain.Signature;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
+import ch.unibas.medizin.osce.server.util.ServerUtils;
 import ch.unibas.medizin.osce.shared.NoteType;
 import ch.unibas.medizin.osce.shared.util;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
@@ -56,6 +59,8 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 	protected Font summaryItalicFont = new Font(Font.FontFamily.TIMES_ROMAN, 13, Font.ITALIC);
 	
 	protected String ANSWER_TEXT = "|";
+	int i =0;
+	int questionNumber = 1;
 	
 	public StudentManagementPrintMinOptionPdfUtil() {
 		super();		
@@ -574,7 +579,7 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 				
 				subTable.addCell(answer);*/
 				String answer = ANSWER_TEXT;
-				
+				String description = options.get(i).getDescription();
 				if (StringUtils.isNotBlank(options.get(i).getOptionName()))
 					answer = options.get(i).getOptionName();
 					
@@ -590,18 +595,47 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 				//subCell.setCellEvent(event);				
 				subCell.setBorder(Rectangle.NO_BORDER);
 				subTable.addCell(subCell);
+				Font font = FontFactory.getFont(FontFactory.HELVETICA, 8, Font.ITALIC, new BaseColor(181,185,200));
+				PdfPTable table = new PdfPTable(1); //1 columns.
+				table.getDefaultCell().setBorder(Rectangle.NO_BORDER);	
+				subTable.getDefaultCell().setBorder(Rectangle.NO_BORDER);
 				if(isSelected)
 				{
-					//System.out.println("Selected Answer Bold: " + answer);
-					subTable.addCell(getPdfCell(answer,boldFont,0,0));
+					PdfPCell cell1 = new PdfPCell(getPdfCell(answer,boldFont,0,0));
+			        cell1.setBorder(Rectangle.NO_BORDER);
+			        cell1.setPadding(0F);
+			        table.addCell(cell1);
+			        
+			        if(StringUtils.isNotBlank(description)) {
+					PdfPCell cell2 = new PdfPCell(new Paragraph(new Chunk(description, font)));
+					cell2.setBorder(Rectangle.NO_BORDER);
+					cell2.setPadding(0F);
+					table.addCell(cell2);
+			        }
+			        subTable.addCell(table);
 				}
 				else
 				{
+					PdfPCell cell1 = new PdfPCell(getPdfCell(answer));
+				       
+			        cell1.setBorder(Rectangle.NO_BORDER);
+			        cell1.setPadding(0F);
+			        table.addCell(cell1);
+			        
+			        if(StringUtils.isNotBlank(description)) {
+					PdfPCell cell2 = new PdfPCell(new Paragraph(new Chunk(description, font)));
+					cell2.setPadding(0F);
+					cell2.setBorder(Rectangle.NO_BORDER);
+					table.addCell(cell2);
+			        }
+			        subTable.addCell(table);
+
 					//System.out.println("Selected Answer: " + answer);
-					subTable.addCell(getPdfCell(answer));
+					/*subTable.addCell(getPdfCell(answer));
+					if(StringUtils.isNotBlank(description)) {
+						subTable.addCell(getPdfCell(description,FontFactory.getFont(FontFactory.HELVETICA, 10, Font.ITALIC, new BaseColor(181,185,200)),0,0));
+					}*/
 				}
-			
-				
 			}
 
 			subTable.setWidthPercentage(100.0f);
@@ -619,15 +653,22 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 			
 			int i = 0;
 			int j=0;
+			
+
 			for (ChecklistItem question: questions) {
 				String questionText = question.getName();
 				if (questionText != null) {
-					Chunk questionChunk = new Chunk(questionText, boldFont);					
+					//Chunk questionChunk = new Chunk(questionText, boldFont);				
+					Chunk questionChunk = new Chunk(questionNumber + ".  "  + questionText, boldFont);
+					
 					Chunk criteriaChunk = null;
 					Chunk instructionChunk = null;
 					
-					if (question.getDescription() != null) {
+					/*if (question.getDescription() != null) {
 						instructionChunk = new Chunk(question.getDescription(), italicFont);						
+					}*/
+					if (question.getDescription() != null) {
+						instructionChunk = new Chunk(OsMaFilePathConstant.SPACING_QUESTION_DESCRIPTION + question.getDescription(), FontFactory.getFont(FontFactory.HELVETICA, 10, Font.ITALIC, new BaseColor(181,185,200)));						
 					}
 
 					if (question.getCheckListCriterias().size() > 0) {
@@ -664,6 +705,7 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 					
 					if (checklistOptionList != null && checklistOptionList.size() > 0)
 					{
+						questionNumber++;
 						PdfPCell questionCell = getPdfCell(questionParagraph, 1, 1);						
 						PdfPCell answerCell = getAnswerCell(questionText, question.getCheckListOptions(),checklistOptionList);	
 						
@@ -707,17 +749,18 @@ public class StudentManagementPrintMinOptionPdfUtil extends PdfUtil {
 		
 		//Paragraph checklistDetails = new Paragraph();
 
+		
 		for (ChecklistItem checklistTopic : checklistTopics) {
 			String chkListTitle = checklistTopic.getName();
 			
 			List<ChecklistItem> checklistQuestionList = ChecklistItem.findChecklistQuestionByChecklistTopic(checklistTopic.getId());
 			
 			PdfPTable table = createCheckListQuestionTable(checklistQuestionList,studId);
-			
 			if (table != null && table.size() > 0)
 			{
 				if (chkListTitle != null) {
-					Paragraph titleParagraph = new Paragraph(new Chunk(chkListTitle, subTitleFont));
+					Paragraph titleParagraph = new Paragraph(new Chunk(ServerUtils.IntToLetter(i) + ".  "  + chkListTitle, subTitleFont));
+					i++;
 					try {
 						document.add(titleParagraph);
 					} catch (DocumentException e) {
