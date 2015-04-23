@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.OsceChecklistQuestionPojoValueProxy;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncService;
 import ch.unibas.medizin.osce.client.a_nonroo.client.dmzsync.eOSCESyncServiceAsync;
 import ch.unibas.medizin.osce.client.a_nonroo.client.place.ExportOscePlace;
@@ -15,6 +16,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScre
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.ApplicationLoadingScreenHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.SelectChangeHandler;
+import ch.unibas.medizin.osce.client.a_nonroo.client.util.ValidationUtil;
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationProxy;
 import ch.unibas.medizin.osce.client.managed.request.BucketInformationRequest;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
@@ -561,59 +563,87 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 		
 		if (semesterProxy != null)
 		{
-			requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
-			
-			List<String> fileList = new ArrayList<String>();
-			
-			for (int i=0; i<checkBoxList.size(); i++)
-			{
-				if (checkBoxList.get(i).getValue() == true)
+			final ValidationUtil util = new ValidationUtil();
+			final List<Long> osceIdList = new ArrayList<Long>();
+				for (int i=0; i<checkBoxList.size(); i++)
 				{
-					fileList.add(checkBoxList.get(i).getFormValue());
+					if (checkBoxList.get(i).getValue() == true)	{
+						osceIdList.add(Long.valueOf(checkBoxList.get(i).getFormValue()));
+					}
 				}
-			}
-			
-			AsyncCallback<Void> submitCallback = new AsyncCallback<Void>() {
-				@Override
-				public void onFailure(Throwable caught) {
 					
-					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
-					if(caught.getMessage() != null){
-						messageConfirmationDialogBox.showConfirmationDialog(osceConstantsWithLookup.getString(caught.getMessage()));
-					} 
-				}
+			requests.checklistItemRequest().validateChecklistOptions(osceIdList).fire(new OSCEReceiver<List<OsceChecklistQuestionPojoValueProxy>>() {
 
 				@Override
-				public void onSuccess(Void result) {
-					requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
-					
-					MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
-					messageConfirmationDialogBox.showConfirmationDialog(constants.exportSuccess());
-					
-					if (view.geteOSCE().getValue()) {
-						if (flag)
-							unprocessedClicked(ExportOsceType.EOSCE);					
-						else 
-							processedClicked(ExportOsceType.EOSCE);
-					} 
-					else if (view.getiOSCE().getValue()) {
-						if (flag)
-							unprocessedClicked(ExportOsceType.IOSCE);					
-						else 
-							processedClicked(ExportOsceType.IOSCE);
+				public void onSuccess(List<OsceChecklistQuestionPojoValueProxy> response) {
+					boolean valid = true;
+					for (OsceChecklistQuestionPojoValueProxy pojo : response) {
+						if(pojo.getQuestion().size() > 0) {
+							valid = false;
+						}
 					}
+					if(!valid) {
 					
+						String checklistOptionValidationMessage = util.getChecklistOptionValidationMessage(response,osceIdList.size());
+						final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.error());
+						confirmationDialogBox.showConfirmationDialogForQuestionValidation(checklistOptionValidationMessage);
+						
+					} 
+					else {
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+						List<String> fileList = new ArrayList<String>();
+						
+						for (int i=0; i<checkBoxList.size(); i++)
+						{
+							if (checkBoxList.get(i).getValue() == true) {
+								fileList.add(checkBoxList.get(i).getFormValue());
+							}
+						}
+						
+						AsyncCallback<Void> submitCallback = new AsyncCallback<Void>() {
+							@Override
+							public void onFailure(Throwable caught) {
+								
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+								MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
+								if(caught.getMessage() != null){
+									messageConfirmationDialogBox.showConfirmationDialog(osceConstantsWithLookup.getString(caught.getMessage()));
+								} 
+							}
+
+							@Override
+							public void onSuccess(Void result) {
+								requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+								
+								MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.success());
+								messageConfirmationDialogBox.showConfirmationDialog(constants.exportSuccess());
+								
+								if (view.geteOSCE().getValue()) {
+									if (flag)
+										unprocessedClicked(ExportOsceType.EOSCE);					
+									else 
+										processedClicked(ExportOsceType.EOSCE);
+								} 
+								else if (view.getiOSCE().getValue()) {
+									if (flag)
+										unprocessedClicked(ExportOsceType.IOSCE);					
+									else 
+										processedClicked(ExportOsceType.IOSCE);
+								}
+								
+							}
+						};
+						
+						if(view.getFtp().getValue()) {
+							eOsceServiceAsync.putFTP(ExportOsceType.IOSCE, semesterProxy.getId(),view.getBucketName().getText(), view.getAccessKey().getText(), view.getPassword().getText(),view.getBasePath().getText(), fileList, flag, submitCallback);	
+						} else if(view.getS3().getValue()) {
+							eOsceServiceAsync.putAmazonS3Object(ExportOsceType.IOSCE, semesterProxy.getId(),view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(), fileList, flag, submitCallback);	
+						} else {
+							Log.error("Error in Export");
+						}
+					}
 				}
-			};
-			
-			if(view.getFtp().getValue()) {
-				eOsceServiceAsync.putFTP(ExportOsceType.IOSCE, semesterProxy.getId(),view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(),view.getBasePath().getText(), fileList, flag, submitCallback);	
-			} else if(view.getS3().getValue()) {
-				eOsceServiceAsync.putAmazonS3Object(ExportOsceType.IOSCE, semesterProxy.getId(),view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(), fileList, flag, submitCallback);	
-			} else {
-				Log.error("Error in Export");
-			}
+			});
 		}		
 	}
 	
@@ -657,12 +687,43 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 		});
 	}
 	
-	private void downloadiOSCEFile(String osceId, Boolean flag) {
-		String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.IOSCE_XML.ordinal()));          
+	private void downloadiOSCEFile(final String osceId, Boolean flag) {
+		
+		final List<Long> osceList = new ArrayList<Long>();
+		osceList.add(Long.valueOf(osceId));
+		final ValidationUtil util = new ValidationUtil();
+		requests.checklistItemRequest().validateChecklistOptions(osceList).with("semester").fire(new OSCEReceiver<List<OsceChecklistQuestionPojoValueProxy>>() {
+
+			@Override
+			public void onSuccess(List<OsceChecklistQuestionPojoValueProxy> response) {
+				boolean valid = true;
+				for (OsceChecklistQuestionPojoValueProxy pojo : response) {
+					if(pojo.getQuestion().size() > 0) {
+						valid = false;
+					}
+				}
+				if(!valid) {
+					
+					String checklistOptionValidationMessage = util.getChecklistOptionValidationMessage(response,1);
+					final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.error());
+					confirmationDialogBox.showConfirmationDialogForQuestionValidation(checklistOptionValidationMessage);
+				
+				} else {
+					String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.IOSCE_XML.ordinal()));          
+					String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
+							.concat("&").concat(ResourceDownloadProps.ID).concat("=").concat(URL.encodeQueryString(osceId));
+					Log.info("--> url is : " +url);
+					Window.open(url, "", "");
+				}
+				
+			}
+		});
+		
+		/*String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.IOSCE_XML.ordinal()));          
 		String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal)
 				.concat("&").concat(ResourceDownloadProps.ID).concat("=").concat(URL.encodeQueryString(osceId));
 		Log.info("--> url is : " +url);
-		Window.open(url, "", "");
+		Window.open(url, "", "");*/
 	}
 
 	@Override

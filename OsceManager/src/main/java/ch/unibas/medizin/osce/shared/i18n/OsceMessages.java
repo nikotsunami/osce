@@ -11,4 +11,6 @@ public interface OsceMessages extends Messages {
 	public String trainingOverlapingMsg(String startime,String endTime);
 
 	public String topicFactorMustBeNumeric(String string);
+	
+	public String checklistOptionRequireMsg(String options);
 }

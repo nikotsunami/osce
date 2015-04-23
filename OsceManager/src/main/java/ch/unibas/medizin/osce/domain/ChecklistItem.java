@@ -24,12 +24,13 @@ import javax.persistence.criteria.Root;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
 
 import ch.unibas.medizin.osce.shared.ChecklistImportPojo;
 import ch.unibas.medizin.osce.shared.ItemType;
 import ch.unibas.medizin.osce.shared.OptionType;
+import ch.unibas.medizin.osce.shared.OsceChecklistQuestionPojo;
 import ch.unibas.medizin.osce.shared.OscePostWiseQuestion;
 import ch.unibas.medizin.osce.shared.StatisticalEvaluationQuestion;
 
@@ -876,6 +877,43 @@ public class ChecklistItem {
 		}
 	}
 
+	public static List<OsceChecklistQuestionPojo> validateChecklistOptions(List<Long> osceIds) {
+		
+		List<OsceChecklistQuestionPojo> osceChecklistQuePojoList = new ArrayList<OsceChecklistQuestionPojo>();
+		
+		for (Long osceId : osceIds) {
+			List<CheckList> checklists = CheckList.findAllCheckListforOsce(osceId);
+			Osce osce = Osce.findOsce(osceId);
+			
+			
+			for (CheckList checkList : checklists) {
+				OsceChecklistQuestionPojo pojo = new OsceChecklistQuestionPojo();
+				pojo.setOsce(osce);
+				pojo.setSemester(osce.getSemester());
+				List<ChecklistItem> queList = new ArrayList<ChecklistItem>();
+				List<ChecklistItem> questions = findChecklistQuestionByChecklistId(checkList.getId());
+
+				for (ChecklistItem que : questions) {
+					if(OptionType.SLIDER.equals(que.getOptionType()) || OptionType.POPOVER.equals(que.getOptionType()) 
+							|| OptionType.TOGGLE_2.equals(que.getOptionType()) ) {
+						if(que.getCheckListOptions().size() < 2) {
+							queList.add(que);
+						}	
+					} else {
+						if(que.getCheckListOptions().size() < 3) {
+							queList.add(que);
+						}	
+					}
+				}
+				pojo.setCheckList(checkList);
+				pojo.setQuestion(queList);
+				osceChecklistQuePojoList.add(pojo);
+			}
+			
+		}
+		return osceChecklistQuePojoList;
+	}
+	
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")

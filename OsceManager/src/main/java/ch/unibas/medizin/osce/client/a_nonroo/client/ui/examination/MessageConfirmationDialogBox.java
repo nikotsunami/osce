@@ -6,10 +6,13 @@ import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -21,6 +24,7 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 	IconButton mayBeBtn;
 	VerticalPanel vp;
 	Label msgLbl;
+	private final HTML html;
 	
 	public static MessageConfirmationDialogBox dialogBox;
 	
@@ -40,6 +44,7 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 	
 	public MessageConfirmationDialogBox(String caption) {
 		
+		html = new HTML();
 		vp=new VerticalPanel();
 		hp=new HorizontalPanel();
 		//vp.add(new HTML(msg));
@@ -55,6 +60,7 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		
 		msgLbl=new Label();
 		vp.add(msgLbl);
+		vp.add(html);
 		hp.add(yesBtn);
 		hp.add(noBtnl);
 		hp.add(mayBeBtn);
@@ -69,6 +75,7 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 		setGlassEnabled(true);
 		dialogBox=this;
 		this.getElement().getStyle().setZIndex(3);
+		this.getNoBtnl().getElement().getStyle().setMarginLeft(0, Unit.PX);
 	}
 	
 	public static MessageConfirmationDialogBox create(String msg)
@@ -165,6 +172,33 @@ public  class MessageConfirmationDialogBox extends DialogBox{
 
 	public HorizontalPanel getHp() {
 		return hp;
+	}
+
+	public void showConfirmationDialogForQuestionValidation(String message) {
+		
+		vp.setSpacing(7);
+		this.getYesBtn().setVisible(false);
+		this.getNoBtnl().setIcon("check");
+		
+		//html.getElement().getStyle().setMargin(15, Unit.PX);
+		html.setHTML(message);
+		html.getElement().getStyle().setProperty("maxHeight", "500px");
+		html.getElement().getStyle().setOverflowY(Overflow.AUTO);
+		
+		this.getNoBtnl().getElement().getStyle().setMarginLeft(206, Unit.PX);
+		hp.setSpacing(0);
+		
+		this.getNoBtnl().setText(constants.close());
+		//this.getCaption().setText(constants.success());
+		this.showDialog();
+		this.getNoBtnl().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent arg0) {
+			
+				dialogBox.hide();	
+			}
+		});
 	}
 	
 }

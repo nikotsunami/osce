@@ -278,7 +278,7 @@ public class ExportOsceViewImpl extends Composite implements ExportOsceView {
 	@UiHandler("exportOSCEButton")
 	public void exportOSCEButtonClicked(ClickEvent event)
 	{
-		if (bucketName.getText().equals("") || accessKey.getText().equals("") || secretKey.getText().equals("") || encryptionKey.getText().equals("") || (ftp.getValue() == true && basePath.getText().equals("")))
+		if (bucketName.getText().equals("") || accessKey.getText().equals("") || (secretKey.getText().equals("")  && password.getText().equals("")) || encryptionKey.getText().equals("") || (ftp.getValue() == true && basePath.getText().equals("")))
 		{
 			final MessageConfirmationDialogBox messageConfirmationDialogBox = new MessageConfirmationDialogBox(constants.error());
 			messageConfirmationDialogBox.showConfirmationDialog(constants.bucketInfoError());

@@ -1785,6 +1785,8 @@ public interface OsceConstants extends Constants {
 	public String audioNotes();
 			
 	public String summary();
+
+	public String checklistOptionWarning();
 }
 
 
