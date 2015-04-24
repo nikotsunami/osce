@@ -549,7 +549,7 @@ public class ExportOsceActivity extends AbstractActivity implements ExportOsceVi
 			};
 			
 			if(view.getFtp().getValue()) {
-				eOsceServiceAsync.putFTP(ExportOsceType.EOSCE, semesterProxy.getId(),view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(),view.getBasePath().getText(), fileList, flag, submitCallback);	
+				eOsceServiceAsync.putFTP(ExportOsceType.EOSCE, semesterProxy.getId(),view.getBucketName().getText(), view.getAccessKey().getText(), view.getPassword().getText(),view.getBasePath().getText(), fileList, flag, submitCallback);	
 			} else if(view.getS3().getValue()) {
 				eOsceServiceAsync.putAmazonS3Object(ExportOsceType.EOSCE, semesterProxy.getId(),view.getBucketName().getText(), view.getAccessKey().getText(), view.getSecretKey().getText(), fileList, flag, submitCallback);	
 			} else {
