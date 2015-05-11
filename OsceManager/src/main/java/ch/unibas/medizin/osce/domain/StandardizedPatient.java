@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,12 +37,14 @@ import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
 import ch.unibas.medizin.osce.domain.spportal.SPPortalPerson;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.util.file.CsvUtil;
@@ -59,6 +62,7 @@ import ch.unibas.medizin.osce.shared.Sorting;
 import ch.unibas.medizin.osce.shared.StandardizedPatientSearchField;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
+
 import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
 
 
@@ -447,7 +451,7 @@ public class StandardizedPatient {
      */
     public static List<StandardizedPatient> findPatientsByAdvancedSearchAndSort(String sortColumn, Sorting order,
             String searchWord, List<String> searchThrough, List<AdvancedSearchCriteria> searchCriteria,
-            Integer firstResult, Integer maxResults) {
+            Integer firstResult, Integer maxResults,Boolean showDeletedSp) {
     /*    //you can add a grepexpresion for you, probably "parameters received" with magenta, so you can see it faster -> mark it in the log, left click
         EntityManager em = entityManager();
         PatientSearch simpatSearch = new PatientSearch(false);
@@ -479,7 +483,7 @@ public class StandardizedPatient {
         Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
         return result; */
     	
-    	TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(generatePatientsSearchCriteria(sortColumn, order, searchWord, searchThrough, searchCriteria));
+    	TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(generatePatientsSearchCriteria(sortColumn, order, searchWord, searchThrough, searchCriteria,showDeletedSp));
 		Log.info("~~QUERY : " + typedQuery.unwrap(Query.class).getQueryString());		
 		typedQuery.setFirstResult(firstResult);
 		typedQuery.setMaxResults(maxResults);
@@ -561,7 +565,7 @@ public class StandardizedPatient {
     ) {
 
         List<StandardizedPatient> standardizedPatients = findPatientsByAdvancedSearchAndSort(
-                sortColumn, order, searchWord, searchThrough, searchCriteria, firstResult, maxResults);
+                sortColumn, order, searchWord, searchThrough, searchCriteria, firstResult, maxResults,false);
 
         try {
             CsvUtil csvUtil = new CsvUtil();
@@ -586,7 +590,7 @@ public class StandardizedPatient {
     ) {
 
         List<StandardizedPatient> standardizedPatients = findPatientsByAdvancedSearchAndSort(
-                sortColumn, order, searchWord, searchThrough, searchCriteria, firstResult, maxResults);
+                sortColumn, order, searchWord, searchThrough, searchCriteria, firstResult, maxResults,false);
 
         try {
             CsvUtil csvUtil = new CsvUtil();
@@ -747,7 +751,7 @@ public class StandardizedPatient {
         //By Spec]End
 
     public static Long countPatientsByAdvancedSearchAndSort(String searchWord,
-            List<String> searchThrough, List<AdvancedSearchCriteria> searchCriteria) {
+            List<String> searchThrough, List<AdvancedSearchCriteria> searchCriteria,Boolean showDeletedSp) {
         //you can add a grepexpresion for you, probably "parameters received" with magenta, so you can see it faster -> mark it in the log, left click
        /* EntityManager em = entityManager();
         PatientSearch simpatSearch = new PatientSearch(true);
@@ -775,8 +779,7 @@ public class StandardizedPatient {
         Long result  = q.getSingleResult();
         Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
         return result; */
-    	
-    	TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(generatePatientsSearchCriteria("name", Sorting.ASC, searchWord, searchThrough, searchCriteria));
+    	TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(generatePatientsSearchCriteria("name", Sorting.ASC, searchWord, searchThrough, searchCriteria,showDeletedSp));
 		Log.info("~~QUERY : " + typedQuery.unwrap(Query.class).getQueryString());		
 		List<StandardizedPatient> result  = typedQuery.getResultList();
 		Long result1  = Long.parseLong(String.valueOf(result.size()));
@@ -811,7 +814,7 @@ public class StandardizedPatient {
         Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
         return result; */
     	
-    	TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(generatePatientsSearchCriteria("", null, "", null, searchCriteria));
+    	TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(generatePatientsSearchCriteria("", null, "", null, searchCriteria,false));
 		Log.info("~~QUERY : " + typedQuery.unwrap(Query.class).getQueryString());		
 		List<StandardizedPatient> resultList  = typedQuery.getResultList();
        
@@ -849,7 +852,7 @@ public class StandardizedPatient {
         Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result);
         return result; */
     	
-    	TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(generatePatientsSearchCriteria("", null, "", null, searchCriteria));
+    	TypedQuery<StandardizedPatient> typedQuery = entityManager().createQuery(generatePatientsSearchCriteria("", null, "", null, searchCriteria,false));
 		Log.info("~~QUERY : " + typedQuery.unwrap(Query.class).getQueryString());		
 		
 		List<StandardizedPatient> result  = typedQuery.getResultList();
@@ -859,7 +862,7 @@ public class StandardizedPatient {
     }
     
     public static CriteriaQuery<StandardizedPatient> generatePatientsSearchCriteria(String sortColumn, Sorting order,
-            String searchWord, List<String> searchThrough, List<AdvancedSearchCriteria> searchCriteria)
+            String searchWord, List<String> searchThrough, List<AdvancedSearchCriteria> searchCriteria,Boolean showDeletedSp)
     {
     	Predicate predicate = null;   	
     	
@@ -960,7 +963,6 @@ public class StandardizedPatient {
     			select.orderBy(criteriaBuilder.asc(from.get(sortColumn)));
     		else if (order == Sorting.DESC)
     			select.orderBy(criteriaBuilder.desc(from.get(sortColumn)));*/
-    	
     	}
     	
     		Predicate advPredicate = null;    		
@@ -1278,30 +1280,49 @@ public class StandardizedPatient {
     			
     				
     			}
+    			//Added this for OMS-148. According to this now we are not showing deleted sp by default and providing check  box to see deleted sp.
+        			if(!showDeletedSp){
+        				Predicate removeAnonymizedPredicate = criteriaBuilder.notEqual(from.get("status"), StandardizedPatientStatus.ANONYMIZED);
+            			criteriaQuery.where(criteriaBuilder.and(removeAnonymizedPredicate,advPredicate));
+        			}else{
+        				criteriaQuery.where(criteriaBuilder.and(advPredicate));
+        			}
     			
-    			Predicate removeAnonymizedPredicate = criteriaBuilder.notEqual(from.get("status"), StandardizedPatientStatus.ANONYMIZED);
-    			criteriaQuery.where(criteriaBuilder.and(removeAnonymizedPredicate,advPredicate));
         	}
         	else if (searchCriteria.size() == 0)
         	{
-        		Predicate removeAnonymizedPredicate = criteriaBuilder.notEqual(from.get("status"), StandardizedPatientStatus.ANONYMIZED);
-        		if(simplePredicate != null)
-        			criteriaQuery.where(criteriaBuilder.and(removeAnonymizedPredicate,simplePredicate));
-        		else 
-        			criteriaQuery.where(removeAnonymizedPredicate);
+        		//Added this for OMS-148. According to this now we are not showing deleted sp by default and providing check  box to see deleted sp.
+        		if(!showDeletedSp){
+	        		Predicate removeAnonymizedPredicate = criteriaBuilder.notEqual(from.get("status"), StandardizedPatientStatus.ANONYMIZED);
+	        		if(simplePredicate != null)
+	        			criteriaQuery.where(criteriaBuilder.and(removeAnonymizedPredicate,simplePredicate));
+	        		else 
+	        			criteriaQuery.where(removeAnonymizedPredicate);
+        		}else{
+        				if(simplePredicate != null){
+        					criteriaQuery.where(criteriaBuilder.and(simplePredicate));
+        				}
+        			}
         	}
         	//Advance Search
         	else
         	{
-        		Predicate removeAnonymizedPredicate = criteriaBuilder.notEqual(from.get("status"), StandardizedPatientStatus.ANONYMIZED);
-        		if (simplePredicate != null)
-        			criteriaQuery.where(criteriaBuilder.and(removeAnonymizedPredicate,simplePredicate));
-        		else {
-        			criteriaQuery.where(removeAnonymizedPredicate);
+        		//Added this for OMS-148. According to this now we are not showing deleted sp by default and providing check  box to see deleted sp.
+        		if(!showDeletedSp){
+	        		Predicate removeAnonymizedPredicate = criteriaBuilder.notEqual(from.get("status"), StandardizedPatientStatus.ANONYMIZED);
+	        		if (simplePredicate != null)
+	        			criteriaQuery.where(criteriaBuilder.and(removeAnonymizedPredicate,simplePredicate));
+	        		else {
+	        			criteriaQuery.where(removeAnonymizedPredicate);
+	        			
+	        		}
+        		}else{
+	        			if (simplePredicate != null){
+		        			criteriaQuery.where(criteriaBuilder.and(simplePredicate));
+	        			}
         		}
         	}
-    		
-    	
+        	
     	return criteriaQuery;
 
     }

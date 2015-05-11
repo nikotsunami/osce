@@ -1787,6 +1787,9 @@ public interface OsceConstants extends Constants {
 	public String summary();
 
 	public String checklistOptionWarning();
+	
+	//Added for OMS-148
+	public String showDeletedSp();
 }
 
 

@@ -25,6 +25,7 @@ public interface StandardizedPatientView  extends IsWidget{
     	public void newClicked();
     	public void performSearch(String q, List<String> list);
     	public void doAnimation(boolean flag);
+		public void showDeletedSpCheckBoxSelected();
 	}
 
      CellTable<StandardizedPatientProxy> getTable();
@@ -49,4 +50,6 @@ public interface StandardizedPatientView  extends IsWidget{
 	QuickSearchBox getSearchBox();
 	Map getSortMap();
 	List<String> getColumnSortSet();
+	//Added for OMS-148
+	Boolean getShowDeletedSpCheckBoxValue();
 }

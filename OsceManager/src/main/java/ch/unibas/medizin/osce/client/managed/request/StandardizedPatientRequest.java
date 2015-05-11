@@ -26,7 +26,7 @@ public interface StandardizedPatientRequest extends RequestContext {
 
     abstract Request<java.util.List<ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy>> findStandardizedPatientEntries(int firstResult, int maxResults);
 
-	abstract Request<Long> countPatientsByAdvancedSearchAndSort(String searchWord, List<String> searchThrough, List<AdvancedSearchCriteriaProxy> searchCriteria);
+	abstract Request<Long> countPatientsByAdvancedSearchAndSort(String searchWord, List<String> searchThrough, List<AdvancedSearchCriteriaProxy> searchCriteria, Boolean showDeletedSp);
 	
 	abstract Request<List<StandardizedPatientProxy>> findPatientsByAdvancedSearchAndSort(
     		String sortColumn,
@@ -35,7 +35,7 @@ public interface StandardizedPatientRequest extends RequestContext {
     		List<String> searchThrough,
     		List<AdvancedSearchCriteriaProxy> searchCriteria,
     		Integer firstResult, 
-    		Integer maxResults
+    		Integer maxResults, Boolean showDeletedSp
     );
         
          //By Spec[start

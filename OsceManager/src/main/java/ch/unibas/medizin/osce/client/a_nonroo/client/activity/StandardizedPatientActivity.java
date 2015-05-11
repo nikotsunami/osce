@@ -1020,7 +1020,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 
 		// (2) Advanced search
 		requests.standardizedPatientRequest().countPatientsByAdvancedSearchAndSort(
-	    		quickSearchTerm, searchThrough, searchCriteria).fire(new StandardizedPatientCountReceiver());
+	    		quickSearchTerm, searchThrough,/*Added for OMS-148*/ searchCriteria,view.getShowDeletedSpCheckBoxValue()).fire(new StandardizedPatientCountReceiver());
 	}
 
 	/**
@@ -1109,7 +1109,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				//fire(new StandardizedPatientReceiver());
 		
 		requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort(sortname, sortorder , quickSearchTerm, 
-				searchThrough, searchCriteria, range.getStart(), range.getLength() /*fields, bindType, comparations, values */).
+				searchThrough, searchCriteria, range.getStart(), range.getLength(),/*Added for OMS-148 */ view.getShowDeletedSpCheckBoxValue() /*fields, bindType, comparations, values */).
 			   fire(new StandardizedPatientReceiver());
 		//By SPEC]End
 	}
@@ -2078,5 +2078,12 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		}
 		
 		return anamnesisCheckText.toString();
+	}
+
+	//Added for OMS-148
+	@Override
+	public void showDeletedSpCheckBoxSelected() {
+		Log.info("show deleted sp check box is clicked : ");
+		initSearch();
 	}
 }

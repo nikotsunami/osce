@@ -40,6 +40,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
@@ -97,7 +98,14 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	Map<String, String> columnName=new HashMap<String, String>();
 	List<String> columnNameorder = new ArrayList<String>();
 
+	//Added for OMS-148
+	@UiField
+	CheckBox showDeletedSpCheckBox;
 	
+	@UiHandler("showDeletedSpCheckBox")
+	public void showDeletedSpCheckBoxSelected(ClickEvent event){
+		delegate.showDeletedSpCheckBoxSelected();
+	}
 	/*custom celltable start code*/
 	
 
@@ -789,6 +797,11 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 	public List<String> getColumnSortSet()
 	{
 		return columnNameorder;
+	}
+
+	@Override
+	public Boolean getShowDeletedSpCheckBoxValue() {
+		return showDeletedSpCheckBox.getValue();
 	}
 	
 	
