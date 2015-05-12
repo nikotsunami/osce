@@ -128,11 +128,15 @@ public class StandardizedPatientAnamnesisTableSubViewImpl extends Composite
 			Boolean truth = null;
 			switch (proxy.getAnamnesischeck().getType()) {
 			case QUESTION_YES_NO:
+				//changed code for OMS-149. 
+				//Now null is saved for de-selected options.
 				VariableSelectorCell.Choice selectedChoice = answer.getSelectedChoice();
 				if (selectedChoice != null && constants.yes().equals(selectedChoice.getOption())) {
 					truth = true;
-				} else {
+				} else if(selectedChoice != null && constants.no().equals(selectedChoice.getOption())) {
 					truth = false;
+				}else{
+					truth=null;
 				}
 				break;
 			case QUESTION_MULT_M:

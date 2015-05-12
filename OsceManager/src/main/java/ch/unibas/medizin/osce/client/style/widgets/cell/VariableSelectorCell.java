@@ -3,11 +3,14 @@ package ch.unibas.medizin.osce.client.style.widgets.cell;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
+
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.cell.client.AbstractInputCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.BrowserEvents;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.dom.client.NativeEvent;
@@ -18,6 +21,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
 public class VariableSelectorCell extends AbstractInputCell<VariableSelectorCell.Choices, VariableSelectorCell.Choices> {
 	private static Templates templates = GWT.create(Templates.class);
+	private OsceConstants constants = GWT.create(OsceConstants.class);
 	private final Alignment _alignment;
 	
 	public enum SelectorType {
@@ -222,8 +226,8 @@ public class VariableSelectorCell extends AbstractInputCell<VariableSelectorCell
 	}
 	
 	public VariableSelectorCell(Alignment alignment) {
-		// Register change event
-		super("change");
+		// Register change event. Registering click event for OMS-149.
+		super("change", BrowserEvents.CLICK);
 		_alignment = alignment;
 	}
 	
@@ -233,6 +237,7 @@ public class VariableSelectorCell extends AbstractInputCell<VariableSelectorCell
 			return;
 		}
 		super.onBrowserEvent(context, parent, value, event, valueUpdater);
+		Log.info("event : " + event.getType() + "  value selector : " + value.getSelectorType());
 		if ("change".equals(event.getType())) {
 			Object key = context.getKey();
 			Choices newValue;
@@ -254,6 +259,35 @@ public class VariableSelectorCell extends AbstractInputCell<VariableSelectorCell
 			if (valueUpdater != null) {
 				valueUpdater.update(newValue);
 			}
+		}else if(BrowserEvents.CLICK.equals(event.getType())){
+			//Added code for OMS-149. De-selecting option. 
+			Object key = context.getKey();
+			Choices newValue=null;
+			switch(value.getSelectorType()) {
+			case RADIO:
+				Log.info("De-selecting option");
+				List<Choice> choices = value.getChoices();
+				if(choices.size()==2 && choices.get(0).getOption().equals(constants.yes()) && choices.get(1).getOption().equals(constants.no())){
+					for(Choice choice : choices){
+						choice.setChecked(false);
+					}
+					
+						newValue=value;
+				}else{
+					return;
+				}
+				break;
+			
+			default:
+				Log.info("Radio button is not clicked");
+			}
+			if (newValue != null) {
+				setViewData(key, newValue);
+				finishEditing(parent, newValue, key, valueUpdater);
+				Log.info("updating options");
+				valueUpdater.update(newValue);
+				
+			}
 		}
 	}
 	
@@ -272,13 +306,13 @@ public class VariableSelectorCell extends AbstractInputCell<VariableSelectorCell
 
 	private Choices radioInputEvent(Element parent, Choices value) {
 		Log.info("radioInputEvent()");
-		for (int i=0; i < parent.getChildCount(); i++) {
-			InputElement input = parent.getChild(i).getFirstChild().cast();
-			if (input.isChecked()) {
-				value.setExclusivelySelected(i);
-				break;
+			for (int i=0; i < parent.getChildCount(); i++) {
+				InputElement input = parent.getChild(i).getFirstChild().cast();
+				if (input.isChecked()) {
+					value.setExclusivelySelected(i);
+					break;
+				}
 			}
-		}
 		return value;
 	}
 
