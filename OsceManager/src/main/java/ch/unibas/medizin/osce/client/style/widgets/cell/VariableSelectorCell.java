@@ -58,7 +58,8 @@ public class VariableSelectorCell extends AbstractInputCell<VariableSelectorCell
 				"<label for=\"{0}-{1}\">{2}</label>" +
 				"</span>")
 		SafeHtml checkBoxTemplateChecked(String fieldName, int id, String value);
-		@SafeHtmlTemplates.Template("<input class=\"gwt-TextBox\" type=\"text\" value=\"{0}\" style=\"width: 100%;\" />")
+		//changed code for OMS-150
+		@SafeHtmlTemplates.Template("<textarea class=\"gwt-textArea\" style=\"width: 100%; white-space: pre-wrap;word-wrap: break-word;\">{0}</textarea>")
 		SafeHtml textBoxTemplate(String text);
 	}
 	

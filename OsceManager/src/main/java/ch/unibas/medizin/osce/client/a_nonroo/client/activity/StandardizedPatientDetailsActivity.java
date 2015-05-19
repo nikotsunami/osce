@@ -1211,6 +1211,18 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 	@Override
 	public void performAnamnesisSearch() {
 		Log.debug("performAnamnesisSearch()");
+		
+		//added for OMS-150.
+		boolean toShowCommentsColumn = standardizedPatientAnamnesisSubView.isToShowCommentsColumn();
+		
+		AnamnesisCheckTitleProxy anamnesisCheckTitleProxy = anamnesisCheckTitles.get(standardizedPatientAnamnesisSubView.getSelectedTab());
+		CellTable<AnamnesisChecksValueProxy> table = anamnesisSubViews.get(anamnesisCheckTitleProxy).getTable();
+		if(table.getColumnCount()==3 && toShowCommentsColumn){
+			addOrRemoveCommentsColumn(toShowCommentsColumn);
+		}else if(table.getColumnCount()==4 && !toShowCommentsColumn){
+			addOrRemoveCommentsColumn(toShowCommentsColumn);
+		}
+		
 		onRangeChangedAnamnesis(anamnesisCheckTitles.get(standardizedPatientAnamnesisSubView.getSelectedTab()));
 	}
 
@@ -1589,6 +1601,24 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		}
 		
 		return anamnesisCheckText.toString();
+	}
+
+	//Added functionality as per OMS-150 point 3.
+	/**
+	 * adding or removing comment column of table based on parameter value.
+	 */
+	@Override
+	public void addOrRemoveCommentsColumn(Boolean isToshowCommentColumn) {
+		Log.info("Adding or removing comment column bases on selection");
+		if(isToshowCommentColumn){
+			AnamnesisCheckTitleProxy anamnesisCheckTitleProxy = anamnesisCheckTitles.get(standardizedPatientAnamnesisSubView.getSelectedTab());
+			anamnesisSubViews.get(anamnesisCheckTitleProxy).addCommentsColumn();
+		}else{
+			AnamnesisCheckTitleProxy anamnesisCheckTitleProxy = anamnesisCheckTitles.get(standardizedPatientAnamnesisSubView.getSelectedTab());
+			anamnesisSubViews.get(anamnesisCheckTitleProxy).removeCommentsColumn();
+			
+		}
+		
 	}
 	
 }

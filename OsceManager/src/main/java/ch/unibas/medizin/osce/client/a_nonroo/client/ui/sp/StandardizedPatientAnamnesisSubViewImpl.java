@@ -6,6 +6,7 @@ import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -75,6 +76,10 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 	@UiField
 	CheckBox showUnanswered;
 
+	//Added for OMS-150.
+	@UiField
+	CheckBox showComment;
+	
 	public StandardizedPatientAnamnesisSubViewImpl() {
 		initSearchBox();
 		initWidget(uiBinder.createAndBindUi(this));
@@ -97,7 +102,8 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 		showAnswered.setValue(true);
 		showAnswered.setText(constants.showAnswered());
 		showUnanswered.setText(constants.showUnanswered());
-
+		showComment.setText(constants.showComments());
+		
 		showAnswered.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -111,6 +117,17 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 			}
 		});
 		
+		//Added for OMS-150.
+		showComment.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				Log.info("show comment value changed new value is : " + event.getValue());
+				delegate.addOrRemoveCommentsColumn(event.getValue());
+			}
+
+			
+		});
 		// FIXME: temporarily disabled...
 //		showAnswered.removeFromParent();
 //		showUnanswered.removeFromParent();
@@ -175,4 +192,13 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 	public void setSelectedAnamnesisTab(int selectedAnamnesisTab) {
 		this.selectedAnamnesisTab = selectedAnamnesisTab;
 	}
+	
+	/**
+	 * return value of show comment check box.
+	 */
+	@Override
+	public boolean isToShowCommentsColumn() {
+		return showComment.getValue();
+	}
+	
 }

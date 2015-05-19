@@ -9,6 +9,8 @@ public interface StandardizedPatientAnamnesisSubView extends IsWidget {
 	interface Delegate {
 		public void performAnamnesisSearch();
 		public void storeDisplaySettings();
+		//Added for OMS-150.
+		public void addOrRemoveCommentsColumn(Boolean value);
 	}
 	
 	public void setDelegate(Delegate delegate);
@@ -26,4 +28,7 @@ public interface StandardizedPatientAnamnesisSubView extends IsWidget {
 	public void allTitlesAreLoaded();
 	
 	public void setSelectedAnamnesisTab(int selectedAnamnesisTab);
+
+	//Added for OMS-150.
+	public boolean isToShowCommentsColumn();
 }

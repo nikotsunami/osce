@@ -13,4 +13,7 @@ public interface StandardizedPatientAnamnesisTableSubView {
 	public void setDelegate(Delegate delegate);
 	public String[] getPaths();
 	public CellTable<AnamnesisChecksValueProxy> getTable();
+	//Added for OMS-150 point 3.
+	public void addCommentsColumn();
+	public void removeCommentsColumn();
 }

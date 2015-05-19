@@ -16,13 +16,16 @@ import ch.unibas.medizin.osce.shared.AnamnesisCheckTypes;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
+import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.TextInputCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.Header;
 import com.google.gwt.user.cellview.client.RowStyles;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
@@ -65,13 +68,31 @@ public class StandardizedPatientAnamnesisTableSubViewImpl extends Composite
 		paths.add("anamnesischeck.anamnesisCheckTitle");
 		
 		table.setRowStyles(new CustomRowStyles());
-		table.addColumn(new StatusColumn(), constants.answered());
+		//changed code for OMS-150. Added check icon by removing heading "Beantwortet?.
+		table.addColumn(new StatusColumn(), new Header<String>(new checkIconHeader()) {
+
+			@Override
+			public String getValue() {
+				return " ";
+			}
+		});
 		table.addColumn(new QuestionColumn(), constants.question());
 		table.addColumn(new AnswerColumn(), constants.answer());
-		table.addColumn(new CommentColumn(), constants.comment());
-		table.addColumnStyleName(0, "iconCol");
+		//comment below line for OMS-150.
+		//table.addColumn(new CommentColumn(), constants.comment());
+		table.addColumnStyleName(0, "checkBoxColumn");
+		table.addColumnStyleName(1, "questionColumn");
+		table.addColumnStyleName(2, "answerColumn");
 	}
 
+	private static class checkIconHeader extends AbstractCell<String> {
+		@Override
+		public void render(com.google.gwt.cell.client.Cell.Context context,String value, SafeHtmlBuilder sb) {
+		     sb.appendHtmlConstant("<span class=\"ui-icon ui-icon-check\"></span>");
+		}
+	  
+  }
+	
 	private static class CustomRowStyles implements RowStyles<AnamnesisChecksValueProxy> {
 		private static MyCellTableNoHilightResources tableResources = GWT.create(MyCellTableNoHilightResources.class);
 		@Override
@@ -280,5 +301,24 @@ public class StandardizedPatientAnamnesisTableSubViewImpl extends Composite
 	@Override
 	public CellTable<AnamnesisChecksValueProxy> getTable() {
 		return table;
+	}
+
+	//Adder for OMS-150.
+	/**
+	 * Adds comment column to table. 
+	 */
+	@Override
+	public void addCommentsColumn() {
+		table.addColumn(new CommentColumn(), constants.comment());
+		table.addColumnStyleName(3, "commentColumn");
+	}
+	//Adder for OMS-150.
+	/**
+	 * Removes comment column from table.
+	 */
+	@Override
+	public void removeCommentsColumn() {
+		table.removeColumn(3);
+		
 	}
 }

@@ -1790,6 +1790,9 @@ public interface OsceConstants extends Constants {
 	
 	//Added for OMS-148
 	public String showDeletedSp();
+
+	//Added for OMS-150
+	public String showComments();
 }
 
 

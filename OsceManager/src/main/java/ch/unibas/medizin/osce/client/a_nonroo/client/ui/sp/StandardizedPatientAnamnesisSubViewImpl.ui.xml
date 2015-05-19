@@ -26,7 +26,9 @@
 			<my:QuickSearchBox ui:field="searchBox" />
 			<g:CheckBox ui:field="showAnswered"></g:CheckBox>
 			<g:CheckBox ui:field="showUnanswered"></g:CheckBox>
+			
 		</div>
-	
+			<!-- Added for OMS-150. -->
+			<g:CheckBox ui:field="showComment"></g:CheckBox>
 	</g:HTMLPanel>
 </ui:UiBinder> 

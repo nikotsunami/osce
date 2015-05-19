@@ -4110,3 +4110,15 @@ color: #f1b532;
 .qr_popup_close_button:HOVER {
 	background: none;
 }
+.checkBoxColumn{
+	width: 5%;
+}
+.questionColumn{
+	width: 20%;
+}
+.answerColumn{
+	width: auto;
+}
+.commentColumn{
+	width: 20%;
+}
