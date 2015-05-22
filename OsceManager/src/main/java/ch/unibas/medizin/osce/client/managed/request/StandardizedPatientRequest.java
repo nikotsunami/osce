@@ -72,8 +72,8 @@ public interface StandardizedPatientRequest extends RequestContext {
 //    	);
         abstract Request<Void> getCSVMapperForStandardizedPatientUsingServlet(List<Long>  ids);
          //SPEC]
-
-		abstract Request<Void> setStandardizedPatientListToSession(List<Long> stdPatIdList, String sortname, Sorting sortorder);
+        //Added parameter semester id for OMS-152.
+		abstract Request<Void> setStandardizedPatientListToSession(List<Long> stdPatIdList, String sortname, Sorting sortorder, Long semesterId);
 
 		// This method is used to save standardized patient data in sp portal db.
 		//abstract Request<Void> insertStandardizedPatientDetailsInSPportal(Long id);

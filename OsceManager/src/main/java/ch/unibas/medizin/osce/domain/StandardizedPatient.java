@@ -1357,12 +1357,13 @@ public class StandardizedPatient {
     //SPEC]
    
  // E Module10 Create plans
-    
-    public static void setStandardizedPatientListToSession(List<Long>  ids, String sortname, Sorting sortorder) {
+    //Added semester id parameter for OMS-152.
+    public static void setStandardizedPatientListToSession(List<Long>  ids, String sortname, Sorting sortorder,Long semesterID) {
     	HttpSession session = RequestFactoryServlet.getThreadLocalRequest().getSession();
 		session.setAttribute(ResourceDownloadProps.SP_LIST, ids);
 		session.setAttribute(ResourceDownloadProps.COLUMN_NAME, sortname);
 		session.setAttribute(ResourceDownloadProps.SORT_ORDER, sortorder);
+		session.setAttribute(ResourceDownloadProps.SEMESTER,semesterID);
 		
     }
 

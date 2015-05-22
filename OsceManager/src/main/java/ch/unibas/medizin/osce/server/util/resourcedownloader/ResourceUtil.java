@@ -476,6 +476,8 @@ public class ResourceUtil {
 			final List<Long> ids = (List<Long>) session.getAttribute(ResourceDownloadProps.SP_LIST);
 			final String column = (String) session.getAttribute(ResourceDownloadProps.COLUMN_NAME);
 			final Sorting sortOrder = (Sorting) session.getAttribute(ResourceDownloadProps.SORT_ORDER);
+			//Added for OMS-152.
+			final Long semesterId=Long.valueOf(session.getAttribute(ResourceDownloadProps.SEMESTER).toString());
 			final List<StandardizedPatient> spList; 
 			if(StringUtils.isNotBlank(column) && sortOrder != null) {
 				spList = StandardizedPatient.findPatientsByidsAndSortByColumn(ids,column,sortOrder);
@@ -486,7 +488,7 @@ public class ResourceUtil {
 			
 			
 			if(spList != null & spList.size() > 0) {
-				StandardizedPatientPaymentUtil paymentUtil =  new StandardizedPatientPaymentUtil(spList,os,session);
+				StandardizedPatientPaymentUtil paymentUtil =  new StandardizedPatientPaymentUtil(spList,os,session,semesterId);
 				fileName = paymentUtil.createPDF();
 			}
 			

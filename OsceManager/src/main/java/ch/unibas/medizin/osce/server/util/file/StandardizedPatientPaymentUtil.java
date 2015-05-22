@@ -19,9 +19,11 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.log4j.Logger;
 
 import ch.unibas.medizin.osce.domain.Bankaccount;
+import ch.unibas.medizin.osce.domain.Semester;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
+import ch.unibas.medizin.osce.shared.Semesters;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.itextpdf.text.Document;
@@ -46,14 +48,16 @@ public class StandardizedPatientPaymentUtil {
 	private final ByteArrayOutputStream os;
 	private final DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 	private final String fileName;
-	
+	private final Semester semester;
 	public StandardizedPatientPaymentUtil(List<StandardizedPatient> list,
-			ByteArrayOutputStream os,HttpSession session) throws IOException {
+			ByteArrayOutputStream os,HttpSession session,Long semesterId) throws IOException {
 		this.spList = list;
 		this.os = os;
 		this.locale = new Locale("de");
 		this.constants = GWTI18N.create(OsceConstants.class, locale.toString());
 		this.fileName = session.getServletContext().getRealPath(OsMaFilePathConstant.appStandardizedPatientPaymentPDF);
+		//Added for OMS-152.
+		this.semester=Semester.findSemester(semesterId);
 	}
 
 	public String createPDF() {
@@ -290,13 +294,26 @@ public class StandardizedPatientPaymentUtil {
 
 		// valueMap.put(DATES_WORKED_FROM, "27.11.2011");
 		// valueMap.put(DATES_WORKED_TO, "26.11.2012");
-		// valueMap.put(SERVICE_CLAIMED, "Service claimed");
-		// valueMap.put(AMOUNT_IN, "USD");
+		//Added code for OMS-152.
+		if(semester.getSemester().equals(Semesters.FED)){
+			valueMap.put(SERVICE_CLAIMED, "Simulationspatient Eidgenössische Schlussprüfung Medizin " + semester.getCalYear());	
+		}else if(semester.getSemester().equals(Semesters.HS) || semester.getSemester().equals(Semesters.FS)){
+			valueMap.put(SERVICE_CLAIMED, "Simulationspatient OSCE " + semester.getSemester() + " " + semester.getCalYear());
+		}
+		 //Added code for OMS-152.
+		 valueMap.put(AMOUNT_IN, "CHF");
 		// valueMap.put(DATE_1, "26.11.2012");
 		// valueMap.put(AMOUNT_1, "100");
 		// valueMap.put(COST_CENTRE_1, "center 1");
 		// valueMap.put(DATE_2, "26.11.2012");
 		// valueMap.put(AMOUNT_2, "200");
+		//Added code for OMS-152.
+		 if(semester.getSemester().equals(Semesters.FED)){
+			 valueMap.put(COST_CENTRE_1, "3MX 1191");
+			}else if(semester.getSemester().equals(Semesters.HS) || semester.getSemester().equals(Semesters.FS)){
+				valueMap.put(COST_CENTRE_1, "MX 1102");
+			}
+
 		// valueMap.put(COST_CENTRE_2, "center 2");
 		// valueMap.put(TOTAL, "unknown");
 
@@ -353,7 +370,11 @@ public class StandardizedPatientPaymentUtil {
 		for (Entry<String, String> element : valueMap.entrySet()) {
 			form.setField(element.getKey(), element.getValue());
 		}
-
+		//Added code for OMS-152. When semester is Staats  than value is not get set in SERVICE_CLAIMED so changing its text size. Manish
+		if(semester.getSemester().equals(Semesters.FED)){
+			form.setFieldProperty(SERVICE_CLAIMED,"textsize", new Float(8),null);
+			form.regenerateField(SERVICE_CLAIMED);
+		}
 	}
 
 	private void resetPDF(AcroFields form) {

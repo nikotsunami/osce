@@ -172,8 +172,8 @@ public class PaymentActivity extends AbstractActivity implements PaymentView.Del
 		}
 		
 		//stdPatIdList is List of Selected Standardized Patient
-		
-		requests.standardizedPatientRequest().setStandardizedPatientListToSession(stdPatIdList,sortname,sortorder).fire(new OSCEReceiver<Void>() {
+		//Added semester id for OMS-152.
+		requests.standardizedPatientRequest().setStandardizedPatientListToSession(stdPatIdList,sortname,sortorder,semesterProxy.getId()).fire(new OSCEReceiver<Void>() {
 
 			@Override
 			public void onSuccess(Void response) {
