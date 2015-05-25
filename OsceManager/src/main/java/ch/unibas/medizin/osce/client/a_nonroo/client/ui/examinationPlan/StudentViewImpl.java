@@ -7,7 +7,6 @@ import ch.unibas.medizin.osce.client.managed.request.AssignmentProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
-import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -22,6 +21,10 @@ import com.google.gwt.event.dom.client.ContextMenuHandler;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -30,7 +33,6 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.IntegerBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -119,6 +121,9 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 	PopupView popupView;
 	
 	PopupView exchangePopupView;
+	
+	//Added for OMS-153.
+	NamePrenamePopupView namePrenamePopupView;
 	
 	public FocusPanel getStudentPanel() {
 		return studentPanel;
@@ -239,8 +244,64 @@ public class StudentViewImpl extends Composite implements StudentView,HasMouseDo
 		});
 		//by spec change
 	
+		//Added for OMS-153.
+		registerAndHandleMouseOverAndMouseOutEvent();
 	}
 	
+	//Added for OMS-153.
+		/**
+		 * registering and handling mouse over and mouse out event on student panel.
+		 */
+		private void registerAndHandleMouseOverAndMouseOutEvent() {
+			Log.info("registering mouse over event");
+			studentPanel.addMouseOverHandler(new MouseOverHandler() {
+				
+				@Override
+				public void onMouseOver(MouseOverEvent event) {
+						Log.info("onMouseOver() called");
+						showStudentPrenameNamePopup();
+				}
+			});
+			studentPanel.addMouseOutHandler(new MouseOutHandler() {
+				
+				@Override
+				public void onMouseOut(MouseOutEvent event) {
+					Log.info("onMouseOut() called");
+					if(namePrenamePopupView!=null){
+						namePrenamePopupView.hidePopup();
+					}
+				}
+			});
+		}
+		//Added for OMS-153.
+		/**
+		 * show student pre-name name popup
+		 */
+		private void showStudentPrenameNamePopup() {
+		 Log.info("showing prename name popup");	
+		 
+		 if(assignmentProxy!=null){
+				if(namePrenamePopupView == null)
+				{
+					namePrenamePopupView=new NamePrenamePopupViewImpl();
+					
+					RootPanel.get().add(((NamePrenamePopupViewImpl)namePrenamePopupView));
+				}
+				
+				namePrenamePopupView.setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-86);
+				//setDAta
+				
+				if(assignmentProxy.getStudent()!=null){
+					namePrenamePopupView.setPreNameAndName(assignmentProxy.getStudent().getPreName()!=null ? assignmentProxy.getStudent().getPreName():constants.notAssigned(),
+							assignmentProxy.getStudent().getName()!=null ? assignmentProxy.getStudent().getName():constants.notAssigned());
+				}
+				else{
+					namePrenamePopupView.setPrenameValue(constants.notAssigned());
+				}
+				namePrenamePopupView.showPopup();
+		 }
+			
+		}
 	@Override
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;

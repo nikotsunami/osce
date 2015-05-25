@@ -11,9 +11,14 @@ import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -169,10 +174,15 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 		return examinerLbl;
 	}
 	
+	//Added for OMS-153.
+	NamePrenamePopupView namePrenamePopupView;
+	
 	public ExaminationViewImpl()
 	{
 		initWidget(uiBinder.createAndBindUi(this));
 		examinationViewImpl=this;
+		//Added for OMS-153.
+		registerAndHandleMouseOverAndMouseOutEvent();
 	}
 	
 	@Override
@@ -398,5 +408,60 @@ public class ExaminationViewImpl extends Composite implements  ExaminationView{
 		((PopupViewImpl)popupView).show();
 		
 	}
-}
 	
+	//Added for OMS-153.
+	/**
+	 * registering and handling mouse over and mouse out event on examiner panel.
+	 */
+	private void registerAndHandleMouseOverAndMouseOutEvent() {
+		Log.info("registering mouse over event");
+		examinerPanel.addMouseOverHandler(new MouseOverHandler() {
+					
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+					Log.info("onMouseOver() called");
+					showExaminerPrenameNamePopup();
+			}
+		});
+		examinerPanel.addMouseOutHandler(new MouseOutHandler() {
+			
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Log.info("onMouseOut() called");
+				if(namePrenamePopupView!=null){
+					namePrenamePopupView.hidePopup();
+				}
+			}
+		});
+	}
+	
+	//Added for OMS-153.
+	/**
+	 * show examiner pre-name name popup
+	 */
+	private void showExaminerPrenameNamePopup() {
+	 Log.info("showing prename name popup");	
+		 
+	 if(assignmentProxy!=null){
+			if(namePrenamePopupView == null)
+			{
+				namePrenamePopupView=new NamePrenamePopupViewImpl();
+						
+				RootPanel.get().add(((NamePrenamePopupViewImpl)namePrenamePopupView));
+			}
+					
+			namePrenamePopupView.setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-86);
+			//setDAta
+			
+			if(assignmentProxy.getExaminer() !=null){
+				namePrenamePopupView.setPreNameAndName(assignmentProxy.getExaminer().getPreName()!=null ? assignmentProxy.getExaminer().getPreName():constants.notAssigned(),
+				assignmentProxy.getExaminer().getName()!=null  ? assignmentProxy.getExaminer().getName():constants.notAssigned());
+			}
+				else{
+					namePrenamePopupView.setPrenameValue(constants.notAssigned());
+				}
+			namePrenamePopupView.showPopup();
+	  }		
+				
+	}
+}

@@ -13,6 +13,10 @@ import com.google.gwt.event.dom.client.ContextMenuHandler;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -45,6 +49,9 @@ public class SPViewImpl extends Composite implements SPView, HasMouseDownHandler
 	PopupView popupView;
 	
 	PopupView exchangePopupView;
+	
+	//Added for OMS-153.
+	NamePrenamePopupView namePrenamePopupView;
 	
 	public FocusPanel getSpPanel() {
 		return spPanel;
@@ -118,8 +125,65 @@ public class SPViewImpl extends Composite implements SPView, HasMouseDownHandler
 			}
 		});
 		//spec change]
+		//Added for OMS-153.
+		registerAndHandleMouseOverAndMouseOutEvent();
 	}
-	
+	//Added for OMS-153.
+	/**
+	 * registering and handling mouse over and mouse out event on sppanel.
+	 */
+	private void registerAndHandleMouseOverAndMouseOutEvent() {
+		Log.info("registering mouse over event");
+		spPanel.addMouseOverHandler(new MouseOverHandler() {
+			
+			@Override
+			public void onMouseOver(MouseOverEvent event) {
+					Log.info("onMouseOver() called");
+					showSpPrenameNamePopup();
+			}
+		});
+		spPanel.addMouseOutHandler(new MouseOutHandler() {
+			
+			@Override
+			public void onMouseOut(MouseOutEvent event) {
+				Log.info("onMouseOut() called");
+				if(namePrenamePopupView!=null){
+					namePrenamePopupView.hidePopup();
+				}
+			}
+		});
+	}
+	//Added for OMS-153.
+	/**
+	 * show sp pre-name name popup
+	 */
+	private void showSpPrenameNamePopup() {
+	 Log.info("showing prename name popup");	
+	 
+	 if(assignmentProxy!=null){
+			if(namePrenamePopupView == null)
+			{
+				namePrenamePopupView=new NamePrenamePopupViewImpl();
+				
+				RootPanel.get().add(((NamePrenamePopupViewImpl)namePrenamePopupView));
+			}
+			
+			namePrenamePopupView.setPopupPosition(this.getAbsoluteLeft()-45, this.getAbsoluteTop()-86);
+			//setDAta
+			
+			if(assignmentProxy.getPatientInRole()!=null){
+				String prename=assignmentProxy.getPatientInRole().getPatientInSemester().getStandardizedPatient().getPreName();
+				String name =assignmentProxy.getPatientInRole().getPatientInSemester().getStandardizedPatient().getName();
+				namePrenamePopupView.setPreNameAndName(prename!=null ? prename:constants.notAssigned(),name!=null ? name:constants.notAssigned());
+			}else{
+				namePrenamePopupView.setPrenameValue(constants.notAssigned());
+			}
+			
+			namePrenamePopupView.showPopup();
+	 }
+		
+	}
+
 	@Override
 	public void setDelegate(Delegate delegate) {
 		this.delegate = delegate;

@@ -64,13 +64,13 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 
 @SuppressWarnings("deprecation")
 public class ExaminationScheduleDetailActivity extends AbstractActivity implements ExaminationScheduleDetailView.Presenter,ExaminationScheduleDetailView.Delegate,AccordianPanelView.Delegate
@@ -2450,7 +2450,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		final Date timeEnd=assignmentProxy.getTimeEnd();
 		final Integer seqNum=assignmentProxy.getSequenceNumber();
 		assignmentProxy=assignmentRequest.edit(view.getAssignmentProxy());
-
+		
 		DoctorProxy doctorProxy=null;
 		for(DoctorProxy dp:doctorList)
 		{
@@ -2463,8 +2463,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		}
 		assignmentProxy.setExaminer(doctorProxy);
 		
-		
 		assignmentProxy.setTimeEnd(view.getExamInfoPopupView().getEndTimeListBox().getValue());
+		final AssignmentProxy updatedAssignmentProxy = assignmentProxy;
 		assignmentRequest.persist().using(assignmentProxy).fire(new OSCEReceiver<Void>() {
 
 			@Override
@@ -2539,7 +2539,8 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 					
 					view.getExamInfoPopupView().getSaveBtn().setVisible(false);
 					view.getExamInfoPopupView().getExaminerNameValue().setText(value);
-					
+					//Added for OMS-153. Updating saved proxy.
+					view.setAssignmentProxy(updatedAssignmentProxy);
 				}
 				//view.getEditPopup().hide();
 			}
