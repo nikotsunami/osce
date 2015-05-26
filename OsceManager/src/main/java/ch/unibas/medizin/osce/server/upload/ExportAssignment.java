@@ -1727,14 +1727,19 @@ public class ExportAssignment  extends HttpServlet {
 		}
         
 	}
-	
+	/**
+	 * setting parcour style
+	 * @param wb
+	 * @param color
+	 * @return
+	 */
+	//changed code as per OMS-154
 	public CellStyle spParcourStyle(Workbook wb,String color)
 	{
 		CellStyle seqStyle;
         
 		Font seqFont = wb.createFont();
         seqFont.setFontHeightInPoints((short)12);
-        seqFont.setColor(IndexedColors.BLACK.getIndex());
         seqStyle = wb.createCellStyle();
         seqFont.setBoldweight((short)2);
         
@@ -1746,67 +1751,83 @@ public class ExportAssignment  extends HttpServlet {
         if(color.equalsIgnoreCase("color_1"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.BROWN.getIndex());
+        	 seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         
         if(color.equalsIgnoreCase("color_2"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+        	seqFont.setColor(IndexedColors.BLACK.getIndex());
         }
         if(color.equalsIgnoreCase("color_3"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.PINK.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_4"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+        	seqFont.setColor(IndexedColors.BLACK.getIndex());
         }
         if(color.equalsIgnoreCase("color_5"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        	seqFont.setColor(IndexedColors.BLACK.getIndex());
         }
         if(color.equalsIgnoreCase("color_6"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.RED.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_7"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.ROSE.getIndex());
+        	seqFont.setColor(IndexedColors.BLACK.getIndex());
         }
         if(color.equalsIgnoreCase("color_8"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.BLUE.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_9"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_10"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.ORANGE.getIndex());
+        	seqFont.setColor(IndexedColors.BLACK.getIndex());
         }
         if(color.equalsIgnoreCase("color_11"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.PLUM.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_12"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.MAROON.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_13"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.OLIVE_GREEN.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_14"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.VIOLET.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_15"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.INDIGO.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_16"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.LIME.getIndex());
+        	seqFont.setColor(IndexedColors.BLACK.getIndex());
         }
         
         
@@ -1835,14 +1856,19 @@ color_16=Black
         
 	}
 	
-	
+	/**
+	 * setting sp post style
+	 * @param wb
+	 * @param color
+	 * @return
+	 */
+	//changed code as per OMS-154
 	public CellStyle spPostStyle(Workbook wb,String color)
 	{
 		CellStyle seqStyle;
         
 		Font seqFont = wb.createFont();
         seqFont.setFontHeightInPoints((short)12);
-        seqFont.setColor(IndexedColors.BLACK.getIndex());
         seqStyle = wb.createCellStyle();
         seqFont.setBoldweight((short)2);
         
@@ -1854,67 +1880,83 @@ color_16=Black
         if(color.equalsIgnoreCase("color_1"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.CORAL.getIndex());
+        	seqFont.setColor(IndexedColors.BLACK.getIndex());
         }
         
         if(color.equalsIgnoreCase("color_2"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
+        	seqFont.setColor(IndexedColors.BLACK.getIndex());
         }
         if(color.equalsIgnoreCase("color_3"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.GOLD.getIndex());
+        	seqFont.setColor(IndexedColors.BLACK.getIndex());
         }
         if(color.equalsIgnoreCase("color_4"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.SKY_BLUE.getIndex());
+        	seqFont.setColor(IndexedColors.BLACK.getIndex());
         }
         if(color.equalsIgnoreCase("color_5"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.CORNFLOWER_BLUE.getIndex());
+        	seqFont.setColor(IndexedColors.BLACK.getIndex());
         }
         if(color.equalsIgnoreCase("color_6"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.LIME.getIndex());
+        	seqFont.setColor(IndexedColors.BLACK.getIndex());
         }
         if(color.equalsIgnoreCase("color_7"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.PLUM.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_8"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.TAN.getIndex());
+        	seqFont.setColor(IndexedColors.BLACK.getIndex());
         }
         if(color.equalsIgnoreCase("color_9"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.TEAL.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_10"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.ORANGE.getIndex());
+        	seqFont.setColor(IndexedColors.BLACK.getIndex());
         }
         if(color.equalsIgnoreCase("color_11"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.ORCHID.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_12"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.MAROON.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_13"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.OLIVE_GREEN.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_14"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.VIOLET.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_15"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.INDIGO.getIndex());
+        	seqFont.setColor(IndexedColors.WHITE.getIndex());
         }
         if(color.equalsIgnoreCase("color_16"))
         {
         	seqStyle.setFillForegroundColor(IndexedColors.LAVENDER.getIndex());
+        	seqFont.setColor(IndexedColors.BLACK.getIndex());
         }
         return seqStyle;
         
