@@ -205,7 +205,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		//ScrolledTab Changes start
 		//loadDisplaySettings();
 		//ScrolledTab Changes start
-		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "bankAccount.country", "langskills", "anamnesisForm", "anamnesisForm.scars","patientInSemester").fire(new InitializeActivityReceiver());
+		requests.find(place.getProxyId()).with("profession", "descriptions", "nationality", "bankAccount", "bankAccount.country", "langskills", "anamnesisForm", "anamnesisForm.scars","patientInSemester","country").fire(new InitializeActivityReceiver());
 		
 		//spportal related changes start {
 		
@@ -1463,7 +1463,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 								}
 							});
 						}else{
-							requests.standardizedPatientRequest().findStandardizedPatient(standardizedPatientProxy.getId()).with("profession", "descriptions", "nationality", "bankAccount", "bankAccount.country", "langskills", "anamnesisForm", "anamnesisForm.scars","patientInSemester").fire(new OSCEReceiver<StandardizedPatientProxy>(){
+							requests.standardizedPatientRequest().findStandardizedPatient(standardizedPatientProxy.getId()).with("profession", "descriptions", "nationality", "bankAccount", "bankAccount.country", "langskills", "anamnesisForm", "anamnesisForm.scars","patientInSemester","country").fire(new OSCEReceiver<StandardizedPatientProxy>(){
 
 								@Override
 								public void onSuccess(StandardizedPatientProxy response) {
@@ -1533,7 +1533,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
-		requests.sPPortalPersonRequest().findSpPortalSPBasedOnOsceSPID(standardizedPatientProxy.getId()).with("person","anamnesisForm","nationality","profession","bankAccount","bankAccount.country").fire(new OSCEReceiver<SpStandardizedPatientProxy>() {
+		requests.sPPortalPersonRequest().findSpPortalSPBasedOnOsceSPID(standardizedPatientProxy.getId()).with("person","anamnesisForm","nationality","profession","bankAccount","bankAccount.country","country").fire(new OSCEReceiver<SpStandardizedPatientProxy>() {
 
 			@Override
 			public void onSuccess(SpStandardizedPatientProxy response) {

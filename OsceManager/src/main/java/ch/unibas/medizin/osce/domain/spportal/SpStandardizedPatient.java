@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,10 +24,12 @@ import javax.persistence.TypedQuery;
 import javax.persistence.Version;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
+
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
 import ch.unibas.medizin.osce.domain.Bankaccount;
 import ch.unibas.medizin.osce.domain.Nationality;
@@ -103,6 +106,9 @@ public class SpStandardizedPatient {
     
     @ManyToOne
     private SpNationality nationality;
+    //Added as per OMS-157.
+    @ManyToOne
+    private SpNationality country;
     
     @Enumerated
     private WorkPermission workPermission;
@@ -270,6 +276,16 @@ public class SpStandardizedPatient {
 				standardizedPatient.setGender(spStandardizedPatient.getGender());
 				standardizedPatient.setHeight(spStandardizedPatient.getHeight());
 				standardizedPatient.setIgnoreSocialInsuranceNo(spStandardizedPatient.getIgnoreSocialInsuranceNo());
+				//Added as per OMS-157.
+				SpNationality spCountry = spStandardizedPatient.getCountry();
+				Nationality country=null;
+				
+				if(spCountry!=null){
+					
+					country=Nationality.findNationalityByName(spCountry.getNationality());
+					
+				}
+				standardizedPatient.setCountry(country);
 				
 				if(spStandardizedPatient.getImmagePath()!=null){
 					//i.e user has uploded image in spportal
@@ -456,6 +472,8 @@ public class SpStandardizedPatient {
 				spStandardizedPatient.setWeight(null);
 				spStandardizedPatient.setWorkPermission(null);
 				spStandardizedPatient.setCreated(null);
+				//Added as per OMS-157.
+				spStandardizedPatient.setCountry(null);
 				spStandardizedPatient.persist();
 				
 				
@@ -899,6 +917,14 @@ public class SpStandardizedPatient {
 	public void setPatientInSemester(Set<SpPatientInSemester> patientInSemester) {
         this.patientInSemester = patientInSemester;
     }
+
+	public SpNationality getCountry() {
+		return country;
+	}
+
+	public void setCountry(SpNationality country) {
+		this.country = country;
+	}
 
 	public String toString() {
         StringBuilder sb = new StringBuilder();

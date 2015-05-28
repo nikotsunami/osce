@@ -137,6 +137,9 @@ public class SPDetailsReviewViewImpl extends PopupPanel implements  SPDetailsRev
 	SpanElement labelPLZCity;
 	@UiField
 	SpanElement labelTelephone;
+	//Added for OMS-157
+	@UiField
+	SpanElement labelCountry;
 	@UiField
 	SpanElement labelTelephone2;
 	@UiField
@@ -198,6 +201,12 @@ public class SPDetailsReviewViewImpl extends PopupPanel implements  SPDetailsRev
 
 	@UiField
 	SpanElement telephoneNewValue;
+	//Added for OMS-157.
+	@UiField
+	SpanElement countryOldValue;
+
+	@UiField
+	SpanElement countryNewValue;
 	
 	@UiField
 	SpanElement telephone2OldValue;
@@ -396,6 +405,8 @@ public class SPDetailsReviewViewImpl extends PopupPanel implements  SPDetailsRev
 		labelStreet.setInnerText(constants.street() + ":");
 		labelTelephone.setInnerText(constants.telephone() + ":");
 		labelTelephone2.setInnerText(constants.telephone() + " 2:");
+		//Added for OMS-157.
+		labelCountry.setInnerText(constants.country() + ":");
 		
 		labelBankName.setInnerText(constants.bank() + ":");
 		labelBankIBAN.setInnerText(constants.iban() + ":");
@@ -516,6 +527,30 @@ public class SPDetailsReviewViewImpl extends PopupPanel implements  SPDetailsRev
 			cityNewValue.removeClassName("nullDataStyle");
 		}
 		
+		//Added for OMS-157
+		countryOldValue.setInnerText(proxy.getCountry() == null ? "" : String.valueOf(proxy.getCountry().getNationality()));
+		countryNewValue.setInnerText(spStandardizedPatientProxy.getCountry() == null ? "" : String.valueOf(spStandardizedPatientProxy.getCountry().getNationality()));
+		
+		if(!countryOldValue.getInnerText().equals(countryNewValue.getInnerText())){
+				
+			countryOldValue.setClassName("oldData");
+			countryNewValue.setClassName("newData");
+				isChangedData=true;
+		}else{
+			countryOldValue.removeClassName("oldData");
+			countryNewValue.removeClassName("newData");
+		}
+		if(countryOldValue.getInnerText().equals("")){
+			countryOldValue.setClassName("nullDataStyle");
+		}else{
+			countryOldValue.removeClassName("nullDataStyle");
+		}
+		if(countryNewValue.getInnerText().equals("")){
+			countryNewValue.setClassName("nullDataStyle");
+		}else{
+			countryNewValue.removeClassName("nullDataStyle");
+		}
+				
 		telephoneOldValue.setInnerText(proxy.getTelephone() == null ? "" : String.valueOf(proxy.getTelephone()));
 		telephoneNewValue.setInnerText(spStandardizedPatientProxy.getTelephone() == null ? "" : String.valueOf(spStandardizedPatientProxy.getTelephone()));
 		

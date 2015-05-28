@@ -4122,3 +4122,5 @@ color: #f1b532;
 .commentColumn{
 	width: 20%;
 }
+#country .customControls td:first-child{ display:none;}
+#country .customControls .eu-nextstreet-SuggestField{width:95px !important;}

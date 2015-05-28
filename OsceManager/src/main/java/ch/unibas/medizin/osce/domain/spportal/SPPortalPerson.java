@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,16 +32,18 @@ import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import ch.unibas.medizin.osce.domain.AnamnesisCheck;
 import ch.unibas.medizin.osce.domain.AnamnesisCheckTitle;
 import ch.unibas.medizin.osce.domain.AnamnesisChecksValue;
@@ -341,7 +344,7 @@ public class SPPortalPerson {
 
 			SpNationality spNationality =initializeNationalityDetailForSpPortal(standardizedPatient);
 			
-			SpBankaccount spBankaccount =initializeBankAccountDetailForSpPortal(standardizedPatient,spNationality);
+			SpBankaccount spBankaccount =initializeBankAccountDetailForSpPortal(standardizedPatient);
 			
 			SpProfession spProfession =  initializeProfessionDetailForSpPortal(standardizedPatient);
 			
@@ -361,10 +364,40 @@ public class SPPortalPerson {
 				
 				//spAnamnesisForm.setAnamnesischecksvalues(setSpAnamnesisChecksValues);
 			}*/
-			SpStandardizedPatient spStandardizedPatient=initializeStandardizedPatientDetailForSpPortal(spNationality,spBankaccount,spProfession,standardizedPatient,spAnamnesisForm);
+			//Added for OMS-157.
+			SpNationality spCountry = initializeCountryDetailForSpPortal(standardizedPatient);
+			
+			SpStandardizedPatient spStandardizedPatient=initializeStandardizedPatientDetailForSpPortal(spNationality,spBankaccount,spProfession,standardizedPatient,spAnamnesisForm,spCountry);
 			
 			log.info("returning sp standardized patient");
 			return spStandardizedPatient;
+		}
+		/**
+		 * This method is used to copy country detail of standardized patient and initialize sp-poratal country detail
+		 * @param standardizedPatient
+		 * @return
+		 */
+		private SpNationality initializeCountryDetailForSpPortal(StandardizedPatient standardizedPatient) {
+			log.info("initializing country details for sp portal");
+			try{
+					Nationality country =standardizedPatient.getCountry();
+					
+					SpNationality spCountry =null;
+					
+					if(country!=null){
+					
+						spCountry= SpNationality.findNationalityOnNationalityText(country.getNationality());
+						 
+						log.info("country detail that will be saved in sp portal db is : " + spCountry);
+						
+					}
+					
+					return spCountry;
+			}catch(Exception e){
+				log.info("Country detail initialization failure for SP portal database");
+				log.error(e.getMessage(),e);
+				return null;
+			}
 		}
 
 		/**
@@ -401,7 +434,7 @@ public class SPPortalPerson {
 		 * @param spNationality
 		 * @return
 		 */
-		private SpBankaccount initializeBankAccountDetailForSpPortal(StandardizedPatient standardizedPatient,SpNationality spNationality) {
+		private SpBankaccount initializeBankAccountDetailForSpPortal(StandardizedPatient standardizedPatient) {
 			log.info("initializing bank account details for sp portal ");
 			try{
 					Bankaccount bankAccount =standardizedPatient.getBankAccount();
@@ -415,6 +448,18 @@ public class SPPortalPerson {
 						spBankAccount.setBankName(bankAccount.getBankName());
 						spBankAccount.setBIC(bankAccount.getBIC());
 						spBankAccount.setCity(bankAccount.getCity());
+						
+						Nationality nationality =bankAccount.getCountry();
+						
+						SpNationality spNationality =null;
+						
+						if(nationality!=null){
+						
+							spNationality= SpNationality.findNationalityOnNationalityText(nationality.getNationality());
+							 
+							log.info("Nationality detail that will be saved in sp portal db is : " + spNationality);
+							
+						}
 						spBankAccount.setCountry(spNationality);
 						spBankAccount.setIBAN(bankAccount.getIBAN());
 						spBankAccount.setOwnerName(bankAccount.getOwnerName());
@@ -534,10 +579,11 @@ public class SPPortalPerson {
 		 * @param spProfession
 		 * @param standardizedPatient
 		 * @param spAnamnesisForm
+		 * @param spCountry 
 		 * @return
 		 */
 		private SpStandardizedPatient initializeStandardizedPatientDetailForSpPortal(SpNationality spNationality, SpBankaccount spBankaccount,SpProfession spProfession,
-				StandardizedPatient standardizedPatient,SpAnamnesisForm spAnamnesisForm) {
+				StandardizedPatient standardizedPatient,SpAnamnesisForm spAnamnesisForm, SpNationality spCountry) {
 			
 			log.info("initializing standardized patient details for sp portal ");
 			try{
@@ -581,6 +627,7 @@ public class SPPortalPerson {
 						spStandardizedPatient.setWeight(standardizedPatient.getWeight());
 						spStandardizedPatient.setWorkPermission(standardizedPatient.getWorkPermission());
 						spStandardizedPatient.setId(standardizedPatient.getId());
+						spStandardizedPatient.setCountry(spCountry);
 						System.out.println("stand patient id is" + standardizedPatient.getId());
 						System.out.println("SP stand patient id is" + spStandardizedPatient.getId());
 						log.info("standardized patient detail that will be saved in sp portal db is : " + spStandardizedPatient);

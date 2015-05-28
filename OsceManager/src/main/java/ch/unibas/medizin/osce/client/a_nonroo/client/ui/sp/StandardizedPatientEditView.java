@@ -13,9 +13,9 @@ import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
 
 import com.google.gwt.place.shared.Place;
-import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 
 public interface StandardizedPatientEditView extends IsWidget {
     void setDelegate(Delegate delegate);
@@ -67,5 +67,8 @@ public interface StandardizedPatientEditView extends IsWidget {
 	// E Highlight onViolation
 	DefaultSuggestBox<NationalityProxy, EventHandlingValueHolderItem<NationalityProxy>> getNationality();
 	DefaultSuggestBox<ProfessionProxy, EventHandlingValueHolderItem<ProfessionProxy>> getProfrssion();
+	//Added for OMS-157.
+	void setCountryPickerValues(Collection<NationalityProxy> values);
+	DefaultSuggestBox<NationalityProxy, EventHandlingValueHolderItem<NationalityProxy>> getCountry();
 
 }

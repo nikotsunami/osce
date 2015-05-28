@@ -107,7 +107,7 @@ public class SPDetailsReviewAnamnesisTableSubViewImpl extends Composite implemen
 				}
 			}else if(anmnesischeckOldValue==null && anmnesischeckNewValue!=null){
 				
-					SafeHtmlBuilder safeHtml = new SafeHtmlBuilder();
+					//SafeHtmlBuilder safeHtml = new SafeHtmlBuilder();
 				
 					if(anamnesisCheckProxy.getType().ordinal()==AnamnesisCheckTypes.QUESTION_OPEN.ordinal()){
 							//Label oldValue = new Label(anmnesischeckOldValue);
@@ -123,6 +123,7 @@ public class SPDetailsReviewAnamnesisTableSubViewImpl extends Composite implemen
 							String [] allQuestionOptions = anamnesisCheckProxy.getValue().split("\\|");
 					
 							for (int option = 0; option < allQuestionOptions.length; option++) {
+								SafeHtmlBuilder safeHtml = new SafeHtmlBuilder();
 								safeHtml.appendHtmlConstant(NO_ICON).appendHtmlConstant(YES_ICON).appendHtmlConstant(allQuestionOptions[option]);
 								HTML html = new HTML(safeHtml.toSafeHtml());
 								html.addStyleName("newAnswered");
@@ -132,7 +133,7 @@ public class SPDetailsReviewAnamnesisTableSubViewImpl extends Composite implemen
 					isChangedData=true;
 			}else if(anmnesischeckOldValue!=null && anmnesischeckNewValue==null){
 				
-						SafeHtmlBuilder safeHtml = new SafeHtmlBuilder();
+						//SafeHtmlBuilder safeHtml = new SafeHtmlBuilder();
 						
 						if(anamnesisCheckProxy.getType().ordinal()==AnamnesisCheckTypes.QUESTION_OPEN.ordinal()){
 							Label oldValue = new Label(anmnesischeckOldValue);
@@ -144,6 +145,7 @@ public class SPDetailsReviewAnamnesisTableSubViewImpl extends Composite implemen
 							String [] allQuestionOptions = anamnesisCheckProxy.getValue().split("\\|");
 				
 							for (int option = 0; option < allQuestionOptions.length; option++) {
+								SafeHtmlBuilder safeHtml = new SafeHtmlBuilder();
 								safeHtml.appendHtmlConstant(YES_ICON).appendHtmlConstant(NO_ICON).appendHtmlConstant(allQuestionOptions[option]);
 								HTML html = new HTML(safeHtml.toSafeHtml());
 								html.addStyleName("oldAnswered");
@@ -153,7 +155,7 @@ public class SPDetailsReviewAnamnesisTableSubViewImpl extends Composite implemen
 						isChangedData=true;
 			}else if(anmnesischeckOldValue!=null && anmnesischeckNewValue!=null){
 				
-					SafeHtmlBuilder safeHtml = new SafeHtmlBuilder();
+					//SafeHtmlBuilder safeHtml = new SafeHtmlBuilder();
 					
 					if(anamnesisCheckProxy.getType().ordinal()==AnamnesisCheckTypes.QUESTION_OPEN.ordinal()){
 						
@@ -189,16 +191,19 @@ public class SPDetailsReviewAnamnesisTableSubViewImpl extends Composite implemen
 							String newOption =allNewSelectedValues[option];
 							//if old and new option is same
 							if(oldOption.equals(newOption)){
+								SafeHtmlBuilder safeHtml = new SafeHtmlBuilder();
 								safeHtml.appendHtmlConstant(NO_ICON).appendHtmlConstant(NO_ICON).appendHtmlConstant(allQuestionOptions[option]);
 								HTML html = new HTML(safeHtml.toSafeHtml());
 								mainPanel.add(html);
 							}else if(oldOption.equals("0") && newOption.equals("1")){
+								SafeHtmlBuilder safeHtml = new SafeHtmlBuilder();
 								safeHtml.appendHtmlConstant(NO_ICON).appendHtmlConstant(YES_ICON).appendHtmlConstant(allQuestionOptions[option]);
 								HTML html = new HTML(safeHtml.toSafeHtml());
 								html.addStyleName("newAnswered");
 								mainPanel.add(html);
 								isChangedData=true;
 							}else if(oldOption.equals("1") && newOption.equals("0")){
+								SafeHtmlBuilder safeHtml = new SafeHtmlBuilder();
 								safeHtml.appendHtmlConstant(YES_ICON).appendHtmlConstant(NO_ICON).appendHtmlConstant(allQuestionOptions[option]);
 								HTML html = new HTML(safeHtml.toSafeHtml());
 								html.addStyleName("oldAnswered");

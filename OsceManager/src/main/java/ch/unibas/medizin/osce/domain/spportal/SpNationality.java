@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.domain.spportal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,10 +17,10 @@ import javax.persistence.Table;
 import javax.persistence.TypedQuery;
 import javax.persistence.Version;
 import javax.validation.constraints.Size;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
-import ch.unibas.medizin.osce.domain.Profession;
 
 @Entity
 @Configurable
@@ -35,6 +36,9 @@ public class SpNationality {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "nationality")
     private Set<SpStandardizedPatient> standardizedpatients = new HashSet<SpStandardizedPatient>();
 
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "country")
+    private Set<SpStandardizedPatient> standardizedpatientsOfCountry = new HashSet<SpStandardizedPatient>();
+    
     private static Logger log = Logger.getLogger(SpNationality.class);
     
 	public static SpNationality findNationalityOnNationalityText(String nationality) {
@@ -172,4 +176,14 @@ public class SpNationality {
 	public void setStandardizedpatients(Set<SpStandardizedPatient> standardizedpatients) {
         this.standardizedpatients = standardizedpatients;
     }
+
+	
+	public Set<SpStandardizedPatient> getStandardizedpatientsOfCountry() {
+		return standardizedpatientsOfCountry;
+	}
+
+	public void setStandardizedpatientsOfCountry(Set<SpStandardizedPatient> standardizedpatientsOfCountry) {
+		this.standardizedpatientsOfCountry = standardizedpatientsOfCountry;
+	}
+	
 }

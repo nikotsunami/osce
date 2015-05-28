@@ -2,14 +2,16 @@
 
 package ch.unibas.medizin.osce.client.managed.request;
 
+import java.util.Date;
+import java.util.Set;
+
 import ch.unibas.medizin.osce.shared.Gender;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
 import ch.unibas.medizin.osce.shared.WorkPermission;
+
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyForName;
-import java.util.Date;
-import java.util.Set;
 
 @ProxyForName("ch.unibas.medizin.osce.domain.StandardizedPatient")
 public interface StandardizedPatientProxy extends EntityProxy {
@@ -137,4 +139,11 @@ public interface StandardizedPatientProxy extends EntityProxy {
     abstract Boolean getIgnoreSocialInsuranceNo();
 
     abstract void setIgnoreSocialInsuranceNo(Boolean ignoreSocialInsuranceNo);
+    
+    //Added for OMS-157.
+    
+    abstract NationalityProxy getCountry();
+
+    abstract void  setCountry(NationalityProxy country);
+    
 }

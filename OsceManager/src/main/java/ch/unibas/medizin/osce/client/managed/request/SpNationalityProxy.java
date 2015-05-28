@@ -2,9 +2,10 @@
 
 package ch.unibas.medizin.osce.client.managed.request;
 
+import java.util.Set;
+
 import com.google.web.bindery.requestfactory.shared.EntityProxy;
 import com.google.web.bindery.requestfactory.shared.ProxyForName;
-import java.util.Set;
 
 @ProxyForName("ch.unibas.medizin.osce.domain.spportal.SpNationality")
 public interface SpNationalityProxy extends EntityProxy {
@@ -24,4 +25,8 @@ public interface SpNationalityProxy extends EntityProxy {
     abstract Set<ch.unibas.medizin.osce.client.managed.request.SpStandardizedPatientProxy> getStandardizedpatients();
 
     abstract void setStandardizedpatients(Set<SpStandardizedPatientProxy> standardizedpatients);
+    
+    abstract Set<SpStandardizedPatientProxy> getStandardizedpatientsOfCountry();
+
+	abstract void setStandardizedpatientsOfCountry(Set<SpStandardizedPatientProxy> standardizedpatientsOfCountry);
 }

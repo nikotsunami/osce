@@ -118,6 +118,9 @@ public class StandardizedPatient {
     private Nationality nationality;
 
     @ManyToOne
+    private Nationality country;
+    
+    @ManyToOne
     private Profession profession;
 
     @Temporal(TemporalType.DATE)
@@ -1889,4 +1892,13 @@ public class StandardizedPatient {
 	public void setIgnoreSocialInsuranceNo(Boolean ignoreSocialInsuranceNo) {
         this.ignoreSocialInsuranceNo = ignoreSocialInsuranceNo;
     }
+
+	public Nationality getCountry() {
+		return country;
+	}
+
+	public void setCountry(Nationality country) {
+		this.country = country;
+	}
+	
 }

@@ -28,11 +28,8 @@ import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
 import ch.unibas.medizin.osce.client.managed.request.DescriptionProxy;
 import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.ProfessionProxy;
-import ch.unibas.medizin.osce.client.managed.request.SPPortalPersonProxy;
-import ch.unibas.medizin.osce.client.managed.request.SPPortalPersonRequest;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
-import ch.unibas.medizin.osce.shared.EditRequestState;
 import ch.unibas.medizin.osce.shared.MaritalStatus;
 import ch.unibas.medizin.osce.shared.Operation;
 import ch.unibas.medizin.osce.shared.StandardizedPatientStatus;
@@ -45,9 +42,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 
 public class StandardizedPatientEditActivity extends AbstractActivity implements
 StandardizedPatientEditView.Presenter, 
@@ -139,6 +136,8 @@ StandardizedPatientEditView.Delegate {
 		view.setWorkPermissionPickerValues(Arrays.asList(WorkPermission.values()));
 		view.setMaritalStatusPickerValues(Arrays.asList(MaritalStatus.values()));
 		view.setNationalityPickerValues(Collections.<NationalityProxy>emptyList());
+		//Added for OMS-157
+		view.setCountryPickerValues(Collections.<NationalityProxy>emptyList());
 		bankaccountView.setCountryPickerValues(Collections.<NationalityProxy>emptyList());
 		
 		/*requests.nationalityRequest().findNationalityEntries(0, 50).
@@ -177,6 +176,8 @@ StandardizedPatientEditView.Delegate {
 		values.addAll(response);
 		view.setNationalityPickerValues(values);
 		bankaccountView.setCountryPickerValues(values);
+		//Added for OMS-157.
+		view.setCountryPickerValues(values);
 	}
 });
 
@@ -218,7 +219,7 @@ requests.professionRequest().findAllProfessions().
 		if (this.place.getOperation()== Operation.EDIT){
 			Log.info("edit");
 			requests.find(place.getProxyId()).
-					with("nationality", "profession", "langskills", "bankAccount", "bankAccount.country", "anamnesisForm", "descriptions").
+					with("nationality", "profession", "langskills", "bankAccount", "bankAccount.country", "anamnesisForm", "descriptions","country").
 					fire(new OSCEReceiver<Object>() {
 
 				@Override
@@ -288,6 +289,8 @@ requests.professionRequest().findAllProfessions().
 			view.getNationality().setSelected(standardizedPatient.getNationality());
 			view.getProfrssion().setSelected(standardizedPatient.getProfession());
 			bankaccountView.getCountry().setSelected(standardizedPatient.getBankAccount().getCountry()); //standardizedPatient.getBankAccount().setCountry(bankaccountView.getCountry().getSelected());
+			//Added for OMS-157.
+			view.getCountry().setSelected(standardizedPatient.getCountry());
 		}
 		
 		Log.info("edit");
@@ -367,6 +370,9 @@ requests.professionRequest().findAllProfessions().
 		standardizedPatient.getBankAccount().setCountry(bankaccountView.getCountry().getSelected());
 		// Highlight onViolation
 	
+		//Added for OMS-157.
+		standardizedPatient.setCountry(view.getCountry().getSelected());
+		
 		Map<String, Widget> tempMap=new HashMap<String, Widget>();
 		
 		if(view.getSelectedTab()==0 || view.getSelectedTab()==1)

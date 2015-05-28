@@ -80,6 +80,11 @@
 							<td><span ui:field="postalCodeOldValue" /> <span ui:field="cityOldValue" /></td>
 							<td><span ui:field="postalCodeNewValue" /> <span ui:field="cityNewValue" /></td>
 						</tr>
+						<tr id="country">
+							<td><span class="{style.label}" ui:field="labelCountry" /></td>
+							<td><span ui:field="countryOldValue" /></td>
+							<td><span ui:field="countryNewValue" /></td>
+						</tr>
 						<tr id="telephone">
 							<td><span class="{style.label}" ui:field="labelTelephone" /></td>
 							<td><span ui:field="telephoneOldValue" /></td>

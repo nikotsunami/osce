@@ -1782,7 +1782,7 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		
 		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
 		
-		requests.spStandardizedPatientRequest().findALlSPWhoEditedDetails().with("person","anamnesisForm","nationality","profession","bankAccount","bankAccount.country").fire(new OSCEReceiver<List<SpStandardizedPatientProxy>>() {
+		requests.spStandardizedPatientRequest().findALlSPWhoEditedDetails().with("person","anamnesisForm","nationality","profession","bankAccount","bankAccount.country","country").fire(new OSCEReceiver<List<SpStandardizedPatientProxy>>() {
 
 			@Override
 			public void onSuccess(List<SpStandardizedPatientProxy> response) {
@@ -1791,9 +1791,9 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				
 				listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal=response;
 				
-				Log.info("finding all standar dized patient whoes data is changed at sp portal to get theird old data");
+				Log.info("finding all standar dized patient whoes data is changed at sp portal to get their old data");
 				
-				requests.sPPortalPersonRequest().findAllStandardizedPAtientWhoesDataIsChangedAtSPPortal(listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal).with("anamnesisForm","bankAccount","profession","nationality","bankAccount.country").
+				requests.sPPortalPersonRequest().findAllStandardizedPAtientWhoesDataIsChangedAtSPPortal(listOfAllSpStandardizedPatientWhoEditedDataAtSPPortal).with("anamnesisForm","bankAccount","profession","nationality","bankAccount.country","country").
 			
 				fire(new OSCEReceiver<List<StandardizedPatientProxy>>() {
 

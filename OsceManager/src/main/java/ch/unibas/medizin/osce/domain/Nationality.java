@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.domain;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,13 +16,12 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.Version;
 import javax.validation.constraints.Size;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
-import com.google.web.bindery.requestfactory.shared.Request;
-import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
+
 import ch.unibas.medizin.osce.domain.spportal.SpNationality;
-import ch.unibas.medizin.osce.domain.spportal.SpProfession;
 
 @Entity
 @Configurable
@@ -35,6 +35,9 @@ public class Nationality {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "nationality")
     private Set<StandardizedPatient> standardizedpatients = new HashSet<StandardizedPatient>();
+    
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "country")
+    private Set<StandardizedPatient> standardizedpatientsOfCountry = new HashSet<StandardizedPatient>();
     
     private static Logger log = Logger.getLogger(Nationality.class);
     
@@ -245,6 +248,16 @@ public class Nationality {
 	public void setStandardizedpatients(Set<StandardizedPatient> standardizedpatients) {
         this.standardizedpatients = standardizedpatients;
     }
+	
+
+	public Set<StandardizedPatient> getStandardizedpatientsOfCountry() {
+		return standardizedpatientsOfCountry;
+	}
+
+	public void setStandardizedpatientsOfCountry(
+			Set<StandardizedPatient> standardizedpatientsOfCountry) {
+		this.standardizedpatientsOfCountry = standardizedpatientsOfCountry;
+	}
 
 	public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -42,7 +42,6 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.text.shared.AbstractRenderer;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -54,6 +53,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.requestfactory.gwt.client.RequestFactoryEditorDriver;
 
 public class StandardizedPatientEditViewImpl extends Composite implements StandardizedPatientEditView, Editor<StandardizedPatientProxy> {
 
@@ -101,7 +101,7 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	TextBox email;
 	
 	Date birthday;
-
+	
 	@Editor.Ignore
 	@UiField (provided = true)
 	FocusableValueListBox<Integer> day = new FocusableValueListBox<Integer>(new AbstractRenderer<Integer>() {
@@ -182,6 +182,9 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	SpanElement labelMobile;
 	@UiField
 	SpanElement labelEmail;
+	//Added as per OMS-157.
+	@UiField
+	SpanElement labelCountry;
 	@UiField
 	SpanElement labelBirthdate;
 	@UiField
@@ -207,6 +210,9 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 	@UiField
 	DivElement errors;
 
+	@UiField
+	public DefaultSuggestBox<NationalityProxy, EventHandlingValueHolderItem<NationalityProxy>> country;
+	
 	private Delegate delegate;
 	private Presenter presenter;
 	private CalendarUtil cal = new CalendarUtil();
@@ -301,6 +307,7 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		standardizedPatientMap.put("maritalStatus",maritalStatus);
 		standardizedPatientMap.put("workPermission",workPermission);
 		standardizedPatientMap.put("socialInsuranceNo",socialInsuranceNo);
+		standardizedPatientMap.put("country", country);
 		
 	}
 	
@@ -474,6 +481,7 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		labelStreet.setInnerText(constants.street() + ":");
 		labelTelephone.setInnerText(constants.telephone() + ":");
 		labelTelephone2.setInnerText(constants.telephone() + " 2:");
+		labelCountry.setInnerText(constants.country());
 		
 		labelBirthdate.setInnerText(constants.birthday() + ":");
 		labelGender.setInnerText(constants.gender() + ":");
@@ -628,7 +636,8 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		//Issue # 122 : Replace pull down with autocomplete.
 	}
 //	@Override
-//	public String getPatientId() {
+
+	//	public String getPatientId() {
 //		return patientId.getValue();
 //	}
 //	@Override
@@ -636,6 +645,34 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 //		this.patientId.setValue(patientId);
 //		
 //	}
+	/**
+	 * Populating country combo box with values
+	 * @param values
+	 */
+	//Added for OMS-157.
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void setCountryPickerValues(Collection<NationalityProxy> values) {
+		Log.info("populating contry selection box with nationalities");
+		DefaultSuggestOracle<NationalityProxy> suggestOracle1 = (DefaultSuggestOracle<NationalityProxy>) country.getSuggestOracle();
+		suggestOracle1.setPossiblilities((List)values);
+		country.setSuggestOracle(suggestOracle1);
+
+		country.setRenderer(new AbstractRenderer<NationalityProxy>() {
+
+			@Override
+			public String render(NationalityProxy object) {
+				if(object!=null)
+				{
+				return object.getNationality();
+				}
+				else
+				{
+					return "";
+				}
+			}
+		});
+	}
 	
 	@Override
 	public Integer getDay() {
@@ -728,4 +765,10 @@ public class StandardizedPatientEditViewImpl extends Composite implements Standa
 		return nationality;
 	}
 	// E Highlight onViolation
+	//Added for OMS-157.
+	@Override
+	public DefaultSuggestBox<NationalityProxy, EventHandlingValueHolderItem<NationalityProxy>> getCountry()
+	{
+		return country;
+	}
 }

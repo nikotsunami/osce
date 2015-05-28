@@ -4,6 +4,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ResolutionSettings;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.managed.request.BankaccountProxy;
+import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
@@ -139,6 +140,11 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	SpanElement labelStreet;
 	@UiField
 	SpanElement labelPLZCity;
+	@UiField
+	//Added for OMS-157.
+	SpanElement labelCountry;
+	@UiField
+	SpanElement country;
 	@UiField
 	SpanElement labelTelephone;
 	@UiField
@@ -349,6 +355,8 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		labelStreet.setInnerText(constants.street() + ":");
 		labelTelephone.setInnerText(constants.telephone() + ":");
 		labelTelephone2.setInnerText(constants.telephone() + " 2:");
+		//Added for OMS-157
+		labelCountry.setInnerText(constants.country() + ":");
 		
 		labelBankName.setInnerText(constants.bank() + ":");
 		labelBankIBAN.setInnerText(constants.iban() + ":");
@@ -376,6 +384,13 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		street.setInnerText(proxy.getStreet() == null ? "" : String.valueOf(proxy.getStreet()));
 		city.setInnerText(proxy.getCity() == null ? "" : String.valueOf(proxy.getCity()));
 		postalCode.setInnerText(proxy.getPostalCode() == null ? "" : String.valueOf(proxy.getPostalCode()));
+		//Added for OMS-157.
+		NationalityProxy countryProxy= proxy.getCountry();
+		if(countryProxy==null){
+			country.setInnerText("");
+		}else{
+			country.setInnerText(countryProxy.getNationality());
+		}
 		telephone.setInnerText(proxy.getTelephone() == null ? "" : String.valueOf(proxy.getTelephone()));
 		mobile.setInnerText(proxy.getMobile() == null ? "" : String.valueOf(proxy.getMobile()));
 		telephone2.setInnerText(proxy.getTelephone2() == null ? "" : String.valueOf(proxy.getTelephone2()));

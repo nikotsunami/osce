@@ -118,6 +118,11 @@
 							<td><span class="{style.label}" ui:field="labelPLZCity" /></td>
 							<td><span ui:field="postalCode" /> <span ui:field="city" /></td>
 						</tr>
+						<!-- Added for OMS-157 -->
+						<tr id="country">
+							<td><span class="{style.label}" ui:field="labelCountry" /></td>
+							<td><span ui:field="country" /></td>
+						</tr>
 						<tr id="telephone">
 							<td><span class="{style.label}" ui:field="labelTelephone" /></td>
 							<td><span ui:field="telephone" /></td>
