@@ -24,6 +24,8 @@ public interface StandardizedPatientDetailsView extends IsWidget{
 		void statusClicked();
 		void onAnonymizeClicked();
 		void showApplicationLoading(Boolean show);
+		//Added for OMS-160.
+		void printHonorarabrechnungClicked();
 	}
 	
 	StandardizedPatientScarSubViewImpl getStandardizedPatientScarSubViewImpl();

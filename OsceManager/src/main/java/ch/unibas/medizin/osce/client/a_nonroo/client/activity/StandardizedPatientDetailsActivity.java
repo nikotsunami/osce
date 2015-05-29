@@ -1621,4 +1621,28 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		
 	}
 	
+	//Added for OMS-160.
+	/**
+	 * printing Honorarabrechnung pdf
+	 */
+	@Override
+	public void printHonorarabrechnungClicked() {
+		List<Long> spIdList = new ArrayList<Long>();
+		spIdList.add(standardizedPatientProxy.getId());
+		requests.standardizedPatientRequest().setStandardizedPatientListToSession(spIdList,"",null,null).fire(new OSCEReceiver<Void>() {
+
+			@Override
+			public void onSuccess(Void response) {
+				Log.info("required attributes to print Honorarabrechnung pdf is placed in session");
+				String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.STANDARDIZED_PATIENT_PAYMENT.ordinal()));
+				String url = GWT.getHostPageBaseURL() + "downloadFile?".concat(ResourceDownloadProps.ENTITY).concat("=").concat(ordinal);
+				Log.info("--> url is : " +url);
+				Window.open(url, "", "");
+				
+			}
+			
+		});
+
+		
+	}
 }

@@ -131,6 +131,9 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	IconButton maps;
 	@UiField
 	IconButton status;
+	//Added as per OMS-160.
+	@UiField
+	IconButton printHonorarabrechnungPdf;
 	
 	@UiField
 	IconButton anonymize;
@@ -288,7 +291,9 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 		delete.setText(constants.delete());
 		maps.setText(constants.googleMaps());
 		anamnesisPanelTitle.setInnerText(constants.anamnesisValues());
-				
+		//Added as per OMS-160.
+		printHonorarabrechnungPdf.setText(constants.printHonorarabrechnungPdf());
+		
 		setTabTexts();
 		setLabelTexts();
 		
@@ -460,6 +465,11 @@ public class StandardizedPatientDetailsViewImpl extends Composite implements  St
 	@UiHandler("print")
 	public void onPrintClicked(ClickEvent e) {
 		delegate.printPatientClicked();
+	}
+	//Added as per OMS-160.
+	@UiHandler("printHonorarabrechnungPdf")
+	public void onPrintHonorarabrechnungClicked(ClickEvent e) {
+		delegate.printHonorarabrechnungClicked();
 	}
 	
 	@UiHandler("maps")

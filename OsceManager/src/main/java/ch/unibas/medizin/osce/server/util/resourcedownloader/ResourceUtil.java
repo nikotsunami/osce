@@ -478,7 +478,14 @@ public class ResourceUtil {
 			final String column = (String) session.getAttribute(ResourceDownloadProps.COLUMN_NAME);
 			final Sorting sortOrder = (Sorting) session.getAttribute(ResourceDownloadProps.SORT_ORDER);
 			//Added for OMS-152.
-			final Long semesterId=Long.valueOf(session.getAttribute(ResourceDownloadProps.SEMESTER).toString());
+			Object semId = session.getAttribute(ResourceDownloadProps.SEMESTER);
+			//changed for OMS-160.
+			final Long semesterId;
+			if(semId!=null){
+				semesterId=Long.valueOf(session.getAttribute(ResourceDownloadProps.SEMESTER).toString());	
+			}else{
+				semesterId=null;
+			}
 			final List<StandardizedPatient> spList; 
 			if(StringUtils.isNotBlank(column) && sortOrder != null) {
 				spList = StandardizedPatient.findPatientsByidsAndSortByColumn(ids,column,sortOrder);
@@ -496,6 +503,7 @@ public class ResourceUtil {
 			session.removeAttribute(ResourceDownloadProps.SP_LIST);
 			session.removeAttribute(ResourceDownloadProps.COLUMN_NAME);
 			session.removeAttribute(ResourceDownloadProps.SORT_ORDER);
+			session.removeAttribute(ResourceDownloadProps.SEMESTER);
 		}
 		
 		return fileName;

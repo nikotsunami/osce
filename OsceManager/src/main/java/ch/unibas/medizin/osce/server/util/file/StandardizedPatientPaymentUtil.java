@@ -57,7 +57,12 @@ public class StandardizedPatientPaymentUtil {
 		this.constants = GWTI18N.create(OsceConstants.class, locale.toString());
 		this.fileName = session.getServletContext().getRealPath(OsMaFilePathConstant.appStandardizedPatientPaymentPDF);
 		//Added for OMS-152.
-		this.semester=Semester.findSemester(semesterId);
+		//changed for OMS-160.
+		if(semesterId!=null){
+			this.semester=Semester.findSemester(semesterId);
+		}else{
+			this.semester=null;
+		}
 	}
 
 	public String createPDF() {
@@ -295,10 +300,13 @@ public class StandardizedPatientPaymentUtil {
 		// valueMap.put(DATES_WORKED_FROM, "27.11.2011");
 		// valueMap.put(DATES_WORKED_TO, "26.11.2012");
 		//Added code for OMS-152.
-		if(semester.getSemester().equals(Semesters.FED)){
-			valueMap.put(SERVICE_CLAIMED, "Simulationspatient Eidgenössische Schlussprüfung Medizin " + semester.getCalYear());	
-		}else if(semester.getSemester().equals(Semesters.HS) || semester.getSemester().equals(Semesters.FS)){
-			valueMap.put(SERVICE_CLAIMED, "Simulationspatient OSCE " + semester.getSemester() + " " + semester.getCalYear());
+		//changed for OMS-160.
+		if(semester!=null){
+			if(semester.getSemester().equals(Semesters.FED)){
+				valueMap.put(SERVICE_CLAIMED, "Simulationspatient Eidgenössische Schlussprüfung Medizin " + semester.getCalYear());	
+			}else if(semester.getSemester().equals(Semesters.HS) || semester.getSemester().equals(Semesters.FS)){
+				valueMap.put(SERVICE_CLAIMED, "Simulationspatient OSCE " + semester.getSemester() + " " + semester.getCalYear());
+			}
 		}
 		 //Added code for OMS-152.
 		 valueMap.put(AMOUNT_IN, "CHF");
@@ -308,11 +316,14 @@ public class StandardizedPatientPaymentUtil {
 		// valueMap.put(DATE_2, "26.11.2012");
 		// valueMap.put(AMOUNT_2, "200");
 		//Added code for OMS-152.
-		 if(semester.getSemester().equals(Semesters.FED)){
-			 valueMap.put(COST_CENTRE_1, "3MX 1191");
-			}else if(semester.getSemester().equals(Semesters.HS) || semester.getSemester().equals(Semesters.FS)){
-				valueMap.put(COST_CENTRE_1, "MX 1102");
-			}
+		 //changed for OMS-160.
+		 if(semester!=null){
+			 if(semester.getSemester().equals(Semesters.FED)){
+				 valueMap.put(COST_CENTRE_1, "3MX 1191");
+				}else if(semester.getSemester().equals(Semesters.HS) || semester.getSemester().equals(Semesters.FS)){
+					valueMap.put(COST_CENTRE_1, "MX 1102");
+				}
+		 }
 
 		// valueMap.put(COST_CENTRE_2, "center 2");
 		// valueMap.put(TOTAL, "unknown");
@@ -371,9 +382,11 @@ public class StandardizedPatientPaymentUtil {
 			form.setField(element.getKey(), element.getValue());
 		}
 		//Added code for OMS-152. When semester is Staats  than value is not get set in SERVICE_CLAIMED so changing its text size. Manish
-		if(semester.getSemester().equals(Semesters.FED)){
-			form.setFieldProperty(SERVICE_CLAIMED,"textsize", new Float(8),null);
-			form.regenerateField(SERVICE_CLAIMED);
+		if(semester!=null){
+			if(semester.getSemester().equals(Semesters.FED)){
+				form.setFieldProperty(SERVICE_CLAIMED,"textsize", new Float(8),null);
+				form.regenerateField(SERVICE_CLAIMED);
+			}
 		}
 	}
 
