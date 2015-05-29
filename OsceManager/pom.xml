@@ -708,6 +708,12 @@
 			<version>1.7</version>
 		</dependency>
 		<!-- Velocity for mail template to send email to spportal user end -->
+		<!-- hermes to use i18 constans on server side -->
+		<dependency>
+  			<groupId>com.mattbertolini</groupId>
+  			<artifactId>hermes</artifactId>
+  			<version>1.2.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

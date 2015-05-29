@@ -96,6 +96,7 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.http.client.URL;
+import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceChangeEvent;
 import com.google.gwt.place.shared.PlaceController;
@@ -351,6 +352,8 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 				
 				if(table.getInitList().contains(colValue))
 				{
+					//Added code for OMS-156. Selecting columns that are shown on view as it is added to show initially.
+					table.getPopup().getMultiSelectionModel().setSelected(colValue, true);
 					table.getInitList().remove(colValue);
 				}
 			columnHeader = colValue;
@@ -409,11 +412,23 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 							} else if (tempColumnHeader == constants.street()) {
 								
 								return renderer.render(object.getStreet()!=null?object.getStreet():"");
-							} else if (tempColumnHeader == constants.city()) {
+							}//Added as per OMS-156
+							else if (tempColumnHeader == constants.plz()) {
+								
+								return renderer.render(object.getPostalCode()!=null?object.getPostalCode():"");
+								
+							}else if (tempColumnHeader == constants.city()) {
 								
 								return renderer.render(object.getCity()!=null?object.getCity():"");
+							}
+							//Added as per OMS-156
+							else if (tempColumnHeader == constants.country()) {
 								
-							} else if (tempColumnHeader == constants.telephone()) {
+								NationalityProxy country = object.getCountry();
+								
+								return renderer.render(country!=null && country.getNationality()!=null?country.getNationality():"");
+							}  
+							else if (tempColumnHeader == constants.telephone()) {
 								
 								return renderer.render(object.getTelephone()!=null?object.getTelephone():"");
 		
@@ -734,7 +749,13 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 					
 					spIdList.add(standardizedPatientProxy.getId());
 				}
-				requests.standardizedPatientRequest().getCSVMapperForStandardizedPatientUsingServlet(spIdList).fire(new Receiver<Void>() {
+				
+				//Added code for OMS-156. Now selected columns data are exported in csv files
+ 				List<String> selectedItems = new ArrayList(table.getPopup().getMultiSelectionModel().getSelectedSet());
+				/*Changed method for OMS-156. Added parameters 'selectedItems' containing name of columns that is currently selected by user and localeName
+ 				name of selected local.*/
+ 				String localeName = LocaleInfo.getCurrentLocale().getLocaleName();
+				requests.standardizedPatientRequest().getCSVMapperForStandardizedPatientUsingServlet(spIdList,selectedItems,localeName).fire(new Receiver<Void>() {
 						@Override
 						public void onSuccess(Void response) {
 							String ordinal = URL.encodeQueryString(String.valueOf(ResourceDownloadProps.Entity.STANDARDIZED_PATIENT_EXPORT.ordinal()));
@@ -983,13 +1004,13 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 			
 		}
 	}
-	 
+	 //changed for OMS-156 added "country" in with clause
 	 /**
 	  * Used to fill table and search field after creating new entity.
 	  * @param entityId
 	  */
 	 private void getSearchStringByEntityProxyId(EntityProxyId<StandardizedPatientProxy> entityId) {
-		 requests.find(entityId).with("name", "preName").fire(new Receiver<StandardizedPatientProxy>() {
+		 requests.find(entityId).with("name", "preName","country").fire(new Receiver<StandardizedPatientProxy>() {
 
 			@Override
 			public void onSuccess(StandardizedPatientProxy proxy) {
@@ -1107,10 +1128,10 @@ public class StandardizedPatientActivity extends AbstractActivity implements Sta
 		//requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort("name", Sorting.ASC, quickSearchTerm, 
 				//searchThrough, searchCriteria /*fields, bindType, comparations, values */).
 				//fire(new StandardizedPatientReceiver());
-		
+		//changed for OMS-156 added code .with("country")
 		requestAdvSeaCritStd.findPatientsByAdvancedSearchAndSort(sortname, sortorder , quickSearchTerm, 
-				searchThrough, searchCriteria, range.getStart(), range.getLength(),/*Added for OMS-148 */ view.getShowDeletedSpCheckBoxValue() /*fields, bindType, comparations, values */).
-			   fire(new StandardizedPatientReceiver());
+				searchThrough, searchCriteria, range.getStart(), range.getLength(),/*Added for OMS-148 */ view.getShowDeletedSpCheckBoxValue() /*fields, bindType, comparations, values */)
+				.with("country").fire(new StandardizedPatientReceiver());
 		//By SPEC]End
 	}
 

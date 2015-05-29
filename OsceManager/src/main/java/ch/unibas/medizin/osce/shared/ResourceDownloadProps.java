@@ -23,7 +23,8 @@ public final class ResourceDownloadProps {
 
 	public static final String OSCE_ID = "g";
 	public static final String COLUMN_NAME = "h";
-
+	public static final String SELECTED_COLUMNS="SELECTED_COLUMNS";
+	public static final String SELECTED_LANGUAGE="SELECTED_LANGUAGE";
 	public static final String OSCEDAYID = "i";
 	public static final String START_TONE = "j";
 	public static final String END_TONE = "k";

@@ -15,6 +15,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickHandler;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeHandler;
+import ch.unibas.medizin.osce.client.managed.request.NationalityProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
 import ch.unibas.medizin.osce.client.style.resources.MyCellTableResources;
@@ -476,6 +477,25 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 			}
 		}, constants.street(),false);
 		
+		//Added zip column as per OMS-156
+		columnName.put(constants.plz(), "postal_code");
+		columnNameorder.add(constants.plz());
+		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+			{ this.setSortable(true); }	//By SPEC
+					
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+				public String render(java.lang.String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(StandardizedPatientProxy object) {
+				return renderer.render(object.getPostalCode());
+			}
+		}, constants.plz(),false);
 		
 		//paths.add("city");
 		//paths.add(" ");
@@ -498,8 +518,28 @@ public class StandardizedPatientViewImpl extends Composite implements  Standardi
 			}
 		}, constants.city(),false);
 		
+		//Added country column as per OMS-156
+		columnName.put(constants.country(), "country");
+		columnNameorder.add(constants.country());
+		table.addColumn(new TextColumn<StandardizedPatientProxy>() {
+
+			{ this.setSortable(true); }	//By SPEC
+			
+			Renderer<java.lang.String> renderer = new AbstractRenderer<java.lang.String>() {
+
+				public String render(java.lang.String obj) {
+					return obj == null ? "" : String.valueOf(obj);
+				}
+			};
+
+			@Override
+			public String getValue(StandardizedPatientProxy object) {
+				NationalityProxy country = object.getCountry();
+				return renderer.render(country!=null && country.getNationality()!=null ?country.getNationality() :"");
+			}
+		}, constants.country(),false);
 		
-		
+				
 		//paths.add("telephone");
 		//paths.add(" ");
 		columnName.put(constants.telephone(), "telephone");

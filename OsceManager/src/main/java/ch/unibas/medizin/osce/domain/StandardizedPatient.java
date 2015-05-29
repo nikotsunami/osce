@@ -630,20 +630,24 @@ public class StandardizedPatient {
 //		session.setAttribute(ResourceDownloadProps.RANGE_LENGTH, maxResults);
 //
 //    }
-    
-    public static void getCSVMapperForStandardizedPatientUsingServlet(List<Long>  ids) {
+    //changed for OMS-156 added parameters List<String> selectedItems,String currentLocale
+    public static void getCSVMapperForStandardizedPatientUsingServlet(List<Long>  ids, List<String> selectedItems,String currentLocale) {
     	HttpSession session = RequestFactoryServlet.getThreadLocalRequest().getSession();
 		
 		session.setAttribute(ResourceDownloadProps.SP_LIST, ids);
+		session.setAttribute(ResourceDownloadProps.SELECTED_COLUMNS, selectedItems);
+		session.setAttribute(ResourceDownloadProps.SELECTED_LANGUAGE,currentLocale);
     }
-    
+    //Added parameters List<String> listOfSelectedColumns,String currentLocale for OMS-156.
     public static String getCSVMapperFindPatientsByAdvancedSearchAndSortForSP(
-    		List<Long> ids, OutputStream os
-    ) {
+    		List<Long> ids, OutputStream os, List<String> listOfSelectedColumns,String currentLocale) {
     	 List<StandardizedPatient> standardizedPatients = findPatientsByids(ids);
           try {
             CsvUtil csvUtil = new CsvUtil();
             csvUtil.setSeparater(",");
+            //Added for OMS-156.
+            csvUtil.setListOfSelectedColumns(listOfSelectedColumns);
+            csvUtil.setCurrentLocale(currentLocale);
 			//Feature : 154
 			//csvUtil.open(fetchRealPath() + OsMaFilePathConstant.FILENAME, false);
 			csvUtil.open(os);

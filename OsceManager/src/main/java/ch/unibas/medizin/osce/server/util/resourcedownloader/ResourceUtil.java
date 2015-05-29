@@ -396,11 +396,12 @@ public class ResourceUtil {
 		
 		if(session.getAttribute(ResourceDownloadProps.SP_LIST) != null) {
 			List<Long> ids = (List<Long>) session.getAttribute(ResourceDownloadProps.SP_LIST);
-	
-			
+			//Added for OMS-156.
+			List<String> listOfSelectedColumns = (List<String>) session.getAttribute(ResourceDownloadProps.SELECTED_COLUMNS);
+			String currentLocale = (String) session.getAttribute(ResourceDownloadProps.SELECTED_LANGUAGE);
 			fileName = StandardizedPatient
 					.getCSVMapperFindPatientsByAdvancedSearchAndSortForSP(ids,
-						os);
+						os,listOfSelectedColumns,currentLocale);
 			session.removeAttribute(ResourceDownloadProps.SP_LIST);
 		}
 		

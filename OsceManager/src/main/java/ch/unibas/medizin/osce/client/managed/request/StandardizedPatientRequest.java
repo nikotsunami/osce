@@ -70,7 +70,8 @@ public interface StandardizedPatientRequest extends RequestContext {
 //    			List<AdvancedSearchCriteriaProxy> searchCriteria
 //                             , int firstResult, int maxResults
 //    	);
-        abstract Request<Void> getCSVMapperForStandardizedPatientUsingServlet(List<Long>  ids);
+        //Added parameter  List<String> selectedItems and String localeName for OMS-156 
+        abstract Request<Void> getCSVMapperForStandardizedPatientUsingServlet(List<Long>  ids, List<String> selectedItems, String localeName);
          //SPEC]
         //Added parameter semester id for OMS-152.
 		abstract Request<Void> setStandardizedPatientListToSession(List<Long> stdPatIdList, String sortname, Sorting sortorder, Long semesterId);
