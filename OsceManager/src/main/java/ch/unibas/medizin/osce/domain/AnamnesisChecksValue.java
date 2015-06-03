@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.domain;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -14,10 +15,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.Version;
 import javax.validation.constraints.Size;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
-import ch.unibas.medizin.osce.client.managed.request.AnamnesisChecksValueProxy;
 
 @Entity
 @Configurable
@@ -424,4 +425,71 @@ public class AnamnesisChecksValue{
 	public void setAnamnesischeck(AnamnesisCheck anamnesischeck) {
         this.anamnesischeck = anamnesischeck;
     }
+	//Added code for OMS-151.
+	/**
+	 * find all AnamnesisChecksValue that matches given string and return result 
+	 * @param formId
+	 * @param query
+	 * @param firstResult
+	 * @param maxResult
+	 * @return
+	 */
+	public static List<AnamnesisChecksValue> findAnamnesisChecksValuesByAnamnesisFormAndTitleForAllTabs(Long formId, String query, int firstResult, int maxResult){
+		log.info("At findAnamnesisChecksValuesByAnamnesisFormAndTitleForAllTabs  with form id : " + formId);
+	    	EntityManager em = entityManager();
+	    	TypedQuery<AnamnesisChecksValue> q = em.createQuery("SELECT o FROM AnamnesisChecksValue AS o " +
+	    			"WHERE anamnesisform = :anamnesisForm " +
+	    			"AND o.anamnesischeck.text LIKE :needle ORDER BY sort_order", AnamnesisChecksValue.class);
+	    	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(formId));
+	    	q.setParameter("needle","%" + query + "%");
+	    	q.setFirstResult(firstResult);
+	    	q.setMaxResults(maxResult);
+	  
+	    	return q.getResultList();
+	    	
+	}
+	//Added code for OMS-151.
+	/**
+	 * find AnamnesisChecksValue that is answered and matches given value and return result
+	 * @param formId
+	 * @param query
+	 * @param firstResult
+	 * @param maxResult
+	 * @return
+	 */
+	 public static List<AnamnesisChecksValue> findAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitleForAllTabs(Long formId, String query, int firstResult, int maxResult){
+		 log.info("At findAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitleForAllTabs  with form id : " + formId);
+		 EntityManager em = entityManager();
+	    	TypedQuery<AnamnesisChecksValue> q = em.createQuery("SELECT o FROM AnamnesisChecksValue AS o " +
+	    			"WHERE anamnesisform = :anamnesisForm " +
+	    			"AND (truth <> NULL OR anamnesisChecksValue <> NULL) " +
+	    			"AND o.anamnesischeck.text LIKE :needle ORDER BY sort_order", AnamnesisChecksValue.class);
+	    	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(formId));
+	    	q.setParameter("needle","%" + query + "%");
+	    	q.setFirstResult(firstResult);
+	    	q.setMaxResults(maxResult);
+	    	return q.getResultList();
+	 }
+	//Added code for OMS-151.
+	 /**
+	  * find AnamnesisChecksValue that is unanswered and matches given value and return result
+	  * @param formId
+	  * @param query
+	  * @param firstResult
+	  * @param maxResult
+	  * @return
+	  */
+	public static List<AnamnesisChecksValue> findUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitleForAllTabs(Long formId, String query, int firstResult, int maxResult){
+		log.info("At findUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitleForAllTabs  with form id : " + formId);
+		 EntityManager em = entityManager();
+	    	TypedQuery<AnamnesisChecksValue> q = em.createQuery("SELECT o FROM AnamnesisChecksValue AS o " +
+	    			"WHERE anamnesisform = :anamnesisForm " +
+	    			"AND truth = NULL AND anamnesisChecksValue = NULL " +
+	    			"AND o.anamnesischeck.text LIKE :needle ORDER BY sort_order", AnamnesisChecksValue.class);
+	    	q.setParameter("anamnesisForm", AnamnesisForm.findAnamnesisForm(formId));
+	    	q.setParameter("needle","%" + query + "%");
+	    	q.setFirstResult(firstResult);
+	    	q.setMaxResults(maxResult);
+	    	return q.getResultList();
+	 }
 }

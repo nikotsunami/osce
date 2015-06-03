@@ -1793,9 +1793,15 @@ public interface OsceConstants extends Constants {
 
 	//Added for OMS-150
 	public String showComments();
-	
+
+	//Added for OMS-151.
+	public  String back();
+	public String forward();
+			
 	//Added for OMS-160.
 	public String printHonorarabrechnungPdf();
+	
+	
 }
 
 

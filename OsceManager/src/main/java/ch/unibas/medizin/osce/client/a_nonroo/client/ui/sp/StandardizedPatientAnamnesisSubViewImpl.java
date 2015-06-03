@@ -2,6 +2,7 @@ package ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp;
 
 import ch.unibas.medizin.osce.client.managed.request.AnamnesisCheckTitleProxy;
 import ch.unibas.medizin.osce.client.style.resources.UiIcons;
+import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.client.style.widgets.QuickSearchBox;
 import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -9,6 +10,8 @@ import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -80,6 +83,17 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 	@UiField
 	CheckBox showComment;
 	
+	//Added for OMS-151.
+	@UiField
+	IconButton btnPrevious;
+	@UiField
+	IconButton btnNext;
+	private boolean isNextClicked=false;
+	private boolean isPreviousClicked=false;
+	
+	boolean isSearchChanged=false;
+	private boolean isRequestSentForAllData;
+	
 	public StandardizedPatientAnamnesisSubViewImpl() {
 		initSearchBox();
 		initWidget(uiBinder.createAndBindUi(this));
@@ -87,14 +101,47 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 		horizontalanamnesisPanel.add(anamnesisTabs);
 		/*anamnesisTabs.setHeight("300px");*/
 		initCheckBoxes();
+		//Added for OMS-151.
+		registerPreviousNextButtonClickHandler();
+		setVisibilityOfPreNextButton("");
+	}
+	//Added for OMS-151.
+	/**
+	 * Registering click handler of previous, next buttons.
+	 */
+	private void registerPreviousNextButtonClickHandler() {
+		Log.info("Registering click handler of previous, next buttons");
+		btnPrevious.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				Log.info("previous button clicked");
+				isPreviousClicked=true;
+				delegate.previousButtonClicked();
+			}
+		});
+		btnNext.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				Log.info("next button clicked");
+				isNextClicked=true;
+				delegate.nextButtonClicked();
+			}
+		});
+		
 	}
 
 	private void initSearchBox() {
 		searchBox = new QuickSearchBox(new QuickSearchBox.Delegate() {
 			@Override
 			public void performAction() {
-				delegate.performAnamnesisSearch();
+				//changed for OMS-151.
+				isSearchChanged=true;
+				setVisibilityOfPreNextButton(searchBox.getText());
+				delegate.findAnamnesisChecksValuesForAllTabs();
 			}
+			
 		});
 	}
 
@@ -107,12 +154,14 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 		showAnswered.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				isSearchChanged=true;
 				delegate.performAnamnesisSearch();
 			}
 		});
 		showUnanswered.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				isSearchChanged=true;
 				delegate.performAnamnesisSearch();
 			}
 		});
@@ -145,8 +194,16 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 			anamnesisTabs.addSelectionHandler(new SelectionHandler<Integer>() {
 				@Override
 				public void onSelection(SelectionEvent<Integer> event) {
-					delegate.performAnamnesisSearch();
-					delegate.storeDisplaySettings();
+					//changed during OMS-151.
+					if(isPreviousClicked || isNextClicked || isRequestSentForAllData ){
+						//When previous or next  button is clicked then we already have search result so showing data from that.
+						isNextClicked=false;
+						isPreviousClicked=false;
+					}else{
+						//fetching result when we don't have cache data.
+						delegate.performAnamnesisSearch();
+						delegate.storeDisplaySettings();
+					}
 				}
 			});
 		}
@@ -199,6 +256,46 @@ public class StandardizedPatientAnamnesisSubViewImpl extends Composite
 	@Override
 	public boolean isToShowCommentsColumn() {
 		return showComment.getValue();
+	}
+
+	//Added for OMS-151.
+	
+	private void setVisibilityOfPreNextButton(String text) {
+		if(text.isEmpty()){
+			btnNext.setVisible(false);
+			btnPrevious.setVisible(false);
+		}else{
+			btnNext.setVisible(true);
+			btnPrevious.setVisible(true);
+		}
+		
+	}
+	@Override
+	public ScrolledTabLayoutPanel getAnamnesisTabs() {
+		return anamnesisTabs;
+	}
+	@Override
+	public void setPreviousButtonEnable(boolean isEnable){
+		btnPrevious.setEnabled(isEnable);
+	}
+	@Override
+	public void setNextButtonEnable(boolean isEnable){
+		btnNext.setEnabled(isEnable);
+	}
+
+	@Override
+	public boolean isSearchChanged() {
+		return isSearchChanged;
+	}
+	@Override
+	public void setSearchChanged(boolean isSearchChanged) {
+		this.isSearchChanged = isSearchChanged;
+	}
+
+	@Override
+	public void setIsRquestAlreadySentForAllData(boolean result) {
+		this.isRequestSentForAllData=result;
+		
 	}
 	
 }

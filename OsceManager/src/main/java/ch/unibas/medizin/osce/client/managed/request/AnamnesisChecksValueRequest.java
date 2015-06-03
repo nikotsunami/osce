@@ -4,6 +4,8 @@ package ch.unibas.medizin.osce.client.managed.request;
 
 import java.util.List;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.AnamnesisCheckTitleToAnamnesisCheckValueProxy;
+
 import com.google.web.bindery.requestfactory.shared.InstanceRequest;
 import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.RequestContext;
@@ -37,5 +39,10 @@ public interface AnamnesisChecksValueRequest extends RequestContext {
     abstract Request<List<AnamnesisChecksValueProxy>> findUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitle(Long anamnesisFormId, Long anamnesisTitleId, String needle, int firstResult, int maxResults);
     
     abstract Request<List<AnamnesisChecksValueProxy>> findAnamnesisChecksValuesByAnamnesisFormAndCheckTitle(Long anamnesisFormId,Long anamnesisChecktitleId);
+  
+    //Added code for OMS-151.
+	abstract Request<List<AnamnesisChecksValueProxy>> findAnamnesisChecksValuesByAnamnesisFormAndTitleForAllTabs(Long id, String query, int firstResult, int maxResult);
+	abstract Request<List<AnamnesisChecksValueProxy>> findAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitleForAllTabs(Long id, String query, int firstResult, int maxResult);
+	abstract Request<List<AnamnesisChecksValueProxy>> findUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitleForAllTabs(Long id, String query, int firstResult, int maxResult);
 
 }

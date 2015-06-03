@@ -24,6 +24,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPDetailsReviewView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.SPDetailsReviewViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisSubView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisTableSubView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientAnamnesisTableSubViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsView;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientDetailsViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.sp.StandardizedPatientLangSkillSubView;
@@ -48,6 +49,7 @@ import ch.unibas.medizin.osce.client.managed.request.SpStandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.SpokenLanguageProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientProxy;
 import ch.unibas.medizin.osce.client.managed.request.StandardizedPatientRequest;
+import ch.unibas.medizin.osce.client.style.widgets.ScrolledTabLayoutPanel;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import ch.unibas.medizin.osce.shared.EditRequestState;
@@ -401,7 +403,14 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		
 		@Override
 		public void onSuccess(Void response) {
+			//changed for OMS-151
+			String query = standardizedPatientAnamnesisSubView.getSearchString();
+			if(query.isEmpty()){
 			fireAnamnesisChecksValueCountRequest(title);
+			}else{
+				findAnamnesisChecksValuesForAllTabs();
+			}
+			
 		}
 	}
 	
@@ -442,6 +451,129 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 			table.setRowData(range.getStart(), response);
 		}
 	}
+	//Added code for OMS-151.
+	/**
+	 * Receiver to receive  AnamnesisChecksValue for all tabs
+	 * @author Manish
+	 *
+	 */
+	public class AnamnesisChecksValueReceiverForSearch extends OSCEReceiver<List<AnamnesisChecksValueProxy>> {
+
+		public AnamnesisChecksValueReceiverForSearch() {
+			
+		}
+
+		@Override
+		public void onSuccess(List<AnamnesisChecksValueProxy> response) {
+			Log.info("response is : " + response);
+			standardizedPatientAnamnesisSubView.setIsRquestAlreadySentForAllData(true);
+			if(response!=null && response.size()>0){
+			
+				Map<Long, List<AnamnesisChecksValueProxy>> resultMap = new HashMap<Long, List<AnamnesisChecksValueProxy>>();
+				
+				createMapFromResult(response, resultMap);
+				
+				ScrolledTabLayoutPanel anamnesisTabs = standardizedPatientAnamnesisSubView.getAnamnesisTabs();
+
+				for(AnamnesisCheckTitleProxy anamnesisCheckTitleProxy : anamnesisCheckTitles){
+					
+					if(resultMap.containsKey(anamnesisCheckTitleProxy.getId())){
+						
+						Log.info("result found in title  : " + anamnesisCheckTitleProxy.getText() + "Number of values : " + resultMap.get(anamnesisCheckTitleProxy.getId()).size());
+						
+						//selecting tab where first result found
+						if(standardizedPatientAnamnesisSubView.isSearchChanged()){
+							StandardizedPatientAnamnesisTableSubView standardizedPatientAnamnesisTableSubView = anamnesisSubViews.get(anamnesisCheckTitleProxy);
+							anamnesisTabs.selectTab((StandardizedPatientAnamnesisTableSubViewImpl)standardizedPatientAnamnesisTableSubView);
+							standardizedPatientAnamnesisSubView.setSearchChanged(false);
+						}
+						
+						List<AnamnesisChecksValueProxy> listOfAnamnesisChecksValueProxies = resultMap.get(anamnesisCheckTitleProxy.getId());
+						
+						CellTable<AnamnesisChecksValueProxy> table = anamnesisSubViews.get(anamnesisCheckTitleProxy).getTable();
+						
+						table.setRowCount(listOfAnamnesisChecksValueProxies.size());
+						Range range = table.getVisibleRange();
+						Log.debug("response.size(): " + listOfAnamnesisChecksValueProxies.size());
+						table.setRowData(range.getStart(), listOfAnamnesisChecksValueProxies);
+					}else{
+						CellTable<AnamnesisChecksValueProxy> table = anamnesisSubViews.get(anamnesisCheckTitleProxy).getTable();
+						table.setRowCount(0);
+					}
+				}
+				setAccessibilityOfPreviousNextButton();
+			}else{
+				//Result is 0 so setting row count as 0 for all tables.
+				boolean isFirstResult=true;
+ 				for(AnamnesisCheckTitleProxy anamnesisCheckTitleProxy : anamnesisCheckTitles){
+ 					
+					CellTable<AnamnesisChecksValueProxy> table = anamnesisSubViews.get(anamnesisCheckTitleProxy).getTable();
+					
+					table.setRowCount(0);
+					if(isFirstResult){
+						StandardizedPatientAnamnesisTableSubView standardizedPatientAnamnesisTableSubView = anamnesisSubViews.get(anamnesisCheckTitleProxy);
+						standardizedPatientAnamnesisSubView.getAnamnesisTabs().selectTab((StandardizedPatientAnamnesisTableSubViewImpl)standardizedPatientAnamnesisTableSubView);
+						isFirstResult=false;
+					}
+				}
+ 				setAccessibilityOfPreviousNextButton();
+			}
+			
+			standardizedPatientAnamnesisSubView.setIsRquestAlreadySentForAllData(false);
+		}
+		
+	}
+	private void setAccessibilityOfPreviousNextButton() {
+		Log.info("setting visibility of previous next button");
+		setAccessibilityOfPreviousButton();
+		setAccessibilityOfNextButton();
+	}
+	private void setAccessibilityOfPreviousButton() {
+		Log.info("setting visibility of previous button");
+		int selectedTab = standardizedPatientAnamnesisSubView.getSelectedTab();
+		if(selectedTab==0){
+			standardizedPatientAnamnesisSubView.setPreviousButtonEnable(false);
+		}else{
+			boolean isFoundAnyTableWithRecords=false;
+			for(int tab=0; tab < selectedTab ;tab++){
+				AnamnesisCheckTitleProxy anamnesisCheckTitleProxy = anamnesisCheckTitles.get(tab);
+				CellTable<AnamnesisChecksValueProxy> table = anamnesisSubViews.get(anamnesisCheckTitleProxy).getTable();
+				if(table.getRowCount()>0){
+					isFoundAnyTableWithRecords=true;
+					break;
+				}
+			}
+			if(isFoundAnyTableWithRecords){
+				standardizedPatientAnamnesisSubView.setPreviousButtonEnable(true);
+			}else{
+				standardizedPatientAnamnesisSubView.setPreviousButtonEnable(false);
+			}
+		}
+	}
+	private void setAccessibilityOfNextButton() {
+		Log.info("setting visibility of next button");
+		int selectedTab = standardizedPatientAnamnesisSubView.getSelectedTab();
+		if(selectedTab==(anamnesisCheckTitles.size()-1)){
+			standardizedPatientAnamnesisSubView.setNextButtonEnable(false);
+		}else{
+			boolean isFoundAnyTableWithRecords=false;
+			for(int tab=(selectedTab+1);tab<anamnesisCheckTitles.size();tab++){
+				AnamnesisCheckTitleProxy anamnesisCheckTitleProxy = anamnesisCheckTitles.get(tab);
+				CellTable<AnamnesisChecksValueProxy> table = anamnesisSubViews.get(anamnesisCheckTitleProxy).getTable();
+				if(table.getRowCount()>0){
+					isFoundAnyTableWithRecords=true;
+					break;
+				}
+			}
+			if(isFoundAnyTableWithRecords){
+				standardizedPatientAnamnesisSubView.setNextButtonEnable(true);
+			}else{
+				standardizedPatientAnamnesisSubView.setNextButtonEnable(false);
+			}
+		}
+		
+	}
+
 	
 	
 	private class AnamnesisChecksValueUpdateReceiver extends OSCEReceiver<Void> {
@@ -611,7 +743,13 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		} else {
 			// requests the number of rows in AnamnesisChecksValue for the
 			// current patient
+			//changed for OMS-151
+			String query = standardizedPatientAnamnesisSubView.getSearchString();
+			if(query.isEmpty()){
 			fireAnamnesisChecksValueCountRequest(title);
+			}else{
+				findAnamnesisChecksValuesForAllTabs();
+			}
 		}
 	}
 	
@@ -682,7 +820,40 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 			receiver.onSuccess(new ArrayList<AnamnesisChecksValueProxy>());
 		}
 	}
+	//Added code for OMS-151.
+	/**
+	 * Find AnamnesisChecksValues for all tabs (AnamnesisCheckTitles).
+	 * 
+	 */
+	@Override
+	public void findAnamnesisChecksValuesForAllTabs() {
+		String query = standardizedPatientAnamnesisSubView.getSearchString();
+		boolean answered = standardizedPatientAnamnesisSubView.areAnsweredQuestionsShown();
+		boolean unanswered = standardizedPatientAnamnesisSubView.areUnansweredQuestionsShown();
+		
+		AnamnesisCheckTitleProxy anamnesisCheckTitleProxy = anamnesisCheckTitles.get(standardizedPatientAnamnesisSubView.getSelectedTab());
+		
+		String[] paths = anamnesisSubViews.get(anamnesisCheckTitleProxy).getPaths();
+				
+		AnamnesisChecksValueRequest request = requests.anamnesisChecksValueRequest();
+		AnamnesisChecksValueReceiverForSearch receiver = new AnamnesisChecksValueReceiverForSearch();
+		
+		//Range range = anamnesisSubViews.get(title).getTable().getVisibleRange();
+		//Log.debug("range.getStart():" + range.getStart() + "; range.getLength():" + range.getLength() + ";");
 	
+		if (answered && unanswered) {
+			Log.debug("request -- show answered and unanswered");
+			request.findAnamnesisChecksValuesByAnamnesisFormAndTitleForAllTabs(anamnesisForm.getId(),query,0, 200).with(paths).fire(receiver);
+		} else if (answered) {
+			Log.debug("request -- show only answered");
+			request.findAnsweredAnamnesisChecksValuesByAnamnesisFormAndTitleForAllTabs(anamnesisForm.getId(), query, 0,200).with(paths).fire(receiver);
+		} else if (unanswered) {
+			Log.debug("request -- show only unanswered");
+			request.findUnansweredAnamnesisChecksValuesByAnamnesisFormAndTitleForAllTabs(anamnesisForm.getId(), query, 0, 200).with(paths).fire(receiver);
+		} else {
+			receiver.onSuccess(new ArrayList<AnamnesisChecksValueProxy>());
+		}
+	}
 	/*******************
 	 * SCAR TABLE
 	 ******************/
@@ -1620,7 +1791,65 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		}
 		
 	}
-	
+	//Added code for OMS-151.
+	/**
+	 * populate map of AnamnesisCheckTitle id  to AnamnesisChecksValue.
+	 * @param resultList
+	 * @param resultMap
+	 */
+	 private static void createMapFromResult(List<AnamnesisChecksValueProxy> resultList,Map<Long, List<AnamnesisChecksValueProxy>> resultMap) {
+		 Log.info("populating map from result");
+		 for(AnamnesisChecksValueProxy value :  resultList){
+	    		if(resultMap.get(value.getAnamnesischeck().getAnamnesisCheckTitle().getId())==null){
+	    			List<AnamnesisChecksValueProxy> valueList = new ArrayList<AnamnesisChecksValueProxy>();
+	    			valueList.add(value);
+	    			resultMap.put(value.getAnamnesischeck().getAnamnesisCheckTitle().getId(),valueList);
+	    		}else{
+	    			
+	    			List<AnamnesisChecksValueProxy> valueList = resultMap.get(value.getAnamnesischeck().getAnamnesisCheckTitle().getId());
+	    			valueList.add(value);
+	    		}
+	    	}
+	}
+	//Added code for OMS-151.
+	/**
+	 * previous button clicked 
+	 */
+	@Override
+	public void previousButtonClicked() {
+		int selectedTab = standardizedPatientAnamnesisSubView.getSelectedTab();
+		
+		for(int tab=selectedTab-1; tab>=0 ;tab--){
+			AnamnesisCheckTitleProxy anamnesisCheckTitleProxy = anamnesisCheckTitles.get(tab);
+			CellTable<AnamnesisChecksValueProxy> table = anamnesisSubViews.get(anamnesisCheckTitleProxy).getTable();
+			if(table.getRowCount()>0){
+				standardizedPatientAnamnesisSubView.getAnamnesisTabs().selectTab(tab);
+				break;
+			}
+		}
+		
+		setAccessibilityOfPreviousNextButton();
+	}
+
+	//Added code for OMS-151.
+	/**
+	 * next button clicked
+	 */
+	@Override
+	public void nextButtonClicked() {
+
+		int selectedTab = standardizedPatientAnamnesisSubView.getSelectedTab();
+		
+		for(int tab=(selectedTab+1);tab<anamnesisCheckTitles.size();tab++){
+			AnamnesisCheckTitleProxy anamnesisCheckTitleProxy = anamnesisCheckTitles.get(tab);
+			CellTable<AnamnesisChecksValueProxy> table = anamnesisSubViews.get(anamnesisCheckTitleProxy).getTable();
+			if(table.getRowCount()>0){
+				standardizedPatientAnamnesisSubView.getAnamnesisTabs().selectTab(tab);
+				break;
+			}
+		}
+		setAccessibilityOfPreviousNextButton();
+	}
 	//Added for OMS-160.
 	/**
 	 * printing Honorarabrechnung pdf
