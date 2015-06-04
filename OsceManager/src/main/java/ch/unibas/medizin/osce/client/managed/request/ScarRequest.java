@@ -33,4 +33,7 @@ public interface ScarRequest extends RequestContext {
 	abstract Request<List<ScarProxy>> findScarEntriesByAnamnesisForm(Long anamnesisFormId, int firstResult, int maxResults);
 
 	abstract Request<List<ScarProxy>> findScarEntriesByNotAnamnesisForm(Long anamnesisFormId);
+
+	//Added for OMS-155.
+	abstract Request<AnamnesisFormProxy> saveScarAndUpdateRefrenceForSP(Long spId, Long scarId,String editedLocation);
 }

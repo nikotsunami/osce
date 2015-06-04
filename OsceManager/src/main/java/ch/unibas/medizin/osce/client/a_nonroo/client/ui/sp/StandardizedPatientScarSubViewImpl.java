@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.EditPopView;
+import ch.unibas.medizin.osce.client.a_nonroo.client.ui.EditPopViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.renderer.EnumRenderer;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
@@ -38,6 +40,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ValueListBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -83,6 +86,11 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 	Map<String, Widget> anemnasisFormMap;
 	// E Highlight onViolation
 	
+	//Added for OMS-155.
+	public EditPopView editPopView;
+    int left = 0;
+	int top = 0;
+	
 	public StandardizedPatientScarSubViewImpl() {
 		CellTable.Resources tableResources = GWT.create(MyCellTableResources.class);
 		table = new CellTable<ScarProxy>(OsMaConstant.TABLE_PAGE_SIZE, tableResources);
@@ -108,6 +116,18 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 
 
 	public void init() {
+		//Added for OMS-155.	
+		table.addDomHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				
+				left = event.getClientX();
+				top = event.getClientY();
+				
+			}
+		}, ClickEvent.getType());
+
 		editableCells = new ArrayList<AbstractEditableCell<?, ?>>();
 		
 		paths.add("trait_type");
@@ -135,6 +155,20 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 				return renderer.render(object.getBodypart());
 			}
 		}, constants.location());
+		
+		//Added as per OMS-155.
+		addColumn(new ActionCell<ScarProxy>(OsMaConstant.EDIT_ICON, new ActionCell.Delegate<ScarProxy>() {
+					public void execute(ScarProxy scar) {
+							Log.info("edited scar proxy id is : " + scar.getId());
+							showEditLocationPopup(scar);
+					}
+					
+				}), "", new GetValue<ScarProxy>() {
+			public ScarProxy getValue(ScarProxy scar) {
+				return scar;
+			}
+		}, null);
+		
 		addColumn(new ActionCell<ScarProxy>(
 				OsMaConstant.DELETE_ICON, new ActionCell.Delegate<ScarProxy>() {
 					public void execute(final ScarProxy scar) {
@@ -148,7 +182,6 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 								public void onClick(ClickEvent event) {
 									dialogBox.hide();									
 									Log.info("yes click");
-									
 									delegate.deleteScarClicked(scar);
 									return;
 
@@ -172,6 +205,7 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 			}
 		}, null);
 		table.addColumnStyleName(2, "iconCol");
+		table.addColumnStyleName(3, "iconCol");
 	}
 	
 	/**
@@ -298,4 +332,59 @@ public class StandardizedPatientScarSubViewImpl extends Composite implements Sta
 		return null;
 	}
 
+	//Added for OMS-155.
+	/**
+	 * To show edit attributes location popup.
+	 * @param scar
+	 */
+	private void showEditLocationPopup(final ScarProxy scar) {
+
+		Log.info("shpwing edit location popup to user");
+		
+		editPopView = new EditPopViewImpl();
+			
+		((EditPopViewImpl)editPopView).setAnimationEnabled(true);
+				
+		((EditPopViewImpl)editPopView).setWidth("200px");
+				
+		editPopView.getOkBtn().addClickHandler(new ClickHandler() {
+					
+			@Override
+			public void onClick(ClickEvent event) {
+					
+			Log.info("save location button clicked");
+					
+				String editedLocation = ((EditPopViewImpl)editPopView).getEditTextbox().getValue();
+					
+				if(editedLocation.isEmpty()==false){
+					 
+					delegate.saveScar(scar,editedLocation);
+					//hiding popup 
+					((EditPopViewImpl)editPopView).hide(true);
+				}else{
+					MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
+					confirmationDialogBox.showConfirmationDialog(constants.warningValidValue());
+				}
+				
+				}
+			});
+				
+			editPopView.getCancelBtn().addClickHandler(new ClickHandler() {
+					
+				@Override
+				public void onClick(ClickEvent event) {
+					((EditPopViewImpl)editPopView).getEditTextbox().setValue("");
+					((EditPopViewImpl)editPopView).hide(true);
+				}
+			});
+			
+			
+		((EditPopViewImpl)editPopView).getEditTextbox().setValue(scar.getBodypart());
+				
+		RootPanel.get().add(((EditPopViewImpl)editPopView));
+			
+			
+		((EditPopViewImpl)editPopView).setPopupPosition(left-269, top - 56);
+		((EditPopViewImpl)editPopView).show();
+	}
 }

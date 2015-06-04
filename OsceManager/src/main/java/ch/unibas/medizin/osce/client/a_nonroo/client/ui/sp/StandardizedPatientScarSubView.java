@@ -16,6 +16,8 @@ public interface StandardizedPatientScarSubView extends IsWidget {
 	public interface Delegate {
 		public void addScarClicked();
 		public void deleteScarClicked(ScarProxy scar);
+		//Added for OMS-155.
+		public void saveScar(ScarProxy scar, String editedLocation);
 	}
 
 	public CellTable<ScarProxy> getTable();

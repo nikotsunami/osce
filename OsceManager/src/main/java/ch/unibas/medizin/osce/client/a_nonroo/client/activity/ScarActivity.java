@@ -1,5 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.activity;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.ui.ScarViewImpl;
 import ch.unibas.medizin.osce.client.a_nonroo.client.ui.examination.MessageConfirmationDialogBox;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.MenuClickEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RecordChangeEvent;
+import ch.unibas.medizin.osce.client.managed.request.AnamnesisFormProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarProxy;
 import ch.unibas.medizin.osce.client.managed.request.ScarRequest;
 import ch.unibas.medizin.osce.client.style.resources.AdvanceCellTable;
@@ -21,6 +24,8 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseOutEvent;
@@ -29,10 +34,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.web.bindery.requestfactory.shared.Receiver;
-import com.google.web.bindery.requestfactory.shared.Request;
-import com.google.web.bindery.requestfactory.shared.ServerFailure;
-import com.google.web.bindery.requestfactory.shared.Violation;
 import com.google.gwt.user.cellview.client.AbstractHasData;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
@@ -43,6 +44,10 @@ import com.google.gwt.view.client.Range;
 import com.google.gwt.view.client.RangeChangeEvent;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.Request;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 
 /**
  * @author dk
@@ -265,7 +270,11 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 	}
 	
 	private void fireRangeRequest(String name, final Range range, final Receiver<List<ScarProxy>> callback) {
-		createRangeRequest(name, range).with(view.getPaths()).fire(callback);
+		//Changed for OMS-155.
+		Set<String> setOfpaths= new HashSet<String>(Arrays.asList(view.getPaths()));
+		setOfpaths.add("anamnesisForms");
+		String[] paths =setOfpaths.toArray(new String[setOfpaths.size()]);
+		createRangeRequest(name, range).with(paths).fire(callback);
 		// Log.debug(((String[])view.getPaths().toArray()).toString());
 	}
 	
@@ -351,6 +360,50 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 	
 	@Override
 	public void updateClicked(String name, TraitTypes traitTypes, ScarProxy proxy) {
+		Log.info("Update clicked");
+		//changed for OMS-155.
+		Set<AnamnesisFormProxy> anamnesisForms = proxy.getAnamnesisForms();
+		
+		if(anamnesisForms!=null && anamnesisForms.size()>0){
+			showConfirmationDialogToEditScar(name,traitTypes,proxy);
+		}else{
+			editScar(name, traitTypes, proxy);
+		}
+		
+	}
+	//Added for OMS-155.
+	/**
+	 * showing confirmation dialog to user if user want to edit attributes that is already assigned to any SP.
+	 * @param name
+	 * @param traitTypes
+	 * @param proxy
+	 */
+	private void showConfirmationDialogToEditScar(final String name,final TraitTypes traitTypes,final ScarProxy proxy) {
+		Log.info("show confirmation dialog to user as he want to edit the scare even it is assigned to sp");
+		final MessageConfirmationDialogBox confirmationDialogBox = new MessageConfirmationDialogBox(constants.warning());
+		confirmationDialogBox.showYesNoDialog(constants.scarEditConfirmation());
+		confirmationDialogBox.getYesBtn().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				Log.info("user is confim to edit this attribute even it is assign to SP ");
+				confirmationDialogBox.hide();
+				editScar(name,traitTypes,proxy);
+			}
+
+			
+		});
+		
+	}
+	//Added for OMS-155.
+	/**
+	 * Editing scare
+	 * @param name
+	 * @param traitTypes
+	 * @param proxy
+	 */
+	private void editScar(String name, TraitTypes traitTypes, ScarProxy proxy) {
+		Log.info("Editting scar");
 		ScarRequest scarReq = requests.scarRequest();
 		proxy = scarReq.edit(proxy);
 		proxy.setBodypart(name);
@@ -363,5 +416,6 @@ public class ScarActivity extends AbstractActivity implements ScarView.Presenter
 					init();
 				}
 		});	
+		
 	}
 }

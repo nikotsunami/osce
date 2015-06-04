@@ -1874,4 +1874,26 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 
 		
 	}
+	//Added for OMS-155.
+	@Override
+	public void saveScar(ScarProxy scar, String editedLocation) {
+		Log.info("saving new location old scar is : " + scar.getId());
+		requests.scarRequest().saveScarAndUpdateRefrenceForSP(standardizedPatientProxy.getId(),scar.getId(),editedLocation).with("scars").fire(new OSCEReceiver<AnamnesisFormProxy>() {
+
+			@Override
+			public void onSuccess(AnamnesisFormProxy response) {
+				if(response!=null){
+					Log.info("scar saved successfully");
+					//updated AnamnesisForm proxy.
+					anamnesisForm =response;
+					fillScar();
+				}else{
+					Log.info("Error while saving scar");
+					MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
+					confirmationDialogBox.showConfirmationDialog(constants.scarSavingFailure());
+				}
+				
+			}
+		});
+	}
 }

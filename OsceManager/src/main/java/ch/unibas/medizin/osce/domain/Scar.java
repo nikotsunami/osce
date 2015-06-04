@@ -3,6 +3,7 @@ package ch.unibas.medizin.osce.domain;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,14 +18,19 @@ import javax.persistence.TypedQuery;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
+
 import ch.unibas.medizin.osce.shared.TraitTypes;
 
 @Configurable
 @Entity
 public class Scar {
 
+	private static Logger Log = Logger.getLogger(Scar.class);
+	 
 	@PersistenceContext(unitName="persistenceUnit")
     transient EntityManager entityManager;
 	
@@ -206,4 +212,86 @@ public class Scar {
 	public static List<Scar> findScarEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM Scar o", Scar.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
+	//Added for OMS-155.
+	/**
+	 * To save scar and update its reference for SP.
+	 * @param spId
+	 * @param scarId
+	 * @param editedLocation
+	 * @return
+	 */
+	public static AnamnesisForm saveScarAndUpdateRefrenceForSP(Long spId, Long scarId,String editedLocation){
+		Log.info("saving new scar if not exist and updating sp refrence of scare");
+		try{
+			
+			StandardizedPatient standardizedPatient = StandardizedPatient.findStandardizedPatient(spId);
+			
+			Scar scar = Scar.findScar(scarId);
+			
+			Scar existingScar= findScarBasedOnAttributeAndLocation(scar.getTraitType(),editedLocation);
+			
+			if(existingScar!=null){
+				//updating scar reference of SP
+				AnamnesisForm anamnesisForm = standardizedPatient.getAnamnesisForm();
+				Set<Scar> scars = anamnesisForm.getScars();
+				//removing old scare reference
+				scars.remove(scar);
+				//As found scar with user entered attributes, so assigning this to SP.
+				scars.add(existingScar);
+				anamnesisForm.setScars(scars);
+				anamnesisForm.persist();
+				return AnamnesisForm.findAnamnesisForm(anamnesisForm.getId());
+			}else{
+				//saving new scar and updating scar reference of SP.
+				AnamnesisForm anamnesisForm = standardizedPatient.getAnamnesisForm();
+				Set<Scar> scars = anamnesisForm.getScars();
+				//removing old scare reference
+				scars.remove(scar);
+				
+				Scar newScar = new Scar();
+				newScar.setBodypart(editedLocation);
+				newScar.setTraitType(scar.getTraitType());
+				//newScar.persist();
+				//Adding new scare 
+				scars.add(newScar);
+				
+				anamnesisForm.setScars(scars);
+						
+				anamnesisForm.persist();
+				
+				return AnamnesisForm.findAnamnesisForm(anamnesisForm.getId()); 	
+			}
+		}catch(Exception e){
+			Log.info("Exception in saving new scar and updating sp refrence of scare");
+			return null;
+		}
+		
+	}
+	/**
+	 * To find scar based on type and location.
+	 * @param traitType
+	 * @param editedLocation
+	 * @return
+	 */
+	private static Scar findScarBasedOnAttributeAndLocation(TraitTypes traitType, String location) {
+		
+		Log.info("finding scar based on type and location");
+
+		EntityManager em = entityManager();
+			 
+		TypedQuery<Scar> q = em.createQuery("SELECT s FROM Scar AS s WHERE s.traitType=:type and s.bodypart=:location", Scar.class);
+	         
+		q.setParameter("type", traitType);
+	         
+		q.setParameter("location",location);
+		
+	    List<Scar> resultList = q.getResultList();
+	         
+	    if(resultList!=null && resultList.size() > 0){
+	      	 return resultList.get(0);
+	     }else{
+	       	 return null;
+	    }
+		
+	}
 }
