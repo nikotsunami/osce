@@ -485,6 +485,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 						if(standardizedPatientAnamnesisSubView.isSearchChanged()){
 							StandardizedPatientAnamnesisTableSubView standardizedPatientAnamnesisTableSubView = anamnesisSubViews.get(anamnesisCheckTitleProxy);
 							anamnesisTabs.selectTab((StandardizedPatientAnamnesisTableSubViewImpl)standardizedPatientAnamnesisTableSubView);
+							setVisibilityOfCommentColumn();
 							standardizedPatientAnamnesisSubView.setSearchChanged(false);
 						}
 						
@@ -513,6 +514,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 					if(isFirstResult){
 						StandardizedPatientAnamnesisTableSubView standardizedPatientAnamnesisTableSubView = anamnesisSubViews.get(anamnesisCheckTitleProxy);
 						standardizedPatientAnamnesisSubView.getAnamnesisTabs().selectTab((StandardizedPatientAnamnesisTableSubViewImpl)standardizedPatientAnamnesisTableSubView);
+						setVisibilityOfCommentColumn();
 						isFirstResult=false;
 					}
 				}
@@ -1384,6 +1386,17 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		Log.debug("performAnamnesisSearch()");
 		
 		//added for OMS-150.
+		//changed for OMS-151.
+		setVisibilityOfCommentColumn();
+		
+		onRangeChangedAnamnesis(anamnesisCheckTitles.get(standardizedPatientAnamnesisSubView.getSelectedTab()));
+	}
+	
+	/**
+	 * setting visibility of comment column.
+	 */
+	private void setVisibilityOfCommentColumn(){
+		
 		boolean toShowCommentsColumn = standardizedPatientAnamnesisSubView.isToShowCommentsColumn();
 		
 		AnamnesisCheckTitleProxy anamnesisCheckTitleProxy = anamnesisCheckTitles.get(standardizedPatientAnamnesisSubView.getSelectedTab());
@@ -1393,8 +1406,6 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 		}else if(table.getColumnCount()==4 && !toShowCommentsColumn){
 			addOrRemoveCommentsColumn(toShowCommentsColumn);
 		}
-		
-		onRangeChangedAnamnesis(anamnesisCheckTitles.get(standardizedPatientAnamnesisSubView.getSelectedTab()));
 	}
 
 	@Override
@@ -1824,6 +1835,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 			CellTable<AnamnesisChecksValueProxy> table = anamnesisSubViews.get(anamnesisCheckTitleProxy).getTable();
 			if(table.getRowCount()>0){
 				standardizedPatientAnamnesisSubView.getAnamnesisTabs().selectTab(tab);
+				setVisibilityOfCommentColumn();
 				break;
 			}
 		}
@@ -1845,6 +1857,7 @@ IndividualSPDataChangedNotificationView.Delegate,SPDetailsReviewView.Delegate,SP
 			CellTable<AnamnesisChecksValueProxy> table = anamnesisSubViews.get(anamnesisCheckTitleProxy).getTable();
 			if(table.getRowCount()>0){
 				standardizedPatientAnamnesisSubView.getAnamnesisTabs().selectTab(tab);
+				setVisibilityOfCommentColumn();
 				break;
 			}
 		}
