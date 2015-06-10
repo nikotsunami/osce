@@ -40,13 +40,13 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.web.bindery.requestfactory.shared.ServerFailure;
-import com.google.web.bindery.requestfactory.shared.Violation;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 
 
 
@@ -75,7 +75,7 @@ IndividualSchedulesDetailsView.Delegate
 		List<Long> studId;
 		List<Long> examinorId;
 		final String[] STUDENT_KEYWORDS_LIST = {"[TITLE SEPARATOR]","[NAME]","[PRENAME]","[TITLE SEPARATOR.]","[OSCE_DAY SEPARATOR]","[OSCE]","[DATE]","[OSCE_DAY SEPARATOR.]","[SCHEDULE SEPARATOR]","[START TIME]","[END TIME]","[POST]","[ROOM]","[SCHEDULE SEPARATOR.]","[BREAK SEPARATOR]","[LONG BREAK]","[LUNCH BREAK]","[BREAK SEPARATOR.]"};
-		final String[] SP_KEYWORDS_LIST = {"[TITLE SEPARATOR]","[NAME]","[PRENAME]","[TITLE SEPARATOR.]","[OSCE_DAY SEPARATOR]","[OSCE]","[DATE]","[OSCE_DAY SEPARATOR.]","[SCHEDULE SEPARATOR]","[START TIME]","[END TIME]","[ROOM]","[SCHEDULE SEPARATOR.]","[BREAK SEPARATOR]","[LONG BREAK]","[LUNCH BREAK]","[BREAK SEPARATOR.]","[ROLE]"};
+		final String[] SP_KEYWORDS_LIST = {"[TITLE SEPARATOR]","[NAME]","[PRENAME]","[TITLE SEPARATOR.]","[OSCE_DAY SEPARATOR]","[OSCE]","[DATE]","[OSCE_DAY SEPARATOR.]","[SCHEDULE SEPARATOR]","[START TIME]","[END TIME]","[ROOM]","[SCHEDULE SEPARATOR.]","[BREAK SEPARATOR]","[START TIME]","[END TIME]","[BREAK NAME]","[BREAK SEPARATOR.]","[ROLE]"};
 		final String[] EXAMINER_KEYWORDS_LIST = {"[TITLE SEPARATOR]","[NAME]","[PRENAME]","[TITLE SEPARATOR.]","[OSCE_DAY SEPARATOR]","[OSCE]","[DATE]","[OSCE_DAY SEPARATOR.]","[SCHEDULE SEPARATOR]","[START TIME]","[END TIME]","[ROOM]","[SCHEDULE SEPARATOR.]","[BREAK SEPARATOR]","[LONG BREAK]","[LUNCH BREAK]","[BREAK SEPARATOR.]","[ROLE]","[STUDENTS]"};
 		//List<String> lstSPStandPatName;
 		//List<String> lstSPStandPatPreName;
@@ -1423,7 +1423,9 @@ IndividualSchedulesDetailsView.Delegate
 							//spSummoningsServiceAsync.generateMailPDFUsingTemplate("UpdatedTemplateSP.txt",templateSPVariables,spId,1L,new AsyncCallback<String>() {
 							Log.info("Semester Proxy: " + IndividualSchedulesActivity.semesterProxyForDetail.getId());
 							//Feature : 154
-							spSummoningsServiceAsync.generateSPPDFUsingTemplate(osceProxy.getId().toString(),TemplateTypes.STANDARDIZED_PATIENT,templateSPVariables,spId,IndividualSchedulesActivity.semesterProxyForDetail.getId(),new AsyncCallback<String>() 
+							//changed for OMS-159
+							String localeName = LocaleInfo.getCurrentLocale().getLocaleName();
+							spSummoningsServiceAsync.generateSPPDFUsingTemplate(osceProxy.getId().toString(),TemplateTypes.STANDARDIZED_PATIENT,templateSPVariables,spId,IndividualSchedulesActivity.semesterProxyForDetail.getId(),localeName,new AsyncCallback<String>() 
 							{
 								@Override
 								public void onFailure(Throwable caught) 

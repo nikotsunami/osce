@@ -17,6 +17,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 import ch.unibas.medizin.osce.client.IndividualScheduleService;
 import ch.unibas.medizin.osce.domain.Assignment;
@@ -30,14 +31,17 @@ import ch.unibas.medizin.osce.domain.RoleItemAccess;
 import ch.unibas.medizin.osce.domain.RoleSubItemValue;
 import ch.unibas.medizin.osce.domain.RoleTableItem;
 import ch.unibas.medizin.osce.domain.RoleTableItemValue;
+import ch.unibas.medizin.osce.domain.Room;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.Student;
 import ch.unibas.medizin.osce.shared.ItemDefination;
 import ch.unibas.medizin.osce.shared.TemplateTypes;
 import ch.unibas.medizin.osce.shared.util;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -46,6 +50,7 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.html.simpleparser.HTMLWorker;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.mattbertolini.hermes.Hermes;
 
 /**
  * @author 
@@ -112,7 +117,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 //Feature : 154
 	@Override
 	@SuppressWarnings("rawtypes")
-	public String generateSPPDFUsingTemplate(String osceId, TemplateTypes templateTypes,Map templateVariables,List<Long> standPatientId,Long semesterId)	
+	public String generateSPPDFUsingTemplate(String osceId, TemplateTypes templateTypes,Map templateVariables,List<Long> standPatientId,Long semesterId,String currentLocale)	
 	{
 		Log.info("Call generateMailPDFUsingTemplate" + standPatientId.size());
 		
@@ -131,6 +136,9 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		
 		int index = 0;
 		try {
+			
+			//initiating osce constants on server side to use it here. Added for OMS-159.
+			OsceConstants constants =Hermes.get(OsceConstants.class,currentLocale);
 			
 			document = new Document();
 //Feature : 154
@@ -292,9 +300,12 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 					    		}
 					    		
 					    		//int tempSp1=0;
+					    		boolean isFirst =true;
+					    		Assignment pastSPAssignment=null;
+					    		boolean isBreak=false;
 					    		while(assignmentIterator.hasNext())
 								{	
-					    			
+					    			//changed code for OMS-159
 									Assignment assignmentStandardizedPatient=(Assignment)assignmentIterator.next();
 									Log.info("Assignment: " + assignmentStandardizedPatient.getId());
 									
@@ -305,46 +316,117 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									String startTime=""+(assignmentStandardizedPatient.getTimeStart().getHours())+":"+(assignmentStandardizedPatient.getTimeStart().getMinutes())+":"+(assignmentStandardizedPatient.getTimeStart().getSeconds());
 									String endTime=""+(assignmentStandardizedPatient.getTimeEnd().getHours())+":"+(assignmentStandardizedPatient.getTimeEnd().getMinutes())+":"+(assignmentStandardizedPatient.getTimeEnd().getSeconds());
 									
-									tempScheduleContent=tempScheduleContent.replace("[START TIME]", setTimeInTwoDigit(assignmentStandardizedPatient.getTimeStart()));
+									tempScheduleContent=tempScheduleContent.replace("[START TIME]",setTimeInTwoDigit(assignmentStandardizedPatient.getTimeStart()));
 									tempScheduleContent=tempScheduleContent.replace("[END TIME]", setTimeInTwoDigit(assignmentStandardizedPatient.getTimeEnd()));	
 									
 									/*if(assignmentStandardizedPatient.getOscePostRoom()!=null)
 									{	*/
 									String standardizedRole = checkNotNull(assignmentStandardizedPatient, "getOscePostRoom","getOscePost","getStandardizedRole")==true?assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole().getLongName().toString():"";
-									String room = checkNotNull(assignmentStandardizedPatient, "getOscePostRoom","getRoom","getRoomNumber")==true?assignmentStandardizedPatient.getOscePostRoom().getRoom().getRoomNumber():"Reserve";
+									//changed for OMS-158,OMA-159
+									String reserveRoomNumber;
+									Room reserveSPRoom = assignmentStandardizedPatient.getOsceDay().getReserveSPRoom();
+									
+									if(reserveSPRoom!=null){
+										reserveRoomNumber="Reserve("+ constants.room() + " " +reserveSPRoom.getRoomNumber() + ")" ;
+									}else{
+										reserveRoomNumber="Reserve() ";
+									}	
+									String room = checkNotNull(assignmentStandardizedPatient, "getOscePostRoom","getRoom","getRoomNumber")==true?constants.room() + " " +assignmentStandardizedPatient.getOscePostRoom().getRoom().getRoomNumber():reserveRoomNumber;
 									
 									if(standardizedRole!="")
 									{
-										tempScheduleContent=tempScheduleContent.replace("[ROLE]", standardizedRole);
+										String color = assignmentStandardizedPatient.getOscePostRoom().getCourse().getColor();
+										tempScheduleContent=tempScheduleContent.replace("<td>","<td bgcolor='"+getParcolrColor(color) +"' width='53%';height='15px';float:left;>");
+										tempScheduleContent=tempScheduleContent.replace("[ROLE]",constants.role()+ " "+standardizedRole);
+										//tempScheduleContent=tempBreakContent.replace("[bgcolor]","red");
 									}
 									else
 									{
 										tempScheduleContent=tempScheduleContent.replace("[ROLE]", "");
-										tempScheduleContent=tempScheduleContent.replace("for ", "");
+										//This is replacing - from start time-end time so commented it.
+										//tempScheduleContent=tempScheduleContent.replace("-", "");
 									}	
 									
 									if (assignmentStandardizedPatient.getOscePostRoom() != null && assignmentStandardizedPatient.getOscePostRoom().getOscePost() != null && assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole() != null)
 									{
-										tempScheduleContent=tempScheduleContent.replace("[SHORT ROLE]", assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole().getShortName());
-										tempScheduleContent=tempScheduleContent.replace("[POST NUMBER]", assignmentStandardizedPatient.getOscePostRoom().getOscePost().getSequenceNumber().toString());
+										 String shortName = assignmentStandardizedPatient.getOscePostRoom().getOscePost().getStandardizedRole().getShortName();
+										tempScheduleContent=tempScheduleContent.replace("[SHORT ROLE]",shortName + " /");
+										tempScheduleContent=tempScheduleContent.replace("[POST NUMBER]","Post " +assignmentStandardizedPatient.getOscePostRoom().getOscePost().getSequenceNumber().toString() +" /");
 									}
 									else
 									{
 										tempScheduleContent=tempScheduleContent.replace("[SHORT ROLE]", "");
 										tempScheduleContent=tempScheduleContent.replace("[POST NUMBER]", "");
-										tempScheduleContent=tempScheduleContent.replace("--", "");
+										//tempScheduleContent=tempScheduleContent.replace("--", "");
 									}
 									
 									tempScheduleContent=tempScheduleContent.replace("[ROOM]", room);
-																		
+											
+									if(isFirst && pastSPAssignment==null){
+										tempBreakContent=fileContents.substring(fileContents.indexOf("[BREAK SEPARATOR]"), fileContents.indexOf("[BREAK SEPARATOR.]"));
+										tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR]", "");
+										tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR.]", "");
+										tempBreakContent=tempBreakContent.replace("[START TIME]","");
+										tempBreakContent=tempBreakContent.replace("[END TIME]","");
+										tempBreakContent=tempBreakContent.replace("[BREAK NAME]","");
+										tempBreakContent=tempBreakContent.replace("-","");
+										tempBreakContent=tempBreakContent.replace("<br>","");
+										isFirst=false;
+										isBreak=false;
+									}else{
+										
+										tempBreakContent=fileContents.substring(fileContents.indexOf("[BREAK SEPARATOR]"), fileContents.indexOf("[BREAK SEPARATOR.]"));
+										tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR]", "");
+										tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR.]", "");
+										Date pastEndTime;
+												
+										if(pastSPAssignment!=null){
+											pastEndTime=pastSPAssignment.getTimeEnd();
+										}else{
+											pastEndTime=assignmentStandardizedPatient.getTimeEnd();
+										}
+										Date newStartTime = assignmentStandardizedPatient.getTimeStart();
+										
+										int timeDifference=(int) (newStartTime.getTime() - pastEndTime.getTime()) / (60 * 1000);
+										
+										if(timeDifference <=0 || timeDifference==osce.getShortBreak()){
+											tempBreakContent=tempBreakContent.replace("[START TIME]","");
+											tempBreakContent=tempBreakContent.replace("[END TIME]","");
+											tempBreakContent=tempBreakContent.replace("[BREAK NAME]","");
+											tempBreakContent=tempBreakContent.replace("-","");
+										}	
+										else if(timeDifference>0){
+											
+											int newLunchTime = osce.getLunchBreak() + (osceDay.getLunchBreakAdjustedTime() == null ? 0 : osceDay.getLunchBreakAdjustedTime());
+											
+											boolean hasLongBreak=getAssignmentLongBreak(newStartTime,pastEndTime,osce.getLongBreak(), newLunchTime);
+											boolean hasLunchBreak=getAssignmentBreak(newStartTime,pastEndTime,newLunchTime);
+											if(hasLongBreak==true)
+											{
+												tempBreakContent=tempBreakContent.replace("[START TIME]",setTimeInTwoDigit(pastEndTime));
+												tempBreakContent=tempBreakContent.replace("[END TIME]",setTimeInTwoDigit(newStartTime));
+												tempBreakContent=tempBreakContent.replace("[BREAK NAME]","   "+constants.coffeeBreak());
+											}else if(hasLunchBreak){
+												tempBreakContent=tempBreakContent.replace("[START TIME]",setTimeInTwoDigit(pastEndTime));
+												tempBreakContent=tempBreakContent.replace("[END TIME]",setTimeInTwoDigit(newStartTime));
+												tempBreakContent=tempBreakContent.replace("[BREAK NAME]","   " +constants.lunchBreak());	
+											}
+											isBreak=true;
+										}
+										
+									}
+									pastSPAssignment = assignmentStandardizedPatient;
 									/*}
 									else
 									{
 										tempScheduleContent=tempScheduleContent.replace("[ROLE]", "");
 										tempScheduleContent=tempScheduleContent.replace("[ROOM]", "");									
 									}
-*/									
-									scheduleContent=scheduleContent+tempScheduleContent;
+*/									if(isBreak){
+										scheduleContent+=tempBreakContent+tempScheduleContent;
+									}else{
+										scheduleContent+=tempScheduleContent+tempBreakContent;
+									}
 									
 									/*if(tempSp1==0)
 									{
@@ -374,8 +456,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 								Log.info("Schedule Content: " + scheduleContent);
 								//mailMessage=mailMessage+scheduleContent;
 								writeInPDFFile(scheduleContent,document);
-								
-								Iterator spAssignmentIterator=spAssignment.iterator();
+								//Commented below code for OMS-159 changes. Will remove it in future. 
+								/*Iterator spAssignmentIterator=spAssignment.iterator();
 								Iterator nextSpAssignmentIterator=spAssignment.iterator();
 								if(nextSpAssignmentIterator.hasNext()) {
 									nextSpAssignmentIterator.next();	
@@ -394,10 +476,10 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									{
 										Assignment nextAssignment=(Assignment)nextSpAssignmentIterator.next();
 										//System.out.println("Assignment " + spCurrentAssignment.getId());
-									/*
+									
 										tempBreakContent=fileContents.substring(fileContents.indexOf("[BREAK SEPARATOR]"), fileContents.indexOf("[BREAK SEPARATOR.]"));
 										tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR]", "");
-										tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR.]", "");*/
+										tempBreakContent=tempBreakContent.replace("[BREAK SEPARATOR.]", "");
 										
 										int newLunchTime = osce.getLunchBreak() + (osceDay.getLunchBreakAdjustedTime() == null ? 0 : osceDay.getLunchBreakAdjustedTime());
 										//hasLongBreak=getAssignmentBreak(nextAssignment.getTimeStart(),spCurrentAssignment.getTimeEnd(),osce.getLongBreak());
@@ -405,29 +487,29 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 										if(hasLongBreak==true)
 										{
 											//System.out.println("Assignment has longBreak between : " + spCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
-											/*tempBreakContent=tempBreakContent.replace("[LONG BREAK]", String.format("%tT to %tT", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
+											tempBreakContent=tempBreakContent.replace("[LONG BREAK]", String.format("%tT to %tT", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
 											longBreak.add(String.format("%tR to %tR", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
 										}
-/*										else
+										else
 										{
 											tempBreakContent=tempBreakContent.replace("[LONG BREAK]","");
 										}
-*/										
+										
 										
 										//hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),spCurrentAssignment.getTimeEnd(),osce.getLunchBreak());
 										hasLunchBreak=getAssignmentBreak(nextAssignment.getTimeStart(),spCurrentAssignment.getTimeEnd(),newLunchTime);
 										if(hasLunchBreak==true)
 										{
 											//System.out.println("Assignment has lunchBreak between : " + spCurrentAssignment.getTimeEnd() +" and " + nextAssignment.getTimeStart());
-/*											tempBreakContent=tempBreakContent.replace("[LUNCH BREAK]", String.format("%tT to %tT", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));*/
+											tempBreakContent=tempBreakContent.replace("[LUNCH BREAK]", String.format("%tT to %tT", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
 											lunchBreak.add(String.format("%tR to %tR", spCurrentAssignment.getTimeEnd(),nextAssignment.getTimeStart()));
 											
 										}
-/*										else
+										else
 										{
 											tempBreakContent=tempBreakContent.replace("[LUNCH BREAK]","");
 										}
-*/										/*if(hasLongBreak||hasLunchBreak)
+										if(hasLongBreak||hasLunchBreak)
 										{
 											breakContent=tempBreakContent;
 											Paragraph roleTemplateEL = new Paragraph();							
@@ -437,7 +519,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 											Log.info("BREAK CONTENTa: " + breakContent);
 											//mailMessage=mailMessage+breakContent;											
 																						
-										}*/
+										}
 									}
 										}
 								
@@ -476,7 +558,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 									document.add(roleTemplateEL);
 									writeInPDFFile(breakContent,document);
 									Log.info("BREAK CONTENTb: " + breakContent);									
-								}
+								}*/
 								
 								
 								//List<Assignment> tempAssignment=Assignment.findAssignmentsByOsceDayAndPIRId(osceDay.getId(), patientInRole.getId());
@@ -741,6 +823,8 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		try
 		{
 			HTMLWorker htmlWorker = new HTMLWorker(document);
+			Chunk createChunk = htmlWorker.createChunk("Role");
+			createChunk.setBackground(BaseColor.BLUE);
 			htmlWorker.parse(new StringReader(documentContent));		
 		} 
 		catch (Exception e) 
@@ -1865,7 +1949,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		
 		//System.out.println("Get Default Template Content:  Template Type: " + templateTypes);
 		
-		StringBuffer filePath = new StringBuffer(fetchRealPath(false) + OsMaFilePathConstant.TEMPLATE_PATH + OsMaFilePathConstant.DEFAULT_TEMPLATE_PATH + fileSeparator);
+		StringBuffer filePath = new StringBuffer(/*fetchRealPath(false) +*/ OsMaFilePathConstant.TEMPLATE_PATH + OsMaFilePathConstant.DEFAULT_TEMPLATE_PATH + fileSeparator);
 		
 		switch (templateTypes) {
 		case STUDENT: {
@@ -2026,5 +2110,75 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 			return false;
 		}
 		return true;
+	}
+	public String getParcolrColor(String color){
+		
+		if(color.equalsIgnoreCase("color_1"))
+        {
+        	return IndexedColors.BROWN.toString();
+        }
+        
+		else if(color.equalsIgnoreCase("color_2"))
+        {
+        	return IndexedColors.YELLOW.toString();
+        }
+		else if(color.equalsIgnoreCase("color_3"))
+        {
+        	return IndexedColors.PINK.toString();
+        }
+		else if(color.equalsIgnoreCase("color_4"))
+        {
+        	return IndexedColors.AQUA.toString();
+        }
+		else if(color.equalsIgnoreCase("color_5"))
+        {
+        	return IndexedColors.GREY_25_PERCENT.toString();
+        }
+		else if(color.equalsIgnoreCase("color_6"))
+        {
+        	return IndexedColors.RED.toString();
+        }
+		else if(color.equalsIgnoreCase("color_7"))
+        {
+        	return IndexedColors.ROSE.toString();
+        }
+		else if(color.equalsIgnoreCase("color_8"))
+        {
+        	return IndexedColors.BLUE.toString();
+        }
+		else if(color.equalsIgnoreCase("color_9"))
+        {
+        	return IndexedColors.GREEN.toString();
+        }
+		else if(color.equalsIgnoreCase("color_10"))
+        {
+        	return IndexedColors.ORANGE.toString();
+        }
+		else if(color.equalsIgnoreCase("color_11"))
+        {
+        	return IndexedColors.PLUM.toString();
+        }
+		else if(color.equalsIgnoreCase("color_12"))
+        {
+        	return IndexedColors.MAROON.toString();
+        }
+		else if(color.equalsIgnoreCase("color_13"))
+        {
+        	return IndexedColors.OLIVE_GREEN.toString();
+        }
+		else   if(color.equalsIgnoreCase("color_14"))
+        {
+        	return IndexedColors.VIOLET.toString();
+        }
+		else if(color.equalsIgnoreCase("color_15"))
+        {
+        	 return IndexedColors.INDIGO.toString();
+        }
+		else if(color.equalsIgnoreCase("color_16"))
+        {
+        	return IndexedColors.LIME.toString();
+        }else {
+        	return "white";
+        }
 	}
 }

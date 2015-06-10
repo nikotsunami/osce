@@ -27,7 +27,7 @@ public interface IndividualScheduleServiceAsync
 
 	void deleteTemplate(String osceId,TemplateTypes templateTypes, AsyncCallback<Boolean> asyncCallback);
 
-	void generateSPPDFUsingTemplate(String osceId, TemplateTypes templateTypes, Map templateVariables, List<Long> spId, Long semesterId, AsyncCallback<String> asyncCallback);
+	void generateSPPDFUsingTemplate(String osceId, TemplateTypes templateTypes, Map templateVariables, List<Long> spId, Long semesterId, String localeName, AsyncCallback<String> asyncCallback);
 
 	void generateStudentPDFUsingTemplate(String osceId, TemplateTypes templateTypes, List<Long> studId, Long semesterId, AsyncCallback<String> asyncCallback);
 

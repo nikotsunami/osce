@@ -24,7 +24,9 @@ public interface IndividualScheduleService extends RemoteService {
 	
 	String generateStudentPDFUsingTemplate(String osceId, TemplateTypes templateTypes, List<Long> studId, Long semesterId);
 	
-	String generateSPPDFUsingTemplate(String osceId, TemplateTypes templateTypes,Map templateVariables, List<Long> spId,Long semesterId);
+	String generateSPPDFUsingTemplate(String osceId,
+			TemplateTypes templateTypes, Map templateVariables,
+			List<Long> spId, Long semesterId, String localeName);
 	
 	String generateExaminerPDFUsingTemplate(String osceId, TemplateTypes templateTypes, List<Long> examinerId, Long semesterId);
 

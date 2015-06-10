@@ -1805,7 +1805,11 @@ public interface OsceConstants extends Constants {
 	//Added for OMS-158
 	public String reserveRoomSp();
 	public String reserveRoomAssignFailure();
-		
+	
+	//Added for OMS-159.
+	public String lunchBreakForPdf();
+	public String coffeeBreak();
+	
 	//Added for OMS-160.
 	public String printHonorarabrechnungPdf();
 	
