@@ -48,4 +48,7 @@ public interface OsceDayRequest extends RequestContext {
 	abstract Request<Void> removeOsceDay(Long osceDayId);
 	
 	abstract Request<OsceDayProxy> findOsceDayByOsceSequenceId(Long osceSeqId);
+
+	//Added for OMS-158
+	abstract Request<Boolean> assignReserveRoomForDay(Long osceDayId, Long roomId);
 }

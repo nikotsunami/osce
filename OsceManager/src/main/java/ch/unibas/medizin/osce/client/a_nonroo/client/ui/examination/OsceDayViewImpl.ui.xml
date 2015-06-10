@@ -114,6 +114,13 @@
 							<g:Label ui:field="lunchBreakEndTimeValueLabel"  styleName="{style.spacing10}" height="14px"></g:Label>	 
 						 </g:VerticalPanel>
 					 
+						
+					</g:HorizontalPanel>
+					
+					<g:HorizontalPanel>
+						<g:Label ui:field="reserverSpRoomLbl" styleName="{style.spacing10}" height="14px"></g:Label>
+						<g:Label ui:field="reserverSpRoomValueLbl" styleName="{style.spacing10}" height="14px"></g:Label>
+						<my:IconButton ui:field="roomedit" icon="pencil"></my:IconButton>
 					</g:HorizontalPanel>
 					</g:VerticalPanel>
 					<!-- bug solve end -->									

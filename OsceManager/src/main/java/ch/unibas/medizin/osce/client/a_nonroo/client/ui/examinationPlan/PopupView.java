@@ -71,4 +71,6 @@ public interface PopupView extends IsWidget {
 	//by spec change]
 	
 	public Label getWarningLbl();
+	//Added for OMS-158
+	void createPopupToshowReserveRoomOfSP();
 }

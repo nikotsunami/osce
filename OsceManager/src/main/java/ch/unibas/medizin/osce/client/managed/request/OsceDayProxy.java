@@ -87,4 +87,8 @@ public interface OsceDayProxy extends EntityProxy {
     abstract Integer getRoomCount();
 
     abstract void setRoomCount(Integer roomCount);
+    
+    abstract RoomProxy getReserveSPRoom();
+
+	abstract void setReserveSPRoom(RoomProxy reserveSPRoom);
 }

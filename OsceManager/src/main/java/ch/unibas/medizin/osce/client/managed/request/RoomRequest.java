@@ -32,5 +32,9 @@ public interface RoomRequest extends RequestContext {
 		
 		abstract Request<List<RoomProxy>> findAllRoomsOrderByRoomNumber();
 
+		//Added for OMS-158.
+		abstract Request<List<RoomProxy>> findAllRoomNotAssignedInPostsOrderByRoomNumber(Long osceDayId);
+		abstract Request<List<RoomProxy>> findRoomsNotAssignedAsReserveOrderByRoomNumber(Long oscePostId);
+
 
 }

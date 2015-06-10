@@ -18,6 +18,8 @@ public class PostDetail {
 	
 	private boolean isReserve=false;
 	
+	private String reserveRoomNumber;
+	
 	public boolean isReserve() {
 		return isReserve;
 	}
@@ -68,4 +70,15 @@ public class PostDetail {
 
 	//equals to number of course, no row span for logical SP Break
 	private int rowSpan;
+
+	public String getReserveRoomNumber() {
+		return reserveRoomNumber;
+	}
+
+	public void setReserveRoomNumber(String reserveRoomNumber) {
+		this.reserveRoomNumber = reserveRoomNumber;
+	}
+
+	
+	
 }

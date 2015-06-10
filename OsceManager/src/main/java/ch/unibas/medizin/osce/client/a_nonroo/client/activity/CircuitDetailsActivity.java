@@ -94,10 +94,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
-import com.google.web.bindery.requestfactory.shared.EntityProxy;
-import com.google.web.bindery.requestfactory.shared.Receiver;
-import com.google.web.bindery.requestfactory.shared.ServerFailure;
-import com.google.web.bindery.requestfactory.shared.Violation;
 import com.google.gwt.text.shared.Renderer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -106,9 +102,14 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.web.bindery.requestfactory.shared.EntityProxy;
+import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
+import com.google.web.bindery.requestfactory.shared.Violation;
 
 
 @SuppressWarnings("deprecation")
@@ -237,7 +238,7 @@ AccordianPanelView.ParcourDelegate
 					});*/
 					
 					//5C:SPEC START
-			requests.find(place.getProxyId()).with("osces").with("oscePostBlueprints","oscePostBlueprints.specialisation","oscePostBlueprints.roleTopic").with("osce_days").with("osce_days.osceSequences").with("osce_days.osceSequences.oscePosts").with("osce_days.osceSequences.oscePosts.oscePostBlueprint").with("osce_days.osceSequences.oscePosts.standardizedRole").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.roleTopic").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.specialisation").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.postType").with("osce_days.osceSequences.courses").with("osce_days.osceSequences.courses.oscePostRooms").with("osce_days.osceSequences.courses.oscePostRooms.oscePost").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.standardizedRole").with("osce_days.osceSequences.courses.oscePostRooms.room").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.roleTopic").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.postType").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<Object>() {
+			requests.find(place.getProxyId()).with("osces").with("oscePostBlueprints","oscePostBlueprints.specialisation","oscePostBlueprints.roleTopic").with("osce_days", "osce_days.reserveSPRoom").with("osce_days.osceSequences").with("osce_days.osceSequences.oscePosts").with("osce_days.osceSequences.oscePosts.oscePostBlueprint").with("osce_days.osceSequences.oscePosts.standardizedRole").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.roleTopic").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.specialisation").with("osce_days.osceSequences.oscePosts.oscePostBlueprint.postType").with("osce_days.osceSequences.courses").with("osce_days.osceSequences.courses.oscePostRooms").with("osce_days.osceSequences.courses.oscePostRooms.oscePost").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.standardizedRole").with("osce_days.osceSequences.courses.oscePostRooms.room").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.roleTopic").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.postType").with("osce_days.osceSequences.courses.oscePostRooms.oscePost.oscePostBlueprint.specialisation").fire(new OSCEReceiver<Object>() {
 
 				@Override
 				public void onSuccess(final Object response) {
@@ -454,6 +455,11 @@ AccordianPanelView.ParcourDelegate
 												else
 												{
 													osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDays.getTimeEnd()).substring(0,5));	
+												}
+												if(osceDays.getReserveSPRoom()!=null){
+													osceDayViewImpl.getReserverSpRoomValueLbl().setText(osceDays.getReserveSPRoom().getRoomNumber());
+												}else{
+													osceDayViewImpl.getReserverSpRoomValueLbl().setText("");
 												}
 												/*if(osceDays.getOsceSequences().size()>1)
 												{
@@ -911,6 +917,11 @@ AccordianPanelView.ParcourDelegate
 												else
 												{
 													osceDayViewImpl.getLunchBreakEndTimeValueLabel().setText(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getTimeEnd()).substring(0,5));	
+												}
+												if(osceDayProxy.getReserveSPRoom()!=null){
+													osceDayViewImpl.getReserverSpRoomValueLbl().setText(osceDayProxy.getReserveSPRoom().getRoomNumber());
+												}else{
+													osceDayViewImpl.getReserverSpRoomValueLbl().setText("");
 												}
 												
 												/*if(osceDayProxy.getLunchBreakStart()==null)
@@ -5025,9 +5036,11 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 				@Override
 				public void roomEditClicked(final OscePostSubView oscePostSubView,final int left,final int top) 
 				{					
-					Log.info("Room Edit");
-					requests.roomRequest().findAllRoomsOrderByRoomNumber().fire(new OSCEReceiver<List<RoomProxy>>() 
+					Log.info("Room Edit fidning all rooms for post id : " + oscePostSubView.getOscePostProxy().getId());
+					//changed for OMS-158.
+					requests.roomRequest().findRoomsNotAssignedAsReserveOrderByRoomNumber(oscePostSubView.getOscePostProxy().getId()).fire(new OSCEReceiver<List<RoomProxy>>() 
 					{
+
 							@Override
 							public void onSuccess(List<RoomProxy> response) 
 							{
@@ -5312,7 +5325,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 									
 									if (response1)
 									{
-										requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
+										requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).with("reserveSPRoom").fire(new OSCEReceiver<OsceDayProxy>() {
 
 										@Override
 										public void onSuccess(
@@ -5479,7 +5492,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 												{
 													Log.info("shiftLucnkBreakPrevClicked Response : " + response1);
 													
-													requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
+													requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).with("reserveSPRoom").fire(new OSCEReceiver<OsceDayProxy>() {
 
 														@Override
 														public void onSuccess(
@@ -5659,7 +5672,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 												
 												if (response1)
 												{
-													requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
+													requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).with("reserveSPRoom").fire(new OSCEReceiver<OsceDayProxy>() {
 
 														@Override
 														public void onSuccess(
@@ -5793,7 +5806,7 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 									
 									if (response1)
 									{
-										requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).fire(new OSCEReceiver<OsceDayProxy>() {
+										requests.osceDayRequest().findOsceDay(osceDayProxy.getId()).with("reserveSPRoom").fire(new OSCEReceiver<OsceDayProxy>() {
 
 											@Override
 											public void onSuccess(
@@ -6302,6 +6315,107 @@ public static void setOsceFixedButtonStyle(CircuitOsceSubViewImpl circuitOsceSub
 		
 		return dayStartTimeValidflag;
 	}
+	//Added for OMS-158.
+	/**
+	 * for reserve sp edit 
+	 */
+	@Override
+	public void reserveSPRoomEditClicked(final OsceDayViewImpl osceDayViewImpl, int clientX, int clientY) {
+		
+		Log.info("Room Edit");
+		requests.roomRequest().findAllRoomNotAssignedInPostsOrderByRoomNumber(osceDayViewImpl.getOsceDayProxy().getId()).fire(new OSCEReceiver<List<RoomProxy>>() 
+		{
+				@Override
+				public void onSuccess(List<RoomProxy> response) 
+				{
+					Log.info("Total room is : " + response!=null ? String.valueOf(response.size()) : "0");
+					
+					final ListBoxPopupView popupView=new ListBoxPopupViewImpl();
+					
+					((ListBoxPopupViewImpl)popupView).setAnimationEnabled(true);
+					((ListBoxPopupViewImpl)popupView).setWidth("160px");
+					
+					RootPanel.get().add(((ListBoxPopupViewImpl)popupView));
+					popupView.getOkBtn().addClickHandler(new ClickHandler() {
+						
+						@Override
+						public void onClick(ClickEvent event) {
+							Object object = ((ListBoxPopupViewImpl)popupView).listBox.getSelected();
+							
+							if (object != null){
+								saveOrEditReserveRoom(osceDayViewImpl,((RoomProxy)object));
+							}
+							
+							((ListBoxPopupViewImpl)popupView).hide();
+						}
+						
+					});
+				
+					List<Object> roomProxyList = new ArrayList<Object>(response);
+					DefaultSuggestOracle<Object> suggestOracle1 = ((DefaultSuggestOracle<Object>) (popupView.getNewListBox().getSuggestOracle()));
+					suggestOracle1.setPossiblilities(roomProxyList);
+					
+					popupView.getNewListBox().setSuggestOracle(suggestOracle1);									
+					
+					popupView.getNewListBox().setRenderer(new Renderer<Object>() {
 
+						@Override
+						public String render(Object object) {
+
+							if(object==null) {
+								return "";
+							}
+							else {
+								return ((RoomProxy)object).getRoomNumber();
+							}
+						}
+						
+						@Override
+						public void render(Object object,Appendable appendable) throws IOException {
+						}
+					});
+					
+					((ListBoxPopupViewImpl)popupView).showRelativeTo(osceDayViewImpl.getRoomedit());
+					 popupView.getNewListBox().setSelected(osceDayViewImpl.getReserveRoomProxy());	
+				}
+		});											
+	
+	}
+	/**
+	 * assinging reserve room for osce day
+	 * @param osceDayViewImpl
+	 * @param roomProxy
+	 */
+	private void saveOrEditReserveRoom(final OsceDayViewImpl osceDayViewImpl,final RoomProxy roomProxy) {
+		
+		final OsceDayProxy osceDayProxy = osceDayViewImpl.getOsceDayProxy();
+		
+		Log.info("assigning reserve room for osce day " + osceDayProxy.getId() + "room id is " + roomProxy.getId());
+		
+		requests.osceDayRequest().assignReserveRoomForDay(osceDayProxy.getId(),roomProxy.getId()).fire(new OSCEReceiver<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean response) {
+				if(response!=null && response){
+					Log.info("assigned reserve room : " + roomProxy.getId() + " to osce day :" + osceDayProxy.getId());
+					osceDayViewImpl.setReserveRoomProxy(roomProxy);
+					osceDayViewImpl.getReserverSpRoomValueLbl().setText(roomProxy.getRoomNumber());
+				}else{
+					Log.info("System can not assigned reserve room  to osce day");
+					osceDayViewImpl.getReserverSpRoomValueLbl().setText("");
+					showErrorMessageToUser(constants.reserveRoomAssignFailure());
+				}
+			}
+		});
+		
+	}
+	/**
+	 * To show any error to user
+	 * @param message
+	 */
+	public void showErrorMessageToUser(String message){
+		final MessageConfirmationDialogBox confirmationDialogBox =new MessageConfirmationDialogBox(constants.warning());
+		confirmationDialogBox.showConfirmationDialog(message);
+	}
 }
 

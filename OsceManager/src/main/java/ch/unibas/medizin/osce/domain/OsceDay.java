@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,6 +33,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.persistence.Version;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -39,9 +41,11 @@ import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
+
 import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
 import ch.unibas.medizin.osce.shared.BreakType;
 import ch.unibas.medizin.osce.shared.RingtoneTypes;
+
 import com.csvreader.CsvWriter;
 
 
@@ -74,6 +78,9 @@ public class OsceDay {
 
 	@ManyToOne
 	private Osce osce;
+	
+	@ManyToOne
+	private Room reserveSPRoom;
 	
 	private Integer value=0;
 	
@@ -1513,6 +1520,14 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
         this.roomCount = roomCount;
     }
 
+	public Room getReserveSPRoom() {
+		return reserveSPRoom;
+	}
+
+	public void setReserveSPRoom(Room reserveSPRoom) {
+		this.reserveSPRoom = reserveSPRoom;
+	}
+
 	public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Assignments: ").append(getAssignments() == null ? "null" : getAssignments().size()).append(", ");
@@ -1621,6 +1636,26 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 	public static List<OsceDay> findOsceDayEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM OsceDay o", OsceDay.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
+	/**
+	 * Assigning reserve room for day.
+	 * @param osceDayId
+	 * @param roomId
+	 * @return
+	 */
+	public static Boolean assignReserveRoomForDay(Long osceDayId, Long roomId){
+		Log.info("assigning reserve room to osce day");
+		try{
+			OsceDay osceDay = OsceDay.findOsceDay(osceDayId);
+			Room reserveRoom = Room.findRoom(roomId);
+			osceDay.setReserveSPRoom(reserveRoom);
+			osceDay.persist();
+			return true;	
+		}catch(Exception e){
+			Log.error("Error while assigning reserve room to osce day");
+			return false;
+		}
+		
+	}
 }
 
 class Schedule
@@ -1654,5 +1689,6 @@ class Schedule
 	}
 	public void setType(RingtoneTypes type) {
 		this.type = type;
-	}	
+	}
+	
 }

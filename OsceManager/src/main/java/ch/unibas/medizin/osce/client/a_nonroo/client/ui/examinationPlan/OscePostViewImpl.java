@@ -1,8 +1,10 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan;
 
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
+import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstantsWithLookup;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -26,6 +28,8 @@ public class OscePostViewImpl  extends Composite implements OscePostView{
 	interface OscePostViewImplUiBinder extends UiBinder<Widget, OscePostViewImpl> {
 	}
 
+	OsceConstants constants = GWT.create(OsceConstants.class);
+	
 	private Delegate delegate;
 	
 	@UiField
@@ -68,6 +72,9 @@ public class OscePostViewImpl  extends Composite implements OscePostView{
 	
 	private OscePostRoomProxy oscePostRoomProxy;
 	
+	//Added for OMS-158.
+	private OsceDayProxy osceDayProxy;
+	
 	public OscePostProxy getOscePostProxy() {
 		return oscePostProxy;
 	}
@@ -94,20 +101,26 @@ public class OscePostViewImpl  extends Composite implements OscePostView{
 	public void oscePostPanelClicked(ClickEvent event)
 	{
 		Log.info("oscePostPanel Clicked");
-		if(oscePostProxy != null){
-			showOscePostPopupView();
-			delegate.retrieveRoomNo(oscePostProxy,courseProxy,popupView);
-		}
-		
+		//changed for OMS-158. Now we are also showing room of break on click of oscePostPanel.
+		showOscePostPopupView();
 	}
+	//changed for OMS-158.
+	/**
+	 * showing osce post popup
+	 */
 	public void showOscePostPopupView()
 	{
 		if(popupView == null)
 		{
 			popupView=new PopupViewImpl();
-			popupView.createOscePostPopupView();
 			
+			if(oscePostProxy!=null){
+				popupView.createOscePostPopupView();
+			}else{
+				popupView.createPopupToshowReserveRoomOfSP();
+			}
 			((PopupViewImpl)popupView).setAnimationEnabled(true);
+			
 			
 			//((PopupViewImpl)popupView).setWidth("150px");
 		
@@ -121,16 +134,37 @@ public class OscePostViewImpl  extends Composite implements OscePostView{
 					((PopupViewImpl)popupView).hide();
 				}
 			});
+		}
+			//changed for OMS-158.
+		if(oscePostProxy!=null){
+			//clicked on station label
 			OsceConstantsWithLookup enumConstants = GWT.create(OsceConstantsWithLookup.class);
-			
-			//setDAta
+				
+			//setData
 			popupView.getNameValue().setText(enumConstants.getString(oscePostProxy.getOscePostBlueprint().getPostType().name()));
-			
+				
 			if(oscePostProxy.getStandardizedRole() !=null)
 			popupView.getStartTimeValue().setText(oscePostProxy.getStandardizedRole().getRoleTopic().getName());
+				
+			delegate.retrieveRoomNo(oscePostProxy,courseProxy,popupView);
 			
+			((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft(), this.getAbsoluteTop()-195);
+				
+		}else{
+			//clicked on SP break
+			if(oscePostLbl.getText().equals(constants.exaPlanBreakPost()) && osceDayProxy!=null){
+				
+				if(osceDayProxy.getReserveSPRoom()!=null){
+					popupView.getEndTimeValue().setText(osceDayProxy.getReserveSPRoom().getRoomNumber());
+				}else{
+					popupView.getEndTimeValue().setText(constants.notAssigned());
+				}
+				((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft(), this.getAbsoluteTop()-114);
+				((PopupViewImpl)popupView).show();
+			}
 		}
-		((PopupViewImpl)popupView).setPopupPosition(this.getAbsoluteLeft(), this.getAbsoluteTop()-195);
+			
+		
 	
 		
 	}
@@ -149,6 +183,12 @@ public class OscePostViewImpl  extends Composite implements OscePostView{
 		
 	public void setOscePostRoomProxy(OscePostRoomProxy oscePostRoomProxy) {
 		this.oscePostRoomProxy = oscePostRoomProxy;
+	}
+
+	@Override
+	public void setOsceDayProxy(OsceDayProxy osceDayProxy) {
+		this.osceDayProxy=osceDayProxy;
+		
 	}
 
 	

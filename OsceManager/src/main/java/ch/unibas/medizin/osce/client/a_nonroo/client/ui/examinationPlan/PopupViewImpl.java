@@ -562,4 +562,42 @@ public class PopupViewImpl  extends PopupPanel  implements PopupView {
 	public Label getWarningLbl() {
 		return warningLbl;
 	}
+	//Added for OMS-158.
+	public void createPopupToshowReserveRoomOfSP(){
+		examinerNameLbl.removeFromParent();
+		examinerSuggestionBox.removeFromParent();
+		edit.removeFromParent();
+		
+		nameLbl.removeFromParent();
+		nameValue.removeFromParent();
+		
+		startTimeLbl.removeFromParent();		
+		startTimeValue.removeFromParent();
+		
+		endTimeLbl.setVisible(true);		
+		endTimeValue.setVisible(true);
+		endTimeLbl.setText(constants.roomNumber());
+		
+		okButton.setVisible(true);
+		okButton.setText(constants.close());
+		
+		cancelButton.setVisible(false);
+		endTimeListBox.removeFromParent();
+		saveBtn.removeFromParent();
+		breakDuration.removeFromParent();
+		
+		exchangeSPLbl.removeFromParent();
+		exchangeSpListBox.removeFromParent();
+		exchangeStudLbl.removeFromParent();
+		exchangeStudentListBox.removeFromParent();
+		warningLbl.removeFromParent();
+		
+		exchangeSPLbl.removeFromParent();
+		exchangeSpListBox.removeFromParent();
+		exchangeStudLbl.removeFromParent();
+		exchangeStudentListBox.removeFromParent();
+		warningLbl.removeFromParent();
+
+		clearButton.removeFromParent();
+	}
 }

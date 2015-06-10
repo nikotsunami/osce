@@ -1801,6 +1801,10 @@ public interface OsceConstants extends Constants {
 	//Added for  OMS-155
 	public String scarSavingFailure();
 	public String scarEditConfirmation();
+	
+	//Added for OMS-158
+	public String reserveRoomSp();
+	public String reserveRoomAssignFailure();
 		
 	//Added for OMS-160.
 	public String printHonorarabrechnungPdf();

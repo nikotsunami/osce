@@ -45,6 +45,7 @@ import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceSequenceProxy;
 import ch.unibas.medizin.osce.client.managed.request.PatientInRoleProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.managed.request.StudentProxy;
 import ch.unibas.medizin.osce.client.style.widgets.ProxySuggestOracle;
 import ch.unibas.medizin.osce.client.style.widgetsnewcustomsuggestbox.test.client.ui.widget.suggest.impl.simple.DefaultSuggestOracle;
@@ -171,7 +172,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 		this.view=examinationScheduleDetailView;
 		requests.getEventBus().fireEvent(
 				new ApplicationLoadingScreenEvent(true));
-		requests.find(place.getProxyId()).with("osce_days","osce_days.osceSequences","osce_days.osceSequences.courses","osce_days.osceSequences.oscePosts","osce_days.osceSequences.oscePosts.oscePostBlueprint","osce_days.osceSequences.oscePosts.standardizedRole","osce_days.osceSequences.oscePosts.standardizedRole.roleTopic").fire(new OSCEReceiver<Object>() {
+		requests.find(place.getProxyId()).with("osce_days","osce_days.reserveSPRoom","osce_days.osceSequences","osce_days.osceSequences.courses","osce_days.osceSequences.oscePosts","osce_days.osceSequences.oscePosts.oscePostBlueprint","osce_days.osceSequences.oscePosts.standardizedRole","osce_days.osceSequences.oscePosts.standardizedRole.roleTopic").fire(new OSCEReceiver<Object>() {
 
 			@Override
 			public void onSuccess(Object response) {
@@ -2216,6 +2217,7 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 				oscePostView.getOscePostPanel().addStyleName("oscePost-bg");
 				oscePostView.getOscePostPanel().addStyleName("oscePost-RightTop-radius");
 				oscePostView.getOscePostPanel().addStyleName("oscePost-leftTop-radius");
+				oscePostView.setOsceDayProxy(osceDayProxy);
 				//create all slots of SP which are in logical break
 				
 				for(int j=0;j<response.size();j++)

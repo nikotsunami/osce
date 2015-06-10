@@ -11,6 +11,7 @@ import ch.unibas.medizin.osce.client.a_nonroo.client.util.RotationRefreshEvent;
 import ch.unibas.medizin.osce.client.a_nonroo.client.util.RotationRefreshHandler;
 import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OsceProxy;
+import ch.unibas.medizin.osce.client.managed.request.RoomProxy;
 import ch.unibas.medizin.osce.client.style.widgets.IconButton;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.i18n.OsceConstants;
@@ -181,6 +182,18 @@ public class OsceDayViewImpl extends Composite implements OsceDayView,RotationRe
 	//spec issue sol
 	List<SequenceOsceSubViewImpl> sequenceOsceSubViewImplList = new ArrayList<SequenceOsceSubViewImpl>();
 	
+	@UiField
+	Label reserverSpRoomLbl;
+	
+	@UiField
+	Label reserverSpRoomValueLbl;
+	
+	@UiField
+	IconButton roomedit;
+
+	//Added for OMS-158.
+	private RoomProxy reserveRoomProxy;
+	
 	@UiHandler("btnChangeTime")
 	public void btnChangeTimeClicked(ClickEvent event)
 	{
@@ -259,6 +272,13 @@ public class OsceDayViewImpl extends Composite implements OsceDayView,RotationRe
 				Log.info("Formatted Start Time is :" +DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getTimeStart()).substring(0,5));
 				startTimeTextBox.setValue(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getTimeStart()).substring(0,5));
 				endTimeTextBox.setValue(DateTimeFormat.getFormat("HH:mm").format(osceDayProxy.getTimeEnd()).substring(0,5));
+				reserveRoomProxy= osceDayProxy.getReserveSPRoom();
+				//Added for OMS-158.
+				if(reserveRoomProxy!=null){
+					reserverSpRoomValueLbl.setText(reserveRoomProxy.getRoomNumber());
+				}else{
+					reserverSpRoomValueLbl.setText("");
+				}
 			 }
 		
 		if(osceProxy != null){
@@ -310,6 +330,7 @@ public class OsceDayViewImpl extends Composite implements OsceDayView,RotationRe
 			osceDayMap.put("timeEnd", endTimeTextBox);
 		// E Highlight onViolation
 		
+		reserverSpRoomLbl.setText(constants.reserveRoomSp());
 	}
 
 	@Override
@@ -484,4 +505,28 @@ public class OsceDayViewImpl extends Composite implements OsceDayView,RotationRe
 	public IconButton getBtnChangeTime() {
 		return btnChangeTime;
 	}
+	
+	@UiHandler("roomedit")
+	public void roomEditClickHandler(ClickEvent event) {
+		delegate.reserveSPRoomEditClicked(this, event.getClientX(), event.getClientY());
+	}
+	
+	@Override
+	public IconButton getRoomedit() {
+		return roomedit;
+	}
+	
+	@Override
+	public Label getReserverSpRoomValueLbl() {
+		return reserverSpRoomValueLbl;
+	}
+	
+	public RoomProxy getReserveRoomProxy() {
+		return reserveRoomProxy;
+	}
+
+	public void setReserveRoomProxy(RoomProxy reserveRoomProxy) {
+		this.reserveRoomProxy = reserveRoomProxy;
+	}
+	
 }

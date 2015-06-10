@@ -1,8 +1,10 @@
 package ch.unibas.medizin.osce.domain;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,8 +18,9 @@ import javax.persistence.TypedQuery;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
 
 @Configurable
@@ -39,6 +42,9 @@ public class Room {
     private Double length;
 
     private Double width;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "reserveSPRoom")
+    private List<OsceDay> osce_days = new ArrayList<OsceDay>();
     
     public static Long countRoomsByName(String name) {
     	EntityManager em = entityManager();
@@ -114,6 +120,14 @@ public class Room {
 	public void setWidth(Double width) {
         this.width = width;
     }
+
+	public List<OsceDay> getOsce_days() {
+		return osce_days;
+	}
+
+	public void setOsce_days(List<OsceDay> osce_days) {
+		this.osce_days = osce_days;
+	}
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -199,4 +213,56 @@ public class Room {
 	public static List<Room> findRoomEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM Room o", Room.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
+	//Added for OMS-158
+	/**
+	 * to find all rooms that is not assigned in post of OSCE day.
+	 * @param osceDayId
+	 * @return
+	 */
+	public static List<Room> findAllRoomNotAssignedInPostsOrderByRoomNumber(Long osceDayId){
+		Log.info("finding all rooms that is not assigned in post for day id " + osceDayId);
+		EntityManager em = entityManager();
+    	String queryString="SELECT r FROM Room as r  where r.id not in(select opr.room.id from OscePostRoom as opr where opr.oscePost.osceSequence.osceDay.id = " + osceDayId + " and opr.room IS NOT NULL ) order by roomNumber";
+    	TypedQuery<Room> q = em.createQuery(queryString, Room.class);
+    	
+    	return q.getResultList();
+	}
+	/**
+	 * To find all rooms that is not assigned as reserve room for OSCE day of post.
+	 * @param oscePostId
+	 * @return
+	 */
+	public static List<Room> findRoomsNotAssignedAsReserveOrderByRoomNumber(Long oscePostId){
+		Log.info("finding all rooms that is not assigned as reserve room for day of post id : " + oscePostId);
+		EntityManager em = entityManager();
+		Long reserveroomOfDay=getReserveRoomOfOsceDayBasaedOnPost(oscePostId);
+		Log.info("reserve room is :" + reserveroomOfDay);
+		String queryString;
+		if(reserveroomOfDay==null){
+			queryString="SELECT r FROM Room r ORDER BY r.roomNumber";
+		}else{
+    	
+			queryString="SELECT r FROM Room as r WHERE r.id NOT IN( "+ reserveroomOfDay +" ) ORDER BY r.roomNumber";
+		}
+		Log.info("query is : " + queryString);
+    	TypedQuery<Room> q = em.createQuery(queryString, Room.class);
+    	
+    	return q.getResultList();
+	}
+	
+	public static Long getReserveRoomOfOsceDayBasaedOnPost(Long oscePostId){
+		Log.info("finding reserve room for day of post id : " + oscePostId);
+		EntityManager em = entityManager();
+    	String queryString="select od from OsceDay as od,OsceSequence as os,OscePost as op where op.id="+oscePostId 
+    			+" and os.id=op.osceSequence and od.id=os.osceDay";
+    	TypedQuery<OsceDay> q = em.createQuery(queryString, OsceDay.class);
+    	
+    	OsceDay osceDay = q.getSingleResult();
+    	if(osceDay.getReserveSPRoom()!=null){
+    		return osceDay.getReserveSPRoom().getId();
+    	}else{
+    		return null;
+    	}
+	}
 }
+ 

@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.client.a_nonroo.client.ui.examinationPlan;
 
 import ch.unibas.medizin.osce.client.managed.request.CourseProxy;
+import ch.unibas.medizin.osce.client.managed.request.OsceDayProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostProxy;
 import ch.unibas.medizin.osce.client.managed.request.OscePostRoomProxy;
 
@@ -37,4 +38,6 @@ public interface OscePostView extends IsWidget{
 	public void setCourseProxy(CourseProxy courseProxy);
 	
 	public void setOscePostRoomProxy(OscePostRoomProxy oscePostRoomProxy);
+	//Added for OMS-158.
+	void setOsceDayProxy(OsceDayProxy osceDayProxy);
 }

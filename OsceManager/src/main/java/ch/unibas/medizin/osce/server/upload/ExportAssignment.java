@@ -568,7 +568,13 @@ public class ExportAssignment  extends HttpServlet {
 						{
 						//post count to set column span of sp break
 						createChildNode("postCount", String.valueOf(osceSeq.getOscePosts().size() + 1), doc, parcourElement);
-						createChildNode("spBreak", "Reserve", doc, parcourElement);
+						//Changed for OMS-158
+						Room reserveSPRoom = osceSeq.getOsceDay().getReserveSPRoom();
+						if(reserveSPRoom!=null){
+							createChildNode("spBreak", "Reserve (" + reserveSPRoom.getRoomNumber()+ ")", doc, parcourElement);
+						}else{
+							createChildNode("spBreak", "Reserve (Not assigned)", doc, parcourElement);
+						}
 						
 						Element spBreakRotationsElement=createEmptyChildNode("spBreakrotations",doc,parcourElement);
 						
@@ -904,6 +910,14 @@ public class ExportAssignment  extends HttpServlet {
 		        					postDetail.setRowSpan(1);
 		        					postDetail.setOscePostRoom(null);
 		        					postDetail.setReserve(true);
+		        					//Added for OMS-158
+		        					Room reserveSPRoom = a.getOsceDay().getReserveSPRoom();
+		        					if(reserveSPRoom!=null){
+		        						postDetail.setReserveRoomNumber(reserveSPRoom.getRoomNumber());	
+		        					}else{
+		        						postDetail.setReserveRoomNumber("Not assigned");
+		        					}
+		        					
 		        					postDetailList.add(postDetail);
 		        				}
 
@@ -1259,8 +1273,10 @@ public class ExportAssignment  extends HttpServlet {
 	        							postCell.setCellStyle(spPostStyle(wb, "color_"+colorIndex));
 		        						if(postDetail.isReserve())//logical break
 		        						{
+		        							//Changed for OMS-158
+		        							String reserveSPRoom = postDetail.getReserveRoomNumber();
+		        							postCell.setCellValue("Reserve ("+ reserveSPRoom +")");
 		        							
-		        							postCell.setCellValue("Reserve");
 		        							//postIndex++;
 		        							//colorIndex++;
 		        						}

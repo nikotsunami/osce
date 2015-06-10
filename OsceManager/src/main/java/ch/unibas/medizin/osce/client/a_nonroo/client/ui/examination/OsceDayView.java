@@ -31,6 +31,8 @@ public interface OsceDayView extends IsWidget{
 		 void setOsceDayTime(OsceDayViewImpl osceDayViewImpl,Long dayId);
 		 
 		 void btnChangeClicked(OsceDayProxy osceDayProxy, OsceDayViewImpl osceDayViewImpl, int x, int y);
+		 //Added for OMS-158.
+		 void reserveSPRoomEditClicked(OsceDayViewImpl osceDayViewImpl, int clientX, int clientY);
 		}
 	 
 	 void setDelegate(Delegate delegate);
@@ -42,4 +44,7 @@ public interface OsceDayView extends IsWidget{
 	 //E Module 5 Bug Report Solution
 
 	  public IconButton getBtnChangeTime();
+	  //Added for OMS-158.
+	 Label getReserverSpRoomValueLbl();
+	 IconButton getRoomedit();
 }
