@@ -15,7 +15,7 @@ import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.PatientInRole;
 import ch.unibas.medizin.osce.domain.StandardizedPatient;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
-import ch.unibas.medizin.osce.shared.RoleTypes;
+import ch.unibas.medizin.osce.shared.AllocationType;
 
 /**
  * Model for optimizing the assignment of SimPats to Assignments. This class initiates all
@@ -54,14 +54,20 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	// used for caching since Assignment.findAssignmentsByOscePostRoomAndType(...)
 	// does not have to be called on each cp-solver iteration (slow!)
 	private int nrStudentSlotsCoveredBySPSlot;
+	private AllocationType allocationType;
 	
 	//public OsceModel(Osce osce) {
-	public OsceModel(OsceDay osceDay) {
+	public OsceModel(OsceDay osceDay, AllocationType allocationType) {
 		//this.osce = osce;
 
 		//spec[
 		this.osceDay = osceDay;
-		nrStudentSlotsCoveredBySPSlot = osceDay.simpatAssignmentSlots();
+		this.allocationType =allocationType;
+		if(allocationType.equals(AllocationType.INITIAL)){
+			nrStudentSlotsCoveredBySPSlot = osceDay.simpatAssignmentSlots();
+		}else if(allocationType.equals(AllocationType.UPDATE)){
+			nrStudentSlotsCoveredBySPSlot = osceDay.emptySimpatAssignmentSlots();
+		}
 		//spec]
 		
 		//nrStudentSlotsCoveredBySPSlot = osce.simpatAssignmentSlots();
@@ -102,7 +108,11 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	public void loadAssignments() {
 		//this.assignments = Assignment.retrieveAssignmentsOfTypeSP(osce);
 		//spec[
-		this.assignments = Assignment.retrieveAssignmentsOfTypeSPByOsceDay(osceDay);
+		if(allocationType.equals(AllocationType.INITIAL)){
+			this.assignments = Assignment.retrieveAssignmentsOfTypeSPByOsceDay(osceDay);
+		}else if(allocationType.equals(AllocationType.UPDATE)){
+			this.assignments = Assignment.retrieveEmptyAssignmentsOfTypeSPByOsceDay(osceDay);
+		}
 		//spec]
 	}
 	
@@ -138,7 +148,27 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 		}*/
 		
 		//spec[
-		Iterator<PatientInRole> it = PatientInRole.findPatientInRoleByOsceDay(osceDay.getId()).iterator();
+		Iterator<PatientInRole> it = new ArrayList<PatientInRole>().iterator();
+		
+		if(allocationType.equals(AllocationType.INITIAL)){
+			
+			it = PatientInRole.findPatientInRoleByOsceDay(osceDay.getId()).iterator();
+			
+		}else if(allocationType.equals(AllocationType.UPDATE)){
+			
+			//All PIR of osce day.
+			List<PatientInRole> patientInRoleList = PatientInRole.findPatientInRoleByOsceDay(osceDay.getId());
+			
+			//All PIR assigned in assignment
+			List<PatientInRole> assignmentSPList = PatientInRole.findAllSPFromAssignmentOfDay(osceDay.getId());
+			
+			patientInRoleList.removeAll(assignmentSPList);
+			//All new SPS that is not assigned in assignment.
+			List<PatientInRole> allNewAssignPatientOfPost = PatientInRole.findAllNewAssignedPatientOfPost(osceDay.getId(),null, patientInRoleList);
+			System.out.println("total new Sp is : " + allNewAssignPatientOfPost.size());
+			
+			it = allNewAssignPatientOfPost.iterator();
+		}
 		while (it.hasNext()) {
 			PatientInRole patientInRole = (PatientInRole) it.next();
 			
@@ -160,7 +190,6 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	 */
 	public void setPatientAssignment(StandardizedPatient p, Assignment a) {
 		Map<Integer, Assignment> assignmentMap;
-		
 		if(patientAssignments.containsKey(p)) {
 			assignmentMap = patientAssignments.get(p);
 		} else {
@@ -194,6 +223,17 @@ public class OsceModel extends Model<VarAssignment, ValPatient> {
 	 * @return assignment for a SimPat during the slot
 	 */
 	public Assignment getPatientAssignment(StandardizedPatient p, Integer sequenceNumber) {
+		//System.out.println("total entry is : " + patientAssignments.size());
+		//System.out.println("check name and id : " + p.getName()  + " " + p.getId() +  " sequence NO : " + sequenceNumber);
+		/*for (Map.Entry<StandardizedPatient, Map<Integer, Assignment>> entry : patientAssignments.entrySet())
+		{
+			StandardizedPatient key = entry.getKey();
+		    System.out.print("Name and id " + key.getName() + " " + key.getId());
+		    Map<Integer, Assignment> map = patientAssignments.get(key);
+		    for(Map.Entry<Integer, Assignment> seqAss : map.entrySet()){
+		    	System.out.println("  sequence is :  " + seqAss.getKey()  + " ass id : " + seqAss.getValue().getId()) ;
+		    }
+		}*/
 		if(patientAssignments.containsKey(p)) {
 			Map<Integer, Assignment> assignmentMap = patientAssignments.get(p);
 			

@@ -1813,6 +1813,8 @@ public interface OsceConstants extends Constants {
 	//Added for OMS-160.
 	public String printHonorarabrechnungPdf();
 	
+	//Added for OMS-161.
+	public String updateSPsAssignment();
 	
 }
 

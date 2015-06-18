@@ -70,4 +70,6 @@ public interface OsceRequest extends RequestContext {
 	abstract Request<OsceProxy> changeOsceStatus(Long osceId, OsceStatus osceStatus);
 	
 	abstract Request<List<OsceProxy>> findOsceBySemesterId(Long semesterId);
+	//Added for OMS-161.
+	abstract Request<Boolean> updateAutoAssignmentOfPatientInRole(Long osceId);
 }

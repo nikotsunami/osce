@@ -28,6 +28,8 @@ public interface ExaminationScheduleDetailView extends IsWidget{
 		public void moveLunchBreak(int flag, OsceDayProxy osceDayProxy);
 
 		public void countOsceWiseStudent(OsceProxy osceProxy);
+		//Added for OMS-161.
+		public void updateSPsAssignmentButtonClicked(Long osceId);
 	}
 	
 	 void setDelegate(Delegate delegate);

@@ -37,7 +37,7 @@
 				<g:HorizontalPanel spacing="5" horizontalAlignment="left">
 					<my:IconButton ui:field="studentAssignmentButton" icon="person"/>
 					<my:IconButton ui:field="spAssignmentButton" icon="contact" />
-					
+					<my:IconButton ui:field="updateSPsAssignmentButton" icon="contact" />
 				</g:HorizontalPanel>
 				
 				<g:HorizontalPanel spacing="5" horizontalAlignment="left">

@@ -838,6 +838,18 @@ public static Boolean updateRotation(Long osceDayId, Integer rotation) {
 	    }
 	    return 0;
 	}
+	//Added for OMS-161.
+	public int emptySimpatAssignmentSlots() {
+	    List<Assignment> assignments = Assignment.retrieveEmptyAssignmentsOfTypeSPByOsceDay(this);
+	    if (assignments.size()>0 && assignments.get(0) != null) {
+	        Assignment assignment = assignments.get(0);
+	        long secs = (assignment.getTimeEnd().getTime() - assignment.getTimeStart().getTime()) / 1000;
+	        int assignmentMinutes = (int) (secs / 60);
+	        int assignmentSlots = assignmentMinutes / (this.osce.getPostLength() + 1);
+	        return assignmentSlots;
+	    }
+	    return 0;
+	}
 	//spec]
 	
 	public static List<OsceDay> findOsceDayBySemester(Long semesterId)

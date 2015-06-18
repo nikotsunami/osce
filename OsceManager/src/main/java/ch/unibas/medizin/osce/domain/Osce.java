@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,17 +30,20 @@ import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import com.allen_sauer.gwt.log.client.Log;
+
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
 import ch.unibas.medizin.osce.server.manualoscettgen.ManualOsceTimeTableCalculation;
 import ch.unibas.medizin.osce.server.spalloc.SPAllocator;
+import ch.unibas.medizin.osce.server.spalloc.SPFederalAllocationUpdator;
 import ch.unibas.medizin.osce.server.spalloc.SPFederalAllocator;
 import ch.unibas.medizin.osce.server.ttgen.TimetableGenerator;
+import ch.unibas.medizin.osce.shared.AllocationType;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 import ch.unibas.medizin.osce.shared.MapOsceRole;
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
@@ -352,7 +356,7 @@ public class Osce {
         		while (itr.hasNext())
         		{
         			OsceDay osceDay = itr.next();
-        			SPAllocator spAlloc = new SPAllocator(osceDay);    			
+        			SPAllocator spAlloc = new SPAllocator(osceDay,AllocationType.INITIAL);    			
             		spAlloc.getSolution();
             		spAlloc.printSolution();
             		spAlloc.saveSolution();
@@ -366,7 +370,48 @@ public class Osce {
     	}
     	return Boolean.TRUE;
     }
-   
+   //Added for OMS-161.
+    /**
+     * Updating SPs assignment.
+     * @param osceId
+     * @return
+     */
+    public static Boolean updateAutoAssignmentOfPatientInRole(Long osceId) {
+    	try {
+    		
+    		Osce osce = Osce.findOsce(osceId);
+    		
+    		if (osce.getOsceSecurityTypes().equals(OsceSecurityType.federal))
+    		{
+    			Iterator<OsceDay> itr = OsceDay.findOsceDayByOsce(osceId).iterator();
+        		
+        		while (itr.hasNext())
+        		{
+        			OsceDay osceDay = itr.next();
+        			SPFederalAllocationUpdator spFederalAllocationUpdator = new SPFederalAllocationUpdator(osceDay);
+        			spFederalAllocationUpdator.allocateSp();
+        		} 
+    		}
+    		else if (osce.getOsceSecurityTypes().equals(OsceSecurityType.simple))
+    		{
+    			Iterator<OsceDay> itr = OsceDay.findOsceDayByOsce(osceId).iterator();
+        		
+        		while (itr.hasNext())
+        		{
+        			OsceDay osceDay = itr.next();
+        			SPAllocator spAlloc = new SPAllocator(osceDay,AllocationType.UPDATE);    			
+            		spAlloc.getSolution();
+            		spAlloc.printSolution();
+            		spAlloc.saveSolution();
+        		} 
+    		}
+    		
+    		   		
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    	return Boolean.TRUE;
+    }
     //spec start
     //This method assigns students in Assignment Table.
    

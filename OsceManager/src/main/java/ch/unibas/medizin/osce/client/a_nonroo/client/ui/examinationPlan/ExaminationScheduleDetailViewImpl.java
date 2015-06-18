@@ -132,6 +132,8 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 	@UiField
 	Button spAssignmentButton;
 	
+	@UiField
+	Button updateSPsAssignmentButton;
 	
 	@UiField
 	Label shortBreakValue;
@@ -182,6 +184,8 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 		numOfRoomsTxt.setText(constants.exaPlanNumRooms());
 		studentAssignmentButton.setText(constants.exaPlanAssignStudents());
 		spAssignmentButton.setText(constants.exaPlanAssignSp());
+		//Added as per OMS-161.
+		updateSPsAssignmentButton.setText(constants.updateSPsAssignment());
 		shortBreakSimPatChangeTxt.setText(constants.exaPlanChangeBreak());
 		longBreakTxt.setText(constants.exaPlanLongBreak());
 		
@@ -500,6 +504,11 @@ public class ExaminationScheduleDetailViewImpl extends Composite implements Exam
 	{
 		showPopup();
 		
+	}
+	
+	@UiHandler("updateSPsAssignmentButton")
+	public void updateSPsAssignmentButtonClicked(ClickEvent event){
+		delegate.updateSPsAssignmentButtonClicked(osceProxy.getId());
 	}
 	
 	@Override

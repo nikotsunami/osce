@@ -3521,4 +3521,49 @@ public class ExaminationScheduleDetailActivity extends AbstractActivity implemen
 	private Date dateSubtractMin(Date date, long minToSubtract) {
 		return new Date((long) (date.getTime() - minToSubtract * 60 * 1000));
 	}
+	/**
+	 * Updating assignemnt of SP.
+	 * 
+	 */
+	@Override
+	public void updateSPsAssignmentButtonClicked(Long osceId) {
+		
+		requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+		
+		requests.osceRequest().updateAutoAssignmentOfPatientInRole(osceId).fire(new OSCEReceiver<Boolean>() {
+
+			@Override
+			public void onSuccess(Boolean response) {
+				Log.info("update Assignment of SP :" + response);
+				
+				MessageConfirmationDialogBox dialogBox=null;
+				if(response)
+				{
+					dialogBox =new MessageConfirmationDialogBox(constants.success());
+					dialogBox.showConfirmationDialog(constants.exaPlanSpSuccess());
+				}
+				else
+				{
+					dialogBox =new MessageConfirmationDialogBox(constants.warning());
+					dialogBox.showConfirmationDialog(constants.exaPlanSpFailure());
+				}
+				dialogBox.getNoBtnl().addClickHandler(new ClickHandler() {
+					
+					@Override
+					public void onClick(ClickEvent event) {
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(true));
+						init();
+						
+						requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+						
+					}
+				});
+			
+				
+				requests.getEventBus().fireEvent(new ApplicationLoadingScreenEvent(false));
+				
+			}
+		});
+		
+	}
 }

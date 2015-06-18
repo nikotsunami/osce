@@ -36,7 +36,7 @@ import org.hibernate.Query;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 
 import ch.unibas.medizin.osce.server.OsMaFilePathConstant;
@@ -232,6 +232,26 @@ public class Assignment {
         q.setParameter("type", AssignmentTypes.PATIENT);
         List<Assignment> assignmentList = q.getResultList();
         return assignmentList;
+    }
+    //Added for OMS-161.
+    public static List<Assignment> retrieveAllEmptyAssignmentsOfTypeSPUniqueTimesByOsceDay(OsceDay osceDay) {
+        EntityManager em = entityManager();
+        String queryString = "SELECT o FROM Assignment AS o WHERE o.osceDay.id = :osceDayId AND o.type = :type AND o.oscePostRoom.oscePost.oscePostBlueprint.postType = :postType"
+        		+ " AND o.patientInRole IS NULL GROUP BY o.timeStart ORDER BY o.timeStart";
+        TypedQuery<Assignment> q = em.createQuery(queryString, Assignment.class);
+        q.setParameter("osceDayId", osceDay.getId());
+        q.setParameter("postType", PostType.NORMAL);
+        q.setParameter("type", AssignmentTypes.PATIENT);
+        List<Assignment> emptyAssignmentList = q.getResultList();
+        
+        
+        String breakQueryString = "SELECT o FROM Assignment AS o WHERE o.osceDay.id ="+osceDay.getId()+" AND o.type = 1 AND o.oscePostRoom IS NULL"
+        		+ " AND o.patientInRole IS NULL GROUP BY o.timeStart ORDER BY o.timeStart";
+        TypedQuery<Assignment> breakAssiQuery = em.createQuery(breakQueryString, Assignment.class);
+        List<Assignment> breakAssignmentList = breakAssiQuery.getResultList();
+        emptyAssignmentList.addAll(breakAssignmentList);
+        
+        return emptyAssignmentList;
     }
   //spec]
     
@@ -1021,6 +1041,7 @@ public class Assignment {
  		if(result!=null && result.size()>0)
  			flag=true;
  		Log.info("EXECUTION IS SUCCESSFUL: RECORDS FOUND "+result.size());
+ 		System.out.println("is patient in osce day");
          return flag; 
  	}
     
@@ -1036,7 +1057,31 @@ public class Assignment {
         Log.info("Assignment List Size :" + assignmentList.size());
         return assignmentList;
     }
-    
+   //Added for OMS-161.
+    /**
+     * Retrieving empty assignment (assignment with PIR as null) of day.
+     * @param osceDay
+     * @return
+     */
+    public static List<Assignment> retrieveEmptyAssignmentsOfTypeSPByOsceDay(OsceDay osceDay) {
+        Log.info("retrieveEmptyAssignmentsOfTypeSPByOsceDay() called  with  osce day id :" + osceDay.getId());
+        EntityManager em = entityManager();
+        String queryString = "SELECT o FROM Assignment AS o WHERE o.osceDay.id = :osceDayID AND o.type = :type AND o.oscePostRoom IS NOT NULL AND o.patientInRole IS NULL";
+        TypedQuery<Assignment> q = em.createQuery(queryString, Assignment.class);
+        q.setParameter("osceDayID", osceDay.getId());
+        q.setParameter("type", AssignmentTypes.PATIENT);
+        Log.info("retrieveEmptyAssignmentsOfTypeSPByOsceDay query String :" + queryString);
+        List<Assignment> assignmentList = q.getResultList();
+        
+       /* String breakAssignmentString = "SELECT o FROM Assignment AS o WHERE o.osceDay.id ="+ osceDay.getId()+ "AND o.type =1 AND o.oscePostRoom IS NULL AND o.patientInRole IS NULL";
+        TypedQuery<Assignment> breakAssQuery = em.createQuery(breakAssignmentString, Assignment.class);
+        Log.info("retrieveEmptyAssignmentsOfTypeSPByOsceDay break assignment query String :" + breakAssignmentString);
+        List<Assignment> breakAssignmentList = breakAssQuery.getResultList();
+        assignmentList.addAll(breakAssignmentList); 
+        Log.info("Empty Assignment List Size :" + assignmentList.size());*/
+       
+        return  assignmentList;
+    }
     
      public static List<Date> minmumStartTime(Long osceDayId, Long osceSequenceId, Long courseId) {
     	
@@ -1779,6 +1824,29 @@ public class Assignment {
     	 String sql = "SELECT a FROM Assignment a WHERE type = 1 AND a.osceDay = " + osceDayId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " GROUP BY a.timeStart ORDER BY a.timeStart";
     	 TypedQuery<Assignment> query = em.createQuery(sql, Assignment.class);
     	 return query.getResultList();
+     }
+     
+     public static List<Assignment> findAllEmptyAssignmentOfOscePostAndOsceDay(Long osceDayId, Long oscePostId,Date timeStart,Date timeEnd,int sequence)
+     {
+    	 Log.info("retrieving all empty slot of post :" +oscePostId + " and day : " + osceDayId);
+    	 
+    	 EntityManager em = entityManager();
+    	 
+    	 String allEmptySlotSql = "SELECT a FROM Assignment a WHERE type = 1 AND a.osceDay = " + osceDayId + " AND a.oscePostRoom.oscePost.id = " + oscePostId + " AND  a.patientInRole IS NULL "
+    	 		+ "AND a.sequenceNumber="+ sequence +" ORDER BY a.timeStart";
+    	 Log.info("all empty sql is  :" +allEmptySlotSql);
+    	 TypedQuery<Assignment> allEmptySloatQuery = em.createQuery(allEmptySlotSql, Assignment.class);
+    	 List<Assignment> allEmptySlots= allEmptySloatQuery.getResultList();
+    	 
+    	 String breakSloatSql = "SELECT a FROM Assignment a WHERE type = 1 AND a.osceDay = " + osceDayId + " AND a.oscePostRoom IS NULL AND a.patientInRole IS NULL "
+     	 		+ "AND a.timeStart = '" + timeStart + "' AND a.timeEnd = '" + timeEnd + "'  AND a.sequenceNumber="+ sequence +" ORDER BY a.timeStart";
+    	 Log.info("break slot sql is  :" + breakSloatSql);
+    	 TypedQuery<Assignment> allBreakSloatQuery = em.createQuery(breakSloatSql, Assignment.class);
+    	 List<Assignment> allBreakSlots= allBreakSloatQuery.getResultList();
+    	
+    	 allEmptySlots.addAll(allBreakSlots);
+    	 
+    	 return allEmptySlots;
      }
      
      public static List<Assignment> findAssignmentByOscePostAndOsceDayAndTimeStartAndTimeEnd(Long osceDayId, Long oscePostId, Date timeStart, Date timeEnd, Integer sequenceNumber, int spCountForPost)
@@ -3858,5 +3926,44 @@ public class Assignment {
 		}
 		
 		return cloudConfiguration;
+	}
+
+	/**
+	 * Assigning SP in break sloats.
+	 * @param pir
+	 */
+	public static void assignSPInBreakSloats(PatientInRole pir,OsceDay osceDay) {
+		
+		Log.info("Assigning Pir in break  pir id is :" + pir.getId());
+		EntityManager em = entityManager();
+		
+		String sql = "SELECT a.sequenceNumber FROM Assignment a WHERE a.osceDay.id = " + osceDay.getId() + " AND a.type = 1 AND a.patientInRole.id="+pir.getId();
+		
+		TypedQuery<Integer> query = em.createQuery(sql, Integer.class);
+		 
+		Log.info("sequence vise assignment of sp query :" + query);
+		 
+		List<Integer> sequenceNoListWhereSpIsAssigned = query.getResultList(); 
+		
+		Log.info("sequence in which pis is already assigned  :" + sequenceNoListWhereSpIsAssigned);
+		
+		String breakAssignmentQueryString="SELECT a FROM Assignment a WHERE a.osceDay.id = " + osceDay.getId() + " AND a.type = 1 "
+		 		+ "AND a.oscePostRoom IS NULL AND a.patientInRole IS NULL AND a.sequenceNumber NOT IN ("+StringUtils.join(sequenceNoListWhereSpIsAssigned, ",")+") "
+		 				+ " GROUP BY a.timeStart ORDER BY a.timeStart";
+		 
+		Log.info("to get break assignment of patient query is  :" + breakAssignmentQueryString);
+		
+		 TypedQuery<Assignment> breakAssignmentQuery = em.createQuery(breakAssignmentQueryString, Assignment.class);
+		
+		 List<Assignment> breakAssignments = breakAssignmentQuery.getResultList();
+		 
+		 Log.info("Total break assignment of patient found is  :" + breakAssignments.size());
+		 
+		 for(Assignment breakAssignment : breakAssignments){
+			 breakAssignment.setPatientInRole(pir);
+			 breakAssignment.persist();
+		 }
+		 
+		 
 	}
 } 

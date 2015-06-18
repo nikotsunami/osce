@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
@@ -17,10 +18,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.Version;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
+
 import ch.unibas.medizin.osce.shared.OSCESecurityStatus;
 import ch.unibas.medizin.osce.shared.OsceSecurityType;
 
@@ -225,17 +229,26 @@ public class PatientInRole {
 					assignment.persist();
 				}
 	    	}*/
-    		
+    		List<Long> allAssignmentIdWhereRefFound = new ArrayList<Long>();
     		for (Assignment assignment : assignmentList)
     		{
-    			assignment.setPatientInRole(null);
-				assignment.persist();
+    			//Changed code while testing OMS-161. As it is giving deleted entity pass to persist error
+    			//assignment.setPatientInRole(null);
+				//assignment.persist();
+    			allAssignmentIdWhereRefFound.add(assignment.getId());
+    		}
+    		if(allAssignmentIdWhereRefFound.size()>0){
+    			//removing assignment PIR reference
+    			PatientInRole pir = new PatientInRole();
+    			pir.removePirRefrenceFromAssignments(allAssignmentIdWhereRefFound);
     		}
     		
     	Integer count=getTotalTimePatientAssignInRole(osceDay.getId(),patientInRole.getPatientInSemester().getId());
+    	
     	Log.info("Number of PatientIn Role Is " +count);
     	
     	if(count==1){
+    		
     		flag=deletPatientInRoleAlongWithPostNull(patientInRole);
     		
     		if(osce.getSecurity()==OSCESecurityStatus.SIMPLE){
@@ -271,6 +284,21 @@ public class PatientInRole {
     	}
     	
     	return flag;
+    }
+    
+    @Transactional
+    public void removePirRefrenceFromAssignments(List<Long> allAssignmentIdWhereRefFound){
+    	EntityManager em = Assignment.entityManager();
+		
+		StringBuilder sql = new StringBuilder("UPDATE  assignment SET patient_in_role = NULL WHERE id IN ( "+StringUtils.join(allAssignmentIdWhereRefFound,",") + " )");
+				
+		Log.info("Query is : " + sql);
+		
+		javax.persistence.Query query =  em.createNativeQuery(sql.toString());
+				
+		int totalEntryUpdated =query.executeUpdate();
+				
+		Log.info(totalEntryUpdated +" suggestion updated with PIR ref as null");
     }
     private static Boolean deletPatientInRoleAlongWithPostNull(PatientInRole patientInRole){
     	Boolean flag=false;
@@ -323,6 +351,28 @@ public class PatientInRole {
     	Log.info("Query Is " + query);
         TypedQuery<PatientInRole> q = em.createQuery(query, PatientInRole.class);
         PatientInRole pir =  q.getSingleResult();
+        
+    	//First up remove all break refrence before deleting PIR
+    	//changed while testing data with security simple for OMS-161.
+    	/*
+    	 * According to scenario patient is assigned in first sequence and its post=NULL reference is assigned in second sequence so we need to 
+    	 * remove reference of patient from second sequence assignments break before we delete PIR.
+    	 */
+    	String assignmentQuery="SELECT a from Assignment a where a.patientInRole.id="+ pir.getId() +" AND a.oscePostRoom IS NULL";
+    	TypedQuery<Assignment> assignmentQ = em.createQuery(assignmentQuery, Assignment.class);
+    	List<Assignment> assignmentsResultList = assignmentQ.getResultList();
+    	
+    	List<Long> assignmentIds= new ArrayList<Long>();
+    	if(assignmentsResultList.size() > 0 ){
+    		for(Assignment a : assignmentsResultList){
+    			assignmentIds.add(a.getId());
+    		}
+    	}
+    	if(assignmentIds.size() > 0 ){
+    		pir.removePirRefrenceFromAssignments(assignmentIds);
+    	}
+    	
+    	//Now removing pir
         pir.remove();
         if(PatientInRole.findPatientInRole(pir.getId())==null){
         return true;
@@ -894,4 +944,52 @@ public class PatientInRole {
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
+
+	public static List<PatientInRole> findAllNewAssignedPatientOfPost(Long osceDayId,Long postId, List<PatientInRole> patientInRoleList) {
+		Log.info("finding new assigned role inpost id : " + postId + " and not assinged in assesment dat : " + osceDayId );
+		EntityManager em = entityManager();
+
+		List<Long> pisIdList = new ArrayList<Long>();
+		for (PatientInRole pir : patientInRoleList) {
+			pisIdList.add(pir.getPatientInSemester().getId());
+		}
+		
+		if (pisIdList.size() > 0) {
+			String sql = "SELECT pir.id FROM PatientInRole pir WHERE pir.oscePost IS NULL AND pir.patientInSemester.id IN (" + StringUtils.join(pisIdList, ",") +")";
+			TypedQuery<Long> query = em.createQuery(sql, Long.class);
+			
+			if (query.getResultList().size() > 0) {
+				String breakAssSql = "SELECT a.patientInRole FROM Assignment a WHERE a.osceDay.id = " + osceDayId + " AND a.type = 1 AND a.oscePostRoom IS NULL AND a.patientInRole IS NOT NULL AND a.patientInRole.id IN(" + StringUtils.join(query.getResultList(), ",") + ")";
+				TypedQuery<PatientInRole> pirQuery = em.createQuery(breakAssSql, PatientInRole.class);
+				
+				for (PatientInRole pir : pirQuery.getResultList()) {
+					if (patientInRoleList.contains(pir)) {
+						patientInRoleList.remove(pir);
+					}
+				}
+			}
+		}
+		
+		return patientInRoleList;
+	}
+
+	public static List<PatientInRole> findAllSPFromAssignment(Long osceDayId, Long oscePostId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT DISTINCT a.patientInRole FROM Assignment a WHERE a.osceDay.id = " + osceDayId + " AND a.oscePostRoom IS NOT NULL AND a.type = 1 AND a.oscePostRoom.oscePost.id = " + oscePostId + " ORDER BY a.timeStart";
+ 		TypedQuery<PatientInRole> query = em.createQuery(sql, PatientInRole.class);
+ 		if (query.getResultList().size() > 0)
+ 			return query.getResultList();
+ 		else
+ 			return new ArrayList<PatientInRole>();
+	}
+	
+	public static List<PatientInRole> findAllSPFromAssignmentOfDay(Long osceDayId) {
+		EntityManager em = entityManager();
+		String sql = "SELECT DISTINCT a.patientInRole FROM Assignment a WHERE a.osceDay.id = " + osceDayId + " AND a.oscePostRoom IS NOT NULL AND a.type = 1 ORDER BY a.timeStart";
+ 		TypedQuery<PatientInRole> query = em.createQuery(sql, PatientInRole.class);
+ 		if (query.getResultList().size() > 0)
+ 			return query.getResultList();
+ 		else
+ 			return new ArrayList<PatientInRole>();
+	}
 }

@@ -1,6 +1,7 @@
 package ch.unibas.medizin.osce.server.spalloc;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,6 +33,7 @@ import ch.unibas.medizin.osce.server.spalloc.constraints.StayInPostConstraint;
 import ch.unibas.medizin.osce.server.spalloc.model.OsceModel;
 import ch.unibas.medizin.osce.server.spalloc.model.ValPatient;
 import ch.unibas.medizin.osce.server.spalloc.model.VarAssignment;
+import ch.unibas.medizin.osce.shared.AllocationType;
 import ch.unibas.medizin.osce.shared.AssignmentTypes;
 
 /**
@@ -54,9 +56,10 @@ public class SPAllocator {
 	private Solution<VarAssignment, ValPatient> solution;
 
 	private List<Assignment> refAssignments;
-	
+	private AllocationType allocationType;
 	/**
 	 * Initialize SPAllocator with OSCE
+	 * @param full 
 	 * @param osce
 	 */
 /*	public SPAllocator(Osce osce) {
@@ -66,9 +69,20 @@ public class SPAllocator {
 	}*/
 	
 	//spec[
-	public SPAllocator(OsceDay osceDay) {
+	public SPAllocator(OsceDay osceDay, AllocationType allocationType) {
 		this.osceDay = osceDay;
-		refAssignments = Assignment.retrieveAssignmentsOfTypeSPUniqueTimesByOsceDay(osceDay);		
+		//changed for OMS-161.
+		/**
+		 * Now this logic will also work when user deletes PIR and assign some new SP in role and then clicks update SPS assignment button to update PIR allocation in assignment.
+		 */
+		this.allocationType=allocationType;
+		if(allocationType.equals(AllocationType.INITIAL)){
+			refAssignments = Assignment.retrieveAssignmentsOfTypeSPUniqueTimesByOsceDay(osceDay);
+		}else if(allocationType.equals(AllocationType.UPDATE)){
+			//Added for OMS-161.
+			refAssignments = Assignment.retrieveAllEmptyAssignmentsOfTypeSPUniqueTimesByOsceDay(osceDay);
+		}
+	
 	}
 	//spec]
 	
@@ -83,7 +97,7 @@ public class SPAllocator {
 		// setup model (create variables and values)
 		//OsceModel model = new OsceModel(osce);
 		//spec[
-		OsceModel model = new OsceModel(osceDay);
+		OsceModel model = new OsceModel(osceDay,allocationType);
 		//spec]
 		
 		// add constraints to model
@@ -188,6 +202,7 @@ public class SPAllocator {
 	 */
 	public void saveSolution() {
 		Set<PatientInSemester> usedPatients = new HashSet<PatientInSemester>();
+		List<PatientInRole> updatedPIR = new ArrayList<PatientInRole>();
 		
 		// link Assignments to PatientInRole
 		for(VarAssignment va : ((OsceModel) solution.getModel()).assignedVariables()) {
@@ -200,32 +215,49 @@ public class SPAllocator {
         		
         		if(!usedPatients.contains(p.getPatientInRole().getPatientInSemester()))
         			usedPatients.add(p.getPatientInRole().getPatientInSemester());
+        		//Added for OMS-161. 
+        		if(!updatedPIR.contains(p.getPatientInRole())){
+        			updatedPIR.add(p.getPatientInRole());
+        		}
         	}
         }
 		
 		// save SP in break assignment if assignments exists but not for all SP slots
 		//Assignment.clearSPBreakAssignments(osce);
 		//spec[
-		Assignment.clearSPBreakAssignmentsByOsceDay(osceDay);
-		//spec]
-		
-		OsceModel model = ((OsceModel) solution.getModel());
-		Iterator<PatientInSemester> it = usedPatients.iterator();
-		int numberSlots = model.getNumberSlots();
-		
-		while (it.hasNext()) {
-			PatientInSemester sp = (PatientInSemester) it.next();
+		if(allocationType.equals(AllocationType.INITIAL)){
 			
-			//for(int i = 1; i <= refAssignments.size(); i++) {
-			//spec[
-			for(int i = model.getLowestNumberSlots(),j=1; i <= numberSlots; i++,j++) {
+			Assignment.clearSPBreakAssignmentsByOsceDay(osceDay);
 			//spec]
-				//if(model.getPatientAssignment(sp.getStandardizedPatient(), i) == null) {
-				//if(model.getPatientAssignment(sp.getStandardizedPatient(), i) == null && Assignment.isSPinOsceDay(sp,refAssignments.get(i - 1))) {
-				if(model.getPatientAssignment(sp.getStandardizedPatient(), i) == null && Assignment.isSPinOsceDay(sp,refAssignments.get(j-1))) {	
-					createSPBreakAssignment(sp, j);
-					log.info(sp.getStandardizedPatient().getName() + ", " + sp.getStandardizedPatient().getPreName() + " added break for patient " + sp.getId() + " and slot " + i);
+		
+			OsceModel model = ((OsceModel) solution.getModel());
+			Iterator<PatientInSemester> it = usedPatients.iterator();
+			
+			int numberSlots = model.getNumberSlots();
+
+			while (it.hasNext()) {
+				PatientInSemester sp = (PatientInSemester) it.next();
+			
+				//for(int i = 1; i <= refAssignments.size(); i++) {
+				//spec[
+				for(int i = model.getLowestNumberSlots(),j=1; i <= numberSlots; i++,j++) {
+					//spec]
+					//if(model.getPatientAssignment(sp.getStandardizedPatient(), i) == null) {
+					//if(model.getPatientAssignment(sp.getStandardizedPatient(), i) == null && Assignment.isSPinOsceDay(sp,refAssignments.get(i - 1))) {
+					if(model.getPatientAssignment(sp.getStandardizedPatient(), i) == null && Assignment.isSPinOsceDay(sp,refAssignments.get(j-1))) {	
+						createSPBreakAssignment(sp, j);
+						log.info(sp.getStandardizedPatient().getName() + ", " + sp.getStandardizedPatient().getPreName() + " added break for patient " + sp.getId() + " and slot " + i);
+					}
 				}
+			}
+		}else if(allocationType.equals(AllocationType.UPDATE)){
+			
+			Iterator<PatientInRole> it = updatedPIR.iterator();
+			
+			while (it.hasNext()) {
+				PatientInRole pir = it.next();
+				Assignment.assignSPInBreakSloats(pir,osceDay);
+				
 			}
 		}
 	}
@@ -242,8 +274,8 @@ public class SPAllocator {
 			try {
 				// get "break role" for this SP
 				PatientInRole breakRole = PatientInRole.findPatientInRolesByPatientInSemesterAndOscePostIsNull(p).getSingleResult();
-				
-					// create break assignment
+
+				// create break assignment
 					Assignment ass = new Assignment();
 					ass.setType(AssignmentTypes.PATIENT);
 					ass.setOscePostRoom(null);
@@ -257,7 +289,7 @@ public class SPAllocator {
 					ass.setPatientInRole(breakRole);
 					ass.persist();
 				
-				
+					
 			} catch(NoResultException e) {
 				log.error(e.getMessage());
 			} catch(NonUniqueResultException e) {
