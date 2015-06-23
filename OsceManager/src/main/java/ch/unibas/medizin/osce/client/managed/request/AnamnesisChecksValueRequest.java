@@ -4,8 +4,6 @@ package ch.unibas.medizin.osce.client.managed.request;
 
 import java.util.List;
 
-import ch.unibas.medizin.osce.client.a_nonroo.client.AnamnesisCheckTitleToAnamnesisCheckValueProxy;
-
 import com.google.web.bindery.requestfactory.shared.InstanceRequest;
 import com.google.web.bindery.requestfactory.shared.Request;
 import com.google.web.bindery.requestfactory.shared.RequestContext;

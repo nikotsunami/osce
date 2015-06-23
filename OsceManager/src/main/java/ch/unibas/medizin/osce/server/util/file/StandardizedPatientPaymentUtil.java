@@ -160,18 +160,20 @@ public class StandardizedPatientPaymentUtil {
 
 		valueMap.put(INSTITUTE, constants.paymentInstitute());
 		valueMap.put(NAME, constants.paymentName());
-
+		valueMap.put(TELEPHONE,"061 267 19 20");
 		String fullName = "";
 		if (sp.getGender() != null) {
 			switch (sp.getGender()) {
 			case MALE: {
 				valueMap.put(MR, CHECKED);
-				fullName += "Mr. ";
+				//commented as per OMS-179.
+				//fullName += "Mr. ";
 				break;
 			}
 			case FEMALE: {
 				valueMap.put(MRS, CHECKED);
-				fullName += "Mrs. ";
+				//commented as per OMS-179.
+				//fullName += "Mrs. ";
 				break;
 			}
 			default: {
@@ -208,20 +210,27 @@ public class StandardizedPatientPaymentUtil {
 		if (isNotBlank(sp.getCity())) {
 			place += sp.getCity();
 		}
+		//Added as per OMS-179.
+		if(sp.getCountry()!=null && isNotBlank(sp.getCountry().getNationality())){
+			place +=", " + sp.getCountry().getNationality();
+		}
 		if (isNotBlank(place)) {
 			valueMap.put(PAYEE_PLACE, place);
 		}
 		// phone number
 		String phoneNumber = "";
+		//changed as per comment on OMS-179.
 		if (isNotBlank(sp.getTelephone())) {
-			phoneNumber += sp.getTelephone() + ", ";
+			phoneNumber = sp.getTelephone();
 		}
-		if (isNotBlank(sp.getTelephone2())) {
-			phoneNumber += sp.getTelephone2() + ", ";
+		else if(isNotBlank(sp.getTelephone2())){
+				phoneNumber= sp.getTelephone2();
 		}
-		if (isNotBlank(sp.getMobile())) {
-			phoneNumber += sp.getMobile();
+		
+		else if (isNotBlank(sp.getMobile())) {
+				phoneNumber = sp.getMobile();
 		}
+		
 		if (isNotBlank(phoneNumber)) {
 			valueMap.put(PAYEE_PHONE, phoneNumber);
 		}
@@ -289,6 +298,9 @@ public class StandardizedPatientPaymentUtil {
 			case C:
 				valueMap.put(C_PERMIT, CHECKED);
 				break;
+			case G:
+				valueMap.put(G_PERMIT, CHECKED);
+				break;	
 			default:
 				log.error("not a valid work permission");
 				break;
@@ -388,6 +400,7 @@ public class StandardizedPatientPaymentUtil {
 				form.regenerateField(SERVICE_CLAIMED);
 			}
 		}
+		
 	}
 
 	private void resetPDF(AcroFields form) {
@@ -414,8 +427,8 @@ public class StandardizedPatientPaymentUtil {
 		//return out.toByteArray();
 	}
 
-
-	private static final String PDF_NAME = "payment.pdf";
+	//commented below old pdf file fields as per OMS-179
+	/*private static final String PDF_NAME = "payment.pdf";
 	private static final String CHECKED = "0";
 	
 	private static final String FORM_PRINT = "TopmostSubform[0].Page1[0].DruckenSchaltfläche1[0]";
@@ -474,6 +487,78 @@ public class StandardizedPatientPaymentUtil {
 	private static final String BIC = "TopmostSubform[0].Page1[0].BankIBIC[0]";
 	
 	private static final String OVERSEAS = "TopmostSubform[0].Page1[0].Paragraph[0].CheckBox[0]";
-	private static final String OTHER_COUNTRY = "TopmostSubform[0].Page1[0].Paragraph[1].CheckBox[0]";
+	private static final String OTHER_COUNTRY = "TopmostSubform[0].Page1[0].Paragraph[1].CheckBox[0]";*/
 
+	//New PDF file fields as per OMS-179.
+	private static final String PDF_NAME = "payment.pdf";
+	private static final String CHECKED = "0";
+	                                          
+	private static final String FORM_PRINT = "TopmostSubform[0].Page1[0].DruckenSchaltfläche1[0]";
+	private static final String INSTITUTE = "TopmostSubform[0].Page1[0].#subform[2].Textfeld1[0]";
+	private static final String NAME = "TopmostSubform[0].Page1[0].Textfeld1[1]";
+	private static final String TELEPHONE="TopmostSubform[0].Page1[0].Textfeld2[0]";
+	
+	// PAYEE MR/MRS
+	private static final String MR = "TopmostSubform[0].Page1[0].CheckBox[4]"; 
+	private static final String MRS = "TopmostSubform[0].Page1[0].CheckBox[5]"; 
+	
+	//TITLE
+	private static final String PROFESSOR= "TopmostSubform[0].Page1[0].CheckBox[6]"; // Professor
+	private static final String PD="TopmostSubform[0].Page1[0].CheckBox[7]";//PD
+	private static final String DR="TopmostSubform[0].Page1[0].CheckBox[8]";// DR
+	
+	//PAYEE DETAILS
+	private static final String PAYEE_NAME = "TopmostSubform[0].Page1[0].Table[0].Textfeld1[0]"; 
+	private static final String PAYEE_ADDRESS = "TopmostSubform[0].Page1[0].Table[0].Textfeld1[1]";
+	private static final String PAYEE_PLACE = "TopmostSubform[0].Page1[0].Table[0].Textfeld1[2]";
+	private static final String PAYEE_PHONE = "TopmostSubform[0].Page1[0].Table[0].Textfeld3[0]"; 
+	private static final String PAYEE_DOB = "TopmostSubform[0].Page1[0].Table[0].DatumsUhrzeitfeld1[0]"; 
+	private static final String PAYEE_NATIONALITY = "TopmostSubform[0].Page1[0].Table[0].Textfeld1[3]";
+	private static final String PAYEE_EMAIL = "TopmostSubform[0].Page1[0].Table[0].Textfeld1[4]";
+
+	// marital_status
+	private static final String SINGLE = "TopmostSubform[0].Page1[0].Table[0].CheckBox[0]";
+	private static final String MARRIED = "TopmostSubform[0].Page1[0].Table[0].CheckBox[1]";
+	private static final String REG_PARTNERSHIP = "TopmostSubform[0].Page1[0].Table[0].CheckBox[2]";
+	private static final String DIVORCED = "TopmostSubform[0].Page1[0].Table[0].CheckBox[3]";
+	private static final String SEPARATED = "TopmostSubform[0].Page1[0].Table[0].CheckBox[4]";
+	private static final String WIDOWED = "TopmostSubform[0].Page1[0].Table[0].CheckBox[5]";
+
+	// status
+	//private static final String SCHOLAR = "TopmostSubform[0].Page1[0].CheckBox[11]"; //
+	//private static final String STUDENT = "TopmostSubform[0].Page1[0].CheckBox[10]"; //
+
+	private static final String SOCIAL_SECURITY_NUMBER = "TopmostSubform[0].Page1[0].SVNr[0]";
+
+	// work permit
+	private static final String B_PERMIT = "TopmostSubform[0].Page1[0].CheckBox[0]"; 
+	private static final String L_PERMIT = "TopmostSubform[0].Page1[0].CheckBox[1]";
+	private static final String C_PERMIT = "TopmostSubform[0].Page1[0].CheckBox[2]";
+	private static final String G_PERMIT="TopmostSubform[0].Page1[0].CheckBox[12]";
+	
+	private static final String SELF_EMPLOYED_IN_SWITERLAND = "TopmostSubform[0].Page1[0].CheckBox[3]"; 
+
+	private static final String DATES_WORKED_FROM = "TopmostSubform[0].Page1[0].DatumVon[0]"; 
+	private static final String DATES_WORKED_TO = "TopmostSubform[0].Page1[0].DatumBis[0]"; 
+	private static final String SERVICE_CLAIMED = "TopmostSubform[0].Page1[0].Leistung[0]";
+	private static final String DATE_1 = "TopmostSubform[0].Page1[0].DatumBis[1]"; 
+	private static final String DATE_2 = "TopmostSubform[0].Page1[0].DatumBis[2]";
+	private static final String AMOUNT_IN = "TopmostSubform[0].Page1[0].Waehrung[0]";
+	private static final String AMOUNT_1 = "TopmostSubform[0].Page1[0].Betrag[0]"; 
+	private static final String AMOUNT_2 = "TopmostSubform[0].Page1[0].Betrag[1]";
+	private static final String COST_CENTRE_1 = "TopmostSubform[0].Page1[0].KST1[0]";
+	private static final String COST_CENTRE_2 = "TopmostSubform[0].Page1[0].#subform[3].#subform[4].KST2[0]";
+	
+	//private static final String TOTAL = "TopmostSubform[0].Page1[0].Zwischensumme[0]";
+
+	// payable to
+	private static final String NAME_OF_BANK = "TopmostSubform[0].Page1[0].BankName[0]";
+	private static final String BANK_ADDRESS = "TopmostSubform[0].Page1[0].BankAdresse[0]";
+	private static final String ACCOUNT_HOLDER = "TopmostSubform[0].Page1[0].BankKontoinhaber[0]";
+	private static final String IBAN = "TopmostSubform[0].Page1[0].BankIBAN[0]";
+	private static final String BIC = "TopmostSubform[0].Page1[0].BankIBIC[0]";
+
+	private static final String CONT_DEDUCTED="TopmostSubform[0].Page1[0].CheckBox[9]";
+	private static final String OVERSEAS = "TopmostSubform[0].Page1[0].CheckBox[10]";
+	private static final String OTHER_COUNTRY = "TopmostSubform[0].Page1[0].CheckBox[11]";
 }

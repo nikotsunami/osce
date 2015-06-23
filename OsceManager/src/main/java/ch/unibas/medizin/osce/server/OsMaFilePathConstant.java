@@ -202,7 +202,12 @@ public class OsMaFilePathConstant {
 
 	public static String localSpDataDirectory = getUploadBaseDIRPath() + "/sp/";
 	
-	public static final String appStandardizedPatientPaymentPDF = "/osMaEntry/gwt/unibas/payment/Honorarabrechnung_Form_2011_01.pdf";
+	//changed as per OMS-179
+	//Old Honorarabrechnung file path
+	//public static final String appStandardizedPatientPaymentPDF = "/osMaEntry/gwt/unibas/payment/Honorarabrechnung_Form_2011_01.pdf";
+	
+	//new Honorarabrechnung path
+	public static final String appStandardizedPatientPaymentPDF = "/osMaEntry/gwt/unibas/payment/Honorarabrechnung.pdf";
 
 	public static final String EXTRA_SPACE_QR="                                       ";
 	
