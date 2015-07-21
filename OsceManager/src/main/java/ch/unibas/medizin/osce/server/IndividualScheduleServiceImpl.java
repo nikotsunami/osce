@@ -1873,26 +1873,32 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		public String[] getTemplateContent(String osceId,TemplateTypes templateTypes){
 //Feature : 154
 	//	System.out.println("Get Template Content Osce Id: " + osceId + "Template Type: " + templateTypes);
-			
+		 Log.info("At getTemplateContent with osce id " + osceId + "  tempate type : " + templateTypes);
 			File file = null;
 		String fileName = "";
 			try {
 				
 			fileName =  getUpdatedTemplatePath(osceId, templateTypes);
+			Log.info("Updated tempate path : " + fileName);
 			file = new File(fileName);
 				
 				if(file.isFile()){
-					
-				return new String[] { fileName, FileUtils.readFileToString(file) };
+					Log.info("file exist of name : " + fileName);
+				    return new String[] { fileName, FileUtils.readFileToString(file) };
 				}else{
-					
 				fileName =  getDefaultTemplatePath(templateTypes);
 				file = new File(fileName);
+				
+					if(file.isFile()){
+						Log.info("valid file found");
+						return new String[] { fileName, FileUtils.readFileToString(file) };
 					
-					if(file.isFile())
-					return new String[] { fileName, FileUtils.readFileToString(file) };
-					else
+					}
+					else{
+						Log.info("No correct file found");
 						return new String[]{"",""};
+					}
+					
 				}
 					
 				
@@ -1946,11 +1952,11 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 	public String getDefaultTemplatePath(TemplateTypes templateTypes) 
 	{
 		String fileSeparator = System.getProperty("file.separator");
-		
+		Log.info("getDefaultTemplatePath() called");
 		//System.out.println("Get Default Template Content:  Template Type: " + templateTypes);
 		
-		StringBuffer filePath = new StringBuffer(/*fetchRealPath(false) +*/ OsMaFilePathConstant.TEMPLATE_PATH + OsMaFilePathConstant.DEFAULT_TEMPLATE_PATH + fileSeparator);
-		
+		StringBuffer filePath = new StringBuffer(fetchRealPath(false) + OsMaFilePathConstant.TEMPLATE_PATH + OsMaFilePathConstant.DEFAULT_TEMPLATE_PATH + fileSeparator);
+		Log.info("file path : " + filePath);
 		switch (templateTypes) {
 		case STUDENT: {
 			//System.out.println("Student");
@@ -1970,6 +1976,7 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 		}
 		filePath.append(OsMaFilePathConstant.TXT_EXTENTION);
 		//System.out.println("Default Template File Path: "+filePath);
+		Log.info("file path returning : " + filePath.toString());
 		return filePath.toString();
 	}
 	
@@ -2073,13 +2080,14 @@ public class IndividualScheduleServiceImpl extends RemoteServiceServlet implemen
 	
 	@Override
 	public Boolean deleteTemplate(String osceId,TemplateTypes templateTypes){
-		
+		Log.info("delete template called with osce " + osceId + " templ type " + templateTypes );
 		File file = null;
 		try {
 			//Feature : 154
 			file = new File(getUpdatedTemplatePath(osceId, templateTypes));
 			
 			if(file.isFile()){
+				Log.info("file exist so deleting it :" + file.getPath());
 				FileUtils.deleteQuietly(file);
 				return true;
 			}else{
