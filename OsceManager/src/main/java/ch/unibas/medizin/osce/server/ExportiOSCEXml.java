@@ -29,6 +29,7 @@ import ch.unibas.medizin.osce.domain.Osce;
 import ch.unibas.medizin.osce.domain.OsceDay;
 import ch.unibas.medizin.osce.domain.OscePostRoom;
 import ch.unibas.medizin.osce.domain.OsceSequence;
+import ch.unibas.medizin.osce.domain.RoleTopic;
 import ch.unibas.medizin.osce.domain.StandardizedRole;
 import ch.unibas.medizin.osce.domain.StudentOsces;
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
@@ -169,6 +170,7 @@ public class ExportiOSCEXml {
 
 			checklistBean.setId(checklist.getId());
 			checklistBean.setName(defaultString(checklist.getTitle()));
+			checklistBean.setSkill(RoleTopic.findRoleTopicByCheckList(checklist.getId()));
 
 			Checklistitems checklistitems = factory.createOscedataChecklistsChecklistChecklistitems();
 			checklistBean.setChecklistitems(checklistitems);

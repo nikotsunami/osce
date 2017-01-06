@@ -996,6 +996,8 @@ public class Oscedata {
             protected Long id;
             @XmlAttribute(required = true)
             protected String name;
+            @XmlAttribute(required = true)
+            protected String skill;
 
             /**
              * Gets the value of the checklistitems property.
@@ -1068,6 +1070,14 @@ public class Oscedata {
             public void setName(String value) {
                 this.name = value;
             }
+            
+            public String getSkill() {
+				return skill;
+			}
+
+			public void setSkill(String skill) {
+				this.skill = skill;
+			}
 
 
             /**

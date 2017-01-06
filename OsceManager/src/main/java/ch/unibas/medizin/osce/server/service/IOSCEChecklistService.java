@@ -22,6 +22,7 @@ import ch.unibas.medizin.osce.domain.CheckList;
 import ch.unibas.medizin.osce.domain.ChecklistCriteria;
 import ch.unibas.medizin.osce.domain.ChecklistItem;
 import ch.unibas.medizin.osce.domain.ChecklistOption;
+import ch.unibas.medizin.osce.domain.RoleTopic;
 import ch.unibas.medizin.osce.server.i18n.GWTI18N;
 import ch.unibas.medizin.osce.server.service.Oscedata.Candidates;
 import ch.unibas.medizin.osce.server.service.Oscedata.Candidates.Candidate;
@@ -148,6 +149,7 @@ public class IOSCEChecklistService extends HttpServlet {
 
 		checklistBean.setId(checklist.getId());
 		checklistBean.setName(defaultString(checklist.getTitle()));
+		checklistBean.setSkill(RoleTopic.findRoleTopicByCheckList(checklist.getId()));
 
 		Checklistitems checklistitems = factory.createOscedataChecklistsChecklistChecklistitems();
 		checklistBean.setChecklistitems(checklistitems);

@@ -524,6 +524,21 @@ public static RoleTopic getRoleTopicForId(Long id){
 	public static List<RoleTopic> findRoleTopicEntries(int firstResult, int maxResults) {
         return entityManager().createQuery("SELECT o FROM RoleTopic o", RoleTopic.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
+	
+	public static String findRoleTopicByCheckList(Long checkListId) {
+		
+		EntityManager em = entityManager();		
+		String queryString="SELECT rt.name from RoleTopic rt, StandardizedRole sr WHERE rt.id=sr.roleTopic and sr.checkList = "+checkListId+"";									
+		
+		TypedQuery<String> q = em.createQuery(queryString, String.class);	
+		String result = "";			
+		try {			
+			result = java.net.URLEncoder.encode(q.getSingleResult(),"UTF-8");			
+		} catch (java.io.UnsupportedEncodingException e) {
+			Log.error("encoding problem"+e.getMessage());				
+		}				
+		return result;			
+	}
 
 	public String toString() {
         StringBuilder sb = new StringBuilder();
