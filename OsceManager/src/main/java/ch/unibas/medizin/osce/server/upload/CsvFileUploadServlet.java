@@ -37,6 +37,7 @@ public class CsvFileUploadServlet extends HttpServlet {
 	
 	private static Logger Log = Logger.getLogger(CsvFileUploadServlet.class);
 	
+	private static final String EMAIL_REG = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$";
 	public String fetchRealPath(HttpServletRequest request) {
 
 		String fileSeparator = System.getProperty("file.separator");
@@ -156,7 +157,7 @@ public class CsvFileUploadServlet extends HttpServlet {
 			String status = "false";
 			resp.getOutputStream().write(status.getBytes());
 		}
-		else if (studentIdCol.equals("") && emailCol.equals(""))
+ else if (emailCol.equals(""))
 		{
 			String status = "false";
 			resp.getOutputStream().write(status.getBytes());
@@ -168,9 +169,12 @@ public class CsvFileUploadServlet extends HttpServlet {
 			while (student.readRecord())
 			{
 				
-				if (emailCol.equals(""))
-					studentList = Student.findStudentByStudentIdAndByEmail(student.get(studentIdCol), "");
-				else if (studentIdCol.equals(""))
+				if ((!"".equals(emailCol))
+						&& (!"".equals(student.get(emailCol)))
+						&& student.get(emailCol).matches(EMAIL_REG)) {
+
+
+					if (studentIdCol.equals(""))
 					studentList = Student.findStudentByStudentIdAndByEmail("", student.get(emailCol));
 				else
 					studentList = Student.findStudentByStudentIdAndByEmail(student.get(studentIdCol), student.get(emailCol));
@@ -227,6 +231,7 @@ public class CsvFileUploadServlet extends HttpServlet {
 						studosces.persist();
 					}	
 				}
+			}
 			}
 			
 			String status = "true";
