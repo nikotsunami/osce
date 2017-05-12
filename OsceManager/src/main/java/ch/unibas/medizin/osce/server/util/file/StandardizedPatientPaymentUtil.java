@@ -160,7 +160,7 @@ public class StandardizedPatientPaymentUtil {
 
 		valueMap.put(INSTITUTE, constants.paymentInstitute());
 		valueMap.put(NAME, constants.paymentName());
-		valueMap.put(TELEPHONE,"061 267 19 20");
+		valueMap.put(TELEPHONE,"061 207 19 20");
 		String fullName = "";
 		if (sp.getGender() != null) {
 			switch (sp.getGender()) {
