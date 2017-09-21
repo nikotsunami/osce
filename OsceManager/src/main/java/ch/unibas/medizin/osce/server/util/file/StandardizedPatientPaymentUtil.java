@@ -331,9 +331,9 @@ public class StandardizedPatientPaymentUtil {
 		 //changed for OMS-160.
 		 if(semester!=null){
 			 if(semester.getSemester().equals(Semesters.FED)){
-				 valueMap.put(COST_CENTRE_1, "3MX 1191");
+				 valueMap.put(COST_CENTRE_1, "DMX2163");
 				}else if(semester.getSemester().equals(Semesters.HS) || semester.getSemester().equals(Semesters.FS)){
-					valueMap.put(COST_CENTRE_1, "MX 1102");
+					valueMap.put(COST_CENTRE_1, "MX1102");
 				}
 		 }
 
