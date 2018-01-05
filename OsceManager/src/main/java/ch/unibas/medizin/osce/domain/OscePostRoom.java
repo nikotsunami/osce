@@ -20,13 +20,13 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.Version;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
 import ch.unibas.medizin.osce.shared.OsceStatus;
 import ch.unibas.medizin.osce.shared.PostType;
 
 @Entity
-@Configurable
+@Configurable
 public class OscePostRoom {
 	
 	@PersistenceContext(unitName="persistenceUnit")
@@ -108,7 +108,7 @@ public class OscePostRoom {
     public static List<OscePostRoom> findOscePostRoomByCourseIDForIOSCE(long courseId)
     {
     	EntityManager em = entityManager();
-    	String query = "SELECT o FROM OscePostRoom o WHERE o.course.id = " + courseId + " order by o.id desc";
+    	String query = "SELECT o FROM OscePostRoom o WHERE o.course.id = " + courseId + " order by o.oscePost.sequenceNumber desc";
     	TypedQuery<OscePostRoom> q = em.createQuery(query, OscePostRoom.class);
     	return q.getResultList();
     }
