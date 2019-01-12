@@ -298,7 +298,7 @@ Suggested Features / Improvements
     instead the discipline / skill / room is selected upon click and the popup
     gets closed. This would require only a cancel button. Behaviour right now is
     slightly confusing.
-  * The abbreviated dicipline / role / skill names in the accordeonView should 
+  * The abbreviated discipline / role / skill names in the accordeonView should 
     be abbreviated in a way that takes advantage of the width of the fields they
     are contained in.
   * Printing:
