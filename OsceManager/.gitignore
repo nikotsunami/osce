@@ -63,3 +63,6 @@ src/main/java/ch/unibas/medizin/osce/client/managed/
 src/main/java/ch/unibas/medizin/osce/domain/*.aj
 src/main/java/patients.sql
 src/test/java/ch/unibas/medizin/osce/domain/*.aj
+
+.idea
+*.iml

@@ -559,8 +559,16 @@ public class eOSCESyncServiceImpl extends RemoteServiceServlet implements eOSCES
 											AnswerOption answerOption = jsonAnswer.getAnswerOption();
 											String checklistOptionId = answerOption.getChecklistOptionId();
 											if (StringUtils.isNotBlank(checklistOptionId)) {
-												ChecklistOption checklistOption = ChecklistOption.findChecklistOption(Long.parseLong(checklistOptionId));
-												
+
+												// Crude hack for iOSCE Int16 overflow
+												Long maybeNegativeChecklistOptionId = Long.parseLong(checklistOptionId);
+
+												if (maybeNegativeChecklistOptionId < 0) {
+													maybeNegativeChecklistOptionId += 65536;
+												}
+
+												ChecklistOption checklistOption = ChecklistOption.findChecklistOption(maybeNegativeChecklistOptionId);
+
 												Answer osceAnswer = new Answer();
 												osceAnswer.setAnswer(answerOption.getChecklistOptionValue());
 												osceAnswer.setChecklistOption(checklistOption);
