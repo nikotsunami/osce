@@ -266,7 +266,7 @@ public class StandardizedPatientPaymentUtil {
 				break;
 
 			case SEPARATED:
-				valueMap.put(SEPARATED, CHECKED);
+				valueMap.put(MARRIED, CHECKED);
 				break;
 
 			case WIDOWED:
@@ -427,69 +427,6 @@ public class StandardizedPatientPaymentUtil {
 		//return out.toByteArray();
 	}
 
-	//commented below old pdf file fields as per OMS-179
-	/*private static final String PDF_NAME = "payment.pdf";
-	private static final String CHECKED = "0";
-	
-	private static final String FORM_PRINT = "TopmostSubform[0].Page1[0].DruckenSchaltfläche1[0]";
-	private static final String INSTITUTE = "TopmostSubform[0].Page1[0].Textfeld1[0]";
-	private static final String NAME = "TopmostSubform[0].Page1[0].Textfeld1[1]";
-
-	// PAYEE
-	private static final String MR = "TopmostSubform[0].Page1[0].Table[0].CheckBox[0]";
-	private static final String MRS = "TopmostSubform[0].Page1[0].Table[0].CheckBox[1]";
-	private static final String PAYEE_NAME = "TopmostSubform[0].Page1[0].Table[0].Name[0]";
-	private static final String PAYEE_ADDRESS = "TopmostSubform[0].Page1[0].Table[0].Strasse[0]";
-	private static final String PAYEE_PLACE = "TopmostSubform[0].Page1[0].Table[0].Ort[0]";
-	private static final String PAYEE_PHONE = "TopmostSubform[0].Page1[0].Table[0].Telefon[0]";
-	private static final String PAYEE_DOB = "TopmostSubform[0].Page1[0].Table[0].GebDatum[0]";
-	private static final String PAYEE_NATIONALITY = "TopmostSubform[0].Page1[0].Table[0].Nationalität[0]";
-	private static final String PAYEE_EMAIL = "TopmostSubform[0].Page1[0].Table[0].eMail[0]";
-
-	// marital_status
-	private static final String SINGLE = "TopmostSubform[0].Page1[0].CheckBox[8]";
-	private static final String MARRIED = "TopmostSubform[0].Page1[0].CheckBox[6]";
-	private static final String REG_PARTNERSHIP = "TopmostSubform[0].Page1[0].CheckBox[9]";
-	private static final String DIVORCED = "TopmostSubform[0].Page1[0].CheckBox[4]";
-	private static final String SEPARATED = "TopmostSubform[0].Page1[0].CheckBox[7]";
-	private static final String WIDOWED = "TopmostSubform[0].Page1[0].CheckBox[5]";
-
-	// status
-	private static final String SCHOLAR = "TopmostSubform[0].Page1[0].CheckBox[11]";
-	private static final String STUDENT = "TopmostSubform[0].Page1[0].CheckBox[10]";
-
-	private static final String SOCIAL_SECURITY_NUMBER = "TopmostSubform[0].Page1[0].SVNr[0]";
-
-	// work permit
-	private static final String B_PERMIT = "TopmostSubform[0].Page1[0].CheckBox[0]";
-	private static final String L_PERMIT = "TopmostSubform[0].Page1[0].CheckBox[1]";
-	private static final String C_PERMIT = "TopmostSubform[0].Page1[0].CheckBox[2]";
-
-	private static final String SELF_EMPLOYED_IN_SWITERLAND = "TopmostSubform[0].Page1[0].CheckBox[3]";
-
-	private static final String DATES_WORKED_FROM = "TopmostSubform[0].Page1[0].DatumVon[0]";
-	private static final String DATES_WORKED_TO = "TopmostSubform[0].Page1[0].DatumBis[0]";
-	private static final String SERVICE_CLAIMED = "TopmostSubform[0].Page1[0].Leistung[0]";
-	private static final String DATE_1 = "TopmostSubform[0].Page1[0].DatumHonorar[0]";
-	private static final String DATE_2 = "TopmostSubform[0].Page1[0].DatumSpesen[0]";
-	private static final String AMOUNT_IN = "TopmostSubform[0].Page1[0].Waehrung[0]";
-	private static final String AMOUNT_1 = "TopmostSubform[0].Page1[0].Betrag[0]";
-	private static final String AMOUNT_2 = "TopmostSubform[0].Page1[0].Betrag[1]";
-	private static final String COST_CENTRE_1 = "TopmostSubform[0].Page1[0].KST1[0]";
-	private static final String COST_CENTRE_2 = "TopmostSubform[0].Page1[0].KST2[0]";
-	private static final String TOTAL = "TopmostSubform[0].Page1[0].Zwischensumme[0]";
-
-	// payable to
-	private static final String NAME_OF_BANK = "TopmostSubform[0].Page1[0].BankName[0]";
-	private static final String BANK_ADDRESS = "TopmostSubform[0].Page1[0].BankAdresse[0]";
-	private static final String ACCOUNT_HOLDER = "TopmostSubform[0].Page1[0].BankKontoinhaber[0]";
-	private static final String IBAN = "TopmostSubform[0].Page1[0].BankIBAN[0]";
-	private static final String BIC = "TopmostSubform[0].Page1[0].BankIBIC[0]";
-	
-	private static final String OVERSEAS = "TopmostSubform[0].Page1[0].Paragraph[0].CheckBox[0]";
-	private static final String OTHER_COUNTRY = "TopmostSubform[0].Page1[0].Paragraph[1].CheckBox[0]";*/
-
-	//New PDF file fields as per OMS-179.
 	private static final String PDF_NAME = "payment.pdf";
 	private static final String CHECKED = "0";
 	                                          
@@ -521,8 +458,7 @@ public class StandardizedPatientPaymentUtil {
 	private static final String MARRIED = "TopmostSubform[0].Page1[0].Table[0].CheckBox[1]";
 	private static final String REG_PARTNERSHIP = "TopmostSubform[0].Page1[0].Table[0].CheckBox[2]";
 	private static final String DIVORCED = "TopmostSubform[0].Page1[0].Table[0].CheckBox[3]";
-	private static final String SEPARATED = "TopmostSubform[0].Page1[0].Table[0].CheckBox[4]";
-	private static final String WIDOWED = "TopmostSubform[0].Page1[0].Table[0].CheckBox[5]";
+	private static final String WIDOWED = "TopmostSubform[0].Page1[0].Table[0].CheckBox[4]";
 
 	// status
 	//private static final String SCHOLAR = "TopmostSubform[0].Page1[0].CheckBox[11]"; //
